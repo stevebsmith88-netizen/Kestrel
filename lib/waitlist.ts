@@ -33,7 +33,7 @@ export const PROVINCES = [
 // Keep this wording identical to what people see. It is saved with every
 // sign up as the record of what they agreed to (CASL express consent).
 export const CONSENT_TEXT =
-  "Yes, email me launch news and updates from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
+  "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
 
 export const THANK_YOU =
   "Thanks, you're on the list. We'll be in touch as Kestrel gets closer to launch.";

@@ -57,7 +57,7 @@ export default function ComingSoon() {
             </div>
             <div className="panel">
               <WaitlistForm />
-              <p className="privacy">Your details are only used to send you Kestrel launch news, and you can unsubscribe at any time.</p>
+              <p className="privacy">We&apos;ll only use your details to email you about Kestrel Eye Care Jobs, and you can unsubscribe at any time.</p>
             </div>
           </div>
         </section>
