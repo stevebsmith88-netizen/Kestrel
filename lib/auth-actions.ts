@@ -58,7 +58,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     return { error: "We couldn't create your account. Please try again." };
   }
   if (data.session) redirect("/dashboard");
-  return { message: "We have sent a link to your email. Open it to confirm your address, then sign in." };
+  return { message: "We have sent a link to your email. Open it to confirm your address, then sign in.", email };
 }
 
 export async function forgotPassword(_prev: FormState, form: FormData): Promise<FormState> {

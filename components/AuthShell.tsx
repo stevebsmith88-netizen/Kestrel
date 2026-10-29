@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 // The plain page around the sign in, sign up and password forms.
-export default function AuthShell({ title, intro, children }: { title: string; intro?: string; children: React.ReactNode }) {
+export default function AuthShell({ title, intro, children }: { title?: string; intro?: string; children: React.ReactNode }) {
   return (
     <>
       <main className="auth">
@@ -11,7 +11,7 @@ export default function AuthShell({ title, intro, children }: { title: string; i
             <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={200} height={59} />
           </Link>
           <div className="panel">
-            <h1>{title}</h1>
+            {title && <h1>{title}</h1>}
             {intro && <p className="auth-intro">{intro}</p>}
             {children}
           </div>

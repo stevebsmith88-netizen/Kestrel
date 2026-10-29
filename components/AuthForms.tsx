@@ -27,11 +27,13 @@ function Problem({ text }: { text?: string }) {
   ) : null;
 }
 
-function Done({ title, text }: { title: string; text: string }) {
+// Replaces the whole form once it has worked, with its own heading.
+function Done({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="thanks" tabIndex={-1} ref={(el) => el?.focus()}>
-      <h3>{title}</h3>
-      <p>{text}</p>
+    <div className="auth-done" tabIndex={-1} ref={(el) => el?.focus()}>
+      <h1>{title}</h1>
+      {children}
+      <p className="alt"><Link href="/sign-in">Back to sign in</Link></p>
     </div>
   );
 }
@@ -59,9 +61,20 @@ export function SignInForm({ notice }: { notice?: string }) {
 
 export function SignUpForm() {
   const { state, pending, submit } = useAuthForm(signUp);
-  if (state.message) return <Done title="Check your email" text={state.message} />;
+  if (state.message) {
+    return (
+      <Done title="Thanks for creating your account">
+        <p className="auth-intro">
+          We have sent a confirmation link to <strong>{state.email}</strong>. Open it to confirm your address, then sign in.
+        </p>
+        <p className="help">It can take a minute to arrive. If you don&apos;t see it, check your spam or junk folder.</p>
+      </Done>
+    );
+  }
   return (
     <form onSubmit={submit} noValidate>
+      <h1>Create your account</h1>
+      <p className="auth-intro">Free to join. It takes about a minute.</p>
       <div className="row">
         <p className="lab" id="su-type">I am</p>
         <div className="choices" role="radiogroup" aria-labelledby="su-type">
@@ -109,9 +122,18 @@ export function SignUpForm() {
 
 export function ForgotPasswordForm() {
   const { state, pending, submit } = useAuthForm(forgotPassword);
-  if (state.message) return <Done title="Check your email" text={state.message} />;
+  if (state.message) {
+    return (
+      <Done title="Check your email">
+        <p className="auth-intro">{state.message}</p>
+        <p className="help">It can take a minute to arrive. If you don&apos;t see it, check your spam or junk folder.</p>
+      </Done>
+    );
+  }
   return (
     <form onSubmit={submit} noValidate>
+      <h1>Reset your password</h1>
+      <p className="auth-intro">Enter your email and we will send you a link.</p>
       <div className="row">
         <label className="lab" htmlFor="fp-email">Email</label>
         <input id="fp-email" name="email" type="email" autoComplete="email" required />

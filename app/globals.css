@@ -85,6 +85,8 @@ footer a{color:#fff}
 .auth-logo img{display:block;width:180px;height:auto}
 .auth h1{font:400 clamp(28px,4vw,34px)/1.1 "DM Serif Display",Georgia,serif;margin:0 0 6px}
 .auth-intro{color:var(--navy-2);margin:0 0 22px}
+.auth-done{outline:none}
+.auth-done .help{margin:-8px 0 0}
 .alt{font-size:15px;color:var(--muted);margin:14px 0 0;text-align:center}
 .topbar{background:#fff;border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;gap:24px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}

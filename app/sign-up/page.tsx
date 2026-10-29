@@ -12,7 +12,7 @@ export default async function SignUp() {
   const session = await getSession();
   if (session) redirect(homeFor(session.role));
   return (
-    <AuthShell title="Create your account" intro="Free to join. It takes about a minute.">
+    <AuthShell>
       <SignUpForm />
     </AuthShell>
   );
