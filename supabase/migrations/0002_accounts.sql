@@ -33,14 +33,17 @@ $$;
 revoke execute on function public.is_admin() from public, anon;
 grant execute on function public.is_admin() to authenticated;
 
+drop policy if exists "People can read their own profile" on public.profiles;
 create policy "People can read their own profile"
   on public.profiles for select to authenticated
   using ((select auth.uid()) = id);
 
+drop policy if exists "Admins can read every profile" on public.profiles;
 create policy "Admins can read every profile"
   on public.profiles for select to authenticated
   using (public.is_admin());
 
+drop policy if exists "People can update their own profile" on public.profiles;
 create policy "People can update their own profile"
   on public.profiles for update to authenticated
   using ((select auth.uid()) = id)
