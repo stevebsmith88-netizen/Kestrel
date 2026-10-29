@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import WaitlistForm from "@/components/WaitlistForm";
 
 export default function ComingSoon() {
@@ -57,7 +58,11 @@ export default function ComingSoon() {
             </div>
             <div className="panel">
               <WaitlistForm />
-              <p className="privacy">We&apos;ll only use your details to email you about Kestrel Eye Care Jobs, and you can unsubscribe at any time.</p>
+              <p className="privacy">
+                We&apos;ll only use your details to email you about Kestrel Eye Care Jobs, and you can unsubscribe at any time. Read our{" "}
+                <Link href="/privacy">privacy policy</Link>.
+              </p>
+              <p className="privacy">Kestrel Eye Care Jobs, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada.</p>
             </div>
           </div>
         </section>
@@ -67,7 +72,9 @@ export default function ComingSoon() {
           <span>
             <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
           </span>
-          <span>&copy; {new Date().getFullYear()} Kestrel Eye Care Jobs</span>
+          <span>
+            <Link href="/privacy">Privacy policy</Link> &middot; &copy; {new Date().getFullYear()} Kestrel Eye Care Jobs
+          </span>
         </div>
       </footer>
     </>
