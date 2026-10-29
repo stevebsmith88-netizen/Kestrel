@@ -86,5 +86,5 @@ Keep dependencies few and current, check `npm audit` monthly, and prefer built i
 1. Connect this repo to GitHub (Kestrel organisation) and Vercel; add the Supabase keys in Vercel; run the waitlist migration.
 2. Import the Wix waitlist CSV.
 3. Add a privacy policy page and link it from the form.
-4. Point eyecarejobs.ca at Vercel once Steve has registered it (Cloudflare Registrar recommended).
+4. Point eyecarejobs.ca at Vercel. Steve has registered it at Namecheap (Cloudflare Registrar does not sell .ca), so the DNS records are entered in Namecheap's Advanced DNS.
 5. Then the platform build, starting with the screen designs Steve approves.

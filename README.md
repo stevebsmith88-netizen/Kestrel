@@ -13,7 +13,7 @@ You'll need: Node.js 20 or newer, the Claude desktop app with Claude Code, and t
 5. **Supabase:** create an account, then a project in the Canadian region. Open the SQL editor, paste in supabase/migrations/0001_waitlist.sql and run it. From Project Settings > API, copy the Project URL and the service role key.
 6. **Local keys:** copy .env.example to .env.local and paste in the 2 Supabase values. Restart `npm run dev` and test the form. Your test sign up appears in Supabase under Table Editor > waitlist.
 7. **Vercel:** create an account, choose "Add New Project", import the GitHub repository, and add the same 3 values from .env.local under Environment Variables (set NEXT_PUBLIC_SITE_URL to your Vercel address for now). Deploy. You'll get a live link ending in vercel.app.
-8. **Domain (later):** once eyecarejobs.ca is registered, add it in Vercel under Settings > Domains and follow the DNS instructions it gives you.
+8. **Domain:** eyecarejobs.ca is registered at Namecheap. Add it in Vercel under Settings > Domains, then enter the DNS records Vercel gives you in Namecheap under Domain List > Manage > Advanced DNS.
 
 ## Everyday commands
 

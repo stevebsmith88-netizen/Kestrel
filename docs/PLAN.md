@@ -21,7 +21,7 @@ The full plan is the v7 doc: https://claude.ai/artifact/2j9U84RzZ5vtmnNVtXPCTC. 
 
 ## Domains
 
-- eyecarejobs.ca: the site (register first)
+- eyecarejobs.ca: the site (registered at Namecheap; Cloudflare Registrar does not sell .ca)
 - kestreljobs.ca: optional, redirects to the site
 - kestreleyecare.ca: optional, for cold outreach email so the main domain's reputation stays clean
 - eyecarejobs.com is taken (registered since 2003)
