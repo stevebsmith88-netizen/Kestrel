@@ -1,0 +1,34 @@
+import type { Metadata, Viewport } from "next";
+import "@fontsource/dm-serif-display/400.css";
+import "@fontsource/source-serif-4/600.css";
+import "@fontsource/poppins/400.css";
+import "@fontsource/source-sans-3/400.css";
+import "@fontsource/source-sans-3/600.css";
+import "@fontsource/source-sans-3/700.css";
+import "./globals.css";
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title: "Kestrel Eye Care Jobs | Coming soon",
+  description:
+    "Kestrel Eye Care Jobs is a dedicated job board for optometrists, opticians, assistants and clinic teams across Canada. Join the waitlist to hear first when we launch.",
+  openGraph: {
+    title: "Kestrel Eye Care Jobs | Coming soon",
+    description: "Eye care jobs across Canada. Join the waitlist to hear first when we launch.",
+    images: ["/brand/kestrel-lockup-full.png"],
+    locale: "en_CA",
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = { themeColor: "#1B2B4B" };
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en-CA">
+      <body>{children}</body>
+    </html>
+  );
+}
