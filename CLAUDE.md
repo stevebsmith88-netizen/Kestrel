@@ -35,7 +35,9 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 
 - The coming soon page (app/page.tsx) is a faithful copy of the live Wix version, hosted at a temporary Wix address until eyecarejobs.ca is pointed here.
 - The waitlist form posts to app/api/waitlist/route.ts, which validates with lib/waitlist.ts and upserts into the Supabase table defined in supabase/migrations/0001_waitlist.sql. Without SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY it returns a 503 with a friendly message.
-- Existing Wix waitlist sign ups still need exporting from Wix Forms as CSV and importing into the waitlist table (keep their original sign up date as consent_at).
+- The site is deployed on Vercel (Hobby) from this repo and saves sign ups to a Supabase project in the Canadian region. The repo currently lives in Steve's personal GitHub account; move it into the Kestrel organisation (Kestreleyecarejobs) when upgrading to Vercel Pro, because Hobby cannot deploy private organisation repos.
+- The Wix page never went live, so there are no Wix sign ups to import.
+- Waitlist consent wording covers launch news, job alerts, product updates and offers (CASL). Keep the wording in lib/waitlist.ts identical to what people see, since it is saved with every sign up.
 
 ## Brand
 
@@ -83,8 +85,7 @@ Keep dependencies few and current, check `npm audit` monthly, and prefer built i
 
 ## Next tasks
 
-1. Connect this repo to GitHub (Kestrel organisation) and Vercel; add the Supabase keys in Vercel; run the waitlist migration.
-2. Import the Wix waitlist CSV.
-3. Add a privacy policy page and link it from the form.
-4. Point eyecarejobs.ca at Vercel. Steve has registered it at Namecheap (Cloudflare Registrar does not sell .ca), so the DNS records are entered in Namecheap's Advanced DNS.
-5. Then the platform build, starting with the screen designs Steve approves.
+1. Add a privacy policy page and link it from the form. It needs Kestrel's mailing address and contact details for CASL, so Steve must choose a mailing address first.
+2. Point eyecarejobs.ca at Vercel. Steve has registered it at Namecheap (Cloudflare Registrar does not sell .ca), so the DNS records are entered in Namecheap's Advanced DNS.
+3. Decide on email at the domain (Google Workspace or free forwarding).
+4. Then the platform build, starting with the screen designs Steve approves.
