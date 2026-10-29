@@ -57,6 +57,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   });
   if (error) {
     console.error("Sign up failed:", error.code, error.message);
+    if (error.code === "user_already_exists" || error.code === "email_exists") return { error: "There is already an account with that email. Try signing in, or reset your password." };
     if (error.code === "over_email_send_rate_limit") return { error: "We have sent a lot of emails just now. Please wait a few minutes and try again." };
     if (error.code === "weak_password") return { error: "That password is too easy to guess. Please choose a stronger one." };
     return { error: "We couldn't create your account. Please try again." };
