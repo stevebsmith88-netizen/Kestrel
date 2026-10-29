@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
 
 export default function ComingSoon() {
   return (
     <>
+      <SiteHeader logo={false} />
       <main>
         <section className="hero">
           <div className="wrap">

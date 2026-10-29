@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Privacy policy | Kestrel Eye Care Jobs",
@@ -12,13 +13,9 @@ const EMAIL = "privacy@eyecarejobs.ca";
 export default function Privacy() {
   return (
     <>
+      <SiteHeader />
       <main className="legal">
         <div className="wrap legal-wrap">
-          <Link href="/" className="legal-logo" aria-label="Kestrel Eye Care Jobs, home">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={220} height={65} />
-          </Link>
-
           <h1>Privacy policy</h1>
           <p className="updated">Last updated {UPDATED}</p>
 
