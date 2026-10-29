@@ -60,7 +60,8 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     if (error.code === "user_already_exists" || error.code === "email_exists") return { error: "There is already an account with that email. Try signing in, or reset your password." };
     if (error.code === "over_email_send_rate_limit") return { error: "We have sent a lot of emails just now. Please wait a few minutes and try again." };
     if (error.code === "weak_password") return { error: "That password is too easy to guess. Please choose a stronger one." };
-    return { error: "We couldn't create your account. Please try again." };
+    if (error.code === "signup_disabled" || error.code === "email_provider_disabled") return { error: "Sign ups are paused right now. Please try again later." };
+    return { error: `We couldn't create your account. Please try again. (Reference: ${error.code ?? error.status ?? "unknown"})` };
   }
   if (data.session) redirect("/dashboard");
   return { message: "We have sent a link to your email. Open it to confirm your address, then sign in.", email };
