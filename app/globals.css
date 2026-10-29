@@ -61,6 +61,7 @@ footer{background:var(--navy);color:#C9D1DA;padding:34px 0;font-size:15px}
 footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 footer strong{color:#fff}
 footer a{color:#fff}
+footer .addr{display:block;margin-top:4px;font-size:14px;color:#AEB8C4}
 .site .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
 .site-logo img{display:block;height:30px;width:auto}
 .site-wide{display:flex;align-items:center;gap:6px}
