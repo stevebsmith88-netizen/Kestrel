@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function CandidateHome() {
   const session = await requireRole("candidate");
-  const first = session.fullName.split(" ")[0] || "there";
+  const first = session.firstName || "there";
   return (
     <>
       <AppBar session={session} />

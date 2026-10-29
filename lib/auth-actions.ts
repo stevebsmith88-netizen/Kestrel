@@ -24,14 +24,16 @@ export async function signIn(_prev: FormState, form: FormData): Promise<FormStat
 
 export async function signUp(_prev: FormState, form: FormData): Promise<FormState> {
   const accountType = text(form, "accountType", 20);
-  const fullName = text(form, "fullName", 120);
+  const firstName = text(form, "firstName", 60);
+  const lastName = text(form, "lastName", 60);
   const email = text(form, "email", 254).toLowerCase();
   const password = String(form.get("password") ?? "");
   const agree = form.get("agree") === "on";
   const marketing = form.get("marketing") === "on";
 
   if (!ACCOUNT_TYPES.some((a) => a.value === accountType)) return { error: "Choose whether you are looking for a job or hiring." };
-  if (!fullName) return { error: "Enter your name." };
+  if (!firstName) return { error: "Enter your first name." };
+  if (!lastName) return { error: "Enter your last name." };
   if (!isEmail(email)) return { error: "Enter an email address like example@mysite.com." };
   if (password.length < MIN_PASSWORD) return { error: `Your password needs at least ${MIN_PASSWORD} characters.` };
   if (!agree) return { error: "Please agree to the privacy policy to continue." };
@@ -45,7 +47,9 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     options: {
       data: {
         role: accountType,
-        full_name: fullName,
+        first_name: firstName,
+        last_name: lastName,
+        full_name: `${firstName} ${lastName}`,
         marketing_consent: marketing,
         marketing_consent_text: marketing ? MARKETING_CONSENT_TEXT : null,
       },

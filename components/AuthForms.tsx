@@ -86,9 +86,15 @@ export function SignUpForm() {
           ))}
         </div>
       </div>
-      <div className="row">
-        <label className="lab" htmlFor="su-name">Your name</label>
-        <input id="su-name" name="fullName" type="text" autoComplete="name" required />
+      <div className="pair">
+        <div className="row">
+          <label className="lab" htmlFor="su-first">First name</label>
+          <input id="su-first" name="firstName" type="text" autoComplete="given-name" required />
+        </div>
+        <div className="row">
+          <label className="lab" htmlFor="su-last">Last name</label>
+          <input id="su-last" name="lastName" type="text" autoComplete="family-name" required />
+        </div>
       </div>
       <div className="row">
         <label className="lab" htmlFor="su-email">Email</label>
