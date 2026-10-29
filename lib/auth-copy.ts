@@ -8,7 +8,7 @@ export const ACCOUNT_TYPES = [
 ] as const;
 
 export const MARKETING_CONSENT_TEXT =
-  "Yes, email me job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
+  "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
 
 export const MIN_PASSWORD = 10;
 

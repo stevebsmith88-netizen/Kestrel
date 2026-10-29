@@ -25,10 +25,10 @@ export default function SiteHeader({ logo = true }: { logo?: boolean }) {
         <details className="site-narrow">
           <summary>Menu</summary>
           <nav aria-label="Main menu">
+            <Link href="/#join" className="menu-cta">Join the waitlist</Link>
             <Link href="/jobs">Find jobs</Link>
             <Link href="/clinics">For clinics</Link>
             <Link href="/sign-in">Sign in</Link>
-            <Link href="/#join">Join the waitlist</Link>
           </nav>
         </details>
       </div>

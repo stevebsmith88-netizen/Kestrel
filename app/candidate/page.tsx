@@ -17,7 +17,7 @@ export default async function CandidateHome() {
         <div className="wrap">
           <p className="kicker">Your home</p>
           <h1>Welcome, {first}</h1>
-          <p className="lede2">Your account is ready. Job search, saved CVs and application tracking are coming soon, and you will be among the first to use them.</p>
+          <p className="lede2">Your account is ready. We are still building Kestrel, so job search, saved CVs and application tracking are not open yet. If you agreed to updates when you signed up, we will email you the moment they are.</p>
           <div className="tiles">
             <section className="card">
               <p className="kicker">Applications</p>

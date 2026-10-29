@@ -92,7 +92,9 @@ export function SignUpForm() {
   return (
     <form onSubmit={submit} noValidate>
       <h1>Create your account</h1>
-      <p className="auth-intro">Free to join. It takes about a minute.</p>
+      <p className="auth-intro">
+        Free to join. We are still building Kestrel, so jobs and posting are not open yet. Create your account now, and tick the second box below to hear the moment they are.
+      </p>
       <div className="row">
         <p className="lab" id="su-type">I am</p>
         <div className="choices" role="radiogroup" aria-labelledby="su-type">

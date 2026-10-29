@@ -36,7 +36,10 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - The coming soon page (app/page.tsx) is a faithful copy of the Wix version and is live at https://eyecarejobs.ca (registered at Namecheap, DNS records entered in Namecheap's Advanced DNS, served by Vercel). The Wix copy is no longer needed.
 - The waitlist form posts to app/api/waitlist/route.ts, which validates with lib/waitlist.ts and upserts into the Supabase table defined in supabase/migrations/0001_waitlist.sql. Without SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY it returns a 503 with a friendly message.
 - The site is deployed on Vercel (Hobby) from this repo and saves sign ups to a Supabase project in the Canadian region. The repo currently lives in Steve's personal GitHub account; move it into the Kestrel organisation (Kestreleyecarejobs) when upgrading to Vercel Pro, because Hobby cannot deploy private organisation repos.
-- Accounts are being built on the branch `build-accounts`: email and password sign in with candidate, clinic and admin roles (see docs/accounts-setup.md). Screen designs for the whole platform are in the "Kestrel platform screens" design artifact that Steve has approved. Launch scope is stages 1 to 3 together, with Stripe in test mode and a free launch coupon, then prices switched on later.
+- Accounts are live: email and password sign in with candidate, clinic and admin roles (see docs/accounts-setup.md; migrations 0002 to 0004 are applied). Sign in and sign up exist, but the candidate and clinic homes are still placeholders. The waitlist stays the main public call to action until launch.
+- Screen designs for the whole platform are in the "Kestrel platform screens" design artifact that Steve has approved (candidate tracker, apply with cover letter, clinic dashboard, post a job, applicants board, claim your listing, checkout, admin overview). Launch scope is stages 1 to 3 together, with Stripe in test mode and a free launch coupon, then prices switched on later.
+- Email: Google Workspace for people (steve@ and aliases at eyecarejobs.ca), Resend for automatic email, sending from mail.eyecarejobs.ca. Supabase sends its sign up emails through Resend SMTP.
+- The privacy policy page is live at /privacy. The mailing address is 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2.
 - The Wix page never went live, so there are no Wix sign ups to import.
 - Waitlist consent wording covers launch news, job alerts, product updates and offers (CASL). Keep the wording in lib/waitlist.ts identical to what people see, since it is saved with every sign up.
 
@@ -86,6 +89,8 @@ Keep dependencies few and current, check `npm audit` monthly, and prefer built i
 
 ## Next tasks
 
-1. Add a privacy policy page and link it from the form. It needs Kestrel's mailing address and contact details for CASL, so Steve must choose a mailing address first.
-2. Decide on email at the domain (Google Workspace or free forwarding). Cloudflare Registrar does not sell .ca, so DNS stays in Namecheap's Advanced DNS; email records go there too.
-3. Then the platform build, starting with the screen designs Steve approves.
+1. Clinic profile, posting a job (pay range and the two required questions) and the admin review queue.
+2. Public job search and job pages with JobPosting structured data, including the independent or corporate filter.
+3. Candidate profile with a saved CV, Easy Apply with a cover letter, the candidate tracker and the clinic applicant board.
+4. Email notifications through Resend, then Stripe in test mode with the free launch code.
+5. Claim your listing, job alerts and the admin numbers. Before launch: Google sign in, a bot check on sign up, and a waitlist confirmation email.

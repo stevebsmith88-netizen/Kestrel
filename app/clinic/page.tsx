@@ -17,7 +17,7 @@ export default async function ClinicHome() {
         <div className="wrap">
           <p className="kicker">Clinic dashboard</p>
           <h1>Welcome, {first}</h1>
-          <p className="lede2">Your clinic account is ready. Posting jobs, reviewing applicants and managing your clinic profile are coming soon.</p>
+          <p className="lede2">Your clinic account is ready. We are still building Kestrel, so posting jobs, reviewing applicants and your clinic profile are not open yet. If you agreed to updates when you signed up, we will email you the moment they are.</p>
           <div className="tiles">
             <section className="card">
               <p className="kicker">Postings</p>

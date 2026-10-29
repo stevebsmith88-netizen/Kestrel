@@ -73,6 +73,8 @@ footer a{color:#fff}
 .site-narrow nav{position:absolute;right:0;top:calc(100% + 6px);z-index:10;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 30px rgba(27,43,75,.14);padding:8px;min-width:230px;display:flex;flex-direction:column}
 .site-narrow nav a{padding:12px 14px;color:var(--navy);text-decoration:none;font-weight:600;border-radius:8px;min-height:44px;display:flex;align-items:center}
 .site-narrow nav a:hover{background:var(--cream)}
+.site-narrow nav a.menu-cta{background:var(--chestnut);color:#fff;justify-content:center;margin-bottom:4px}
+.site-narrow nav a.menu-cta:hover{background:var(--chestnut-d)}
 @media (max-width:700px){.site-wide{display:none}.site-narrow{display:block}}
 .simple{padding:56px 0 96px}
 .simple .wrap{max-width:720px}
