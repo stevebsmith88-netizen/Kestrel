@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useState } from "react";
 import { forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, type FormState } from "@/lib/auth-copy";
 
@@ -17,6 +17,27 @@ function useAuthForm(action: Action) {
     startTransition(() => run(data));
   };
   return { state, pending, submit };
+}
+
+// A password box with an eye to show or hide what has been typed.
+function PasswordField({ id, name, label, autoComplete, hint, minLength }: { id: string; name: string; label: string; autoComplete: string; hint?: string; minLength?: number }) {
+  const [shown, setShown] = useState(false);
+  return (
+    <div className="row">
+      <label className="lab" htmlFor={id}>{label}</label>
+      <div className="pw">
+        <input id={id} name={name} type={shown ? "text" : "password"} autoComplete={autoComplete} minLength={minLength} required aria-describedby={hint ? `${id}-hint` : undefined} />
+        <button type="button" className="pw-toggle" onClick={() => setShown(!shown)} aria-pressed={shown} aria-label={shown ? "Hide password" : "Show password"}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+            <circle cx="12" cy="12" r="3" />
+            {shown && <path d="M4 4l16 16" />}
+          </svg>
+        </button>
+      </div>
+      {hint && <p className="help" id={`${id}-hint`}>{hint}</p>}
+    </div>
+  );
 }
 
 function Problem({ text }: { text?: string }) {
@@ -47,10 +68,7 @@ export function SignInForm({ notice }: { notice?: string }) {
         <label className="lab" htmlFor="si-email">Email</label>
         <input id="si-email" name="email" type="email" autoComplete="email" required />
       </div>
-      <div className="row">
-        <label className="lab" htmlFor="si-password">Password</label>
-        <input id="si-password" name="password" type="password" autoComplete="current-password" required />
-      </div>
+      <PasswordField id="si-password" name="password" label="Password" autoComplete="current-password" />
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Signing in" : "Sign in"}</button>
       <p className="alt"><Link href="/forgot-password">Forgot your password?</Link></p>
@@ -100,11 +118,7 @@ export function SignUpForm() {
         <label className="lab" htmlFor="su-email">Email</label>
         <input id="su-email" name="email" type="email" autoComplete="email" required />
       </div>
-      <div className="row">
-        <label className="lab" htmlFor="su-password">Password</label>
-        <input id="su-password" name="password" type="password" autoComplete="new-password" minLength={MIN_PASSWORD} required aria-describedby="su-hint" />
-        <p className="help" id="su-hint">At least {MIN_PASSWORD} characters. A few words you will remember work well.</p>
-      </div>
+      <PasswordField id="su-password" name="password" label="Password" autoComplete="new-password" minLength={MIN_PASSWORD} hint={`At least ${MIN_PASSWORD} characters. A few words you will remember work well.`} />
       <div className="row">
         <label className="consent">
           <input name="agree" type="checkbox" />
@@ -155,15 +169,8 @@ export function ResetPasswordForm() {
   const { state, pending, submit } = useAuthForm(resetPassword);
   return (
     <form onSubmit={submit} noValidate>
-      <div className="row">
-        <label className="lab" htmlFor="rp-password">New password</label>
-        <input id="rp-password" name="password" type="password" autoComplete="new-password" minLength={MIN_PASSWORD} required />
-        <p className="help">At least {MIN_PASSWORD} characters.</p>
-      </div>
-      <div className="row">
-        <label className="lab" htmlFor="rp-again">Type it again</label>
-        <input id="rp-again" name="again" type="password" autoComplete="new-password" required />
-      </div>
+      <PasswordField id="rp-password" name="password" label="New password" autoComplete="new-password" minLength={MIN_PASSWORD} hint={`At least ${MIN_PASSWORD} characters.`} />
+      <PasswordField id="rp-again" name="again" label="Type it again" autoComplete="new-password" />
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : "Save my new password"}</button>
     </form>

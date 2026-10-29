@@ -85,6 +85,12 @@ footer a{color:#fff}
 .auth-logo img{display:block;width:180px;height:auto}
 .auth h1{font:400 clamp(28px,4vw,34px)/1.1 "DM Serif Display",Georgia,serif;margin:0 0 6px}
 .auth-intro{color:var(--navy-2);margin:0 0 22px}
+.pw{position:relative}
+.pw input{padding-right:54px}
+.pw-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;background:none;color:var(--navy-2);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.pw-toggle:hover{background:rgba(27,43,75,.07)}
+.pw-toggle:focus-visible{outline:3px solid var(--buff);outline-offset:1px}
+.pw-toggle svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .auth-done{outline:none}
 .auth-done .help{margin:-8px 0 0}
 .alt{font-size:15px;color:var(--muted);margin:14px 0 0;text-align:center}
