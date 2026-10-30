@@ -4,6 +4,7 @@ import { notifyAdmin } from "@/lib/notify-admin";
 import { REPORT_REASON_LABEL } from "@/lib/reports";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -23,6 +24,8 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   if (!REPORT_REASON_LABEL[reason]) return { error: "Please choose what is wrong with the job." };
   if (email && !EMAIL.test(email)) return { error: "That email address doesn't look right. You can also leave it blank." };
   if (reason === "other" && details.length < 10) return { error: "Please tell us a little about what is wrong." };
+
+  if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
   const db = supabaseAdmin();
   if (!db) return { error: "Reporting isn't available right now. Please email hello@eyecarejobs.ca." };

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Choices, Field } from "@/components/Field";
+import Turnstile from "@/components/Turnstile";
 import { useServerForm } from "@/components/useServerForm";
 import { submitReport } from "@/lib/report-actions";
 import { REPORT_REASONS } from "@/lib/reports";
@@ -31,6 +32,7 @@ export default function ReportForm({ jobId }: { jobId: string }) {
       <Field id="rp-email" label="Your email" hint="Optional. Only if you would like us to write back. We use it for nothing else.">
         <input id="rp-email" name="email" type="email" autoComplete="email" />
       </Field>
+      <Turnstile resetSignal={state} />
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}
       <button type="submit" className="btn" disabled={pending}>{pending ? "Sending" : "Send report"}</button>
     </form>

@@ -58,3 +58,10 @@ delete from auth.users where email = 'steve+admin@eyecarejobs.ca';
 2. Change your email to a new test address such as steve+changed@eyecarejobs.ca. Enter your password. Open the email sent to the old address and the one sent to the new address. After both are confirmed, sign out and sign in with the new address.
 3. Email choices: turn off "Email me when a clinic updates one of my applications" (candidate), then move an application's status as the clinic. No email should arrive, but the tracker still updates. Turn it back on.
 4. Clinic: with a new clinic account that has not set up a clinic, press Post a job. You should land on Set up your clinic with a note saying it must be done first.
+
+## Also try (the bot check)
+
+1. With the Turnstile keys in Vercel, open the waitlist form on the home page, the sign up page, the forgot password page and a job's "Report this job" page. Each should show the security check above the button.
+2. Fill in a form and send it. It should go through as normal.
+3. Send the same form twice in a row. The check should refresh itself each time.
+4. On a preview link, use Cloudflare's test keys (see `docs/security.md`), because preview addresses are not on your real widget. Use your real keys only on the live site.

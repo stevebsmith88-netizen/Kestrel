@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { startTransition, useActionState, useState } from "react";
 import { forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
+import Turnstile from "@/components/Turnstile";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, type FormState } from "@/lib/auth-copy";
 
 type Action = (prev: FormState, form: FormData) => Promise<FormState>;
@@ -136,6 +137,7 @@ export function SignUpForm({ defaultType = "candidate" }: { defaultType?: "candi
           <span>{MARKETING_CONSENT_TEXT}</span>
         </label>
       </div>
+      <Turnstile resetSignal={state} />
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Creating your account" : "Create my account"}</button>
       <p className="alt">Already have an account? <Link href="/sign-in">Sign in</Link></p>
@@ -161,6 +163,7 @@ export function ForgotPasswordForm() {
         <label className="lab" htmlFor="fp-email">Email</label>
         <input id="fp-email" name="email" type="email" autoComplete="email" required />
       </div>
+      <Turnstile resetSignal={state} />
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Sending" : "Send me a link"}</button>
       <p className="alt"><Link href="/sign-in">Back to sign in</Link></p>

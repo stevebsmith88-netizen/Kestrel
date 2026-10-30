@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Turnstile from "@/components/Turnstile";
 import { AUDIENCES, CONSENT_TEXT, PROVINCES, ROLES, THANK_YOU, validate, type FieldErrors, type WaitlistInput } from "@/lib/waitlist";
 
 const EMPTY: WaitlistInput = {
@@ -23,6 +24,8 @@ export default function WaitlistForm() {
   const [formError, setFormError] = useState("");
   const [sending, setSending] = useState(false);
   const [done, setDone] = useState(false);
+  const [token, setToken] = useState("");
+  const [attempts, setAttempts] = useState(0);
 
   const isClinic = v.audience === "clinic";
 
@@ -55,16 +58,18 @@ export default function WaitlistForm() {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(v),
+        body: JSON.stringify({ ...v, turnstileToken: token }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setDone(true);
         return;
       }
+      setAttempts((n) => n + 1);
       if (data.errors) setErrors(data.errors);
       setFormError(data.error || (data.errors ? "Please check the highlighted answers." : "Something went wrong sending your details. Please try again."));
     } catch {
+      setAttempts((n) => n + 1);
       setFormError("Something went wrong sending your details. Please try again.");
     } finally {
       setSending(false);
@@ -192,6 +197,7 @@ export default function WaitlistForm() {
         </label>
       </div>
 
+      <Turnstile onToken={setToken} resetSignal={attempts} />
       {formError && <p className="err form-err" role="alert">{formError}</p>}
       <button type="submit" className="btn" disabled={sending}>
         {sending ? "Sending" : "Join the waitlist"}

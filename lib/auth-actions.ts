@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase/server";
+import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
 
 const text = (form: FormData, key: string, max = 200) => String(form.get(key) ?? "").trim().slice(0, max);
@@ -37,6 +38,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   if (!isEmail(email)) return { error: "Enter an email address like example@mysite.com." };
   if (password.length < MIN_PASSWORD) return { error: `Your password needs at least ${MIN_PASSWORD} characters.` };
   if (!agree) return { error: "Please agree to the privacy policy to continue." };
+  if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
@@ -70,6 +72,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
 export async function forgotPassword(_prev: FormState, form: FormData): Promise<FormState> {
   const email = text(form, "email", 254).toLowerCase();
   if (!isEmail(email)) return { error: "Enter an email address like example@mysite.com." };
+  if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };

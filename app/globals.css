@@ -363,3 +363,5 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .card .facts + .subh{margin-top:20px}
 .card .stackform{gap:16px}
 .card > h2{margin-top:0}
+
+.turnstile{margin:14px 0;min-height:65px}

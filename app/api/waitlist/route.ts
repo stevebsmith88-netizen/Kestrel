@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
 import { waitlistConfirmUrl } from "@/lib/waitlist-confirm";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { CONSENT_TEXT, validate } from "@/lib/waitlist";
@@ -17,6 +18,7 @@ export async function POST(req: Request) {
   // Bots fill the hidden "website" field. Pretend it worked and save nothing.
   if (values.website) return NextResponse.json({ ok: true });
   if (!ok) return NextResponse.json({ errors }, { status: 422 });
+  if (!(await passesTurnstile((body as Record<string, unknown> | null)?.turnstileToken))) return NextResponse.json({ error: TURNSTILE_MESSAGE }, { status: 400 });
 
   const db = supabaseAdmin();
   if (!db) {

@@ -20,6 +20,7 @@ Change one by creating the new key first, putting it in Vercel (Settings, Enviro
 | `RESEND_API_KEY` | Vercel only | Send email as Kestrel. Cannot read the database. | Resend, API Keys: create `kestrel-website`, swap, redeploy, delete the old one. |
 | Resend SMTP key (used by Supabase for sign up emails) | Supabase, Authentication, SMTP | Send email as Kestrel. | Create a new Resend key, paste it into Supabase's SMTP settings, delete the old one. |
 | `ANTHROPIC_API_KEY` | Vercel only | Run AI requests on our bill. Cannot read the database. Keep a monthly spend limit on it. | Anthropic console, API keys: create, swap, redeploy, delete the old one. |
+| `TURNSTILE_SECRET_KEY` | Vercel only | Check bot test results as if it were the site's own. Cannot read the database. | Cloudflare, Turnstile, the widget, Settings: rotate the secret key, swap it in Vercel, redeploy. |
 | `CRON_SECRET` | Vercel only | Run the daily housekeeping job on demand (expire jobs, send alert emails). | Make up a new long random string in Vercel and redeploy. Vercel sends it automatically. |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public by design | Nothing on its own. Our database rules (row level security) decide what it can see, and we have tested them. | Not secret. Only change it if Supabase asks. |
 | Stripe keys (when built) | Vercel only | Take payments and read customers. | Use restricted keys, and roll them in the Stripe dashboard. |
@@ -57,7 +58,15 @@ Hugging Face's July 2026 breach is the example: attackers got internal datasets 
 
 ## Known gaps
 
-- **Bots:** nothing yet stops a robot filling in the waitlist or sign up forms again and again. The Cloudflare Turnstile bot check fixes this and needs your free key.
+- **Bots:** the Cloudflare Turnstile check is built into the waitlist, sign up, password reset and report forms. It only works once both Turnstile keys are in Vercel. Sign in is left without it on purpose, because Supabase already limits sign in attempts and the check adds friction for real people.
 - **Uploaded CVs are not scanned for viruses.** The type and size are checked, but a clinic opens a CV on their own computer. Add scanning before launch.
 - **No 2 step sign in on the admin area** beyond the account's own. Your Supabase account having 2 step sign in matters.
 - **A stricter content security policy** (which limits what scripts a page may run) is not on yet. It is worth adding with the full audit, because it needs testing.
+
+## Setting up the bot check (Cloudflare Turnstile)
+
+1. Create a free Cloudflare account with a Kestrel address, turn on 2 step sign in, then Turnstile, Add widget, hostname `eyecarejobs.ca`, mode Managed.
+2. In Vercel add `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (the Site Key, public) and `TURNSTILE_SECRET_KEY` (the Secret Key, mark Sensitive, never paste it into chat or email) to **Production**.
+3. For **Preview**, add Cloudflare's published test keys instead, because preview addresses are not on the real widget. Check Cloudflare's Turnstile testing page for the current values.
+4. Redeploy without the build cache. The site key is read when the site is built, so the check only appears after a new build.
+5. Both keys must be set for the check to run. If only one is set, the forms carry on without it, so a half finished setup can never lock people out.
