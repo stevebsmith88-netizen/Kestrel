@@ -36,6 +36,7 @@ export default async function CandidateHome() {
               <div className="meter" role="img" aria-label={`Profile ${strength} percent complete`}><i style={{ width: `${strength}%` }} /></div>
               <p>{profileReady(profile) ? "Your CV and details are saved." : "Add your role and save your CV, and you can apply to any job in a few clicks."}</p>
               <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
+              <p className="help"><Link href="/candidate/letters">My saved cover letters</Link></p>
             </section>
             <section className="card">
               <p className="kicker">Applications</p>

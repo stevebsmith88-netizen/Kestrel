@@ -6,7 +6,7 @@ import ApplyForm from "@/components/ApplyForm";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
-import { formatPay } from "@/lib/jobs";
+import { formatPay, longDate } from "@/lib/jobs";
 import { getLiveJob } from "@/lib/public-jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -43,6 +43,9 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
   } else {
     const profile = await getMyCandidateProfile(session.userId);
     const db = await supabaseServer();
+    const { data: draft } = db ? await db.from("application_drafts").select("cover_letter, updated_at").eq("job_id", job.id).maybeSingle() : { data: null };
+    const { data: letterRows } = db ? await db.from("cover_letter_templates").select("id, name, body").order("updated_at", { ascending: false }) : { data: null };
+    const letters = (letterRows ?? []) as { id: string; name: string; body: string }[];
     const { data: existing } = db ? await db.from("applications").select("id").eq("job_id", job.id).maybeSingle() : { data: null };
     if (existing) {
       body = <section className="card"><h2>You have already applied</h2><p>You can follow this application under My applications.</p><Link href={`/candidate/applications/${existing.id}`} className="btn">See my application</Link></section>;
@@ -67,7 +70,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
             </dl>
             <p className="help"><Link href="/candidate/profile">Change these in my profile</Link></p>
           </section>
-          <ApplyForm jobId={job.id} clinicName={clinic} />
+          <ApplyForm jobId={job.id} clinicName={clinic} draft={draft?.cover_letter ?? ""} draftSavedAt={draft ? longDate(draft.updated_at) : ""} letters={letters} />
         </>
       );
     }

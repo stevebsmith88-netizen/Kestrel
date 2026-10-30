@@ -83,3 +83,41 @@ export async function getMyJob(id: string): Promise<MyJob | null> {
   const { data } = await db.from("jobs").select(JOB_COLUMNS).eq("id", id).maybeSingle();
   return (data as MyJob | null) ?? null;
 }
+
+// A saved starting point for a job post. The two questions every post must answer (existing vacancy and AI
+// screening) are not saved, so they are answered fresh each time.
+export type JobTemplate = {
+  id: string;
+  name: string;
+  title: string | null;
+  role_category: string | null;
+  employment_type: string | null;
+  province: string | null;
+  city: string | null;
+  pay_period: string | null;
+  pay_min: number | null;
+  pay_max: number | null;
+  description: string | null;
+  apply_method: string;
+  apply_url: string | null;
+  work_arrangement: string;
+  territory: string | null;
+  pay_extras: string | null;
+  updated_at: string;
+};
+
+const TEMPLATE_COLUMNS = "id, name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at";
+
+export async function getMyTemplates(): Promise<JobTemplate[]> {
+  const db = await supabaseServer();
+  if (!db) return [];
+  const { data } = await db.from("job_templates").select(TEMPLATE_COLUMNS).order("updated_at", { ascending: false });
+  return (data ?? []) as JobTemplate[];
+}
+
+export async function getMyTemplate(id: string): Promise<JobTemplate | null> {
+  const db = await supabaseServer();
+  if (!db) return null;
+  const { data } = await db.from("job_templates").select(TEMPLATE_COLUMNS).eq("id", id).maybeSingle();
+  return (data as JobTemplate | null) ?? null;
+}

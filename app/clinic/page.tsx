@@ -6,6 +6,7 @@ import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { closeJob, deleteJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
+import { saveJobAsTemplate } from "@/lib/template-actions";
 import { daysLeft, formatPay, longDate } from "@/lib/jobs";
 
 export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -20,13 +21,16 @@ const NOTICES: Record<string, string> = {
   "job-withdrawn": "The job is back in your drafts, so you can change it and send it again.",
   "job-deleted": "The job is deleted.",
   "job-edited": "Your changes are with our team. The job is offline until we approve them, usually within 1 business day. Its 30 days keep running.",
+  "template-saved": "Saved as a template. Start a new post from it under Post a job.",
+  "template-limit": "You have 20 templates already. Delete one under Post a job, then try again.",
+  "template-failed": "We couldn't save that template. Please try again.",
   "job-limit": "You have 10 open jobs already. Close or delete one, then try again.",
   "job-repost-failed": "We couldn't copy that job. Please try again.",
 };
 
-export default async function ClinicHome({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
+export default async function ClinicHome({ searchParams }: { searchParams: Promise<{ notice?: string; template?: string }> }) {
   const session = await requireRole("clinic");
-  const { notice } = await searchParams;
+  const { notice, template } = await searchParams;
   const employer = await getMyEmployer(session.userId);
   const jobs = employer ? await getMyJobs(employer.id) : [];
   const applicants = employer ? await getApplicantCounts() : {};
@@ -41,7 +45,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
         <div className="wrap">
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}
+          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{template ? " It is also saved as a template for next time." : ""}</p>}
 
           {!employer ? (
             <section className="card setup">
@@ -90,6 +94,9 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                             <Link href={`/clinic/jobs/${j.id}/applicants`} className="btn sm">
                               Applicants ({applicants[j.id].total}{applicants[j.id].fresh ? `, ${applicants[j.id].fresh} new` : ""})
                             </Link>
+                          )}
+                          {j.status !== "draft" && (
+                            <form action={saveJobAsTemplate}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Save as template</button></form>
                           )}
                           {j.status === "live" && <Link href={`/jobs/${j.id}`} className="btn sm ghost">View</Link>}
                           {j.status === "live" && (

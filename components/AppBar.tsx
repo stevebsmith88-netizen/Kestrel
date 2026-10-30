@@ -6,6 +6,7 @@ const NAV: Record<Role, { href: string; label: string }[]> = {
   candidate: [
     { href: "/candidate", label: "Home" },
     { href: "/jobs", label: "Find jobs" },
+    { href: "/find-your-fit", label: "Find your fit" },
     { href: "/candidate/applications", label: "My applications" },
     { href: "/candidate/profile", label: "Profile and CV" },
     { href: "/candidate/alerts", label: "Job alerts" },

@@ -6,7 +6,7 @@ Work down the list. "You" is Steve. "Claude" means Claude builds it and you appr
 
 | # | What | Who | Time |
 | --- | --- | --- | --- |
-| 1 | Run `supabase/combined/run-everything.sql` (all migrations 0001 to 0014, with a check at the end). Safe to run again | You | 2 min |
+| 1 | Run `supabase/combined/run-everything.sql` (all migrations 0001 to 0015, with a check at the end). Safe to run again | You | 2 min |
 | 2 | Create the new Resend key `kestrel-website` (sending access, your domain only) and add it to Vercel as `RESEND_API_KEY` | You | 5 min |
 | 3 | Create the Anthropic key `kestrel-website` (own workspace, spending limit) and add it as `ANTHROPIC_API_KEY` | You | 5 min |
 | 4 | Make up a long random string and add it as `CRON_SECRET` | You | 2 min |
@@ -37,7 +37,8 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 17 | Stripe checkout in test mode with the FREELAUNCH coupon and HST | Your Stripe account and test keys |
 | 18 | DONE: "Claim your listing" page (run migration 0012) | Nothing |
 | 19 | DONE: waitlist confirmation email (run migration 0014) | Nothing |
-| 20 | Admin numbers and a simple "Find your fit" quiz | Nothing |
+| 20 | DONE: admin numbers and the "Find your fit" quiz | Nothing |
+| 20a | DONE: saved job templates, application drafts and saved cover letters (run migration 0015) | Nothing |
 | 21 | DONE: do not email list and clinic unsubscribe page | Nothing |
 | 22 | Converting remaining fixed pixel sizes to relative sizes | Nothing |
 | 22a | Admin tool to add found listings (seeding). Editing a live job and Post again are DONE | Nothing |

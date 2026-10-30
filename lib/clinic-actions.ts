@@ -73,6 +73,17 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   return { message: "Your clinic profile is saved." };
 }
 
+// What a template keeps from a job: everything except the status and the two questions that must be answered fresh.
+const templateFields = (row: {
+  title: string; role_category: string | null; employment_type: string | null; province: string | null; city: string | null;
+  pay_period: string | null; pay_min: number | null; pay_max: number | null; description: string | null; apply_method: string;
+  apply_url: string | null; work_arrangement: string; territory: string | null; pay_extras: string | null;
+}) => ({
+  title: row.title, role_category: row.role_category, employment_type: row.employment_type, province: row.province, city: row.city,
+  pay_period: row.pay_period, pay_min: row.pay_min, pay_max: row.pay_max, description: row.description, apply_method: row.apply_method,
+  apply_url: row.apply_url, work_arrangement: row.work_arrangement, territory: row.territory, pay_extras: row.pay_extras,
+});
+
 export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("clinic");
   const employer = await getMyEmployer(session.userId);
@@ -145,10 +156,18 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     }
   }
 
+  // Optionally keep this post as a template for next time (the two required questions are not kept).
+  let savedTemplate = false;
+  if (field(form, "saveTemplate") === "yes") {
+    const name = (String(field(form, "templateName")).trim() || job.title).slice(0, 80);
+    const { error: templateError } = await db.from("job_templates").upsert({ employer_id: employer.id, name, ...templateFields(row) }, { onConflict: "employer_id,name" });
+    if (templateError) console.error("Template save failed:", templateError.code, templateError.message);
+    else savedTemplate = true;
+  }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
   revalidatePath("/jobs");
-  redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}`);
+  redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}${savedTemplate ? "&template=1" : ""}`);
 }
 
 // Live job: close it. Job in review: take it back to a draft so it can be changed.

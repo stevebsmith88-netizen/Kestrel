@@ -30,6 +30,12 @@ export async function GET() {
       db.from("candidate_profiles").select("profession, licensed_provinces, years_experience, available_from, phone, cv_filename, cv_uploaded_at, created_at, updated_at").eq("user_id", id).maybeSingle(),
       db.from("applications").select("id, job_title, clinic_name, job_location, status, cover_letter, keep_details, applicant, cv_filename, clinic_message, viewed_at, status_changed_at, created_at").eq("candidate_id", id).order("created_at", { ascending: false }),
     ]);
+    const [letters, drafts] = await Promise.all([
+      db.from("cover_letter_templates").select("name, body, created_at, updated_at").eq("user_id", id),
+      db.from("application_drafts").select("cover_letter, updated_at").eq("user_id", id),
+    ]);
+    data.savedCoverLetters = letters.data ?? [];
+    data.applicationDrafts = drafts.data ?? [];
     const appIds = (apps.data ?? []).map((a) => a.id);
     const events = appIds.length ? await db.from("application_events").select("application_id, status, note, created_at").in("application_id", appIds).order("created_at") : { data: [] };
     data.candidateProfile = cp.data ?? null;
@@ -40,6 +46,8 @@ export async function GET() {
     const jobs = employer.data
       ? await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.data.id).order("created_at", { ascending: false })
       : { data: [] };
+    const templates = employer.data ? await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.data.id) : { data: [] };
+    data.jobTemplates = templates.data ?? [];
     data.clinic = employer.data ? { ...employer.data, id: undefined, alertEmail: contact.data?.notify_email ?? null } : null;
     data.jobs = jobs.data ?? [];
   }

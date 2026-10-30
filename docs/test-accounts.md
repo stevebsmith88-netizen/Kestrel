@@ -44,3 +44,10 @@ Use "Delete my account" on the Account page for the candidate and clinic account
 ```sql
 delete from auth.users where email = 'steve+admin@eyecarejobs.ca';
 ```
+
+## Also try (templates, drafts, quiz and numbers)
+
+1. Clinic: start a post, press Save draft, and find it on the dashboard. Open it, finish it, tick "Also keep this as a template" and submit. Then go to Post a job and start from the template.
+2. Candidate: open an application, write half a letter, press "Save as a draft", leave, and come back. Then send it with "Keep this letter" ticked and check it appears under My saved letters.
+3. Anyone: open Find your fit, answer the 6 questions and follow a result to the job search.
+4. Admin: open Overview, switch between the 3 periods, and press Export CSV.

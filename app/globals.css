@@ -327,3 +327,31 @@ main:focus{outline:none}
 .postlist h2 a{text-decoration:none;color:var(--navy)}
 .postlist h2 a:hover{text-decoration:underline}
 .blogcta{margin:32px 0}
+
+.templatebox{margin:20px 0 4px;padding:14px;border:1px dashed var(--edge);border-radius:12px;background:var(--paper)}
+.alertlist .jobactions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+.letterpick{margin:14px 0}
+.pickrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pickrow select{flex:1;min-width:200px}
+.draftrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:12px 0}
+
+/* Find your fit quiz */
+.quizset{border:0;padding:0;margin:18px 0}
+.quizset legend{padding:0;margin-bottom:6px}
+.quizset legend h2{margin:0;font-size:1.5rem}
+.quizset h2:focus{outline:none}
+.quizoptions{display:grid;gap:10px;margin-top:12px}
+.quizoptions .choice{align-items:flex-start;line-height:1.4}
+
+/* Admin numbers */
+.periodbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+.periodbar nav{display:flex;gap:8px;flex-wrap:wrap}
+.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
+@media (max-width:860px){.twocol{grid-template-columns:1fr}}
+.bars{list-style:none;margin:12px 0 0;padding:0}
+.card .bars li{display:grid;grid-template-columns:minmax(90px,150px) minmax(0,1fr) 48px;gap:12px;align-items:center;padding:6px 0;border-top:0}
+.card .bars li::before{content:none}
+.bars .bar{display:block;height:12px;border-radius:6px;background:var(--mist);overflow:hidden}
+.bars .bar i{display:block;height:100%;background:var(--navy)}
+.bars strong{text-align:right}

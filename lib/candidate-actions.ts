@@ -173,6 +173,13 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
     return { error: "We couldn't attach your CV. Please try again." };
   }
   await admin.from("applications").update({ cv_path: copyPath, cv_filename: profile.cv_filename }).eq("id", created.id);
+  // The draft is no longer needed. If asked, the letter is kept as a template for next time (up to 5).
+  await admin.from("application_drafts").delete().eq("user_id", session.userId).eq("job_id", job.id);
+  const letterName = String(form.get("letterName") ?? "").trim().slice(0, 80);
+  if (form.get("saveLetter") === "yes" && coverLetter && letterName) {
+    const { error: letterError } = await admin.from("cover_letter_templates").upsert({ user_id: session.userId, name: letterName, body: coverLetter }, { onConflict: "user_id,name" });
+    if (letterError) console.error("Letter template save failed:", letterError.code, letterError.message);
+  }
   await admin.from("application_events").insert({ application_id: created.id, status: "applied" });
 
   // Tell the clinic, without putting the candidate's details in the email.

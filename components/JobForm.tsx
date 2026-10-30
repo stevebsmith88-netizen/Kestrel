@@ -42,6 +42,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
     if (ad.state.ad) setDescription(ad.state.ad);
   }, [ad.state.ad]);
   const [applyMethod, setApplyMethod] = useState(initial.apply_method || "kestrel");
+  const [saveTemplate, setSaveTemplate] = useState(false);
   const [arrangement, setArrangement] = useState(initial.work_arrangement || "on_site");
   const e = state.errors ?? {};
   return (
@@ -155,6 +156,19 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
         </Field>
       )}
 
+      {!live && (
+        <div className="templatebox">
+          <label className="choice agree">
+            <input type="checkbox" name="saveTemplate" value="yes" checked={saveTemplate} onChange={(ev) => setSaveTemplate(ev.target.checked)} />
+            <span>Also keep this as a template, so I can start a similar post next time. The two questions above are not kept, so you answer them fresh each time.</span>
+          </label>
+          {saveTemplate && (
+            <Field id="jf-tname" label="Template name" hint="For example: Full time optician, Victoria. Using a name you already have replaces that template.">
+              <input id="jf-tname" name="templateName" type="text" maxLength={80} defaultValue={initial.title} />
+            </Field>
+          )}
+        </div>
+      )}
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}
       <div className="formbtns">
         <button type="submit" name="intent" value="submit" className="btn" disabled={pending}>{pending ? "Saving" : live ? "Send my changes for review" : "Submit for review"}</button>
