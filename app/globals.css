@@ -272,3 +272,12 @@ textarea{resize:vertical;line-height:1.5}
 .adbuilder{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 18px}
 .adbuilder .row{margin-bottom:12px}
 .adbuilder .btn{width:auto}
+
+.dangerzone h2{font:400 24px/1.2 "DM Serif Display",Georgia,serif;margin:0 0 6px;color:#8C2A1F}
+.dangerzone p{color:var(--navy-2)}
+.btn.danger{background:#8C2A1F}
+.btn.danger:hover{background:#6E2118}
+
+.alertlist{list-style:none;margin:12px 0 0;padding:0}
+.alertlist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.alertlist li:first-child{border-top:0}

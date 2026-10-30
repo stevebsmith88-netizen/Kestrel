@@ -138,7 +138,7 @@ export default function Privacy() {
           <h2>Your rights</h2>
           <p>
             You can ask to see the personal information we hold about you, ask us to correct it, ask us to delete it, or
-            withdraw your consent, including deleting your account. Email <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. We may need to confirm who you are first. If
+            withdraw your consent. You can delete your account yourself on the Account page, or email <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. We may need to confirm who you are first. If
             you are not satisfied with our response, you can contact the{" "}
             <a href="https://www.priv.gc.ca" rel="noopener noreferrer">Office of the Privacy Commissioner of Canada</a>.
           </p>

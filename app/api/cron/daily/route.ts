@@ -12,7 +12,8 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 //  1. marks live jobs that have passed their 30 days as expired,
 //  2. closes out applications still waiting on a job that ended a week ago, so candidates
 //     are never left waiting,
-//  3. reminds clinics about applications they have not opened for 14 days.
+//  3. reminds clinics about applications they have not opened for 14 days,
+//  4. emails candidates one digest of new jobs that match their job alerts.
 // Vercel sends the secret in the Authorization header, so nobody else can trigger it.
 export async function GET(request: Request) {
   const secret = process.env.CRON_SECRET;
@@ -21,7 +22,7 @@ export async function GET(request: Request) {
   if (!admin) return new Response("Not available", { status: 503 });
 
   const now = new Date();
-  const summary = { expiredJobs: 0, closedOutApplications: 0, reminders: 0 };
+  const summary = { expiredJobs: 0, closedOutApplications: 0, reminders: 0, alertsSent: 0 };
 
   // 1. Expire jobs. The public pages already stop showing them the moment they pass their date.
   const { data: expired } = await admin.from("jobs").update({ status: "expired" }).eq("status", "live").lt("expires_at", now.toISOString()).select("id");
@@ -77,6 +78,51 @@ export async function GET(request: Request) {
         await admin.from("applications").update({ reminded_at: new Date().toISOString() }).in("id", appIds);
         summary.reminders += 1;
       }
+    }
+  }
+
+  // 4. Job alerts. Each person gets at most one email a day listing every new match.
+  const { data: alerts } = await admin.from("job_alerts").select("id, user_id, role_category, province, practice_type, last_sent_at");
+  const byUser = new Map<string, NonNullable<typeof alerts>>();
+  (alerts ?? []).forEach((a) => byUser.set(a.user_id, [...(byUser.get(a.user_id) ?? []), a]));
+  for (const [userId, mine] of byUser) {
+    const { data: profile } = await admin.from("profiles").select("unsubscribed_at").eq("id", userId).maybeSingle();
+    if (!profile || profile.unsubscribed_at) continue;
+    const found = new Map<string, { title: string; clinic: string; place: string }>();
+    for (const alert of mine) {
+      let query = admin
+        .from("jobs")
+        .select("id, title, province, city, employers!inner(clinic_name, practice_type)")
+        .eq("status", "live")
+        .gt("expires_at", now.toISOString())
+        .gt("posted_at", alert.last_sent_at)
+        .order("posted_at", { ascending: false })
+        .limit(20);
+      if (alert.role_category) query = query.eq("role_category", alert.role_category);
+      if (alert.province) query = query.eq("province", alert.province);
+      if (alert.practice_type) query = query.eq("employers.practice_type", alert.practice_type);
+      const { data: jobs } = await query;
+      for (const job of (jobs ?? []) as unknown as { id: string; title: string; province: string; city: string; employers: { clinic_name: string } | null }[]) {
+        found.set(job.id, { title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
+      }
+    }
+    if (found.size === 0) continue;
+    const { data: user } = await admin.auth.admin.getUserById(userId);
+    const email = user?.user?.email;
+    if (!email) continue;
+    const unsubscribeUrl = `${SITE_URL}/unsubscribe/${userId}`;
+    const mail = emailLayout({
+      heading: found.size === 1 ? "A new job matches your alert" : `${found.size} new jobs match your alerts`,
+      paragraphs: ["Here is what has been posted since we last emailed you."],
+      items: [...found].slice(0, 15).map(([id, j]) => ({ text: `${j.title}, ${j.clinic}, ${j.place}`, url: `${SITE_URL}/jobs/${id}` })),
+      buttonText: "See all jobs",
+      buttonUrl: `${SITE_URL}/jobs`,
+      unsubscribeUrl,
+    });
+    const sent = await sendEmail({ to: email, subject: found.size === 1 ? "New job alert: 1 new job" : `New job alert: ${found.size} new jobs`, unsubscribeUrl, ...mail });
+    if (sent) {
+      await admin.from("job_alerts").update({ last_sent_at: now.toISOString() }).in("id", mine.map((a) => a.id));
+      summary.alertsSent += 1;
     }
   }
 

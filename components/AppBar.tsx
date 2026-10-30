@@ -8,11 +8,14 @@ const NAV: Record<Role, { href: string; label: string }[]> = {
     { href: "/jobs", label: "Find jobs" },
     { href: "/candidate/applications", label: "My applications" },
     { href: "/candidate/profile", label: "Profile and CV" },
+    { href: "/candidate/alerts", label: "Job alerts" },
+    { href: "/account", label: "Account" },
   ],
   clinic: [
     { href: "/clinic", label: "Dashboard" },
     { href: "/clinic/profile", label: "Clinic profile" },
     { href: "/clinic/jobs/new", label: "Post a job" },
+    { href: "/account", label: "Account" },
   ],
   admin: [
     { href: "/admin", label: "Overview" },
