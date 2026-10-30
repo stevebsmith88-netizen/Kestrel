@@ -35,6 +35,7 @@ export async function updateName(_prev: JobFormState, form: FormData): Promise<J
 // so nobody who finds a signed in screen can take over the account.
 export async function requestEmailChange(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("candidate", "clinic");
+  if (!session.hasPassword) return { error: "You sign in with Google, so your email address comes from your Google account." };
   const next = String(form.get("email") ?? "").trim().toLowerCase();
   const password = String(form.get("password") ?? "");
   const errors = validateEmailChange(session.email, next, password);

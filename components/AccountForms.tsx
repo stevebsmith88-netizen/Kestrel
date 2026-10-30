@@ -26,9 +26,10 @@ export function NameForm({ first, last }: { first: string; last: string }) {
   );
 }
 
-export function EmailForm({ current }: { current: string }) {
+export function EmailForm({ current, hasPassword = true }: { current: string; hasPassword?: boolean }) {
   const { state, pending, submit } = useServerForm(requestEmailChange);
   const e = state.errors ?? {};
+  if (!hasPassword) return <p className="help">You sign in with Google, using <strong>{current}</strong>. Your email address comes from your Google account, so it is changed there.</p>;
   if (state.message) return <p className="ok-msg" role="status">{state.message}</p>;
   return (
     <form onSubmit={submit} noValidate className="stackform">

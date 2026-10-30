@@ -30,6 +30,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           first={first}
           last={last}
           hasClinic={Boolean(employer)}
+          hasPassword={session.hasPassword}
           emailNotice={emailNotice}
           prefs={{
             news: Boolean(profile?.marketing_consent) && !profile?.unsubscribed_at,

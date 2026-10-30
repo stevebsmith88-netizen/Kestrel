@@ -6,7 +6,7 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 
 export type Role = "candidate" | "clinic" | "admin";
-export type Session = { userId: string; email: string; role: Role; firstName: string; fullName: string; needsAccountType: boolean };
+export type Session = { userId: string; email: string; role: Role; firstName: string; fullName: string; needsAccountType: boolean; hasPassword: boolean };
 
 // Safety net: if someone is signed in but has no profile (the sign up trigger did not
 // run), make one from their sign up details. It can only ever be a candidate or a
@@ -46,7 +46,10 @@ export const getSession = cache(async (): Promise<Session | null> => {
   const role: Role = profile?.role === "admin" || profile?.role === "clinic" ? profile.role : "candidate";
   const fullName: string = profile?.full_name ?? "";
   const firstName: string = profile?.first_name || fullName.split(" ")[0] || "";
-  return { userId: user.id, email: user.email ?? "", role, firstName, fullName, needsAccountType };
+  // Someone who only ever signed in with Google has no Kestrel password.
+  const providers = (user.app_metadata?.providers as string[] | undefined) ?? [user.app_metadata?.provider as string | undefined].filter(Boolean);
+  const hasPassword = providers.includes("email");
+  return { userId: user.id, email: user.email ?? "", role, firstName, fullName, needsAccountType, hasPassword };
 });
 
 export const homeFor = (role: Role) => (role === "admin" ? "/admin" : role === "clinic" ? "/clinic" : "/candidate");

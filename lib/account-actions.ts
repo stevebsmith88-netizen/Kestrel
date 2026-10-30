@@ -18,15 +18,21 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
   const password = String(form.get("password") ?? "");
   const confirm = String(form.get("confirm") ?? "").trim();
   if (confirm !== "DELETE") return { errors: { confirm: "Type the word DELETE in capital letters to continue." }, error: "Type the word DELETE in capital letters to continue." };
-  if (!password) return { errors: { password: "Enter your password." }, error: "Enter your password." };
+  if (session.hasPassword && !password) return { errors: { password: "Enter your password." }, error: "Enter your password." };
+  // Google sign in has no password to check, so we ask for the email address instead.
+  if (!session.hasPassword && String(form.get("confirmEmail") ?? "").trim().toLowerCase() !== session.email.toLowerCase()) {
+    return { errors: { confirmEmail: "Type your email address exactly as shown." }, error: "Type your email address exactly as shown." };
+  }
 
   const db = await supabaseServer();
   const admin = supabaseAdmin();
   if (!db || !admin) return { error: NOT_CONNECTED };
 
   // Check it really is them, even if someone left a signed in screen open.
-  const { error: authError } = await db.auth.signInWithPassword({ email: session.email, password });
-  if (authError) return { errors: { password: "That password doesn't match." }, error: "That password doesn't match." };
+  if (session.hasPassword) {
+    const { error: authError } = await db.auth.signInWithPassword({ email: session.email, password });
+    if (authError) return { errors: { password: "That password doesn't match." }, error: "That password doesn't match." };
+  }
 
   // Collect every stored file that belongs to this account.
   const paths: string[] = [];

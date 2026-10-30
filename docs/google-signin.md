@@ -8,6 +8,7 @@ The button "Continue with Google" is built, and stays hidden until it is switche
 2. A new person is taken to **Welcome**, where they say whether they are looking for a job or hiring, and agree to the privacy policy and terms (the marketing box is optional and unticked). A clinic then goes to set up its clinic profile.
 3. Someone who already has a Kestrel account with the same email address is signed in to that account. Supabase links them, because Google has verified the address.
 4. We receive only their name and email address. We never see their Google password.
+5. A person who only uses Google has no Kestrel password. "Delete my account" asks them to type their email address instead of a password, and "Change my email" explains that the address comes from their Google account. They can still set a password through "Forgot your password" if they want one.
 
 ## Setting it up
 

@@ -8,12 +8,13 @@ export type AccountViewProps = {
   first: string;
   last: string;
   hasClinic: boolean;
+  hasPassword: boolean;
   prefs: Prefs;
   emailNotice?: string;
 };
 
 // What the Account page shows: the person's details, their email choices, and the download and delete options.
-export default function AccountView({ role, email, first, last, hasClinic, prefs, emailNotice }: AccountViewProps) {
+export default function AccountView({ role, email, first, last, hasClinic, hasPassword, prefs, emailNotice }: AccountViewProps) {
   const home = role === "clinic" ? "/clinic" : "/candidate";
   return (
         <div className="wrap narrow">
@@ -32,7 +33,7 @@ export default function AccountView({ role, email, first, last, hasClinic, prefs
               <h3 className="subh">Your name</h3>
               <NameForm first={first} last={last} />
               <h3 className="subh">Your email address</h3>
-              <EmailForm current={email} />
+              <EmailForm current={email} hasPassword={hasPassword} />
             </section>
 
             <section className="card" aria-labelledby="ac-email-prefs">
@@ -53,7 +54,7 @@ export default function AccountView({ role, email, first, last, hasClinic, prefs
             </section>
 
             <section className="card">
-              <DeleteAccountForm role={role} />
+              <DeleteAccountForm role={role} hasPassword={hasPassword} email={email} />
             </section>
           </div>
         </div>
