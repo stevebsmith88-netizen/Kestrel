@@ -183,8 +183,8 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   await admin.from("application_events").insert({ application_id: created.id, status: "applied" });
 
   // Tell the clinic, without putting the candidate's details in the email.
-  const { data: contact } = await admin.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
-  if (contact?.notify_email) {
+  const { data: contact } = await admin.from("employer_contacts").select("notify_email, notify_new_applications").eq("employer_id", job.employer_id).maybeSingle();
+  if (contact?.notify_email && contact.notify_new_applications !== false) {
     const mail = emailLayout({
       heading: "A new application",
       paragraphs: [`Someone has applied for ${job.title}. Open it to read their cover letter and CV.`],

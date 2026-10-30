@@ -355,3 +355,11 @@ main:focus{outline:none}
 .bars .bar{display:block;height:12px;border-radius:6px;background:var(--mist);overflow:hidden}
 .bars .bar i{display:block;height:100%;background:var(--navy)}
 .bars strong{text-align:right}
+
+/* Spacing: cards that sit one under another always have a gap, even when no wrapper was used */
+main.app > .wrap > :is(.card, .panel, .notice, .note) + :is(.card, .panel, form.panel){margin-top:20px}
+main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
+.subh{font:700 1.05rem "Source Sans 3",sans-serif;margin:26px 0 10px;padding-top:20px;border-top:1px solid var(--line)}
+.card .facts + .subh{margin-top:20px}
+.card .stackform{gap:16px}
+.card > h2{margin-top:0}

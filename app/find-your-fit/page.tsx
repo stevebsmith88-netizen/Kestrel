@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { findYourFitOn } from "@/lib/features";
 import AppFooter from "@/components/AppFooter";
 import FitQuiz from "@/components/FitQuiz";
 import SiteHeader from "@/components/SiteHeader";
@@ -11,6 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function FindYourFit() {
+  // Built, but switched off until Steve has decided how it should look (ENABLE_FIND_YOUR_FIT=yes in Vercel).
+  if (!findYourFitOn()) notFound();
   const session = await getSession();
   return (
     <>

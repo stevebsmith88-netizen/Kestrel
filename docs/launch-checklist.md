@@ -6,7 +6,7 @@ Work down the list. "You" is Steve. "Claude" means Claude builds it and you appr
 
 | # | What | Who | Time |
 | --- | --- | --- | --- |
-| 1 | Run `supabase/combined/run-everything.sql` (all migrations 0001 to 0015, with a check at the end). Safe to run again | You | 2 min |
+| 1 | Run `supabase/combined/run-everything.sql` (all migrations 0001 to 0016, with a check at the end). Safe to run again | You | 2 min |
 | 2 | Create the new Resend key `kestrel-website` (sending access, your domain only) and add it to Vercel as `RESEND_API_KEY` | You | 5 min |
 | 3 | Create the Anthropic key `kestrel-website` (own workspace, spending limit) and add it as `ANTHROPIC_API_KEY` | You | 5 min |
 | 4 | Make up a long random string and add it as `CRON_SECRET` | You | 2 min |

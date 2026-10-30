@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0015), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0016), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1244,6 +1244,18 @@ revoke execute on function public.limit_job_templates() from public, anon, authe
 revoke execute on function public.limit_cover_letter_templates() from public, anon, authenticated;
 revoke execute on function public.limit_application_drafts() from public, anon, authenticated;
 
+-- ======================================================================
+-- 0016_email_preferences.sql
+-- ======================================================================
+-- Email preferences people can change themselves on their Account page. Safe to run more than once.
+--  * Candidates can turn off emails about their applications.
+--  * Clinics can turn off new applicant emails and the reminders about unopened applications.
+-- Emails about security (password resets, email changes) and about an account (a job taken down) are always sent.
+
+alter table public.profiles add column if not exists notify_application_updates boolean not null default true;
+alter table public.employer_contacts add column if not exists notify_new_applications boolean not null default true;
+alter table public.employer_contacts add column if not exists notify_reminders boolean not null default true;
+
 
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
@@ -1269,6 +1281,8 @@ from (
     ('table: job_templates', to_regclass('public.job_templates') is not null),
     ('table: cover_letter_templates', to_regclass('public.cover_letter_templates') is not null),
     ('table: application_drafts', to_regclass('public.application_drafts') is not null),
+    ('column: candidate application email choice', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'notify_application_updates')),
+    ('column: clinic new applicant email choice', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_contacts' and column_name = 'notify_new_applications')),
     ('column: job alert frequency', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_alerts' and column_name = 'frequency')),
     ('column: clinic confirmed direct hire', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'direct_hire_confirmed_at')),
     ('column: field based role area', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'territory')),

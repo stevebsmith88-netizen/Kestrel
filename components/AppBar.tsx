@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { signOut } from "@/lib/auth-actions";
 import { homeFor, type Role, type Session } from "@/lib/auth";
+import { findYourFitOn } from "@/lib/features";
 
+const QUIZ = { href: "/find-your-fit", label: "Find your fit" };
 const NAV: Record<Role, { href: string; label: string }[]> = {
   candidate: [
     { href: "/candidate", label: "Home" },
     { href: "/jobs", label: "Find jobs" },
-    { href: "/find-your-fit", label: "Find your fit" },
     { href: "/candidate/applications", label: "My applications" },
     { href: "/candidate/profile", label: "Profile and CV" },
     { href: "/candidate/alerts", label: "Job alerts" },
@@ -34,7 +35,7 @@ const NAV: Record<Role, { href: string; label: string }[]> = {
 // `current` and its link is highlighted. On a phone the links fold into a Menu button.
 export default function AppBar({ session, current }: { session: Session; current?: string }) {
   const here = current ?? homeFor(session.role);
-  const links = NAV[session.role];
+  const links = session.role === "candidate" && findYourFitOn() ? [...NAV.candidate.slice(0, 2), QUIZ, ...NAV.candidate.slice(2)] : NAV[session.role];
   return (
     <header className="topbar">
       <div className="wrap">

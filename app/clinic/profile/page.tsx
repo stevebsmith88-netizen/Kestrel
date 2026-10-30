@@ -9,8 +9,9 @@ export const metadata: Metadata = { title: "Clinic profile | Kestrel Eye Care Jo
 
 export const dynamic = "force-dynamic";
 
-export default async function ClinicProfile() {
+export default async function ClinicProfile({ searchParams }: { searchParams: Promise<{ from?: string }> }) {
   const session = await requireRole("clinic");
+  const { from } = await searchParams;
   const employer = await getMyEmployer(session.userId);
   return (
     <>
@@ -19,6 +20,9 @@ export default async function ClinicProfile() {
         <div className="wrap narrow">
           <p className="kicker">Clinic profile</p>
           <h1>{employer ? "Your clinic" : "Set up your clinic"}</h1>
+          {!employer && from === "post" && (
+            <p className="note" role="status"><strong>You must set up your clinic before posting a job.</strong> It takes about 2 minutes. When you save it, you can post your first job straight away.</p>
+          )}
           <p className="lede2">This is what candidates see on your job posts, apart from your alert email, which stays private.</p>
           <ClinicProfileForm initial={employer} />
         </div>

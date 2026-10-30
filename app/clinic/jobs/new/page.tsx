@@ -19,7 +19,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
   const session = await requireRole("clinic");
   const { template: templateId, notice } = await searchParams;
   const employer = await getMyEmployer(session.userId);
-  if (!employer) redirect("/clinic/profile");
+  if (!employer) redirect("/clinic/profile?from=post");
   const templates = await getMyTemplates();
   const start = templateId && UUID.test(templateId) ? await getMyTemplate(templateId) : null;
   return (

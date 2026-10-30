@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { APP_LABELS, clinicMoveError, isAppStatus } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { candidateRecipient } from "@/lib/recipient";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -24,7 +25,7 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   const admin = supabaseAdmin();
   if (!db || !admin) return { error: NOT_CONNECTED };
 
-  const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant").eq("id", id).maybeSingle();
+  const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id").eq("id", id).maybeSingle();
   if (!app) return { error: "We couldn't find that application." };
 
   const problem = clinicMoveError(app.status, to, app.keep_details, message);
@@ -41,8 +42,8 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   }
   await admin.from("application_events").insert({ application_id: id, status: to, note: message || null });
 
-  const email = (app.applicant as { email?: string } | null)?.email;
-  if (email) {
+  const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
+  if (email && wants) {
     const mail = emailLayout({
       heading: "An update on your application",
       paragraphs: [`Your application for ${app.job_title} at ${app.clinic_name} is now: ${APP_LABELS[to]}.`, ...(message ? [message] : [])],
@@ -53,7 +54,7 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   }
 
   revalidatePath(`/clinic/applications/${id}`);
-  return { message: "Saved, and the candidate has been told." };
+  return { message: "Saved. The candidate is told by email unless they have turned those emails off, and they can always see it in their account." };
 }
 
 export async function saveApplicantNote(_prev: JobFormState, form: FormData): Promise<JobFormState> {

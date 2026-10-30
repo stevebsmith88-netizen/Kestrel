@@ -37,6 +37,16 @@ Sign in uses Supabase Auth with email and password. Google sign in is added in a
    <p>The Kestrel team</p>
    ```
 
+   Change email address, subject "Confirm your new email for Kestrel". (Supabase sends this one to both the old and the new address when someone changes their email on the Account page. Under Authentication, Sign In / Providers, Email, keep "Secure email change" switched on.)
+
+   ```html
+   <h2>Confirm your email change</h2>
+   <p>Someone asked to change the email address on a Kestrel Eye Care Jobs account from {{ .Email }} to {{ .NewEmail }}.</p>
+   <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email_change&next=/account%3Femail%3Dconfirmed">Confirm the change</a></p>
+   <p>The change only happens once the link in both emails has been opened. If this was not you, ignore this email and change your password.</p>
+   <p>The Kestrel team</p>
+   ```
+
 5. **Vercel, Settings, Environment Variables:** add these two (same values as in Supabase, Project Settings, API). They are safe to be public.
    - `NEXT_PUBLIC_SUPABASE_URL`: the Project URL
    - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`: the **publishable** key (starts `sb_publishable_`)

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { signOut } from "@/lib/auth-actions";
 import { homeFor, type Session } from "@/lib/auth";
+import { findYourFitOn } from "@/lib/features";
 
 // The menu across the top of the public pages. On a phone it folds into a Menu button.
 // Pages that know who is signed in pass `session`, so a signed in person sees a way back to
@@ -21,7 +22,7 @@ export default function SiteHeader({ logo = true, session = null }: { logo?: boo
 
         <nav className="site-wide" aria-label="Main">
           <Link href="/jobs">Find jobs</Link>
-          <Link href="/find-your-fit">Find your fit</Link>
+          {findYourFitOn() && <Link href="/find-your-fit">Find your fit</Link>}
           {!session && <Link href="/clinics">For clinics</Link>}
           {session?.role === "clinic" && <Link href="/clinic/jobs/new">Post a job</Link>}
           {session ? (
@@ -42,7 +43,7 @@ export default function SiteHeader({ logo = true, session = null }: { logo?: boo
           <nav aria-label="Main menu">
             {session ? <Link href={dashboard!} className="menu-cta">My dashboard</Link> : <Link href="/#join" className="menu-cta">Join the waitlist</Link>}
             <Link href="/jobs">Find jobs</Link>
-            <Link href="/find-your-fit">Find your fit</Link>
+            {findYourFitOn() && <Link href="/find-your-fit">Find your fit</Link>}
             {!session && <Link href="/clinics">For clinics</Link>}
             {session?.role === "clinic" && <Link href="/clinic/jobs/new">Post a job</Link>}
             {session ? (

@@ -51,3 +51,10 @@ delete from auth.users where email = 'steve+admin@eyecarejobs.ca';
 2. Candidate: open an application, write half a letter, press "Save as a draft", leave, and come back. Then send it with "Keep this letter" ticked and check it appears under My saved letters.
 3. Anyone: open Find your fit, answer the 6 questions and follow a result to the job search.
 4. Admin: open Overview, switch between the 3 periods, and press Export CSV.
+
+## Also try (account settings)
+
+1. Candidate and clinic: on Account, change your name. It should show in the menu straight away.
+2. Change your email to a new test address such as steve+changed@eyecarejobs.ca. Enter your password. Open the email sent to the old address and the one sent to the new address. After both are confirmed, sign out and sign in with the new address.
+3. Email choices: turn off "Email me when a clinic updates one of my applications" (candidate), then move an application's status as the clinic. No email should arrive, but the tracker still updates. Turn it back on.
+4. Clinic: with a new clinic account that has not set up a clinic, press Post a job. You should land on Set up your clinic with a note saying it must be done first.

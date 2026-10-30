@@ -1,46 +1,43 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
-import DeleteAccountForm from "@/components/DeleteAccountForm";
+import AccountView from "@/components/AccountView";
 import { requireRole } from "@/lib/auth";
-import { supabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "My account | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
-export default async function Account() {
+export default async function Account({ searchParams }: { searchParams: Promise<{ email?: string }> }) {
   const session = await requireRole("candidate", "clinic");
-  const db = await supabaseServer();
-  const { data: profile } = db ? await db.from("profiles").select("marketing_consent").eq("id", session.userId).maybeSingle() : { data: null };
-  const home = session.role === "clinic" ? "/clinic" : "/candidate";
+  const { email: emailNotice } = await searchParams;
+  const admin = supabaseAdmin();
+
+  const { data: profile } = admin ? await admin.from("profiles").select("first_name, last_name, marketing_consent, unsubscribed_at, notify_application_updates").eq("id", session.userId).maybeSingle() : { data: null };
+  const { data: employer } = admin && session.role === "clinic" ? await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle() : { data: null };
+  const { data: contact } = admin && employer ? await admin.from("employer_contacts").select("notify_new_applications, notify_reminders").eq("employer_id", employer.id).maybeSingle() : { data: null };
+
+  const first = profile?.first_name || session.firstName;
+  const last = profile?.last_name ?? "";
   return (
     <>
       <AppBar session={session} current="/account" />
       <main id="main" tabIndex={-1} className="app">
-        <div className="wrap narrow">
-          <p className="back"><Link href={home}>Back to my home</Link></p>
-          <p className="kicker">My account</p>
-          <h1>Your account</h1>
-          <section className="card">
-            <dl className="facts">
-              <div><dt>Name</dt><dd>{session.fullName || "Not given"}</dd></div>
-              <div><dt>Email</dt><dd>{session.email}</dd></div>
-              <div><dt>Account type</dt><dd>{session.role === "clinic" ? "Clinic" : "Candidate"}</dd></div>
-              <div><dt>Updates by email</dt><dd>{profile?.marketing_consent ? "You agreed to hear from us" : "Not signed up"}</dd></div>
-            </dl>
-            <p className="help">To change your name or email, or to stop marketing emails, write to <a href="mailto:privacy@eyecarejobs.ca">privacy@eyecarejobs.ca</a>. Every marketing email also has an unsubscribe link.</p>
-          </section>
-          <section className="card">
-            <h2>Download your information</h2>
-            <p className="help">Get a copy of the information we hold about you as a file. It includes your account, {session.role === "clinic" ? "clinic profile and job posts" : "profile, applications and job alerts"}. Your CV file can be downloaded from your profile page.</p>
-            <a href="/account/export" className="btn ghost" download>Download my information</a>
-          </section>
-          <section className="card">
-            <DeleteAccountForm role={session.role === "clinic" ? "clinic" : "candidate"} />
-          </section>
-        </div>
+        <AccountView
+          role={session.role === "clinic" ? "clinic" : "candidate"}
+          email={session.email}
+          first={first}
+          last={last}
+          hasClinic={Boolean(employer)}
+          emailNotice={emailNotice}
+          prefs={{
+            news: Boolean(profile?.marketing_consent) && !profile?.unsubscribed_at,
+            applicationUpdates: profile?.notify_application_updates !== false,
+            newApplicants: contact?.notify_new_applications !== false,
+            reminders: contact?.notify_reminders !== false,
+          }}
+        />
       </main>
       <AppFooter />
     </>

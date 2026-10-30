@@ -13,7 +13,9 @@
 - A candidate can keep up to 5 cover letters (My saved letters). On an application, "Start from one of your saved letters" fills in the letter, and "Keep this letter" saves the one just written. The page reminds them to change it for each clinic.
 - Private to the candidate, and included in "Download my information". Deleting an account deletes them.
 
-## Find your fit
+## Find your fit (switched off for now)
+
+- The quiz is built but hidden: the page shows "not found", and it is left out of the menus and the sitemap. To switch it on, add `ENABLE_FIND_YOUR_FIT` with the value `yes` in Vercel (Production and Preview) and redeploy.
 
 - Page: /find-your-fit, in the menu. 6 questions, one at a time, then up to 3 roles with a plain reason for each and a link to the job search with filters filled in.
 - All the rules are in `lib/quiz.ts` (points for each answer, roles in a fixed order for ties) and are tested in `lib/quiz.test.ts`. No AI, nothing is saved or sent.

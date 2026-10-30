@@ -2,6 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { APP_LABELS } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { candidateRecipient } from "@/lib/recipient";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
@@ -49,14 +50,14 @@ async function runDaily(request: Request) {
   // 2. Applications still waiting on a job that ended a week or more ago.
   const { data: ended } = await admin.from("jobs").select("id").in("status", ["expired", "closed"]).lt("updated_at", new Date(now.getTime() - 7 * DAY).toISOString());
   for (const ids of chunks((ended ?? []).map((j) => j.id))) {
-    const { data: waiting } = await admin.from("applications").select("id, applicant, job_title, clinic_name").in("job_id", ids).in("status", ["applied", "viewed", "shortlisted"]);
+    const { data: waiting } = await admin.from("applications").select("id, applicant, job_title, clinic_name, candidate_id").in("job_id", ids).in("status", ["applied", "viewed", "shortlisted"]);
     for (const app of waiting ?? []) {
       const stamp = new Date().toISOString();
       await admin.from("applications").update({ status: "no_update", status_changed_at: stamp, updated_at: stamp }).eq("id", app.id);
       await admin.from("application_events").insert({ application_id: app.id, status: "no_update" });
       summary.closedOutApplications += 1;
-      const email = (app.applicant as { email?: string } | null)?.email;
-      if (email) {
+      const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
+      if (email && wants) {
         const mail = emailLayout({
           heading: "An update on your application",
           paragraphs: [`The job you applied for, ${app.job_title} at ${app.clinic_name}, has closed, and the clinic did not send a decision. Your application is now marked: ${APP_LABELS.no_update}.`, "Thank you for applying. We would love to help you find the next one."],
@@ -83,8 +84,8 @@ async function runDaily(request: Request) {
       if (emp) perEmployer.set(emp, [...(perEmployer.get(emp) ?? []), a.id]);
     });
     for (const [employerId, appIds] of perEmployer) {
-      const { data: contact } = await admin.from("employer_contacts").select("notify_email").eq("employer_id", employerId).maybeSingle();
-      if (!contact?.notify_email) continue;
+      const { data: contact } = await admin.from("employer_contacts").select("notify_email, notify_reminders").eq("employer_id", employerId).maybeSingle();
+      if (!contact?.notify_email || contact.notify_reminders === false) continue;
       const mail = emailLayout({
         heading: "Applications are waiting for you",
         paragraphs: [`${appIds.length === 1 ? "An application has" : `${appIds.length} applications have`} been waiting for 2 weeks without being opened. A quick look lets candidates know where they stand, and it only takes a moment.`],
