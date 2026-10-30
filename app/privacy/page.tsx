@@ -99,6 +99,7 @@ export default function Privacy() {
             <li>Supabase, which hosts our database and stored CVs in Canada.</li>
             <li>Vercel, which hosts our website.</li>
             <li>Resend, which sends our emails, such as sign up confirmations and application updates.</li>
+            <li>Anthropic, whose AI helps clinics write job ads. It sees only the job details a clinic types in, never candidate information.</li>
           </ul>
           <p>
             <strong>Clinics.</strong> When you apply to a job, the clinic that posted it can see your application: your cover letter,
@@ -113,7 +114,7 @@ export default function Privacy() {
           <h2>Where your information is kept</h2>
           <p>
             Your details, CV and applications are stored in a database and a private file store hosted in Canada. Our website
-            hosting provider and our email provider are based in the United States and may handle requests, and the emails we
+            hosting provider, our email provider and our AI provider are based in the United States and may handle requests, and the emails we
             send you, on servers outside Canada. While your information is there, it may be subject to the laws of that country.
           </p>
 
