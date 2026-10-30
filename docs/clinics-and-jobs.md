@@ -28,3 +28,12 @@
 ## Tests
 
 `npm test` runs the job rules (pay range, Canadian experience, flags, dates, structured data).
+
+## Keeping recruiters and spam out
+
+Layers, none of which is perfect on its own:
+1. Every clinic ticks a box confirming it hires directly and is not a recruiter, staffing agency or broker (date saved in `employers.direct_hire_confirmed_at`).
+2. Every post is read by an admin before it goes live. The review queue flags agency wording ("our client", "on behalf of"), a missing website, alerts going to a free email address (gmail and similar), and a missing confirmation.
+3. A clinic can have at most 10 open jobs (drafts, in review, live) at a time (migration 0009).
+4. Contact details are masked, so candidates apply through Kestrel and recruiters cannot harvest clinic emails.
+5. Still to add before launch: a bot check on sign up (Cloudflare Turnstile), written terms of use that ban agencies (needs a lawyer), and a "report this job" link.

@@ -11,6 +11,7 @@ export type Employer = {
   city: string;
   about: string | null;
   notify_email: string;
+  direct_hire_confirmed_at: string | null;
 };
 
 export type MyJob = {
@@ -44,7 +45,7 @@ export async function getMyEmployer(userId: string): Promise<Employer | null> {
   if (!db) return null;
   const { data } = await db
     .from("employers")
-    .select("id, clinic_name, practice_type, website, province, city, about")
+    .select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at")
     .eq("owner_id", userId)
     .maybeSingle();
   if (!data) return null;

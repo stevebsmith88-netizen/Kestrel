@@ -25,6 +25,7 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     city: field(form, "city"),
     about: field(form, "about"),
     notifyEmail: field(form, "notifyEmail"),
+    directHire: form.get("directHire") === "yes",
   });
   const errors = validateClinic(clinic);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
@@ -40,6 +41,8 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     province: clinic.province,
     city: clinic.city,
     about: clinic.about || null,
+    // Keep the first date they confirmed.
+    direct_hire_confirmed_at: existing?.direct_hire_confirmed_at ?? new Date().toISOString(),
   };
 
   let employerId = existing?.id;

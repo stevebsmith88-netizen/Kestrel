@@ -3,7 +3,7 @@
 import { Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { createAlert } from "@/lib/alert-actions";
-import { PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { ALERT_FREQUENCIES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 
 export default function AlertForm() {
   const { state, pending, submit } = useServerForm(createAlert);
@@ -31,6 +31,11 @@ export default function AlertForm() {
           </select>
         </Field>
       </div>
+      <Field id="al-frequency" label="How often should we email you?" hint="One email with everything new, never one email per job. You can remove an alert at any time.">
+        <select id="al-frequency" name="frequency" defaultValue="weekly">
+          {ALERT_FREQUENCIES.map((f) => <option key={f.value} value={f.value}>{f.label}</option>)}
+        </select>
+      </Field>
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
       <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : "Save this alert"}</button>

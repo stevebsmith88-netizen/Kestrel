@@ -3,7 +3,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { approveJob, rejectJob } from "@/lib/admin-actions";
-import { formatPay, longDate, reviewFlags } from "@/lib/jobs";
+import { employerFlags, formatPay, longDate, reviewFlags } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -20,8 +20,8 @@ const NOTICES: Record<string, string> = {
 type QueueJob = {
   id: string; title: string; role_category: string; employment_type: string; province: string; city: string;
   pay_period: string; pay_min: number; pay_max: number; is_existing_vacancy: boolean; uses_ai_screening: boolean;
-  description: string; apply_method: string; apply_url: string | null; created_at: string;
-  employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string } | null;
+  description: string; apply_method: string; apply_url: string | null; created_at: string; employer_id: string;
+  employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; direct_hire_confirmed_at: string | null } | null;
 };
 
 export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
@@ -31,11 +31,16 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   const { data } = db
     ? await db
         .from("jobs")
-        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, created_at, employers(clinic_name, practice_type, website, city, province)")
+        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, created_at, employer_id, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
         .eq("status", "in_review")
         .order("created_at", { ascending: true })
     : { data: null };
   const jobs = (data ?? []) as unknown as QueueJob[];
+  const notifyEmails = new Map<string, string>();
+  if (db && jobs.length) {
+    const { data: contacts } = await db.from("employer_contacts").select("employer_id, notify_email").in("employer_id", [...new Set(jobs.map((j) => j.employer_id))]);
+    (contacts ?? []).forEach((c) => notifyEmails.set(c.employer_id, c.notify_email));
+  }
 
   return (
     <>
@@ -52,7 +57,10 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
           ) : (
             <div className="joblist">
               {jobs.map((j) => {
-                const flags = reviewFlags(j);
+                const flags = [
+                  ...reviewFlags(j),
+                  ...employerFlags({ website: j.employers?.website, notifyEmail: notifyEmails.get(j.employer_id), directHireConfirmedAt: j.employers?.direct_hire_confirmed_at }),
+                ];
                 return (
                   <article className="card review" key={j.id}>
                     <div className="listhead">

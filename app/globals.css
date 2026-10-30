@@ -281,3 +281,5 @@ textarea{resize:vertical;line-height:1.5}
 .alertlist{list-style:none;margin:12px 0 0;padding:0}
 .alertlist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
 .alertlist li:first-child{border-top:0}
+.choice.agree{align-items:flex-start;line-height:1.45}
+.choice.agree input{margin-top:3px}

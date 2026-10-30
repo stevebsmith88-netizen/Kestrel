@@ -81,10 +81,13 @@ export async function GET(request: Request) {
     }
   }
 
-  // 4. Job alerts. Each person gets at most one email a day listing every new match.
-  const { data: alerts } = await admin.from("job_alerts").select("id, user_id, role_category, province, practice_type, last_sent_at");
-  const byUser = new Map<string, NonNullable<typeof alerts>>();
-  (alerts ?? []).forEach((a) => byUser.set(a.user_id, [...(byUser.get(a.user_id) ?? []), a]));
+  // 4. Job alerts. Each person gets at most one email a day, covering the alerts that are due (daily, weekly or monthly).
+  const { data: alerts } = await admin.from("job_alerts").select("id, user_id, role_category, province, practice_type, frequency, last_sent_at");
+  // A little under the full gap, so the once a day schedule never skips a turn.
+  const GAP_HOURS: Record<string, number> = { daily: 20, weekly: 7 * 24 - 4, monthly: 30 * 24 - 4 };
+  const due = (alerts ?? []).filter((a) => now.getTime() - new Date(a.last_sent_at).getTime() >= (GAP_HOURS[a.frequency] ?? GAP_HOURS.weekly) * 60 * 60 * 1000);
+  const byUser = new Map<string, typeof due>();
+  due.forEach((a) => byUser.set(a.user_id, [...(byUser.get(a.user_id) ?? []), a]));
   for (const [userId, mine] of byUser) {
     const { data: profile } = await admin.from("profiles").select("unsubscribed_at").eq("id", userId).maybeSingle();
     if (!profile || profile.unsubscribed_at) continue;

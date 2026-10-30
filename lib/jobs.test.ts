@@ -8,6 +8,7 @@ import {
   formatPay,
   jobPostingJsonLd,
   longDate,
+  employerFlags,
   mentionsCanadianExperience,
   parseMoney,
   payRangeAllowed,
@@ -79,8 +80,9 @@ test("an external application page must be a secure web address", () => {
 });
 
 test("clinic profile", () => {
-  const clinic = { clinicName: "Harbourside Optical", practiceType: "independent", website: "https://example.ca", province: "Ontario", city: "Toronto", about: "", notifyEmail: "hiring@example.ca" };
+  const clinic = { clinicName: "Harbourside Optical", practiceType: "independent", website: "https://example.ca", province: "Ontario", city: "Toronto", about: "", notifyEmail: "hiring@example.ca", directHire: true };
   assert.deepEqual(validateClinic(clinic), {});
+  assert.ok(validateClinic({ ...clinic, directHire: false }).directHire);
   assert.ok(validateClinic({ ...clinic, notifyEmail: "nope" }).notifyEmail);
   assert.ok(validateClinic({ ...clinic, website: "javascript:alert(1)" }).website);
   assert.ok(validateClinic({ ...clinic, practiceType: "" }).practiceType);
@@ -124,4 +126,15 @@ test("structured data matches the page", () => {
   assert.equal(data.baseSalary.value.unitText, "YEAR");
   assert.equal(data.datePosted, "2026-11-01");
   assert.equal(data.url, "https://eyecarejobs.ca/jobs/abc");
+});
+
+test("employerFlags points out clinics that look unlike a direct employer", () => {
+  assert.deepEqual(employerFlags({ website: "https://a.ca", notifyEmail: "hiring@a.ca", directHireConfirmedAt: "2026-10-30" }), []);
+  const flags = employerFlags({ website: "", notifyEmail: "someone@gmail.com", directHireConfirmedAt: null });
+  assert.equal(flags.length, 3);
+});
+
+test("reviewFlags notices agency wording", () => {
+  assert.ok(reviewFlags({ title: "Optician", description: "We are hiring on behalf of our client, a busy practice." }).includes("Wording that suggests a recruiter or agency"));
+  assert.ok(!reviewFlags({ title: "Optician", description: "Join our friendly team." }).includes("Wording that suggests a recruiter or agency"));
 });

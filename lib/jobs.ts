@@ -58,7 +58,14 @@ export type ClinicInput = {
   city: string;
   about: string;
   notifyEmail: string;
+  directHire: boolean;
 };
+
+export const ALERT_FREQUENCIES = [
+  { value: "daily", label: "Daily" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+] as const;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
@@ -156,6 +163,7 @@ export function cleanClinic(raw: Partial<Record<keyof ClinicInput, unknown>>): C
     city: clean(raw.city, 80),
     about: typeof raw.about === "string" ? raw.about.replace(/\r\n/g, "\n").trim().slice(0, 3000) : "",
     notifyEmail: clean(raw.notifyEmail, 254).toLowerCase(),
+    directHire: raw.directHire === true,
   };
 }
 
@@ -174,6 +182,7 @@ export function validateClinic(c: ClinicInput) {
     }
   }
   if (!EMAIL.test(c.notifyEmail)) errors.notifyEmail = "Enter an email address like hiring@yourclinic.ca.";
+  if (!c.directHire) errors.directHire = "Please confirm that you are hiring directly for your own practice.";
   return errors;
 }
 
@@ -190,6 +199,19 @@ export function reviewFlags(job: { title?: string | null; description?: string |
   if (/[\w.+-]+@[\w-]+\.[\w.-]+/.test(job.description ?? "") || /\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b/.test(job.description ?? "")) {
     flags.push("Contains an email address or phone number");
   }
+  if (RECRUITER_WORDING.test(text)) flags.push("Wording that suggests a recruiter or agency");
+  return flags;
+}
+
+const RECRUITER_WORDING = /\b(our client|on behalf of|recruitment agency|recruiting agency|staffing (agency|firm|company)|placement fee|headhunt\w*|confidential (employer|client|practice))\b/i;
+const FREE_EMAIL = /@(gmail|googlemail|yahoo|hotmail|outlook|live|msn|icloud|me|aol|proton|protonmail)\./i;
+
+// Things the admin should know about the clinic behind a post.
+export function employerFlags(employer: { website?: string | null; notifyEmail?: string | null; directHireConfirmedAt?: string | null }) {
+  const flags: string[] = [];
+  if (!employer.directHireConfirmedAt) flags.push("Has not confirmed they hire directly");
+  if (!employer.website) flags.push("No clinic website given");
+  if (employer.notifyEmail && FREE_EMAIL.test(employer.notifyEmail)) flags.push("Alerts go to a free email address, not a clinic one");
   return flags;
 }
 

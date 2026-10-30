@@ -31,10 +31,10 @@ On the Post a job page, a clinic types a few lines about the role and presses **
 
 ## Job alerts
 
-Candidates can set up to 5 alerts at /candidate/alerts (role, province, practice type; any can be left as "any"). The daily housekeeping job (step 4) emails each person one digest of live jobs posted since their alert was last sent, with an unsubscribe link. People who have unsubscribed are skipped. Needs migration 0008 and RESEND_API_KEY.
+Candidates can set up to 5 alerts at /candidate/alerts (role, province, practice type; any can be left as "any"), each daily, weekly (the default) or monthly. The daily housekeeping job (step 4) emails each person one digest covering the alerts that are due, listing live jobs posted since the alert was last sent, with an unsubscribe link. People who have unsubscribed are skipped. Needs migrations 0008 and 0009 and RESEND_API_KEY.
 
 ## Setup order for everything built since accounts
 
-1. Run migrations in the Supabase SQL editor, in order: 0005, 0006, 0007, 0008 (each is safe to run twice).
+1. Run `supabase/combined/run-0005-to-0009.sql` in the Supabase SQL editor (it is migrations 0005 to 0009 in order, and is safe to run twice).
 2. Vercel environment variables (Production and Preview): `RESEND_API_KEY` (a website sending key), `ANTHROPIC_API_KEY` (ad builder), `CRON_SECRET` (any long random string).
 3. Redeploy without the build cache after adding variables.

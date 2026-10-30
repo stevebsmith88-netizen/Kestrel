@@ -6,7 +6,7 @@ import { useServerForm } from "@/components/useServerForm";
 import { saveClinic } from "@/lib/clinic-actions";
 import { PRACTICE_TYPES, PROVINCES } from "@/lib/jobs";
 
-type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string };
+type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; direct_hire_confirmed_at: string | null };
 
 export default function ClinicProfileForm({ initial }: { initial: Initial | null }) {
   const { state, pending, submit } = useServerForm(saveClinic);
@@ -39,6 +39,14 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
       <Field id="cp-email" label="Send new applicant alerts to" required error={e.notifyEmail} hint="Private. We never show this address on a job post. Applicants contact you through Kestrel.">
         <input id="cp-email" name="notifyEmail" type="email" autoComplete="email" defaultValue={initial?.notify_email ?? ""} />
       </Field>
+
+      <div className={`row ${e.directHire ? "invalid" : ""}`}>
+        <label className="choice agree">
+          <input type="checkbox" name="directHire" value="yes" defaultChecked={Boolean(initial?.direct_hire_confirmed_at)} />
+          <span>I confirm that I am hiring directly for this practice. I am not a recruiter, staffing agency or job broker. <span className="req" aria-hidden="true">*</span></span>
+        </label>
+        {e.directHire && <p className="err" role="alert">{e.directHire}</p>}
+      </div>
 
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message} <Link href="/clinic">Back to your dashboard</Link></p>}
