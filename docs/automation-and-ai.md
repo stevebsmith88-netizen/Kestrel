@@ -35,6 +35,12 @@ Candidates can set up to 5 alerts at /candidate/alerts (role, province, practice
 
 ## Setup order for everything built since accounts
 
-1. Run `supabase/combined/run-0005-to-0009.sql` in the Supabase SQL editor (it is migrations 0005 to 0009 in order, and is safe to run twice).
+1. Run `supabase/combined/run-0005-to-0010.sql` in the Supabase SQL editor (it is migrations 0005 to 0010 in order, and is safe to run twice).
 2. Vercel environment variables (Production and Preview): `RESEND_API_KEY` (a website sending key), `ANTHROPIC_API_KEY` (ad builder), `CRON_SECRET` (any long random string).
 3. Redeploy without the build cache after adding variables.
+
+## Monitoring
+
+- `/api/health` answers 200 when the site is up and the database can be reached, and 503 when it cannot. Point a free uptime monitor (such as UptimeRobot) at it.
+- Set `ADMIN_ALERT_EMAIL` and the site emails you when the daily housekeeping job fails or has a problem, and whenever a job is reported.
+- Vercel keeps logs (Observability) if you need to look further.

@@ -6,10 +6,10 @@ const FROM = process.env.EMAIL_FROM || "Kestrel Eye Care Jobs <hello@mail.eyecar
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 // A short, branded email in the same look as the sign up emails.
-export function emailLayout({ heading, paragraphs, items, buttonText, buttonUrl, unsubscribeUrl }: { heading: string; paragraphs: string[]; items?: { text: string; url: string }[]; buttonText?: string; buttonUrl?: string; unsubscribeUrl?: string }) {
+export function emailLayout({ heading, paragraphs, items, buttonText, buttonUrl, unsubscribeUrl, reason }: { heading: string; paragraphs: string[]; items?: { text: string; url: string }[]; buttonText?: string; buttonUrl?: string; unsubscribeUrl?: string; reason?: string }) {
   // Marketing emails carry an unsubscribe link and the mailing address, as Canada's anti-spam law requires.
   const footerNote = unsubscribeUrl
-    ? `You are receiving this because you asked to hear from Kestrel Eye Care Jobs. <a href="${esc(unsubscribeUrl)}" style="color:#8C4024;">Unsubscribe</a> at any time.`
+    ? `${esc(reason ?? "You are receiving this because you asked to hear from Kestrel Eye Care Jobs.")} <a href="${esc(unsubscribeUrl)}" style="color:#8C4024;">Unsubscribe</a> at any time.`
     : "This email is about your Kestrel account or an application.";
   const body = paragraphs.map((p) => `<p style="margin:0 0 16px 0;">${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
   const list = items?.length

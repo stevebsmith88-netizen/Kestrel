@@ -138,3 +138,17 @@ test("reviewFlags notices agency wording", () => {
   assert.ok(reviewFlags({ title: "Optician", description: "We are hiring on behalf of our client, a busy practice." }).includes("Wording that suggests a recruiter or agency"));
   assert.ok(!reviewFlags({ title: "Optician", description: "Join our friendly team." }).includes("Wording that suggests a recruiter or agency"));
 });
+
+test("reviewFlags notices wording that may break human rights rules", () => {
+  const cases: [string, string][] = [
+    ["Native English speakers only please.", "Language or accent wording that may exclude people"],
+    ["Female candidates only.", "Wording that may point to sex or gender"],
+    ["Canadian citizens only.", "Citizenship requirement, usually not allowed unless the law requires it"],
+    ["We want a young and energetic person.", "Wording about age"],
+    ["Christian values are important to us.", "Wording about religion"],
+  ];
+  for (const [description, flag] of cases) assert.ok(reviewFlags({ title: "Optician", description }).includes(flag), description);
+  for (const fine of ["Fluent English or French is needed for patient care.", "We are a single location practice with a friendly team.", "Registered optician in good standing."]) {
+    assert.deepEqual(reviewFlags({ title: "Optician", description: fine }).filter((f) => /Language|sex|family|Citizen|religion|appearance|age/i.test(f)), [], fine);
+  }
+});

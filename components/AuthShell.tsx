@@ -23,7 +23,7 @@ export default function AuthShell({ title, intro, children }: { title?: string; 
             <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
           </span>
           <span>
-            <Link href="/privacy">Privacy policy</Link>
+            <Link href="/privacy">Privacy policy</Link> &middot; <Link href="/terms">Terms of use</Link>
           </span>
         </div>
       </footer>

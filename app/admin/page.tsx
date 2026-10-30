@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Admin | Kestrel Eye Care Jobs", robo
 
 export const dynamic = "force-dynamic";
 
-async function count(table: "profiles" | "waitlist" | "jobs" | "employers" | "applications", filter?: [string, string]) {
+async function count(table: "profiles" | "waitlist" | "jobs" | "employers" | "applications" | "job_reports", filter?: [string, string]) {
   const db = supabaseAdmin();
   if (!db) return null;
   let query = db.from(table).select("*", { count: "exact", head: true });
@@ -20,7 +20,7 @@ async function count(table: "profiles" | "waitlist" | "jobs" | "employers" | "ap
 
 export default async function AdminHome() {
   const session = await requireRole("admin");
-  const [candidates, clinics, waitlist, live, inReview, profiles, applications] = await Promise.all([
+  const [candidates, clinics, waitlist, live, inReview, profiles, applications, openReports] = await Promise.all([
     count("profiles", ["role", "candidate"]),
     count("profiles", ["role", "clinic"]),
     count("waitlist"),
@@ -28,6 +28,7 @@ export default async function AdminHome() {
     count("jobs", ["status", "in_review"]),
     count("employers"),
     count("applications"),
+    count("job_reports", ["status", "open"]),
   ]);
   const show = (n: number | null) => (n === null ? "Not available" : n.toLocaleString("en-CA"));
   return (
@@ -42,6 +43,12 @@ export default async function AdminHome() {
           {inReview ? (
             <p className="notice" role="status">
               {inReview} {inReview === 1 ? "job is" : "jobs are"} waiting for your review. <Link href="/admin/review">Open the review queue</Link>
+            </p>
+          ) : null}
+
+          {openReports ? (
+            <p className="notice" role="status">
+              {openReports} {openReports === 1 ? "job has" : "jobs have"} been reported. <Link href="/admin/reports">Open the reports</Link>
             </p>
           ) : null}
 

@@ -1,5 +1,6 @@
 import { APP_LABELS } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { notifyAdmin } from "@/lib/notify-admin";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +17,17 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 //  4. emails candidates one digest of new jobs that match their job alerts.
 // Vercel sends the secret in the Authorization header, so nobody else can trigger it.
 export async function GET(request: Request) {
+  try {
+    return await runDaily(request);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    console.error("Daily job crashed:", message);
+    await notifyAdmin("The daily housekeeping job failed", ["It stopped with this error:", message.slice(0, 300)]);
+    return new Response("Failed", { status: 500 });
+  }
+}
+
+async function runDaily(request: Request) {
   const secret = process.env.CRON_SECRET;
   if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) return new Response("Unauthorized", { status: 401 });
   const admin = supabaseAdmin();
@@ -23,9 +35,11 @@ export async function GET(request: Request) {
 
   const now = new Date();
   const summary = { expiredJobs: 0, closedOutApplications: 0, reminders: 0, alertsSent: 0 };
+  const problems: string[] = [];
 
   // 1. Expire jobs. The public pages already stop showing them the moment they pass their date.
-  const { data: expired } = await admin.from("jobs").update({ status: "expired" }).eq("status", "live").lt("expires_at", now.toISOString()).select("id");
+  const { data: expired, error: expireError } = await admin.from("jobs").update({ status: "expired" }).eq("status", "live").lt("expires_at", now.toISOString()).select("id");
+  if (expireError) problems.push(`Expiring jobs: ${expireError.message}`);
   summary.expiredJobs = expired?.length ?? 0;
 
   // 2. Applications still waiting on a job that ended a week or more ago.
@@ -82,7 +96,8 @@ export async function GET(request: Request) {
   }
 
   // 4. Job alerts. Each person gets at most one email a day, covering the alerts that are due (daily, weekly or monthly).
-  const { data: alerts } = await admin.from("job_alerts").select("id, user_id, role_category, province, practice_type, frequency, last_sent_at");
+  const { data: alerts, error: alertsError } = await admin.from("job_alerts").select("id, user_id, role_category, province, practice_type, frequency, last_sent_at");
+  if (alertsError) problems.push(`Reading job alerts: ${alertsError.message}`);
   // A little under the full gap, so the once a day schedule never skips a turn.
   const GAP_HOURS: Record<string, number> = { daily: 20, weekly: 7 * 24 - 4, monthly: 30 * 24 - 4 };
   const due = (alerts ?? []).filter((a) => now.getTime() - new Date(a.last_sent_at).getTime() >= (GAP_HOURS[a.frequency] ?? GAP_HOURS.weekly) * 60 * 60 * 1000);
@@ -129,5 +144,6 @@ export async function GET(request: Request) {
     }
   }
 
-  return Response.json({ ok: true, ...summary });
+  if (problems.length) await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+  return Response.json({ ok: problems.length === 0, ...summary });
 }

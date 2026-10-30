@@ -3,10 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { getSession } from "@/lib/auth";
 import { formatPay, jobPostingJsonLd, longDate } from "@/lib/jobs";
 import { getLiveJob } from "@/lib/public-jobs";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -32,7 +33,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader session={await getSession()} />
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
       <main id="main" tabIndex={-1} className="jobpage">
         <div className="wrap">
@@ -75,6 +76,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 )}
               </section>
+              <p className="reportlink"><Link href={`/jobs/${job.id}/report`}>Report this job</Link></p>
               <section className="card">
                 <h2>Job facts</h2>
                 <dl className="facts">

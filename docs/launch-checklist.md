@@ -1,0 +1,52 @@
+# Launch checklist, in order of ease and necessity
+
+Work down the list. "You" is Steve. "Claude" means Claude builds it and you approve.
+
+## 1. Do now (minutes each, and they unlock testing)
+
+| # | What | Who | Time |
+| --- | --- | --- | --- |
+| 1 | Run `supabase/combined/run-0005-to-0010.sql` in the Supabase SQL editor | You | 2 min |
+| 2 | Create the new Resend key `kestrel-website` (sending access, your domain only) and add it to Vercel as `RESEND_API_KEY` | You | 5 min |
+| 3 | Create the Anthropic key `kestrel-website` (own workspace, spending limit) and add it as `ANTHROPIC_API_KEY` | You | 5 min |
+| 4 | Make up a long random string and add it as `CRON_SECRET` | You | 2 min |
+| 5 | Add `ADMIN_ALERT_EMAIL` (your steve@ address) so the site can tell you about problems and reported jobs | You | 1 min |
+| 6 | Redeploy without the build cache (Vercel, Deployments, the 3 dots, Redeploy, untick "Use existing build cache") | You | 3 min |
+| 7 | Create the 3 test accounts (see `docs/test-accounts.md`) | You | 10 min |
+| 8 | Add a free uptime check: UptimeRobot, monitor `https://eyecarejobs.ca/api/health`, alert to your email | You | 5 min |
+| 9 | Walk through the end to end run in `docs/test-accounts.md` on the preview and tell Claude what looks wrong | You | 30 min |
+| 10 | Approve, then Claude merges to main | You | 1 min |
+
+Add each key to Production and Preview in Vercel (Settings, Environment Variables).
+
+## 2. Before you invite anyone (small effort, important)
+
+| # | What | Who |
+| --- | --- | --- |
+| 11 | Support inbox: set up `hello@` and `privacy@` as Google Workspace aliases (or a Google Group) and turn on "Send mail as" so replies come from them | You, with Claude's steps |
+| 12 | Cloudflare Turnstile bot check on sign up: you create the free key, Claude wires it in | You then Claude |
+| 13 | Move Supabase to Pro (about $25 a month) for daily backups and no pausing | You |
+| 14 | Name yourself privacy officer and write down a breach plan (a one page note) | You, Claude drafts |
+| 15 | Lawyer reads the Terms, Posting policy and Privacy policy. Then Claude removes the "Draft for review" banner | You |
+| 16 | Google sign in (Google Cloud OAuth setup) | You then Claude |
+
+## 3. Claude builds next
+
+| # | What | Needs from you |
+| --- | --- | --- |
+| 17 | Stripe checkout in test mode with the FREELAUNCH coupon and HST | Your Stripe account and test keys |
+| 18 | "Claim your listing" page | Nothing |
+| 19 | Waitlist confirmation email | Nothing |
+| 20 | Admin numbers and a simple "Find your fit" quiz | Nothing |
+| 21 | Suppression list and clinic unsubscribe page (for outreach) | Nothing |
+| 22 | Converting remaining fixed pixel sizes to relative sizes | Nothing |
+
+## 4. Before launch day
+
+| # | What | Who |
+| --- | --- | --- |
+| 23 | Full audit: security, accessibility with a real screen reader, and a clean run of every flow | You choose the reviewer, Claude fixes findings |
+| 24 | Test a restore from a Supabase backup once | You |
+| 25 | Vercel Pro, and move the repo into the Kestrel GitHub organisation | You |
+| 26 | Your disclosure conversation at Eye Recommend, then clinic outreach and listing seeding | You |
+| 27 | Switch the Stripe test keys for live keys, then switch prices on | You |

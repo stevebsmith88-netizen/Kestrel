@@ -43,7 +43,7 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
       <div className={`row ${e.directHire ? "invalid" : ""}`}>
         <label className="choice agree">
           <input type="checkbox" name="directHire" value="yes" defaultChecked={Boolean(initial?.direct_hire_confirmed_at)} />
-          <span>I confirm that I am hiring directly for this practice. I am not a recruiter, staffing agency or job broker. <span className="req" aria-hidden="true">*</span></span>
+          <span>I confirm that I am hiring directly for this practice. I am not a recruiter, staffing agency or job broker. I agree to the <Link href="/terms" target="_blank">Terms of use</Link> and the <Link href="/posting-policy" target="_blank">Posting policy</Link>. <span className="req" aria-hidden="true">*</span></span>
         </label>
         {e.directHire && <p className="err" role="alert">{e.directHire}</p>}
       </div>

@@ -195,6 +195,7 @@ export function reviewFlags(job: { title?: string | null; description?: string |
   const max = Number(job.pay_max);
   if (min > 0 && max > 0 && job.pay_period && !payRangeAllowed(min, max, job.pay_period)) flags.push("Pay range is too wide");
   if (/\b(young|youthful|recent graduate only|digital native)\b/i.test(text)) flags.push("Wording that may point to age");
+  for (const [pattern, message] of RIGHTS_WORDING) if (pattern.test(text)) flags.push(message);
   if (/(^|\s)(https?:\/\/|www\.)\S+/i.test(job.description ?? "")) flags.push("Contains a web link");
   if (/[\w.+-]+@[\w-]+\.[\w.-]+/.test(job.description ?? "") || /\b\d{3}[-.\s]\d{3}[-.\s]\d{4}\b/.test(job.description ?? "")) {
     flags.push("Contains an email address or phone number");
@@ -202,6 +203,17 @@ export function reviewFlags(job: { title?: string | null; description?: string |
   if (RECRUITER_WORDING.test(text)) flags.push("Wording that suggests a recruiter or agency");
   return flags;
 }
+
+// Wording that can break human rights rules. These only point the admin to a closer look; a person decides.
+const RIGHTS_WORDING: [RegExp, string][] = [
+  [/\b(native (english|french) speakers?|native speakers? of|no accent|accent[- ]free|mother tongue)\b/i, "Language or accent wording that may exclude people"],
+  [/\b(male|female|men|women|man|woman)\s+(only|preferred|candidates? only)\b|\b(only|prefer)\s+(a\s+)?(male|female|men|women)\b/i, "Wording that may point to sex or gender"],
+  [/\b(unmarried|childless|no (young |small )?children|not (be )?pregnant|family status)\b/i, "Wording that may point to family status"],
+  [/\b(canadian citizens? only|citizens? only|must be a (canadian )?citizen|citizenship required)\b/i, "Citizenship requirement, usually not allowed unless the law requires it"],
+  [/\b(christian|muslim|catholic|jewish|hindu|sikh|buddhist)\s+(only|preferred|candidates?|values)\b|\bshare our faith\b/i, "Wording about religion"],
+  [/\b(good[- ]looking|attractive|pleasant appearance|well[- ]groomed appearance|height|weight)\s+(required|preferred|needed)\b|\battractive\b/i, "Wording about appearance"],
+  [/\b(under|over|between)\s+\d{2}\s+(years|yrs)?\s*(old|of age)\b|\b\d{2}\s*(to|-)\s*\d{2}\s*years old\b|\benergetic young\b|\byoung and energetic\b/i, "Wording about age"],
+];
 
 const RECRUITER_WORDING = /\b(our client|on behalf of|recruitment agency|recruiting agency|staffing (agency|firm|company)|placement fee|headhunt\w*|confidential (employer|client|practice))\b/i;
 const FREE_EMAIL = /@(gmail|googlemail|yahoo|hotmail|outlook|live|msn|icloud|me|aol|proton|protonmail)\./i;

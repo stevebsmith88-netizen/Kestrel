@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { getSession } from "@/lib/auth";
 import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, formatPay, longDate } from "@/lib/jobs";
 import { PAGE_SIZE, cleanFilters, searchJobs, type JobFilters } from "@/lib/public-jobs";
 
@@ -29,7 +30,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader session={await getSession()} />
       <main id="main" tabIndex={-1} className="jobsearch">
         <div className="wrap">
           <h1>Find your next eye care job</h1>

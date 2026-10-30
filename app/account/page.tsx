@@ -33,6 +33,11 @@ export default async function Account() {
             <p className="help">To change your name or email, or to stop marketing emails, write to <a href="mailto:privacy@eyecarejobs.ca">privacy@eyecarejobs.ca</a>. Every marketing email also has an unsubscribe link.</p>
           </section>
           <section className="card">
+            <h2>Download your information</h2>
+            <p className="help">Get a copy of the information we hold about you as a file. It includes your account, {session.role === "clinic" ? "clinic profile and job posts" : "profile, applications and job alerts"}. Your CV file can be downloaded from your profile page.</p>
+            <a href="/account/export" className="btn ghost" download>Download my information</a>
+          </section>
+          <section className="card">
             <DeleteAccountForm role={session.role === "clinic" ? "clinic" : "candidate"} />
           </section>
         </div>

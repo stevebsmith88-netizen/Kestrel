@@ -55,6 +55,12 @@ export default function Privacy() {
               write, and the private email address where you want to receive alerts.
             </li>
             <li>
+              <strong>Job alerts:</strong> the roles, provinces and type of practice you choose, and how often you want an email.
+            </li>
+            <li>
+              <strong>If you report a job:</strong> what you tell us about it and, only if you choose to give it, your email address so we can write back.
+            </li>
+            <li>
               <strong>A record of your consent:</strong> the exact wording you agreed to, and the date and time you agreed.
             </li>
             <li>
@@ -139,7 +145,7 @@ export default function Privacy() {
           <h2>Your rights</h2>
           <p>
             You can ask to see the personal information we hold about you, ask us to correct it, ask us to delete it, or
-            withdraw your consent. You can delete your account yourself on the Account page, or email <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. We may need to confirm who you are first. If
+            withdraw your consent. You can download a copy of your information and delete your account yourself on the Account page, or email <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. We may need to confirm who you are first. If
             you are not satisfied with our response, you can contact the{" "}
             <a href="https://www.priv.gc.ca" rel="noopener noreferrer">Office of the Privacy Commissioner of Canada</a>.
           </p>
