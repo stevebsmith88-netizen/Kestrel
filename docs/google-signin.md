@@ -12,7 +12,7 @@ The button "Continue with Google" is built, and stays hidden until it is switche
 ## Setting it up
 
 1. **Google Cloud** (signed in as your Kestrel Workspace account, in the project under `eyecarejobs.ca`):
-   - Google Auth Platform, Branding: app name `Kestrel Eye Care Jobs`, support email `hello@eyecarejobs.ca`, home page `https://eyecarejobs.ca`, privacy policy `https://eyecarejobs.ca/privacy`, terms `https://eyecarejobs.ca/terms`. Authorized domains: `eyecarejobs.ca` and `supabase.co`. Leave the logo out for now, because adding one can trigger a review.
+   - Google Auth Platform, Branding: app name `Kestrel Eye Care Jobs`, support email `hello@eyecarejobs.ca`, home page `https://eyecarejobs.ca`, privacy policy `https://eyecarejobs.ca/privacy`, terms `https://eyecarejobs.ca/terms`. Authorized domains: `eyecarejobs.ca` and your own Supabase project address, for example `abcdxyz.supabase.co` (the part of the Callback URL between `https://` and `/auth/v1/callback`). Do not use plain `supabase.co`: Google refuses it, because every Supabase customer shares it. Leave the logo out for now, because adding one can trigger a review.
    - Audience: **External**, then publish it ("In production"), so anyone can sign in and not only test users.
    - Data Access: add only `openid`, `email` and `profile`. These do not need Google's review.
    - Clients, Create client: type **Web application**, name `Kestrel website`. Authorized JavaScript origins: `https://eyecarejobs.ca`. Authorized redirect URI: the **Callback URL** shown in Supabase, under Authentication, Providers, Google (it looks like `https://xxxx.supabase.co/auth/v1/callback`).
