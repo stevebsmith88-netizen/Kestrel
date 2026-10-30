@@ -23,6 +23,11 @@ test("outreach email meets the CASL basics", () => {
   }
 });
 
+test("outreach email says why it is worth having the listing without promising results", () => {
+  assert.match(mail.text, /more than one place/);
+  assert.ok(!/guarantee|will get you|more applicants/i.test(mail.text));
+});
+
 test("outreach email follows the house writing style", () => {
   assert.ok(!/[–—]/.test(mail.text), "no dashes used as punctuation");
   assert.match(mail.text, /The Kestrel team/);

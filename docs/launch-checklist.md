@@ -6,7 +6,7 @@ Work down the list. "You" is Steve. "Claude" means Claude builds it and you appr
 
 | # | What | Who | Time |
 | --- | --- | --- | --- |
-| 1 | Run `supabase/combined/run-0005-to-0010.sql` in the Supabase SQL editor | You | 2 min |
+| 1 | DONE: migrations 0005 to 0010. NEW: run `supabase/migrations/0011_do_not_email.sql` | You | 1 min |
 | 2 | Create the new Resend key `kestrel-website` (sending access, your domain only) and add it to Vercel as `RESEND_API_KEY` | You | 5 min |
 | 3 | Create the Anthropic key `kestrel-website` (own workspace, spending limit) and add it as `ANTHROPIC_API_KEY` | You | 5 min |
 | 4 | Make up a long random string and add it as `CRON_SECRET` | You | 2 min |
@@ -38,7 +38,7 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 18 | "Claim your listing" page | Nothing |
 | 19 | Waitlist confirmation email | Nothing |
 | 20 | Admin numbers and a simple "Find your fit" quiz | Nothing |
-| 21 | Suppression list and clinic unsubscribe page (for outreach) | Nothing |
+| 21 | DONE: do not email list and clinic unsubscribe page | Nothing |
 | 22 | Converting remaining fixed pixel sizes to relative sizes | Nothing |
 
 ## 4. Before launch day

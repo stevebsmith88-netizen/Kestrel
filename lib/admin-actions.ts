@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { expiryFrom } from "@/lib/jobs";
+import { suppress } from "@/lib/suppression";
+import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -94,4 +96,26 @@ export async function dismissReport(form: FormData) {
   await db.from("job_reports").update({ status: "dismissed", handled_at: new Date().toISOString() }).eq("id", reportId).eq("status", "open");
   revalidatePath("/admin/reports");
   redirect("/admin/reports?notice=dismissed");
+}
+
+// The do not email list. Use it when someone asks to stop by email or phone, or to block a whole
+// clinic domain (written @clinic.ca).
+export async function addSuppression(form: FormData) {
+  await requireRole("admin");
+  const address = normaliseAddress(String(form.get("address") ?? ""));
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(address) || /^@[^\s@]+\.[^\s@]{2,}$/.test(address);
+  if (!valid) redirect("/admin/suppressions?notice=bad-address");
+  const ok = await suppress(address, "asked_to_stop", "added by admin");
+  revalidatePath("/admin/suppressions");
+  redirect(`/admin/suppressions?notice=${ok ? "added" : "error"}`);
+}
+
+export async function removeSuppression(form: FormData) {
+  await requireRole("admin");
+  const id = String(form.get("id") ?? "");
+  const db = supabaseAdmin();
+  if (!UUID.test(id) || !db) redirect("/admin/suppressions?notice=error");
+  await db.from("email_suppressions").delete().eq("id", id);
+  revalidatePath("/admin/suppressions");
+  redirect("/admin/suppressions?notice=removed");
 }

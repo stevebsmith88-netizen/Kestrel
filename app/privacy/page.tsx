@@ -117,6 +117,13 @@ export default function Privacy() {
           </p>
           <p>We may also disclose information when the law requires it.</p>
 
+          <h2>If you unsubscribe</h2>
+          <p>
+            We keep your email address, and nothing else about the email, on a do not email list, so that we honour your request in future. Even if you or your clinic
+            post another job or join again by mistake, we will not send you marketing email. We will still send emails about an account or application you have, such
+            as a new applicant or a password reset.
+          </p>
+
           <h2>Where your information is kept</h2>
           <p>
             Your details, CV and applications are stored in a database and a private file store hosted in Canada. Our website
