@@ -51,9 +51,9 @@ export default async function Terms() {
             <li>We may email you about your applications and, if you have agreed, about jobs and Kestrel news. You can unsubscribe at any time.</li>
           </ul>
 
-          <h2>If you are a clinic</h2>
+          <h2>If you are a clinic or a company</h2>
           <ul>
-            <li>You must be hiring directly for your own practice. Recruiters, staffing agencies and job brokers may not use Kestrel to post jobs or to contact candidates.</li>
+            <li>You must be hiring directly for your own clinic or company. Recruiters, staffing agencies and job brokers may not use Kestrel to post jobs or to contact candidates.</li>
             <li>Every job you post must follow our <Link href="/posting-policy">posting policy</Link>. We read each post before it goes live, and we may ask you to change it, decline it, or remove it later.</li>
             <li>You are responsible for your hiring decisions and for following the laws that apply to you as an employer, including human rights, employment standards, pay transparency and privacy laws. Kestrel does not give legal advice.</li>
             <li>Use applicants&apos; information only to assess them for the job they applied for, unless they agree to something more, such as being kept in mind for future roles.</li>

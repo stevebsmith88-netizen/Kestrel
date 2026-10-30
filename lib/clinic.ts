@@ -29,6 +29,9 @@ export type MyJob = {
   description: string | null;
   apply_method: string;
   apply_url: string | null;
+  work_arrangement: string;
+  territory: string | null;
+  pay_extras: string | null;
   status: JobStatus;
   review_note: string | null;
   posted_at: string | null;
@@ -37,7 +40,7 @@ export type MyJob = {
 };
 
 const JOB_COLUMNS =
-  "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, review_note, posted_at, expires_at, created_at";
+  "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
 
 // The signed in clinic's own profile (row level security means it can only be their own).
 export async function getMyEmployer(userId: string): Promise<Employer | null> {

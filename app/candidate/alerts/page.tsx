@@ -3,6 +3,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import AlertForm from "@/components/AlertForm";
 import { requireRole } from "@/lib/auth";
+import { practiceLabel } from "@/lib/jobs";
 import { deleteAlert } from "@/lib/alert-actions";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -13,7 +14,7 @@ export const dynamic = "force-dynamic";
 type Alert = { id: string; role_category: string | null; province: string | null; practice_type: string | null; frequency: string };
 
 const describe = (a: Alert) =>
-  [a.role_category ?? "Any role", a.province ?? "all of Canada", a.practice_type ? (a.practice_type === "corporate" ? "corporate practices" : "independent practices") : "any practice", a.frequency].join(" · ");
+  [a.role_category ?? "Any role", a.province ?? "all of Canada", a.practice_type ? `${practiceLabel(a.practice_type).toLowerCase()} employers` : "any type of employer", a.frequency].join(" · ");
 
 export default async function Alerts() {
   const session = await requireRole("candidate");

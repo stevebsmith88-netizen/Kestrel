@@ -13,10 +13,10 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
   const e = state.errors ?? {};
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
-      <Field id="cp-name" label="Clinic name" required error={e.clinicName}>
+      <Field id="cp-name" label="Clinic or company name" required error={e.clinicName}>
         <input id="cp-name" name="clinicName" type="text" autoComplete="organization" defaultValue={initial?.clinic_name ?? ""} />
       </Field>
-      <Choices name="practiceType" label="Type of practice" options={PRACTICE_TYPES} value={initial?.practice_type} error={e.practiceType} />
+      <Choices name="practiceType" label="Type of employer" options={PRACTICE_TYPES} value={initial?.practice_type} error={e.practiceType} />
       <div className="pair">
         <Field id="cp-city" label="City" required error={e.city}>
           <input id="cp-city" name="city" type="text" autoComplete="address-level2" defaultValue={initial?.city ?? ""} />
@@ -43,7 +43,7 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
       <div className={`row ${e.directHire ? "invalid" : ""}`}>
         <label className="choice agree">
           <input type="checkbox" name="directHire" value="yes" defaultChecked={Boolean(initial?.direct_hire_confirmed_at)} />
-          <span>I confirm that I am hiring directly for this practice. I am not a recruiter, staffing agency or job broker. I agree to the <Link href="/terms" target="_blank">Terms of use</Link> and the <Link href="/posting-policy" target="_blank">Posting policy</Link>. <span className="req" aria-hidden="true">*</span></span>
+          <span>I confirm that I am hiring directly for this clinic or company. I am not a recruiter, staffing agency or job broker. I agree to the <Link href="/terms" target="_blank">Terms of use</Link> and the <Link href="/posting-policy" target="_blank">Posting policy</Link>. <span className="req" aria-hidden="true">*</span></span>
         </label>
         {e.directHire && <p className="err" role="alert">{e.directHire}</p>}
       </div>

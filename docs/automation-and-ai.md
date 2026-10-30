@@ -35,7 +35,7 @@ Candidates can set up to 5 alerts at /candidate/alerts (role, province, practice
 
 ## Setup order for everything built since accounts
 
-1. Run `supabase/combined/run-0005-to-0010.sql` in the Supabase SQL editor (it is migrations 0005 to 0010 in order, and is safe to run twice).
+1. Run `supabase/combined/run-everything.sql` in the Supabase SQL editor (it is migrations 0005 to 0010 in order, and is safe to run twice).
 2. Vercel environment variables (Production and Preview): `RESEND_API_KEY` (a website sending key), `ANTHROPIC_API_KEY` (ad builder), `CRON_SECRET` (any long random string).
 3. Redeploy without the build cache after adding variables.
 

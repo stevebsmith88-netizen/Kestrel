@@ -17,7 +17,7 @@ export async function createAlert(_prev: JobFormState, form: FormData): Promise<
   const frequency = text(form, "frequency") || "weekly";
   if (role && !(ROLE_CATEGORIES as readonly string[]).includes(role)) return { error: "Choose one of the roles in the list." };
   if (province && !(PROVINCES as readonly string[]).includes(province)) return { error: "Choose one of the provinces in the list." };
-  if (practice && !PRACTICE_TYPES.some((p) => p.value === practice)) return { error: "Choose independent or corporate, or leave it as any." };
+  if (practice && !PRACTICE_TYPES.some((p) => p.value === practice)) return { error: "Choose a type of employer, or leave it as any." };
 
   if (!ALERT_FREQUENCIES.some((f) => f.value === frequency)) return { error: "Choose how often you would like to hear from us." };
 

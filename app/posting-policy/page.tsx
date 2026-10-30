@@ -31,6 +31,7 @@ export default async function PostingPolicy() {
           <h2>Who may post</h2>
           <ul>
             <li>Clinics and practices hiring directly for their own team, independent or corporate. Corporate groups may post for their own locations.</li>
+            <li>Suppliers, manufacturers and optical labs hiring directly for their own team, including field based roles such as sales and territory representatives, trainers and clinical educators, and field service technicians.</li>
             <li>Recruiters, staffing agencies and job brokers may not post, and may not contact candidates through Kestrel.</li>
             <li>You confirm this when you set up your clinic profile.</li>
           </ul>
@@ -40,7 +41,8 @@ export default async function PostingPolicy() {
             <li><strong>A pay range</strong> for the job, as a yearly salary or an hourly rate. The range should be genuine. Unless the top of the range is over $200,000 a year, it may not be more than $50,000 wide (hourly rates are counted over a standard year of 2,080 hours).</li>
             <li><strong>Whether this is an existing vacancy</strong>, answered honestly with yes or no. Please do not advertise a job that does not exist.</li>
             <li><strong>Whether you use artificial intelligence to screen candidates</strong>, answered honestly with yes or no.</li>
-            <li>The role, the type of work (full time, part time, locum or contract), and the city and province.</li>
+            <li>The role, the type of work (full time, part time, locum or contract), and the city and province. For a field based role, the city the person is based in and the area they cover.</li>
+            <li>If part of the pay is commission, a car allowance or similar, say so. The pay range is still required, and it should show the base pay.</li>
             <li>A clear description of the job in your own words.</li>
           </ul>
 

@@ -55,6 +55,9 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
                 description: job.description ?? "",
                 apply_method: job.apply_method,
                 apply_url: job.apply_url ?? "",
+                work_arrangement: job.work_arrangement ?? "on_site",
+                territory: job.territory ?? "",
+                pay_extras: job.pay_extras ?? "",
               }}
             />
           )}

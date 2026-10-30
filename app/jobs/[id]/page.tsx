@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { formatPay, jobPostingJsonLd, longDate } from "@/lib/jobs";
+import { formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { getLiveJob } from "@/lib/public-jobs";
 
 export const dynamic = "force-dynamic";
@@ -44,7 +44,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             <p className="chips">
               <span className="chip">{job.employment_type}</span>
               <span className="chip paychip">{formatPay(job.pay_min, job.pay_max, job.pay_period)}</span>
-              <span className="chip">{clinic?.practice_type === "corporate" ? "Corporate" : "Independent"}</span>
+              <span className="chip">{practiceLabel(clinic?.practice_type)}</span>
+              {job.work_arrangement === "field" && <span className="chip">Field based</span>}
             </p>
             {job.is_seeded && !clinic?.claimed && (
               <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed. <Link href={`/jobs/${job.id}/claim`}>Is this your clinic? Claim this listing</Link></p>
@@ -73,7 +74,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 ) : (
                   <>
-                    <p>Apply with your saved CV and a short cover letter. It takes a couple of minutes, and you can follow your application as the clinic reviews it.</p>
+                    <p>Apply with your saved CV and a short cover letter. It takes a couple of minutes, and you can follow your application as the employer reviews it.</p>
                     <Link href={`/jobs/${job.id}/apply`} className="btn">Apply with Kestrel</Link>
                   </>
                 )}
@@ -84,7 +85,9 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 <dl className="facts">
                   <div><dt>Pay</dt><dd>{formatPay(job.pay_min, job.pay_max, job.pay_period)}</dd></div>
                   <div><dt>Type</dt><dd>{job.employment_type}</dd></div>
-                  <div><dt>Location</dt><dd>{job.city}, {job.province}</dd></div>
+                  {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
+                  <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
+                  {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
                   <div><dt>Existing vacancy</dt><dd>{job.is_existing_vacancy ? "Yes" : "No"}</dd></div>
                   <div><dt>Uses AI to screen candidates</dt><dd>{job.uses_ai_screening ? "Yes" : "No"}</dd></div>
                   <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>

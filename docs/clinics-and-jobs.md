@@ -57,3 +57,11 @@ A listing we found on a clinic's own website (a seeded listing) belongs to a cli
 To try it without a real clinic, run `docs/test-claim.sql` (a fake clinic whose website is eyecarejobs.ca, so `steve+claim@eyecarejobs.ca` counts as an address at its own website). Delete it afterwards.
 
 Not built yet: the admin tool to add found listings (seeding), and editing a live job (a live job can only be closed and reposted).
+
+## Field based and supplier roles
+
+- Employers can be a clinic (independent or corporate) or a supplier or manufacturer (`practice_type` of `supplier`). Suppliers and optical labs may post if they hire directly for their own team.
+- Roles: the 5 clinic roles plus Sales or territory representative, Trainer or clinical educator, Field service or equipment technician, and Account or practice development manager. The list is in `lib/jobs.ts` (`FIELD_ROLES`) and the database checks are in migration 0013. To add a role, change both.
+- A job is "On site" or "Field based". A field based job must say the area covered (`territory`) and the city the person is based in, and may say what else is part of the pay (`pay_extras`, such as commission or a vehicle). The pay range is still required and shows base pay.
+- Search can be limited to field based roles (`/jobs?arrangement=field`), and alerts can be set for any of the new roles.
+- Not built: pricing for these roles (the Stripe step decides it), and a separate "supplier" landing page.

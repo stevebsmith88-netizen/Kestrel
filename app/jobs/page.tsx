@@ -3,7 +3,7 @@ import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, formatPay, longDate } from "@/lib/jobs";
+import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS, formatPay, longDate, practiceLabel } from "@/lib/jobs";
 import { PAGE_SIZE, cleanFilters, searchJobs, type JobFilters } from "@/lib/public-jobs";
 
 export const metadata: Metadata = {
@@ -53,10 +53,15 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 <option value="">All of Canada</option>
                 {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
-              <label className="sr" htmlFor="s-practice">Type of practice</label>
+              <label className="sr" htmlFor="s-practice">Type of employer</label>
               <select id="s-practice" name="practice" defaultValue={filters.practice}>
-                <option value="">Any practice</option>
+                <option value="">Any type of employer</option>
                 {PRACTICE_TYPES.map((p) => <option key={p.value} value={p.value}>{p.label} only</option>)}
+              </select>
+              <label className="sr" htmlFor="s-arrangement">Where the person works</label>
+              <select id="s-arrangement" name="arrangement" defaultValue={filters.arrangement}>
+                <option value="">On site or field based</option>
+                {WORK_ARRANGEMENTS.map((w) => <option key={w.value} value={w.value}>{w.value === "field" ? "Field based only" : "On site only"}</option>)}
               </select>
               <label className="sr" htmlFor="s-type">Employment type</label>
               <select id="s-type" name="type" defaultValue={filters.type}>
@@ -95,7 +100,8 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                       <p className="chips">
                         <span className="chip">{j.employment_type}</span>
                         <span className="chip paychip">{formatPay(j.pay_min, j.pay_max, j.pay_period)}</span>
-                        <span className="chip">{j.employers?.practice_type === "corporate" ? "Corporate" : "Independent"}</span>
+                        <span className="chip">{practiceLabel(j.employers?.practice_type)}</span>
+                        {j.work_arrangement === "field" && <span className="chip">Field based</span>}
                       </p>
                       {j.is_seeded && !j.employers?.claimed && <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed</p>}
                     </div>

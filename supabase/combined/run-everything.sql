@@ -1,3 +1,235 @@
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0013), plus a check at the end.
+-- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
+
+-- ======================================================================
+-- 0001_waitlist.sql
+-- ======================================================================
+-- Kestrel launch waitlist.
+-- Rows are written only by the server (app/api/waitlist/route.ts) using the
+-- service role key. Row level security is on with no public policies, so the
+-- public anon key can neither read nor write this table.
+
+create table if not exists public.waitlist (
+  id            uuid primary key default gen_random_uuid(),
+  created_at    timestamptz not null default now(),
+  audience      text not null check (audience in ('clinic', 'candidate')),
+  first_name    text not null,
+  last_name     text,
+  email         text not null unique, -- always stored in lower case
+  clinic_name   text,
+  role          text,
+  province      text not null,
+  consent       boolean not null check (consent = true),
+  consent_text  text not null,
+  consent_at    timestamptz not null default now(),
+  source        text not null default 'eyecarejobs.ca waitlist',
+  unsubscribed_at timestamptz
+);
+
+-- One sign up per email address; a repeat sign up updates the existing row.
+alter table public.waitlist enable row level security;
+
+-- ======================================================================
+-- 0002_accounts.sql
+-- ======================================================================
+-- Accounts: one profile row per person who signs in.
+-- Roles: candidate, clinic or admin. Anyone can sign up as a candidate or a
+-- clinic. Nobody can make themselves an admin: that is done once, by hand, in
+-- the SQL editor (see the bottom of this file).
+
+create table if not exists public.profiles (
+  id                     uuid primary key references auth.users (id) on delete cascade,
+  role                   text not null default 'candidate' check (role in ('candidate', 'clinic', 'admin')),
+  full_name              text not null default '',
+  marketing_consent      boolean not null default false,
+  marketing_consent_text text,
+  marketing_consent_at   timestamptz,
+  created_at             timestamptz not null default now()
+);
+
+alter table public.profiles enable row level security;
+
+-- Checks the signed in person's role. Security definer so the check itself is
+-- not blocked by row level security.
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = (select auth.uid()) and role = 'admin'
+  );
+$$;
+
+revoke execute on function public.is_admin() from public, anon;
+grant execute on function public.is_admin() to authenticated;
+
+drop policy if exists "People can read their own profile" on public.profiles;
+create policy "People can read their own profile"
+  on public.profiles for select to authenticated
+  using ((select auth.uid()) = id);
+
+drop policy if exists "Admins can read every profile" on public.profiles;
+create policy "Admins can read every profile"
+  on public.profiles for select to authenticated
+  using (public.is_admin());
+
+drop policy if exists "People can update their own profile" on public.profiles;
+create policy "People can update their own profile"
+  on public.profiles for update to authenticated
+  using ((select auth.uid()) = id)
+  with check ((select auth.uid()) = id);
+
+-- Signed in people can change their name and nothing else. Role and consent
+-- records can only be changed by the server or in the SQL editor.
+revoke all on public.profiles from anon;
+revoke insert, delete on public.profiles from authenticated;
+revoke update on public.profiles from authenticated;
+grant update (full_name) on public.profiles to authenticated;
+
+-- Creates the profile the moment someone signs up. The role comes from the sign
+-- up form, and only "clinic" or "candidate" are ever accepted.
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  consent boolean := coalesce(new.raw_user_meta_data ->> 'marketing_consent', 'false') = 'true';
+begin
+  insert into public.profiles (id, role, full_name, marketing_consent, marketing_consent_text, marketing_consent_at)
+  values (
+    new.id,
+    case when new.raw_user_meta_data ->> 'role' = 'clinic' then 'clinic' else 'candidate' end,
+    coalesce(left(new.raw_user_meta_data ->> 'full_name', 120), ''),
+    consent,
+    case when consent then left(new.raw_user_meta_data ->> 'marketing_consent_text', 500) end,
+    case when consent then now() end
+  );
+  return new;
+end;
+$$;
+
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- Give a profile to anyone who signed up before this file was run.
+insert into public.profiles (id)
+select id from auth.users
+on conflict (id) do nothing;
+
+-- TO MAKE YOURSELF THE ADMIN (run this on its own, once, after you have created
+-- your account on the site, replacing the email address):
+--
+--   update public.profiles
+--   set role = 'admin'
+--   where id = (select id from auth.users where email = 'you@example.com');
+
+-- ======================================================================
+-- 0003_profile_names.sql
+-- ======================================================================
+-- Keep first and last name separately, so people can be greeted by first name.
+-- full_name stays, as the two joined together, for places that show a single name.
+
+alter table public.profiles add column if not exists first_name text not null default '';
+alter table public.profiles add column if not exists last_name text not null default '';
+
+-- Fill in the names of accounts made before this file was run.
+update public.profiles
+set first_name = split_part(full_name, ' ', 1),
+    last_name = trim(substr(full_name, length(split_part(full_name, ' ', 1)) + 1))
+where first_name = '' and last_name = '' and full_name <> '';
+
+-- People can change their own names, and nothing else about their profile.
+grant update (first_name, last_name, full_name) on public.profiles to authenticated;
+
+-- The same sign up trigger as before, now reading the two names.
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  consent boolean := coalesce(new.raw_user_meta_data ->> 'marketing_consent', 'false') = 'true';
+  first text := left(coalesce(new.raw_user_meta_data ->> 'first_name', ''), 60);
+  last text := left(coalesce(new.raw_user_meta_data ->> 'last_name', ''), 60);
+begin
+  insert into public.profiles (id, role, first_name, last_name, full_name, marketing_consent, marketing_consent_text, marketing_consent_at)
+  values (
+    new.id,
+    case when new.raw_user_meta_data ->> 'role' = 'clinic' then 'clinic' else 'candidate' end,
+    first,
+    last,
+    trim(concat_ws(' ', first, last)),
+    consent,
+    case when consent then left(new.raw_user_meta_data ->> 'marketing_consent_text', 500) end,
+    case when consent then now() end
+  );
+  return new;
+end;
+$$;
+
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
+-- ======================================================================
+-- 0004_repair_profiles.sql
+-- ======================================================================
+-- Repairs accounts that were created without a profile, and makes sure the
+-- sign up trigger is in place. Safe to run more than once.
+
+-- 1. The trigger that creates a profile whenever someone signs up.
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  consent boolean := coalesce(new.raw_user_meta_data ->> 'marketing_consent', 'false') = 'true';
+  first text := left(coalesce(new.raw_user_meta_data ->> 'first_name', ''), 60);
+  last text := left(coalesce(new.raw_user_meta_data ->> 'last_name', ''), 60);
+begin
+  insert into public.profiles (id, role, first_name, last_name, full_name, marketing_consent, marketing_consent_text, marketing_consent_at)
+  values (
+    new.id,
+    case when new.raw_user_meta_data ->> 'role' = 'clinic' then 'clinic' else 'candidate' end,
+    first,
+    last,
+    trim(concat_ws(' ', first, last)),
+    consent,
+    case when consent then left(new.raw_user_meta_data ->> 'marketing_consent_text', 500) end,
+    case when consent then now() end
+  )
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- 2. A profile for everyone who signed up without one, using the details they gave.
+insert into public.profiles (id, role, first_name, last_name, full_name)
+select
+  u.id,
+  case when u.raw_user_meta_data ->> 'role' = 'clinic' then 'clinic' else 'candidate' end,
+  left(coalesce(nullif(u.raw_user_meta_data ->> 'first_name', ''), split_part(coalesce(u.raw_user_meta_data ->> 'full_name', ''), ' ', 1)), 60),
+  left(coalesce(nullif(u.raw_user_meta_data ->> 'last_name', ''), trim(substr(coalesce(u.raw_user_meta_data ->> 'full_name', ''), length(split_part(coalesce(u.raw_user_meta_data ->> 'full_name', ''), ' ', 1)) + 1))), 60),
+  left(coalesce(nullif(u.raw_user_meta_data ->> 'full_name', ''), trim(concat_ws(' ', u.raw_user_meta_data ->> 'first_name', u.raw_user_meta_data ->> 'last_name'))), 120)
+from auth.users u
+where not exists (select 1 from public.profiles p where p.id = u.id);
+
 -- ======================================================================
 -- 0005_clinics_and_jobs.sql
 -- ======================================================================
@@ -661,3 +893,169 @@ create policy "Admins can read reports"
 revoke all on public.job_reports from anon, authenticated;
 grant select on public.job_reports to authenticated;
 
+-- ======================================================================
+-- 0011_do_not_email.sql
+-- ======================================================================
+-- The do not email list. When someone unsubscribes, or asks us to stop, their address goes here
+-- and no marketing or outreach email is ever sent to it again, however many jobs they post later.
+-- An entry is either a full address (name@clinic.ca) or a whole domain (@clinic.ca).
+-- Written by the server only. Safe to run more than once.
+
+create table if not exists public.email_suppressions (
+  id         uuid primary key default gen_random_uuid(),
+  address    text not null unique check (address = lower(address) and char_length(address) between 3 and 254),
+  reason     text not null check (reason in ('unsubscribed', 'asked_to_stop', 'bounced', 'complaint', 'admin')),
+  source     text check (source is null or char_length(source) <= 200),
+  created_at timestamptz not null default now()
+);
+
+alter table public.email_suppressions enable row level security;
+
+drop policy if exists "Admins can read the do not email list" on public.email_suppressions;
+create policy "Admins can read the do not email list"
+  on public.email_suppressions for select to authenticated
+  using (public.is_admin());
+
+revoke all on public.email_suppressions from anon, authenticated;
+grant select on public.email_suppressions to authenticated;
+
+-- ======================================================================
+-- 0012_claim_listing.sql
+-- ======================================================================
+-- Claim your listing. A clinic whose job we found on its own website can claim it. Safe to run more than once.
+
+-- 1. A listing we found has no owner until someone claims it.
+alter table public.employers alter column owner_id drop not null;
+
+-- 2. Claims. Written by the server only. A person can read their own, and admins can read all.
+create table if not exists public.listing_claims (
+  id               uuid primary key default gen_random_uuid(),
+  employer_id      uuid not null references public.employers (id) on delete cascade,
+  user_id          uuid not null references auth.users (id) on delete cascade,
+  claimant_name    text not null default '' check (char_length(claimant_name) <= 120),
+  claimant_email   text not null check (char_length(claimant_email) <= 254),
+  role_at_clinic   text not null check (role_at_clinic in ('Owner', 'Practice manager', 'Hiring manager', 'Other')),
+  -- email: confirmed by a link sent to an address at the clinic's own website. manual: checked by a person.
+  method           text not null check (method in ('email', 'manual')),
+  note             text check (note is null or char_length(note) <= 1000),
+  status           text not null default 'pending_email' check (status in ('pending_email', 'pending_review', 'approved', 'rejected', 'expired')),
+  token_hash       text,
+  token_expires_at timestamptz,
+  decision_note    text check (decision_note is null or char_length(decision_note) <= 1000),
+  created_at       timestamptz not null default now(),
+  verified_at      timestamptz,
+  decided_at       timestamptz
+);
+
+create index if not exists listing_claims_status_idx on public.listing_claims (status, created_at);
+create index if not exists listing_claims_user_idx on public.listing_claims (user_id, created_at);
+-- One open claim per person per clinic.
+create unique index if not exists listing_claims_open_idx on public.listing_claims (employer_id, user_id) where status in ('pending_email', 'pending_review');
+
+alter table public.listing_claims enable row level security;
+
+drop policy if exists "People can read their own claims" on public.listing_claims;
+create policy "People can read their own claims"
+  on public.listing_claims for select to authenticated
+  using ((select auth.uid()) = user_id);
+
+drop policy if exists "Admins can read every claim" on public.listing_claims;
+create policy "Admins can read every claim"
+  on public.listing_claims for select to authenticated
+  using (public.is_admin());
+
+revoke all on public.listing_claims from anon, authenticated;
+grant select (id, employer_id, user_id, claimant_name, claimant_email, role_at_clinic, method, note, status, decision_note, created_at, verified_at, decided_at)
+  on public.listing_claims to authenticated;
+
+-- ======================================================================
+-- 0013_field_roles.sql
+-- ======================================================================
+-- Field based roles (sales and territory representatives, trainers, field service technicians and
+-- similar) and suppliers or manufacturers as employers. Safe to run more than once.
+
+-- 1. More role categories, everywhere a role is checked.
+alter table public.jobs drop constraint if exists jobs_role_category_check;
+alter table public.jobs add constraint jobs_role_category_check check (role_category in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
+
+alter table public.candidate_profiles drop constraint if exists candidate_profiles_profession_check;
+alter table public.candidate_profiles add constraint candidate_profiles_profession_check check (profession is null or profession in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
+
+alter table public.job_alerts drop constraint if exists job_alerts_role_category_check;
+alter table public.job_alerts add constraint job_alerts_role_category_check check (role_category is null or role_category in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
+
+-- 2. Suppliers and manufacturers can have an employer profile too.
+alter table public.employers drop constraint if exists employers_practice_type_check;
+alter table public.employers add constraint employers_practice_type_check check (practice_type in ('independent', 'corporate', 'supplier'));
+
+alter table public.job_alerts drop constraint if exists job_alerts_practice_type_check;
+alter table public.job_alerts add constraint job_alerts_practice_type_check check (practice_type is null or practice_type in ('independent', 'corporate', 'supplier'));
+
+-- 3. Where the person works, the area a field based person covers, and any extra pay such as commission.
+alter table public.jobs add column if not exists work_arrangement text not null default 'on_site';
+alter table public.jobs drop constraint if exists jobs_work_arrangement_check;
+alter table public.jobs add constraint jobs_work_arrangement_check check (work_arrangement in ('on_site', 'field'));
+
+alter table public.jobs add column if not exists territory text;
+alter table public.jobs drop constraint if exists jobs_territory_check;
+alter table public.jobs add constraint jobs_territory_check check (territory is null or char_length(territory) <= 200);
+
+alter table public.jobs add column if not exists pay_extras text;
+alter table public.jobs drop constraint if exists jobs_pay_extras_check;
+alter table public.jobs add constraint jobs_pay_extras_check check (pay_extras is null or char_length(pay_extras) <= 300);
+
+-- A field based job that is submitted or live must say what area it covers.
+alter table public.jobs drop constraint if exists jobs_field_has_area;
+alter table public.jobs add constraint jobs_field_has_area check (
+  work_arrangement <> 'field' or status in ('draft', 'rejected') or (territory is not null and char_length(territory) >= 3));
+
+-- 4. Who can see and change the new columns.
+grant select (work_arrangement, territory, pay_extras) on public.jobs to anon;
+grant insert (work_arrangement, territory, pay_extras) on public.jobs to authenticated;
+grant update (work_arrangement, territory, pay_extras) on public.jobs to authenticated;
+
+
+-- ======================================================================
+-- CHECK: after everything above has run, this lists every part of the
+-- database Kestrel needs. Every row should say OK.
+-- ======================================================================
+select thing, case when present then 'OK' when thing = 'private CV storage' then 'NOT YET (normal: it is created when the first CV is uploaded)' else 'MISSING' end as status
+from (
+  values
+    ('table: waitlist', to_regclass('public.waitlist') is not null),
+    ('table: profiles', to_regclass('public.profiles') is not null),
+    ('table: employers', to_regclass('public.employers') is not null),
+    ('table: employer_contacts', to_regclass('public.employer_contacts') is not null),
+    ('table: jobs', to_regclass('public.jobs') is not null),
+    ('table: candidate_profiles', to_regclass('public.candidate_profiles') is not null),
+    ('table: applications', to_regclass('public.applications') is not null),
+    ('table: application_events', to_regclass('public.application_events') is not null),
+    ('table: application_notes', to_regclass('public.application_notes') is not null),
+    ('table: ad_builder_uses', to_regclass('public.ad_builder_uses') is not null),
+    ('table: job_alerts', to_regclass('public.job_alerts') is not null),
+    ('table: job_reports', to_regclass('public.job_reports') is not null),
+    ('table: email_suppressions (do not email list)', to_regclass('public.email_suppressions') is not null),
+    ('table: listing_claims', to_regclass('public.listing_claims') is not null),
+    ('column: job alert frequency', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_alerts' and column_name = 'frequency')),
+    ('column: clinic confirmed direct hire', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'direct_hire_confirmed_at')),
+    ('column: field based role area', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'territory')),
+    ('column: extra pay', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_extras')),
+    ('column: work arrangement', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'work_arrangement')),
+    ('column: unsubscribed date on profiles', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'unsubscribed_at')),
+    ('column: unopened reminder on applications', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'reminded_at')),
+    ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
+) as checks(thing, present)
+order by 2, 1;

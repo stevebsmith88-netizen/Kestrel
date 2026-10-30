@@ -68,7 +68,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - Each job page carries JobPosting structured data that matches the visible page exactly.
 - Seeded listings are labelled "Found on the clinic's website, not yet claimed", show facts in our own words with a link to the clinic's application page, and never use the clinic's logo until claimed.
 - Outreach emails meet CASL: Kestrel's name, a mailing address, a working unsubscribe processed within 10 business days, sent only to published business addresses about the recipient's role.
-- Launch features: clinic and candidate accounts, clinic profiles, post a job with the ad builder, checkout, search with filters (role, province, city, practice type, employment type), job pages, expiry, candidate alerts, clinic dashboard, admin review queue, and a simple rules based "Find your fit" quiz. Later: locum board, supplier roles, featured listings, AI culture match, French.
+- Launch features: clinic and candidate accounts, clinic profiles, post a job with the ad builder, checkout, search with filters (role, province, city, practice type, employment type), job pages, expiry, candidate alerts, clinic dashboard, admin review queue, and a simple rules based "Find your fit" quiz. Later: locum board, featured listings, AI culture match, French. Field based and supplier roles (sales and territory reps, trainers, field service technicians, account managers; suppliers and manufacturers as employers) are built (migration 0013). A blog for search traffic is built (content/posts.ts, docs/blog.md).
 
 ## Data model (planned)
 

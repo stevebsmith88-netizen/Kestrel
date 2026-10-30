@@ -5,11 +5,27 @@
 import { PROVINCES, ROLES } from "./waitlist.ts";
 
 export { PROVINCES };
-export const ROLE_CATEGORIES = ROLES;
+// Roles that work from clinics. The waitlist uses this list too, so it is kept as it is.
+export const CLINIC_ROLES = ROLES;
+// Roles that usually travel to clinics, for suppliers, manufacturers and labs. To add another role, add it
+// here and in the role checks in supabase/migrations/0013_field_roles.sql.
+export const FIELD_ROLES = [
+  "Sales or territory representative",
+  "Trainer or clinical educator",
+  "Field service or equipment technician",
+  "Account or practice development manager",
+] as const;
+export const ROLE_CATEGORIES = [...CLINIC_ROLES, ...FIELD_ROLES] as const;
 export const EMPLOYMENT_TYPES = ["Full time", "Part time", "Locum", "Contract"] as const;
 export const PRACTICE_TYPES = [
   { value: "independent", label: "Independent" },
   { value: "corporate", label: "Corporate" },
+  { value: "supplier", label: "Supplier or manufacturer" },
+] as const;
+export const practiceLabel = (type: string | null | undefined) => PRACTICE_TYPES.find((p) => p.value === type)?.label ?? "Independent";
+export const WORK_ARRANGEMENTS = [
+  { value: "on_site", label: "On site" },
+  { value: "field", label: "Field based, travelling to clinics" },
 ] as const;
 export const PAY_PERIODS = [
   { value: "year", label: "A year" },
@@ -46,6 +62,9 @@ export type JobInput = {
   description: string;
   applyMethod: string; // "kestrel" | "external"
   applyUrl: string;
+  workArrangement: string; // "on_site" | "field"
+  territory: string;
+  payExtras: string;
 };
 
 export type JobFormState = { error?: string; message?: string; errors?: Record<string, string>; ad?: string };
@@ -107,6 +126,9 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     description: typeof raw.description === "string" ? raw.description.replace(/\r\n/g, "\n").trim().slice(0, 8000) : "",
     applyMethod: clean(raw.applyMethod, 10) === "external" ? "external" : "kestrel",
     applyUrl: clean(raw.applyUrl, 500),
+    workArrangement: clean(raw.workArrangement, 10) === "field" ? "field" : "on_site",
+    territory: clean(raw.territory, 200),
+    payExtras: clean(raw.payExtras, 300),
   };
 }
 
@@ -122,7 +144,8 @@ export function validateJob(job: JobInput, submit: boolean) {
   if (!(ROLE_CATEGORIES as readonly string[]).includes(job.roleCategory)) errors.roleCategory = "Choose a role.";
   if (!(EMPLOYMENT_TYPES as readonly string[]).includes(job.employmentType)) errors.employmentType = "Choose an employment type.";
   if (!(PROVINCES as readonly string[]).includes(job.province)) errors.province = "Choose a province or territory.";
-  if (!job.city) errors.city = "Enter the city.";
+  if (!job.city) errors.city = job.workArrangement === "field" ? "Enter the city you are based in." : "Enter the city.";
+  if (job.workArrangement === "field" && job.territory.length < 3) errors.territory = "Tell us the area the person covers, for example Southern Ontario.";
 
   if (!PAY_PERIODS.some((p) => p.value === job.payPeriod)) errors.payPeriod = "Choose whether the pay is a year or an hour.";
   const min = parseMoney(job.payMin);
@@ -170,7 +193,7 @@ export function cleanClinic(raw: Partial<Record<keyof ClinicInput, unknown>>): C
 export function validateClinic(c: ClinicInput) {
   const errors: Record<string, string> = {};
   if (!c.clinicName) errors.clinicName = "Enter your clinic's name.";
-  if (!PRACTICE_TYPES.some((p) => p.value === c.practiceType)) errors.practiceType = "Choose independent or corporate.";
+  if (!PRACTICE_TYPES.some((p) => p.value === c.practiceType)) errors.practiceType = "Choose independent, corporate or supplier.";
   if (!(PROVINCES as readonly string[]).includes(c.province)) errors.province = "Choose a province or territory.";
   if (!c.city) errors.city = "Enter the city.";
   if (c.website) {

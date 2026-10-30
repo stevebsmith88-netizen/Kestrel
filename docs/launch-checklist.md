@@ -6,7 +6,7 @@ Work down the list. "You" is Steve. "Claude" means Claude builds it and you appr
 
 | # | What | Who | Time |
 | --- | --- | --- | --- |
-| 1 | DONE: migrations 0005 to 0010. NEW: run `supabase/migrations/0011_do_not_email.sql` | You | 1 min |
+| 1 | Run `supabase/combined/run-everything.sql` (all migrations 0001 to 0013, with a check at the end). Safe to run again | You | 2 min |
 | 2 | Create the new Resend key `kestrel-website` (sending access, your domain only) and add it to Vercel as `RESEND_API_KEY` | You | 5 min |
 | 3 | Create the Anthropic key `kestrel-website` (own workspace, spending limit) and add it as `ANTHROPIC_API_KEY` | You | 5 min |
 | 4 | Make up a long random string and add it as `CRON_SECRET` | You | 2 min |
@@ -41,6 +41,8 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 21 | DONE: do not email list and clinic unsubscribe page | Nothing |
 | 22 | Converting remaining fixed pixel sizes to relative sizes | Nothing |
 | 22a | Admin tool to add found listings (seeding), and editing a live job | Nothing |
+| 22b | DONE: field based and supplier roles; blog with 3 starter posts (more topics in `docs/blog.md`) | Nothing |
+| 22c | Pricing for field and supplier roles (decide with the Stripe step) | Your decision |
 
 ## 4. Before launch day
 

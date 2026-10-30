@@ -92,6 +92,9 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     description: field(form, "description"),
     applyMethod: field(form, "applyMethod"),
     applyUrl: field(form, "applyUrl"),
+    workArrangement: field(form, "workArrangement"),
+    territory: field(form, "territory"),
+    payExtras: field(form, "payExtras"),
   });
   const errors = validateJob(job, submit);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
@@ -113,6 +116,9 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     description: job.description || null,
     apply_method: job.applyMethod,
     apply_url: job.applyMethod === "external" ? job.applyUrl || null : null,
+    work_arrangement: job.workArrangement,
+    territory: job.workArrangement === "field" ? job.territory || null : null,
+    pay_extras: job.payExtras || null,
     status: submit ? "in_review" : "draft",
   };
 

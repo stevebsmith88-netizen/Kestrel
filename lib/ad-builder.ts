@@ -3,13 +3,13 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
-import type { JobFormState } from "@/lib/jobs";
+import { practiceLabel, type JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 const MODEL = "claude-opus-5-5";
 const DAILY_LIMIT = 15;
 
-const SYSTEM = `You write job ads for eye care clinics in Canada, for a job board called Kestrel Eye Care Jobs.
+const SYSTEM = `You write job ads for eye care clinics, suppliers and manufacturers in Canada, for a job board called Kestrel Eye Care Jobs.
 
 Write one clear, warm, honest ad from the facts the clinic gives you.
 
@@ -17,6 +17,7 @@ Rules:
 - Use only the facts you are given. Never invent benefits, pay, hours, years of experience, equipment, awards or anything else. If something is not in the brief, leave it out.
 - Do not mention pay or salary. The pay range is shown separately on the job page.
 - Never ask for Canadian experience, local experience or experience working in Canada.
+- For field based roles, describe the area covered and the travel only if the facts say so. Never invent a territory, a vehicle, commission or a quota.
 - Do not include email addresses, phone numbers or web addresses. Candidates apply through the job board.
 - Do not use wording that points to age, such as "young", "energetic" or "digital native".
 - Write in plain, warm British spelling with Canadian conventions (centre, organisation, colour). Use numerals (3, not three). Do not use em dashes, and do not use hyphens as punctuation: use commas or full stops.
@@ -51,7 +52,9 @@ export async function buildAd(_prev: JobFormState, form: FormData): Promise<JobF
 
   const employer = await getMyEmployer(session.userId);
   const facts = [
-    `Clinic: ${employer?.clinic_name ?? "the clinic"} (${employer?.practice_type === "corporate" ? "corporate" : "independent"} practice)`,
+    `Employer: ${employer?.clinic_name ?? "the employer"} (${practiceLabel(employer?.practice_type).toLowerCase()})`,
+    clip(form, "workArrangement", 10) === "field" && `This is a field based role covering: ${clip(form, "territory", 200) || "an area the employer has not yet described"}`,
+    clip(form, "payExtras", 300) && `Also part of the pay (mention it without giving any amounts): ${clip(form, "payExtras", 300)}`,
     clip(form, "title", 120) && `Job title: ${clip(form, "title", 120)}`,
     clip(form, "roleCategory", 80) && `Role: ${clip(form, "roleCategory", 80)}`,
     clip(form, "employmentType", 30) && `Employment type: ${clip(form, "employmentType", 30)}`,

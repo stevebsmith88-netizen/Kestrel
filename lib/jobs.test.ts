@@ -6,6 +6,8 @@ import {
   daysLeft,
   expiryFrom,
   formatPay,
+  FIELD_ROLES,
+  practiceLabel,
   jobPostingJsonLd,
   longDate,
   employerFlags,
@@ -151,4 +153,16 @@ test("reviewFlags notices wording that may break human rights rules", () => {
   for (const fine of ["Fluent English or French is needed for patient care.", "We are a single location practice with a friendly team.", "Registered optician in good standing."]) {
     assert.deepEqual(reviewFlags({ title: "Optician", description: fine }).filter((f) => /Language|sex|family|Citizen|religion|appearance|age/i.test(f)), [], fine);
   }
+});
+
+test("field based jobs need an area, and field roles and suppliers exist", () => {
+  const field = { ...good, roleCategory: "Sales or territory representative", workArrangement: "field", territory: "" };
+  assert.ok(validateJob(field, true).territory);
+  assert.deepEqual(validateJob({ ...field, territory: "Southern Ontario and Ottawa" }, true), {});
+  assert.deepEqual(validateJob({ ...good, workArrangement: "on_site" }, true), {});
+  assert.equal(cleanJob({ workArrangement: "anything else" }).workArrangement, "on_site");
+  assert.ok(FIELD_ROLES.includes("Trainer or clinical educator"));
+  assert.equal(practiceLabel("supplier"), "Supplier or manufacturer");
+  assert.equal(practiceLabel("corporate"), "Corporate");
+  assert.equal(practiceLabel(undefined), "Independent");
 });

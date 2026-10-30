@@ -3,7 +3,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { approveJob, rejectJob } from "@/lib/admin-actions";
-import { employerFlags, formatPay, longDate, reviewFlags } from "@/lib/jobs";
+import { employerFlags, formatPay, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -67,7 +67,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       <div>
                         <h2>{j.title}</h2>
                         <p className="meta">
-                          {j.employers?.clinic_name} · {j.employers?.practice_type === "corporate" ? "Corporate" : "Independent"} · {j.city}, {j.province} · submitted {longDate(j.created_at)}
+                          {j.employers?.clinic_name} · {practiceLabel(j.employers?.practice_type)} · {j.city}, {j.province} · submitted {longDate(j.created_at)}
                         </p>
                       </div>
                     </div>

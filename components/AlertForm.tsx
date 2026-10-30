@@ -24,9 +24,9 @@ export default function AlertForm() {
             {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         </Field>
-        <Field id="al-practice" label="Type of practice">
+        <Field id="al-practice" label="Type of employer">
           <select id="al-practice" name="practice" defaultValue="">
-            <option value="">Any practice</option>
+            <option value="">Any type of employer</option>
             {PRACTICE_TYPES.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
           </select>
         </Field>

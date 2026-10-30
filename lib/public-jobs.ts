@@ -5,7 +5,7 @@ import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/
 export const PAGE_SIZE = 20;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export type JobFilters = { q?: string; province?: string; role?: string; type?: string; practice?: string; page?: number };
+export type JobFilters = { q?: string; province?: string; role?: string; type?: string; practice?: string; arrangement?: string; page?: number };
 
 export type JobSummary = {
   id: string;
@@ -19,6 +19,7 @@ export type JobSummary = {
   pay_max: number;
   posted_at: string;
   is_seeded: boolean;
+  work_arrangement: string;
   employers: { clinic_name: string; practice_type: string; claimed: boolean } | null;
 };
 
@@ -36,6 +37,7 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
     role: pick(one("role"), ROLE_CATEGORIES),
     type: pick(one("type"), EMPLOYMENT_TYPES),
     practice: pick(one("practice"), PRACTICE_TYPES.map((p) => p.value)),
+    arrangement: pick(one("arrangement"), ["on_site", "field"] as const),
     page: Number.isFinite(page) && page > 0 ? Math.min(page, 500) : 1,
   };
 }
@@ -46,12 +48,13 @@ export async function searchJobs(filters: JobFilters): Promise<{ jobs: JobSummar
   const page = filters.page ?? 1;
   let query = db
     .from("jobs")
-    .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, employers!inner(clinic_name, practice_type, claimed)", { count: "exact" })
+    .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)", { count: "exact" })
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString());
   if (filters.province) query = query.eq("province", filters.province);
   if (filters.role) query = query.eq("role_category", filters.role);
   if (filters.type) query = query.eq("employment_type", filters.type);
+  if (filters.arrangement) query = query.eq("work_arrangement", filters.arrangement);
   if (filters.practice) query = query.eq("employers.practice_type", filters.practice);
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
   const { data, count, error } = await query.order("posted_at", { ascending: false }).range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
@@ -67,6 +70,8 @@ export type LiveJob = JobSummary & {
   is_existing_vacancy: boolean;
   uses_ai_screening: boolean;
   description: string;
+  territory: string | null;
+  pay_extras: string | null;
   apply_method: string;
   apply_url: string | null;
   expires_at: string;
@@ -79,7 +84,7 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   if (!db) return null;
   const { data, error } = await db
     .from("jobs")
-    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, is_seeded, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
+    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
     .eq("id", id)
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString())

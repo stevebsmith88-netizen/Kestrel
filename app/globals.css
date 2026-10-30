@@ -320,3 +320,10 @@ main:focus{outline:none}
 .card .how li:first-child{border-top:0}
 .card .how li::before{content:none}
 .card .plainlist{padding-left:0;line-height:1.5}
+
+/* Blog */
+.postlist{display:grid;gap:16px;margin-top:16px}
+.postlist h2{margin:6px 0 8px}
+.postlist h2 a{text-decoration:none;color:var(--navy)}
+.postlist h2 a:hover{text-decoration:underline}
+.blogcta{margin:32px 0}

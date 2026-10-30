@@ -27,7 +27,7 @@ export default async function NewJob() {
             initial={{
               title: "", role_category: "", employment_type: "", province: employer.province, city: employer.city,
               pay_period: "year", pay_min: "", pay_max: "", is_existing_vacancy: "", uses_ai_screening: "",
-              description: "", apply_method: "kestrel", apply_url: "",
+              description: "", apply_method: "kestrel", apply_url: "", work_arrangement: "on_site", territory: "", pay_extras: "",
             }}
           />
         </div>

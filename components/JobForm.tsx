@@ -5,7 +5,7 @@ import { Choices, Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { buildAd } from "@/lib/ad-builder";
 import { saveJob } from "@/lib/clinic-actions";
-import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { CLINIC_ROLES, EMPLOYMENT_TYPES, FIELD_ROLES, PAY_PERIODS, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 
 export type JobFormValues = {
   id?: string;
@@ -22,6 +22,9 @@ export type JobFormValues = {
   description: string;
   apply_method: string;
   apply_url: string;
+  work_arrangement: string;
+  territory: string;
+  pay_extras: string;
 };
 
 const YES_NO = [
@@ -39,6 +42,7 @@ export default function JobForm({ initial, adBuilder = false }: { initial: JobFo
     if (ad.state.ad) setDescription(ad.state.ad);
   }, [ad.state.ad]);
   const [applyMethod, setApplyMethod] = useState(initial.apply_method || "kestrel");
+  const [arrangement, setArrangement] = useState(initial.work_arrangement || "on_site");
   const e = state.errors ?? {};
   return (
     <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
@@ -52,9 +56,12 @@ export default function JobForm({ initial, adBuilder = false }: { initial: JobFo
         <Field id="jf-role" label="Role" required error={e.roleCategory}>
           <select id="jf-role" name="roleCategory" defaultValue={initial.role_category}>
             <option value="">Choose one</option>
-            {ROLE_CATEGORIES.map((r) => (
-              <option key={r} value={r}>{r}</option>
-            ))}
+            <optgroup label="Clinic roles">
+              {CLINIC_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+            </optgroup>
+            <optgroup label="Field and supplier roles">
+              {FIELD_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
+            </optgroup>
           </select>
         </Field>
         <Field id="jf-type" label="Employment type" required error={e.employmentType}>
@@ -66,8 +73,21 @@ export default function JobForm({ initial, adBuilder = false }: { initial: JobFo
           </select>
         </Field>
       </div>
+      <Choices
+        name="workArrangement"
+        label="Where does the person work?"
+        options={WORK_ARRANGEMENTS}
+        value={arrangement}
+        onChange={setArrangement}
+        hint="Choose field based for roles that travel to clinics, such as sales, training and service."
+      />
+      {arrangement === "field" && (
+        <Field id="jf-territory" label="Area covered" required error={e.territory} hint="For example: Southern Ontario and Ottawa, or British Columbia and Alberta. Say how much travel to expect in the ad.">
+          <input id="jf-territory" name="territory" type="text" defaultValue={initial.territory} />
+        </Field>
+      )}
       <div className="pair">
-        <Field id="jf-city" label="City" required error={e.city}>
+        <Field id="jf-city" label={arrangement === "field" ? "City you are based in" : "City"} required error={e.city}>
           <input id="jf-city" name="city" type="text" defaultValue={initial.city} />
         </Field>
         <Field id="jf-province" label="Province or territory" required error={e.province}>
@@ -91,6 +111,10 @@ export default function JobForm({ initial, adBuilder = false }: { initial: JobFo
           <input id="jf-max" name="payMax" type="text" inputMode="decimal" defaultValue={initial.pay_max} placeholder="74,000" />
         </Field>
       </div>
+
+      <Field id="jf-extras" label="Anything else that is part of the pay" error={e.payExtras} hint="Optional. For example: plus commission, a car allowance or a company vehicle. The range above should be the base pay.">
+        <input id="jf-extras" name="payExtras" type="text" maxLength={300} defaultValue={initial.pay_extras} />
+      </Field>
 
       <h2 className="formh">Two quick questions</h2>
       <Choices name="existingVacancy" label="Is this an existing vacancy?" options={YES_NO} value={initial.is_existing_vacancy} error={e.existingVacancy} hint="Choose No if you are building a pool of candidates for the future." />
