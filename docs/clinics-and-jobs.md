@@ -1,0 +1,30 @@
+# Clinics, jobs and the review queue
+
+## How it works
+
+1. A person signs up as a **clinic**, and sets up a clinic profile (`/clinic/profile`). The alert email they give is private and is never shown on a page.
+2. They write a job at `/clinic/jobs/new`. A draft only needs a title. To **submit for review** a job needs everything, including a pay range and the two questions (existing vacancy, uses AI to screen). Pay ranges can be up to $50,000 a year wide unless the top is over $200,000. Mentioning Canadian experience is refused.
+3. The admin sees it at `/admin/review`, with automatic flags (Canadian experience, pay range, age wording, links, email addresses or phone numbers). **Approve and publish** makes it live for 30 days. **Send back** needs a note, which the clinic sees on their dashboard.
+4. Live jobs appear at `/jobs` (search and filters) and `/jobs/[id]` (with Google structured data). Expired jobs disappear from the public pages at once, because the database stops showing them.
+
+## Rules enforced by the database (migration 0005)
+
+- Only an admin action on the server can make a job live. A clinic can never publish its own job.
+- A live or in review job cannot be edited, only closed or taken back to a draft.
+- The public can read live jobs and the clinics that have them, nothing else. The alert email lives in its own private table.
+- Pay range and "complete before review" rules are checked by the database as well as the form.
+
+## Setting up
+
+1. Run `supabase/migrations/0005_clinics_and_jobs.sql` in the Supabase SQL editor. It is safe to run twice.
+2. Nothing else to set up. The same Supabase keys are used.
+
+## Trying it
+
+1. Sign in as the clinic test account, create the clinic profile, then post a job and submit it.
+2. Sign in as the admin, open Review queue, approve it.
+3. Open `/jobs` (signed out) and check the job appears, then open its page.
+
+## Tests
+
+`npm test` runs the job rules (pay range, Canadian experience, flags, dates, structured data).

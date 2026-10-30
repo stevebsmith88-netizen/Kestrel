@@ -1,11 +1,27 @@
 import Link from "next/link";
 import { signOut } from "@/lib/auth-actions";
-import { homeFor, type Session } from "@/lib/auth";
+import { homeFor, type Role, type Session } from "@/lib/auth";
 
-const HOME_LABEL = { candidate: "Home", clinic: "Dashboard", admin: "Overview" } as const;
+const NAV: Record<Role, { href: string; label: string }[]> = {
+  candidate: [
+    { href: "/candidate", label: "Home" },
+    { href: "/jobs", label: "Find jobs" },
+  ],
+  clinic: [
+    { href: "/clinic", label: "Dashboard" },
+    { href: "/clinic/profile", label: "Clinic profile" },
+    { href: "/clinic/jobs/new", label: "Post a job" },
+  ],
+  admin: [
+    { href: "/admin", label: "Overview" },
+    { href: "/admin/review", label: "Review queue" },
+    { href: "/admin/waitlist", label: "Waitlist" },
+  ],
+};
 
-// The bar across the top of every signed in page.
-export default function AppBar({ session }: { session: Session }) {
+// The bar across the top of every signed in page. Pass the page's own address as
+// `current` and its link is highlighted.
+export default function AppBar({ session, current }: { session: Session; current?: string }) {
   return (
     <header className="topbar">
       <div className="wrap">
@@ -14,7 +30,11 @@ export default function AppBar({ session }: { session: Session }) {
           <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={132} height={39} />
         </Link>
         <nav aria-label="Main">
-          <Link href={homeFor(session.role)} aria-current="page">{HOME_LABEL[session.role]}</Link>
+          {NAV[session.role].map((item) => (
+            <Link key={item.href} href={item.href} aria-current={(current ?? homeFor(session.role)) === item.href ? "page" : undefined}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
         <div className="topbar-who">
           <span>{session.fullName || session.email}</span>
