@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
+import { groupOf } from "@/lib/applications";
+import { getMyApplications, getMyCandidateProfile, profileReady, profileStrength } from "@/lib/candidate";
+import { longDate } from "@/lib/jobs";
 
 export const metadata: Metadata = { title: "Your home | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -9,32 +14,59 @@ export const dynamic = "force-dynamic";
 
 export default async function CandidateHome() {
   const session = await requireRole("candidate");
+  const [profile, applications] = await Promise.all([getMyCandidateProfile(session.userId), getMyApplications()]);
   const first = session.firstName || "there";
+  const strength = profileStrength(profile);
+  const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
+  const latest = applications.slice(0, 3);
+
   return (
     <>
-      <AppBar session={session} />
+      <AppBar session={session} current="/candidate" />
       <main className="app">
         <div className="wrap">
           <p className="kicker">Your home</p>
           <h1>Welcome, {first}</h1>
-          <p className="lede2">Your account is ready. We are still building Kestrel, so job search, saved CVs and application tracking are not open yet. If you agreed to updates when you signed up, we will email you the moment they are.</p>
+          <p className="lede2">Keep your CV and details here, and apply to any job in a few clicks.</p>
+
           <div className="tiles">
             <section className="card">
+              <p className="kicker">Your profile</p>
+              <h2>{profileReady(profile) ? "Ready to apply" : "Finish your profile"}</h2>
+              <div className="meter" role="img" aria-label={`Profile ${strength} percent complete`}><i style={{ width: `${strength}%` }} /></div>
+              <p>{profileReady(profile) ? "Your CV and details are saved." : "Add your role and save your CV, and you can apply to any job in a few clicks."}</p>
+              <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
+            </section>
+            <section className="card">
               <p className="kicker">Applications</p>
-              <h2>Track every role</h2>
-              <p>Once job search opens, each application you send will appear here with its progress, from applied to offer.</p>
+              <h2>{applications.length === 0 ? "None yet" : `${active} in progress`}</h2>
+              <p>{applications.length === 0 ? "When you apply, each application appears here with its progress, from applied to offer." : `You have sent ${applications.length} ${applications.length === 1 ? "application" : "applications"}.`}</p>
+              <Link href="/candidate/applications" className="btn sm ghost">My applications</Link>
             </section>
             <section className="card">
-              <p className="kicker">Your CV</p>
-              <h2>Save it once</h2>
-              <p>Upload your CV once and apply in a few clicks, with a short cover letter for each job.</p>
-            </section>
-            <section className="card">
-              <p className="kicker">Job alerts</p>
-              <h2>Hear first</h2>
-              <p>Tell us the roles and provinces you care about and we will email you when a match is posted.</p>
+              <p className="kicker">Jobs</p>
+              <h2>Find your next role</h2>
+              <p>Search by role, province, and independent or corporate practice. Every job shows its pay.</p>
+              <Link href="/jobs" className="btn sm">Find jobs</Link>
             </section>
           </div>
+
+          {latest.length > 0 && (
+            <>
+              <div className="listhead"><h2>Latest on your applications</h2><Link href="/candidate/applications">See all</Link></div>
+              <div className="joblist">
+                {latest.map((a) => (
+                  <article className="card jobrow" key={a.id}>
+                    <div className="jobmain">
+                      <h3><Link href={`/candidate/applications/${a.id}`}>{a.job_title}</Link></h3>
+                      <p className="meta">{a.clinic_name} · {a.job_location} · applied {longDate(a.created_at)}</p>
+                    </div>
+                    <div className="jobside"><AppStatusBadge status={a.status} /></div>
+                  </article>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       </main>
       <AppFooter />

@@ -70,8 +70,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 ) : (
                   <>
-                    <p>Easy Apply opens soon. Create a free account, and tick the box for updates, and we will email you the moment you can apply with your saved CV.</p>
-                    <Link href="/sign-up" className="btn">Create a free account</Link>
+                    <p>Apply with your saved CV and a short cover letter. It takes a couple of minutes, and you can follow your application as the clinic reviews it.</p>
+                    <Link href={`/jobs/${job.id}/apply`} className="btn">Apply with Kestrel</Link>
                   </>
                 )}
               </section>

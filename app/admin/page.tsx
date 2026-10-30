@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Admin | Kestrel Eye Care Jobs", robo
 
 export const dynamic = "force-dynamic";
 
-async function count(table: "profiles" | "waitlist" | "jobs" | "employers", filter?: [string, string]) {
+async function count(table: "profiles" | "waitlist" | "jobs" | "employers" | "applications", filter?: [string, string]) {
   const db = supabaseAdmin();
   if (!db) return null;
   let query = db.from(table).select("*", { count: "exact", head: true });
@@ -20,13 +20,14 @@ async function count(table: "profiles" | "waitlist" | "jobs" | "employers", filt
 
 export default async function AdminHome() {
   const session = await requireRole("admin");
-  const [candidates, clinics, waitlist, live, inReview, profiles] = await Promise.all([
+  const [candidates, clinics, waitlist, live, inReview, profiles, applications] = await Promise.all([
     count("profiles", ["role", "candidate"]),
     count("profiles", ["role", "clinic"]),
     count("waitlist"),
     count("jobs", ["status", "live"]),
     count("jobs", ["status", "in_review"]),
     count("employers"),
+    count("applications"),
   ]);
   const show = (n: number | null) => (n === null ? "Not available" : n.toLocaleString("en-CA"));
   return (
@@ -48,6 +49,7 @@ export default async function AdminHome() {
             <section className="card tile"><p className="kicker">Live jobs</p><p className="num">{show(live)}</p><p>Visible to candidates</p></section>
             <section className="card tile"><p className="kicker">In review</p><p className="num">{show(inReview)}</p><p><Link href="/admin/review">Review queue</Link></p></section>
             <section className="card tile"><p className="kicker">Clinic profiles</p><p className="num">{show(profiles)}</p><p>Set up their clinic</p></section>
+            <section className="card tile"><p className="kicker">Applications</p><p className="num">{show(applications)}</p><p>Sent so far</p></section>
             <section className="card tile"><p className="kicker">Candidates</p><p className="num">{show(candidates)}</p><p>Accounts created</p></section>
             <section className="card tile"><p className="kicker">Clinic accounts</p><p className="num">{show(clinics)}</p><p>Accounts created</p></section>
             <section className="card tile"><p className="kicker">Waitlist</p><p className="num">{show(waitlist)}</p><p><Link href="/admin/waitlist">See the list</Link></p></section>

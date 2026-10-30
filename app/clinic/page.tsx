@@ -4,7 +4,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
-import { getMyEmployer, getMyJobs } from "@/lib/clinic";
+import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { closeJob, deleteJob, withdrawJob } from "@/lib/clinic-actions";
 import { daysLeft, formatPay, longDate } from "@/lib/jobs";
 
@@ -26,6 +26,8 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const { notice } = await searchParams;
   const employer = await getMyEmployer(session.userId);
   const jobs = employer ? await getMyJobs(employer.id) : [];
+  const applicants = employer ? await getApplicantCounts() : {};
+  const unread = Object.values(applicants).reduce((sum, c) => sum + c.fresh, 0);
   const first = session.firstName || "there";
   const count = (s: string) => jobs.filter((j) => j.status === s).length;
 
@@ -49,6 +51,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
             <>
               <div className="tiles stats">
                 <section className="card tile"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></section>
+                <section className="card tile"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></section>
                 <section className="card tile"><p className="kicker">In review</p><p className="num">{count("in_review")}</p><p>With our team</p></section>
                 <section className="card tile"><p className="kicker">Drafts</p><p className="num">{count("draft") + count("rejected")}</p><p>Not sent yet</p></section>
               </div>
@@ -77,6 +80,11 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                         <StatusBadge status={j.status} />
                         <div className="jobactions">
                           {(j.status === "draft" || j.status === "rejected") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost">Edit</Link>}
+                          {applicants[j.id] && (
+                            <Link href={`/clinic/jobs/${j.id}/applicants`} className="btn sm">
+                              Applicants ({applicants[j.id].total}{applicants[j.id].fresh ? `, ${applicants[j.id].fresh} new` : ""})
+                            </Link>
+                          )}
                           {j.status === "live" && <Link href={`/jobs/${j.id}`} className="btn sm ghost">View</Link>}
                           {j.status === "live" && (
                             <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Close</button></form>

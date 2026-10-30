@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { supabaseServer } from "@/lib/supabase/server";
-import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, isEmail, type FormState } from "@/lib/auth-copy";
+import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
 
 const text = (form: FormData, key: string, max = 200) => String(form.get(key) ?? "").trim().slice(0, max);
 
@@ -19,7 +19,7 @@ export async function signIn(_prev: FormState, form: FormData): Promise<FormStat
     if (error.code === "email_not_confirmed") return { error: "Please confirm your email first. We sent you a link when you signed up." };
     return { error: "That email and password don't match. Please try again." };
   }
-  redirect("/dashboard");
+  redirect(safeNext(String(form.get("next") ?? "")));
 }
 
 export async function signUp(_prev: FormState, form: FormData): Promise<FormState> {

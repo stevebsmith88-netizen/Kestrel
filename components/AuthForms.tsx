@@ -59,10 +59,11 @@ function Done({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
-export function SignInForm({ notice }: { notice?: string }) {
+export function SignInForm({ notice, next }: { notice?: string; next?: string }) {
   const { state, pending, submit } = useAuthForm(signIn);
   return (
     <form onSubmit={submit} noValidate>
+      {next && <input type="hidden" name="next" value={next} />}
       {notice && <p className="err form-err" role="alert">{notice}</p>}
       <div className="row">
         <label className="lab" htmlFor="si-email">Email</label>
