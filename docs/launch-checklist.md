@@ -28,7 +28,7 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 13 | Move Supabase to Pro (about $25 a month) for daily backups and no pausing | You |
 | 14 | Name yourself privacy officer and write down a breach plan (a one page note) | You, Claude drafts |
 | 15 | Lawyer reads the Terms, Posting policy and Privacy policy. Then Claude removes the "Draft for review" banner | You |
-| 16 | Google sign in (Google Cloud OAuth setup) | You then Claude |
+| 16 | Google sign in: Claude has built it. You set up Google and Supabase, run migration 0017 and add `ENABLE_GOOGLE_SIGNIN=yes` (see `docs/google-signin.md`) | You |
 
 ## 2a. Lock down the accounts (you, about 45 minutes, see `docs/security.md`)
 

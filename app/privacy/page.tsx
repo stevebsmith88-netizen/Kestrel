@@ -46,6 +46,9 @@ export default function Privacy() {
               <strong>If you create an account:</strong> your name, your email address and whether you are a candidate or a clinic.
             </li>
             <li>
+              <strong>If you sign in with Google:</strong> Google tells us your name and email address. We never see your Google password.
+            </li>
+            <li>
               <strong>If you are a candidate:</strong> the details you add to your profile (your role, where you are licensed,
               your experience, when you are available, and a phone number if you choose to give one), the CV you upload, and the
               cover letters and applications you send.
@@ -105,6 +108,7 @@ export default function Privacy() {
             <li>Supabase, which hosts our database and stored CVs in Canada.</li>
             <li>Vercel, which hosts our website.</li>
             <li>Resend, which sends our emails, such as sign up confirmations and application updates.</li>
+            <li>Google, if you choose to sign in with it. Google is told when you sign in to Kestrel, and handles your sign in under its own privacy policy.</li>
             <li>Cloudflare, whose Turnstile security check on our forms tells real people from robots. It looks at signals from your browser, such as how it behaves, and does not need you to solve a puzzle in most cases.</li>
             <li>Anthropic, whose AI helps clinics write job ads. It sees only the job details a clinic types in, never candidate information.</li>
           </ul>

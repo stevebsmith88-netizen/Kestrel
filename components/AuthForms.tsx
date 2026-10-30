@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { startTransition, useActionState, useState } from "react";
-import { forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
+import { chooseAccountType, forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
+import GoogleButton from "@/components/GoogleButton";
 import Turnstile from "@/components/Turnstile";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, type FormState } from "@/lib/auth-copy";
 
@@ -60,9 +61,11 @@ function Done({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
-export function SignInForm({ notice, next }: { notice?: string; next?: string }) {
+export function SignInForm({ notice, next, google = false }: { notice?: string; next?: string; google?: boolean }) {
   const { state, pending, submit } = useAuthForm(signIn);
   return (
+    <>
+    {google && <GoogleButton next={next} />}
     <form onSubmit={submit} noValidate>
       {next && <input type="hidden" name="next" value={next} />}
       {notice && <p className="err form-err" role="alert">{notice}</p>}
@@ -76,10 +79,11 @@ export function SignInForm({ notice, next }: { notice?: string; next?: string })
       <p className="alt"><Link href="/forgot-password">Forgot your password?</Link></p>
       <p className="alt">New to Kestrel? <Link href="/sign-up">Create an account</Link></p>
     </form>
+    </>
   );
 }
 
-export function SignUpForm({ defaultType = "candidate" }: { defaultType?: "candidate" | "clinic" }) {
+export function SignUpForm({ defaultType = "candidate", google = false }: { defaultType?: "candidate" | "clinic"; google?: boolean }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -92,11 +96,13 @@ export function SignUpForm({ defaultType = "candidate" }: { defaultType?: "candi
     );
   }
   return (
-    <form onSubmit={submit} noValidate>
+    <>
       <h1>Create your account</h1>
       <p className="auth-intro">
         Free to join. Candidates can save a CV and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and job alerts.
       </p>
+      {google && <GoogleButton next={`/welcome?type=${defaultType}`} note="Next, you will choose whether you are looking for a job or hiring." />}
+    <form onSubmit={submit} noValidate>
       <div className="row">
         <p className="lab" id="su-type">I am</p>
         <div className="choices" role="radiogroup" aria-labelledby="su-type">
@@ -142,6 +148,7 @@ export function SignUpForm({ defaultType = "candidate" }: { defaultType?: "candi
       <button type="submit" className="btn" disabled={pending}>{pending ? "Creating your account" : "Create my account"}</button>
       <p className="alt">Already have an account? <Link href="/sign-in">Sign in</Link></p>
     </form>
+    </>
   );
 }
 
@@ -179,6 +186,45 @@ export function ResetPasswordForm() {
       <PasswordField id="rp-again" name="again" label="Type it again" autoComplete="new-password" />
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : "Save my new password"}</button>
+    </form>
+  );
+}
+
+export function WelcomeForm({ defaultType = "candidate", email, hasName }: { defaultType?: "candidate" | "clinic"; email: string; hasName: boolean }) {
+  const { state, pending, submit } = useAuthForm(chooseAccountType);
+  return (
+    <form onSubmit={submit} noValidate>
+      <h1>Welcome to Kestrel</h1>
+      <p className="auth-intro">You are signed in as <strong>{email}</strong>. One last step, so we can set up the right account.</p>
+      <div className="row">
+        <p className="lab" id="wl-type">I am</p>
+        <div className="choices" role="radiogroup" aria-labelledby="wl-type">
+          {ACCOUNT_TYPES.map((a) => (
+            <label className="choice" key={a.value}>
+              <input type="radio" name="accountType" value={a.value} defaultChecked={a.value === defaultType} />
+              <span>{a.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+      {!hasName && (
+        <div className="pair">
+          <div className="row"><label className="lab" htmlFor="wl-first">First name</label><input id="wl-first" name="firstName" type="text" autoComplete="given-name" /></div>
+          <div className="row"><label className="lab" htmlFor="wl-last">Last name</label><input id="wl-last" name="lastName" type="text" autoComplete="family-name" /></div>
+        </div>
+      )}
+      <div className="row">
+        <label className="consent">
+          <input name="agree" type="checkbox" />
+          <span>I agree to the <Link href="/privacy" target="_blank">privacy policy</Link> and the <Link href="/terms" target="_blank">terms of use</Link>.</span>
+        </label>
+        <label className="consent">
+          <input name="marketing" type="checkbox" />
+          <span>{MARKETING_CONSENT_TEXT}</span>
+        </label>
+      </div>
+      <Problem text={state.error} />
+      <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : "Continue"}</button>
     </form>
   );
 }

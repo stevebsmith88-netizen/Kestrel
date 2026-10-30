@@ -1,6 +1,9 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getSession, homeFor } from "@/lib/auth";
+import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
@@ -109,4 +112,54 @@ export async function signOut() {
   const db = await supabaseServer();
   await db?.auth.signOut();
   redirect("/");
+}
+
+// "Continue with Google". Sends the person to Google, who sends them back to /auth/callback. It works from a form button,
+// so it needs no extra code in the browser. The address we ask Google to return to is the one the visitor is on.
+export async function signInWithGoogle(form: FormData) {
+  const next = safeNext(String(form.get("next") ?? ""), "/dashboard");
+  const db = await supabaseServer();
+  if (!db) redirect("/sign-in?error=google");
+  const h = await headers();
+  const host = h.get("x-forwarded-host") ?? h.get("host");
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  if (!host) redirect("/sign-in?error=google");
+  const { data, error } = await db.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${proto}://${host}/auth/callback?next=${encodeURIComponent(next)}`, queryParams: { prompt: "select_account" } },
+  });
+  if (error || !data?.url) {
+    console.error("Google sign in could not start:", error?.message);
+    redirect("/sign-in?error=google");
+  }
+  redirect(data.url);
+}
+
+// The first time someone arrives through Google, they say whether they are looking for a job or hiring, and agree to
+// the policies. This can only be done once. Only candidate or clinic can be chosen, never admin.
+export async function chooseAccountType(_prev: FormState, form: FormData): Promise<FormState> {
+  const session = await getSession();
+  if (!session) redirect("/sign-in");
+  if (!session.needsAccountType) redirect(homeFor(session.role));
+
+  const accountType = text(form, "accountType", 20);
+  const agree = form.get("agree") === "on";
+  const marketing = form.get("marketing") === "on";
+  const firstName = text(form, "firstName", 60) || session.firstName;
+  const lastName = text(form, "lastName", 60);
+  if (!ACCOUNT_TYPES.some((a) => a.value === accountType)) return { error: "Choose whether you are looking for a job or hiring." };
+  if (!firstName) return { error: "Enter your first name." };
+  if (!agree) return { error: "Please agree to the privacy policy and terms to continue." };
+
+  const admin = supabaseAdmin();
+  if (!admin) return { error: NOT_CONNECTED };
+  const update: Record<string, unknown> = { role: accountType, account_type_confirmed: true };
+  if (!session.firstName) Object.assign(update, { first_name: firstName, last_name: lastName, full_name: [firstName, lastName].filter(Boolean).join(" ") });
+  if (marketing) Object.assign(update, { marketing_consent: true, marketing_consent_text: MARKETING_CONSENT_TEXT, marketing_consent_at: new Date().toISOString() });
+  const { data, error } = await admin.from("profiles").update(update).eq("id", session.userId).eq("account_type_confirmed", false).select("id");
+  if (error || !data?.length) {
+    console.error("Account type save failed:", error?.code, error?.message);
+    return { error: "We couldn't save that. Please try again." };
+  }
+  redirect(accountType === "clinic" ? "/clinic" : "/candidate");
 }

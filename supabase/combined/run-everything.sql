@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0016), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0017), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1256,6 +1256,53 @@ alter table public.profiles add column if not exists notify_application_updates 
 alter table public.employer_contacts add column if not exists notify_new_applications boolean not null default true;
 alter table public.employer_contacts add column if not exists notify_reminders boolean not null default true;
 
+-- ======================================================================
+-- 0017_google_signin.sql
+-- ======================================================================
+-- Sign in with Google. Safe to run more than once.
+--  * People who sign up with Google have not yet said whether they are a candidate or a clinic, so their
+--    account starts as "type not confirmed" and they are asked on the first visit.
+--  * Google gives a first and last name, so use them when our own sign up form was not used.
+
+alter table public.profiles add column if not exists account_type_confirmed boolean not null default true;
+
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  meta jsonb := coalesce(new.raw_user_meta_data, '{}'::jsonb);
+  whole text := coalesce(nullif(meta ->> 'full_name', ''), nullif(meta ->> 'name', ''), '');
+  consent boolean := coalesce(meta ->> 'marketing_consent', 'false') = 'true';
+  first text := left(coalesce(nullif(meta ->> 'first_name', ''), nullif(meta ->> 'given_name', ''), split_part(whole, ' ', 1)), 60);
+  last text := left(coalesce(nullif(meta ->> 'last_name', ''), nullif(meta ->> 'family_name', ''), trim(substr(whole, length(split_part(whole, ' ', 1)) + 1))), 60);
+  chose boolean := coalesce((meta ->> 'role') in ('clinic', 'candidate'), false);
+  by_email boolean := coalesce(new.raw_app_meta_data ->> 'provider', 'email') = 'email';
+begin
+  insert into public.profiles (id, role, first_name, last_name, full_name, marketing_consent, marketing_consent_text, marketing_consent_at, account_type_confirmed)
+  values (
+    new.id,
+    case when meta ->> 'role' = 'clinic' then 'clinic' else 'candidate' end,
+    first,
+    last,
+    trim(concat_ws(' ', first, last)),
+    consent,
+    case when consent then left(meta ->> 'marketing_consent_text', 500) end,
+    case when consent then now() end,
+    chose or by_email
+  )
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
 
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
@@ -1283,6 +1330,7 @@ from (
     ('table: application_drafts', to_regclass('public.application_drafts') is not null),
     ('column: candidate application email choice', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'notify_application_updates')),
     ('column: clinic new applicant email choice', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_contacts' and column_name = 'notify_new_applications')),
+    ('column: Google sign in account type', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'account_type_confirmed')),
     ('column: job alert frequency', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_alerts' and column_name = 'frequency')),
     ('column: clinic confirmed direct hire', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'direct_hire_confirmed_at')),
     ('column: field based role area', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'territory')),
