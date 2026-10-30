@@ -5,7 +5,7 @@ import AppFooter from "@/components/AppFooter";
 import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
-import { closeJob, deleteJob, withdrawJob } from "@/lib/clinic-actions";
+import { closeJob, deleteJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
 import { daysLeft, formatPay, longDate } from "@/lib/jobs";
 
 export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -19,6 +19,9 @@ const NOTICES: Record<string, string> = {
   "job-closed": "The job is closed and no longer shown to candidates.",
   "job-withdrawn": "The job is back in your drafts, so you can change it and send it again.",
   "job-deleted": "The job is deleted.",
+  "job-edited": "Your changes are with our team. The job is offline until we approve them, usually within 1 business day. Its 30 days keep running.",
+  "job-limit": "You have 10 open jobs already. Close or delete one, then try again.",
+  "job-repost-failed": "We couldn't copy that job. Please try again.",
 };
 
 export default async function ClinicHome({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
@@ -79,7 +82,10 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                       <div className="jobside">
                         <StatusBadge status={j.status} />
                         <div className="jobactions">
-                          {(j.status === "draft" || j.status === "rejected") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost">Edit</Link>}
+                          {(j.status === "draft" || j.status === "rejected" || j.status === "live") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost">Edit</Link>}
+                          {(j.status === "closed" || j.status === "expired") && (
+                            <form action={repostJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm ghost">Post again</button></form>
+                          )}
                           {applicants[j.id] && (
                             <Link href={`/clinic/jobs/${j.id}/applicants`} className="btn sm">
                               Applicants ({applicants[j.id].total}{applicants[j.id].fresh ? `, ${applicants[j.id].fresh} new` : ""})

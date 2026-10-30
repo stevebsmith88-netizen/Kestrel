@@ -65,3 +65,11 @@ Not built yet: the admin tool to add found listings (seeding), and editing a liv
 - A job is "On site" or "Field based". A field based job must say the area covered (`territory`) and the city the person is based in, and may say what else is part of the pay (`pay_extras`, such as commission or a vehicle). The pay range is still required and shows base pay.
 - Search can be limited to field based roles (`/jobs?arrangement=field`), and alerts can be set for any of the new roles.
 - Not built: pricing for these roles (the Stripe step decides it), and a separate "supplier" landing page.
+
+## Editing a live job, and posting again
+
+- A live job can be edited from the clinic dashboard (Edit). The changes go to the review queue and the job is offline until an admin approves them, so nothing can be swapped in unchecked. The original 30 days keep running: approving a job that was already live keeps its first posting and closing dates (only a brand new job gets 30 fresh days).
+- The review queue marks these with "Changes to a job that was already live since ...", so you can compare. You also get an email when a job is submitted or edited (needs `ADMIN_ALERT_EMAIL`).
+- A live job cannot be saved as a draft. It can be closed.
+- Closed and expired jobs have "Post again", which copies the job into a new draft (counts toward the 10 open jobs limit).
+- Database rule: migration 0014 lets a clinic move a live job to in review (and nothing else), and still blocks any edit while it stays live, any change to the dates, and any move to live by the clinic.

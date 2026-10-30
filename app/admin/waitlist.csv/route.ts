@@ -19,11 +19,11 @@ export async function GET() {
 
   const { data, error } = await db
     .from("waitlist")
-    .select("created_at, audience, first_name, last_name, email, clinic_name, role, province, consent_at, unsubscribed_at, consent_text")
+    .select("created_at, audience, first_name, last_name, email, clinic_name, role, province, consent_at, confirmed_at, unsubscribed_at, consent_text")
     .order("created_at", { ascending: false });
   if (error) return new Response("Could not load the waitlist", { status: 500 });
 
-  const columns = ["created_at", "audience", "first_name", "last_name", "email", "clinic_name", "role", "province", "consent_at", "unsubscribed_at", "consent_text"] as const;
+  const columns = ["created_at", "audience", "first_name", "last_name", "email", "clinic_name", "role", "province", "consent_at", "confirmed_at", "unsubscribed_at", "consent_text"] as const;
   const lines = [columns.join(","), ...(data ?? []).map((row) => columns.map((c) => cell(row[c])).join(","))];
   return new Response(lines.join("\r\n"), {
     headers: {

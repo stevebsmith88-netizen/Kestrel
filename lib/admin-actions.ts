@@ -19,9 +19,13 @@ export async function approveJob(form: FormData) {
   const db = supabaseAdmin();
   if (!UUID.test(id) || !db) redirect("/admin/review?notice=error");
   const now = new Date();
+  // A job that was live before (it was edited and sent back) keeps its original 30 days. Otherwise editing
+  // would be a way to keep a job live for ever.
+  const { data: before } = await db.from("jobs").select("posted_at, expires_at").eq("id", id).eq("status", "in_review").maybeSingle();
+  const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };
   const { data, error } = await db
     .from("jobs")
-    .update({ status: "live", posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString(), review_note: null })
+    .update({ status: "live", ...dates, review_note: null })
     .eq("id", id)
     .eq("status", "in_review")
     .select("id");

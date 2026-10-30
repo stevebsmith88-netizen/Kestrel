@@ -19,7 +19,8 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
   if (!UUID.test(id)) notFound();
   const job = await getMyJob(id);
   if (!job) notFound();
-  const editable = job.status === "draft" || job.status === "rejected";
+  const live = job.status === "live";
+  const editable = job.status === "draft" || job.status === "rejected" || live;
   const yesNo = (v: boolean | null) => (v === true ? "yes" : v === false ? "no" : "");
 
   return (
@@ -32,6 +33,11 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
           {job.status === "rejected" && job.review_note && (
             <p className="note"><strong>What to change:</strong> {job.review_note}</p>
           )}
+          {live && (
+            <p className="note">
+              <strong>This job is live.</strong> If you change it, it goes offline until our team has read the changes, usually within 1 business day. Its 30 days keep running. Applications you have already received are kept.
+            </p>
+          )}
           {!editable ? (
             <section className="card">
               <p>This job is {job.status === "live" ? "live" : job.status === "in_review" ? "with our team" : job.status} and can&apos;t be edited here.</p>
@@ -39,6 +45,7 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
             </section>
           ) : (
             <JobForm
+              live={live}
             adBuilder={Boolean(process.env.ANTHROPIC_API_KEY)}
               initial={{
                 id: job.id,

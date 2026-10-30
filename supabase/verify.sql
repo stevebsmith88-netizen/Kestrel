@@ -24,6 +24,7 @@ from (
     ('column: field based role area', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'territory')),
     ('column: extra pay', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_extras')),
     ('column: work arrangement', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'work_arrangement')),
+    ('column: waitlist email confirmed', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'waitlist' and column_name = 'confirmed_at')),
     ('column: unsubscribed date on profiles', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'unsubscribed_at')),
     ('column: unopened reminder on applications', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'reminded_at')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),

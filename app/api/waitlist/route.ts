@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { waitlistConfirmUrl } from "@/lib/waitlist-confirm";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { CONSENT_TEXT, validate } from "@/lib/waitlist";
 
@@ -23,8 +24,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "The waitlist isn't connected yet. Please try again shortly." }, { status: 503 });
   }
 
-  // Only people who are new get the welcome email, so signing up twice never sends two.
-  const { data: existing } = await db.from("waitlist").select("id").eq("email", values.email).maybeSingle();
+  const { data: existing } = await db.from("waitlist").select("id, confirmed_at, confirmation_sent_at").eq("email", values.email).maybeSingle();
 
   const { data: saved, error } = await db.from("waitlist").upsert(
     {
@@ -43,24 +43,29 @@ export async function POST(req: Request) {
     { onConflict: "email" },
   ).select("id").single();
 
-  if (error) {
-    console.error("Waitlist insert failed:", error.message);
+  if (error || !saved) {
+    console.error("Waitlist insert failed:", error?.message);
     return NextResponse.json({ error: "Something went wrong sending your details. Please try again." }, { status: 500 });
   }
 
-  if (!existing && saved) {
-    const unsubscribeUrl = `${SITE_URL}/unsubscribe/${saved.id}`;
+  // A new address, or one not yet confirmed, is sent a link to confirm it. Nobody gets more than 1 an hour, so a
+  // stranger cannot use this form to fill someone's inbox. People who have already confirmed are not emailed again.
+  // The answer is the same either way, so the form cannot be used to find out who is on the list.
+  const recentlySent = existing?.confirmation_sent_at && Date.now() - new Date(existing.confirmation_sent_at).getTime() < 60 * 60 * 1000;
+  if (!existing?.confirmed_at && !recentlySent) {
     const mail = emailLayout({
-      heading: "You're on the list",
+      heading: "Please confirm your email",
       paragraphs: [
-        `Thanks, ${values.firstName}. You are on the Kestrel Eye Care Jobs waitlist.`,
-        "We are building a job board for eye care across Canada, with the pay shown on every job. We will email you the moment Kestrel opens.",
+        `Thanks, ${values.firstName}. Press the button below to confirm your email address and finish joining the Kestrel Eye Care Jobs waitlist.`,
+        "If you did not ask to join, you can ignore this email and we will not add you.",
       ],
-      buttonText: "Visit Kestrel",
-      buttonUrl: SITE_URL,
-      unsubscribeUrl,
+      buttonText: "Confirm my email",
+      buttonUrl: waitlistConfirmUrl(saved.id),
+      unsubscribeUrl: `${SITE_URL}/unsubscribe/${saved.id}`,
     });
-    await sendEmail({ to: values.email, subject: "You're on the Kestrel waitlist", unsubscribeUrl, ...mail });
+    // No unsubscribe address check here: this answers a request the person has just made.
+    const sent = await sendEmail({ to: values.email, subject: "Please confirm your email for the Kestrel waitlist", ...mail });
+    if (sent) await db.from("waitlist").update({ confirmation_sent_at: new Date().toISOString() }).eq("id", saved.id);
   }
   return NextResponse.json({ ok: true });
 }

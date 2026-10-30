@@ -32,6 +32,8 @@ where id = (select id from auth.users where email = 'steve+admin@eyecarejobs.ca'
 5. Candidate: watch the tracker update.
 6. Anyone: open the job and use "Report this job". Then, as admin, look under Reports.
 7. Candidate: download your information from the Account page.
+8. Clinic: edit the live job. It goes offline and appears in the admin review queue with a note that it was already live. Approve it as admin and check the closing date has not changed.
+9. Anyone: join the waitlist on the home page with a new test address (such as steve+waitlist@eyecarejobs.ca). Open the email, press Confirm, and check the admin waitlist page says Confirmed.
 
 The test job is public while it is live, and search engines can see it. Close it as soon as you have finished testing, and give it an obviously fake clinic name.
 

@@ -9,13 +9,13 @@ export const metadata: Metadata = { title: "Waitlist | Kestrel Eye Care Jobs", r
 
 export const dynamic = "force-dynamic";
 
-type Row = { id: string; created_at: string; audience: string; first_name: string; last_name: string | null; email: string; clinic_name: string | null; role: string | null; province: string; unsubscribed_at: string | null };
+type Row = { id: string; created_at: string; audience: string; first_name: string; last_name: string | null; email: string; clinic_name: string | null; role: string | null; province: string; unsubscribed_at: string | null; confirmed_at: string | null; confirmation_sent_at: string | null };
 
 export default async function Waitlist() {
   const session = await requireRole("admin");
   const db = supabaseAdmin();
   const { data, count } = db
-    ? await db.from("waitlist").select("id, created_at, audience, first_name, last_name, email, clinic_name, role, province, unsubscribed_at", { count: "exact" }).order("created_at", { ascending: false }).limit(500)
+    ? await db.from("waitlist").select("id, created_at, audience, first_name, last_name, email, clinic_name, role, province, unsubscribed_at, confirmed_at, confirmation_sent_at", { count: "exact" }).order("created_at", { ascending: false }).limit(500)
     : { data: null, count: null };
   const rows = (data ?? []) as Row[];
   return (
@@ -28,6 +28,7 @@ export default async function Waitlist() {
           <p className="lede2">
             {count ?? rows.length} {(count ?? rows.length) === 1 ? "person" : "people"} on the list. <a href="/admin/waitlist.csv">Download as a spreadsheet</a>
           </p>
+          <p className="help">People now confirm their address by email. Email the ones marked Confirmed first. Anyone marked "Joined before confirmation emails" ticked the consent box, but we never checked their address.</p>
           {rows.length === 0 ? (
             <section className="card"><p>Nobody has joined yet.</p></section>
           ) : (
@@ -46,7 +47,7 @@ export default async function Waitlist() {
                       <td>{r.clinic_name ?? ""}</td>
                       <td>{r.role ?? ""}</td>
                       <td>{r.province}</td>
-                      <td>{r.unsubscribed_at ? `Unsubscribed ${longDate(r.unsubscribed_at)}` : "OK to email"}</td>
+                      <td>{r.unsubscribed_at ? `Unsubscribed ${longDate(r.unsubscribed_at)}` : r.confirmed_at ? `Confirmed ${longDate(r.confirmed_at)}` : r.confirmation_sent_at ? "Waiting to confirm" : "Joined before confirmation emails"}</td>
                     </tr>
                   ))}
                 </tbody>

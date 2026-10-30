@@ -40,7 +40,7 @@ export default function Privacy() {
             <li>
               <strong>What you give us on the waitlist form:</strong> your first name, your last name (optional), your email address,
               whether you are a clinic or looking for a role, your clinic name (clinics only), your role, and your province or
-              territory.
+              territory. We then email you a link to confirm that the address is yours, and we keep the date you confirmed it.
             </li>
             <li>
               <strong>If you create an account:</strong> your name, your email address and whether you are a candidate or a clinic.

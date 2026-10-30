@@ -36,7 +36,7 @@ export const CONSENT_TEXT =
   "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
 
 export const THANK_YOU =
-  "Thanks, you're on the list. We'll be in touch as Kestrel gets closer to launch.";
+  "Thanks. We have sent you an email. Press the button in it to confirm your address and finish joining the list. It can take a few minutes, and it may land in your spam folder.";
 
 export type WaitlistInput = {
   audience: string;

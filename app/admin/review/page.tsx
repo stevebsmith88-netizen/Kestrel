@@ -20,7 +20,7 @@ const NOTICES: Record<string, string> = {
 type QueueJob = {
   id: string; title: string; role_category: string; employment_type: string; province: string; city: string;
   pay_period: string; pay_min: number; pay_max: number; is_existing_vacancy: boolean; uses_ai_screening: boolean;
-  description: string; apply_method: string; apply_url: string | null; created_at: string; employer_id: string;
+  description: string; apply_method: string; apply_url: string | null; created_at: string; employer_id: string; posted_at: string | null; expires_at: string | null;
   employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; direct_hire_confirmed_at: string | null } | null;
 };
 
@@ -31,7 +31,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   const { data } = db
     ? await db
         .from("jobs")
-        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, created_at, employer_id, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
+        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
         .eq("status", "in_review")
         .order("created_at", { ascending: true })
     : { data: null };
@@ -58,6 +58,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
             <div className="joblist">
               {jobs.map((j) => {
                 const flags = [
+                  ...(j.posted_at ? [`Changes to a job that was already live since ${longDate(j.posted_at)}. Compare it with what candidates saw.`] : []),
                   ...reviewFlags(j),
                   ...employerFlags({ website: j.employers?.website, notifyEmail: notifyEmails.get(j.employer_id), directHireConfirmedAt: j.employers?.direct_hire_confirmed_at }),
                 ];

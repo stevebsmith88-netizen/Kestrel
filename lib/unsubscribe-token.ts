@@ -33,3 +33,14 @@ export function addressFromUnsubscribe(secret: string, e: string | undefined, s:
   const given = Buffer.from(s);
   return expected.length === given.length && timingSafeEqual(expected, given) ? address : null;
 }
+
+// The same idea for other links we email, such as confirming a waitlist address. The `purpose`
+// keeps a link made for one job from working for another.
+export const signValue = (secret: string, purpose: string, value: string) => createHmac("sha256", secret).update(`${purpose}:${value}`).digest("hex");
+
+export function valueIsGenuine(secret: string, purpose: string, value: string | undefined, signature: string | undefined) {
+  if (!value || !signature) return false;
+  const expected = Buffer.from(signValue(secret, purpose, value));
+  const given = Buffer.from(signature);
+  return expected.length === given.length && timingSafeEqual(expected, given);
+}

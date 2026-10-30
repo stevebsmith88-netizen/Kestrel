@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
+import { notifyAdmin } from "@/lib/notify-admin";
 import { cleanClinic, cleanJob, parseMoney, validateClinic, validateJob, type JobFormState } from "@/lib/jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
@@ -123,6 +124,13 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   };
 
   const id = idFrom(form);
+  // A live job can be edited, but only by sending the changes to be read again. It is offline until they are approved.
+  let wasLive = false;
+  if (id) {
+    const { data: current } = await db.from("jobs").select("status").eq("id", id).maybeSingle();
+    wasLive = current?.status === "live";
+    if (wasLive && !submit) return { error: "A live job can't be saved as a draft. Send your changes for review, or close the job." };
+  }
   if (id) {
     const { data, error } = await db.from("jobs").update(row).eq("id", id).select("id");
     if (error || !data?.length) {
@@ -137,8 +145,10 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     }
   }
 
+  if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
-  redirect(`/clinic?notice=${submit ? "job-submitted" : "job-saved"}`);
+  revalidatePath("/jobs");
+  redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}`);
 }
 
 // Live job: close it. Job in review: take it back to a draft so it can be changed.
@@ -167,4 +177,29 @@ export async function deleteJob(form: FormData) {
   if (id && db) await db.from("jobs").delete().eq("id", id).in("status", ["draft", "rejected"]);
   revalidatePath("/clinic");
   redirect("/clinic?notice=job-deleted");
+}
+
+// Starts a new draft from an old job (one that has closed or expired), so it can be posted again
+// without typing everything in again. The dates start fresh when it is approved.
+export async function repostJob(form: FormData) {
+  const session = await requireRole("clinic");
+  const id = idFrom(form);
+  const employer = await getMyEmployer(session.userId);
+  const db = await supabaseServer();
+  if (!id || !db || !employer) redirect("/clinic");
+  const { data: old } = await db
+    .from("jobs")
+    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
+    .eq("id", id)
+    .eq("employer_id", employer.id)
+    .in("status", ["closed", "expired", "live"])
+    .maybeSingle();
+  if (!old) redirect("/clinic");
+  const { data: copy, error } = await db.from("jobs").insert({ ...old, employer_id: employer.id, status: "draft" }).select("id").single();
+  if (error || !copy) {
+    console.error("Repost failed:", error?.code, error?.message);
+    redirect(`/clinic?notice=${/10 open jobs/.test(error?.message ?? "") ? "job-limit" : "job-repost-failed"}`);
+  }
+  revalidatePath("/clinic");
+  redirect(`/clinic/jobs/${copy.id}`);
 }

@@ -44,3 +44,7 @@ Candidates can set up to 5 alerts at /candidate/alerts (role, province, practice
 - `/api/health` answers 200 when the site is up and the database can be reached, and 503 when it cannot. Point a free uptime monitor (such as UptimeRobot) at it.
 - Set `ADMIN_ALERT_EMAIL` and the site emails you when the daily housekeeping job fails or has a problem, and whenever a job is reported.
 - Vercel keeps logs (Observability) if you need to look further.
+
+## Waitlist confirmation
+
+Joining the waitlist now sends one email with a "Confirm my email" button (a signed link to /waitlist/confirm; pressing the button, not opening the link, confirms it). No more than 1 confirmation email an hour goes to the same address, and the form answers the same whether or not someone is already on the list. Confirming sends the welcome email and, because the person has just proved the address is theirs, lifts an earlier unsubscribe for that address (complaints, bounces and addresses blocked by hand stay blocked). The admin waitlist page shows Confirmed, Waiting to confirm, or Joined before confirmation emails. Email the confirmed ones first. Needs migration 0014 and `RESEND_API_KEY`.

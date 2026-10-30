@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { addressFromUnsubscribe, normaliseAddress, suppressionKeys, unsubscribeQuery } from "./unsubscribe-token.ts";
+import { addressFromUnsubscribe, normaliseAddress, signValue, suppressionKeys, unsubscribeQuery, valueIsGenuine } from "./unsubscribe-token.ts";
 
 const secret = "test-secret";
 
@@ -23,4 +23,14 @@ test("a changed address, a wrong signature or a different secret is refused", ()
   assert.equal(addressFromUnsubscribe("another-secret", q.get("e") ?? "", q.get("s") ?? ""), null);
   assert.equal(addressFromUnsubscribe(secret, undefined, undefined), null);
   assert.equal(addressFromUnsubscribe(secret, q.get("e") ?? "", "short"), null);
+});
+
+test("a signed value only works for its own purpose and its own value", () => {
+  const sig = signValue(secret, "waitlist-confirm", "abc");
+  assert.equal(valueIsGenuine(secret, "waitlist-confirm", "abc", sig), true);
+  assert.equal(valueIsGenuine(secret, "unsubscribe", "abc", sig), false);
+  assert.equal(valueIsGenuine(secret, "waitlist-confirm", "abd", sig), false);
+  assert.equal(valueIsGenuine("other", "waitlist-confirm", "abc", sig), false);
+  assert.equal(valueIsGenuine(secret, "waitlist-confirm", undefined, sig), false);
+  assert.equal(valueIsGenuine(secret, "waitlist-confirm", "abc", "short"), false);
 });

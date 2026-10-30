@@ -32,7 +32,7 @@ const YES_NO = [
   { value: "no", label: "No" },
 ] as const;
 
-export default function JobForm({ initial, adBuilder = false }: { initial: JobFormValues; adBuilder?: boolean }) {
+export default function JobForm({ initial, adBuilder = false, live = false }: { initial: JobFormValues; adBuilder?: boolean; live?: boolean }) {
   const { state, pending, submit } = useServerForm(saveJob);
   const ad = useServerForm(buildAd);
   const form = useRef<HTMLFormElement>(null);
@@ -157,8 +157,8 @@ export default function JobForm({ initial, adBuilder = false }: { initial: JobFo
 
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}
       <div className="formbtns">
-        <button type="submit" name="intent" value="submit" className="btn" disabled={pending}>{pending ? "Saving" : "Submit for review"}</button>
-        <button type="submit" name="intent" value="draft" className="btn ghost" disabled={pending}>Save draft</button>
+        <button type="submit" name="intent" value="submit" className="btn" disabled={pending}>{pending ? "Saving" : live ? "Send my changes for review" : "Submit for review"}</button>
+        {!live && <button type="submit" name="intent" value="draft" className="btn ghost" disabled={pending}>Save draft</button>}
       </div>
       <p className="help">Our team checks every post, usually within 1 business day, before it goes live.</p>
     </form>
