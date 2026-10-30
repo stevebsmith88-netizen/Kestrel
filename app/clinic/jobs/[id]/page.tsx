@@ -25,7 +25,7 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
   return (
     <>
       <AppBar session={session} current="/clinic" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">Your job</p>
           <h1>{job.title}</h1>

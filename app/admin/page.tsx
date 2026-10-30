@@ -33,7 +33,7 @@ export default async function AdminHome() {
   return (
     <>
       <AppBar session={session} current="/admin" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="kicker">Admin</p>
           <h1>Overview</h1>

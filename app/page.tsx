@@ -7,7 +7,7 @@ export default function ComingSoon() {
   return (
     <>
       <SiteHeader logo={false} />
-      <main>
+      <main id="main" tabIndex={-1}>
         <section className="hero">
           <div className="wrap">
             <span className="pill">Coming soon</span>

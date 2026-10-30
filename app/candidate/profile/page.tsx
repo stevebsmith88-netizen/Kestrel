@@ -18,7 +18,7 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
   return (
     <>
       <AppBar session={session} current="/candidate/profile" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">My profile</p>
           <h1>Your profile and CV</h1>

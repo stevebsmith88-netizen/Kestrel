@@ -9,7 +9,7 @@ export default function Goodbye() {
   return (
     <>
       <SiteHeader />
-      <main className="simple">
+      <main id="main" tabIndex={-1} className="simple">
         <div className="wrap">
           <span className="pill">All done</span>
           <h1>Your account is deleted</h1>

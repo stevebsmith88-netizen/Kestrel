@@ -12,7 +12,7 @@ export default function Clinics() {
   return (
     <>
       <SiteHeader />
-      <main className="simple">
+      <main id="main" tabIndex={-1} className="simple">
         <div className="wrap">
           <span className="pill">Opening soon</span>
           <h1>Hire people who know eye care</h1>

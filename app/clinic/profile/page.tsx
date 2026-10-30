@@ -15,7 +15,7 @@ export default async function ClinicProfile() {
   return (
     <>
       <AppBar session={session} current="/clinic/profile" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">Clinic profile</p>
           <h1>{employer ? "Your clinic" : "Set up your clinic"}</h1>

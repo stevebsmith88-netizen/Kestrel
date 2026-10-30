@@ -26,7 +26,7 @@ export default async function MyApplications({ searchParams }: { searchParams: P
   return (
     <>
       <AppBar session={session} current="/candidate/applications" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="kicker">My applications</p>
           <h1>Where each application stands</h1>

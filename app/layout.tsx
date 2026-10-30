@@ -23,12 +23,15 @@ export const metadata: Metadata = {
   },
 };
 
-export const viewport: Viewport = { themeColor: "#1B2B4B" };
+export const viewport: Viewport = { themeColor: "#1B2B4B", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-CA">
-      <body>{children}</body>
+      <body>
+        <a className="skip" href="#main">Skip to main content</a>
+        {children}
+      </body>
     </html>
   );
 }

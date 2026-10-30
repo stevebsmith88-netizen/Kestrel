@@ -14,7 +14,7 @@ export default function Privacy() {
   return (
     <>
       <SiteHeader />
-      <main className="legal">
+      <main id="main" tabIndex={-1} className="legal">
         <div className="wrap legal-wrap">
           <h1>Privacy policy</h1>
           <p className="updated">Last updated {UPDATED}</p>

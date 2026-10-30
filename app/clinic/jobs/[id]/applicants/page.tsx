@@ -38,7 +38,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   return (
     <>
       <AppBar session={session} current="/clinic" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="back"><Link href="/clinic">Back to your dashboard</Link></p>
           <p className="kicker">Applicants</p>

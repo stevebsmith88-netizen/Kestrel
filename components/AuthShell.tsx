@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function AuthShell({ title, intro, children }: { title?: string; intro?: string; children: React.ReactNode }) {
   return (
     <>
-      <main className="auth">
+      <main id="main" tabIndex={-1} className="auth">
         <div className="wrap authwrap">
           <Link href="/" className="auth-logo" aria-label="Kestrel Eye Care Jobs, home">
             {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -1,10 +1,10 @@
 /* Kestrel Eye Care Jobs: brand tokens and page styles.
    Palette: Navy #1B2B4B, Chestnut #A4502C, Deep Chestnut #8C4024, Cream #F7F1E6,
    Wing Buff #D8B48A, Mist #DCE3E6, Paper #FBF8F2, Line #E3D9C8. */
-:root{--navy:#1B2B4B;--navy-2:#2B3F5F;--chestnut:#A4502C;--chestnut-d:#8C4024;--cream:#F7F1E6;--paper:#FBF8F2;--mist:#DCE3E6;--buff:#D8B48A;--line:#E3D9C8;--muted:#5A6672}
+:root{--navy:#1B2B4B;--navy-2:#2B3F5F;--chestnut:#A4502C;--chestnut-d:#8C4024;--cream:#F7F1E6;--paper:#FBF8F2;--mist:#DCE3E6;--buff:#D8B48A;--line:#E3D9C8;--muted:#5A6672;--edge:#7B868E}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--cream);color:var(--navy);font:400 17px/1.55 "Source Sans 3",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--cream);color:var(--navy);font:400 1.0625rem/1.6 "Source Sans 3",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--chestnut)}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 .pill{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--chestnut);border:1.5px solid var(--chestnut);border-radius:999px;padding:6px 14px;white-space:nowrap}
@@ -21,7 +21,7 @@ a{color:var(--chestnut)}
 .btn{display:inline-block;background:var(--chestnut);color:#fff;border:0;border-radius:8px;padding:15px 28px;font:700 17px/1 "Source Sans 3";text-decoration:none;cursor:pointer;transition:background .15s}
 .btn:hover{background:var(--chestnut-d)}
 .btn:disabled{opacity:.7;cursor:progress}
-.btn:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--buff);outline-offset:2px}
+
 .hero .btn{margin-top:28px;position:relative;z-index:1}
 .split{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:64px 0}
 .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
@@ -39,11 +39,11 @@ a{color:var(--chestnut)}
 .row{margin-bottom:18px}
 .lab{display:block;font-weight:600;margin:0 0 6px}
 .req{color:var(--chestnut)}
-input[type=text],input[type=email],input[type=password],input[type=tel],input[type=url],input[type=number],select,textarea{width:100%;font:inherit;color:var(--navy);background:#fff;border:1.5px solid #CDD5DA;border-radius:8px;padding:12px 14px}
+input[type=text],input[type=email],input[type=password],input[type=tel],input[type=url],input[type=number],select,textarea{width:100%;font:inherit;color:var(--navy);background:#fff;border:1.5px solid var(--edge);border-radius:8px;padding:12px 14px}
 select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--navy) 50%),linear-gradient(135deg,var(--navy) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px;background-repeat:no-repeat;padding-right:40px}
 input.other{margin-top:10px}
 .choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.choice{display:flex;align-items:center;gap:10px;border:1.5px solid #CDD5DA;border-radius:8px;padding:12px 14px;cursor:pointer}
+.choice{display:flex;align-items:center;gap:10px;border:1.5px solid var(--edge);border-radius:8px;padding:12px 14px;cursor:pointer}
 .choice:has(input:checked){border-color:var(--chestnut);background:#FBF3EE}
 .choice input,.consent input{accent-color:var(--chestnut);width:18px;height:18px;margin:0;flex:none}
 .consent{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--navy-2);cursor:pointer}
@@ -92,7 +92,7 @@ footer .addr{display:block;margin-top:4px;font-size:14px;color:#AEB8C4}
 .pw input{padding-right:54px}
 .pw-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:44px;border:0;background:none;color:var(--navy-2);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .pw-toggle:hover{background:rgba(27,43,75,.07)}
-.pw-toggle:focus-visible{outline:3px solid var(--buff);outline-offset:1px}
+
 .pw-toggle svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .auth-done{outline:none}
 .auth-done .help{margin:-8px 0 0}
@@ -126,13 +126,13 @@ footer .addr{display:block;margin-top:4px;font-size:14px;color:#AEB8C4}
 @media (max-width:820px){.cards,.join .grid{grid-template-columns:1fr}
 .join .grid{gap:28px}
 }
-@media (max-width:480px){.pill{font-size:11px;padding:5px 10px}
+@media (max-width:480px){.pill{font-size:12px;padding:5px 10px}
 .hero{padding:36px 0 0}
 .skyline{margin-top:-10px}
 .choices{grid-template-columns:1fr}
 .card,.panel{padding:22px}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}
 }
 .pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
@@ -241,13 +241,13 @@ textarea{resize:vertical;line-height:1.5}
 .a-kept{background:#D9E1F0;color:#1B2B4B}
 .a-not_selected,.a-role_filled,.a-no_update,.a-withdrawn{background:#ECEEF0;color:#4A5560}
 .steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;list-style:none;margin:14px 0 0;padding:0}
-.step{font-size:12px;color:var(--slate);line-height:1.2;min-width:0;overflow-wrap:anywhere}
+.step{font-size:13px;color:var(--slate);line-height:1.2;min-width:0;overflow-wrap:anywhere}
 .step .bar{height:6px;border-radius:3px;background:var(--line);margin-bottom:5px}
 .step.done .bar{background:var(--navy)}
 .step.now .bar{background:var(--chestnut)}
 .step.now{color:var(--chestnut-d);font-weight:700}
 .step.mute .bar{background:#B7BEC5}
-@media (max-width:480px){.step{font-size:11px}}
+@media (max-width:480px){.step{font-size:12px}}
 .tl{list-style:none;margin:0;padding:0}
 .tl li{position:relative;padding:0 0 18px 26px;border-left:2px solid var(--line);margin-left:6px;display:flex;flex-direction:column}
 .tl li::before{content:"";position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--navy)}
@@ -256,7 +256,7 @@ textarea{resize:vertical;line-height:1.5}
 .msg{margin:12px 0 8px;border-left:4px solid var(--buff);background:var(--paper);border-radius:0 12px 12px 0;padding:16px 20px;white-space:pre-wrap}
 .letter{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
 .file{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--paper);flex-wrap:wrap;margin:12px 0}
-.ft{width:44px;height:52px;border-radius:6px;background:#fff;border:1.5px solid #CDD5DA;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-size:11px;font-weight:700;color:var(--chestnut-d);flex:none}
+.ft{width:44px;height:52px;border-radius:6px;background:#fff;border:1.5px solid #CDD5DA;display:flex;align-items:flex-end;justify-content:center;padding-bottom:6px;font-size:12px;font-weight:700;color:var(--chestnut-d);flex:none}
 .filemain{flex:1;min-width:160px}
 .uploadform{margin:14px 0 8px}
 .uploadform input[type=file]{width:100%;margin:4px 0;padding:10px;border:1.5px dashed #CDD5DA;border-radius:8px;background:#fff;font:inherit}
@@ -283,3 +283,10 @@ textarea{resize:vertical;line-height:1.5}
 .alertlist li:first-child{border-top:0}
 .choice.agree{align-items:flex-start;line-height:1.45}
 .choice.agree input{margin-top:3px}
+
+/* Accessibility: a visible focus ring on everything you can tab to. It has two tones, navy with a white gap,
+   so it shows on pale and on navy backgrounds. */
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,.choice:has(input:focus-visible){outline:3px solid var(--navy);outline-offset:2px;box-shadow:0 0 0 2px #fff}
+main:focus{outline:none}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;background:var(--navy);color:#fff;padding:12px 18px;border-radius:0 0 8px 8px;font-weight:700;text-decoration:none}
+.skip:focus{top:0}

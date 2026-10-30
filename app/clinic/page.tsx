@@ -34,7 +34,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   return (
     <>
       <AppBar session={session} current="/clinic" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>

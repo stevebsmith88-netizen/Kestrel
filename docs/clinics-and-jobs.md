@@ -37,3 +37,7 @@ Layers, none of which is perfect on its own:
 3. A clinic can have at most 10 open jobs (drafts, in review, live) at a time (migration 0009).
 4. Contact details are masked, so candidates apply through Kestrel and recruiters cannot harvest clinic emails.
 5. Still to add before launch: a bot check on sign up (Cloudflare Turnstile), written terms of use that ban agencies (needs a lawyer), and a "report this job" link.
+
+## Accessibility
+
+The target is WCAG 2.2 level AA. Done so far: a skip to main content link on every page, a two tone focus ring on everything reachable by keyboard, form hints and errors linked to their fields for screen readers, input borders at 3:1 contrast or better, text colours checked at 4.5:1 or better, body text that scales with the browser's text size setting, no motion when the visitor asks for reduced motion, and plain language throughout. Still to do: a full audit with a screen reader and an automated checker before launch, and converting the remaining fixed pixel sizes to relative sizes.

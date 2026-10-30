@@ -34,7 +34,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
     <>
       <SiteHeader />
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
-      <main className="jobpage">
+      <main id="main" tabIndex={-1} className="jobpage">
         <div className="wrap">
           <p className="back"><Link href="/jobs">Back to all jobs</Link></p>
           <header className="jobhead">

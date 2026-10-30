@@ -6,7 +6,7 @@ export default function NotFound() {
   return (
     <>
       <SiteHeader />
-      <main className="simple">
+      <main id="main" tabIndex={-1} className="simple">
         <div className="wrap">
           <span className="pill">Page not found</span>
           <h1>We can&apos;t find that page</h1>

@@ -18,7 +18,7 @@ export default async function Account() {
   return (
     <>
       <AppBar session={session} current="/account" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="back"><Link href={home}>Back to my home</Link></p>
           <p className="kicker">My account</p>

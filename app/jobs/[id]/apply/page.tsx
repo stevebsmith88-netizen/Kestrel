@@ -76,7 +76,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
   return (
     <>
       <SiteHeader />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
           <p className="kicker">Easy Apply</p>

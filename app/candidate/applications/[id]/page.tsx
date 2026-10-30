@@ -30,7 +30,7 @@ export default async function ApplicationDetail({ params, searchParams }: { para
   return (
     <>
       <AppBar session={session} current="/candidate/applications" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="back"><Link href="/candidate/applications">Back to my applications</Link></p>
           <p className="kicker">{a.clinic_name} · {a.job_location}</p>

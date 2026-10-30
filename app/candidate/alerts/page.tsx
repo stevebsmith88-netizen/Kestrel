@@ -23,7 +23,7 @@ export default async function Alerts() {
   return (
     <>
       <AppBar session={session} current="/candidate/alerts" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">Job alerts</p>
           <h1>Hear about new jobs first</h1>

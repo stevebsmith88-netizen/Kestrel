@@ -21,7 +21,7 @@ export default async function Waitlist() {
   return (
     <>
       <AppBar session={session} current="/admin/waitlist" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="kicker">Admin</p>
           <h1>Waitlist</h1>

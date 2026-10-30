@@ -30,7 +30,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   return (
     <>
       <SiteHeader />
-      <main className="jobsearch">
+      <main id="main" tabIndex={-1} className="jobsearch">
         <div className="wrap">
           <h1>Find your next eye care job</h1>
           <p className="lede2">Independent and corporate practices across Canada. Every job shows its pay.</p>

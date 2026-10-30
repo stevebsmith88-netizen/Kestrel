@@ -17,7 +17,7 @@ export default async function NewJob() {
   return (
     <>
       <AppBar session={session} current="/clinic/jobs/new" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">{employer.clinic_name}</p>
           <h1>Post a job</h1>

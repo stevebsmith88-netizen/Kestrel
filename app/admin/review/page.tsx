@@ -45,7 +45,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   return (
     <>
       <AppBar session={session} current="/admin/review" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">Admin</p>
           <h1>Review queue</h1>

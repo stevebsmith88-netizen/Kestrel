@@ -47,7 +47,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
   return (
     <>
       <AppBar session={session} current="/clinic" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="back"><Link href={`/clinic/jobs/${a.job_id}/applicants`}>Back to all applicants</Link></p>
           <p className="kicker">{a.job_title}</p>

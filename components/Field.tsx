@@ -1,4 +1,5 @@
 // Small building blocks shared by the clinic and job forms.
+import { cloneElement, isValidElement } from "react";
 
 export function Field({ id, label, error, hint, required, children }: { id: string; label: string; error?: string; hint?: string; required?: boolean; children: React.ReactNode }) {
   return (
@@ -6,7 +7,12 @@ export function Field({ id, label, error, hint, required, children }: { id: stri
       <label className="lab" htmlFor={id}>
         {label} {required && <span className="req" aria-hidden="true">*</span>}
       </label>
-      {children}
+      {isValidElement<Record<string, unknown>>(children) && typeof children.type === "string"
+        ? cloneElement(children, {
+            "aria-describedby": [hint && `${id}-hint`, error && `${id}-err`].filter(Boolean).join(" ") || undefined,
+            "aria-invalid": error ? true : undefined,
+          })
+        : children}
       {hint && <p className="help" id={`${id}-hint`}>{hint}</p>}
       {error && <p className="err" id={`${id}-err`} role="alert">{error}</p>}
     </div>

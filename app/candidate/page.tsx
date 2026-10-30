@@ -23,7 +23,7 @@ export default async function CandidateHome() {
   return (
     <>
       <AppBar session={session} current="/candidate" />
-      <main className="app">
+      <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="kicker">Your home</p>
           <h1>Welcome, {first}</h1>
