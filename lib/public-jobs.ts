@@ -19,7 +19,7 @@ export type JobSummary = {
   pay_max: number;
   posted_at: string;
   is_seeded: boolean;
-  employers: { clinic_name: string; practice_type: string } | null;
+  employers: { clinic_name: string; practice_type: string; claimed: boolean } | null;
 };
 
 // Only these filter values are ever used, so nothing odd reaches the database query.
@@ -46,7 +46,7 @@ export async function searchJobs(filters: JobFilters): Promise<{ jobs: JobSummar
   const page = filters.page ?? 1;
   let query = db
     .from("jobs")
-    .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, employers!inner(clinic_name, practice_type)", { count: "exact" })
+    .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, employers!inner(clinic_name, practice_type, claimed)", { count: "exact" })
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString());
   if (filters.province) query = query.eq("province", filters.province);
@@ -70,7 +70,7 @@ export type LiveJob = JobSummary & {
   apply_method: string;
   apply_url: string | null;
   expires_at: string;
-  employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; about: string | null } | null;
+  employers: { clinic_name: string; practice_type: string; claimed: boolean; website: string | null; city: string; province: string; about: string | null } | null;
 };
 
 export async function getLiveJob(id: string): Promise<LiveJob | null> {
@@ -79,7 +79,7 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   if (!db) return null;
   const { data, error } = await db
     .from("jobs")
-    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, is_seeded, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, about)")
+    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, is_seeded, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
     .eq("id", id)
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString())

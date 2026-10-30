@@ -216,7 +216,7 @@ const RIGHTS_WORDING: [RegExp, string][] = [
 ];
 
 const RECRUITER_WORDING = /\b(our client|on behalf of|recruitment agency|recruiting agency|staffing (agency|firm|company)|placement fee|headhunt\w*|confidential (employer|client|practice))\b/i;
-const FREE_EMAIL = /@(gmail|googlemail|yahoo|hotmail|outlook|live|msn|icloud|me|aol|proton|protonmail)\./i;
+export const FREE_EMAIL = /@(gmail|googlemail|yahoo|hotmail|outlook|live|msn|icloud|me|aol|proton|protonmail)\./i;
 
 // Things the admin should know about the clinic behind a post.
 export function employerFlags(employer: { website?: string | null; notifyEmail?: string | null; directHireConfirmedAt?: string | null }) {

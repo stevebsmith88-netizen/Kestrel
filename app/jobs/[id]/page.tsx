@@ -46,7 +46,9 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
               <span className="chip paychip">{formatPay(job.pay_min, job.pay_max, job.pay_period)}</span>
               <span className="chip">{clinic?.practice_type === "corporate" ? "Corporate" : "Independent"}</span>
             </p>
-            {job.is_seeded && <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed</p>}
+            {job.is_seeded && !clinic?.claimed && (
+              <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed. <Link href={`/jobs/${job.id}/claim`}>Is this your clinic? Claim this listing</Link></p>
+            )}
           </header>
 
           <div className="jobgrid">

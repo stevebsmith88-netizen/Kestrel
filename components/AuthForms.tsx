@@ -78,7 +78,7 @@ export function SignInForm({ notice, next }: { notice?: string; next?: string })
   );
 }
 
-export function SignUpForm() {
+export function SignUpForm({ defaultType = "candidate" }: { defaultType?: "candidate" | "clinic" }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -94,14 +94,14 @@ export function SignUpForm() {
     <form onSubmit={submit} noValidate>
       <h1>Create your account</h1>
       <p className="auth-intro">
-        Free to join. We are still building Kestrel, so jobs and posting are not open yet. Create your account now, and tick the second box below to hear the moment they are.
+        Free to join. Candidates can save a CV and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and job alerts.
       </p>
       <div className="row">
         <p className="lab" id="su-type">I am</p>
         <div className="choices" role="radiogroup" aria-labelledby="su-type">
           {ACCOUNT_TYPES.map((a) => (
             <label className="choice" key={a.value}>
-              <input type="radio" name="accountType" value={a.value} defaultChecked={a.value === "candidate"} />
+              <input type="radio" name="accountType" value={a.value} defaultChecked={a.value === defaultType} />
               <span>{a.label}</span>
             </label>
           ))}

@@ -8,12 +8,13 @@ export const metadata: Metadata = { title: "Create an account | Kestrel Eye Care
 
 export const dynamic = "force-dynamic";
 
-export default async function SignUp() {
+export default async function SignUp({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
+  const { type } = await searchParams;
   const session = await getSession();
   if (session) redirect(homeFor(session.role));
   return (
     <AuthShell>
-      <SignUpForm />
+      <SignUpForm defaultType={type === "clinic" ? "clinic" : "candidate"} />
     </AuthShell>
   );
 }

@@ -35,11 +35,12 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | # | What | Needs from you |
 | --- | --- | --- |
 | 17 | Stripe checkout in test mode with the FREELAUNCH coupon and HST | Your Stripe account and test keys |
-| 18 | "Claim your listing" page | Nothing |
+| 18 | DONE: "Claim your listing" page (run migration 0012) | Nothing |
 | 19 | Waitlist confirmation email | Nothing |
 | 20 | Admin numbers and a simple "Find your fit" quiz | Nothing |
 | 21 | DONE: do not email list and clinic unsubscribe page | Nothing |
 | 22 | Converting remaining fixed pixel sizes to relative sizes | Nothing |
+| 22a | Admin tool to add found listings (seeding), and editing a live job | Nothing |
 
 ## 4. Before launch day
 

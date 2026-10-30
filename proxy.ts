@@ -18,5 +18,6 @@ export const config = {
     "/admin/:path*",
     "/account",
     "/auth/:path*",
+    "/claim/:path*",
   ],
 };

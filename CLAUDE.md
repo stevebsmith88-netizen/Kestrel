@@ -43,6 +43,8 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - The Wix page never went live, so there are no Wix sign ups to import.
 - Waitlist consent wording covers launch news, job alerts, product updates and offers (CASL). Keep the wording in lib/waitlist.ts identical to what people see, since it is saved with every sign up.
 
+- Claim your listing is built (migration 0012, docs/clinics-and-jobs.md). The admin tool to add found listings is not, and clinic outreach stays off until Steve confirms his disclosure conversation.
+
 ## Brand
 
 - Name: Kestrel Eye Care Jobs. Line: "Canada-wide eye care job board". Domain: eyecarejobs.ca.

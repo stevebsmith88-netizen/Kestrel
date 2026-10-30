@@ -97,7 +97,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                         <span className="chip paychip">{formatPay(j.pay_min, j.pay_max, j.pay_period)}</span>
                         <span className="chip">{j.employers?.practice_type === "corporate" ? "Corporate" : "Independent"}</span>
                       </p>
-                      {j.is_seeded && <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed</p>}
+                      {j.is_seeded && !j.employers?.claimed && <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed</p>}
                     </div>
                     <div className="jobside">
                       <span className="meta">Posted {longDate(j.posted_at)}</span>

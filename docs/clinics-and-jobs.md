@@ -41,3 +41,19 @@ Layers, none of which is perfect on its own:
 ## Accessibility
 
 The target is WCAG 2.2 level AA. Done so far: a skip to main content link on every page, a two tone focus ring on everything reachable by keyboard, form hints and errors linked to their fields for screen readers, input borders at 3:1 contrast or better, text colours checked at 4.5:1 or better, body text that scales with the browser's text size setting, no motion when the visitor asks for reduced motion, and plain language throughout. Still to do: a full audit with a screen reader and an automated checker before launch, and converting the remaining fixed pixel sizes to relative sizes.
+
+## Claim your listing
+
+A listing we found on a clinic's own website (a seeded listing) belongs to a clinic profile with no owner and `claimed = false`. The job page shows "Found on the clinic's website, not yet claimed" with a link to `/jobs/<id>/claim`.
+
+1. The clinic signs in with a clinic account and fills in the claim form: work email, role, and a confirmation that it may post for the clinic.
+2. If the email is at the clinic's own website (free email and shared website builders do not count), we send a link there. If not, the clinic ticks a box and explains how we can confirm it, and a person checks by hand.
+3. The link opens `/claim/verify`. A button, not the link itself, confirms it, so an email scanner cannot do it by accident. The link works for 2 days and only for the account that made the claim.
+4. A confirmed claim waits in Admin, Claims. Approving it makes the clinic account the owner of the profile and its listings (only while `claimed` is still false, so two claims cannot both win), and emails the clinic. Declining needs a note, which is emailed.
+5. A person can make up to 5 claims a day, hold one open claim per clinic, and an account that already has a clinic profile cannot take over another (they email us).
+
+"Ask us to remove it" opens an email to hello@eyecarejobs.ca. To take a listing down, close the job from Admin or use the report flow.
+
+To try it without a real clinic, run `docs/test-claim.sql` (a fake clinic whose website is eyecarejobs.ca, so `steve+claim@eyecarejobs.ca` counts as an address at its own website). Delete it afterwards.
+
+Not built yet: the admin tool to add found listings (seeding), and editing a live job (a live job can only be closed and reposted).
