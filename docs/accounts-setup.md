@@ -15,37 +15,7 @@ Sign in uses Supabase Auth with email and password. Google sign in is added in a
 1. **Run the migration.** SQL Editor, new query, paste `supabase/migrations/0002_accounts.sql`, run.
 2. **Authentication, Sign In / Providers, Email:** set the minimum password length to 10. Turn "Confirm email" on for launch. While testing on a preview link you can turn it off, so sign up logs you straight in. Turn it back on before launch.
 3. **Authentication, URL Configuration:** set the Site URL to `https://eyecarejobs.ca`.
-4. **Authentication, Emails, Templates:** replace the links so they use the secure token (these work on a phone even if you signed up on a computer).
-
-   Confirm signup, subject "Confirm your email for Kestrel Eye Care Jobs":
-
-   ```html
-   <h2>Confirm your email</h2>
-   <p>Thanks for joining Kestrel Eye Care Jobs. Please confirm your email address to finish creating your account.</p>
-   <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=signup&next=/dashboard">Confirm my email</a></p>
-   <p>If you didn't sign up, you can ignore this email.</p>
-   <p>The Kestrel team</p>
-   ```
-
-   Reset password, subject "Reset your Kestrel password":
-
-   ```html
-   <h2>Reset your password</h2>
-   <p>We received a request to reset the password for your Kestrel account.</p>
-   <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/reset-password">Choose a new password</a></p>
-   <p>If you didn't ask for this, you can ignore this email.</p>
-   <p>The Kestrel team</p>
-   ```
-
-   Change email address, subject "Confirm your new email for Kestrel". (Supabase sends this one to both the old and the new address when someone changes their email on the Account page. Under Authentication, Sign In / Providers, Email, keep "Secure email change" switched on.)
-
-   ```html
-   <h2>Confirm your email change</h2>
-   <p>Someone asked to change the email address on a Kestrel Eye Care Jobs account from {{ .Email }} to {{ .NewEmail }}.</p>
-   <p><a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email_change&next=/account%3Femail%3Dconfirmed">Confirm the change</a></p>
-   <p>The change only happens once the link in both emails has been opened. If this was not you, ignore this email and change your password.</p>
-   <p>The Kestrel team</p>
-   ```
+4. **Authentication, Emails, Templates:** paste in the three Kestrel templates from `docs/email-templates/` (confirm sign up, reset password and change email address). The links use the secure token, so they work on a phone even if you signed up on a computer. Keep "Secure email change" on.
 
 5. **Vercel, Settings, Environment Variables:** add these two (same values as in Supabase, Project Settings, API). They are safe to be public.
    - `NEXT_PUBLIC_SUPABASE_URL`: the Project URL
