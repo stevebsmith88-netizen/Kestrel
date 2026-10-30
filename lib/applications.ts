@@ -119,6 +119,24 @@ export function detectCv(bytes: Uint8Array, filename: string): { ext: "pdf" | "d
 
 export const CV_MAX_BYTES = 3 * 1024 * 1024;
 
+const ascii = (bytes: Uint8Array) => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString("latin1");
+const utf16 = (text: string) => Buffer.from(text, "utf16le").toString("latin1");
+
+// Looks inside a CV for the things malicious files usually rely on: macros, scripts, launch actions and embedded
+// programs. Returns what it found, or null. This is a safety net, not an antivirus. It cannot see inside compressed
+// parts of a file, so a real virus scan is still planned (see docs/cv-scanning.md).
+export function activeContent(bytes: Uint8Array, ext: "pdf" | "docx" | "doc"): string | null {
+  const text = ascii(bytes);
+  if (ext === "pdf") {
+    if (/\/(JavaScript|Launch|EmbeddedFile|RichMedia|XFA)\b/.test(text) || /\/JS(?![A-Za-z])/.test(text)) return "a script, a launch action or an embedded file";
+  } else if (ext === "docx") {
+    if (/vbaProject\.bin|word\/activeX\/|word\/embeddings\//i.test(text)) return "macros or embedded objects";
+  } else if (text.includes(utf16("_VBA_PROJECT")) || text.includes(utf16("Ole10Native"))) {
+    return "macros or embedded objects";
+  }
+  return null;
+}
+
 // A safe name to show and to download the file as.
 export function safeFilename(name: string) {
   const cleaned = name.replace(/[^\w.\- ()]/g, "").replace(/\s+/g, " ").replace(/^[.\s]+/, "").trim().slice(-120);

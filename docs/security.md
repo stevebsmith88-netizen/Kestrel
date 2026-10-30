@@ -36,6 +36,10 @@ Turn on 2 step sign in (an authenticator app, not text messages) and use a passw
 - Vercel: mark secrets Sensitive, and remove anyone who does not need access.
 - Supabase: upgrade to Pro for daily backups, and do a test restore once before launch.
 
+## If personal information is lost or seen by the wrong person
+
+Follow `docs/breach-plan.md`: one page, with a message to send and a log to fill in.
+
 ## If a service we use says it has been breached
 
 Hugging Face's July 2026 breach is the example: attackers got internal datasets and credentials, and the company told users to rotate their tokens and check their account activity. Kestrel does not use Hugging Face. The same steps apply to any of our services:
@@ -59,7 +63,7 @@ Hugging Face's July 2026 breach is the example: attackers got internal datasets 
 ## Known gaps
 
 - **Bots:** the Cloudflare Turnstile check is built into the waitlist, sign up, password reset and report forms. It only works once both Turnstile keys are in Vercel. Sign in is left without it on purpose, because Supabase already limits sign in attempts and the check adds friction for real people.
-- **Uploaded CVs are not scanned for viruses.** The type and size are checked, but a clinic opens a CV on their own computer. Add scanning before launch.
+- **Uploaded CVs are checked, but not virus scanned.** The type and size are checked, and files with macros, scripts or embedded programs are refused, but a real antivirus scan is still to be added before launch. See `docs/cv-scanning.md`.
 - **No 2 step sign in on the admin area** beyond the account's own. Your Supabase account having 2 step sign in matters.
 - **A stricter content security policy** (which limits what scripts a page may run) is not on yet. It is worth adding with the full audit, because it needs testing.
 

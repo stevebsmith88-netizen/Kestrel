@@ -49,7 +49,10 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 20 | DONE: admin numbers and the "Find your fit" quiz | Nothing |
 | 20a | DONE: saved job templates, application drafts and saved cover letters (run migration 0015) | Nothing |
 | 21 | DONE: do not email list and clinic unsubscribe page | Nothing |
-| 22 | Converting remaining fixed pixel sizes to relative sizes | Nothing |
+| 22 | DONE: text sizes now follow the browser's text size setting (tested at 150% and 200%) | Nothing |
+| 22d | DONE: CVs with macros, scripts or embedded files are refused. A real virus scanner is still to choose, see `docs/cv-scanning.md` | Your decision |
+| 22e | DONE: one page breach plan, `docs/breach-plan.md`. Fill in the backup person and the lawyer | You |
+| 22f | Set `EMAIL_REPLY_TO` in Vercel to a real inbox (see `docs/email-addresses.md`) | You |
 | 22a | Admin tool to add found listings (seeding). Editing a live job and Post again are DONE | Nothing |
 | 22b | DONE: field based and supplier roles; blog with 3 starter posts (more topics in `docs/blog.md`) | Nothing |
 | 22c | Pricing for field and supplier roles (decide with the Stripe step) | Your decision |

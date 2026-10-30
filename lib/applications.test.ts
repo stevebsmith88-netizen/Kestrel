@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   CLOSED,
+  activeContent,
   STEPS,
   clinicMoveError,
   detectCv,
@@ -78,4 +79,22 @@ test("file names are made safe", () => {
 test("word count", () => {
   assert.equal(wordCount(""), 0);
   assert.equal(wordCount("  hello   there world "), 3);
+});
+
+test("a CV with macros, scripts or embedded programs is refused, and ordinary ones are not", () => {
+  const bytes = (text: string) => new TextEncoder().encode(text);
+  const utf16 = (text: string) => new Uint8Array(Buffer.from(text, "utf16le"));
+  // PDFs
+  assert.equal(activeContent(bytes("%PDF-1.7\n1 0 obj << /Type /Catalog /OpenAction [3 0 R /Fit] >> endobj"), "pdf"), null);
+  assert.ok(activeContent(bytes("%PDF-1.7\n1 0 obj << /OpenAction << /S /JavaScript /JS (app.alert(1)) >> >>"), "pdf"));
+  assert.ok(activeContent(bytes("%PDF-1.4\n<< /S /Launch /F (cmd.exe) >>"), "pdf"));
+  assert.ok(activeContent(bytes("%PDF-1.4\n<< /Type /EmbeddedFile /Length 5 >>"), "pdf"));
+  assert.equal(activeContent(bytes("%PDF-1.7\n<< /Type /Page /Resources << /Font << /F1 5 0 R >> >> >>"), "pdf"), null);
+  // Word
+  assert.equal(activeContent(bytes("PK\u0003\u0004word/document.xml word/styles.xml [Content_Types].xml"), "docx"), null);
+  assert.ok(activeContent(bytes("PK\u0003\u0004word/document.xml word/vbaProject.bin"), "docx"));
+  assert.ok(activeContent(bytes("PK\u0003\u0004word/embeddings/oleObject1.bin"), "docx"));
+  assert.equal(activeContent(utf16("Root Entry WordDocument 1Table SummaryInformation"), "doc"), null);
+  assert.ok(activeContent(utf16("Root Entry Macros _VBA_PROJECT_CUR"), "doc"));
+  assert.ok(activeContent(utf16("Root Entry \u0001Ole10Native"), "doc"));
 });

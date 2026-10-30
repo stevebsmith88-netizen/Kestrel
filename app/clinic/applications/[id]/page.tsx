@@ -77,7 +77,12 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
                   <div><dt>Applied</dt><dd>{longDate(a.created_at)}</dd></div>
                   <div><dt>May keep details for future roles</dt><dd>{a.keep_details ? "Yes" : "No"}</dd></div>
                 </dl>
-                {a.cv_filename && <p><a className="btn sm" href={`/clinic/applications/${a.id}/cv`}>Download their CV ({a.cv_filename})</a></p>}
+                {a.cv_filename && (
+                  <>
+                    <p><a className="btn sm" href={`/clinic/applications/${a.id}/cv`}>Download their CV ({a.cv_filename})</a></p>
+                    <p className="help">Kestrel checks CVs for macros and scripts, but cannot promise any file is safe. Open it in your usual PDF or Word viewer, and if anything looks wrong, close it and use Report on the job page.</p>
+                  </>
+                )}
               </section>
 
               <section className="card">

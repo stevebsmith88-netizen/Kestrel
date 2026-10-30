@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
-import { CV_MAX_BYTES, cleanCoverLetter, detectCv, isClosed, safeFilename } from "@/lib/applications";
+import { CV_MAX_BYTES, activeContent, cleanCoverLetter, detectCv, isClosed, safeFilename } from "@/lib/applications";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
@@ -73,6 +73,8 @@ export async function uploadCv(_prev: JobFormState, form: FormData): Promise<Job
   const bytes = new Uint8Array(await file.arrayBuffer());
   const kind = detectCv(bytes, file.name);
   if (!kind) return { error: "We can only accept a PDF or a Word document (.docx or .doc)." };
+  // Macros, scripts and embedded programs are how most harmful files work, and a CV never needs them.
+  if (activeContent(bytes, kind.ext)) return { error: "This file contains macros, scripts or embedded files, which we cannot accept. Please save your CV as a plain PDF and upload that." };
 
   const admin = supabaseAdmin();
   if (!admin || !(await ensureBucket(admin))) return { error: NOT_CONNECTED };
