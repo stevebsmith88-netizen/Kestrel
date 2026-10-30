@@ -48,7 +48,7 @@ export type JobInput = {
   applyUrl: string;
 };
 
-export type JobFormState = { error?: string; message?: string; errors?: Record<string, string> };
+export type JobFormState = { error?: string; message?: string; errors?: Record<string, string>; ad?: string };
 
 export type ClinicInput = {
   clinicName: string;

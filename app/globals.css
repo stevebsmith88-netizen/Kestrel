@@ -268,3 +268,7 @@ textarea{resize:vertical;line-height:1.5}
 .nudge{margin-top:16px;background:#FBF3EE;border:1px solid #EBCFC0;border-radius:10px;padding:14px 16px;color:#6E3219}
 .nudge p{margin:4px 0 10px;color:#6E3219}
 .card .consent{margin-bottom:12px}
+
+.adbuilder{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 18px}
+.adbuilder .row{margin-bottom:12px}
+.adbuilder .btn{width:auto}

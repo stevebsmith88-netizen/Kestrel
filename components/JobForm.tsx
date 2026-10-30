@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Choices, Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
+import { buildAd } from "@/lib/ad-builder";
 import { saveJob } from "@/lib/clinic-actions";
 import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 
@@ -28,12 +29,19 @@ const YES_NO = [
   { value: "no", label: "No" },
 ] as const;
 
-export default function JobForm({ initial }: { initial: JobFormValues }) {
+export default function JobForm({ initial, adBuilder = false }: { initial: JobFormValues; adBuilder?: boolean }) {
   const { state, pending, submit } = useServerForm(saveJob);
+  const ad = useServerForm(buildAd);
+  const form = useRef<HTMLFormElement>(null);
+  const [description, setDescription] = useState(initial.description);
+  // When the ad builder returns a draft, it goes into the ad box for the clinic to edit.
+  useEffect(() => {
+    if (ad.state.ad) setDescription(ad.state.ad);
+  }, [ad.state.ad]);
   const [applyMethod, setApplyMethod] = useState(initial.apply_method || "kestrel");
   const e = state.errors ?? {};
   return (
-    <form onSubmit={submit} noValidate className="panel formpanel">
+    <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
 
       <h2 className="formh">The role</h2>
@@ -89,8 +97,20 @@ export default function JobForm({ initial }: { initial: JobFormValues }) {
       <Choices name="usesAi" label="Do you use AI to screen or select candidates?" options={YES_NO} value={initial.uses_ai_screening} error={e.usesAi} hint="Ontario requires employers to say so from 1st January 2026." />
 
       <h2 className="formh">The ad</h2>
+      {adBuilder && (
+        <div className="adbuilder">
+          <Field id="jf-brief" label="Tell us about the job in a few lines" error={ad.state.errors?.brief} hint="For example: what the role involves, what you offer, who you are looking for. We will turn it into a draft ad that you can edit.">
+            <textarea id="jf-brief" name="brief" rows={4} />
+          </Field>
+          <button type="button" className="btn sm ghost" disabled={ad.pending} onClick={() => form.current && ad.send(new FormData(form.current))}>
+            {ad.pending ? "Writing your ad" : "Write my ad"}
+          </button>
+          {ad.state.error && <p className="err form-err" role="alert">{ad.state.error}</p>}
+          {ad.state.message && <p className="ok-msg" role="status">{ad.state.message}</p>}
+        </div>
+      )}
       <Field id="jf-desc" label="Describe the job" required error={e.description} hint="What the role involves, what you offer and who you are looking for. Do not include email addresses or phone numbers. Please do not ask for Canadian experience.">
-        <textarea id="jf-desc" name="description" rows={12} defaultValue={initial.description} />
+        <textarea id="jf-desc" name="description" rows={12} value={description} onChange={(e) => setDescription(e.target.value)} />
       </Field>
 
       <h2 className="formh">How people apply</h2>

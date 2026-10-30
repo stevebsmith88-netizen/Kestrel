@@ -23,6 +23,7 @@ export default async function NewJob() {
           <h1>Post a job</h1>
           <p className="lede2">About 5 minutes. You can save a draft and come back to it.</p>
           <JobForm
+            adBuilder={Boolean(process.env.ANTHROPIC_API_KEY)}
             initial={{
               title: "", role_category: "", employment_type: "", province: employer.province, city: employer.city,
               pay_period: "year", pay_min: "", pay_max: "", is_existing_vacancy: "", uses_ai_screening: "",

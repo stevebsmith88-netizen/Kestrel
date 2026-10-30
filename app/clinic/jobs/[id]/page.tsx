@@ -39,6 +39,7 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
             </section>
           ) : (
             <JobForm
+            adBuilder={Boolean(process.env.ANTHROPIC_API_KEY)}
               initial={{
                 id: job.id,
                 title: job.title,

@@ -15,5 +15,7 @@ export function useServerForm(action: Action) {
     const data = new FormData(e.currentTarget, submitter instanceof HTMLElement ? submitter : undefined);
     startTransition(() => run(data));
   };
-  return { state, pending, submit };
+  // Send a form's data without a submit event (used when one form has two jobs).
+  const send = (data: FormData) => startTransition(() => run(data));
+  return { state, pending, submit, send };
 }

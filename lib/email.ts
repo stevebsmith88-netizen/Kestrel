@@ -6,7 +6,11 @@ const FROM = process.env.EMAIL_FROM || "Kestrel Eye Care Jobs <hello@mail.eyecar
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 // A short, branded email in the same look as the sign up emails.
-export function emailLayout({ heading, paragraphs, buttonText, buttonUrl }: { heading: string; paragraphs: string[]; buttonText?: string; buttonUrl?: string }) {
+export function emailLayout({ heading, paragraphs, buttonText, buttonUrl, unsubscribeUrl }: { heading: string; paragraphs: string[]; buttonText?: string; buttonUrl?: string; unsubscribeUrl?: string }) {
+  // Marketing emails carry an unsubscribe link and the mailing address, as Canada's anti-spam law requires.
+  const footerNote = unsubscribeUrl
+    ? `You are receiving this because you asked to hear from Kestrel Eye Care Jobs. <a href="${esc(unsubscribeUrl)}" style="color:#8C4024;">Unsubscribe</a> at any time.`
+    : "This email is about your Kestrel account or an application.";
   const body = paragraphs.map((p) => `<p style="margin:0 0 16px 0;">${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
   const button = buttonText && buttonUrl
     ? `<tr><td style="padding:0 36px 24px 36px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="#A4502C" style="background-color:#A4502C;border-radius:6px;"><a href="${esc(buttonUrl)}" style="display:inline-block;padding:13px 26px;font-family:Arial,Helvetica,sans-serif;font-size:16px;font-weight:bold;color:#FFFFFF;text-decoration:none;border-radius:6px;">${esc(buttonText)}</a></td></tr></table></td></tr>`
@@ -19,15 +23,21 @@ export function emailLayout({ heading, paragraphs, buttonText, buttonUrl }: { he
 <tr><td style="padding:0 36px 8px 36px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:25px;color:#1B2B4B;">${body}</td></tr>
 ${button}
 <tr><td style="padding:0 36px 24px 36px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:25px;color:#1B2B4B;"><p style="margin:0;">Warm regards,<br><strong>The Kestrel team</strong></p></td></tr>
-<tr><td style="padding:20px 36px 28px 36px;border-top:1px solid #E3D9C8;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#5A6672;"><p style="margin:0;">Kestrel Eye Care Jobs, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada. This email is about your Kestrel account or an application.</p></td></tr>
+<tr><td style="padding:20px 36px 28px 36px;border-top:1px solid #E3D9C8;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#5A6672;"><p style="margin:0;">Kestrel Eye Care Jobs, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada. ${footerNote}</p></td></tr>
 </table></td></tr></table></body></html>`;
-  const text = [heading, "", ...paragraphs, ...(buttonText && buttonUrl ? ["", `${buttonText}: ${buttonUrl}`] : []), "", "Warm regards,", "The Kestrel team"].join("\n");
+  const text = [
+    heading, "", ...paragraphs,
+    ...(buttonText && buttonUrl ? ["", `${buttonText}: ${buttonUrl}`] : []),
+    "", "Warm regards,", "The Kestrel team", "",
+    "Kestrel Eye Care Jobs, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada",
+    ...(unsubscribeUrl ? [`Unsubscribe: ${unsubscribeUrl}`] : []),
+  ].join("\n");
   return { html, text };
 }
 
 // Sends one email through Resend. Never throws: a failed email must not break the page.
 // Until RESEND_API_KEY is set, it does nothing but note that it skipped.
-export async function sendEmail({ to, subject, html, text }: { to: string; subject: string; html: string; text: string }) {
+export async function sendEmail({ to, subject, html, text, unsubscribeUrl }: { to: string; subject: string; html: string; text: string; unsubscribeUrl?: string }) {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
     console.log("Email skipped, no RESEND_API_KEY set:", subject);
@@ -37,7 +47,7 @@ export async function sendEmail({ to, subject, html, text }: { to: string; subje
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM, to: [to], subject, html, text }),
+      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, ...(unsubscribeUrl ? { headers: { "List-Unsubscribe": `<${unsubscribeUrl}>` } } : {}) }),
     });
     if (!res.ok) {
       console.error("Email failed:", res.status, (await res.text()).slice(0, 200));
