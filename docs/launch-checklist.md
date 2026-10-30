@@ -30,6 +30,15 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 15 | Lawyer reads the Terms, Posting policy and Privacy policy. Then Claude removes the "Draft for review" banner | You |
 | 16 | Google sign in (Google Cloud OAuth setup) | You then Claude |
 
+## 2a. Lock down the accounts (you, about 45 minutes, see `docs/security.md`)
+
+| # | What | Who |
+| --- | --- | --- |
+| 15a | 2 step sign in (authenticator app) and a password manager on GitHub, Vercel, Supabase, Namecheap, Google Workspace, Resend, Anthropic | You |
+| 15b | Vercel: mark every secret as Sensitive. Namecheap: turn on the domain lock | You |
+| 15c | Anthropic: a monthly spend limit on the Kestrel key. Resend: key limited to sending, for your domain | You |
+| 15d | GitHub: turn on Dependabot alerts, and require a pull request before changes reach `main` | You |
+
 ## 3. Claude builds next
 
 | # | What | Needs from you |

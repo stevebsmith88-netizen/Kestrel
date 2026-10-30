@@ -45,6 +45,8 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 
 - Claim your listing is built (migration 0012, docs/clinics-and-jobs.md). The admin tool to add found listings is not, and clinic outreach stays off until Steve confirms his disclosure conversation.
 
+- Security: docs/security.md lists every secret, how to rotate it and what to do after a breach at a service we use. Keep it current whenever a new key or service is added.
+
 ## Brand
 
 - Name: Kestrel Eye Care Jobs. Line: "Canada-wide eye care job board". Domain: eyecarejobs.ca.

@@ -1,3 +1,4 @@
+import { timingSafeEqual } from "node:crypto";
 import { APP_LABELS } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { notifyAdmin } from "@/lib/notify-admin";
@@ -29,7 +30,10 @@ export async function GET(request: Request) {
 
 async function runDaily(request: Request) {
   const secret = process.env.CRON_SECRET;
-  if (!secret || request.headers.get("authorization") !== `Bearer ${secret}`) return new Response("Unauthorized", { status: 401 });
+  const given = Buffer.from(request.headers.get("authorization") ?? "");
+  const expected = Buffer.from(`Bearer ${secret ?? ""}`);
+  // Compared in constant time, so the secret cannot be guessed from how long the answer takes. No secret set means nobody gets in.
+  if (!secret || given.length !== expected.length || !timingSafeEqual(given, expected)) return new Response("Unauthorized", { status: 401 });
   const admin = supabaseAdmin();
   if (!admin) return new Response("Not available", { status: 503 });
 
