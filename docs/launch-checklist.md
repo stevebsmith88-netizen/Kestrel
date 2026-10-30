@@ -24,11 +24,11 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | # | What | Who |
 | --- | --- | --- |
 | 11 | Support inbox: set up `hello@` and `privacy@` as Google Workspace aliases (or a Google Group) and turn on "Send mail as" so replies come from them | You, with Claude's steps |
-| 12 | Cloudflare Turnstile bot check: Claude has wired it in. You add the two keys to Vercel (see `docs/security.md`), then redeploy | You |
+| 12 | DONE: Cloudflare Turnstile bot check (built, keys added and tested) | |
 | 13 | Move Supabase to Pro (about $25 a month) for daily backups and no pausing | You |
 | 14 | Name yourself privacy officer and write down a breach plan (a one page note) | You, Claude drafts |
 | 15 | Lawyer reads the Terms, Posting policy and Privacy policy. Then Claude removes the "Draft for review" banner | You |
-| 16 | Google sign in: Claude has built it. You set up Google and Supabase, run migration 0017 and add `ENABLE_GOOGLE_SIGNIN=yes` (see `docs/google-signin.md`) | You |
+| 16 | DONE: Google sign in (built, set up and tested; see `docs/google-signin.md`) | |
 
 ## 2a. Lock down the accounts (you, about 45 minutes, see `docs/security.md`)
 
