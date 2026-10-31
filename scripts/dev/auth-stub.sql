@@ -7,6 +7,8 @@ do $$ begin
 end $$;
 create schema if not exists auth;
 create table if not exists auth.users (id uuid primary key default gen_random_uuid(), email text, raw_user_meta_data jsonb default '{}', raw_app_meta_data jsonb default '{}');
+-- the columns Supabase's accounts table has that the demo data script fills in
+alter table auth.users add column if not exists instance_id uuid, add column if not exists aud text, add column if not exists role text, add column if not exists email_confirmed_at timestamptz, add column if not exists created_at timestamptz default now(), add column if not exists updated_at timestamptz default now();
 create or replace function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
 grant usage on schema public, auth to anon, authenticated, service_role;
 create schema if not exists storage;

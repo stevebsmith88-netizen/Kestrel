@@ -7,11 +7,15 @@ import "@fontsource/source-sans-3/600.css";
 import "@fontsource/source-sans-3/700.css";
 import "./globals.css";
 import CloseMenuOnEscape from "@/components/CloseMenuOnEscape";
+import DemoBanner from "@/components/DemoBanner";
+import { demoMode } from "@/lib/demo";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  // The demo copy of the site must never appear in search results.
+  ...(demoMode() ? { robots: { index: false, follow: false } } : {}),
   title: "Kestrel Eye Care Jobs | Coming soon",
   description:
     "Kestrel Eye Care Jobs is a dedicated job board for optometrists, opticians, assistants and clinic teams across Canada. Join the waitlist to hear first when we launch.",
@@ -32,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a className="skip" href="#main">Skip to main content</a>
         <CloseMenuOnEscape />
+        <DemoBanner />
         {children}
       </body>
     </html>

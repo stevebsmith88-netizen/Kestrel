@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const { error } = await db.from("waitlist").select("id", { head: true, count: "exact" }).limit(1);
   if (error) console.error("Health check failed:", error.code, error.message);
 
-  const live = process.env.VERCEL_ENV === "production";
+  const live = process.env.VERCEL_ENV === "production" && process.env.DEMO_MODE !== "yes";
   const { data: run } = await db.from("job_runs").select("last_ok_at").eq("name", "daily").maybeSingle();
   const daily = live ? dailyStatus(run?.last_ok_at) : "ok";
   const missing = live ? missingSettings() : [];
