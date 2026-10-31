@@ -6,9 +6,10 @@ import { resolve } from "node:path";
 const { chromium } = createRequire(import.meta.url)("playwright");
 const browser = await chromium.launch();
 const page = await browser.newPage();
-await page.goto(pathToFileURL(resolve("docs/legal/Kestrel-lawyer-review-pack.html")).href);
+const name = process.argv[2] || "Kestrel-lawyer-review-pack";
+await page.goto(pathToFileURL(resolve(`docs/legal/${name}.html`)).href);
 await page.pdf({
-  path: "docs/legal/Kestrel-lawyer-review-pack.pdf",
+  path: `docs/legal/${name}.pdf`,
   format: "Letter",
   printBackground: true,
   displayHeaderFooter: true,

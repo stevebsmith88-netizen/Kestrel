@@ -3,7 +3,10 @@
 Run from the repository root after `npm run build`, with the site running on port 3189:
   PORT=3189 npm start &   then   python3 docs/legal/build-lawyer-pack.py   then   node docs/legal/render-pdf.mjs
 """
-import html, re, urllib.request
+import html, os, re, urllib.request
+
+# PACK=full (default), business (no employment content, for a business, privacy and technology reviewer) or employment (Part A only)
+PACK = os.environ.get("PACK", "full")
 
 def page(path):
     raw = urllib.request.urlopen(f"http://127.0.0.1:3189{path}").read().decode()
@@ -202,6 +205,34 @@ BRIEF = f"""
 </ul>
 """
 
+def cut(text, start, end=None):
+    i = text.index(start)
+    return text[i:] if end is None else text[i:text.index(end)]
+
+cover = cut(BRIEF, '<div class="cover">', '<h2 class="pb">Part 1.')
+part1 = cut(BRIEF, '<h2 class="pb">Part 1.', '<h2 class="pb">Part A.')
+partA = cut(BRIEF, '<h2 class="pb">Part A.', '<h2>Part B.')
+rest = cut(BRIEF, '<h2>Part B.')
+bring_i = rest.index('<h2>Documents to bring</h2>')
+rest_questions, rest_bring = rest[:bring_i], rest[bring_i:]
+
+if PACK == "business":
+    cover = cover.replace("Legal review pack</p>", "Legal review pack: business, privacy and technology</p>", 1)
+    cover = cover.replace("Parts A to G are the 40 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email.", "Parts B to G are questions 7 to 40, in the order I would like to cover them. If time is short, Parts B and C come first and the rest can follow by email. Questions 1 to 6 are about employment and are being handled separately.", 1)
+    part1 = part1.replace("I work full time for another organisation (see Part A). I am not a developer", "I am building Kestrel alongside other work. I am not a developer", 1)
+    part1 = part1.replace("only after the matters in Part A are settled", "only after the company, policy and other legal matters in this pack are settled", 1)
+    bring = '<h2>Documents to bring</h2><ul><li>This pack (the policies are in the appendices, exactly as published).</li><li>A name search result, once done.</li></ul>'
+    brief_html = cover + part1 + rest_questions + bring + cut(BRIEF, '<h2 class="pb">Background 1.')
+elif PACK == "employment":
+    cover = cover.replace("Legal review pack</p>", "Legal review pack: employment and disclosure</p>", 1)
+    cover = cover.replace("For a fixed fee review meeting. Everything that needs a lawyer's eyes is in this one document: what the business is, the questions in order of priority, and the documents themselves.", "For a fixed fee review meeting about my employment agreement and the disclosure to my employer. It gives a short summary of the business, and the questions.", 1)
+    cover = re.sub(r'<div class="box"><strong>How to use this pack\.</strong>.*?</div>', '<div class="box"><strong>How to use this pack.</strong> Part 1 summarises the business. Part A has the questions, numbered 1 to 6. My employment agreement is attached separately. Business, privacy and technology questions are being handled separately.</div>', cover, count=1, flags=re.S)
+    part1_short = part1[:part1.index('<h3>Who handles what</h3>')]
+    bring = '<h2>Documents to bring</h2><ul><li>My employment agreement, and any employee handbook or policy on outside activities.</li><li>The disclosure letter, if I bring a first attempt.</li></ul>'
+    brief_html = cover + part1_short + partA + bring
+else:
+    brief_html = BRIEF
+
 EMAILS = """
 <h2 class="pb">Appendix E. Consent wordings, outreach email and the email list</h2>
 <h3>E1. Consent wordings saved with each sign up</h3>
@@ -241,9 +272,7 @@ EMAILS = """
 <p class="small">Every email carries the sender's name, the mailing address and "The Kestrel team". Unsubscribes take effect immediately. Replies go to hello@eyecarejobs.ca.</p>
 """
 
-doc = f"""<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><title>Kestrel Eye Care Jobs: legal review pack</title><style>{CSS}</style></head><body>
-{BRIEF}
-<div class="appendix">
+APPENDICES = f"""<div class="appendix">
 <h2 class="pb">Appendix A. Terms of use, as published on 31st October 2026</h2>
 <p class="small">Rendered from https://eyecarejobs.ca/terms. Navigation and footer removed.</p>
 {terms}
@@ -255,6 +284,10 @@ doc = f"""<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><title>K
 <p class="small">From the internal document docs/breach-plan.md. The backup person and the lawyer are to be filled in, and the backup person's name is deliberately kept out of this and every other document in the code repository.</p>
 {breach}
 {EMAILS}
-</div></body></html>"""
-open("docs/legal/Kestrel-lawyer-review-pack.html", "w").write(doc)
-print("written", len(doc))
+</div>"""
+
+head = f"""<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><title>Kestrel Eye Care Jobs: legal review pack</title><style>{CSS}</style></head><body>"""
+doc = head + brief_html + (APPENDICES if PACK != "employment" else "") + "</body></html>"
+name = {"full": "Kestrel-lawyer-review-pack", "business": "Kestrel-review-pack-business-privacy-technology", "employment": "Kestrel-review-pack-employment"}[PACK]
+open(f"docs/legal/{name}.html", "w").write(doc)
+print("written", name, len(doc))
