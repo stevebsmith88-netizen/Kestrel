@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
+import { excerpt, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
 import { POSTS } from "../content/posts.ts";
 
 test("text becomes headings, lists and paragraphs", () => {
@@ -71,4 +71,15 @@ test("the posts are spaced at least 2 weeks apart after the first 3, and none li
       assert.ok(target.date <= post.date, `${post.slug} (${post.date}) links to ${target.slug}, which is not out until ${target.date}`);
     }
   }
+});
+
+test("an excerpt is plain text, ends cleanly, and is never longer than asked", () => {
+  for (const post of POSTS) {
+    const text = excerpt(post.body);
+    assert.ok(text.length > 40 && text.length <= 231, `${post.slug} excerpt is ${text.length} characters`);
+    assert.ok(!/[*\[\]]|\]\(/.test(text), `${post.slug} excerpt still has markdown in it`);
+    assert.ok(/[.?!\u2026]$/.test(text), `${post.slug} excerpt does not end cleanly: ${text}`);
+  }
+  assert.equal(excerpt("Short **bold** and a [link](/jobs).\n\nSecond."), "Short bold and a link.");
+  assert.equal(excerpt("## Only a heading"), "");
 });

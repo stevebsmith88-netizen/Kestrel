@@ -59,3 +59,15 @@ export const scheduledPostsVisible = () => process.env.VERCEL_ENV !== "productio
 export function visiblePosts<T extends { date: string }>(posts: T[], now: Date = new Date(), showScheduled: boolean = scheduledPostsVisible()): T[] {
   return showScheduled ? posts : posts.filter((p) => isPublished(p, now));
 }
+
+// The opening paragraph of a post as plain text, for a teaser. It stops at the end of a sentence if it can, and otherwise at a word.
+export function excerpt(body: string, max = 230) {
+  const first = parseBlocks(body).find((b) => b.type === "p");
+  if (!first || first.type !== "p") return "";
+  const plain = first.text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*/g, "").trim();
+  if (plain.length <= max) return plain;
+  const cut = plain.slice(0, max);
+  const sentenceEnd = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "), cut.lastIndexOf("! "));
+  if (sentenceEnd > max * 0.5) return cut.slice(0, sentenceEnd + 1);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:]$/, "")}…`;
+}

@@ -404,19 +404,25 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 @media (max-width:820px){.numgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 20px}}
 @media (max-width:420px){.numbox{padding:26px 20px 4px}}
 
-/* From the blog (home page) */
+/* From the blog (home page): 1 feature and 2 plain links */
 .blogstrip{padding:56px 0 8px}
 .blogstrip .kicker{font-size:0.8125rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--chestnut);margin:0 0 10px}
-.blogstrip h2{font:400 clamp(1.625rem,3.4vw,2.125rem)/1.15 "DM Serif Display",Georgia,serif;margin:0 0 20px}
-.striplist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-.striplist .card{padding:24px}
-.striplist h3{font:400 1.375rem/1.2 "DM Serif Display",Georgia,serif;margin:6px 0 8px}
-.striplist h3 a{color:var(--navy);text-decoration:none}
-.striplist h3 a:hover{text-decoration:underline}
-.striplist .card p{margin:0 0 8px}
-.striplist .meta{font-size:0.875rem;color:var(--muted)}
-.stripmore{margin:18px 0 0;font-weight:600}
-@media (max-width:820px){.striplist{grid-template-columns:1fr}}
+.blogstrip h2{font:400 clamp(1.625rem,3.4vw,2.125rem)/1.15 "DM Serif Display",Georgia,serif;margin:0 0 24px}
+.stripgrid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:44px;align-items:start}
+.featured{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 32px}
+.featured h3{font:400 clamp(1.5rem,2.6vw,1.9rem)/1.15 "DM Serif Display",Georgia,serif;margin:8px 0 12px}
+.featured h3 a{color:var(--navy);text-decoration:none}
+.featured h3 a:hover{text-decoration:underline}
+.featured .teaser{margin:0 0 12px;color:var(--navy-2)}
+.featured .meta,.striplinks .meta{font-size:0.875rem;color:var(--muted);display:block}
+.featured .readmore{margin:0;font-weight:600}
+.striplinks{list-style:none;margin:0;padding:0}
+.striplinks li{padding:18px 0;border-top:1px solid var(--line)}
+.striplinks li:first-child{border-top:0;padding-top:4px}
+.striplinks a{display:block;margin-top:4px;font:400 1.3125rem/1.25 "DM Serif Display",Georgia,serif;color:var(--navy);text-decoration:none}
+.striplinks a:hover{text-decoration:underline}
+.stripmore{margin:22px 0 0;font-weight:600}
+@media (max-width:820px){.stripgrid{grid-template-columns:1fr;gap:12px}.featured{padding:24px}}
 
 /* The profile progress bar, and section labels above headings that sit outside a card */
 .meter{height:8px;border-radius:4px;background:var(--mist);overflow:hidden;margin:10px 0}
