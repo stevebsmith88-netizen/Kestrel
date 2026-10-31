@@ -53,9 +53,12 @@ export default function AccountView({ role, email, first, last, hasClinic, hasPa
               <a href="/account/export" className="btn ghost" download>Download my information</a>
             </section>
 
-            <section className="card">
-              <DeleteAccountForm role={role} hasPassword={hasPassword} email={email} />
-            </section>
+            <details className="quietdelete" id="delete-account">
+              <summary>Delete my account</summary>
+              <section className="card">
+                <DeleteAccountForm role={role} hasPassword={hasPassword} email={email} />
+              </section>
+            </details>
           </div>
         </div>
   );
