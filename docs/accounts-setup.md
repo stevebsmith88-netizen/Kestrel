@@ -55,3 +55,14 @@ Until the free launch, a new clinic account needs an invitation code, so nobody 
 - **Password reset:** the reset page works only for someone who has just used the link in their reset email (a signed cookie that lasts 15 minutes). Being signed in on a shared computer is not enough.
 - **Bot check on the live site:** if the Turnstile keys are missing in Production, sign up, sign in and reset forms refuse instead of letting bots through. Previews and local work are unaffected.
 - **Session refresh:** runs on every page except static files and API routes.
+
+## Sign up is closed until launch (migration 0021)
+
+Nobody can create an account without an invitation. This is enforced in the database, so it cannot be skipped by calling the sign up service directly.
+
+- **What people see:** `/sign-up` sends everyone to the waitlist. The sign in page offers "Join the waitlist" instead of "Create an account". A brand new "Continue with Google" attempt is refused with a message that sign up is not open yet. People who already have accounts sign in as normal.
+- **To invite someone** (a pilot clinic, or you with a new test account): send `https://eyecarejobs.ca/sign-up?invite=CODE`, where CODE is the value of `CLINIC_INVITE_CODE` in Vercel. The page then shows the form, and the code is checked again when it is sent. Clinics still need the code even after launch until `CLINIC_SIGNUP` is set to `yes`.
+- **To open sign up at launch,** run in the Supabase SQL editor: `update public.signup_gate set open = true;` To close it again: `update public.signup_gate set open = false;`
+- **Accounts made by hand in the Supabase dashboard are also refused while it is closed.** Open the gate for a minute, or use the invitation link.
+- **If the gate cannot be read** (for example the migration has not been run), the site treats sign up as closed.
+- **Behind it:** the website asks the database for a one time ticket (`issue_signup_ticket`, 15 minutes, works once) after it has checked the code, and passes it with the sign up. A trigger on the accounts table accepts a new account only if the gate is open or the ticket is valid.

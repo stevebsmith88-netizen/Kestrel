@@ -29,6 +29,8 @@ from (
     ('table: account_deletions', to_regclass('public.account_deletions') is not null),
     ('table: job_runs (daily job lock and heartbeat)', to_regclass('public.job_runs') is not null),
     ('column: closing soon email marker', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'expiry_reminded_at')),
+    ('table: signup_gate (sign up closed until launch)', to_regclass('public.signup_gate') is not null),
+    ('trigger: new accounts need an open gate or a ticket', exists (select 1 from pg_trigger where tgname = 'gate_new_users')),
     ('column: Google sign in account type', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'account_type_confirmed')),
     ('column: job alert frequency', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_alerts' and column_name = 'frequency')),
     ('column: clinic confirmed direct hire', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'direct_hire_confirmed_at')),
