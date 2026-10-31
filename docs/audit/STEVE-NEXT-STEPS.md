@@ -57,10 +57,10 @@ Gate A means: the disclosure is given and acknowledged, the company and bank exi
 
 | # | Step | Who | Depends on | Rough time |
 | --- | --- | --- | --- | --- |
-| 1 | Fill in the highlighted boxes in `docs/legal/Kestrel-lawyer-review-pack.pdf` (employer, role, overlap) and find your employment agreement | You | Nothing | 1 hour |
+| 1 | Read through `docs/legal/Kestrel-lawyer-review-pack.pdf` once, correct anything that is wrong, and find your employment agreement. The pack states plainly that your employer offers a job board to the same clinics Kestrel targets | You | Nothing | 1 hour |
 | 2 | Do the free first searches: CIPO trademark database, Ontario and federal corporation name searches, and a web search for "Kestrel" in eye care and job boards. A formal NUANS name report is done by the lawyer or an incorporator, and has a fee | You | Nothing | 1 to 2 hours |
 | 3 | Book the fixed fee lawyer meeting and send the pack beforehand | You | 1 | Book this week |
-| 4 | Meeting 1: employment agreement (sections 7 and 9), what the disclosure should say, incorporation and ownership of the brand and code. Ask the lawyer to draft or review the disclosure letter | You, lawyer | 3 | 2 hours plus follow up |
+| 4 | Meeting 1: employment agreement (sections 7 and 9), what the disclosure should say, how to handle the overlap with your employer's job board, incorporation and ownership of the brand and code. Ask the lawyer to draft or review the disclosure letter | You, lawyer | 3 | 2 hours plus follow up |
 | 5 | Give the disclosure to your employer and get the acknowledgement in writing. Clinic outreach stays off until this is done | You | 4 | Aim for mid December |
 | 6 | Incorporate, with the name from the formal search. The lawyer can do this in the same engagement | You, lawyer | 2, 4 | 1 to 2 weeks |
 | 7 | Business Number, and the HST decision with your accountant (register at incorporation is simplest) | You, accountant | 6 | 1 week |
@@ -97,7 +97,7 @@ Do this once a week for 4 weeks. Counts only. Do not copy any ads.
 | | Indeed | ophthalmic technician | Canada | | |
 | | Indeed | eye care manager | Canada | | |
 
-What you are working out: how many eye care job ads there are in Canada in a year (the useful number, rather than the number of practices). New ads a week, times 52, gives a first estimate. Claude can do a sourced top down estimate from public statistics (numbers of practices and licensed professionals) if you would like that as a cross check.
+What you are working out: how many eye care job ads there are in Canada in a year (the useful number, rather than the number of practices). New ads a week, times 52, gives a first estimate. The top down estimate from public statistics is in `docs/market-sizing.md`, with sources and assumptions marked. Your weekly counts are the cross check on it.
 
 ## 5. What Claude does next (when you say so)
 

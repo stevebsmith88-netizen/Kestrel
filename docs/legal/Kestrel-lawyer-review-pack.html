@@ -30,7 +30,6 @@ a { color: #8C4024; }
   <p class="meta">Prepared on 31st October 2026 by Steve Smith, founder, from an audit of the website and its code carried out on 30th October 2026.<br>
   The legal references in this pack are an AI assistant's reading and were not checked by a lawyer. Where it is unsure, it says so. Please verify them.</p>
   <div class="box"><strong>How to use this pack.</strong> Part 1 is the plain summary. Parts A to G are the 40 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email. The two background sections after Part G describe what the site collects and what has already been decided. The appendices are the policies exactly as they are published today, the breach plan, the consent wordings and the email list.</div>
-  <p class="small">Items marked <span class="fill">fill in</span> are for Steve to complete before the meeting.</p>
 </div>
 
 <h2 class="pb">Part 1. The business in one page</h2>
@@ -44,11 +43,11 @@ a { color: #8C4024; }
 <table>
 <tr><th>Provider</th><th>What it does for Kestrel</th><th>Personal information it handles</th><th>Where</th></tr>
 <tr><td>Supabase</td><td>Database, sign in, stored CVs</td><td>Accounts, profiles, applications, CVs, waitlist</td><td>Canada (Canada Central)</td></tr>
-<tr><td>Vercel</td><td>Hosts the website and runs the server code</td><td>Everything that passes through a page or form</td><td>Server functions set to Montreal on 31st October 2026. Content delivery network is global. <span class="fill">confirm</span></td></tr>
-<tr><td>Resend</td><td>Sends email (sign up confirmations, alerts, application updates)</td><td>Recipient email address, message content</td><td>Provider's location <span class="fill">confirm</span></td></tr>
-<tr><td>Anthropic</td><td>AI that drafts job ads for clinics</td><td>Only the job details a clinic types in; never candidate information</td><td>United States <span class="fill">confirm</span></td></tr>
-<tr><td>Cloudflare</td><td>"Turnstile" bot check on forms</td><td>Browser signals</td><td><span class="fill">confirm</span></td></tr>
-<tr><td>Google</td><td>Staff email (Workspace); optional "Continue with Google" sign in</td><td>Emails to hello@ and privacy@; sign in details</td><td><span class="fill">confirm</span></td></tr>
+<tr><td>Vercel</td><td>Hosts the website and runs the server code</td><td>Everything that passes through a page or form</td><td>Server functions run in Montreal (set on 31st October 2026). The content delivery network is global</td></tr>
+<tr><td>Resend</td><td>Sends email (sign up confirmations, alerts, application updates)</td><td>Recipient email address, message content</td><td>United States. Resend states that account data and logs are stored in the US whatever sending region is chosen</td></tr>
+<tr><td>Anthropic</td><td>AI that drafts job ads for clinics</td><td>Only the job details a clinic types in; never candidate information</td><td>United States</td></tr>
+<tr><td>Cloudflare</td><td>"Turnstile" bot check on forms</td><td>Browser signals</td><td>Cloudflare's global network</td></tr>
+<tr><td>Google</td><td>Staff email (Workspace); optional "Continue with Google" sign in</td><td>Emails to hello@ and privacy@; sign in details</td><td>Google's data centres (not a Canada only service)</td></tr>
 <tr><td>Namecheap</td><td>Domain registration</td><td>Registrant details (mine)</td><td>n/a</td></tr>
 </table>
 <p class="small">I have accepted each provider's data processing terms. Stripe will be added at paid launch.</p>
@@ -56,28 +55,28 @@ a { color: #8C4024; }
 <h2 class="pb">Part A. My employment and the disclosure to my employer</h2>
 <div class="box"><strong>Why this comes first.</strong> I plan to launch only after my employer has been told and has acknowledged it. I would like your advice on the agreement before I make that disclosure.</div>
 <table>
-<tr><td style="width:32%"><strong>My employer</strong></td><td><span class="fill">name and a one line description of what it does</span> (an organisation that supports independent optometry practices)</td></tr>
-<tr><td><strong>My role</strong></td><td><span class="fill">title; whether I deal with member clinics or hiring</span></td></tr>
-<tr><td><strong>Overlap</strong></td><td>Kestrel's audience includes independent optometry practices, which may also be my employer's members or clients. <span class="fill">does my employer offer any job board, recruiting or hiring service?</span></td></tr>
-<tr><td><strong>What I have kept separate</strong></td><td>Kestrel uses no employer data, member lists, devices, accounts, email or branding. It has its own domain, email, accounts and hosting. Work on it is done in my own time. Clinic outreach is switched off. <span class="fill">anything to correct?</span></td></tr>
+<tr><td style="width:32%"><strong>My employer</strong></td><td>An organisation that supports independent optometry practices through a buying group. It is not named in this document. I will name it at the meeting.</td></tr>
+<tr><td><strong>My role</strong></td><td>Business coach, working directly with member clinics. I do not run their hiring.</td></tr>
+<tr><td><strong>Overlap</strong></td><td><strong>Yes, and this is the central issue.</strong> Kestrel's core audience is independent optometry practices, who are also my employer's members. My employer offers a job board, or job postings, to its members. So Kestrel overlaps with a service my employer provides, aimed at the same clinics. I coach those clinics in my day job.</td></tr>
+<tr><td><strong>What I have kept separate</strong></td><td>Kestrel uses no employer data, member lists, devices, accounts, email or branding. It has its own domain, email, accounts and hosting. Work on it is done in my own time. Clinic outreach is switched off. I have confirmed this is accurate.</td></tr>
 <tr><td><strong>What already exists in public</strong></td><td>The domain eyecarejobs.ca, a coming soon page with a waitlist (1 test entry), and a blog being prepared. No clinics or candidates have been contacted.</td></tr>
 </table>
 <ol>
 <li value="1">Please review sections 7 and 9 of my employment agreement (attached). What do they restrict: outside business activity, competing business, soliciting my employer's clients or members, use of confidential information, or ownership of anything I create?</li>
-<li value="2">Does Kestrel, as described, fall inside any restriction? Does my exposure change depending on which parts I do (for example, a job board versus outreach to independent clinics)?</li>
-<li value="3">What should the disclosure say, in what form, and to whom? Do I need written consent, or is acknowledgement enough? Can you draft or review the letter?</li>
+<li value="2">Does Kestrel, as described, fall inside any restriction? My employer offers a job board or postings service to the same independent clinics that Kestrel targets. Is Kestrel a competing business, a conflict of interest, or both? Does my exposure change depending on which parts I do (for example, a job board versus outreach to independent clinics, or my using what I know from coaching them)?</li>
+<li value="3">What should the disclosure say, in what form, and to whom? Do I need written consent, or is acknowledgement enough? How should it describe the overlap with my employer's job board? Can you draft or review the letter?</li>
 <li value="4">Is it a problem that the domain, the waitlist page and a blog exist before the disclosure? Is there anything I should stop, slow down or avoid until it is acknowledged?</li>
 <li value="5">What should I do to keep my work and Kestrel clearly separate, beyond what I have already done?</li>
-<li value="6">If my employer objects or sets conditions, what are my realistic options (narrower audience, delay, negotiated terms, other)?</li>
+<li value="6">If my employer objects or sets conditions, what are my realistic options? For example: a different audience (suppliers, corporate groups and candidates rather than my employer's member clinics), a promise not to contact member clinics, a delay, negotiated terms, or something else.</li>
 </ol>
 
 <h2>Part B. The company and what it owns</h2>
 <ol>
-<li value="7">Federal or Ontario corporation? Who should hold the shares? <span class='fill'>a family member may be given a role (for example, as a private backup contact): advise on whether this has legal consequences</span>. Name search (NUANS): can the legal name be Kestrel Eye Care Jobs, or should that be a registered business name?</li>
+<li value="7">Federal or Ontario corporation? Who should hold the shares? I may give a family member a private role, such as an emergency backup contact: does that have any legal consequences?. Name search (NUANS): can the legal name be Kestrel Eye Care Jobs, or should that be a registered business name?</li>
 <li value="8">Assignment to the company of everything Kestrel runs on: the domain (registered in my name at Namecheap), the logo and skyline artwork (my own), the website code (written by an AI coding assistant under my direction: who owns it, and is anything needed to make ownership clear?), and the accounts (Supabase, Vercel, GitHub, Resend, Anthropic, Google Workspace).</li>
 <li value="9">Trademark. Is a search and filing worthwhile for the name and the logo before launch? "Kestrel" is a common word and "Eye Care Jobs" is descriptive. Which classes, and how would you sequence this with incorporation? (I understand a company registration does not on its own protect a brand across Canada.)</li>
 <li value="10">Insurance: should the company carry cyber liability or professional liability cover before launch?</li>
-<li value="11">Which provincial and federal registrations are needed to operate? <span class='fill'>I am in Ontario. The registered mailing address in the footer is 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2 (confirm it is appropriate to publish)</span>.</li>
+<li value="11">Which provincial and federal registrations are needed to operate? I am in Ontario. The mailing address in the footer, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, is a business or shared office address, and I am happy to publish it..</li>
 </ol>
 <p class="small">For my accountant, not the lawyer: HST registration timing (sales may pass $30,000 around month 10), Business Number, bank account, Stripe fees and how to restate the revenue model net of payment costs.</p>
 
