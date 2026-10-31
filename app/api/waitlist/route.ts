@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
 import { waitlistConfirmUrl } from "@/lib/waitlist-confirm";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -63,7 +64,7 @@ export async function POST(req: Request) {
       ],
       buttonText: "Confirm my email",
       buttonUrl: waitlistConfirmUrl(saved.id),
-      unsubscribeUrl: `${SITE_URL}/unsubscribe/${saved.id}`,
+      unsubscribeUrl: unsubscribeIdUrl(saved.id),
     });
     // No unsubscribe address check here: this answers a request the person has just made.
     const sent = await sendEmail({ to: values.email, subject: "Please confirm your email for the Kestrel waitlist", ...mail });

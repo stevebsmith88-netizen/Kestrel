@@ -2,6 +2,7 @@ import { timingSafeEqual } from "node:crypto";
 import { APP_LABELS } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 import { candidateRecipient } from "@/lib/recipient";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -133,7 +134,7 @@ async function runDaily(request: Request) {
     const { data: user } = await admin.auth.admin.getUserById(userId);
     const email = user?.user?.email;
     if (!email) continue;
-    const unsubscribeUrl = `${SITE_URL}/unsubscribe/${userId}`;
+    const unsubscribeUrl = unsubscribeIdUrl(userId);
     const mail = emailLayout({
       heading: found.size === 1 ? "A new job matches your alert" : `${found.size} new jobs match your alerts`,
       paragraphs: ["Here is what has been posted since we last emailed you."],

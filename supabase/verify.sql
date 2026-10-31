@@ -24,6 +24,7 @@ from (
     ('table: application_drafts', to_regclass('public.application_drafts') is not null),
     ('column: candidate application email choice', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'notify_application_updates')),
     ('column: clinic new applicant email choice', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_contacts' and column_name = 'notify_new_applications')),
+    ('column: terms agreed record', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'terms_version')),
     ('column: Google sign in account type', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'account_type_confirmed')),
     ('column: job alert frequency', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_alerts' and column_name = 'frequency')),
     ('column: clinic confirmed direct hire', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'direct_hire_confirmed_at')),

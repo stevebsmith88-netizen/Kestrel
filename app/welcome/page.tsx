@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import AuthShell from "@/components/AuthShell";
 import { WelcomeForm } from "@/components/AuthForms";
 import { getSession, homeFor } from "@/lib/auth";
+import { clinicInviteOnly } from "@/lib/invite";
 
 export const metadata: Metadata = { title: "Welcome | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -16,7 +17,7 @@ export default async function Welcome({ searchParams }: { searchParams: Promise<
   const { type } = await searchParams;
   return (
     <AuthShell>
-      <WelcomeForm defaultType={type === "clinic" ? "clinic" : "candidate"} email={session.email} hasName={Boolean(session.firstName)} />
+      <WelcomeForm defaultType={type === "clinic" ? "clinic" : "candidate"} email={session.email} hasName={Boolean(session.firstName)} inviteOnly={clinicInviteOnly()} />
     </AuthShell>
   );
 }

@@ -1,12 +1,14 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSession, homeFor } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
-import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
+import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, TERMS_VERSION, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
+import { INVITE_MESSAGE, clinicInviteOk } from "@/lib/invite";
+import { RECOVERY_COOKIE, recoveryIsValid } from "@/lib/recovery";
 
 const text = (form: FormData, key: string, max = 200) => String(form.get(key) ?? "").trim().slice(0, max);
 
@@ -40,7 +42,8 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   if (!lastName) return { error: "Enter your last name." };
   if (!isEmail(email)) return { error: "Enter an email address like example@mysite.com." };
   if (password.length < MIN_PASSWORD) return { error: `Your password needs at least ${MIN_PASSWORD} characters.` };
-  if (!agree) return { error: "Please agree to the privacy policy to continue." };
+  if (!agree) return { error: "Please agree to the terms of use and the privacy policy to continue." };
+  if (accountType === "clinic" && !clinicInviteOk(text(form, "invite", 60))) return { error: INVITE_MESSAGE };
   if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
   const db = await supabaseServer();
@@ -57,6 +60,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
         full_name: `${firstName} ${lastName}`,
         marketing_consent: marketing,
         marketing_consent_text: marketing ? MARKETING_CONSENT_TEXT : null,
+        terms_version: TERMS_VERSION,
       },
     },
   });
@@ -99,12 +103,19 @@ export async function resetPassword(_prev: FormState, form: FormData): Promise<F
   } = await db.auth.getUser();
   if (!user) return { error: "This link has expired. Please ask for a new one." };
 
+  // Being signed in is not enough: the person must have just used the link from their reset email.
+  const jar = await cookies();
+  if (!recoveryIsValid(process.env.SUPABASE_SERVICE_ROLE_KEY ?? "", user.id, jar.get(RECOVERY_COOKIE)?.value)) {
+    return { error: "To change your password, please use the link in the reset email we send you. You can ask for a new one on the Forgot your password page." };
+  }
+
   const { error } = await db.auth.updateUser({ password });
   if (error) {
     if (error.code === "weak_password") return { error: "That password is too easy to guess. Please choose a stronger one." };
     if (error.code === "same_password") return { error: "Please choose a password you haven't used before." };
     return { error: "We couldn't change your password. Please try again." };
   }
+  jar.delete(RECOVERY_COOKIE);
   redirect("/dashboard");
 }
 
@@ -150,10 +161,11 @@ export async function chooseAccountType(_prev: FormState, form: FormData): Promi
   if (!ACCOUNT_TYPES.some((a) => a.value === accountType)) return { error: "Choose whether you are looking for a job or hiring." };
   if (!firstName) return { error: "Enter your first name." };
   if (!agree) return { error: "Please agree to the privacy policy and terms to continue." };
+  if (accountType === "clinic" && !clinicInviteOk(text(form, "invite", 60))) return { error: INVITE_MESSAGE };
 
   const admin = supabaseAdmin();
   if (!admin) return { error: NOT_CONNECTED };
-  const update: Record<string, unknown> = { role: accountType, account_type_confirmed: true };
+  const update: Record<string, unknown> = { role: accountType, account_type_confirmed: true, terms_version: TERMS_VERSION, terms_accepted_at: new Date().toISOString() };
   if (!session.firstName) Object.assign(update, { first_name: firstName, last_name: lastName, full_name: [firstName, lastName].filter(Boolean).join(" ") });
   if (marketing) Object.assign(update, { marketing_consent: true, marketing_consent_text: MARKETING_CONSENT_TEXT, marketing_consent_at: new Date().toISOString() });
   const { data, error } = await admin.from("profiles").update(update).eq("id", session.userId).eq("account_type_confirmed", false).select("id");

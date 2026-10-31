@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { suppress } from "@/lib/suppression";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { addressFromUnsubscribe } from "@/lib/unsubscribe-token";
+import { unsubscribeIdIsGenuine } from "@/lib/unsubscribe-link";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -12,15 +13,22 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 // on our lists.
 export async function unsubscribe(form: FormData) {
   const id = String(form.get("id") ?? "");
+  const signature = String(form.get("s") ?? "");
   if (!UUID.test(id)) redirect("/");
   const db = supabaseAdmin();
   if (db) {
     const now = new Date().toISOString();
+    // A waitlist id is a random value only we and the person's email have. An account id can be seen by other
+    // signed in people, so for an account the link must carry our signature.
     const { data: entry } = await db.from("waitlist").update({ unsubscribed_at: now }).eq("id", id).select("email");
-    await db.from("profiles").update({ unsubscribed_at: now, marketing_consent: false }).eq("id", id);
+    const addresses = [entry?.[0]?.email];
+    if (unsubscribeIdIsGenuine(id, signature)) {
+      await db.from("profiles").update({ unsubscribed_at: now, marketing_consent: false }).eq("id", id);
+      const { data: user } = await db.auth.admin.getUserById(id);
+      addresses.push(user?.user?.email);
+    }
     // Also keep the address on the do not email list, so it is honoured everywhere.
-    const { data: user } = await db.auth.admin.getUserById(id);
-    for (const address of [entry?.[0]?.email, user?.user?.email]) if (address) await suppress(address, "unsubscribed", "unsubscribe link");
+    for (const address of addresses) if (address) await suppress(address, "unsubscribed", "unsubscribe link");
   }
   redirect(`/unsubscribe/${id}?done=1`);
 }

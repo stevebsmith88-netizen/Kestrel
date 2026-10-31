@@ -5,20 +5,8 @@ export async function proxy(request: NextRequest) {
   return updateSession(request);
 }
 
-// Only the account pages. The public pages never touch the sign in session.
+// Every page except static files and the API routes. The sign in session is refreshed on whichever page someone
+// opens, so it can never be used up on a public page without being saved.
 export const config = {
-  matcher: [
-    "/sign-in",
-    "/sign-up",
-    "/forgot-password",
-    "/reset-password",
-    "/dashboard/:path*",
-    "/candidate/:path*",
-    "/clinic/:path*",
-    "/admin/:path*",
-    "/account",
-    "/auth/:path*",
-    "/claim/:path*",
-    "/welcome",
-  ],
+  matcher: ["/((?!_next/static|_next/image|api/|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|woff2?)$).*)"],
 };

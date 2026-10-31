@@ -61,6 +61,17 @@ function Done({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
+// Clinic accounts are by invitation until the free launch. Candidates leave this blank.
+function InviteField({ id }: { id: string }) {
+  return (
+    <div className="row">
+      <label className="lab" htmlFor={id}>Invitation code (clinics only)</label>
+      <input id={id} name="invite" type="text" autoComplete="off" maxLength={60} />
+      <p className="help">Clinic accounts are by invitation while we get ready to open. Looking for a job? Leave this empty.</p>
+    </div>
+  );
+}
+
 export function SignInForm({ notice, next, google = false }: { notice?: string; next?: string; google?: boolean }) {
   const { state, pending, submit } = useAuthForm(signIn);
   return (
@@ -83,7 +94,7 @@ export function SignInForm({ notice, next, google = false }: { notice?: string; 
   );
 }
 
-export function SignUpForm({ defaultType = "candidate", google = false }: { defaultType?: "candidate" | "clinic"; google?: boolean }) {
+export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -128,12 +139,13 @@ export function SignUpForm({ defaultType = "candidate", google = false }: { defa
         <label className="lab" htmlFor="su-email">Email</label>
         <input id="su-email" name="email" type="email" autoComplete="email" required />
       </div>
+      {inviteOnly && <InviteField id="su-invite" />}
       <PasswordField id="su-password" name="password" label="Password" autoComplete="new-password" minLength={MIN_PASSWORD} hint={`At least ${MIN_PASSWORD} characters. A few words you will remember work well.`} />
       <div className="row">
         <label className="consent">
           <input name="agree" type="checkbox" />
           <span>
-            I agree to the <Link href="/privacy" target="_blank">privacy policy</Link>.
+            I agree to the <Link href="/terms" target="_blank">terms of use</Link> and the <Link href="/privacy" target="_blank">privacy policy</Link>.
           </span>
         </label>
       </div>
@@ -190,7 +202,7 @@ export function ResetPasswordForm() {
   );
 }
 
-export function WelcomeForm({ defaultType = "candidate", email, hasName }: { defaultType?: "candidate" | "clinic"; email: string; hasName: boolean }) {
+export function WelcomeForm({ defaultType = "candidate", email, hasName, inviteOnly = false }: { defaultType?: "candidate" | "clinic"; email: string; hasName: boolean; inviteOnly?: boolean }) {
   const { state, pending, submit } = useAuthForm(chooseAccountType);
   return (
     <form onSubmit={submit} noValidate>
@@ -213,6 +225,7 @@ export function WelcomeForm({ defaultType = "candidate", email, hasName }: { def
           <div className="row"><label className="lab" htmlFor="wl-last">Last name</label><input id="wl-last" name="lastName" type="text" autoComplete="family-name" /></div>
         </div>
       )}
+      {inviteOnly && <InviteField id="wl-invite" />}
       <div className="row">
         <label className="consent">
           <input name="agree" type="checkbox" />

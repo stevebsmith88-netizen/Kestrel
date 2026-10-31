@@ -7,9 +7,9 @@ export const metadata: Metadata = { title: "Unsubscribe | Kestrel Eye Care Jobs"
 
 export const dynamic = "force-dynamic";
 
-export default async function Unsubscribe({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ done?: string }> }) {
+export default async function Unsubscribe({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ done?: string; s?: string }> }) {
   const { id } = await params;
-  const { done } = await searchParams;
+  const { done, s } = await searchParams;
   return (
     <AuthShell title={done ? "You are unsubscribed" : "Unsubscribe from Kestrel emails"}>
       {done ? (
@@ -22,6 +22,7 @@ export default async function Unsubscribe({ params, searchParams }: { params: Pr
           <p className="auth-intro">Press the button and we will stop sending you launch news, job alerts, product updates and offers. We will act on this straight away.</p>
           <form action={unsubscribe}>
             <input type="hidden" name="id" value={id} />
+            <input type="hidden" name="s" value={s ?? ""} />
             <button type="submit" className="btn">Unsubscribe me</button>
           </form>
           <p className="alt">Changed your mind? <Link href="/">Take me back</Link></p>

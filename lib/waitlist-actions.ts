@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 import { valueIsGenuine } from "@/lib/unsubscribe-token";
 import { WAITLIST_PURPOSE } from "@/lib/waitlist-confirm";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -26,7 +27,7 @@ export async function confirmWaitlist(form: FormData) {
   // Complaints, bounces and addresses we were asked to block by hand stay blocked.
   await db.from("email_suppressions").delete().eq("address", row.email).eq("reason", "unsubscribed");
 
-  const unsubscribeUrl = `${SITE_URL}/unsubscribe/${row.id}`;
+  const unsubscribeUrl = unsubscribeIdUrl(row.id);
   const mail = emailLayout({
     heading: "You're on the list",
     paragraphs: [

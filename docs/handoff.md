@@ -56,7 +56,7 @@ Test tools that live in the repo (development only, never deployed):
 
 ## Accounts and settings (names only, never values)
 
-Vercel environment variables (Production and Preview): `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ANTHROPIC_API_KEY`, `CRON_SECRET`, `ADMIN_ALERT_EMAIL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `ENABLE_GOOGLE_SIGNIN`, optional `ENABLE_FIND_YOUR_FIT`. Preview uses Cloudflare's test keys for Turnstile. Never ask Steve to paste a secret into chat.
+Vercel environment variables (Production and Preview): `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ANTHROPIC_API_KEY`, `CRON_SECRET`, `ADMIN_ALERT_EMAIL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `ENABLE_GOOGLE_SIGNIN`, optional `ENABLE_FIND_YOUR_FIT`, `CLINIC_INVITE_CODE` and `CLINIC_SIGNUP` (see docs/accounts-setup.md). Preview uses Cloudflare's test keys for Turnstile. Never ask Steve to paste a secret into chat.
 
 ## Open items waiting on Steve
 
