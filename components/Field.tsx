@@ -11,11 +11,21 @@ export function Field({ id, label, error, hint, required, children }: { id: stri
         ? cloneElement(children, {
             "aria-describedby": [hint && `${id}-hint`, error && `${id}-err`].filter(Boolean).join(" ") || undefined,
             "aria-invalid": error ? true : undefined,
+            "aria-required": required ? true : undefined,
           })
         : children}
       {hint && <p className="help" id={`${id}-hint`}>{hint}</p>}
       {error && <p className="err" id={`${id}-err`} role="alert">{error}</p>}
     </div>
+  );
+}
+
+// The line at the top of a long form that explains the star. Screen readers are told each field is required on the field itself.
+export function RequiredNote() {
+  return (
+    <p className="help reqnote">
+      <span className="req" aria-hidden="true">*</span> marks a question you need to answer.
+    </p>
   );
 }
 
@@ -32,7 +42,14 @@ export function Choices({ name, label, error, options, value, hint, onChange }: 
   return (
     <div className={`row ${error ? "invalid" : ""}`}>
       <p className="lab" id={`lab-${name}`}>{label} <span className="req" aria-hidden="true">*</span></p>
-      <div className="choices" role="radiogroup" aria-labelledby={`lab-${name}`}>
+      <div
+        className="choices"
+        role="radiogroup"
+        aria-labelledby={`lab-${name}`}
+        aria-required="true"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={[hint && `hint-${name}`, error && `err-${name}`].filter(Boolean).join(" ") || undefined}
+      >
         {options.map((o) => (
           <label className="choice" key={o.value}>
             <input type="radio" name={name} value={o.value} defaultChecked={value === o.value} onChange={() => onChange?.(o.value)} />
@@ -40,8 +57,8 @@ export function Choices({ name, label, error, options, value, hint, onChange }: 
           </label>
         ))}
       </div>
-      {hint && <p className="help">{hint}</p>}
-      {error && <p className="err" role="alert">{error}</p>}
+      {hint && <p className="help" id={`hint-${name}`}>{hint}</p>}
+      {error && <p className="err" id={`err-${name}`} role="alert">{error}</p>}
     </div>
   );
 }

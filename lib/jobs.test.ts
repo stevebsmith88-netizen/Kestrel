@@ -12,6 +12,7 @@ import {
   longDate,
   employerFlags,
   mentionsCanadianExperience,
+  cleanClinic,
   parseMoney,
   payRangeAllowed,
   reviewFlags,
@@ -65,6 +66,28 @@ test("pay is checked when a job is submitted", () => {
   assert.ok(validateJob({ ...good, payMin: "abc" }, true).payMin);
 });
 
+test("Canadian experience is blocked in all the common wordings", () => {
+  const blocked = [
+    "Canadian experience required", "canadian work experience", "Experience in Canada", "experience working in Canada", "local experience",
+    "2 years of experience in Canada", "Canadian clinical experience", "Canadian optometry experience", "Canadian-experience preferred",
+    "Cdn experience", "Canada experience", "experience within Canada", "previous experience in a Canadian clinic", "experience gained in Canada",
+    "Canadian work history", "must have worked in Canada", "Canadian employment experience", "North American experience",
+    "Canadian retail optical experience an asset", "Prior Canadian dispensing experience", "Must have practised in Canada", "Canadian experienced opticians only",
+    "Candidates with local work history", "Experience from a Canadian clinic", "Canada hire Canadian experience", "CANADIAN EXPERIENCE",
+  ];
+  for (const text of blocked) assert.equal(mentionsCanadianExperience(text), true, text);
+});
+
+test("ordinary sentences are not blocked", () => {
+  const allowed = [
+    "Experience with progressive lenses", "We are a Canadian clinic", "Canada wide job board", "A Canadian clinic offering experience with lenses",
+    "Member of the Canadian Association of Optometrists", "Licensed to practise in Ontario", "Must be licensed to practise in Canada",
+    "Registered to work in Canada as an optician", "Clinics across Canada hire experienced opticians", "We serve patients across Canada. Experience with lenses helps.",
+    "Local community clinic", "10 years of experience in eye care", "Experience working with children", "Our clinic has operated in Canada for 20 years",
+  ];
+  for (const text of allowed) assert.equal(mentionsCanadianExperience(text), false, text);
+});
+
 test("Canadian experience is blocked", () => {
   for (const text of ["Canadian experience required", "must have Canadian work experience", "local experience is a must", "experience working in Canada"]) {
     assert.equal(mentionsCanadianExperience(text), true, text);
@@ -103,6 +126,21 @@ test("the area covered and extra pay are checked too", () => {
   assert.ok(reviewFlags({ title: "Rep", description: "A friendly company.", pay_extras: "Bonus. Canadian experience only.", pay_period: "year", pay_min: 60000, pay_max: 70000 }).includes("Mentions Canadian experience"));
   assert.ok(validateJob({ ...good, territory: "Canadian experience in Ontario" }, false).territory);
   assert.ok(validateJob({ ...good, payExtras: "Canadian experience required" }, false).payExtras);
+});
+
+test("pay that is probably a typing slip is flagged for the admin", () => {
+  const base = { title: "Optician", description: "A friendly clinic.", pay_period: "year" };
+  assert.ok(reviewFlags({ ...base, pay_min: 62, pay_max: 70 }).some((f) => /unusually/.test(f)));
+  assert.ok(reviewFlags({ ...base, pay_min: 62000, pay_max: 99999999 }).some((f) => /unusually/.test(f)));
+  assert.ok(reviewFlags({ ...base, pay_period: "hour", pay_min: 0.01, pay_max: 20 }).some((f) => /unusually/.test(f)));
+  assert.deepEqual(reviewFlags({ ...base, pay_min: 62000, pay_max: 74000 }), []);
+  assert.deepEqual(reviewFlags({ ...base, pay_period: "hour", pay_min: 24, pay_max: 28.5 }), []);
+});
+
+test("the clinic About text is checked for Canadian experience too", () => {
+  const clinic = cleanClinic({ clinicName: "Test", practiceType: "independent", province: "Ontario", city: "Toronto", notifyEmail: "hr@test.ca", directHire: true, about: "We value Canadian experience." });
+  assert.ok(validateClinic(clinic).about);
+  assert.equal(validateClinic({ ...clinic, about: "A friendly family clinic." }).about, undefined);
 });
 
 test("pay is shown in plain words", () => {

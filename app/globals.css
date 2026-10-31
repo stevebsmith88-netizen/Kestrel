@@ -375,3 +375,6 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .google-block .help{margin:8px 0 0;text-align:center}
 .or{display:flex;align-items:center;gap:12px;margin:18px 0 6px;color:var(--muted);font-size:.9rem}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.reqnote{margin:0 0 14px}
+.reqnote .req{color:var(--chestnut-d);font-weight:700}

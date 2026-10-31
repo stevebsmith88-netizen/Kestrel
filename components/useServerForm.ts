@@ -1,6 +1,7 @@
 "use client";
 
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect, useRef } from "react";
+import { focusFirstProblem } from "@/components/focus-problem";
 import type { JobFormState } from "@/lib/jobs";
 
 type Action = (prev: JobFormState, form: FormData) => Promise<JobFormState>;
@@ -21,8 +22,18 @@ export function useServerForm(action: Action) {
     }
   };
   const [state, run, pending] = useActionState(safe, {} as JobFormState);
+  // After a send that comes back with a mistake, move keyboard focus to the first problem instead of leaving it behind.
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const waiting = useRef(false);
+  useEffect(() => {
+    if (!waiting.current || pending) return;
+    waiting.current = false;
+    if (formRef.current && (state.error || (state.errors && Object.keys(state.errors).length))) focusFirstProblem(formRef.current);
+  }, [state, pending]);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    formRef.current = e.currentTarget;
+    waiting.current = true;
     const submitter = (e.nativeEvent as SubmitEvent).submitter;
     const data = new FormData(e.currentTarget, submitter instanceof HTMLElement ? submitter : undefined);
     startTransition(() => run(data));

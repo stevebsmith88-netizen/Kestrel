@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useActionState, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
+import { focusFirstProblem } from "@/components/focus-problem";
 import { chooseAccountType, forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
 import GoogleButton from "@/components/GoogleButton";
 import Turnstile from "@/components/Turnstile";
@@ -23,8 +24,18 @@ function useAuthForm(action: Action) {
     }
   };
   const [state, run, pending] = useActionState(safe, {} as FormState);
+  // After a send that comes back with a mistake, move keyboard focus to the message instead of leaving it behind.
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const waiting = useRef(false);
+  useEffect(() => {
+    if (!waiting.current || pending) return;
+    waiting.current = false;
+    if (formRef.current && state.error) focusFirstProblem(formRef.current);
+  }, [state, pending]);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    formRef.current = e.currentTarget;
+    waiting.current = true;
     const data = new FormData(e.currentTarget);
     startTransition(() => run(data));
   };

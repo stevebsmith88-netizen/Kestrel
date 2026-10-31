@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Choices, Field } from "@/components/Field";
+import { Choices, Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { buildAd } from "@/lib/ad-builder";
 import { saveJob } from "@/lib/clinic-actions";
@@ -47,6 +47,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
   const e = state.errors ?? {};
   return (
     <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
+      <RequiredNote />
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
 
       <h2 className="formh">The role</h2>
