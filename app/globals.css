@@ -443,3 +443,7 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .rowtick input{width:20px;height:20px;accent-color:var(--chestnut)}
 .bulkbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:16px 0}
 .bulkfill{margin-top:24px}
+.quietdelete{margin-top:8px}
+.quietdelete summary{cursor:pointer;display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:var(--muted);font-size:0.9375rem;text-decoration:underline;text-underline-offset:3px}
+.quietdelete summary:hover{color:var(--navy)}
+.quietdelete[open] summary{margin-bottom:12px}
