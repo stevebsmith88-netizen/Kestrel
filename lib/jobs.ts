@@ -315,14 +315,27 @@ const REGION_CODES: Record<string, string> = {
   Quebec: "QC", Saskatchewan: "SK", Yukon: "YT",
 };
 
-const SCHEMA_EMPLOYMENT: Record<string, string> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: "TEMPORARY", Contract: "CONTRACTOR" };
+// Locum work is temporary and usually done as a contractor, so both are given. Google accepts a list.
+const SCHEMA_EMPLOYMENT: Record<string, string | string[]> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: ["TEMPORARY", "CONTRACTOR"], Contract: "CONTRACTOR" };
 
 type PublicJob = {
   id: string; title: string; description: string; employment_type: string; province: string; city: string;
   pay_period: string; pay_min: number | string; pay_max: number | string; apply_method: string; apply_url: string | null;
-  posted_at: string; expires_at: string;
+  posted_at: string; expires_at: string; territory?: string | null; pay_extras?: string | null; work_arrangement?: string | null;
 };
 type PublicClinic = { clinic_name: string; website: string | null };
+
+const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+// The job's text as Google reads it: special characters made safe first (so "<2 years" is not read as a tag), then line
+// breaks, then the 2 facts the page shows beside the ad for field roles and extra pay, so the markup says what the page says.
+export function markupDescription(job: Pick<PublicJob, "description" | "territory" | "pay_extras" | "work_arrangement">) {
+  const extras = [
+    job.work_arrangement === "field" && job.territory ? `Area covered: ${job.territory}` : "",
+    job.pay_extras ? `Also part of the pay: ${job.pay_extras}` : "",
+  ].filter(Boolean);
+  return [escapeHtml(job.description).replace(/\n/g, "<br>"), ...extras.map(escapeHtml)].join("<br><br>");
+}
 
 // Google's structured data for a job. Everything here is also shown on the page,
 // because Google requires the two to match exactly.
@@ -331,11 +344,12 @@ export function jobPostingJsonLd(job: PublicJob, clinic: PublicClinic, siteUrl: 
     "@context": "https://schema.org",
     "@type": "JobPosting",
     title: job.title,
-    description: job.description.replace(/\n/g, "<br>"),
+    description: markupDescription(job),
     datePosted: new Date(job.posted_at).toISOString().slice(0, 10),
     validThrough: new Date(job.expires_at).toISOString(),
     employmentType: SCHEMA_EMPLOYMENT[job.employment_type] ?? "OTHER",
-    hiringOrganization: { "@type": "Organization", name: clinic.clinic_name, ...(clinic.website ? { sameAs: clinic.website } : {}) },
+    // The clinic website is not shown on the job page, so it is not given to Google either.
+    hiringOrganization: { "@type": "Organization", name: clinic.clinic_name },
     jobLocation: {
       "@type": "Place",
       address: { "@type": "PostalAddress", addressLocality: job.city, addressRegion: REGION_CODES[job.province] ?? job.province, addressCountry: "CA" },

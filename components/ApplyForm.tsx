@@ -55,7 +55,7 @@ export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt 
         <textarea id="af-letter" name="coverLetter" rows={11} value={letter} onChange={(e) => setLetter(e.target.value)} placeholder={`Dear ${clinicName} team,\n\nI am writing because...`} />
         <div className="letterfoot">
           <span className="help">About 100 to 200 words works well. Write it fresh for each job.</span>
-          <span className="help" aria-live="polite">{words} {words === 1 ? "word" : "words"}</span>
+          <span className="help">{words} {words === 1 ? "word" : "words"}</span>
         </div>
         <div className="draftrow">
           <button
@@ -72,7 +72,7 @@ export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt 
         </div>
         <label className="consent">
           <input type="checkbox" name="saveLetter" value="yes" checked={saveLetter} onChange={(ev) => setSaveLetter(ev.target.checked)} />
-          <span>Keep this letter to start future applications from. You can keep up to 5. <Link href="/candidate/letters" target="_blank">My saved letters</Link></span>
+          <span>Keep this letter to start future applications from. You can keep up to 5. <Link href="/candidate/letters" target="_blank">My saved letters<span className="sr"> (opens in a new tab)</span></Link></span>
         </label>
         {saveLetter && (
           <Field id="af-lname" label="Name for this letter" hint="For example: Optician, independent clinic.">

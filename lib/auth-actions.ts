@@ -106,7 +106,7 @@ export async function resetPassword(_prev: FormState, form: FormData): Promise<F
   const password = String(form.get("password") ?? "");
   const again = String(form.get("again") ?? "");
   if (password.length < MIN_PASSWORD) return { error: `Your password needs at least ${MIN_PASSWORD} characters.` };
-  if (password !== again) return { error: "The two passwords don't match." };
+  if (password !== again) return { error: "The 2 passwords don't match." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };

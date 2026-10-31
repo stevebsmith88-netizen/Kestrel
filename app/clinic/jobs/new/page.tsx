@@ -34,7 +34,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
 
           {start ? (
             <p className="note">
-              <strong>Started from your template: {start.name}.</strong> Check every detail, and answer the two questions again for this post. <Link href="/clinic/jobs/new">Start blank instead</Link>
+              <strong>Started from your template: {start.name}.</strong> Check every detail, and answer the 2 questions again for this post. <Link href="/clinic/jobs/new">Start blank instead</Link>
             </p>
           ) : templates.length > 0 ? (
             <section className="card" aria-labelledby="tpl-h">

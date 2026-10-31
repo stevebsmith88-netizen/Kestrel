@@ -73,7 +73,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 {job.apply_method === "external" && job.apply_url ? (
                   <>
                     <p>Applications are made on the clinic&apos;s own website.</p>
-                    <a href={job.apply_url} className="btn" target="_blank" rel="nofollow noopener noreferrer">Apply on the clinic&apos;s website</a>
+                    <a href={job.apply_url} className="btn" target="_blank" rel="nofollow noopener noreferrer">Apply on the clinic&apos;s website<span className="sr"> (opens in a new tab)</span></a>
                   </>
                 ) : (
                   <>

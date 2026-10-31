@@ -21,7 +21,7 @@ lines = [
     ("The rules", "COUNTS ONLY. Read a number off the screen and type it in. Do not copy, save or paste any ad, name or employer. No scraping, no automation, no browser extensions that collect results. Do not use anything from your employer's own member job board or any member only information."),
     ("Keep it identical", "Use exactly the same searches, wording and place every week, and pick the same weekday. Do not change a search in the middle of the 4 weeks, or the weeks cannot be compared."),
     ("Indeed", "Search the job title (use the words in column B), with the place set to Canada. Type the total shown (for example '214 jobs') into the Open column. Then set the filter 'Date posted' to 'Last 7 days' and type that total into the New 7 days column."),
-    ("Jobs4ECPs", "Type the total number of open ads into Open. If the site lets you sort by date or filter to the last 7 days, type that count into New 7 days. If not, leave it blank."),
+    ("Jobs4ECPs and Job-Opportunities (OSI)", "Use only what any visitor can see on the public pages, with no sign in and no member access. Type the total number of open ads into Open. If the site lets you sort by date or filter to the last 7 days, type that count into New 7 days. If not, leave it blank. Never use anything from a members only board."),
     ("Relevance check (once)", "Look at the first 20 results of any one Indeed search. Count how many really are eye care roles, and put that as a share (for example 16 of 20 is 0.8) into the Summary sheet, cell B7. Searches pull in some unrelated jobs, so this keeps the estimate honest."),
     ("Yellow cells", "Yellow cells are for you. On the Summary sheet the yellow cells are guesses. Change them if you know better, and they will update the answer."),
     ("What the Summary tells you", "Two estimates of roles advertised in a year: one from how many NEW ads appear each week, and one from how many are OPEN at a time and how long an ad stays up. If they roughly agree, trust them more. Neither is exact."),
@@ -39,6 +39,7 @@ c["A1"] = "Weekly counts"; c["A1"].font = title
 c["A2"] = "Type the date above each pair (for example 7th Nov 2026), then fill the yellow cells. Open = total shown. New 7 days = shown after filtering to the last 7 days."
 rows = [
     ("Jobs4ECPs", "All jobs", "Canada"),
+    ("Job-Opportunities (OSI)", "All jobs", "Canada"),
     ("Indeed", "optometrist", "Canada"),
     ("Indeed", "optician", "Canada"),
     ("Indeed", "optometric assistant", "Canada"),
@@ -75,7 +76,7 @@ c.cell(total_row + 2, 1, "Notes for each week (anything odd: a holiday, a site c
 c.cell(total_row + 3, 1).fill = inp
 c.merge_cells(start_row=total_row + 3, start_column=1, end_row=total_row + 5, end_column=3 + 2 * WEEKS)
 c.cell(total_row + 3, 1).alignment = wrap
-c.column_dimensions["A"].width = 16; c.column_dimensions["B"].width = 26; c.column_dimensions["C"].width = 10
+c.column_dimensions["A"].width = 24; c.column_dimensions["B"].width = 26; c.column_dimensions["C"].width = 10
 c.row_dimensions[4].height = 32; c.freeze_panes = "D5"
 
 # ------------------------------------------------------------------ Summary
@@ -90,7 +91,7 @@ s["A6"] = "Average new ads a week (all searches added)"; s["B6"] = f'=IF(COUNT({
 s["A8"] = "Guesses (yellow, change them if you know better)"; s["A8"].font = bold
 # the labels sit one row above the cells used in formulas, so keep references explicit
 s["A9"] = "Share of results that really are eye care roles (do the 20 result check)"; s["B9"] = 0.8
-s["A10"] = "Share that are different ads (the same job appears under several searches or reposts)"; s["B10"] = 0.75
+s["A10"] = "Share that are different ads (the same job appears under several searches, reposts or both sites)"; s["B10"] = 0.7
 s["A11"] = "Share of all advertised eye care roles that appear on these 2 sites"; s["B11"] = 0.6
 s["A12"] = "How many days a typical ad stays up"; s["B12"] = 30
 for ref in ("B9", "B10", "B11", "B12"):

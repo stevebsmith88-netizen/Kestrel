@@ -93,9 +93,19 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   return (data as unknown as LiveJob | null) ?? null;
 }
 
-export async function listLiveJobIds(): Promise<{ id: string; posted_at: string }[]> {
+// For the sitemap. If the database cannot be read this throws, so Next keeps the last good sitemap instead of
+// publishing one with no jobs in it. With no database set up at all (a local build) it is an empty list.
+export async function listLiveJobIds(): Promise<{ id: string; posted_at: string; updated_at: string }[]> {
   const db = supabasePublic();
   if (!db) return [];
-  const { data } = await db.from("jobs").select("id, posted_at").eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(1000);
+  const { data, error } = await db.from("jobs").select("id, posted_at, updated_at").eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(1000);
+  if (error) {
+    // While the site is being built, a failed read must not stop the deployment. After that, throwing keeps the last good copy.
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      console.error("Sitemap build could not read the jobs:", error.message);
+      return [];
+    }
+    throw new Error(`Sitemap could not read the jobs: ${error.message}`);
+  }
   return data ?? [];
 }

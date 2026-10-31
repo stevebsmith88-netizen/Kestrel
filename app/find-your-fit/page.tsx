@@ -7,11 +7,15 @@ import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = shareMetadata({
+// While the quiz is switched off the page is a 404, so it must not keep its own title or be offered to Google.
+export async function generateMetadata(): Promise<Metadata> {
+  if (!findYourFitOn()) return { title: "Page not found | Kestrel Eye Care Jobs", robots: { index: false } };
+  return shareMetadata({
   title: "Find your fit in eye care",
   description: "A 2 minute quiz that points you to the eye care roles in Canada that suit the way you like to work.",
   path: "/find-your-fit",
 });
+}
 
 export default async function FindYourFit() {
   // Built, but switched off until Steve has decided how it should look (ENABLE_FIND_YOUR_FIT=yes in Vercel).

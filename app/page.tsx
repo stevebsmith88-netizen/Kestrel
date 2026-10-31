@@ -1,8 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import EyeCareNumbers from "@/components/EyeCareNumbers";
+import HomeBlogStrip from "@/components/HomeBlogStrip";
 import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
+
+// Built ahead of time, and rebuilt at least hourly, so a scheduled post appears on the home page soon after its date.
+export const revalidate = 3600;
 
 export default function ComingSoon() {
   return (
@@ -53,6 +57,8 @@ export default function ComingSoon() {
           </div>
           <EyeCareNumbers />
         </section>
+
+        <HomeBlogStrip />
 
         <section className="join" id="join">
           <div className="wrap grid">

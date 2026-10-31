@@ -150,7 +150,7 @@ export default function Privacy() {
           <h2>How we protect it</h2>
           <p>
             We limit who can see your details, store them in a database with restricted access, keep CVs in a private store that
-            can only be opened through a link that works for one minute, use encrypted connections (HTTPS), and keep our access
+            can only be opened through a link that works for 1 minute, use encrypted connections (HTTPS), and keep our access
             keys out of the website&apos;s public code. No system is perfectly secure. If a breach
             creates a real risk of significant harm to you, we will tell you and the Office of the Privacy Commissioner of
             Canada.

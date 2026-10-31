@@ -173,7 +173,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
         <label className="consent">
           <input name="agree" type="checkbox" />
           <span>
-            I agree to the <Link href="/terms" target="_blank">terms of use</Link> and the <Link href="/privacy" target="_blank">privacy policy</Link>.
+            I agree to the <Link href="/terms" target="_blank">terms of use<span className="sr"> (opens in a new tab)</span></Link> and the <Link href="/privacy" target="_blank">privacy policy<span className="sr"> (opens in a new tab)</span></Link>.
           </span>
         </label>
       </div>
@@ -258,7 +258,7 @@ export function WelcomeForm({ defaultType = "candidate", email, hasName, inviteO
       <div className="row">
         <label className="consent">
           <input name="agree" type="checkbox" />
-          <span>I agree to the <Link href="/privacy" target="_blank">privacy policy</Link> and the <Link href="/terms" target="_blank">terms of use</Link>.</span>
+          <span>I agree to the <Link href="/privacy" target="_blank">privacy policy<span className="sr"> (opens in a new tab)</span></Link> and the <Link href="/terms" target="_blank">terms of use<span className="sr"> (opens in a new tab)</span></Link>.</span>
         </label>
         <label className="consent">
           <input name="marketing" type="checkbox" />

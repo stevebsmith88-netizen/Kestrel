@@ -8,13 +8,23 @@ What each page gets for search engines: its own title, description and address, 
 
 Writing text: a blank line between paragraphs, `## ` for a heading, `- ` for a bullet list, `**bold**`, and `[text](/jobs)` for links (an address on the site, or one starting with https://).
 
+## Scheduling
+
+A post is shown from the start of its `date` (Toronto time). Give a new post a future date and it waits: it is not on the blog, the home page or the sitemap, and its own address is a 404, until that day. The home page is rebuilt at least hourly, so it picks the post up soon after midnight Eastern.
+
+On previews, scheduled posts are visible and marked "Scheduled for ...", so Steve can read and approve a post before it goes out. On the live site (Vercel's Production environment) they stay hidden.
+
+Posts are spaced about 1 every 2 weeks, on Fridays. Never link to a post that is dated later than the one doing the linking (the tests check this). Do not change the date of a post that is already out.
+
+Schedule so far: 3 posts published on 30th October 2026, then 13th November 2026 (optometric assistant jobs and pay), then 27th November 2026 (optician interview questions).
+
 ## What to write next (about 1 post a fortnight)
 
 Good topics, each aimed at a real search:
 
 1. How to become an optician in Canada, by province (check each college's current rules before publishing)
-2. Optometric assistant jobs in Canada: what the work is and what it pays
-3. Questions to ask in an optician job interview
+2. ~~Optometric assistant jobs in Canada: what the work is and what it pays~~ (published 31st October 2026)
+3. ~~Questions to ask in an optician job interview~~ (published 31st October 2026)
 4. A guide to pay ranges and pay transparency for clinics, province by province
 5. Locum optometrist work in Canada: how it works
 6. What an optical lab technician does

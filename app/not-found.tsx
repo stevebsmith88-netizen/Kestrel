@@ -1,6 +1,9 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+
+export const metadata: Metadata = { title: "Page not found | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export default function NotFound() {
   return (

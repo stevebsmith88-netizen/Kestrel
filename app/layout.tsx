@@ -6,6 +6,7 @@ import "@fontsource/source-sans-3/400.css";
 import "@fontsource/source-sans-3/600.css";
 import "@fontsource/source-sans-3/700.css";
 import "./globals.css";
+import CloseMenuOnEscape from "@/components/CloseMenuOnEscape";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kestrel Eye Care Jobs | Coming soon",
     description: "Eye care jobs across Canada. Join the waitlist to hear first when we launch.",
-    images: ["/brand/kestrel-lockup-full.png"],
+    images: [{ url: "/brand/kestrel-share-1200x630.png", width: 1200, height: 630, alt: "Kestrel Eye Care Jobs" }],
     locale: "en_CA",
     type: "website",
   },
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-CA">
       <body>
         <a className="skip" href="#main">Skip to main content</a>
+        <CloseMenuOnEscape />
         {children}
       </body>
     </html>

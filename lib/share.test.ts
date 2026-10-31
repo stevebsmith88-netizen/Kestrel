@@ -14,6 +14,6 @@ test("a shared link gets the page's own title and description, never the coming 
 
 test("every shared link carries a picture", () => {
   const meta = shareMetadata({ title: "For clinics", description: "x", path: "/clinics" });
-  assert.ok(JSON.stringify(meta.openGraph).includes("/brand/kestrel-lockup-full.png"));
-  assert.ok(JSON.stringify(meta.twitter).includes("/brand/kestrel-lockup-full.png"));
+  assert.ok(JSON.stringify(meta.openGraph).includes("/brand/kestrel-share-1200x630.png"));
+  assert.ok(JSON.stringify(meta.twitter).includes("/brand/kestrel-share-1200x630.png"));
 });
