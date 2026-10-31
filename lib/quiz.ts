@@ -1,7 +1,7 @@
 // "Find your fit": a short, rules based quiz that points someone to the eye care roles that suit them.
 // There is no AI and nothing is saved. Every rule is below, so it is easy to read and change.
 
-import { CLINIC_ROLES, EMPLOYMENT_TYPES, FIELD_ROLES, PROVINCES, ROLE_CATEGORIES } from "./jobs.ts";
+import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PROVINCES, ROLE_CATEGORIES } from "./jobs.ts";
 
 export type Answers = { work?: string; setting?: string; today?: string; employer?: string; hours?: string; province?: string };
 
@@ -70,7 +70,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "hours",
     title: "What hours are you looking for?",
-    options: [...EMPLOYMENT_TYPES.map((t) => ({ value: t, label: t })), { value: "any", label: "Open to any" }],
+    options: [...EMPLOYMENT_TYPES.map((t) => ({ value: t, label: employmentLabel(t) })), { value: "any", label: "Open to any" }],
   },
   {
     id: "province",

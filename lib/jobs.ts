@@ -16,7 +16,18 @@ export const FIELD_ROLES = [
   "Account or practice development manager",
 ] as const;
 export const ROLE_CATEGORIES = [...CLINIC_ROLES, ...FIELD_ROLES] as const;
-export const EMPLOYMENT_TYPES = ["Full time", "Part time", "Locum", "Contract"] as const;
+export const EMPLOYMENT_TYPES = ["Full time", "Part time", "Contract", "Locum"] as const;
+
+// "Contract" is the value saved in the database. People see "Fixed term": a role with an end, such as maternity cover or seasonal work.
+// Search addresses can carry one type or several. Only known types get through, once each.
+export function cleanEmploymentTypes(value: string | string[] | undefined): (typeof EMPLOYMENT_TYPES)[number][] {
+  const list = (Array.isArray(value) ? value : [value ?? ""]).map((x) => x.trim());
+  return EMPLOYMENT_TYPES.filter((t) => list.includes(t));
+}
+
+export function employmentLabel(type: string | null | undefined): string {
+  return type === "Contract" ? "Fixed term" : type ?? "";
+}
 export const PRACTICE_TYPES = [
   { value: "independent", label: "Independent" },
   { value: "corporate", label: "Corporate" },

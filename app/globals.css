@@ -432,3 +432,7 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 /* Demo site banner */
 .demobar{margin:0;padding:8px 20px;background:var(--navy);color:#fff;font-size:0.875rem;line-height:1.4;text-align:center}
 .demobar strong{color:var(--buff)}
+.sf-types{border:0;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.sf-types legend{float:left;margin:0 6px 0 0;padding:0;font-weight:600;color:var(--navy)}
+.sf-tick{display:inline-flex;align-items:center;gap:8px;cursor:pointer;min-height:44px}
+.sf-tick input{width:20px;height:20px;accent-color:var(--chestnut)}

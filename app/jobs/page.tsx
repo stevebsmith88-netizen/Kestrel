@@ -3,7 +3,7 @@ import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS, formatPay, longDate, practiceLabel } from "@/lib/jobs";
+import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS, formatPay, longDate, practiceLabel } from "@/lib/jobs";
 import { PAGE_SIZE, cleanFilters, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -11,7 +11,7 @@ import { shareMetadata } from "@/lib/share";
 // Searches and later pages can still be followed to the jobs, but they are not listed.
 export async function generateMetadata({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
   const filters = cleanFilters(await searchParams);
-  const narrowed = Boolean(filters.q || filters.province || filters.role || filters.type || filters.practice || filters.arrangement || (filters.page ?? 1) > 1);
+  const narrowed = Boolean(filters.q || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.page ?? 1) > 1);
   return {
     ...shareMetadata({
       title: "Find eye care jobs",
@@ -26,7 +26,8 @@ export const dynamic = "force-dynamic";
 
 function pageHref(filters: JobFilters, page: number) {
   const params = new URLSearchParams();
-  (["q", "province", "role", "type", "practice", "arrangement"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
+  (["q", "province", "role", "practice", "arrangement"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
+  filters.type?.forEach((t) => params.append("type", t));
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
   return qs ? `/jobs?${qs}` : "/jobs";
@@ -35,7 +36,7 @@ function pageHref(filters: JobFilters, page: number) {
 export default async function Jobs({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const filters = cleanFilters(await searchParams);
   const { jobs, total } = await searchJobs(filters);
-  const filtered = Boolean(filters.q || filters.province || filters.role || filters.type || filters.practice || filters.arrangement);
+  const filtered = Boolean(filters.q || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement);
   const page = filters.page ?? 1;
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -74,12 +75,16 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 <option value="">On site or field based</option>
                 {WORK_ARRANGEMENTS.map((w) => <option key={w.value} value={w.value}>{w.value === "field" ? "Field based only" : "On site only"}</option>)}
               </select>
-              <label className="sr" htmlFor="s-type">Employment type</label>
-              <select id="s-type" name="type" defaultValue={filters.type}>
-                <option value="">Any type</option>
-                {EMPLOYMENT_TYPES.map((t) => <option key={t} value={t}>{t}</option>)}
-              </select>
             </div>
+            <fieldset className="sf-types">
+              <legend>Type of work</legend>
+              {EMPLOYMENT_TYPES.map((t) => (
+                <label key={t} className="sf-tick">
+                  <input type="checkbox" name="type" value={t} defaultChecked={filters.type?.includes(t)} />
+                  <span>{employmentLabel(t)}</span>
+                </label>
+              ))}
+            </fieldset>
           </form>
 
           {jobs.length === 0 ? (
@@ -109,7 +114,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                         {j.employers?.clinic_name} · {j.city}, {j.province}
                       </p>
                       <p className="chips">
-                        <span className="chip">{j.employment_type}</span>
+                        <span className="chip">{employmentLabel(j.employment_type)}</span>
                         <span className="chip paychip">{formatPay(j.pay_min, j.pay_max, j.pay_period)}</span>
                         <span className="chip">{practiceLabel(j.employers?.practice_type)}</span>
                         {j.work_arrangement === "field" && <span className="chip">Field based</span>}

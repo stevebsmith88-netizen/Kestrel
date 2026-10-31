@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { employmentLabel, formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { getLiveJob } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -45,7 +45,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             <h1>{job.title}</h1>
             <p className="meta">{clinic?.clinic_name} · {job.city}, {job.province}</p>
             <p className="chips">
-              <span className="chip">{job.employment_type}</span>
+              <span className="chip">{employmentLabel(job.employment_type)}</span>
               <span className="chip paychip">{formatPay(job.pay_min, job.pay_max, job.pay_period)}</span>
               <span className="chip">{practiceLabel(clinic?.practice_type)}</span>
               {job.work_arrangement === "field" && <span className="chip">Field based</span>}
@@ -87,7 +87,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 <h2>Job facts</h2>
                 <dl className="facts">
                   <div><dt>Pay</dt><dd>{formatPay(job.pay_min, job.pay_max, job.pay_period)}</dd></div>
-                  <div><dt>Type</dt><dd>{job.employment_type}</dd></div>
+                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
                   {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
                   <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
                   {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
