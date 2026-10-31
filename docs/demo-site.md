@@ -84,3 +84,14 @@ Anyone with the link can create a demo account. If someone abuses it, run `updat
 ## Cost and fair use
 
 The demo costs nothing extra on the free plans. Vercel's Hobby plan is for non commercial use, and a demo for showing people around is fine. If the AI ad writer is switched on, each draft costs a few cents and counts against the Anthropic spend limit.
+
+## Keeping the demo in step with the live site
+
+Both Vercel projects (`kestrel` and `kestrel-demo`) build from the `main` branch of the same repository. So **merging to `main` updates both**. Two things do not follow by themselves:
+
+1. **Database changes.** Each site has its own Supabase database. When a change comes with new SQL (a new file in `supabase/migrations`), run it on **both** databases: the live project and the demo project. The demo takes the same SQL as the live site. If the change touches the sample data, run `seed.sql` again on the demo afterwards.
+2. **Settings.** A new environment variable, or a change to one, has to be added in **both** Vercel projects. The demo only needs the ones listed in the setup section above, plus any the new feature needs.
+
+How to check that both updated: open each Vercel project's **Deployments** tab. The newest Production deployment in each should show the same commit message as the last merge. Open `eyecarejobs.ca` and `demo.eyecarejobs.ca` and look for the change.
+
+Differences you should expect and not worry about: the demo has the banner, hides itself from search engines and never sends email, and its blog and jobs come from its own sample data.
