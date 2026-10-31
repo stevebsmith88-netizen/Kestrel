@@ -89,11 +89,36 @@ export const ALERT_FREQUENCIES = [
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
-// Wording that is not allowed in a post. This covers Ontario's rules from 1st January 2026.
-const CANADIAN_EXPERIENCE = /\b(canadian|local)\s+(work\s+)?experience\b|\bexperience\s+(working\s+)?in\s+canada\b/i;
+// Wording that is not allowed in a post: any requirement of Canadian experience. This covers Ontario's rules from 1st January 2026.
+// It looks for three shapes, and is a safety net, because the admin reads every post as well:
+//  1. a place word near "experience": "Canadian experience", "Canadian clinical experience", "Canadian-experience preferred",
+//     "Cdn experience", "North American experience", "local work history". Only job words may sit between the two,
+//     so "We are a Canadian clinic offering experience with lenses" is allowed.
+//  2. experience then "in" a place: "experience in Canada", "experience gained in Canada", "experience in a Canadian clinic".
+//  3. "worked in Canada", "practising in Canada". Not when it is about a licence ("licensed to practise in Canada").
+const PLACE = "(?:canad\\w*|cdn|north\\s+americ\\w*|local)";
+const EXPERIENCE = "(?:experienc\\w*|work\\s+history|employment\\s+history)";
+const JOB_WORDS = new Set("clinical clinic optometry optometric optical optician opticians dispensing retail eye care eyecare vision work working job professional industry relevant related prior previous practice practising practicing field employment health healthcare".split(" "));
+const NEAR_PLACE = new RegExp(`\\b${PLACE}\\b((?:[\\s-]+[\\w']+){0,3}?)[\\s-]+${EXPERIENCE}\\b`, "gi");
+const EXPERIENCE_IN = new RegExp(`\\bexperienc\\w*(?:\\s+[\\w']+){0,3}?\\s+(?:in|within|across|throughout|from)\\s+(?:a\\s+|the\\s+)?(?:canad\\w*|north\\s+americ\\w*)\\b`, "i");
+const WORKED_IN = /\b(?:work(?:ed|ing)?|practi[sc](?:e|ed|ing)|employed)\s+(?:[\w']+\s+){0,2}?(?:in|within)\s+(?:a\s+|the\s+)?canad\w*\b/gi;
+const ABOUT_A_LICENCE = /licen[cs]|regist|eligib|entitled|authori[sz]ed|permitted/i;
+
+// Finds the first match that passes `accept`. After a rejected match the search resumes 1 character later, so a rejected
+// longer match can never hide a real one inside it ("Canada hire Canadian experience").
+function firstAccepted(pattern: RegExp, text: string, accept: (match: RegExpExecArray) => boolean) {
+  const re = new RegExp(pattern.source, pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`);
+  for (let match = re.exec(text); match; match = re.exec(text)) {
+    if (accept(match)) return true;
+    re.lastIndex = match.index + 1;
+  }
+  return false;
+}
 
 export function mentionsCanadianExperience(text: string) {
-  return CANADIAN_EXPERIENCE.test(text);
+  const onlyJobWords = (m: RegExpExecArray) => m[1].split(/[\s-]+/).filter(Boolean).every((w) => JOB_WORDS.has(w.toLowerCase()));
+  const notAboutALicence = (m: RegExpExecArray) => !ABOUT_A_LICENCE.test(text.slice(Math.max(0, m.index - 30), m.index));
+  return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
 }
 
 // Parses "62,000", "$62000" or "24.50". Returns null for anything else.
@@ -198,6 +223,7 @@ export function validateClinic(c: ClinicInput) {
   if (!PRACTICE_TYPES.some((p) => p.value === c.practiceType)) errors.practiceType = "Choose independent, corporate or supplier.";
   if (!(PROVINCES as readonly string[]).includes(c.province)) errors.province = "Choose a province or territory.";
   if (!c.city) errors.city = "Enter the city.";
+  if (c.about && mentionsCanadianExperience(c.about)) errors.about = "Please take out any mention of Canadian experience. We do not allow it on Kestrel.";
   if (c.website) {
     try {
       const url = new URL(c.website);
@@ -219,6 +245,9 @@ export function reviewFlags(job: { title?: string | null; description?: string |
   const min = Number(job.pay_min);
   const max = Number(job.pay_max);
   if (min > 0 && max > 0 && job.pay_period && !payRangeAllowed(min, max, job.pay_period)) flags.push("Pay range is too wide");
+  // A typo such as $62 instead of $62,000, or 6 zeros too many, is far more likely than a real offer this low or high.
+  if (min > 0 && max > 0 && job.pay_period === "year" && (min < 25_000 || max > 500_000)) flags.push("Yearly pay looks unusually low or high. Check for a typing slip");
+  if (min > 0 && max > 0 && job.pay_period === "hour" && (min < 15 || max > 150)) flags.push("Hourly pay looks unusually low or high. Check for a typing slip");
   if (/\b(young|youthful|recent graduate only|digital native)\b/i.test(text)) flags.push("Wording that may point to age");
   for (const [pattern, message] of RIGHTS_WORDING) if (pattern.test(text)) flags.push(message);
   if (/(^|\s)(https?:\/\/|www\.)\S+/i.test(job.description ?? "")) flags.push("Contains a web link");

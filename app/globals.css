@@ -376,6 +376,9 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .or{display:flex;align-items:center;gap:12px;margin:18px 0 6px;color:var(--muted);font-size:.9rem}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
 
+.reqnote{margin:0 0 14px}
+.reqnote .req{color:var(--chestnut-d);font-weight:700}
+
 /* Eye care in numbers (home page) */
 .numwrap{margin-top:24px}
 .numbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 30px 4px}

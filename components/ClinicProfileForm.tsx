@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Choices, Field } from "@/components/Field";
+import { Choices, Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveClinic } from "@/lib/clinic-actions";
 import { PRACTICE_TYPES, PROVINCES } from "@/lib/jobs";
@@ -13,6 +13,7 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
   const e = state.errors ?? {};
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
+      <RequiredNote />
       <Field id="cp-name" label="Clinic or company name" required error={e.clinicName}>
         <input id="cp-name" name="clinicName" type="text" autoComplete="organization" defaultValue={initial?.clinic_name ?? ""} />
       </Field>

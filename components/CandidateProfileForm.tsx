@@ -1,6 +1,6 @@
 "use client";
 
-import { Field } from "@/components/Field";
+import { Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveCandidateProfile } from "@/lib/candidate-actions";
 import { PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
@@ -15,6 +15,7 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
   const licensed = initial?.licensed_provinces ?? [];
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
+      <RequiredNote />
       <Field id="cpf-profession" label="Your role" required error={e.profession}>
         <select id="cpf-profession" name="profession" defaultValue={initial?.profession ?? ""}>
           <option value="">Choose one</option>
