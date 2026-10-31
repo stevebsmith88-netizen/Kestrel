@@ -7,7 +7,7 @@ import { requireRole } from "@/lib/auth";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { closeJob, deleteJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
 import { saveJobAsTemplate } from "@/lib/template-actions";
-import { daysLeft, formatPay, longDate } from "@/lib/jobs";
+import { daysLeft, employmentLabel, formatPay, longDate } from "@/lib/jobs";
 
 export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -78,7 +78,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                       <div className="jobmain">
                         <h3>{j.title}</h3>
                         <p className="meta">
-                          {[j.employment_type, j.city && j.province ? `${j.city}, ${j.province}` : null, j.pay_min && j.pay_max && j.pay_period ? formatPay(j.pay_min, j.pay_max, j.pay_period) : null].filter(Boolean).join(" · ") || "Not finished yet"}
+                          {[employmentLabel(j.employment_type), j.city && j.province ? `${j.city}, ${j.province}` : null, j.pay_min && j.pay_max && j.pay_period ? formatPay(j.pay_min, j.pay_max, j.pay_period) : null].filter(Boolean).join(" · ") || "Not finished yet"}
                         </p>
                         {j.status === "live" && j.expires_at && <p className="meta">Live until {longDate(j.expires_at)} ({daysLeft(j.expires_at)} days left)</p>}
                         {j.status === "in_review" && <p className="meta">With our team. We usually check posts within 1 business day.</p>}

@@ -4,7 +4,7 @@ import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { approveJob, rejectJob } from "@/lib/admin-actions";
 import { changedFields } from "@/lib/job-diff";
-import { employerFlags, formatPay, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
+import { employerFlags, employmentLabel, formatPay, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -104,7 +104,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                     )}
                     <dl className="facts">
                       <div><dt>Role</dt><dd>{j.role_category}</dd></div>
-                      <div><dt>Type</dt><dd>{j.employment_type}</dd></div>
+                      <div><dt>Type</dt><dd>{employmentLabel(j.employment_type)}</dd></div>
                       <div><dt>Pay</dt><dd>{formatPay(j.pay_min, j.pay_max, j.pay_period)}</dd></div>
                       {j.territory && <div><dt>Area covered</dt><dd>{j.territory}</dd></div>}
                       {j.pay_extras && <div><dt>Anything else that is part of the pay</dt><dd>{j.pay_extras}</dd></div>}

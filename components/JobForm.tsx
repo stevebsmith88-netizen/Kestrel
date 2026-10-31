@@ -5,7 +5,7 @@ import { Choices, Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { buildAd } from "@/lib/ad-builder";
 import { saveJob } from "@/lib/clinic-actions";
-import { CLINIC_ROLES, EMPLOYMENT_TYPES, FIELD_ROLES, PAY_PERIODS, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
+import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 
 export type JobFormValues = {
   id?: string;
@@ -70,7 +70,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
           <select id="jf-type" name="employmentType" defaultValue={initial.employment_type}>
             <option value="">Choose one</option>
             {EMPLOYMENT_TYPES.map((t) => (
-              <option key={t} value={t}>{t}</option>
+              <option key={t} value={t}>{employmentLabel(t)}</option>
             ))}
           </select>
         </Field>

@@ -2,6 +2,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  cleanEmploymentTypes,
+  employmentLabel,
   cleanJob,
   daysLeft,
   expiryFrom,
@@ -226,4 +228,16 @@ test("field based jobs need an area, and field roles and suppliers exist", () =>
   assert.equal(practiceLabel("supplier"), "Supplier or manufacturer");
   assert.equal(practiceLabel("corporate"), "Corporate");
   assert.equal(practiceLabel(undefined), "Independent");
+});
+
+test("Contract shows as Fixed term and other types are unchanged", () => {
+  assert.equal(employmentLabel("Contract"), "Fixed term");
+  assert.equal(employmentLabel("Full time"), "Full time");
+  assert.equal(employmentLabel(null), "");
+});
+
+test("employment types can be ticked more than once, and odd values are dropped", () => {
+  assert.deepEqual(cleanEmploymentTypes(["Full time", "Part time", "Part time", "Nonsense"]), ["Full time", "Part time"]);
+  assert.deepEqual(cleanEmploymentTypes("Contract"), ["Contract"]);
+  assert.deepEqual(cleanEmploymentTypes(undefined), []);
 });

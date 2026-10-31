@@ -1,11 +1,11 @@
 import "server-only";
 import { supabasePublic } from "@/lib/supabase/public";
-import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { cleanEmploymentTypes, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 
 export const PAGE_SIZE = 20;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export type JobFilters = { q?: string; province?: string; role?: string; type?: string; practice?: string; arrangement?: string; page?: number };
+export type JobFilters = { q?: string; province?: string; role?: string; type?: string[]; practice?: string; arrangement?: string; page?: number };
 
 export type JobSummary = {
   id: string;
@@ -35,7 +35,7 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
     q: one("q").replace(/[,()%*\\"]/g, " ").slice(0, 80).trim(),
     province: pick(one("province"), PROVINCES),
     role: pick(one("role"), ROLE_CATEGORIES),
-    type: pick(one("type"), EMPLOYMENT_TYPES),
+    type: cleanEmploymentTypes(raw.type),
     practice: pick(one("practice"), PRACTICE_TYPES.map((p) => p.value)),
     arrangement: pick(one("arrangement"), ["on_site", "field"] as const),
     page: Number.isFinite(page) && page > 0 ? Math.min(page, 500) : 1,
@@ -53,7 +53,7 @@ export async function searchJobs(filters: JobFilters): Promise<{ jobs: JobSummar
     .gt("expires_at", new Date().toISOString());
   if (filters.province) query = query.eq("province", filters.province);
   if (filters.role) query = query.eq("role_category", filters.role);
-  if (filters.type) query = query.eq("employment_type", filters.type);
+  if (filters.type?.length) query = query.in("employment_type", filters.type);
   if (filters.arrangement) query = query.eq("work_arrangement", filters.arrangement);
   if (filters.practice) query = query.eq("employers.practice_type", filters.practice);
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
