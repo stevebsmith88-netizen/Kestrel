@@ -1,6 +1,7 @@
 import "server-only";
 
 import { SITE_URL } from "./email-layout.ts";
+import { demoMode } from "@/lib/demo";
 import { isSuppressed } from "@/lib/suppression";
 
 export { SITE_URL, emailLayout } from "./email-layout.ts";
@@ -20,6 +21,11 @@ type EmailMessage = { to: string; subject: string; html: string; text: string; u
 
 // The same, but says whether the email was sent, deliberately skipped (do not email list, no key) or failed.
 export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, replyTo }: EmailMessage): Promise<SendResult> {
+  // The demo site never sends email to anyone, whatever keys are set.
+  if (demoMode()) {
+    console.log("Email skipped, this is the demo site:", subject);
+    return "skipped";
+  }
   // Anything with an unsubscribe link is a marketing message, and is never sent to an address on the do not email list.
   if (unsubscribeUrl && (await isSuppressed(to))) {
     console.log("Email skipped, address is on the do not email list:", subject);

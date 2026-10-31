@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
           // Always use the secure site (for a year), and stop other sites framing ours, planting a base address or loading plug ins.
           { key: "Strict-Transport-Security", value: "max-age=31536000" },
           { key: "Content-Security-Policy", value: "frame-ancestors 'none'; base-uri 'self'; object-src 'none'" },
+          // The demo site tells search engines not to list any page.
+          ...(process.env.DEMO_MODE === "yes" ? [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] : []),
         ],
       },
     ];

@@ -6,7 +6,8 @@ export const turnstileEnforced = () => Boolean(process.env.TURNSTILE_SECRET_KEY 
 
 // On the live site (not previews or local work) a missing key is a mistake, not a choice, so the forms refuse
 // rather than quietly letting bots through.
-const liveSite = () => process.env.VERCEL_ENV === "production";
+// The demo site is a Production deployment too, but it has no security check keys and does not need them.
+const liveSite = () => process.env.VERCEL_ENV === "production" && process.env.DEMO_MODE !== "yes";
 
 export const TURNSTILE_MESSAGE = "Please complete the security check and try again.";
 

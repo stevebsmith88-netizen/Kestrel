@@ -44,6 +44,10 @@ Claude writes and publishes posts from `content/posts.ts` (see `docs/blog.md`). 
 - Fill in `docs/breach-plan.md`: the lawyer's name after the first meeting. The backup person stays out of the repository (see 2).
 - Ad builder: try it on the live site and tell Claude if a draft fails or is cut off (it now uses Sonnet 5.5).
 
+### 1.5 The demo site
+
+A separate, working copy of the site with sample data, to show people around before launch. Full steps in `docs/demo-site.md` (about 45 minutes once). It needs the pull request that adds demo mode merged first.
+
 ## 2. The backup person and names
 
 - A backup person can be your wife. Their job is to be able to help if you cannot be reached for a day: emergency access to your password manager, or a sealed copy of your recovery codes. They do not need admin rights on anything.

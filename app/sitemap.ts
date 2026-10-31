@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "@/content/posts";
 import { visiblePosts } from "@/lib/blog";
+import { demoMode } from "@/lib/demo";
 import { findYourFitOn } from "@/lib/features";
 import { listLiveJobIds } from "@/lib/public-jobs";
 
@@ -9,6 +10,7 @@ export const revalidate = 3600;
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  if (demoMode()) return [];
   const jobs = await listLiveJobIds();
   const quiz = findYourFitOn() ? [{ url: `${SITE}/find-your-fit`, changeFrequency: "monthly" as const, priority: 0.6 }] : [];
   return [
