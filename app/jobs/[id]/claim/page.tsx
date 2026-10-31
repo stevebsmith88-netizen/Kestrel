@@ -15,8 +15,8 @@ export const metadata: Metadata = { title: "Claim your listing | Kestrel Eye Car
 export const dynamic = "force-dynamic";
 
 const STEPS = [
-  ["Create your clinic account", "Choose “I’m hiring for a clinic” and use your work email."],
-  ["Confirm you represent the clinic", "We send a link to an email address at your clinic’s own website."],
+  ["Create your clinic account", "Choose \"I'm hiring for a clinic\" and use your work email."],
+  ["Confirm you represent the clinic", "We send a link to an email address at your clinic's own website."],
   ["Check the details", "Fix anything we got wrong and add your pay range if it was missing."],
   ["We take a quick look", "Our team checks every claim, usually within 1 business day."],
 ];
@@ -65,8 +65,8 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
               <section className="card">
                 <h2>What claiming gives you</h2>
                 <ul className="plainlist">
-                  <li>Your clinic as the owner of the listing, instead of “not yet claimed”</li>
-                  <li>Applications arrive in your dashboard, with the applicant’s CV and cover letter</li>
+                  <li>Your clinic as the owner of the listing, instead of &quot;not yet claimed&quot;</li>
+                  <li>Applications arrive in your dashboard, with the applicant&apos;s CV and cover letter</li>
                   <li>You can close the job whenever you like, and post new ones</li>
                   <li>Your contact details stay private, because applicants write to you through Kestrel</li>
                 </ul>
@@ -93,7 +93,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
                     <Link href="/sign-up?type=clinic" className="btn">Create a clinic account</Link>
                     <Link href={`/sign-in?next=${encodeURIComponent(here)}`} className="btn ghost">I already have one</Link>
                   </div>
-                  <p className="help">After you create your account, confirm your email, then come back to this page and press “I already have one” to sign in.</p>
+                  <p className="help">After you create your account, confirm your email, then come back to this page and press &quot;I already have one&quot; to sign in.</p>
                 </div>
               ) : session.role !== "clinic" ? (
                 <div className="card"><h3>You need a clinic account</h3><p>You are signed in as {session.role === "admin" ? "an admin" : "a candidate"}. Claiming a listing needs a clinic account. Sign out and create one with your work email.</p></div>
