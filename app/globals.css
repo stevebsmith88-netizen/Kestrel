@@ -377,8 +377,8 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
 
 /* Eye care in numbers (home page) */
-.numbers{padding:56px 0 8px}
-.numbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:34px 30px 8px;box-shadow:0 10px 30px rgba(27,43,75,.06)}
+.numwrap{margin-top:24px}
+.numbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 30px 4px}
 .numbox .kicker{font-size:0.8125rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--chestnut);margin:0 0 10px}
 .numbox h2{font:400 clamp(1.625rem,3.4vw,2.125rem)/1.15 "DM Serif Display",Georgia,serif;margin:0 0 6px}
 .numlede{margin:0 0 26px;color:var(--navy-2)}

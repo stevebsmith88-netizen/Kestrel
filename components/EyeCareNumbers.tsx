@@ -2,11 +2,11 @@ import CountUp from "@/components/CountUp";
 import { CHECKED_ON, EYE_CARE_NUMBERS, NUMBER_SOURCES } from "@/lib/eye-care-numbers";
 
 // "Eye care in Canada, in numbers": 4 figures that count up on the home page, and a + that opens where they come from.
+// It sits inside the band that holds the clinics and professionals cards, under them.
 export default function EyeCareNumbers() {
   return (
-    <section className="numbers" aria-labelledby="numbers-h">
-      <div className="wrap">
-        <div className="numbox">
+    <div className="wrap numwrap" role="region" aria-labelledby="numbers-h">
+      <div className="numbox">
           <p className="kicker">Eye care in Canada</p>
           <h2 id="numbers-h">A big field, with a lot of hiring to do</h2>
           <p className="numlede">Thousands of clinics and tens of thousands of people. Kestrel is built for all of them.</p>
@@ -34,8 +34,7 @@ export default function EyeCareNumbers() {
               <p className="srcs">Figures are rounded and change over time. Last checked {CHECKED_ON}.</p>
             </div>
           </details>
-        </div>
       </div>
-    </section>
+    </div>
   );
 }

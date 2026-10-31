@@ -51,9 +51,8 @@ export default function ComingSoon() {
               </ul>
             </article>
           </div>
+          <EyeCareNumbers />
         </section>
-
-        <EyeCareNumbers />
 
         <section className="join" id="join">
           <div className="wrap grid">
