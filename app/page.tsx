@@ -59,6 +59,25 @@ export default function ComingSoon() {
               </ul>
             </article>
           </div>
+          <EyeCareNumbers />
+        </section>
+
+        {homeBlogOn() && <HomeBlogStrip />}
+
+        <section className="join" id="join">
+          <div className="wrap grid">
+            <div className="intro">
+              <h2>Be first through the door</h2>
+              <p>Whether you&apos;re hiring or looking, join the waitlist and we&apos;ll let you know the moment Kestrel opens.</p>
+            </div>
+            <div className="panel">
+              <WaitlistForm />
+              <p className="privacy">
+                We&apos;ll only use your details to email you about Kestrel Eye Care Jobs, and you can unsubscribe at any time. Read our{" "}
+                <Link href="/privacy">privacy policy</Link>.
+              </p>
+            </div>
+          </div>
         </section>
       </main>
       <footer>
