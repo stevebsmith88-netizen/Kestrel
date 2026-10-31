@@ -1,5 +1,6 @@
 "use server";
 
+import { cleanFrequency } from "@/lib/clinic-emails";
 import { revalidatePath } from "next/cache";
 import { cleanName, fullName, validateEmailChange, validateName } from "@/lib/account";
 import { requireRole } from "@/lib/auth";
@@ -81,7 +82,8 @@ export async function savePreferences(_prev: JobFormState, form: FormData): Prom
   } else {
     const { data: employer } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
     if (employer) {
-      await admin.from("employer_contacts").update({ notify_new_applications: form.get("newApplicants") === "yes", notify_reminders: form.get("reminders") === "yes" }).eq("employer_id", employer.id);
+      const frequency = cleanFrequency(form.get("applicantEmails"));
+      await admin.from("employer_contacts").update({ notify_frequency: frequency, notify_new_applications: frequency !== "off", notify_reminders: form.get("reminders") === "yes" }).eq("employer_id", employer.id);
     }
   }
   revalidatePath("/account");

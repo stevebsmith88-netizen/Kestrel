@@ -4,6 +4,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
+import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { closeJob, deleteJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
 import { saveJobAsTemplate } from "@/lib/template-actions";
@@ -36,6 +37,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const jobs = employer ? await getMyJobs(employer.id) : [];
   const applicants = employer ? await getApplicantCounts() : {};
   const unread = Object.values(applicants).reduce((sum, c) => sum + c.fresh, 0);
+  const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
   const first = session.firstName || "there";
   const count = (s: string) => jobs.filter((j) => j.status === s).length;
 
@@ -57,6 +59,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
             </section>
           ) : (
             <>
+              {waiting > 0 && <p className="replynote">{waiting} {waiting === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
               <div className="tiles stats">
                 <section className="card tile"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></section>
                 <section className="card tile"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></section>

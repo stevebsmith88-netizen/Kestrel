@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0021), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0022), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1620,6 +1620,24 @@ drop trigger if exists gate_new_users on auth.users;
 create trigger gate_new_users before insert on auth.users for each row execute function public.gate_new_users();
 
 -- ======================================================================
+-- 0022_clinic_email_frequency.sql
+-- ======================================================================
+-- How often a clinic is emailed about new applicants. Safe to run more than once.
+--  each      one email for every application (what happens today)
+--  few_days  one summary email every 2 to 3 days (recommended)
+--  weekly    one summary email a week
+--  off       no emails, the clinic checks its dashboard
+
+alter table public.employer_contacts add column if not exists notify_frequency text not null default 'each';
+alter table public.employer_contacts add column if not exists last_digest_at timestamptz;
+
+alter table public.employer_contacts drop constraint if exists employer_contacts_notify_frequency_check;
+alter table public.employer_contacts add constraint employer_contacts_notify_frequency_check check (notify_frequency in ('each', 'few_days', 'weekly', 'off'));
+
+-- Clinics that had already turned new applicant emails off stay off.
+update public.employer_contacts set notify_frequency = 'off' where notify_new_applications = false and notify_frequency = 'each';
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -1650,6 +1668,7 @@ from (
     ('table: account_deletions', to_regclass('public.account_deletions') is not null),
     ('table: job_runs (daily job lock and heartbeat)', to_regclass('public.job_runs') is not null),
     ('column: closing soon email marker', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'expiry_reminded_at')),
+    ('column: clinic applicant email frequency', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_contacts' and column_name = 'notify_frequency')),
     ('table: signup_gate (sign up closed until launch)', to_regclass('public.signup_gate') is not null),
     ('trigger: new accounts need an open gate or a ticket', exists (select 1 from pg_trigger where tgname = 'gate_new_users')),
     ('column: Google sign in account type', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'account_type_confirmed')),

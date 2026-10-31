@@ -30,3 +30,27 @@ test("no em dashes in anything a clinic reads", () => {
     assert.ok(!mail.html.includes("—") && !mail.text.includes("—") && !mail.subject.includes("—"));
   }
 });
+
+test("the summary email counts new applications by job and carries the reply reminder", async () => {
+  const { applicantDigestEmail, newApplicationEmail, RESPONSE_NOTE, cleanFrequency } = await import("./clinic-emails.ts");
+  const mail = applicantDigestEmail({ jobs: [{ title: "Optician", count: 2 }, { title: "Assistant", count: 1 }] });
+  assert.equal(mail.subject, "3 new applications on Kestrel");
+  assert.ok(mail.text.includes("Optician: 2 new") && mail.text.includes("Assistant: 1 new"));
+  assert.ok(mail.text.includes(RESPONSE_NOTE));
+  assert.equal(applicantDigestEmail({ jobs: [{ title: "Optician", count: 1 }] }).subject, "1 new application on Kestrel");
+  assert.ok(newApplicationEmail({ title: "Optician", applicationId: JOB }).html.includes(`/clinic/applications/${JOB}`));
+  assert.equal(cleanFrequency("weekly"), "weekly");
+  assert.equal(cleanFrequency("nonsense"), "each");
+  for (const m of [mail, newApplicationEmail({ title: "T", applicationId: JOB })]) assert.ok(!m.html.includes("—") && !m.text.includes("—"));
+});
+
+test("summary emails go out every 2 to 3 days or weekly, and a daily job that runs late still counts", async () => {
+  const { digestDue } = await import("./clinic-emails.ts");
+  const now = new Date("2026-11-10T14:00:00Z");
+  const ago = (hours: number) => new Date(now.getTime() - hours * 3600 * 1000);
+  assert.equal(digestDue("few_days", null, now), true);
+  assert.equal(digestDue("few_days", ago(24), now), false);
+  assert.equal(digestDue("few_days", ago(47.5), now), true);
+  assert.equal(digestDue("weekly", ago(5 * 24), now), false);
+  assert.equal(digestDue("weekly", ago(7 * 24), now), true);
+});

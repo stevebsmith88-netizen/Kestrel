@@ -7,6 +7,7 @@ import { requireRole } from "@/lib/auth";
 import { CV_MAX_BYTES, activeContent, cleanCoverLetter, detectCv, isClosed, safeFilename } from "@/lib/applications";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { newApplicationEmail } from "@/lib/clinic-emails";
 import { PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -186,15 +187,10 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   await admin.from("application_events").insert({ application_id: created.id, status: "applied" });
 
   // Tell the clinic, without putting the candidate's details in the email.
-  const { data: contact } = await admin.from("employer_contacts").select("notify_email, notify_new_applications").eq("employer_id", job.employer_id).maybeSingle();
-  if (contact?.notify_email && contact.notify_new_applications !== false) {
-    const mail = emailLayout({
-      heading: "A new application",
-      paragraphs: [`Someone has applied for ${job.title}. Open it to read their cover letter and CV.`],
-      buttonText: "Open the application",
-      buttonUrl: `${SITE_URL}/clinic/applications/${created.id}`,
-    });
-    await sendEmail({ to: contact.notify_email, subject: `New application for ${job.title}`, ...mail });
+  const { data: contact } = await admin.from("employer_contacts").select("*").eq("employer_id", job.employer_id).maybeSingle();
+  // Clinics who chose a summary (every 2 to 3 days, or weekly) or no email get nothing here. The daily job sends their summary.
+  if (contact?.notify_email && contact.notify_new_applications !== false && (contact.notify_frequency ?? "each") === "each") {
+    await sendEmail({ to: contact.notify_email, ...newApplicationEmail({ title: job.title, applicationId: created.id }) });
   }
 
   revalidatePath("/candidate/applications");

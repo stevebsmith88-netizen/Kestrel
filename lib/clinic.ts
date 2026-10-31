@@ -64,14 +64,15 @@ export async function getMyJobs(employerId: string): Promise<MyJob[]> {
 }
 
 // How many people applied to each of this clinic's jobs, and how many are still unread.
-export async function getApplicantCounts(): Promise<Record<string, { total: number; fresh: number }>> {
+export async function getApplicantCounts(): Promise<Record<string, { total: number; fresh: number; waiting: number }>> {
   const db = await supabaseServer();
   if (!db) return {};
   const { data } = await db.from("applications").select("job_id, status");
-  const counts: Record<string, { total: number; fresh: number }> = {};
+  const counts: Record<string, { total: number; fresh: number; waiting: number }> = {};
   (data ?? []).forEach((row) => {
-    const c = (counts[row.job_id] ??= { total: 0, fresh: 0 });
+    const c = (counts[row.job_id] ??= { total: 0, fresh: 0, waiting: 0 });
     c.total += 1;
+    if (row.status === "applied" || row.status === "viewed" || row.status === "shortlisted") c.waiting += 1;
     if (row.status === "applied") c.fresh += 1;
   });
   return counts;

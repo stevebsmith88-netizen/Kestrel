@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
-import { APP_LABELS, clinicMoveError, isAppStatus } from "@/lib/applications";
+import { redirect } from "next/navigation";
+import { APP_LABELS, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { candidateRecipient } from "@/lib/recipient";
 import type { JobFormState } from "@/lib/jobs";
@@ -11,6 +12,74 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+type AppForEmail = { id: string; candidate_id: string; applicant: unknown; job_title: string; clinic_name: string };
+
+// Tells the candidate by email, unless they have turned those emails off. They can always see the update in their account.
+async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>>, app: AppForEmail, to: string, message: string) {
+  const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
+  if (email && wants) {
+    const mail = emailLayout({
+      heading: "An update on your application",
+      paragraphs: [`Your application for ${app.job_title} at ${app.clinic_name} is now: ${APP_LABELS[to as keyof typeof APP_LABELS]}.`, ...(message ? [message] : [])],
+      buttonText: "See your application",
+      buttonUrl: `${SITE_URL}/candidate/applications/${app.id}`,
+    });
+    await sendEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail });
+  }
+}
+
+// Still waiting on a decision. Interviews and offers are never closed in bulk.
+const WAITING = ["applied", "viewed", "shortlisted"];
+
+// Moves several waiting applications to one closing step with the kind ready made message, and tells each candidate.
+async function closeWaiting(jobId: string, ids: string[] | null, to: "not_selected" | "role_filled"): Promise<number> {
+  const db = await supabaseServer();
+  const admin = supabaseAdmin();
+  if (!db || !admin) return 0;
+  let query = db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id").eq("job_id", jobId).in("status", WAITING);
+  if (ids) query = query.in("id", ids);
+  const { data } = await query.limit(500);
+  let done = 0;
+  for (const app of data ?? []) {
+    const message = messageTemplate(to, app.clinic_name);
+    if (clinicMoveError(app.status, to, app.keep_details, message)) continue;
+    const now = new Date().toISOString();
+    const { error } = await admin.from("applications").update({ status: to, clinic_message: message, status_changed_at: now, updated_at: now }).eq("id", app.id);
+    if (error) continue;
+    await admin.from("application_events").insert({ application_id: app.id, status: to, note: message });
+    await tellCandidate(admin, app, to, message);
+    done += 1;
+  }
+  return done;
+}
+
+// Tick some applicants and send each a kind no, using the same wording as sending one at a time.
+export async function declineSelected(form: FormData) {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  const ids = form.getAll("ids").map(String).filter((x) => UUID.test(x)).slice(0, 100);
+  if (!UUID.test(jobId)) redirect("/clinic");
+  const done = ids.length ? await closeWaiting(jobId, ids, "not_selected") : 0;
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}`);
+}
+
+// The role is filled: close the job and let everyone still waiting know, kindly.
+export async function fillRole(form: FormData) {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  if (!UUID.test(jobId)) redirect("/clinic");
+  const db = await supabaseServer();
+  if (!db) redirect("/clinic");
+  const { data: mine } = await db.from("jobs").select("id").eq("id", jobId).maybeSingle();
+  if (!mine) redirect("/clinic");
+  await db.from("jobs").update({ status: "closed" }).eq("id", jobId).in("status", ["live", "draft", "rejected"]);
+  const done = await closeWaiting(jobId, null, "role_filled");
+  revalidatePath("/clinic");
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}&filled=1`);
+}
 
 // A clinic moves an application along. The clinic's right to see this application is
 // checked by the database itself (row level security); the change is then made on the server.
@@ -42,16 +111,7 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   }
   await admin.from("application_events").insert({ application_id: id, status: to, note: message || null });
 
-  const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
-  if (email && wants) {
-    const mail = emailLayout({
-      heading: "An update on your application",
-      paragraphs: [`Your application for ${app.job_title} at ${app.clinic_name} is now: ${APP_LABELS[to]}.`, ...(message ? [message] : [])],
-      buttonText: "See your application",
-      buttonUrl: `${SITE_URL}/candidate/applications/${id}`,
-    });
-    await sendEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail });
-  }
+  await tellCandidate(admin, { id, candidate_id: app.candidate_id, applicant: app.applicant, job_title: app.job_title, clinic_name: app.clinic_name }, to, message);
 
   revalidatePath(`/clinic/applications/${id}`);
   return { message: "Saved. The candidate is told by email unless they have turned those emails off, and they can always see it in their account." };
