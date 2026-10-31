@@ -1,5 +1,6 @@
 "use client";
 
+import { FREQUENCIES, RESPONSE_NOTE, type Frequency } from "@/lib/clinic-emails";
 import Link from "next/link";
 import { Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
@@ -46,7 +47,7 @@ export function EmailForm({ current, hasPassword = true }: { current: string; ha
   );
 }
 
-export type Prefs = { news: boolean; applicationUpdates: boolean; newApplicants: boolean; reminders: boolean };
+export type Prefs = { news: boolean; applicationUpdates: boolean; applicantEmails: Frequency; reminders: boolean };
 
 export function PreferencesForm({ role, prefs, hasClinic }: { role: "candidate" | "clinic"; prefs: Prefs; hasClinic: boolean }) {
   const { state, pending, submit } = useServerForm(savePreferences);
@@ -63,10 +64,16 @@ export function PreferencesForm({ role, prefs, hasClinic }: { role: "candidate" 
         </label>
       ) : hasClinic ? (
         <>
-          <label className="consent">
-            <input type="checkbox" name="newApplicants" value="yes" defaultChecked={prefs.newApplicants} />
-            <span>Email me when someone applies to one of my jobs.</span>
-          </label>
+          <fieldset className="radiogroup">
+            <legend>How often should we email you about new applicants?</legend>
+            {FREQUENCIES.map((f) => (
+              <label key={f.value} className="consent">
+                <input type="radio" name="applicantEmails" value={f.value} defaultChecked={prefs.applicantEmails === f.value} />
+                <span>{f.label}</span>
+              </label>
+            ))}
+            <p className="help">Whatever you choose, new applicants always appear in your dashboard. {RESPONSE_NOTE}</p>
+          </fieldset>
           <label className="consent">
             <input type="checkbox" name="reminders" value="yes" defaultChecked={prefs.reminders} />
             <span>Remind me when applications have waited 2 weeks without being opened.</span>

@@ -1,5 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { APP_LABELS } from "@/lib/applications";
+import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue } from "@/lib/clinic-emails";
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { notifyAdmin } from "@/lib/notify-admin";
@@ -21,6 +22,7 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 //  3. closes out applications still waiting on a job that ended a week ago, so candidates
 //     are never left waiting,
 //  4. reminds clinics about applications they have not opened for 14 days,
+//     and sends the summary email to clinics who chose one every 2 to 3 days or weekly,
 //  5. emails candidates one digest of new jobs that match their job alerts,
 //  6. tells Steve about anything that has waited more than a day for him.
 // Vercel sends the secret in the Authorization header, so nobody else can trigger it.
@@ -49,7 +51,7 @@ async function runDaily(request: Request) {
   const started = Date.now();
   const outOfTime = () => Date.now() - started > TIME_LIMIT;
   const now = new Date();
-  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, alertsSent: 0, emailsFailed: 0, emailsHeldBack: 0 };
+  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, emailsFailed: 0, emailsHeldBack: 0 };
   const problems: string[] = [];
 
   // Only one run at a time. If two copies started together, every email would go twice.
@@ -168,6 +170,39 @@ async function runDaily(request: Request) {
         await admin.from("applications").update({ reminded_at: new Date().toISOString() }).in("id", appIds);
         summary.reminders += 1;
       }
+    }
+  }
+
+  // 4b. Summary emails for clinics who chose "every 2 to 3 days" or "weekly" instead of one email per application.
+  const { data: digestContacts, error: digestError } = await admin
+    .from("employer_contacts")
+    .select("employer_id, notify_email, notify_frequency, last_digest_at")
+    .in("notify_frequency", ["few_days", "weekly"])
+    .order("last_digest_at", { ascending: true, nullsFirst: true })
+    .limit(500);
+  if (digestError) problems.push(`Applicant summaries could not run (has migration 0022 been run?): ${digestError.message}`);
+  for (const c of digestContacts ?? []) {
+    if (outOfTime()) break;
+    if (!c.notify_email) continue;
+    const frequency = c.notify_frequency as "few_days" | "weekly";
+    const gapHours = DIGEST_GAP_HOURS[frequency];
+    const last = c.last_digest_at ? new Date(c.last_digest_at) : null;
+    if (!digestDue(frequency, last, now)) continue;
+    const since = (last ?? new Date(now.getTime() - gapHours * 60 * 60 * 1000)).toISOString();
+    const { data: theirJobs } = await admin.from("jobs").select("id, title").eq("employer_id", c.employer_id);
+    if (!theirJobs?.length) continue;
+    const { data: fresh } = await admin.from("applications").select("job_id").in("job_id", theirJobs.map((j) => j.id)).gt("created_at", since);
+    if (!fresh?.length) continue;
+    const counts = new Map<string, number>();
+    fresh.forEach((a) => counts.set(a.job_id, (counts.get(a.job_id) ?? 0) + 1));
+    const jobs = theirJobs.filter((j) => counts.has(j.id)).map((j) => ({ title: j.title, count: counts.get(j.id) ?? 0 }));
+    if (!budget.take()) {
+      summary.emailsHeldBack += 1;
+      continue;
+    }
+    if (note(await deliverEmail({ to: c.notify_email, ...applicantDigestEmail({ jobs }) }))) {
+      await admin.from("employer_contacts").update({ last_digest_at: now.toISOString() }).eq("employer_id", c.employer_id);
+      summary.applicantSummaries += 1;
     }
   }
 
