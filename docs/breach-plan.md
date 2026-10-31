@@ -3,8 +3,8 @@
 One page. Keep it where you can find it quickly. A plain English summary of Canada's privacy law (PIPEDA), not legal advice. Alberta, British Columbia and Quebec also have their own rules, so ask the lawyer which apply. Read with `docs/security.md`.
 
 **Privacy officer:** Steve Smith, privacy@eyecarejobs.ca
-**Backup person:** (write a name here)
-**Lawyer:** (write a name and number here)
+**Backup person:** held offline by Steve (in his password manager notes). Deliberately not written in this repository.
+**Lawyer:** (add after the first meeting; keep the number in Steve's contacts, not here)
 **Last reviewed:** 30th October 2026
 
 ## What counts
@@ -28,6 +28,7 @@ If you are not sure, treat it as serious and call the lawyer.
 **4. If it is serious: tell people, quickly.**
 - Report it to the **Office of the Privacy Commissioner of Canada** as soon as you can, using their online breach report form.
 - Tell **each person affected** directly, by email. See the message below.
+- If the people affected are candidates whose applications a **clinic** can see (or the reverse), also tell that clinic. Ask the lawyer who is responsible for the information once a clinic has opened an application.
 - Tell anyone else who can help reduce the harm, if that applies.
 - Ask the lawyer whether Alberta, British Columbia or Quebec's regulators also need to hear.
 
