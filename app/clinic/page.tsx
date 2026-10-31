@@ -20,6 +20,7 @@ const NOTICES: Record<string, string> = {
   "job-closed": "The job is closed and no longer shown to candidates.",
   "job-withdrawn": "The job is back in your drafts, so you can change it and send it again.",
   "job-deleted": "The job is deleted.",
+  "job-delete-blocked": "That job can't be deleted because it has been live or has applications. Close it instead, so candidates keep their record.",
   "job-edited": "Your changes are with our team. The job is offline until we approve them, usually within 1 business day. Its 30 days keep running.",
   "template-saved": "Saved as a template. Start a new post from it under Post a job.",
   "template-limit": "You have 20 templates already. Delete one under Post a job, then try again.",
@@ -45,7 +46,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
         <div className="wrap">
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{template ? " It is also saved as a template for next time." : ""}</p>}
+          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
           {!employer ? (
             <section className="card setup">
@@ -105,7 +106,10 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                           {j.status === "in_review" && (
                             <form action={withdrawJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Take back to edit</button></form>
                           )}
-                          {(j.status === "draft" || j.status === "rejected") && (
+                          {(j.status === "draft" || j.status === "rejected") && (j.posted_at || applicants[j.id]) && (
+                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Close</button></form>
+                          )}
+                          {(j.status === "draft" || j.status === "rejected") && !j.posted_at && !applicants[j.id] && (
                             <form action={deleteJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Delete</button></form>
                           )}
                         </div>

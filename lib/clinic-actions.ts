@@ -6,6 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { cleanClinic, cleanJob, parseMoney, validateClinic, validateJob, type JobFormState } from "@/lib/jobs";
+import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 
@@ -158,16 +159,20 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
 
   // Optionally keep this post as a template for next time (the two required questions are not kept).
   let savedTemplate = false;
+  let templateFailed = false;
   if (field(form, "saveTemplate") === "yes") {
     const name = (String(field(form, "templateName")).trim() || job.title).slice(0, 80);
-    const { error: templateError } = await db.from("job_templates").upsert({ employer_id: employer.id, name, ...templateFields(row) }, { onConflict: "employer_id,name" });
-    if (templateError) console.error("Template save failed:", templateError.code, templateError.message);
-    else savedTemplate = true;
+    const fields = templateFields(row);
+    const { error: templateError } = await updateThenInsert(db, "job_templates", { employer_id: employer.id, name }, { ...fields }, { employer_id: employer.id, name, ...fields });
+    if (templateError) {
+      console.error("Template save failed:", templateError.code, templateError.message);
+      templateFailed = true;
+    } else savedTemplate = true;
   }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
   revalidatePath("/jobs");
-  redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}${savedTemplate ? "&template=1" : ""}`);
+  redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}${savedTemplate ? "&template=1" : templateFailed ? "&template=failed" : ""}`);
 }
 
 // Live job: close it. Job in review: take it back to a draft so it can be changed.
@@ -175,7 +180,8 @@ export async function closeJob(form: FormData) {
   await requireRole("clinic");
   const id = idFrom(form);
   const db = await supabaseServer();
-  if (id && db) await db.from("jobs").update({ status: "closed" }).eq("id", id).eq("status", "live");
+  // A live job, or a draft or rejected one that was live before, can be closed. Closing keeps the record for candidates.
+  if (id && db) await db.from("jobs").update({ status: "closed" }).eq("id", id).in("status", ["live", "draft", "rejected"]);
   revalidatePath("/clinic");
   redirect("/clinic?notice=job-closed");
 }
@@ -193,9 +199,15 @@ export async function deleteJob(form: FormData) {
   await requireRole("clinic");
   const id = idFrom(form);
   const db = await supabaseServer();
-  if (id && db) await db.from("jobs").delete().eq("id", id).in("status", ["draft", "rejected"]);
+  // Only a job that was never live and has no applications can be deleted. The database enforces this too.
+  // Anything else is closed instead, so candidates keep their record of applying.
+  let removed = false;
+  if (id && db) {
+    const { data } = await db.from("jobs").delete().eq("id", id).in("status", ["draft", "rejected"]).is("posted_at", null).select("id");
+    removed = Boolean(data?.length);
+  }
   revalidatePath("/clinic");
-  redirect("/clinic?notice=job-deleted");
+  redirect(`/clinic?notice=${removed ? "job-deleted" : "job-delete-blocked"}`);
 }
 
 // Starts a new draft from an old job (one that has closed or expired), so it can be posted again

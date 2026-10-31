@@ -139,6 +139,8 @@ export function validateJob(job: JobInput, submit: boolean) {
   if (job.description && mentionsCanadianExperience(`${job.title} ${job.description}`)) {
     errors.description = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
   }
+  if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
+  if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
   if (!submit) return errors;
 
   if (!(ROLE_CATEGORIES as readonly string[]).includes(job.roleCategory)) errors.roleCategory = "Choose a role.";
@@ -210,9 +212,9 @@ export function validateClinic(c: ClinicInput) {
 }
 
 // Things the admin should look at before approving a post.
-export function reviewFlags(job: { title?: string | null; description?: string | null; pay_period?: string | null; pay_min?: number | string | null; pay_max?: number | string | null; apply_url?: string | null }) {
+export function reviewFlags(job: { title?: string | null; description?: string | null; territory?: string | null; pay_extras?: string | null; pay_period?: string | null; pay_min?: number | string | null; pay_max?: number | string | null; apply_url?: string | null }) {
   const flags: string[] = [];
-  const text = `${job.title ?? ""} ${job.description ?? ""}`;
+  const text = `${job.title ?? ""} ${job.description ?? ""} ${job.territory ?? ""} ${job.pay_extras ?? ""}`;
   if (mentionsCanadianExperience(text)) flags.push("Mentions Canadian experience");
   const min = Number(job.pay_min);
   const max = Number(job.pay_max);

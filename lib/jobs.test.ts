@@ -98,6 +98,13 @@ test("review flags", () => {
   assert.deepEqual(reviewFlags({ title: "Optician", description: "A friendly clinic.", pay_period: "year", pay_min: 60000, pay_max: 70000 }), []);
 });
 
+test("the area covered and extra pay are checked too", () => {
+  assert.ok(reviewFlags({ title: "Rep", description: "A friendly company.", territory: "Ontario, Canadian experience preferred", pay_period: "year", pay_min: 60000, pay_max: 70000 }).includes("Mentions Canadian experience"));
+  assert.ok(reviewFlags({ title: "Rep", description: "A friendly company.", pay_extras: "Bonus. Canadian experience only.", pay_period: "year", pay_min: 60000, pay_max: 70000 }).includes("Mentions Canadian experience"));
+  assert.ok(validateJob({ ...good, territory: "Canadian experience in Ontario" }, false).territory);
+  assert.ok(validateJob({ ...good, payExtras: "Canadian experience required" }, false).payExtras);
+});
+
 test("pay is shown in plain words", () => {
   assert.equal(formatPay(62000, 74000, "year"), "$62,000 to $74,000 a year");
   assert.equal(formatPay("24", "28.5", "hour"), "$24 to $28.50 an hour");

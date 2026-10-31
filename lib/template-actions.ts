@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
+import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -26,7 +27,8 @@ export async function saveJobAsTemplate(form: FormData) {
     .eq("employer_id", employer.id)
     .maybeSingle();
   if (!job) redirect("/clinic");
-  const { error } = await db.from("job_templates").upsert({ employer_id: employer.id, name: job.title.slice(0, 80), ...job }, { onConflict: "employer_id,name" });
+  const name = job.title.slice(0, 80);
+  const { error } = await updateThenInsert(db, "job_templates", { employer_id: employer.id, name }, { ...job }, { employer_id: employer.id, name, ...job });
   if (error) {
     console.error("Template save failed:", error.code, error.message);
     redirect(`/clinic?notice=${/20 templates/.test(error.message) ? "template-limit" : "template-failed"}`);

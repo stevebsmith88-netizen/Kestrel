@@ -34,21 +34,26 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
     if (authError) return { errors: { password: "That password doesn't match." }, error: "That password doesn't match." };
   }
 
-  // Collect every stored file that belongs to this account.
+  // Collect every stored file that belongs to this account, and count what goes with it for the deletion record.
   const paths: string[] = [];
+  let jobsCount = 0;
+  let applicationsCount = 0;
   if (session.role === "candidate") {
     const { data: profile } = await admin.from("candidate_profiles").select("cv_path").eq("user_id", session.userId).maybeSingle();
     if (profile?.cv_path) paths.push(profile.cv_path);
     const { data: apps } = await admin.from("applications").select("cv_path").eq("candidate_id", session.userId);
     (apps ?? []).forEach((a) => a.cv_path && paths.push(a.cv_path));
+    applicationsCount = apps?.length ?? 0;
   } else {
     const { data: employer } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
     if (employer) {
       const { data: jobs } = await admin.from("jobs").select("id").eq("employer_id", employer.id);
       const jobIds = (jobs ?? []).map((j) => j.id);
+      jobsCount = jobIds.length;
       if (jobIds.length) {
         const { data: apps } = await admin.from("applications").select("cv_path").in("job_id", jobIds);
         (apps ?? []).forEach((a) => a.cv_path && paths.push(a.cv_path));
+        applicationsCount = apps?.length ?? 0;
       }
     }
   }
@@ -60,6 +65,9 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
     console.error("Account deletion failed:", error.message);
     return { error: "We couldn't delete your account. Please try again, or email privacy@eyecarejobs.ca and we will do it for you." };
   }
+  // A record that it happened, with no names or addresses.
+  const { error: logError } = await admin.from("account_deletions").insert({ account_role: session.role, jobs_count: jobsCount, applications_count: applicationsCount });
+  if (logError) console.error("Deletion record failed:", logError.code, logError.message);
   await db.auth.signOut();
   redirect("/goodbye");
 }

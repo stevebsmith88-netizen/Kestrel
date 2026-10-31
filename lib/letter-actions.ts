@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { cleanCoverLetter } from "@/lib/applications";
 import type { JobFormState } from "@/lib/jobs";
+import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -16,7 +17,8 @@ export async function saveApplicationDraft(_prev: JobFormState, form: FormData):
   if (!UUID.test(jobId)) return { error: "We couldn't find that job." };
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
-  const { error } = await db.from("application_drafts").upsert({ user_id: session.userId, job_id: jobId, cover_letter: cleanCoverLetter(form.get("coverLetter")) }, { onConflict: "user_id,job_id" });
+  const coverLetter = cleanCoverLetter(form.get("coverLetter"));
+  const { error } = await updateThenInsert(db, "application_drafts", { user_id: session.userId, job_id: jobId }, { cover_letter: coverLetter }, { user_id: session.userId, job_id: jobId, cover_letter: coverLetter });
   if (error) {
     console.error("Draft save failed:", error.code, error.message);
     return { error: "We couldn't save your draft. Please try again." };
@@ -36,7 +38,7 @@ export async function saveLetterTemplate(_prev: JobFormState, form: FormData): P
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
-  const { error } = await db.from("cover_letter_templates").upsert({ user_id: session.userId, name, body }, { onConflict: "user_id,name" });
+  const { error } = await updateThenInsert(db, "cover_letter_templates", { user_id: session.userId, name }, { body }, { user_id: session.userId, name, body });
   if (error) {
     if (/up to 5/i.test(error.message)) return { error: "You can save up to 5 cover letters. Delete one to add another." };
     console.error("Letter save failed:", error.code, error.message);

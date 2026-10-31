@@ -73,3 +73,16 @@ Not built yet: the admin tool to add found listings (seeding), and editing a liv
 - A live job cannot be saved as a draft. It can be closed.
 - Closed and expired jobs have "Post again", which copies the job into a new draft (counts toward the 10 open jobs limit).
 - Database rule: migration 0014 lets a clinic move a live job to in review (and nothing else), and still blocks any edit while it stays live, any change to the dates, and any move to live by the clinic.
+
+## Deleting, closing and keeping records (migration 0019)
+
+- A clinic can **delete** a job only if it was never live and has no applications. Anything else is **closed**, so candidates keep their record of applying. The database enforces this, not just the buttons. A draft or rejected job that was once live can also be closed.
+- When a **live job is edited**, the wording candidates were seeing is kept in `job_versions`. The review queue lists what changed. Only the server (admin) can read these copies.
+- The review queue now shows "Area covered" and "Anything else that is part of the pay", and the automatic checks (including Canadian experience) run over them. The Post a job form checks them too.
+- The limit of 10 open jobs holds even if two posts arrive at the same moment.
+- Deleting an account writes a row to `account_deletions` (the role, and how many jobs and applications went with it, with no names or addresses).
+- **Still to decide with the lawyer (audit R5):** deleting a clinic account still removes the jobs and the applications it received from candidates' trackers, and deleting a candidate removes their applications from clinics. Candidates' own copies (title, clinic name, location) are already stored on each application, so keeping them after a clinic leaves is possible once the retention rule is agreed.
+
+## Saves that used to fail (audit R6)
+
+Saving a cover letter draft, a cover letter and a job template used an "upsert", which the database refuses for signed in people because it also rewrites the columns that identify the row. They now update first and add only if nothing matched (`lib/save-helpers.ts`). Replacing a letter or template with the same name also no longer counts against the limit of 5 letters and 20 templates.

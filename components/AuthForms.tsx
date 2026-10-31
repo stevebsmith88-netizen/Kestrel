@@ -12,7 +12,17 @@ type Action = (prev: FormState, form: FormData) => Promise<FormState>;
 // Sends the form without React's automatic reset, so a wrong password does not
 // clear what the person typed.
 function useAuthForm(action: Action) {
-  const [state, run, pending] = useActionState(action, {} as FormState);
+  // If sending fails (a dropped signal, a time out), show a message and keep what was typed.
+  const safe: Action = async (prev, form) => {
+    try {
+      return await action(prev, form);
+    } catch (e) {
+      // A redirect after a successful save is not a failure, so let it through.
+      if (String((e as { digest?: unknown } | null)?.digest ?? "").startsWith("NEXT_REDIRECT")) throw e;
+      return { ...prev, error: "We couldn't send that just now. Please check your connection and try again." };
+    }
+  };
+  const [state, run, pending] = useActionState(safe, {} as FormState);
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
