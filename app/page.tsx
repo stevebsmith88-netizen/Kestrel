@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import EyeCareNumbers from "@/components/EyeCareNumbers";
 import HomeBlogStrip from "@/components/HomeBlogStrip";
+import { homeBlogOn } from "@/lib/features";
 import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
 
@@ -58,7 +59,7 @@ export default function ComingSoon() {
           <EyeCareNumbers />
         </section>
 
-        <HomeBlogStrip />
+        {homeBlogOn() && <HomeBlogStrip />}
 
         <section className="join" id="join">
           <div className="wrap grid">
