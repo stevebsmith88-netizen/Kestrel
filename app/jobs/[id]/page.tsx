@@ -77,8 +77,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 ) : (
                   <>
-                    <p>Apply with your saved CV and a short cover letter. It takes a couple of minutes, and you can follow your application as the employer reviews it.</p>
-                    <Link href={`/jobs/${job.id}/apply`} className="btn">Apply with Kestrel</Link>
+                    <p>Use your saved CV and, if you like, a short cover note. It takes about a minute, and you can follow your application as the employer reviews it.</p>
+                    <Link href={`/jobs/${job.id}/apply`} className="btn">Quick Apply</Link>
                   </>
                 )}
               </section>
