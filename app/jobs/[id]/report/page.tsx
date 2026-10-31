@@ -21,8 +21,8 @@ export default async function ReportJob({ params }: { params: Promise<{ id: stri
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
-          <p className="kicker">Report this job</p>
-          <h1>{job.title}</h1>
+          <p className="kicker">{job.title}</p>
+          <h1>Report this job</h1>
           <p className="lede2">{job.employers?.clinic_name} · {job.city}, {job.province}. Thank you for helping keep Kestrel honest. A person reads every report.</p>
           <ReportForm jobId={job.id} />
         </div>

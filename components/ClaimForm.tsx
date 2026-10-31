@@ -47,7 +47,7 @@ export default function ClaimForm({ jobId, defaultEmail, host }: { jobId: string
       <div className={`row ${e.authorised ? "invalid" : ""}`}>
         <label className="choice agree">
           <input type="checkbox" name="authorised" value="yes" />
-          <span>I am authorised to post on behalf of this clinic, and I agree to the <Link href="/terms" target="_blank">Terms of use</Link>, the <Link href="/posting-policy" target="_blank">Posting policy</Link> and the <Link href="/privacy" target="_blank">Privacy policy</Link>.</span>
+          <span>I am authorised to post on behalf of this clinic, and I agree to the <Link href="/terms" target="_blank">Terms of use<span className="sr"> (opens in a new tab)</span></Link>, the <Link href="/posting-policy" target="_blank">Posting policy<span className="sr"> (opens in a new tab)</span></Link> and the <Link href="/privacy" target="_blank">Privacy policy<span className="sr"> (opens in a new tab)</span></Link>.</span>
         </label>
         {e.authorised && <p className="err" role="alert">{e.authorised}</p>}
       </div>

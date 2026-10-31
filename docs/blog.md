@@ -13,8 +13,8 @@ Writing text: a blank line between paragraphs, `## ` for a heading, `- ` for a b
 Good topics, each aimed at a real search:
 
 1. How to become an optician in Canada, by province (check each college's current rules before publishing)
-2. Optometric assistant jobs in Canada: what the work is and what it pays
-3. Questions to ask in an optician job interview
+2. ~~Optometric assistant jobs in Canada: what the work is and what it pays~~ (published 31st October 2026)
+3. ~~Questions to ask in an optician job interview~~ (published 31st October 2026)
 4. A guide to pay ranges and pay transparency for clinics, province by province
 5. Locum optometrist work in Canada: how it works
 6. What an optical lab technician does

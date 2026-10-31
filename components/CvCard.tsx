@@ -30,7 +30,7 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
         {state.message && <p className="ok-msg" role="status">{state.message}</p>}
         <button type="submit" className="btn sm" disabled={pending}>{pending ? "Uploading" : "Upload"}</button>
       </form>
-      <p className="help">Stored privately in Canada. Only a clinic you apply to can open it, through a link that works for one minute. You can delete it at any time.</p>
+      <p className="help">Stored privately in Canada. Only a clinic you apply to can open it, through a link that works for 1 minute. You can delete it at any time.</p>
     </section>
   );
 }

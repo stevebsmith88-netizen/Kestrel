@@ -77,7 +77,7 @@ export function validate(raw: Partial<WaitlistInput>) {
   if (v.role === "__other__" && !v.roleOther) errors.roleOther = "Tell us your role.";
   if (v.role && v.role !== "__other__" && !(ROLES as readonly string[]).includes(v.role)) errors.role = "Choose an option.";
   if (!(PROVINCES as readonly string[]).includes(v.province)) errors.province = "Choose an option.";
-  if (!v.consent) errors.consent = "Check the box to continue.";
+  if (!v.consent) errors.consent = "Tick the box to continue.";
   const role = v.role === "__other__" ? `Other: ${v.roleOther}` : v.role;
   return { values: { ...v, role }, errors, ok: Object.keys(errors).length === 0 };
 }

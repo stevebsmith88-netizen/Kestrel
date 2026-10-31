@@ -33,6 +33,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     "@type": "Article",
     headline: post.title,
     description: post.description,
+    image: [`${SITE}/brand/kestrel-share-1200x630.png`],
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
     author: { "@type": "Organization", name: "Kestrel Eye Care Jobs", url: SITE },

@@ -7,17 +7,26 @@ import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRA
 import { PAGE_SIZE, cleanFilters, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = shareMetadata({
-  title: "Find eye care jobs",
-  description: "Eye care jobs across Canada, in independent and corporate practices. Every job shows its pay.",
-  path: "/jobs",
-});
+// Every search and page number is its own address with the same title, so only the plain /jobs page is offered to Google.
+// Searches and later pages can still be followed to the jobs, but they are not listed.
+export async function generateMetadata({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
+  const filters = cleanFilters(await searchParams);
+  const narrowed = Boolean(filters.q || filters.province || filters.role || filters.type || filters.practice || filters.arrangement || (filters.page ?? 1) > 1);
+  return {
+    ...shareMetadata({
+      title: "Find eye care jobs",
+      description: "Eye care jobs across Canada, in independent and corporate practices. Every job shows its pay.",
+      path: "/jobs",
+    }),
+    ...(narrowed ? { robots: { index: false, follow: true } } : {}),
+  };
+}
 
 export const dynamic = "force-dynamic";
 
 function pageHref(filters: JobFilters, page: number) {
   const params = new URLSearchParams();
-  (["q", "province", "role", "type", "practice"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
+  (["q", "province", "role", "type", "practice", "arrangement"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
   return qs ? `/jobs?${qs}` : "/jobs";
@@ -26,7 +35,7 @@ function pageHref(filters: JobFilters, page: number) {
 export default async function Jobs({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const filters = cleanFilters(await searchParams);
   const { jobs, total } = await searchJobs(filters);
-  const filtered = Boolean(filters.q || filters.province || filters.role || filters.type || filters.practice);
+  const filtered = Boolean(filters.q || filters.province || filters.role || filters.type || filters.practice || filters.arrangement);
   const page = filters.page ?? 1;
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -109,7 +118,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                     </div>
                     <div className="jobside">
                       <span className="meta">Posted {longDate(j.posted_at)}</span>
-                      <Link href={`/jobs/${j.id}`} className="btn sm">View job</Link>
+                      <Link href={`/jobs/${j.id}`} className="btn sm" aria-label={`View job: ${j.title}`}>View job</Link>
                     </div>
                   </article>
                 ))}

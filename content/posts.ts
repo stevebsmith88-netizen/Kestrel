@@ -4,11 +4,101 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "optometric-assistant-jobs-canada",
+    title: "Optometric assistant jobs in Canada: the work and the pay",
+    description: "What an optometric assistant does day to day, what the job pays across Canada, and how to start or move up in an eye care clinic.",
+    date: "2026-10-31",
+    body: `An optometric assistant is the person who keeps an eye exam running smoothly. You are the first friendly face a patient meets after reception, and the person who gets them ready for the optometrist. It is one of the most common ways into eye care, and a good job for someone who likes people, routine and learning how the instruments work.
+
+## What the work involves
+
+The details change from clinic to clinic, and from province to province, but most days include some mix of these:
+
+- **Pre-testing.** Taking a patient's history and running the first tests before the exam, such as measuring eye pressure, checking how the eyes work together, and taking images of the eye. Which tests you do depends on the equipment in the clinic.
+- **Looking after the exam room.** Preparing instruments, cleaning and putting them away, and keeping the day on time.
+- **Helping patients.** Explaining what is about to happen, teaching a new contact lens wearer how to insert and remove their lenses, and answering simple questions.
+- **The front of the clinic.** Booking appointments, checking in patients, and in smaller clinics some insurance and billing work.
+
+What an assistant is allowed to do is set by the optometrist you work with and the rules in your province. If a job ad is vague, ask which tests you would be trained to do.
+
+## What it pays
+
+Job Bank, the federal government's job site, shows a national median wage of about $23 an hour for optometric assistants, with most wages falling between about $18 and $30 an hour. Its most recent provincial medians were around $22 in Ontario, $22.50 in Alberta and $25 in British Columbia. These figures are updated from time to time, so check [Job Bank](https://www.jobbank.gc.ca/marketreport/wages-occupation/27193/ca) for the current numbers before you negotiate.
+
+Pay usually moves with experience, the equipment you are trained on, the hours you work and the size of the practice. In several provinces a job ad now has to show the pay, so you should not need to guess. Our [checklist for job ads](/blog/eye-care-job-ad-checklist) explains what clinics must include.
+
+## How to get started
+
+Many clinics are happy to train a keen, reliable person on the job, and some prefer it. Others look for a course or certificate in optometric assistant work, which a few colleges and professional associations offer. Ask the clinics you apply to what they prefer, and do not be put off if you have no experience yet. Customer service, retail, health care and reception work all count.
+
+A short [cover letter](/blog/cover-letter-optical-job) that says why you want to work in eye care often matters as much as a long CV.
+
+## Where it can lead
+
+- **Lead assistant or clinic manager.** Running the team, the schedule and the day to day of the practice.
+- **Optician.** Many assistants study to become opticians, so they can fit and dispense glasses and contact lenses.
+- **A role with a supplier.** Lens and frame companies hire people who know clinics, as trainers and account managers. See our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs).
+
+## Questions to ask before you accept
+
+- Which tests would I be trained to do, and who trains me?
+- What are the hours, including evenings and Saturdays?
+- How many assistants and optometrists work here, and how long have they been here?
+- Is there support for courses or certification?
+- What is the pay range, and how often is pay reviewed?
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "optician-interview-questions",
+    title: "Questions to ask in an optician job interview",
+    description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
+    date: "2026-10-31",
+    body: `An interview works both ways. The clinic is deciding if you are right for the job, and you are deciding whether you want to spend your days there. Opticians have more choice than most people think, so it is worth asking good questions. Here are the ones that tell you the most.
+
+## About the practice
+
+- **Is this an independent clinic or part of a group?** Neither is better. They feel different, and the answer affects who makes decisions, how much choice you have over frames and suppliers, and how you progress.
+- **Who are the patients?** Families, older patients, children, a lot of contact lens wearers, a busy sports or specialty practice? You will do your best work if the mix suits you.
+- **What does the frame collection look like?** Ask who chooses it and how much say the opticians have.
+- **How many opticians and optometrists work here?** This tells you how busy you will be and who you can learn from.
+
+## About the day
+
+- **What does a normal day or week look like?** Ask about evenings, Saturdays and holiday cover.
+- **How do patients move from the exam room to the dispensary?** A clinic that has thought about this usually runs more smoothly.
+- **Is the lab work done here or sent out?** If it is done in the clinic, ask who does edging and repairs, and whether you would be trained.
+- **What equipment do you use?** It is fair to ask whether you will get training on anything new to you.
+
+## About pay and growth
+
+- **What is the pay range?** In several provinces a job ad must show it, so it should not be a surprise. If there is commission or a bonus, ask exactly how it is worked out and what a typical month looks like.
+- **What benefits are included, and when do they start?**
+- **Is there support for continuing education and licence fees?** Many provinces require opticians to keep learning, and the cost adds up.
+- **Who would I learn from, and what could this job lead to in 2 or 3 years?**
+
+## About the team
+
+- **Who would I report to, and how are they to work for?**
+- **Why is this position open?** A new role, a retirement and a replacement for someone who left are very different stories.
+- **How long have the opticians here been in their jobs?** A team that stays is usually a good sign.
+
+## Things to watch for
+
+A few things are worth a second look: no pay range anywhere, an ad that only says "fast paced" without saying what that means, a role that has been open for months, and answers that change when you ask the same question twice.
+
+## Be ready for their questions too
+
+Think of 3 short stories: a time you helped a difficult fit, a time you worked well with an optometrist, and a time you learned something new. A clear, warm [cover letter](/blog/cover-letter-optical-job) gives you a good start before you even sit down.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "eye-care-job-ad-checklist",
     title: "What every eye care job ad in Canada should include",
     description: "A plain checklist for clinics: the pay range, vacancy and AI questions, fair wording and the details that help the right person say yes.",
     date: "2026-10-30",
-    body: `A good job ad does two things. It helps the right person decide to apply, and it keeps you on the right side of the hiring rules that now apply in several provinces. This is the checklist we use at Kestrel. It is practical guidance, not legal advice, so check which rules apply to your employer.
+    body: `A good job ad does 2 things. It helps the right person decide to apply, and it keeps you on the right side of the hiring rules that now apply in several provinces. This is the checklist we use at Kestrel. It is practical guidance, not legal advice, so check which rules apply to your employer.
 
 ## 1. Show a real pay range
 
@@ -72,7 +162,7 @@ Pick 2 or 3 things that matter for this job, and give each a short example.
 - An optometric assistant might mention pre-testing, patient flow or experience with your kind of equipment.
 - A practice manager might mention scheduling, insurance billing or training new staff.
 
-Skip the long list of skills. One true example is stronger than five adjectives.
+Skip the long list of skills. One true example is stronger than 5 adjectives.
 
 ## Be clear about the practical things
 
@@ -90,7 +180,7 @@ End with something simple, such as "I would be glad to come in for a chat." Then
 
 ## A shape you can borrow
 
-- **Why this clinic:** one or 2 sentences.
+- **Why this clinic:** 1 or 2 sentences.
 - **What you would bring:** 2 or 3 short examples.
 - **When you could start:** and which days you can work.
 

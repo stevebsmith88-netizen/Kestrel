@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 // A page that sets its own Open Graph details replaces the site's wholesale, so every page that can be shared
 // builds them here. Without this, every link previewed as "Coming soon, join the waitlist".
 const SITE_NAME = "Kestrel Eye Care Jobs";
-const IMAGE = "/brand/kestrel-lockup-full.png";
+// 1200 x 630, the size social sites expect, made from the logo file without changing it.
+const IMAGE = "/brand/kestrel-share-1200x630.png";
 
 export function shareMetadata({ title, description, path, type = "website", shareTitle }: { title: string; description: string; path: string; type?: "website" | "article"; shareTitle?: string }): Metadata {
   const shown = shareTitle ?? title;
@@ -12,7 +13,7 @@ export function shareMetadata({ title, description, path, type = "website", shar
     title: `${title} | ${SITE_NAME}`,
     description,
     alternates: { canonical: path },
-    openGraph: { title: shown, description, url: path, siteName: SITE_NAME, locale: "en_CA", type, images: [{ url: IMAGE, alt: SITE_NAME }] },
+    openGraph: { title: shown, description, url: path, siteName: SITE_NAME, locale: "en_CA", type, images: [{ url: IMAGE, width: 1200, height: 630, alt: SITE_NAME }] },
     twitter: { card: "summary", title: shown, description, images: [IMAGE] },
   };
 }

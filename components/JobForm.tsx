@@ -118,7 +118,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
         <input id="jf-extras" name="payExtras" type="text" maxLength={300} defaultValue={initial.pay_extras} />
       </Field>
 
-      <h2 className="formh">Two quick questions</h2>
+      <h2 className="formh">2 quick questions</h2>
       <Choices name="existingVacancy" label="Is this an existing vacancy?" options={YES_NO} value={initial.is_existing_vacancy} error={e.existingVacancy} hint="Choose No if you are building a pool of candidates for the future." />
       <Choices name="usesAi" label="Do you use AI to screen or select candidates?" options={YES_NO} value={initial.uses_ai_screening} error={e.usesAi} hint="Ontario requires employers to say so from 1st January 2026." />
 
@@ -161,7 +161,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
         <div className="templatebox">
           <label className="choice agree">
             <input type="checkbox" name="saveTemplate" value="yes" checked={saveTemplate} onChange={(ev) => setSaveTemplate(ev.target.checked)} />
-            <span>Also keep this as a template, so I can start a similar post next time. The two questions above are not kept, so you answer them fresh each time.</span>
+            <span>Also keep this as a template, so I can start a similar post next time. The 2 questions above are not kept, so you answer them fresh each time.</span>
           </label>
           {saveTemplate && (
             <Field id="jf-tname" label="Template name" hint="For example: Full time optician, Victoria. Using a name you already have replaces that template.">

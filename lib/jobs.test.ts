@@ -9,6 +9,7 @@ import {
   FIELD_ROLES,
   practiceLabel,
   jobPostingJsonLd,
+  markupDescription,
   longDate,
   employerFlags,
   mentionsCanadianExperience,
@@ -173,6 +174,21 @@ test("structured data matches the page", () => {
   assert.equal(data.baseSalary.value.unitText, "YEAR");
   assert.equal(data.datePosted, "2026-11-01");
   assert.equal(data.url, "https://eyecarejobs.ca/jobs/abc");
+  assert.deepEqual(data.hiringOrganization, { "@type": "Organization", name: "Harbourside Optical" });
+});
+
+test("structured data text is made safe and carries what the page shows", () => {
+  assert.equal(markupDescription({ description: "Need <2 years & a licence\nSecond line" }), "Need &lt;2 years &amp; a licence<br>Second line");
+  const field = markupDescription({ description: "Visit clinics.", work_arrangement: "field", territory: "Southern Ontario", pay_extras: "Commission and a car" });
+  assert.equal(field, "Visit clinics.<br><br>Area covered: Southern Ontario<br><br>Also part of the pay: Commission and a car");
+  // the area only shows for field based roles, so it is only given for them
+  assert.equal(markupDescription({ description: "Clinic job.", work_arrangement: "on_site", territory: "Ottawa" }), "Clinic job.");
+  const locum = jobPostingJsonLd(
+    { id: "x", title: "Locum", description: "d", employment_type: "Locum", province: "Ontario", city: "Toronto", pay_period: "hour", pay_min: 80, pay_max: 100, apply_method: "kestrel", apply_url: null, posted_at: "2026-11-01T00:00:00Z", expires_at: "2026-12-01T00:00:00Z" },
+    { clinic_name: "C", website: null },
+    "https://eyecarejobs.ca",
+  );
+  assert.deepEqual(locum.employmentType, ["TEMPORARY", "CONTRACTOR"]);
 });
 
 test("employerFlags points out clinics that look unlike a direct employer", () => {
