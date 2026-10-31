@@ -6,7 +6,9 @@ import { getMyEmployer } from "@/lib/clinic";
 import { practiceLabel, type JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
-const MODEL = "claude-opus-5-5";
+// Sonnet 5.5 writes a good ad at a fraction of the cost of the largest model. Set AD_BUILDER_MODEL in Vercel to try another
+// (for example claude-haiku-5-5 for the lowest cost) without a code change.
+const MODEL = process.env.AD_BUILDER_MODEL || "claude-sonnet-5-5";
 const DAILY_LIMIT = 15;
 
 const SYSTEM = `You write job ads for eye care clinics, suppliers and manufacturers in Canada, for a job board called Kestrel Eye Care Jobs.
@@ -68,7 +70,7 @@ export async function buildAd(_prev: JobFormState, form: FormData): Promise<JobF
     // Fallbacks keep a request from failing if the first model declines it.
     const response = await client.beta.messages.create({
       model: MODEL,
-      max_tokens: 8000,
+      max_tokens: 3000,
       betas: ["server-side-fallback-2026-07-01"],
       fallbacks: "default",
       output_config: { effort: "low" },

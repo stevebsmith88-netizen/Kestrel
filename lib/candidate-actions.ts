@@ -61,6 +61,7 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
     return { error: "We couldn't save your profile. Please try again." };
   }
   revalidatePath("/candidate");
+  revalidatePath("/candidate/profile");
   return { message: "Your profile is saved." };
 }
 

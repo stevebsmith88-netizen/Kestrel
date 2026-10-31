@@ -54,7 +54,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
         <section className="card setup">
           <h2>One thing first</h2>
           <p>Save your CV and choose your role, and then you can apply in a few clicks.</p>
-          <Link href="/candidate/profile" className="btn">Complete my profile</Link>
+          <Link href={`/candidate/profile?next=${next}`} className="btn">Complete my profile</Link>
         </section>
       );
     } else {

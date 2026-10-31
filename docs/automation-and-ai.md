@@ -21,7 +21,7 @@ To switch it on, add `CRON_SECRET` in Vercel (Settings, Environment Variables) a
 On the Post a job page, a clinic types a few lines about the role and presses **Write my ad**. Claude writes a draft (never including pay, contact details, Canadian experience requirements or invented facts), which goes into the ad box for the clinic to edit. The clinic always reads it before submitting, and our review still checks every post.
 
 - Needs `ANTHROPIC_API_KEY` (create one at console.anthropic.com). Without it, the builder is hidden and clinics write by hand.
-- Uses Claude Opus 5.5, with the safety fallback switched on. Each draft costs roughly a cent or two.
+- Uses Claude Sonnet 5.5 by default, with the safety fallback switched on and a cap of 3,000 tokens a draft. Set `AD_BUILDER_MODEL` in Vercel to try another model (for example `claude-haiku-5-5` for the lowest cost). The ad is 120 to 300 words, so each draft costs a small fraction of a cent to a few cents.
 - Each clinic can use it 15 times a day (counted in `ad_builder_uses`, migration 0007).
 
 ## Setting up
