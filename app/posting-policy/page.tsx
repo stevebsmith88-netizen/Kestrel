@@ -4,11 +4,13 @@ import AppFooter from "@/components/AppFooter";
 import DraftNotice from "@/components/DraftNotice";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Posting policy | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "Posting policy",
   description: "What every job posted on Kestrel must include, and what is not allowed.",
-};
+  path: "/posting-policy",
+});
 
 const UPDATED = "30th October 2026";
 const DRAFT = true;

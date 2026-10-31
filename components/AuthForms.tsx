@@ -98,13 +98,13 @@ export function SignInForm({ notice, next, google = false }: { notice?: string; 
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Signing in" : "Sign in"}</button>
       <p className="alt"><Link href="/forgot-password">Forgot your password?</Link></p>
-      <p className="alt">New to Kestrel? <Link href="/sign-up">Create an account</Link></p>
+      <p className="alt">New to Kestrel? <Link href={next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up"}>Create an account</Link></p>
     </form>
     </>
   );
 }
 
-export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean }) {
+export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, next }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean; next?: string }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -122,8 +122,9 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
       <p className="auth-intro">
         Free to join. Candidates can save a CV and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and job alerts.
       </p>
-      {google && <GoogleButton next={`/welcome?type=${defaultType}`} note="Next, you will choose whether you are looking for a job or hiring." />}
+      {google && <GoogleButton next={`/welcome?type=${defaultType}${next ? `&next=${encodeURIComponent(next)}` : ""}`} note="Next, you will choose whether you are looking for a job or hiring." />}
     <form onSubmit={submit} noValidate>
+      {next && <input type="hidden" name="next" value={next} />}
       <div className="row">
         <p className="lab" id="su-type">I am</p>
         <div className="choices" role="radiogroup" aria-labelledby="su-type">
@@ -212,10 +213,11 @@ export function ResetPasswordForm() {
   );
 }
 
-export function WelcomeForm({ defaultType = "candidate", email, hasName, inviteOnly = false }: { defaultType?: "candidate" | "clinic"; email: string; hasName: boolean; inviteOnly?: boolean }) {
+export function WelcomeForm({ defaultType = "candidate", email, hasName, inviteOnly = false, next }: { defaultType?: "candidate" | "clinic"; email: string; hasName: boolean; inviteOnly?: boolean; next?: string }) {
   const { state, pending, submit } = useAuthForm(chooseAccountType);
   return (
     <form onSubmit={submit} noValidate>
+      {next && <input type="hidden" name="next" value={next} />}
       <h1>Welcome to Kestrel</h1>
       <p className="auth-intro">You are signed in as <strong>{email}</strong>. One last step, so we can set up the right account.</p>
       <div className="row">

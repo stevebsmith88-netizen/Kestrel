@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Contact | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "Contact",
   description: "How to reach the Kestrel team.",
-};
+  path: "/contact",
+});
 
 export default async function Contact() {
   return (

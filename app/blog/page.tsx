@@ -6,12 +6,13 @@ import { getSession } from "@/lib/auth";
 import { readingMinutes } from "@/lib/blog";
 import { longDate } from "@/lib/jobs";
 import { POSTS } from "@/content/posts";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Eye care hiring and career advice | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "Eye care hiring and career advice",
   description: "Plain advice for Canadian clinics and eye care professionals: writing job ads, applying for jobs, pay, and field based roles.",
-  alternates: { canonical: "/blog" },
-};
+  path: "/blog",
+});
 
 export default async function Blog() {
   const posts = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));

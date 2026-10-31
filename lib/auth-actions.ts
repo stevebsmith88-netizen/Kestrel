@@ -36,6 +36,8 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   const password = String(form.get("password") ?? "");
   const agree = form.get("agree") === "on";
   const marketing = form.get("marketing") === "on";
+  // Where to go after the email is confirmed, for example back to the job someone was applying to.
+  const after = safeNext(String(form.get("next") ?? ""), "");
 
   if (!ACCOUNT_TYPES.some((a) => a.value === accountType)) return { error: "Choose whether you are looking for a job or hiring." };
   if (!firstName) return { error: "Enter your first name." };
@@ -61,6 +63,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
         marketing_consent: marketing,
         marketing_consent_text: marketing ? MARKETING_CONSENT_TEXT : null,
         terms_version: TERMS_VERSION,
+        ...(after && accountType === "candidate" ? { signup_next: after } : {}),
       },
     },
   });
@@ -72,7 +75,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     if (error.code === "signup_disabled" || error.code === "email_provider_disabled") return { error: "Sign ups are paused right now. Please try again later." };
     return { error: `We couldn't create your account. Please try again. (Reference: ${error.code ?? error.status ?? "unknown"})` };
   }
-  if (data.session) redirect("/dashboard");
+  if (data.session) redirect(accountType === "candidate" && after ? after : "/dashboard");
   return { message: "We have sent a link to your email. Open it to confirm your address, then sign in.", email };
 }
 
@@ -173,5 +176,5 @@ export async function chooseAccountType(_prev: FormState, form: FormData): Promi
     console.error("Account type save failed:", error?.code, error?.message);
     return { error: "We couldn't save that. Please try again." };
   }
-  redirect(accountType === "clinic" ? "/clinic" : "/candidate");
+  redirect(accountType === "clinic" ? "/clinic" : safeNext(String(form.get("next") ?? ""), "/candidate"));
 }

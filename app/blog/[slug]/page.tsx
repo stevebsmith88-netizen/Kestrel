@@ -8,6 +8,7 @@ import { getSession } from "@/lib/auth";
 import { readingMinutes } from "@/lib/blog";
 import { longDate } from "@/lib/jobs";
 import { POSTS } from "@/content/posts";
+import { shareMetadata } from "@/lib/share";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -19,12 +20,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = POSTS.find((p) => p.slug === slug);
   if (!post) return {};
-  return {
-    title: `${post.title} | Kestrel Eye Care Jobs`,
-    description: post.description,
-    alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: { title: post.title, description: post.description, type: "article", publishedTime: post.date, modifiedTime: post.updated ?? post.date, url: `${SITE}/blog/${post.slug}`, locale: "en_CA" },
-  };
+  const share = shareMetadata({ title: post.title, description: post.description, path: `/blog/${post.slug}`, type: "article" });
+  return { ...share, openGraph: { ...share.openGraph, type: "article", publishedTime: post.date, modifiedTime: post.updated ?? post.date, url: `${SITE}/blog/${post.slug}` } };
 }
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {

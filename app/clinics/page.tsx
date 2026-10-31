@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "For clinics | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "For clinics",
   description: "Post jobs and reach eye care professionals across Canada. Join the waitlist to be first invited to post.",
-};
+  path: "/clinics",
+});
 
 export default function Clinics() {
   return (

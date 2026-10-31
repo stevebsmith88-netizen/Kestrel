@@ -34,7 +34,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
         <p>Create a free account, save your CV once, and apply to any job in a few clicks.</p>
         <div className="formbtns">
           <Link href={`/sign-in?next=${next}`} className="btn">Sign in</Link>
-          <Link href="/sign-up" className="btn ghost">Create a free account</Link>
+          <Link href={`/sign-up?next=${next}`} className="btn ghost">Create a free account</Link>
         </div>
       </section>
     );

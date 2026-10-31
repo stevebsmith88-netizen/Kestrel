@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Privacy policy | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "Privacy policy",
   description: "How Kestrel Eye Care Jobs collects, uses and protects your personal information.",
-};
+  path: "/privacy",
+});
 
 const UPDATED = "30th October 2026";
 const EMAIL = "privacy@eyecarejobs.ca";

@@ -20,6 +20,7 @@ Change one by creating the new key first, putting it in Vercel (Settings, Enviro
 | `RESEND_API_KEY` | Vercel only | Send email as Kestrel. Cannot read the database. | Resend, API Keys: create `kestrel-website`, swap, redeploy, delete the old one. |
 | Resend SMTP key (used by Supabase for sign up emails) | Supabase, Authentication, SMTP | Send email as Kestrel. | Create a new Resend key, paste it into Supabase's SMTP settings, delete the old one. |
 | `ANTHROPIC_API_KEY` | Vercel only | Run AI requests on our bill. Cannot read the database. Keep a monthly spend limit on it. | Anthropic console, API keys: create, swap, redeploy, delete the old one. |
+| `ADMIN_BACKUP_EMAIL` | Vercel only | Receives the same admin alerts as ADMIN_ALERT_EMAIL. Nothing else. | Change the value in Vercel and redeploy. |
 | `CLINIC_INVITE_CODE` | Vercel only | Lets someone who has the code create a clinic account while sign up is by invitation. Nothing else. | Choose a new code in Vercel (Production), redeploy, and send the new one to invited clinics. |
 | `TURNSTILE_SECRET_KEY` | Vercel only | Check bot test results as if it were the site's own. Cannot read the database. | Cloudflare, Turnstile, the widget, Settings: rotate the secret key, swap it in Vercel, redeploy. |
 | Google sign in Client Secret | Supabase only (Authentication, Providers, Google) | Pretend to be our Google sign in. Cannot read the database. | Google Cloud, Google Auth Platform, Clients: add a new secret, paste it into Supabase, then delete the old one. |

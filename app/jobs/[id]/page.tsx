@@ -6,6 +6,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { getLiveJob } from "@/lib/public-jobs";
+import { shareMetadata } from "@/lib/share";
 
 export const dynamic = "force-dynamic";
 
@@ -16,11 +17,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const job = await getLiveJob(id);
   if (!job) return { title: "Job not found | Kestrel Eye Care Jobs", robots: { index: false } };
   const where = `${job.city}, ${job.province}`;
-  return {
-    title: `${job.title} at ${job.employers?.clinic_name ?? "a clinic"}, ${where} | Kestrel Eye Care Jobs`,
+  const clinic = job.employers?.clinic_name ?? "a clinic";
+  return shareMetadata({
+    title: `${job.title} at ${clinic}, ${where}`,
+    shareTitle: `${job.title} at ${clinic}`,
     description: `${job.title} in ${where}. ${formatPay(job.pay_min, job.pay_max, job.pay_period)}.`,
-    alternates: { canonical: `/jobs/${job.id}` },
-  };
+    path: `/jobs/${job.id}`,
+  });
 }
 
 export default async function JobPage({ params }: { params: Promise<{ id: string }> }) {

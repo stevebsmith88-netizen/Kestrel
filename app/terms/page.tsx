@@ -4,11 +4,13 @@ import AppFooter from "@/components/AppFooter";
 import DraftNotice from "@/components/DraftNotice";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Terms of use | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "Terms of use",
   description: "The rules for using Kestrel Eye Care Jobs, for candidates and for clinics.",
-};
+  path: "/terms",
+});
 
 const UPDATED = "30th October 2026";
 const DRAFT = true;

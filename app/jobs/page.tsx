@@ -5,11 +5,13 @@ import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS, formatPay, longDate, practiceLabel } from "@/lib/jobs";
 import { PAGE_SIZE, cleanFilters, searchJobs, type JobFilters } from "@/lib/public-jobs";
+import { shareMetadata } from "@/lib/share";
 
-export const metadata: Metadata = {
-  title: "Find eye care jobs | Kestrel Eye Care Jobs",
+export const metadata: Metadata = shareMetadata({
+  title: "Find eye care jobs",
   description: "Eye care jobs across Canada, in independent and corporate practices. Every job shows its pay.",
-};
+  path: "/jobs",
+});
 
 export const dynamic = "force-dynamic";
 

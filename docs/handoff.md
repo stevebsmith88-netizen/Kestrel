@@ -56,7 +56,7 @@ Test tools that live in the repo (development only, never deployed):
 
 ## Accounts and settings (names only, never values)
 
-Vercel environment variables (Production and Preview): `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ANTHROPIC_API_KEY`, `CRON_SECRET`, `ADMIN_ALERT_EMAIL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `ENABLE_GOOGLE_SIGNIN`, optional `ENABLE_FIND_YOUR_FIT`, `CLINIC_INVITE_CODE` and `CLINIC_SIGNUP` (see docs/accounts-setup.md). Preview uses Cloudflare's test keys for Turnstile. Never ask Steve to paste a secret into chat.
+Vercel environment variables (Production and Preview): `NEXT_PUBLIC_SITE_URL`, `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `RESEND_API_KEY`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `ANTHROPIC_API_KEY`, `CRON_SECRET`, `ADMIN_ALERT_EMAIL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `ENABLE_GOOGLE_SIGNIN`, optional `ENABLE_FIND_YOUR_FIT`, `CLINIC_INVITE_CODE` and `CLINIC_SIGNUP` (see docs/accounts-setup.md), and the optional `DAILY_EMAIL_BUDGET` and `ADMIN_BACKUP_EMAIL` (see "The daily job and the health check" below). `EMAIL_REPLY_TO` now defaults to hello@eyecarejobs.ca in code. Preview uses Cloudflare's test keys for Turnstile. Never ask Steve to paste a secret into chat.
 
 ## Open items waiting on Steve
 
@@ -66,3 +66,17 @@ Account lockdown (2 step sign in everywhere, Vercel Sensitive secrets, domain lo
 
 1. Work on a branch. 2. `npm run typecheck && npm test && npm run build`. 3. Push the branch, Steve checks the preview. 4. Steve says merge, then fast forward `main`. Docs only changes may be merged without a preview but still need his go ahead in the conversation.
 New database changes are a new numbered migration, added to the combined file (`supabase/combined/run-everything.sql`, built from every migration plus `supabase/verify.sql`), and tested twice on a scratch database.
+
+## The daily job and the health check (audit R7, R8, R35)
+
+- **Send budget:** the daily job (`/api/cron/daily`) sends at most `DAILY_EMAIL_BUDGET` emails a run (default 50). Every email Kestrel sends, including "confirm your email", shares one Resend account, and the free plan refuses everything after 100 in a day. Whatever does not fit waits for tomorrow, and Steve is emailed when that happens. On Resend Pro, raise it.
+- **One run at a time:** the job takes a lock (`job_runs`, migration 0020) and gives up if another copy is running. Alerts are claimed before they are emailed, so nobody gets the same email twice. It reads alerts in pages, longest waiting first, and stops starting new work after 50 seconds.
+- **Failures are counted:** if any email fails, the run is marked as having problems and Steve is emailed. "ok" in the result now means nothing went wrong.
+- **Heartbeat:** each good run records when it finished. `/api/health` returns 503 if the database cannot be reached, if the daily job has not finished well for over 36 hours, or (on the live site only) if `CRON_SECRET`, `ADMIN_ALERT_EMAIL`, `RESEND_API_KEY` or either Turnstile key is missing. Point UptimeRobot at `/api/health`. The public answer is just `{"ok": true}` or false. Sending the header `Authorization: Bearer <CRON_SECRET>` also lists the missing setting names.
+- **Second alert contact:** set `ADMIN_BACKUP_EMAIL` and every admin alert goes to both addresses.
+- **Waiting too long:** each day, if any job has been in review, any listing claim has been pending, or any report has been open for over a day, Steve gets one email listing them.
+- **Clinic emails:** a clinic is emailed when a job is approved (or an edit is), when it needs a change (with the note), and 3 days before it closes (once, respecting the clinic's reminder choice).
+
+## The waitlist download
+
+`/admin/waitlist.csv` is now the "ready to email" list: confirmed, not unsubscribed, not on the do not email list, with each person's unsubscribe link. `/admin/waitlist.csv?all=1` is everyone with a status column. The public waitlist form never changes an address that is already on the list.

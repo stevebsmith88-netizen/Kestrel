@@ -26,9 +26,9 @@ export default async function Waitlist() {
           <p className="kicker">Admin</p>
           <h1>Waitlist</h1>
           <p className="lede2">
-            {count ?? rows.length} {(count ?? rows.length) === 1 ? "person" : "people"} on the list. <a href="/admin/waitlist.csv">Download as a spreadsheet</a>
+            {count ?? rows.length} {(count ?? rows.length) === 1 ? "person" : "people"} on the list. <a href="/admin/waitlist.csv">Download the ready to email list</a> (confirmed, not unsubscribed, with each person's unsubscribe link) or <a href="/admin/waitlist.csv?all=1">everyone, with a status column</a>
           </p>
-          <p className="help">People now confirm their address by email. Email the ones marked Confirmed first. Anyone marked "Joined before confirmation emails" ticked the consent box, but we never checked their address.</p>
+          <p className="help">People now confirm their address by email. Only email people from the ready to email download, never from the full list. Anyone marked "Joined before confirmation emails" ticked the consent box, but we never checked their address.</p>
           {rows.length === 0 ? (
             <section className="card"><p>Nobody has joined yet.</p></section>
           ) : (

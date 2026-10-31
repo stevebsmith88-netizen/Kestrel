@@ -4,7 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
-import { expiryFrom } from "@/lib/jobs";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { jobLiveEmail, jobNeedsChangeEmail } from "@/lib/clinic-emails";
+import { expiryFrom, longDate } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
 import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -13,6 +15,19 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // Publishing and rejecting always go through the server, after checking the person is an
 // admin. No browser can publish a job by itself.
+// Tells the clinic what happened to their job. Never stops the approval if the email fails.
+async function emailClinic(db: SupabaseClient, jobId: string, kind: "live" | "needs-change", extra: { wasEdit?: boolean; note?: string } = {}) {
+  const { data: job } = await db.from("jobs").select("title, employer_id, expires_at").eq("id", jobId).maybeSingle();
+  if (!job) return;
+  const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
+  if (!contact?.notify_email) return;
+  const mail =
+    kind === "live"
+      ? jobLiveEmail({ title: job.title, jobId, expiresLabel: job.expires_at ? longDate(job.expires_at) : null, wasEdit: Boolean(extra.wasEdit) })
+      : jobNeedsChangeEmail({ title: job.title, jobId, note: extra.note ?? "" });
+  await sendEmail({ to: contact.notify_email, ...mail });
+}
+
 export async function approveJob(form: FormData) {
   await requireRole("admin");
   const id = String(form.get("id") ?? "");
@@ -33,6 +48,7 @@ export async function approveJob(form: FormData) {
     console.error("Approve failed:", error?.code, error?.message);
     redirect("/admin/review?notice=error");
   }
+  await emailClinic(db, id, "live", { wasEdit: Boolean(before?.posted_at) });
   revalidatePath("/admin/review");
   revalidatePath("/jobs");
   redirect("/admin/review?notice=approved");
@@ -50,6 +66,7 @@ export async function rejectJob(form: FormData) {
     console.error("Reject failed:", error?.code, error?.message);
     redirect("/admin/review?notice=error");
   }
+  await emailClinic(db, id, "needs-change", { note });
   revalidatePath("/admin/review");
   redirect("/admin/review?notice=rejected");
 }

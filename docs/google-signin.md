@@ -20,7 +20,7 @@ The button "Continue with Google" is built, and stays hidden until it is switche
    - Copy the **Client ID** and **Client secret**. The secret is a password. It goes only into Supabase.
 2. **Supabase**, Authentication, Sign In / Providers, Google: switch it on, paste the Client ID and Client secret, save.
 3. **Supabase**, Authentication, URL Configuration: the Site URL is `https://eyecarejobs.ca`. Under Redirect URLs, add only `https://eyecarejobs.ca/**`. Do not add a wildcard for preview links such as `https://*-kestrel18.vercel.app/**`: anyone can name a free Vercel project to match it and capture a Google sign in. Use a separate Supabase project for previews instead (see `docs/audit/PHASE-0-WALKTHROUGH.md`, step 3).
-4. **Supabase SQL editor:** run the latest `supabase/combined/run-everything.sql` (migrations up to 0019). It makes new Google accounts start as "type not confirmed".
+4. **Supabase SQL editor:** run the latest `supabase/combined/run-everything.sql` (migrations up to 0020). It makes new Google accounts start as "type not confirmed".
 5. **Vercel:** add `ENABLE_GOOGLE_SIGNIN` with the value `yes` (Production and Preview) and redeploy. Remove it, or set it to anything else, and the button disappears again.
 
 ## Test it

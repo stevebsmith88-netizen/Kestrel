@@ -17,7 +17,9 @@ export async function GET(request: NextRequest) {
   if (db && tokenHash && type) {
     const { data, error } = await db.auth.verifyOtp({ type, token_hash: tokenHash });
     if (!error) {
-      const response = NextResponse.redirect(new URL(next, origin));
+      // Someone who signed up while applying to a job goes back to that job, whatever device they confirm on.
+      const saved = type === "signup" || type === "email" ? safeNext(String(data.user?.user_metadata?.signup_next ?? ""), "") : "";
+      const response = NextResponse.redirect(new URL(saved || next, origin));
       // A password reset link also leaves a short lived, signed note that lets the next page change the password.
       const secret = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
       if (type === "recovery" && data.user && secret) {
