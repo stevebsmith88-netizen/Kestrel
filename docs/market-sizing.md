@@ -46,6 +46,21 @@ Not usable as a headcount: IBISWorld's 14,150 "optometrist employment" is the wh
 | Independent practices (Kestrel's core customer) | about 2,000 to 4,000 | A: roughly half of practices. Independents sold 44% of eyewear units in 2019, and tend to be a majority of locations |
 | Average roles advertised a year per practice | about 0.3 to 1.6 (central case about 0.7) | 2,200 to 6,900 over 4,300 to 7,000 practices |
 
+## Sensitivity: how often clinics hire
+
+Steve's experience is that many clinics recruit far more often than once or twice a year. That fits the high turnover typical of optical retail and clinic support roles, and public data cannot confirm or deny it. So here is the same model with higher turnover. The public home page deliberately uses only the cautious floor.
+
+| Case | Turnover and growth a year | Hires a year | Roles advertised (60% to 80%) | Per practice |
+| --- | --- | --- | --- | --- |
+| Cautious (used on the home page) | 12% to 22% | 3,700 to 8,600 | 2,200 to 6,900 | 0.3 to 1.6 |
+| Higher turnover (Steve's experience) | 25% to 40% | 7,800 to 15,600 | 4,700 to 12,500 | 0.7 to 2.9 |
+
+At the higher turnover, the plan's roughly 800 paid posts a year is about 6% to 17% of all advertised roles, not 20% or more. That is far easier to reach, and means the revenue plan is more credible than the cautious case suggests. Which case is right is the most important unknown in the plan. Steve's weekly counts, and Kestrel's own traffic in its first months, will show it.
+
+## A note on member clinics
+
+Several hundred of the independent clinics in Canada are members of Steve's employer. Using no employer data and no member contact means they are out of reach unless an arrangement is agreed. If they are around a sixth to a third of independent practices (about 2,000 to 4,000, above), the rest of the market is still large, but a members benefit arrangement would add a lot. This depends on the disclosure and the lawyer (pack, Part A). The figure is deliberately kept out of this repository.
+
 ## What this means for the plan (coaching view)
 
 The revenue plan in `docs/PLAN.md` needs about **47 clinic passes and 550 single posts**.
