@@ -5,6 +5,9 @@ import HomeBlogStrip from "@/components/HomeBlogStrip";
 import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
 
+// Built ahead of time, and rebuilt at least hourly, so a scheduled post appears on the home page soon after its date.
+export const revalidate = 3600;
+
 export default function ComingSoon() {
   return (
     <>

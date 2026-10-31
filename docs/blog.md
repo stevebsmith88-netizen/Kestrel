@@ -8,6 +8,16 @@ What each page gets for search engines: its own title, description and address, 
 
 Writing text: a blank line between paragraphs, `## ` for a heading, `- ` for a bullet list, `**bold**`, and `[text](/jobs)` for links (an address on the site, or one starting with https://).
 
+## Scheduling
+
+A post is shown from the start of its `date` (Toronto time). Give a new post a future date and it waits: it is not on the blog, the home page or the sitemap, and its own address is a 404, until that day. The home page is rebuilt at least hourly, so it picks the post up soon after midnight Eastern.
+
+On previews, scheduled posts are visible and marked "Scheduled for ...", so Steve can read and approve a post before it goes out. On the live site (Vercel's Production environment) they stay hidden.
+
+Posts are spaced about 1 every 2 weeks, on Fridays. Never link to a post that is dated later than the one doing the linking (the tests check this). Do not change the date of a post that is already out.
+
+Schedule so far: 3 posts published on 30th October 2026, then 13th November 2026 (optometric assistant jobs and pay), then 27th November 2026 (optician interview questions).
+
 ## What to write next (about 1 post a fortnight)
 
 Good topics, each aimed at a real search:

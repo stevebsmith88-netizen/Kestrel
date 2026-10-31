@@ -6,6 +6,7 @@ import { getSession } from "@/lib/auth";
 import { readingMinutes } from "@/lib/blog";
 import { longDate } from "@/lib/jobs";
 import { POSTS } from "@/content/posts";
+import { isPublished, visiblePosts } from "@/lib/blog";
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
@@ -15,7 +16,7 @@ export const metadata: Metadata = shareMetadata({
 });
 
 export default async function Blog() {
-  const posts = [...POSTS].sort((a, b) => b.date.localeCompare(a.date));
+  const posts = visiblePosts([...POSTS]).sort((a, b) => b.date.localeCompare(a.date));
   return (
     <>
       <SiteHeader session={await getSession()} />
@@ -27,7 +28,7 @@ export default async function Blog() {
           <div className="postlist">
             {posts.map((p) => (
               <article className="card" key={p.slug}>
-                <p className="meta">{longDate(p.date)} · {readingMinutes(p.body)} min read</p>
+                <p className="meta">{isPublished(p) ? longDate(p.date) : `Scheduled for ${longDate(p.date)} (only visible on previews)`} · {readingMinutes(p.body)} min read</p>
                 <h2><Link href={`/blog/${p.slug}`}>{p.title}</Link></h2>
                 <p>{p.description}</p>
                 <p><Link href={`/blog/${p.slug}`}>Read the article</Link></p>

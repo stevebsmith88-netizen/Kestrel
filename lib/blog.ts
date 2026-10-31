@@ -45,3 +45,17 @@ export function parseInline(text: string): Inline[] {
 
 export const wordCount = (body: string) => body.trim().split(/\s+/).filter(Boolean).length;
 export const readingMinutes = (body: string) => Math.max(1, Math.round(wordCount(body) / 220));
+
+// Scheduled posts. A post is shown from the start of its date in Toronto, so a post dated 13th November 2026 appears at midnight
+// Eastern on the 13th. Before that it is not on the blog, the home page or the sitemap, and its own address is a 404.
+// On the live site only published posts are shown. Previews and local work show scheduled ones too (marked as scheduled),
+// so a post can be read and approved before its date.
+export const todayInToronto = (now: Date = new Date()) => now.toLocaleDateString("en-CA", { timeZone: "America/Toronto" });
+
+export const isPublished = (post: { date: string }, now: Date = new Date()) => post.date <= todayInToronto(now);
+
+export const scheduledPostsVisible = () => process.env.VERCEL_ENV !== "production";
+
+export function visiblePosts<T extends { date: string }>(posts: T[], now: Date = new Date(), showScheduled: boolean = scheduledPostsVisible()): T[] {
+  return showScheduled ? posts : posts.filter((p) => isPublished(p, now));
+}

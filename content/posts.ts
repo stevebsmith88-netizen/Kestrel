@@ -1,13 +1,57 @@
 import type { Post } from "../lib/blog.ts";
 
-// Blog posts, newest first. To add one, copy a block below and change it, then check with `npm test`.
+// Blog posts, newest first. A post is shown from its date (see isPublished in lib/blog.ts), so a future date schedules it. To add one, copy a block below and change it, then check with `npm test`.
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
+  {
+    slug: "optician-interview-questions",
+    title: "Questions to ask in an optician job interview",
+    description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
+    date: "2026-11-27",
+    body: `An interview works both ways. The clinic is deciding if you are right for the job, and you are deciding whether you want to spend your days there. Opticians have more choice than most people think, so it is worth asking good questions. Here are the ones that tell you the most.
+
+## About the practice
+
+- **Is this an independent clinic or part of a group?** Neither is better. They feel different, and the answer affects who makes decisions, how much choice you have over frames and suppliers, and how you progress.
+- **Who are the patients?** Families, older patients, children, a lot of contact lens wearers, a busy sports or specialty practice? You will do your best work if the mix suits you.
+- **What does the frame collection look like?** Ask who chooses it and how much say the opticians have.
+- **How many opticians and optometrists work here?** This tells you how busy you will be and who you can learn from.
+
+## About the day
+
+- **What does a normal day or week look like?** Ask about evenings, Saturdays and holiday cover.
+- **How do patients move from the exam room to the dispensary?** A clinic that has thought about this usually runs more smoothly.
+- **Is the lab work done here or sent out?** If it is done in the clinic, ask who does edging and repairs, and whether you would be trained.
+- **What equipment do you use?** It is fair to ask whether you will get training on anything new to you.
+
+## About pay and growth
+
+- **What is the pay range?** In several provinces a job ad must show it, so it should not be a surprise. If there is commission or a bonus, ask exactly how it is worked out and what a typical month looks like.
+- **What benefits are included, and when do they start?**
+- **Is there support for continuing education and licence fees?** Many provinces require opticians to keep learning, and the cost adds up.
+- **Who would I learn from, and what could this job lead to in 2 or 3 years?**
+
+## About the team
+
+- **Who would I report to, and how are they to work for?**
+- **Why is this position open?** A new role, a retirement and a replacement for someone who left are very different stories.
+- **How long have the opticians here been in their jobs?** A team that stays is usually a good sign.
+
+## Things to watch for
+
+A few things are worth a second look: no pay range anywhere, an ad that only says "fast paced" without saying what that means, a role that has been open for months, and answers that change when you ask the same question twice.
+
+## Be ready for their questions too
+
+Think of 3 short stories: a time you helped a difficult fit, a time you worked well with an optometrist, and a time you learned something new. A clear, warm [cover letter](/blog/cover-letter-optical-job) gives you a good start before you even sit down.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
   {
     slug: "optometric-assistant-jobs-canada",
     title: "Optometric assistant jobs in Canada: the work and the pay",
     description: "What an optometric assistant does day to day, what the job pays across Canada, and how to start or move up in an eye care clinic.",
-    date: "2026-10-31",
+    date: "2026-11-13",
     body: `An optometric assistant is the person who keeps an eye exam running smoothly. You are the first friendly face a patient meets after reception, and the person who gets them ready for the optometrist. It is one of the most common ways into eye care, and a good job for someone who likes people, routine and learning how the instruments work.
 
 ## What the work involves
@@ -48,50 +92,6 @@ A short [cover letter](/blog/cover-letter-optical-job) that says why you want to
 - What is the pay range, and how often is pay reviewed?
 
 [See eye care jobs across Canada](/jobs)`,
-  },
-  {
-    slug: "optician-interview-questions",
-    title: "Questions to ask in an optician job interview",
-    description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
-    date: "2026-10-31",
-    body: `An interview works both ways. The clinic is deciding if you are right for the job, and you are deciding whether you want to spend your days there. Opticians have more choice than most people think, so it is worth asking good questions. Here are the ones that tell you the most.
-
-## About the practice
-
-- **Is this an independent clinic or part of a group?** Neither is better. They feel different, and the answer affects who makes decisions, how much choice you have over frames and suppliers, and how you progress.
-- **Who are the patients?** Families, older patients, children, a lot of contact lens wearers, a busy sports or specialty practice? You will do your best work if the mix suits you.
-- **What does the frame collection look like?** Ask who chooses it and how much say the opticians have.
-- **How many opticians and optometrists work here?** This tells you how busy you will be and who you can learn from.
-
-## About the day
-
-- **What does a normal day or week look like?** Ask about evenings, Saturdays and holiday cover.
-- **How do patients move from the exam room to the dispensary?** A clinic that has thought about this usually runs more smoothly.
-- **Is the lab work done here or sent out?** If it is done in the clinic, ask who does edging and repairs, and whether you would be trained.
-- **What equipment do you use?** It is fair to ask whether you will get training on anything new to you.
-
-## About pay and growth
-
-- **What is the pay range?** In several provinces a job ad must show it, so it should not be a surprise. If there is commission or a bonus, ask exactly how it is worked out and what a typical month looks like.
-- **What benefits are included, and when do they start?**
-- **Is there support for continuing education and licence fees?** Many provinces require opticians to keep learning, and the cost adds up.
-- **Who would I learn from, and what could this job lead to in 2 or 3 years?**
-
-## About the team
-
-- **Who would I report to, and how are they to work for?**
-- **Why is this position open?** A new role, a retirement and a replacement for someone who left are very different stories.
-- **How long have the opticians here been in their jobs?** A team that stays is usually a good sign.
-
-## Things to watch for
-
-A few things are worth a second look: no pay range anywhere, an ad that only says "fast paced" without saying what that means, a role that has been open for months, and answers that change when you ask the same question twice.
-
-## Be ready for their questions too
-
-Think of 3 short stories: a time you helped a difficult fit, a time you worked well with an optometrist, and a time you learned something new. A clear, warm [cover letter](/blog/cover-letter-optical-job) gives you a good start before you even sit down.
-
-[Browse eye care jobs across Canada](/jobs)`,
   },
   {
     slug: "eye-care-job-ad-checklist",

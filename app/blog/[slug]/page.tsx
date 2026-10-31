@@ -8,17 +8,18 @@ import { getSession } from "@/lib/auth";
 import { readingMinutes } from "@/lib/blog";
 import { longDate } from "@/lib/jobs";
 import { POSTS } from "@/content/posts";
+import { isPublished, visiblePosts } from "@/lib/blog";
 import { shareMetadata } from "@/lib/share";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export function generateStaticParams() {
-  return POSTS.map((p) => ({ slug: p.slug }));
+  return visiblePosts(POSTS).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = POSTS.find((p) => p.slug === slug);
+  const post = visiblePosts(POSTS).find((p) => p.slug === slug);
   if (!post) return {};
   const share = shareMetadata({ title: post.title, description: post.description, path: `/blog/${post.slug}`, type: "article" });
   return { ...share, openGraph: { ...share.openGraph, type: "article", publishedTime: post.date, modifiedTime: post.updated ?? post.date, url: `${SITE}/blog/${post.slug}` } };
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = POSTS.find((p) => p.slug === slug);
+  const post = visiblePosts(POSTS).find((p) => p.slug === slug);
   if (!post) notFound();
   const jsonLd = {
     "@context": "https://schema.org",
@@ -41,7 +42,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     mainEntityOfPage: `${SITE}/blog/${post.slug}`,
     inLanguage: "en-CA",
   };
-  const more = POSTS.filter((p) => p.slug !== post.slug).slice(0, 2);
+  const more = visiblePosts(POSTS).filter((p) => p.slug !== post.slug && isPublished(p)).slice(0, 2);
   return (
     <>
       <SiteHeader session={await getSession()} />
@@ -49,6 +50,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
       <main id="main" tabIndex={-1} className="legal">
         <article className="wrap legal-wrap">
           <p className="back"><Link href="/blog">All articles</Link></p>
+          {!isPublished(post) && <p className="notice" role="note">Scheduled for {longDate(post.date)}. Only previews can see this page until then.</p>}
           <h1>{post.title}</h1>
           <p className="updated">By The Kestrel team · {longDate(post.date)} · {readingMinutes(post.body)} min read</p>
           <BlogBody body={post.body} />
