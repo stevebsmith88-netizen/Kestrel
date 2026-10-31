@@ -22,17 +22,15 @@ Do one service at a time. For each, in this order, so you can never lock yoursel
 | Google Workspace and Google Cloud | Two step sign in for every user and for the Google Cloud project that holds the sign in credentials. |
 | Resend, Anthropic, Cloudflare, UptimeRobot | Same method. Stripe later. |
 
-### 1.2 Search Console and the sitemap (about 30 minutes, free)
+### 1.2 Search Console and the sitemap (done 31st October 2026)
 
-Your blog is the long game for ranking. Search Console is how you see whether Google has found it, and it starts building data from day 1.
+Domain verified (the TXT record in Namecheap is what keeps it verified, so never delete it), the sitemap was submitted and Google found 11 pages. Google sign in branding (name, logo, privacy and terms links) is also verified in Google Cloud, and a Google Cloud budget alert is the one thing to keep in place since the account was upgraded.
 
-1. Go to search.google.com/search-console and sign in as kestrel@eyecarejobs.ca.
-2. Add property, choose **Domain**, and enter `eyecarejobs.ca`.
-3. Google shows a TXT record. In Namecheap, open the domain, Advanced DNS, Add new record, type TXT, host `@`, paste the value, save. Wait a few minutes, then press Verify in Search Console.
-4. Open Sitemaps in the left menu. Enter `sitemap.xml` and submit. The sitemap is at https://eyecarejobs.ca/sitemap.xml. It lists your public pages, live jobs and every blog post automatically.
-5. Open URL Inspection, paste your home page and each new blog post as you publish it, and press Request indexing.
-6. Check back weekly: Performance shows impressions, clicks and the searches people used. Note the numbers once a month in a simple sheet. They are the evidence for the conversation at work.
-7. Optional: Bing Webmaster Tools can import everything from Search Console in one click.
+What is still worth doing here:
+
+1. Open URL Inspection, paste your home page and each new blog post as you publish it, and press Request indexing.
+2. Check back weekly: Performance shows impressions, clicks and the searches people used. Note the numbers once a month in a simple sheet. They are the evidence for the conversation at work.
+3. Optional: Bing Webmaster Tools can import everything from Search Console in one click.
 
 ### 1.3 Blog routine (every 2 to 3 weeks)
 
