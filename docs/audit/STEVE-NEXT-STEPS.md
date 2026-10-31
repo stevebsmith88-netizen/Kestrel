@@ -84,6 +84,8 @@ A practical order: do the free searches now, let the lawyer advise on whether to
 
 ## 4. Market counts (check 19)
 
+**Use `docs/market-count-sheet.xlsx`.** It has a weekly grid, the rules, and a Summary tab that turns your counts into a yearly estimate. The table below is the older paper version of the same idea.
+
 Claude cannot run these. The project rules forbid scraping or automated reading of Indeed, LinkedIn, Jobs4ECPs and the college registers, and the sites' own terms forbid it too. A person reading a number off a search page and writing it down is fine, and is what the audit asked for.
 
 Do this once a week for 4 weeks. Counts only. Do not copy any ads.
