@@ -59,3 +59,13 @@ Gate C: 50 live roles across 5 or more provinces, job pages indexed, free to pai
 - Refresh CLAUDE.md, merge the 19 docs to about 9, issue a v8 plan note on the stack (R44).
 - Drop 4 unneeded settings and the duplicate code, update the cost estimate (R59).
 - Low items and ideas (R48, R51 to R53, R60).
+
+## Search and posting ideas agreed 31st October 2026 (to schedule, Steve to confirm timing)
+
+Steve's decisions so far. Nothing here is built.
+
+1. **Employment type as tick boxes, more than one at a time.** Full time, Part time, Fixed term, Locum. "Contract" is renamed "Fixed term" and means a role with an end, such as maternity cover or seasonal work. No database change if done in code only. If a database check constraint lists the old value, a small migration renames existing "Contract" jobs (run on both databases).
+2. **City and radius filter.** After a province is chosen, the city list shows only places with live jobs, with a count beside each (for example "Calgary (6)"), then a radius of 10, 25, 50 or 100 km. Needs a table of Canadian places with map positions (open data, check the licence), clinics choosing a place from that list when posting, matching of existing free text cities, and a distance query in Postgres. Straight line distance, not drive time. Needs a migration on both databases. Open questions: should remote and field roles always show whatever the radius, and how small a town should the list include (suggest about 1,000 people).
+3. **No pay filter.** Steve agreed it feels loaded. Pay stays visible on every job. Revisit a "sort by pay" only if clinics or candidates ask, and only after pay periods are normalised.
+4. **No years of experience filter.** Not requested, and it invites requirements that fit badly with the "Canadian experience" rule.
+5. **Pay benchmark for clinics, shown while posting.** A line such as "Your range is below, in line with or above what is typical for this role in this province", with the source and date. Use the word typical or median, not national average. Two sources, in this order: (a) Government of Canada Job Bank wage data by occupation and province, open data, check the licence and attribution before use and whether it can be fetched from our environment; (b) Kestrel's own posted ranges once a role and province has enough posts (suggest at least 10 before showing anything). Never scraped job board pay. It is guidance only and never blocks a post. Convert hourly and yearly pay to one basis before comparing. Ask the lawyer whether sharing pay benchmarks needs any wording or limits (add to the lawyer pack).
