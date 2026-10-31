@@ -1,0 +1,27 @@
+name: Checks
+
+# Runs on every pull request and every push to main.
+# Same three steps Claude runs by hand before each push: types, tests, build.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      # No secrets here on purpose: the build must work without them.
+      - run: npm run build
