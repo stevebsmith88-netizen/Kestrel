@@ -35,8 +35,8 @@ export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt 
     <form ref={form} onSubmit={onSubmit} noValidate className="stackform">
       <input type="hidden" name="jobId" value={jobId} />
       <section className="card" aria-labelledby="cl-h">
-        <h2 id="cl-h">Write a short cover letter</h2>
-        <p className="help">A few honest lines about why {clinicName} and what you would bring. Your CV says what you have done. Your letter says who you are.</p>
+        <h2 id="cl-h">Add a cover note (optional)</h2>
+        <p className="help"><strong>We recommend adding one.</strong> Clinics tend to read the personal ones first. A few honest lines about why {clinicName} and what you would bring. Your CV says what you have done. Your letter says who you are.</p>
         <p className="chips"><span className="chip">Why this clinic</span><span className="chip">What you would bring</span><span className="chip">When you could start</span></p>
         {letters.length > 0 && (
           <div className="letterpick">
@@ -51,7 +51,7 @@ export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt 
             <p className="help">Change it so it speaks to {clinicName}. Clinics can tell when a letter has been sent to 20 places.</p>
           </div>
         )}
-        <label className="lab" htmlFor="af-letter">Your cover letter</label>
+        <label className="lab" htmlFor="af-letter">Your cover note</label>
         <textarea id="af-letter" name="coverLetter" rows={11} value={letter} onChange={(e) => setLetter(e.target.value)} placeholder={`Dear ${clinicName} team,\n\nI am writing because...`} />
         <div className="letterfoot">
           <span className="help">About 100 to 200 words works well. Write it fresh for each job.</span>

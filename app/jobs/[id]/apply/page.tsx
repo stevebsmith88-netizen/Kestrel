@@ -82,7 +82,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
-          <p className="kicker">Easy Apply</p>
+          <p className="kicker">Quick Apply</p>
           <h1>Apply to {job.title}</h1>
           <p className="lede2">{clinic} · {job.city}, {job.province} · {formatPay(job.pay_min, job.pay_max, job.pay_period)}</p>
           <div className="stackcards">{body}</div>
