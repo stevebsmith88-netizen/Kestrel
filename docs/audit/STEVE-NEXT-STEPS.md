@@ -46,6 +46,22 @@ Claude writes and publishes posts from `content/posts.ts` (see `docs/blog.md`). 
 
 A separate, working copy of the site with sample data, to show people around before launch. Full steps in `docs/demo-site.md` (about 45 minutes once). It needs the pull request that adds demo mode merged first.
 
+## Next week (added 31st October 2026)
+
+**Steve**
+- Send rough notes for the 13th November blog post, by about the 8th: a real anonymised moment, 1 or 2 specifics (a number, a type of town, a role that led somewhere), what a good ad tells you that a weak one hides, and one thing you would tell a new grad or assistant. Names stay out.
+- Two step sign in on the remaining accounts, and booking the lawyer. Send anything back from the paralegal friend.
+- Allow these hosts in the cloud environment (title bar menu, Edit, Network access, Allowed domains): `jobbank.gc.ca`, `open.canada.ca`, `download.geonames.org`. Or download the Job Bank wage file and the GeoNames Canada places file yourself and tell Claude where they are. Both are blocked from the session today.
+- Decide: city and radius options (suggest 10, 25, 50 and 100 km), whether remote and field roles always show, and how small a town the list should include (suggest about 1,000 people). Also whether Fixed term roles get a short optional end date note.
+- Check on the demo: the Account page email options, the applicants page reply line and tick boxes, the quieter Delete my account link.
+
+**Claude**
+- Read the 3 published blog posts for generic advice and list what only Steve can supply. Rewrite the 2 scheduled posts once his notes arrive.
+- City and radius search, with counts beside each option (SQL on both databases, needs the places data above).
+- Pay benchmark for clinics: Job Bank wage data first, Kestrel's own posted pay later. Check the licence and attribution, and add the benchmark question to the lawyer pack.
+- Audit items R25, R22 and R45. Decide what to do with the old `email-auto-reply` branch.
+- Add LinkedIn as count rows to the market count sheet if Steve wants it, and move any numbers he has already typed into the new layout.
+
 ## 2. The backup person and names
 
 - A backup person can be your wife. Their job is to be able to help if you cannot be reached for a day: emergency access to your password manager, or a sealed copy of your recovery codes. They do not need admin rights on anything.
