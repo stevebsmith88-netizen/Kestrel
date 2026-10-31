@@ -7,7 +7,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, TERMS_VERSION, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
-import { INVITE_MESSAGE, clinicInviteOk } from "@/lib/invite";
+import { INVITE_MESSAGE, SIGNUP_CLOSED_MESSAGE, clinicInviteOk, inviteMatches } from "@/lib/invite";
+import { issueSignupTicket, signupsOpen } from "@/lib/signup-gate";
 import { RECOVERY_COOKIE, recoveryIsValid } from "@/lib/recovery";
 
 const text = (form: FormData, key: string, max = 200) => String(form.get(key) ?? "").trim().slice(0, max);
@@ -45,8 +46,15 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   if (!isEmail(email)) return { error: "Enter an email address like example@mysite.com." };
   if (password.length < MIN_PASSWORD) return { error: `Your password needs at least ${MIN_PASSWORD} characters.` };
   if (!agree) return { error: "Please agree to the terms of use and the privacy policy to continue." };
-  if (accountType === "clinic" && !clinicInviteOk(text(form, "invite", 60))) return { error: INVITE_MESSAGE };
+  const invite = text(form, "invite", 60);
+  // Until launch nobody can create an account without an invitation, whether candidate or clinic.
+  const open = await signupsOpen();
+  if (!open && !inviteMatches(invite)) return { error: SIGNUP_CLOSED_MESSAGE };
+  if (accountType === "clinic" && !clinicInviteOk(invite)) return { error: INVITE_MESSAGE };
   if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
+
+  const ticket = open ? undefined : await issueSignupTicket();
+  if (!open && !ticket) return { error: SIGNUP_CLOSED_MESSAGE };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
@@ -63,6 +71,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
         marketing_consent: marketing,
         marketing_consent_text: marketing ? MARKETING_CONSENT_TEXT : null,
         terms_version: TERMS_VERSION,
+        ...(ticket ? { signup_ticket: ticket } : {}),
         ...(after && accountType === "candidate" ? { signup_next: after } : {}),
       },
     },
@@ -72,7 +81,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     if (error.code === "user_already_exists" || error.code === "email_exists") return { error: "There is already an account with that email. Try signing in, or reset your password." };
     if (error.code === "over_email_send_rate_limit") return { error: "We have sent a lot of emails just now. Please wait a few minutes and try again." };
     if (error.code === "weak_password") return { error: "That password is too easy to guess. Please choose a stronger one." };
-    if (error.code === "signup_disabled" || error.code === "email_provider_disabled") return { error: "Sign ups are paused right now. Please try again later." };
+    if (error.code === "signup_disabled" || error.code === "email_provider_disabled" || /not open yet/i.test(error.message)) return { error: SIGNUP_CLOSED_MESSAGE };
     return { error: `We couldn't create your account. Please try again. (Reference: ${error.code ?? error.status ?? "unknown"})` };
   }
   if (data.session) redirect(accountType === "candidate" && after ? after : "/dashboard");

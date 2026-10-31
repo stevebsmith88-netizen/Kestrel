@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { clinicInviteOk, clinicInviteOnly } from "./invite.ts";
+import { clinicInviteOk, clinicInviteOnly, inviteMatches } from "./invite.ts";
 
 test("clinic sign up is by invitation unless CLINIC_SIGNUP is yes", () => {
   assert.equal(clinicInviteOnly({}), true);
@@ -25,4 +25,14 @@ test("with the switch on and no code set, nobody gets in", () => {
 
 test("once the switch is open, no code is needed", () => {
   assert.equal(clinicInviteOk("", { CLINIC_SIGNUP: "yes" }), true);
+});
+
+test("the invitation code for the closed sign up page matches in any case, and a missing or short code lets nobody in", () => {
+  assert.equal(inviteMatches("Hawk-2027", { CLINIC_INVITE_CODE: "hawk-2027" }), true);
+  assert.equal(inviteMatches("  HAWK-2027 ", { CLINIC_INVITE_CODE: "hawk-2027" }), true);
+  assert.equal(inviteMatches("hawk-2028", { CLINIC_INVITE_CODE: "hawk-2027" }), false);
+  assert.equal(inviteMatches("", { CLINIC_INVITE_CODE: "hawk-2027" }), false);
+  assert.equal(inviteMatches("", {}), false);
+  assert.equal(inviteMatches("anything", {}), false);
+  assert.equal(inviteMatches("short", { CLINIC_INVITE_CODE: "short" }), false);
 });

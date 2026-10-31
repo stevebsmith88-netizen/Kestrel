@@ -93,7 +93,7 @@ function InviteField({ id }: { id: string }) {
   );
 }
 
-export function SignInForm({ notice, next, google = false }: { notice?: string; next?: string; google?: boolean }) {
+export function SignInForm({ notice, next, google = false, signupOpen = true }: { notice?: string; next?: string; google?: boolean; signupOpen?: boolean }) {
   const { state, pending, submit } = useAuthForm(signIn);
   return (
     <>
@@ -109,13 +109,17 @@ export function SignInForm({ notice, next, google = false }: { notice?: string; 
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Signing in" : "Sign in"}</button>
       <p className="alt"><Link href="/forgot-password">Forgot your password?</Link></p>
-      <p className="alt">New to Kestrel? <Link href={next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up"}>Create an account</Link></p>
+      {signupOpen ? (
+        <p className="alt">New to Kestrel? <Link href={next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up"}>Create an account</Link></p>
+      ) : (
+        <p className="alt">New to Kestrel? <Link href="/#join">Join the waitlist</Link></p>
+      )}
     </form>
     </>
   );
 }
 
-export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, next }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean; next?: string }) {
+export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, invitation, next }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean; invitation?: string; next?: string }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -161,7 +165,9 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
         <label className="lab" htmlFor="su-email">Email</label>
         <input id="su-email" name="email" type="email" autoComplete="email" required />
       </div>
-      {inviteOnly && <InviteField id="su-invite" />}
+      {invitation && <input type="hidden" name="invite" value={invitation} />}
+      {invitation && <p className="help">You have an invitation, so you can create your account now.</p>}
+      {inviteOnly && !invitation && <InviteField id="su-invite" />}
       <PasswordField id="su-password" name="password" label="Password" autoComplete="new-password" minLength={MIN_PASSWORD} hint={`At least ${MIN_PASSWORD} characters. A few words you will remember work well.`} />
       <div className="row">
         <label className="consent">
