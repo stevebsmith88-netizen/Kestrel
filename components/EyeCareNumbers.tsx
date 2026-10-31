@@ -9,7 +9,7 @@ export default function EyeCareNumbers() {
       <div className="numbox">
           <p className="kicker">Eye care in Canada</p>
           <h2 id="numbers-h">A big field, with a lot of hiring to do</h2>
-          <p className="numlede">Thousands of clinics and tens of thousands of people. Kestrel is built for all of them.</p>
+          <p className="numlede">Thousands of clinics and tens of thousands of people work in eye care across Canada.</p>
           <ul className="numgrid">
             {EYE_CARE_NUMBERS.map((n) => (
               <li key={n.label}>

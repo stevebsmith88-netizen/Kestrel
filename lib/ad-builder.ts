@@ -24,6 +24,7 @@ Rules:
 - Do not use wording that points to age, such as "young", "energetic" or "digital native".
 - Write in plain, warm British spelling with Canadian conventions (centre, organisation, colour). Use numerals (3, not three). Do not use em dashes, and do not use hyphens as punctuation: use commas or full stops.
 - Sound like a colleague who knows eye care clinics. No recruiter cliches such as "rockstar", "fast paced environment" or "dynamic team". No hype.
+- Avoid wording that reads as machine written. Never use: delve, tapestry, testament, vibrant, bespoke, robust, furthermore, intricate, leverage, pivot, utilise, showcase, bolster, foster, seamless, transformative, scalable, unlock, elevate, streamline, empower, journey. Do not write "not just X, but Y" or "rather than X, it does Y": say directly what the role or clinic is or does. Use plain verbs (is, has, does) instead of "serves as" or "functions as". Do not put 3 adjectives or 3 phrases in a row to sound impressive. Vary sentence length: mix short sentences with longer ones. No emoji. Use straight quotation marks.
 
 Format: plain text only, with no markdown symbols (no #, *, or bullet characters). Use these three headings, each on its own line, with a blank line before each:
 About the role

@@ -26,7 +26,7 @@ export default function ComingSoon() {
             </svg>
             <p className="board">Canada-wide eye care job board</p>
             <p className="lede">
-              A dedicated job board for optometrists, opticians, assistants and clinic teams, built by people who know eye care. We&apos;re launching soon.
+              A job board for eye care in Canada, built by people who know it. Optometrists, opticians, assistants, clinic teams and suppliers, in one place. We&apos;re launching soon.
             </p>
             <a className="btn" href="#join">Join the waitlist</a>
           </div>
@@ -39,41 +39,25 @@ export default function ComingSoon() {
           <div className="wrap cards">
             <article className="card">
               <p className="kicker">For clinics</p>
-              <h2>Hire people who know eye care</h2>
+              <h2>Be seen by people who want eye care work</h2>
+              <p>
+                On the big job sites, a clinic&apos;s post can sink among thousands of others, and clinics often say they get applicants who click Apply on everything. Here, everyone searching is looking for work in eye care.
+              </p>
               <ul>
-                <li>Reach optometrists, opticians and support teams in one place</li>
-                <li>Independent and corporate practices, side by side</li>
+                <li>Independent and corporate practices post side by side</li>
                 <li>Waitlist clinics will be the first invited to post</li>
               </ul>
             </article>
             <article className="card">
               <p className="kicker">For eye care professionals</p>
-              <h2>Find your next role</h2>
+              <h2>Find a job that fits, then see where it can lead</h2>
               <ul>
-                <li>Roles in clinics across every province and territory</li>
-                <li>Filter by role, location and type of practice</li>
-                <li>Hear about new roles first by joining the waitlist</li>
+                <li>Search eye care jobs only, so you are not scrolling past everything else</li>
+                <li>Filter by role, province and type of practice, from independent clinics to suppliers</li>
+                <li>Roles run from assistant and optician to manager, trainer and field rep, so you can see where a career could go</li>
+                <li>Every job shows its pay</li>
               </ul>
             </article>
-          </div>
-          <EyeCareNumbers />
-        </section>
-
-        {homeBlogOn() && <HomeBlogStrip />}
-
-        <section className="join" id="join">
-          <div className="wrap grid">
-            <div className="intro">
-              <h2>Be first through the door</h2>
-              <p>Whether you&apos;re hiring or looking, join the waitlist and we&apos;ll let you know the moment Kestrel opens.</p>
-            </div>
-            <div className="panel">
-              <WaitlistForm />
-              <p className="privacy">
-                We&apos;ll only use your details to email you about Kestrel Eye Care Jobs, and you can unsubscribe at any time. Read our{" "}
-                <Link href="/privacy">privacy policy</Link>.
-              </p>
-            </div>
           </div>
         </section>
       </main>
