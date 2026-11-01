@@ -12,12 +12,12 @@ export const EYE_CARE_NUMBERS: EyeCareNumber[] = [
   { value: 2000, suffix: "+", label: "eye care roles advertised every year", source: "Kestrel estimate", estimate: true },
 ];
 
+// Short names for the line under the numbers. The full titles are in docs/market-sizing.md.
 export const NUMBER_SOURCES: { name: string; url: string }[] = [
-  { name: "Statistics Canada, Vision Health Month: Eyes on the data", url: "https://www.statcan.gc.ca/o1/en/plus/6173-vision-health-month-eyes-data" },
-  { name: "Canadian Association of Optometrists, Optometry in Canada reports", url: "https://opto.ca/olf/reports" },
-  { name: "IBISWorld, optometrists in Canada, number of businesses", url: "https://www.ibisworld.com/canada/number-of-businesses/optometrists/1560" },
-  { name: "Scott's Directories, offices of optometrists (NAICS 621320)", url: "https://scottsdirectories.com/canada-b2b-database/naics621320-offices-of-optometrists" },
-  { name: "Job Bank, opticians outlook", url: "https://www.jobbank.gc.ca/outlookreport/occupation/4345" },
+  { name: "Statistics Canada", url: "https://www.statcan.gc.ca/o1/en/plus/6173-vision-health-month-eyes-data" },
+  { name: "IBISWorld", url: "https://www.ibisworld.com/canada/number-of-businesses/optometrists/1560" },
+  { name: "Scott's Directories", url: "https://scottsdirectories.com/canada-b2b-database/naics621320-offices-of-optometrists" },
+  { name: "Job Bank", url: "https://www.jobbank.gc.ca/outlookreport/occupation/4345" },
 ];
 
 export const formatCount = (n: number) => n.toLocaleString("en-CA");
