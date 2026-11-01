@@ -90,7 +90,7 @@ The 7 research areas Steve was asked about earlier, and what the repository hold
 
 ## Open questions raised so far
 
-Each question has the context it came from. Status is open unless stated.
+Each question has the context it came from. Status is open unless stated. Steve's answers of 1st November 2026 are in "Steve's answers" below.
 
 ### Strategy
 
@@ -130,3 +130,77 @@ Each question has the context it came from. Status is open unless stated.
 25. **Which trends shape demand?** Myopia management, AMD and technology. Area 6 above, and blog material.
 26. **Who should Steve talk to?** Practice owners, conferences (Vision Expo, OAO), LinkedIn and optometry forums, and the Waterloo optometry school. Use no Eye Recommend contacts or lists.
 27. **How do overseas professionals get into practice?** Areas 2 and 3 above. Linked to question 12.
+
+## Steve's answers (1st November 2026)
+
+Numbers follow the groups in "Open questions raised so far".
+
+**Strategy**
+
+- Q1: a long term option. Q2: not raised for now, as above. Q5: positioning and value proposition are held for later.
+- Q3, Zest: a UK recruitment agency. Steve first contacted them about a year ago, when the idea first came up, and they later raised the possibility of an extension arm in Canada. It went quiet when Steve started at Eye Recommend and has not been revived. Nothing is agreed. If it is revived it needs the disclosure conversation and a lawyer first.
+- Q4, UK against Canada: Steve asked for a deeper check. See "Figures check" below.
+
+**Product**
+
+- Q15, profession list: **should widen.** Not scheduled. Widening touches the candidate profile, the job role categories, search filters, alerts, the quiz and a database change on both databases, so it needs Steve to choose a phase.
+- Q16, structured benefits fields: **no.** It would make posting and applying longer. Benefits stay in the description.
+- Q17, full locum availability: a later build. Billing software experience goes with it.
+- Q18, matching opt-in and consent log: build when the agency phase rolls out, not before.
+- Q19, licence number: **no.** If screening is ever introduced, the licence number becomes part of that step.
+- Q20, pay transparency: **nationwide, as built.**
+
+**Market and data**
+
+- Q21, how often clinics hire: trends should be clear after week 12 of live data.
+- Q22, market figures: the first set came from Google Gemini and are unsourced. See "Figures check".
+- Q23, who is hiring: Steve's view is everyone is, and few clinics have stable teams in 2026. Not yet backed by data.
+- Q24 and Q25, pay and trends: will come from further searching, and from real roles once the site is live.
+- Q26, Eye Recommend clinics: not off the radar, but the approach to them will differ until after disclosure. The project rule is unchanged: no outreach to clinics, including any Eye Recommend member clinics, until Steve confirms the disclosure conversation, and no Eye Recommend data, lists or contacts in this repository.
+- Q27, pathways: a roadmap of the known routes for optometrists, opticians and anyone wanting to come to Canada. Plain information, not legal advice. See "Pathways roadmap (draft)".
+
+## Figures check (web search summaries, 1st November 2026)
+
+Still unverified. These come from search summaries of paid or blocked pages, so confirm each against the source.
+
+| Item | Earlier AI figure | What the search found |
+| --- | --- | --- |
+| Canada, optical retail market | $3.2B to $3.5B CAD | IBISWorld puts eyeglasses and contact lens stores at about $2.4B to $2.5B in 2026, shrinking about 1.1% a year from 2021 to 2026. It excludes online sales and sales at optometrists' offices, so it is not the whole eye care market. |
+| Canada, independents against chains | Corporate 35% to 40% | VisionWatch, by frame units: independents 44.0%, chains 42.6%, others 13.4%. The search describes a 2015 survey. docs/market-sizing.md says the filing is from 2019. Check which. Units, not revenue. |
+| UK, market | About £5.9B | IBISWorld puts UK opticians at about £5.8B in 2026, growing about 3.5% a year from 2020 to 2025. This matches. |
+| UK, number of businesses | Not given | IBISWorld counts 5,421 opticians businesses in 2025. A business count, not a count of registered practitioners. |
+| UK, corporate share | About 70% or more | Specsavers is named the largest, with about £1.8B and £1.6B in revenue across two group companies (do not add them). No share percentage found. |
+| UK against Canada | "About double" | Not like for like. The two sources define the industry differently, so the ratio is unreliable. Using the AI's own figures it was nearer triple. |
+| Locum day rates | $800 to $1,200 CAD | Not found. |
+
+What to take from this: the broad shape (the UK more consolidated, Canada with a large independent share) holds up. The specific percentages and the UK to Canada ratio do not have a source yet. Steve's weekly counts remain the best Canadian evidence. Getting paid VisionWatch or IBISWorld detail is the route to firmer numbers, and is optional.
+
+## Pathways roadmap (draft, not legal advice)
+
+Purpose: a plain-English guide to the known routes for people who want to practise in Canada, to publish later as a blog post or guide. Do not publish until each step is checked against the regulator's own page. This draft comes from search summaries that include weak sources (a lender's blog, forum posts), and several names and details conflict.
+
+**Optometrists** (as described by the sources)
+
+1. Credential assessment through FORAC for people trained outside North America. One source says it is mandatory.
+2. A clinical skills evaluation, named IGOEE by the sources, run by the Touchstone Institute. Confirm the current name.
+3. Depending on results, go to the national exam or enter a bridging program. The University of Waterloo runs one, with limited places each year. Sources call it ASOPP or, in older pages, IOBP. Confirm.
+4. The national licensing exam from the Optometry Examining Board of Canada (OEBC), offered in spring and fall, with a written and a practical part. One source uses an older or different exam name. Confirm.
+5. Registration with the provincial regulator. Each province has its own application.
+
+**Opticians**
+
+1. Start with the provincial regulator.
+2. A Prior Learning Assessment and Recognition (PLAR) through the National Alliance of Canadian Optician Regulators (NACOR).
+3. NACOR examinations. A forum post says Ontario requires both dispensing and contact lens exams for a dual licence. Unconfirmed.
+4. Registration with the provincial regulator.
+5. No official College of Opticians of Ontario page was found. NACOR's step by step PLAR page is the primary source to check.
+
+**Everyone else** (assistants, technicians, managers, supplier roles): not researched. Immigration and work permit routes are not covered at all.
+
+Sources used so far (all to be verified at the originals):
+[IBISWorld, Canada eyeglasses and contact lens stores](https://www.ibisworld.com/canada/industry/eyeglasses-contact-lens-stores-in-canada/1056/),
+[VisionWatch data via Optiknow](https://optiknow.ca/wp-content/uploads/2019/10/VuePoint-ids-canada-vs-usa-visionwatch-data.pdf),
+[IBISWorld, UK opticians](https://www.ibisworld.com/united-kingdom/industry/opticians/6226/),
+[University of Waterloo, what you need to practise optometry in Canada](https://uwaterloo.atlassian.net/wiki/x/rAH9UQo),
+[CHCPBC, optician Prior Learning Assessment and Recognition](https://chcpbc.org/wp-content/uploads/2024/08/RO-Prior-Learning-Assessment-and-Recognition.pdf),
+[New Brunswick, opticians registration](https://www.nbjobs.ca/sites/default/files/registration/Opticians.pdf).
