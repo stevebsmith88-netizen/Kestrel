@@ -62,6 +62,22 @@ A separate, working copy of the site with sample data, to show people around bef
 - Audit items R25, R22 and R45. Decide what to do with the old `email-auto-reply` branch.
 - Add LinkedIn as count rows to the market count sheet if Steve wants it, and move any numbers he has already typed into the new layout.
 
+## This week (added 1st November 2026, parked for discussion)
+
+These came out of the agency research. Nothing here is started. The plan for each is agreed together first. Background is in `docs/agency-pathway.md` (branch `docs/agency-pathway`, not yet merged).
+
+**Steve**
+- Read `docs/agency-pathway.md` and correct anything that is wrong. It records your answers, the open questions for a lawyer, and the research gaps.
+- Decide when to widen the profession list (decided: yes, not scheduled). Choose a phase, or leave it parked.
+- Leave Zest parked. If it is ever revived, it goes through the disclosure conversation and the lawyer first.
+
+**Claude (to plan with Steve)**
+- Widen the profession list: map what it touches (candidate profile, job role categories, filters, alerts, quiz, SQL on both databases) and propose a phase.
+- Pathways roadmap: check each step against the regulator's own pages (FORAC, OEBC, Touchstone, NACOR, CHCPBC), then decide whether it becomes a blog post or a guide page. Some hosts may need allowing in the cloud environment.
+- Figures check: confirm the market figures against primary sources, and settle whether the VisionWatch data is from 2015 or 2019.
+- Competitor and hiring review (research area 4) by hand from public pages, with no scraping.
+- Trends content (myopia, AMD, technology) as blog topics that need Steve's specifics.
+
 ## 2. The backup person and names
 
 - A backup person can be your wife. Their job is to be able to help if you cannot be reached for a day: emergency access to your password manager, or a sealed copy of your recovery codes. They do not need admin rights on anything.
