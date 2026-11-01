@@ -71,6 +71,12 @@ These came out of the agency research. Nothing here is started. The plan for eac
 - Decide when to widen the profession list (decided: yes, not scheduled). Choose a phase, or leave it parked.
 - Leave Zest parked. If it is ever revived, it goes through the disclosure conversation and the lawyer first.
 
+**Chicken or egg: which side first (planning item)**
+Working view: start with jobs. A few current, clean roles bring candidates. A long candidate list with nothing to apply for loses them. Sources, in order: seeded listings from clinics' own careers pages (labelled, linked back, 21 days; the admin tool is not built and waits for Gate A to be closer), free launch posts, then claim your listing. Candidates come from the waitlist, search content (the pathways guide and the blog) and job alerts. Concentrate the first 50 roles on 2 or 3 provinces and 1 or 2 role types, so the board looks full where people look. Clinic outreach, including Eye Recommend member clinics, stays off until the disclosure conversation, and nothing is scraped.
+- Steve: check the waitlist split in Supabase (clinics against candidates, with provinces and roles) and send the numbers.
+- Steve: name the 2 or 3 provinces you know best and believe have the most hiring pressure.
+- Claude: once those are in, propose the first region, the role mix, and the seeding order.
+
 **Claude (to plan with Steve)**
 - Widen the profession list: map what it touches (candidate profile, job role categories, filters, alerts, quiz, SQL on both databases) and propose a phase.
 - Pathways roadmap: check each step against the regulator's own pages (FORAC, OEBC, Touchstone, NACOR, CHCPBC), then decide whether it becomes a blog post or a guide page. Some hosts may need allowing in the cloud environment.
