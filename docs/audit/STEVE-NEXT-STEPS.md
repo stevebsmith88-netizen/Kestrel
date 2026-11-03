@@ -77,6 +77,16 @@ Working view: start with jobs. A few current, clean roles bring candidates. A lo
 - Steve: name the 2 or 3 provinces you know best and believe have the most hiring pressure.
 - Claude: once those are in, propose the first region, the role mix, and the seeding order.
 
+**Automation plan (planning item, added 3rd November 2026)**
+Goal: automate the board as far as is safe. Build it in house on Resend, Supabase and Vercel, not with Apollo, Instantly or HighLevel. Implied consent under CASL depends on each address being published on the clinic's own page, and third party contact databases cannot show that. Outreach stays off until the disclosure conversation. Green light from Eye Recommend is separate from CASL, and the lawyer's review still applies.
+1. Find and write ads: Claude reads a clinic's own careers page and drafts the listing, and a person approves it. Labelled, linked back, 21 days. Not built (admin tool 22a and the "read this page" step).
+2. Email clinics to claim: wording, unsubscribe and do not email list are built. To build: the record of where each address was found (page and date), a send queue, 1 email plus 1 follow up at most, a slow warm up of the mail subdomain.
+3. Candidates: no cold email to individuals. Reach them through alerts (built), the waitlist, the pathways guide and blog, paid ads, and clinics inviting their own applicants.
+4. Reminders: expiry, closing soon and unopened applications are built. To build: repost and renewal nudges once Stripe is on.
+Rollout: semi automatic first (Claude drafts and queues, Steve approves in batches), then hands off once the error rate is low.
+- Steve decision: hold Eye Recommend member clinics out of automated outreach at first, or not.
+- Claude: turn the 4 steps into a phased plan with sizes and gates, to discuss.
+
 **Claude (to plan with Steve)**
 - Widen the profession list: map what it touches (candidate profile, job role categories, filters, alerts, quiz, SQL on both databases) and propose a phase.
 - Pathways roadmap: check each step against the regulator's own pages (FORAC, OEBC, Touchstone, NACOR, CHCPBC), then decide whether it becomes a blog post or a guide page. Some hosts may need allowing in the cloud environment.
