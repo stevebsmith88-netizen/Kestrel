@@ -41,6 +41,9 @@ from (
     ('column: waitlist email confirmed', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'waitlist' and column_name = 'confirmed_at')),
     ('column: unsubscribed date on profiles', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'unsubscribed_at')),
     ('column: unopened reminder on applications', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'reminded_at')),
+    ('table: page_reads (found listings tool record)', to_regclass('public.page_reads') is not null),
+    ('column: when a found listing was found', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'found_at')),
+    ('rule: found listings live 21 days at most', exists (select 1 from pg_constraint where conname = 'jobs_found_listing_21_days')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

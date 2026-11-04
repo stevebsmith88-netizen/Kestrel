@@ -71,11 +71,14 @@ with sample(clinic, title, role, etype, period, pmin, pmax, vacancy, descr, how,
    'A part time optometric assistant listed from the clinic''s own careers page. Pre-testing and patient support in a small clinic. Apply on the clinic''s website.', 'external', null, null, 6, true)
 )
 insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening,
-                         description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, is_seeded, source_url, posted_at, expires_at)
-select e.id, s.title, s.role, s.etype, e.province, e.city, s.period, s.pmin, s.pmax, s.vacancy, false,
+                         description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, is_seeded, source_url, found_at, posted_at, expires_at)
+-- Found listings leave the 2 questions empty, shown as "Not stated by the clinic" (migration 0023).
+select e.id, s.title, s.role, s.etype, e.province, e.city, s.period, s.pmin, s.pmax,
+       case when s.seeded then null else s.vacancy end, case when s.seeded then null else false end,
        s.descr, s.how, case when s.how = 'external' then 'https://example.com/careers' end,
        case when s.territory is not null then 'field' else 'on_site' end, s.territory, s.extras,
        'live', s.seeded, case when s.seeded then 'https://example.com/careers' end,
+       case when s.seeded then now() - make_interval(days => s.days_ago) end,
        now() - make_interval(days => s.days_ago),
        now() - make_interval(days => s.days_ago) + make_interval(days => case when s.seeded then 21 else 30 end)
 from sample s join public.employers e on e.clinic_name = s.clinic;

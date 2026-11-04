@@ -56,7 +56,7 @@ A listing we found on a clinic's own website (a seeded listing) belongs to a cli
 
 To try it without a real clinic, run `docs/test-claim.sql` (a fake clinic whose website is eyecarejobs.ca, so `steve+claim@eyecarejobs.ca` counts as an address at its own website). Delete it afterwards.
 
-Not built yet: the admin tool to add found listings (seeding), and editing a live job (a live job can only be closed and reposted).
+Found listings are added from Admin, Found listings (see `docs/found-listings.md`). A found listing can also be taken down there.
 
 ## Field based and supplier roles
 

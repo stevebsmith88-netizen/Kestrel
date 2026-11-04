@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  answerLabel,
   cleanEmploymentTypes,
   employmentLabel,
   cleanJob,
@@ -149,6 +150,7 @@ test("the clinic About text is checked for Canadian experience too", () => {
 test("pay is shown in plain words", () => {
   assert.equal(formatPay(62000, 74000, "year"), "$62,000 to $74,000 a year");
   assert.equal(formatPay("24", "28.5", "hour"), "$24 to $28.50 an hour");
+  assert.equal(formatPay(30, "30", "hour"), "$30 an hour");
   assert.equal(parseMoney("$62,000"), 62000);
   assert.equal(parseMoney("0"), null);
   assert.equal(parseMoney("12abc"), null);
@@ -240,4 +242,10 @@ test("employment types can be ticked more than once, and odd values are dropped"
   assert.deepEqual(cleanEmploymentTypes(["Full time", "Part time", "Part time", "Nonsense"]), ["Full time", "Part time"]);
   assert.deepEqual(cleanEmploymentTypes("Contract"), ["Contract"]);
   assert.deepEqual(cleanEmploymentTypes(undefined), []);
+});
+
+test("the 2 required answers show Not stated by the clinic when a found listing's page did not say", () => {
+  assert.equal(answerLabel(true), "Yes");
+  assert.equal(answerLabel(false), "No");
+  assert.equal(answerLabel(null), "Not stated by the clinic");
 });

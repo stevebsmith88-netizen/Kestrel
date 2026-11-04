@@ -30,8 +30,9 @@ export function RequiredNote() {
 }
 
 // A group of radio choices (such as yes or no) that shows as buttons.
-export function Choices({ name, label, error, options, value, hint, onChange }: {
+export function Choices({ name, id, label, error, options, value, hint, onChange }: {
   name: string;
+  id?: string; // only needed when the same question appears more than once on a page
   label: string;
   error?: string;
   options: readonly { value: string; label: string }[];
@@ -39,16 +40,17 @@ export function Choices({ name, label, error, options, value, hint, onChange }: 
   hint?: string;
   onChange?: (value: string) => void;
 }) {
+  const key = id ?? name;
   return (
     <div className={`row ${error ? "invalid" : ""}`}>
-      <p className="lab" id={`lab-${name}`}>{label} <span className="req" aria-hidden="true">*</span></p>
+      <p className="lab" id={`lab-${key}`}>{label} <span className="req" aria-hidden="true">*</span></p>
       <div
         className="choices"
         role="radiogroup"
-        aria-labelledby={`lab-${name}`}
+        aria-labelledby={`lab-${key}`}
         aria-required="true"
         aria-invalid={error ? true : undefined}
-        aria-describedby={[hint && `hint-${name}`, error && `err-${name}`].filter(Boolean).join(" ") || undefined}
+        aria-describedby={[hint && `hint-${key}`, error && `err-${key}`].filter(Boolean).join(" ") || undefined}
       >
         {options.map((o) => (
           <label className="choice" key={o.value}>
@@ -57,8 +59,8 @@ export function Choices({ name, label, error, options, value, hint, onChange }: 
           </label>
         ))}
       </div>
-      {hint && <p className="help" id={`hint-${name}`}>{hint}</p>}
-      {error && <p className="err" id={`err-${name}`} role="alert">{error}</p>}
+      {hint && <p className="help" id={`hint-${key}`}>{hint}</p>}
+      {error && <p className="err" id={`err-${key}`} role="alert">{error}</p>}
     </div>
   );
 }
