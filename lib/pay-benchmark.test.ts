@@ -7,13 +7,15 @@ import { compareRange, describeBenchmark, findBenchmark, ownPayStats, plainDate,
 
 const entry = (role: string, province: string, period: string, min: number, max: number) => ({ role, province, period, min, max });
 
-test("the Job Bank file covers Ontario, Alberta and British Columbia for the roles with a match", () => {
+test("the Job Bank file covers Ontario, Alberta and British Columbia for every mapped role, and other provinces where Job Bank publishes", () => {
   for (const province of ["Ontario", "Alberta", "British Columbia"]) {
-    for (const role of ["Optometrist", "Optician", "Optometric assistant or technician", "Patient care or reception"]) {
+    for (const role of ["Optometrist", "Optician", "Optometric assistant or technician", "Patient care or reception", "Practice or clinic manager"]) {
       assert.ok(JOB_BANK_WAGES.some((w) => w.role === role && w.province === province), `${role} in ${province}`);
     }
   }
-  assert.equal(JOB_BANK_WAGES.length, 12);
+  assert.ok(JOB_BANK_WAGES.some((w) => w.province === "Quebec") && JOB_BANK_WAGES.some((w) => w.province === "Nova Scotia"));
+  // No row is kept twice.
+  assert.equal(new Set(JOB_BANK_WAGES.map((w) => `${w.role}|${w.province}`)).size, JOB_BANK_WAGES.length);
 });
 
 test("every Job Bank row is sensible: known role and province, median present, quartiles in order, plausible size", () => {
@@ -65,6 +67,7 @@ test("the wording says typical and median, shows the source and date, and never 
   assert.match(m.lead, /^Your range is below what is typical for opticians in Ontario\.$/);
   assert.match(m.detail, /median is about \$24\.04 an hour/);
   assert.match(m.detail, /\$23\.00 an hour to \$33\.65 an hour/);
+  assert.equal(m.short, "Source: Job Bank, Government of Canada. Guidance only.");
   assert.match(m.source, /Job Bank wages, Government of Canada/);
   assert.match(m.source, /Labour Force Survey 2023 to 2024\. Job Bank file of 19th November 2025/);
   assert.match(m.caution, /cover 2023 to 2024/);
@@ -100,7 +103,7 @@ test("a closest group match says so", () => {
 
 test("with no official figure and no Kestrel data there is nothing to show", () => {
   assert.equal(findBenchmark("Vision therapist", "Ontario"), null);
-  assert.equal(findBenchmark("Optician", "Manitoba"), null);
+  assert.equal(findBenchmark("Optician", "Prince Edward Island"), null);
   assert.equal(findBenchmark("Sales or territory representative", "Ontario"), null);
 });
 

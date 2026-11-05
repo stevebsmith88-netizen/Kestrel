@@ -176,6 +176,12 @@ textarea{resize:vertical;line-height:1.5}
 .payguide p:last-child{margin-bottom:0}
 .pg-kicker{font-size:0.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--chestnut)}
 .pg-lead{font-weight:700;color:var(--navy)}
+.pgdetails{margin-top:4px}
+.pgdetails summary{cursor:pointer;font-size:0.9375rem;color:var(--chestnut);font-weight:600;list-style:none}
+.pgdetails summary::-webkit-details-marker{display:none}
+.pgdetails .plus{display:inline-block;width:1em;font-weight:700}
+.pgdetails[open] .plus{transform:rotate(45deg)}
+.pgdetails p{margin:8px 0 0}
 .formbtns{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 12px}
 .formpanel .formbtns .btn{width:auto;margin-top:0}
 .ok-msg{color:#16543C;margin:0 0 12px}

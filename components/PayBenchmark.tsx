@@ -16,13 +16,17 @@ export default function PayBenchmark({ role, province, period, min, max, own }: 
       <p className="pg-kicker" id="pg-h">{m.heading}</p>
       <p className="pg-lead">{m.lead}</p>
       {m.detail && <p>{m.detail}</p>}
-      <p className="help">{m.source}</p>
-      <p className="help">{m.caution}</p>
-      {m.licence && (
-        <p className="help">
-          {LICENCE_STATEMENT} <a href={LICENCE_URL} target="_blank" rel="noopener noreferrer">Licence</a>. Kestrel has adapted the figures (hourly and yearly pay shown on one basis) and is not endorsed by the Government of Canada.
-        </p>
-      )}
+      <p className="help">{m.short}</p>
+      <details className="pgdetails">
+        <summary><span className="plus" aria-hidden="true">+</span> Source and details</summary>
+        <p className="help">{m.source}</p>
+        <p className="help">{m.caution}</p>
+        {m.licence && (
+          <p className="help">
+            {LICENCE_STATEMENT} <a href={LICENCE_URL} target="_blank" rel="noopener noreferrer">Licence</a>. Kestrel has adapted the figures (hourly and yearly pay shown on one basis) and is not endorsed by the Government of Canada.
+          </p>
+        )}
+      </details>
     </aside>
   );
 }

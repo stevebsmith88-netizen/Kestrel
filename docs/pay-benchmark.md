@@ -20,16 +20,17 @@ Job Bank groups jobs by the National Occupational Classification (NOC) 2021. A m
 | Optician | Opticians (NOC 32100) | Exact |
 | Optometric assistant or technician | Other assisting occupations in support of health services (NOC 33109) | Closest. Steve to confirm on Job Bank (see below) |
 | Patient care or reception | Receptionists (NOC 14101) | Closest |
+| Practice or clinic manager | Supervisors, general office and administrative support workers (NOC 12010) | Closest. Steve to confirm (see below) |
 
-Provinces covered so far: Ontario, Alberta and British Columbia. Other provinces have rows in the same file and can be added in `scripts/build-pay-benchmark.py`.
+Provinces: all 13 where Job Bank publishes a figure (43 of 65 role and province pairs). Prince Edward Island, the territories and a few optometrist rows are suppressed by Statistics Canada for small numbers, so the form shows nothing there.
 
 **Left out on purpose, for now:**
 
-- **Practice or clinic manager.** The nearest group is "Managers in health care" (NOC 30010), whose median is about $56 an hour in Ontario. That group is likely dominated by hospital and health authority managers, so it would make most clinic manager ranges read as "below". Held back until Steve chooses a group or accepts the AI starting range.
+- **Practice or clinic manager** started as "Managers in health care" (NOC 30010, about $56 an hour in Ontario) or "Other administrative services managers" (NOC 10019, about $50). Both are dominated by senior managers, so a clinic manager would read as "below". Office and administrative supervisors (NOC 12010, about $31 an hour in Ontario) look closer to a clinic manager, so that is the closest match used. Not verified, so it carries the "closest" note.
 - **Vision therapist.** No clear Job Bank group. Uses the starting range path.
 - **Field and supplier roles** (sales or territory representative, trainer, field service technician, account or practice development manager). The sales groups (62100 and 64101) do not say whether equipment or consumables are sold, and base pay is mixed with commission. No group for trainers or field technicians fits. Held back.
 
-**To check on Job Bank (Steve, 5 minutes):** search "optometric assistant" and "receptionist" at https://www.jobbank.gc.ca/trend-analysis/search-wages and note which occupation group Job Bank offers. If it is not NOC 33109 for assistants, tell Claude and the mapping and the blog post follow it. Claude could not run that search from the cloud environment (the page needs a browser session), and did not guess.
+**To check on Job Bank (Steve, 5 minutes):** search "optometric assistant", "receptionist" and "office manager" (and "dental office manager" for comparison) at https://www.jobbank.gc.ca/trend-analysis/search-wages and note which occupation group Job Bank offers. If it is not NOC 33109 for assistants (or NOC 12010 for managers), tell Claude and the mapping and the blog post follow it. Claude could not run that search from the cloud environment (the page needs a browser session), and did not guess.
 
 ## How the comparison works
 

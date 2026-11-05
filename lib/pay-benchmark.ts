@@ -99,7 +99,8 @@ export type BenchmarkMessage = {
   heading: string; // "Pay guide" or "Starting point, from AI"
   lead: string; // the one line: how the range compares
   detail: string; // the typical figure
-  source: string; // where it came from and when
+  short: string; // the one line always shown: where the figure is from
+  source: string; // the full source, group and date, shown when the reader opens "Source"
   caution: string;
   licence: boolean; // whether the Open Government Licence statement must be shown
 };
@@ -125,7 +126,8 @@ export function describeBenchmark(entry: PayEntry, b: Benchmark): BenchmarkMessa
     const near = b.closest ? " Kestrel chose the closest Job Bank group for this role, so it may include related jobs." : "";
     return {
       verdict, kind: b.kind, heading: "Pay guide", lead, detail,
-      source: `Source: Job Bank wages, Government of Canada. Group: ${group}. ${b.survey}${b.survey.includes(b.period) ? "" : ` ${years(b.period)}`}. Job Bank file of ${plainDate(b.revised)}.${near}`,
+      short: "Source: Job Bank, Government of Canada. Guidance only.",
+      source: `Job Bank wages, Government of Canada. Group: ${group}. ${b.survey}${b.survey.includes(b.period) ? "" : ` ${years(b.period)}`}. Job Bank file of ${plainDate(b.revised)}.${near}`,
       caution: `Guidance only. It does not stop you posting. These figures cover ${years(b.period)}, so pay today and pay in your town can differ.`,
       licence: true,
     };
@@ -134,7 +136,8 @@ export function describeBenchmark(entry: PayEntry, b: Benchmark): BenchmarkMessa
     const detail = `The median is about ${showMoney(b.bands.median, entry.period)}${mid ? `, and the middle half of posts range from ${mid}` : ""}.`;
     return {
       verdict, kind: b.kind, heading: "Pay guide", lead, detail,
-      source: `Source: ${b.posts} posts on Kestrel for this role in ${entry.province}, shown as the middle of each posted range.`,
+      short: `Source: ${b.posts} posts on Kestrel. Guidance only.`,
+      source: `${b.posts} posts on Kestrel for this role in ${entry.province}, shown as the middle of each posted range.`,
       caution: "Guidance only. It does not stop you posting. It reflects what clinics have posted here, not what people were finally paid.",
       licence: false,
     };
@@ -144,7 +147,8 @@ export function describeBenchmark(entry: PayEntry, b: Benchmark): BenchmarkMessa
     verdict, kind: b.kind, heading: "Starting point, from AI",
     lead: verdict ? `Your range is ${VERDICT_TEXT[verdict]} this starting range for ${where}.` : `A starting range for ${where}.`,
     detail,
-    source: `There is no official figure for this role and province yet. This range was made by AI on ${plainDate(b.madeOn)} from ${b.basis}. It is a rough starting point, not fact.`,
+    short: "Made by AI as a rough starting point, not fact. Guidance only.",
+    source: `There is no official figure for this role and province yet. This range was made by AI on ${plainDate(b.madeOn)} from ${b.basis}.`,
     caution: "Guidance only. It does not stop you posting. It will be replaced by Kestrel's own posted pay once there are enough posts.",
     licence: false,
   };
