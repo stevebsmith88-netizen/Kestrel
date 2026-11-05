@@ -34,7 +34,7 @@ export default async function PostingPolicy() {
           <ul>
             <li>Clinics and practices hiring directly for their own team, independent or corporate. Corporate groups may post for their own locations.</li>
             <li>Suppliers, manufacturers and optical labs hiring directly for their own team, including field based roles such as sales and territory representatives, trainers and clinical educators, and field service technicians.</li>
-            <li>Recruiters, staffing agencies and job brokers may not post, and may not contact candidates through Kestrel.</li>
+            <li>Outside recruiters, staffing agencies and job brokers may not post, and may not contact candidates through Kestrel. A corporate group&apos;s own recruiting or HR team may post for the group&apos;s own locations, because the group is the employer.</li>
             <li>You confirm this when you set up your clinic profile.</li>
           </ul>
 

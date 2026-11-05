@@ -92,7 +92,7 @@ Use official data first: the federal Job Bank wages dataset on open.canada.ca (W
 
 - 1% for $1,000 means the company is valued at $100,000 after the money goes in. That is a plausible number for a pre revenue business, but if Kestrel reaches its $150,000 a year revenue target it would be cheap equity. Giving 10% of the business away for $10,000 is a real decision: decide it with the accountant.
 - Ten small shareholders also bring paperwork: a shareholder agreement, notices, tax slips and a vote on some decisions. A SAFE or a convertible note with a valuation cap delays the valuation question and the shareholder admin until a later round. The lawyer decides the structure, and the exemptions that let each person invest (for example the family, friends and close business associates exemption, or an investor qualifying as an accredited investor).
-- **A Kickstarter style alternative that needs no equity:** founding clinic credit packs. A clinic pays up front for a pack of posts at a discount (for example $1,000 for a pack of 20 posts, which would be $1,580 at the $79 standard price) that it can use over 12 to 24 months. Ten packs raises $10,000, avoids dilution and shows real demand. Rules: write the terms down, limit the number of packs, give a refund policy, and ask the accountant about HST and how prepaid income is recorded. It is a customer prepayment, not an investment, so do not call it one. The company, bank account and Stripe (Gate A) must exist first.
+- **A Kickstarter style alternative that needs no equity:** founding clinic credit packs. A clinic pays up front for a pack of posts at a discount (for example $1,000 for a pack of 20 posts, which would be $1,520 at the $76 average single post price on the 5th November ladder) that it can use over 12 to 24 months. Ten packs raises $10,000, avoids dilution and shows real demand. Rules: write the terms down, limit the number of packs, give a refund policy, and ask the accountant about HST and how prepaid income is recorded. It is a customer prepayment, not an investment, so do not call it one. The company, bank account and Stripe (Gate A) must exist first.
 - "Free posts" for an investor should be a nominal number of posts over 1 or 2 years, written down, and kept apart from the share terms.
 - Steve works at Eye Recommend, so any investor tied to it goes into the disclosure conversation.
 
@@ -105,3 +105,32 @@ Use official data first: the federal Job Bank wages dataset on open.canada.ca (W
 - OptiBoard has a Canadian Discussion Forum, which is a forum, not Reddit.
 
 How to approach it: read each community's rules first. Message the moderators before posting anything that mentions Kestrel, say who you are and what you want to share, and ask what is allowed. Spend most of your time answering questions and adding useful comments, with no links. Share a blog post only when it answers someone's actual question, and say it is yours. Never post jobs unless the rules allow it, never use fake accounts, and use your own account. Because Steve works at Eye Recommend, hold promotional posts until after the disclosure conversation, and never use Eye Recommend's name or material.
+
+## 11. Pass tiers and the Jobs4ECPs comparison, 5th November 2026
+
+Steve's notes of 5th November 2026. **Decided later the same day: option 1, two named tiers (Clinic pass $199, Clinic pass Plus $349).** Built in `lib/pricing.ts`, the /clinics page, the outreach emails and the flyer draft. Steve confirmed on 5th November: founding clinics keep the price of whichever pass they take, and Plus gets a founding yearly option too ($3,490, 10 months for 12, to bring in early cash for marketing). The annual prepay needs the company, bank account and Stripe first, plus the accountant on HST and prepaid income, and the lawyer on refunds for a year paid up front. Terms and the lawyer pack should say which roles each pass covers.
+
+**Jobs4ECPs prices (Steve's screenshot, taken the morning of 5th November 2026, page www.jobs4ecps.ca/products).** Basic Single Job Posting: $100.00 for 1 job, 30 days, the same price for every role. Profile Access: $0.00, 30 days, lets an employer view current job seeker profiles. No multi post or pass option shown on that page. The site is run by Eye Care Edge Ltd. Check the page again when not signed in before quoting it anywhere. The screenshot itself is not kept in the repository because the browser frame shows work bookmarks and tabs.
+
+**Kestrel against $100 a post.** Support and patient care $59 (41% lower), opticians and practice leads $79 (21% lower), optometrists $99 (about the same). The plan mix averages $76 (24% lower). Five posts on the $199 pass against $500 for 5 posts at Jobs4ECPs saves $301.
+
+**The problem with one pass.** The $199 pass for 5 live posts is priced against the average mix. If all 5 posts are optometrists, the singles total is $495, so the discount is 60% (about $296 given up). The clinics most likely to buy a pass are groups and corporates with several vacancies, and optometrists are often what they hire for. The cost to Kestrel of an extra post is only a few cents, so this is forgone revenue, not a loss, but it is the largest hole in the pass.
+
+| 5 posts at singles pricing | Singles total | Pass at $199 | Discount |
+| --- | --- | --- | --- |
+| All support and patient care ($59) | $295 | $199 | 33% |
+| All opticians and leads ($79) | $395 | $199 | 50% |
+| Plan mix (average $76) | $380 | $199 | 48% |
+| All optometrists ($99) | $495 | $199 | 60% |
+
+**Options.**
+
+1. Two named tiers. Pass at $199: up to 5 live posts for support, patient care, optician and practice lead roles. Pass Plus at about $349: up to 5 live posts including optometrists. That is about $70 a post, 29% below $99, and about $150 under 5 optometrist posts at Jobs4ECPs ($500). Steve's suggestion; Claude's lean, because it follows the 3 role bands already in the pricing.
+2. One pass, where an optometrist post counts as 2 of the 5 slots. Easy to build, harder to explain.
+3. Pass at $199 includes 1 optometrist post, and Plus removes the cap.
+
+**Decide before any clinic hears the founding offer.** Founding clinics are promised $199 a month for 12 months. If that is promised before the tiers exist, it may lock in unlimited optometrist posts at $199. Settle what the founding offer covers first, then update the launch flyer, the For clinics page (audit R42) and the Terms to match. The credit pack example in section 10 above has been recalculated from the 5th November ladder. The launch flyer draft (`docs/marketing/launch-flyer.html`) still shows the older introductory prices ($39, $49, $59) and a $79 standard post, and needs the same update.
+
+**Profile Access gap.** Jobs4ECPs gives employers free access to candidate profiles. Kestrel has saved CVs for applying but no way for clinics to browse candidates. Parked: it needs a decision on candidate consent, and a question for the lawyer, before it is considered.
+
+**Jobs-optometry.** Steve's understanding is that its job board only lets OSI members post. Not checked by Claude. If it is right, that board is closed to corporate chains, opticians, assistants and any non member, and Kestrel being open to everyone belongs on the For clinics page. Add it to the hand review of competitors (`NEXT-STEPS-PHASES.md` and the planning item in `STEVE-NEXT-STEPS.md`), by reading public pages only, with no scraping.
