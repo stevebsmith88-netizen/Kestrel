@@ -84,7 +84,6 @@ export default function ComingSoon() {
         <div className="wrap">
           <span>
             <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
-            <span className="addr">6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada</span>
           </span>
           <span>
             <Link href="/blog">Blog</Link> &middot; <Link href="/privacy">Privacy</Link> &middot; <Link href="/terms">Terms</Link> &middot; <Link href="/posting-policy">Posting policy</Link> &middot; <Link href="/contact">Contact</Link> &middot; &copy; {new Date().getFullYear()} Kestrel Eye Care Jobs
