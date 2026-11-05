@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
+import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { cleanClinic, cleanJob, parseMoney, validateClinic, validateJob, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
@@ -53,6 +54,12 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     if (error) {
       console.error("Clinic update failed:", error.code, error.message);
       return { error: "We couldn't save your clinic profile. Please try again." };
+    }
+    // The clinic name, website and About text show on live job pages without a review. If this clinic has live jobs, tell the admin what changed.
+    const changes = clinicChanges(existing, row);
+    if (changes.length) {
+      const { count } = await db.from("jobs").select("id", { count: "exact", head: true }).eq("employer_id", existing.id).eq("status", "live");
+      if (count && count > 0) await notifyAdmin("A clinic with live jobs changed its profile", clinicChangeParagraphs(clinic.clinicName, changes), "/admin/review");
     }
   } else {
     const { data, error } = await db.from("employers").insert({ ...row, owner_id: session.userId }).select("id").single();
