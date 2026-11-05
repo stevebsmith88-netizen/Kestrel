@@ -41,6 +41,10 @@ At the top of the page, **Search a province for clinics that are hiring**. Choos
 - **A record of where and when.** Every page read is kept in a private table, `page_reads`: the address, when, who pressed the button, and what was found. The page's wording itself is not kept. Only a set of numbers used for the copy check is stored, and the daily job clears those after 30 days. This is also the record CASL needs before any outreach (docs/casl-outreach.md).
 - **A daily limit** of 60 pages a day, so a mistake cannot run up the Anthropic bill.
 
+## Setup check
+
+At the top of the Found listings page, **Setup check** says what this copy of the site can see: whether it is the live site, the demo or a preview, whether `ANTHROPIC_API_KEY` is present and looks right (never the key itself), the workspace setting, the database, and whether publishing is on. It opens by itself when something needs attention. **Test Claude** and **Test web search** send 1 tiny request each (a fraction of a cent, and about 1 cent) and say plainly whether it worked, or what to fix. The ad builder, the reader and the province search all use the same key, so a pass here covers all 3.
+
 ## Setting it up
 
 1. Run `supabase/migrations/0023_found_listings.sql` and `0025_clinic_leads.sql` in the Supabase SQL editor, **on both databases** (the live project and the demo project). Or run `supabase/combined/run-everything.sql`, which now includes it. Safe to run twice.
