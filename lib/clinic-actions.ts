@@ -5,8 +5,9 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
+import { jobFromForm } from "@/lib/job-form";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { cleanClinic, cleanJob, parseMoney, validateClinic, validateJob, type JobFormState } from "@/lib/jobs";
+import { cleanClinic, validateClinic, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
@@ -98,49 +99,12 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   if (!employer) redirect("/clinic/profile");
 
   const submit = String(form.get("intent") ?? "") === "submit";
-  const job = cleanJob({
-    title: field(form, "title"),
-    roleCategory: field(form, "roleCategory"),
-    employmentType: field(form, "employmentType"),
-    province: field(form, "province"),
-    city: field(form, "city"),
-    payPeriod: field(form, "payPeriod"),
-    payMin: field(form, "payMin"),
-    payMax: field(form, "payMax"),
-    existingVacancy: field(form, "existingVacancy"),
-    usesAi: field(form, "usesAi"),
-    description: field(form, "description"),
-    applyMethod: field(form, "applyMethod"),
-    applyUrl: field(form, "applyUrl"),
-    workArrangement: field(form, "workArrangement"),
-    territory: field(form, "territory"),
-    payExtras: field(form, "payExtras"),
-  });
-  const errors = validateJob(job, submit);
+  const { job, row, errors } = jobFromForm(form, submit);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
 
-  const row = {
-    title: job.title,
-    role_category: job.roleCategory || null,
-    employment_type: job.employmentType || null,
-    province: job.province || null,
-    city: job.city || null,
-    pay_period: job.payPeriod || null,
-    pay_min: parseMoney(job.payMin),
-    pay_max: parseMoney(job.payMax),
-    is_existing_vacancy: job.existingVacancy === "yes" ? true : job.existingVacancy === "no" ? false : null,
-    uses_ai_screening: job.usesAi === "yes" ? true : job.usesAi === "no" ? false : null,
-    description: job.description || null,
-    apply_method: job.applyMethod,
-    apply_url: job.applyMethod === "external" ? job.applyUrl || null : null,
-    work_arrangement: job.workArrangement,
-    territory: job.workArrangement === "field" ? job.territory || null : null,
-    pay_extras: job.payExtras || null,
-    status: submit ? "in_review" : "draft",
-  };
 
   const id = idFrom(form);
   // A live job can be edited, but only by sending the changes to be read again. It is offline until they are approved.

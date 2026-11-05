@@ -43,6 +43,7 @@ from (
     ('column: unopened reminder on applications', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'reminded_at')),
     ('table: page_reads (found listings tool record)', to_regclass('public.page_reads') is not null),
     ('table: sign_in_attempts (sign in guard)', to_regclass('public.sign_in_attempts') is not null),
+    ('column: job posted by an admin', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'posted_by_admin_id')),
     ('column: when a found listing was found', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'found_at')),
     ('rule: found listings live 21 days at most', exists (select 1 from pg_constraint where conname = 'jobs_found_listing_21_days')),
     ('table: clinic_leads (province search leads)', to_regclass('public.clinic_leads') is not null),
