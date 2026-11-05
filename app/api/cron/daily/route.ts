@@ -4,6 +4,9 @@ import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } fro
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { outreachDailyLimit, outreachOn } from "@/lib/features";
+import { nextDueAt, outreachSequenceEmail, sameClinicPattern, stopReason } from "@/lib/outreach-sequence";
+import { addressUnsubscribeUrl, isSuppressed } from "@/lib/suppression";
 import { candidateRecipient } from "@/lib/recipient";
 import { dailyBudget, makeBudget } from "@/lib/send-budget";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -24,6 +27,7 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 //  4. reminds clinics about applications they have not opened for 14 days,
 //     and sends the summary email to clinics who chose one every 2 to 3 days or weekly,
 //  5. emails candidates one digest of new jobs that match their job alerts,
+//     then sends the clinic outreach emails that are due (only while ENABLE_OUTREACH is "yes"),
 //  6. tells Steve about anything that has waited more than a day for him.
 // Vercel sends the secret in the Authorization header, so nobody else can trigger it.
 // Only one run can go at a time, it sends no more than the day's email budget, and it records when it last finished well,
@@ -51,7 +55,7 @@ async function runDaily(request: Request) {
   const started = Date.now();
   const outOfTime = () => Date.now() - started > TIME_LIMIT;
   const now = new Date();
-  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, emailsFailed: 0, emailsHeldBack: 0 };
+  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
   const problems: string[] = [];
 
   // Only one run at a time. If two copies started together, every email would go twice.
@@ -277,6 +281,53 @@ async function runDaily(request: Request) {
       summary.alertsSent += 1;
     } else {
       await putBack();
+    }
+  }
+
+  // 5a. Clinic outreach sequence, only while it is switched on. Each clinic was added by Steve on the Outreach page.
+  // Before every email, it checks the clinic has not unsubscribed, joined or claimed a listing, and stops if so.
+  if (outreachOn()) {
+    let outreachLeft = outreachDailyLimit();
+    const { data: due, error: dueError } = await admin
+      .from("outreach_contacts")
+      .select("id, email, clinic_name, steps_sent")
+      .eq("status", "active")
+      .lte("next_due_at", now.toISOString())
+      .order("next_due_at", { ascending: true })
+      .limit(200);
+    if (dueError) problems.push(`Reading outreach (has migration 0029 been run?): ${dueError.message}`);
+    for (const contact of due ?? []) {
+      if (outOfTime() || outreachLeft <= 0) break;
+      const sameClinic = sameClinicPattern(contact.email);
+      const [suppressed, onWaitlist, hasAccount, claimed] = await Promise.all([
+        isSuppressed(contact.email),
+        admin.from("waitlist").select("id", { count: "exact", head: true }).eq("email", contact.email).then((r) => (r.count ?? 0) > 0),
+        admin.from("employer_contacts").select("employer_id", { count: "exact", head: true }).ilike("notify_email", sameClinic).then((r) => (r.count ?? 0) > 0),
+        admin.from("listing_claims").select("id", { count: "exact", head: true }).ilike("claimant_email", sameClinic).then((r) => (r.count ?? 0) > 0),
+      ]);
+      const stop = stopReason({ suppressed, onWaitlist, hasAccount, claimed });
+      if (stop) {
+        await admin.from("outreach_contacts").update({ status: "stopped", stop_reason: stop, next_due_at: null, updated_at: now.toISOString() }).eq("id", contact.id);
+        summary.outreachStopped += 1;
+        continue;
+      }
+      if (!budget.take()) {
+        summary.emailsHeldBack += 1;
+        break;
+      }
+      const step = contact.steps_sent + 1;
+      const mail = outreachSequenceEmail({ step, clinicName: contact.clinic_name, unsubscribeUrl: addressUnsubscribeUrl(contact.email) });
+      const result = await deliverEmail({ to: contact.email, unsubscribeUrl: addressUnsubscribeUrl(contact.email), ...mail });
+      if (!note(result)) continue;
+      outreachLeft -= 1;
+      const sentAt = new Date();
+      const next = nextDueAt(step, sentAt);
+      await admin
+        .from("outreach_contacts")
+        .update({ steps_sent: step, last_sent_at: sentAt.toISOString(), next_due_at: next?.toISOString() ?? null, status: next ? "active" : "finished", updated_at: sentAt.toISOString() })
+        .eq("id", contact.id);
+      await admin.from("outreach_sends").insert({ contact_id: contact.id, step, subject: mail.subject });
+      summary.outreachSent += 1;
     }
   }
 

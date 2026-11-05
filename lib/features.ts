@@ -16,3 +16,12 @@ export const clinicSignUpOpen = () => process.env.CLINIC_SIGNUP === "yes";
 // disclosure conversation has happened. While it is off, pages can be read and drafts saved, but nothing is published.
 // Set ENABLE_SEEDING to "yes" in Vercel to switch it on.
 export const seedingOn = () => process.env.ENABLE_SEEDING === "yes";
+
+// The clinic outreach email sequence (Admin, Outreach). Off until Steve confirms his disclosure conversation has happened
+// and a lawyer has checked the sequence. While it is off, clinics can be added and nothing is sent.
+// Set ENABLE_OUTREACH to "yes" in Vercel to switch it on. OUTREACH_DAILY_LIMIT caps sends a day (default 20).
+export const outreachOn = () => process.env.ENABLE_OUTREACH === "yes";
+export function outreachDailyLimit(env: Record<string, string | undefined> = process.env) {
+  const given = Number(env.OUTREACH_DAILY_LIMIT);
+  return env.OUTREACH_DAILY_LIMIT && Number.isFinite(given) && given >= 0 ? Math.min(Math.floor(given), 200) : 20;
+}
