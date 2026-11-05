@@ -106,6 +106,7 @@ export function SignInForm({ notice, next, google = false, signupOpen = true }: 
         <input id="si-email" name="email" type="email" autoComplete="email" required />
       </div>
       <PasswordField id="si-password" name="password" label="Password" autoComplete="current-password" />
+      {state.check && <Turnstile resetSignal={state} />}
       <Problem text={state.error} />
       <button type="submit" className="btn" disabled={pending}>{pending ? "Signing in" : "Sign in"}</button>
       <p className="alt"><Link href="/forgot-password">Forgot your password?</Link></p>

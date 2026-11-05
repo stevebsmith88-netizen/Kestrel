@@ -236,7 +236,7 @@ export async function saveLead(_prev: LeadSaveState, form: FormData): Promise<Le
   const { error } = await db.from("clinic_leads").upsert(row, { onConflict: "website_key" });
   if (error) {
     console.error("Saving a lead failed:", error.code, error.message);
-    return { error: error.code === "42P01" ? "Leads need database migration 0024. Run it in Supabase, then try again." : "We couldn't save that lead. Please try again." };
+    return { error: error.code === "42P01" ? "Leads need database migration 0025. Run it in Supabase, then try again." : "We couldn't save that lead. Please try again." };
   }
   revalidatePath("/admin/found");
   return { saved: true, message: "Saved to your leads." };

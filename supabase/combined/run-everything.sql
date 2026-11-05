@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0024), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0025), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1700,7 +1700,25 @@ alter table public.jobs add constraint jobs_found_listing_21_days check (
 ) not valid;
 
 -- ======================================================================
--- 0024_clinic_leads.sql
+-- 0024_sign_in_attempts.sql
+-- ======================================================================
+-- Sign in guard (audit R22). Counts failed sign in attempts per email and per visitor, so that after 5 failures in
+-- 15 minutes the sign in form asks for the bot check. Only the website's server reads or writes this table.
+-- The keys are one way scrambled (hashed) values, never a plain email address or visitor address.
+-- Safe to run more than once.
+
+create table if not exists public.sign_in_attempts (
+  key                text primary key,
+  failures           integer not null default 0,
+  window_started_at  timestamptz not null default now()
+);
+
+alter table public.sign_in_attempts enable row level security;
+revoke all on public.sign_in_attempts from anon, authenticated;
+-- No policies on purpose: the browser can never read or change this table.
+
+-- ======================================================================
+-- 0025_clinic_leads.sql
 -- ======================================================================
 -- Clinic leads: clinics that appear to be hiring, found by the province search (Admin, Found listings). Safe to run more than once.
 -- A lead is a note about a clinic, not a listing. Nothing here is public, and nothing is sent to anyone from it.
@@ -1739,6 +1757,7 @@ create unique index if not exists clinic_leads_website_idx on public.clinic_lead
 create index if not exists clinic_leads_province_idx on public.clinic_leads (province, found_at desc);
 alter table public.clinic_leads enable row level security;
 revoke all on public.clinic_leads from anon, authenticated;
+
 
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
@@ -1784,6 +1803,7 @@ from (
     ('column: unsubscribed date on profiles', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'unsubscribed_at')),
     ('column: unopened reminder on applications', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'reminded_at')),
     ('table: page_reads (found listings tool record)', to_regclass('public.page_reads') is not null),
+    ('table: sign_in_attempts (sign in guard)', to_regclass('public.sign_in_attempts') is not null),
     ('column: when a found listing was found', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'found_at')),
     ('rule: found listings live 21 days at most', exists (select 1 from pg_constraint where conname = 'jobs_found_listing_21_days')),
     ('table: clinic_leads (province search leads)', to_regclass('public.clinic_leads') is not null),

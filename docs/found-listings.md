@@ -43,7 +43,7 @@ At the top of the page, **Search a province for clinics that are hiring**. Choos
 
 ## Setting it up
 
-1. Run `supabase/migrations/0023_found_listings.sql` and `0024_clinic_leads.sql` in the Supabase SQL editor, **on both databases** (the live project and the demo project). Or run `supabase/combined/run-everything.sql`, which now includes it. Safe to run twice.
+1. Run `supabase/migrations/0023_found_listings.sql` and `0025_clinic_leads.sql` in the Supabase SQL editor, **on both databases** (the live project and the demo project). Or run `supabase/combined/run-everything.sql`, which now includes it. Safe to run twice.
 2. Nothing new is needed in Vercel to try it. It uses the same `ANTHROPIC_API_KEY` as the ad builder.
 3. When you are ready to publish (after the disclosure conversation): add `ENABLE_SEEDING` = `yes` in Vercel for the live project, and redeploy. Only add it to the demo project if you want to try publishing there, and remember the demo site is public too.
 4. On the demo site, run `supabase/demo/seed.sql` again after step 1 if you want its 2 sample found listings to show "Not stated by the clinic".

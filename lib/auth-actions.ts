@@ -6,6 +6,8 @@ import { getSession, homeFor } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
+import { checkRequired, clearFailures, recordFailure, signInKeys } from "@/lib/sign-in-guard";
+import { RATE_LIMITED_MESSAGE, TOO_MANY_MESSAGE } from "@/lib/sign-in-limits";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, NOT_CONNECTED, TERMS_VERSION, isEmail, safeNext, type FormState } from "@/lib/auth-copy";
 import { INVITE_MESSAGE, SIGNUP_CLOSED_MESSAGE, clinicInviteOk, inviteMatches } from "@/lib/invite";
 import { issueSignupTicket, signupsOpen } from "@/lib/signup-gate";
@@ -21,11 +23,19 @@ export async function signIn(_prev: FormState, form: FormData): Promise<FormStat
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
 
+  // After 5 failed attempts for this email or from this visitor, the bot check is needed before another try.
+  const keys = await signInKeys(email);
+  if ((await checkRequired(keys)) && !(await passesTurnstile(form.get("turnstileToken")))) return { error: TOO_MANY_MESSAGE, check: true };
+
   const { error } = await db.auth.signInWithPassword({ email, password });
   if (error) {
     if (error.code === "email_not_confirmed") return { error: "Please confirm your email first. We sent you a link when you signed up." };
-    return { error: "That email and password don't match. Please try again." };
+    // Supabase's own limit counts all of Kestrel's visitors together, so a busy day can reach it.
+    if (error.code === "over_request_rate_limit" || error.status === 429) return { error: RATE_LIMITED_MESSAGE };
+    const check = await recordFailure(keys);
+    return { error: "That email and password don't match. Please try again.", ...(check ? { check: true } : {}) };
   }
+  await clearFailures(keys);
   redirect(safeNext(String(form.get("next") ?? "")));
 }
 

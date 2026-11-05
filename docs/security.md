@@ -41,6 +41,10 @@ Turn on 2 step sign in (an authenticator app, not text messages) and use a passw
 - Vercel: mark secrets Sensitive, and remove anyone who does not need access.
 - Supabase: upgrade to Pro for daily backups, and do a test restore once before launch.
 
+## Emergency switches
+
+A maintenance switch (`MAINTENANCE_MODE`) puts the whole site behind a "back soon" page, and `docs/breach-plan.md` has the click by click steps for that, for signing everyone out, for stopping all email, and for going back to the last good version. It is a setting, not a secret, and it must be set in each Vercel project (live and demo) separately.
+
 ## If personal information is lost or seen by the wrong person
 
 Follow `docs/breach-plan.md`: one page, with a message to send and a log to fill in.
@@ -79,3 +83,7 @@ Hugging Face's July 2026 breach is the example: attackers got internal datasets 
 3. For **Preview**, add Cloudflare's published test keys instead, because preview addresses are not on the real widget. Check Cloudflare's Turnstile testing page for the current values.
 4. Redeploy without the build cache. The site key is read when the site is built, so the check only appears after a new build.
 5. Both keys must be set for the check to run. If only one is set, the forms carry on without it, so a half finished setup can never lock people out.
+
+## Sign in guard
+
+Failed sign in attempts are counted per email and per visitor in `sign_in_attempts` (migration 0024), using scrambled keys. After 5 failures in 15 minutes, the sign in form asks for the bot check before another try. If Supabase's own limit is reached, people see a "wait a few minutes" message. A good sign in clears the email's count, and the daily job removes counts older than a day. If the table is missing or unreadable, sign in carries on as before and the problem is logged.

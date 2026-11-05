@@ -316,6 +316,10 @@ async function runDaily(request: Request) {
   }
   if (summary.emailsFailed > 0) problems.push(`${summary.emailsFailed} emails could not be sent. Check the Resend dashboard.`);
 
+  // Tidy the sign in guard's counts. Anything older than a day has long since run out. A problem here is logged, not alerted.
+  const { error: attemptsError } = await admin.from("sign_in_attempts").delete().lt("window_started_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+  if (attemptsError) console.error("Clearing old sign in attempts:", attemptsError.code, attemptsError.message);
+
   // Record the run, so a missed or failing day shows up in the health check.
   const finished = new Date().toISOString();
   const ok = problems.length === 0;
