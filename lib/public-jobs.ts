@@ -67,8 +67,8 @@ export async function searchJobs(filters: JobFilters): Promise<{ jobs: JobSummar
 
 export type LiveJob = JobSummary & {
   employer_id: string;
-  is_existing_vacancy: boolean;
-  uses_ai_screening: boolean;
+  is_existing_vacancy: boolean | null;
+  uses_ai_screening: boolean | null;
   description: string;
   territory: string | null;
   pay_extras: string | null;

@@ -27,7 +27,7 @@ Docs that describe each area: `docs/accounts-setup.md`, `clinics-and-jobs.md`, `
 ## What is NOT built
 
 - **Stripe** (single posts, the monthly pass, coupons, HST via Stripe Tax, the free launch coupon FREELAUNCH). Decided: launch with Stripe in test mode and a free launch period, then switch prices on. A pricing decision for field and supplier roles is still open.
-- **The seeding tool** (admin tool to add found listings) and **careers page reading** with the Claude API (the stack table mentions it). Seeding stays unused until Steve confirms his disclosure conversation.
+- **Publishing found listings.** The seeding tool and careers page reading are built (`/admin/found`, `docs/found-listings.md`), but publishing stays switched off (`ENABLE_SEEDING`) until Steve confirms his disclosure conversation. The ad builder's "paste your job link" box, which will use the same page reader, is not built.
 - **Clinic outreach sending.** The email template exists (`lib/outreach.ts`) and is deliberately not connected to anything.
 - A **real antivirus scan** for CVs (see `docs/cv-scanning.md`), **French**, the **locum board**, **featured listings**, **AI culture match**, and a **stricter Content Security Policy**.
 

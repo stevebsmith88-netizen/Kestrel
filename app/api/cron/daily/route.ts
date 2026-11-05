@@ -288,6 +288,11 @@ async function runDaily(request: Request) {
     }
   }
 
+  // 5b. Found listings tool: forget the copy check numbers of careers pages read more than 30 days ago. The record of
+  // where and when each page was read stays.
+  const { error: printError } = await admin.from("page_reads").update({ fingerprint: null }).not("fingerprint", "is", null).lt("read_at", new Date(now.getTime() - 30 * DAY).toISOString());
+  if (printError) problems.push(`Clearing old page readings (has migration 0023 been run?): ${printError.message}`);
+
   // 6. Anything waiting for Steve for more than a day.
   const dayAgo = new Date(now.getTime() - DAY).toISOString();
   const [waitingJobs, waitingClaims, openReports] = await Promise.all([

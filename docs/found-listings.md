@@ -1,0 +1,45 @@
+# Found listings (the seeding tool)
+
+Admin, Overview, then the **Found listings** link under the heading (`/admin/found`). It is kept off the top menu so the admin bar stays on 1 line. It lists real jobs from a clinic's own careers page, for clinics that are not on Kestrel yet, so candidates see a fuller board before launch (Gate C: 50 live roles across 5 or more provinces). Each listing links back to the clinic's own application page, and the clinic can claim it.
+
+**Publishing is switched off.** You can read pages and save drafts, but nothing goes public until `ENABLE_SEEDING` is set to `yes` in Vercel. Leave it off until your disclosure conversation at work has happened (CLAUDE.md, Non negotiables). Clinic outreach is a separate step and is still not connected to anything.
+
+## How to use it
+
+1. Open the clinic's careers page in your browser. Copy its address.
+2. Paste it into "Read a careers page", tick that it is the clinic's own website, and press **Read this page**. It takes up to a minute.
+3. The reader shows each open job it found, with every fact in a form: title, role, type, place, pay, the 2 questions, the apply link and a short summary in our own words.
+4. Check each one against the page, change anything that is wrong, tick "I have checked every fact", then **Save as a draft** (or, once publishing is on, **Publish for 21 days**).
+5. Drafts wait at the bottom of the page. Publish one within a week of reading the page, or read the page again.
+
+A live found listing comes down by itself after 21 days, unless the clinic claims it first. **Take it down** removes one straight away, for example when a clinic asks.
+
+## The rules it follows
+
+- **Only the clinic's own website.** Job boards (Indeed, LinkedIn, Jobs4ECPs, Glassdoor, Job Bank and others), recruiters, social networks and the professional colleges and associations are refused by name. Claude also checks what kind of page it is, and refuses a job board or recruiter page it does not recognise. A careers page on a hiring system for one clinic (Workable, BambooHR, Lever and similar) is fine, but then you type in the clinic's own website.
+- **Nothing connected with Eye Recommend.** A page that mentions Eye Recommend anywhere, in its words or its links, is refused.
+- **robots.txt is obeyed.** If a site asks automated readers to stay away, the page is not read. The reader also names itself (`KestrelEyeCareJobs`) and reads 1 page each time you press the button. It never follows links on its own.
+- **Not for clinics already on Kestrel.** If a clinic with the same website has its own account, the tool says so and stops.
+- **Pay must be on the page.** Every live job on Kestrel shows a pay range, so a job whose page gives no pay is left out. A single figure is fine (enter it in both boxes).
+- **The 2 questions are never guessed.** "Is this an existing vacancy?" and "Does it use AI to screen?" are Yes or No only when the page says so. Otherwise the job page shows **Not stated by the clinic**. Once the clinic claims the listing, they can answer.
+- **Our own words.** Claude writes a fresh summary from the facts. Before saving, the tool checks the summary does not repeat any run of 8 words from the clinic's page, and asks you to reword it if it does. Facts are free to repeat; wording is not.
+- **No logo, no contact details.** The clinic profile is marked "not yet claimed", has no logo, and the summary carries no emails, phone numbers or links. Applicants are sent to the clinic's own application page.
+- **No Google job markup until claimed.** Unclaimed found listings appear on Kestrel and in its search, but are not sent to Google for Jobs, because the clinic's own page is the original and we cannot know the moment a job is filled. Once claimed, the markup is added. (This is option (a) from the 30th October audit, R19.)
+- **A record of where and when.** Every page read is kept in a private table, `page_reads`: the address, when, who pressed the button, and what was found. The page's wording itself is not kept. Only a set of numbers used for the copy check is stored, and the daily job clears those after 30 days. This is also the record CASL needs before any outreach (docs/casl-outreach.md).
+- **A daily limit** of 60 pages a day, so a mistake cannot run up the Anthropic bill.
+
+## Setting it up
+
+1. Run `supabase/migrations/0023_found_listings.sql` in the Supabase SQL editor, **on both databases** (the live project and the demo project). Or run `supabase/combined/run-everything.sql`, which now includes it. Safe to run twice.
+2. Nothing new is needed in Vercel to try it. It uses the same `ANTHROPIC_API_KEY` as the ad builder.
+3. When you are ready to publish (after the disclosure conversation): add `ENABLE_SEEDING` = `yes` in Vercel for the live project, and redeploy. Only add it to the demo project if you want to try publishing there, and remember the demo site is public too.
+4. On the demo site, run `supabase/demo/seed.sql` again after step 1 if you want its 2 sample found listings to show "Not stated by the clinic".
+
+Optional: `PAGE_READER_MODEL` chooses the Claude model (Sonnet 5.5 by default, as for the ad builder). Each page read costs a few cents at most.
+
+## What it cannot do yet
+
+- Some careers pages load their jobs after the page opens (with JavaScript), so the reader sees an empty page. The tool says so. Paste the link to one job instead.
+- It does not recheck a live found listing's page each day. The 21 day limit and the "Take it down" button cover that for now.
+- The ad builder's "Paste your job link" box for clinics will use the same page reader. It is not built yet.
+- The lawyer pack asks about this (questions 16 and 32). Question 32 lists "recheck the page" among the rules: the tool covers it with the 21 day limit, a fresh reading (under a week old) before anything is published, and the Take it down button, but it does not recheck live listings each day. The tool obeys robots.txt, but it cannot read each site's own terms of use, so skip any clinic whose site says not to copy its content.

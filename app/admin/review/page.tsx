@@ -4,7 +4,7 @@ import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { approveJob, rejectJob } from "@/lib/admin-actions";
 import { changedFields } from "@/lib/job-diff";
-import { employerFlags, employmentLabel, formatPay, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
+import { answerLabel, employerFlags, employmentLabel, formatPay, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -20,7 +20,7 @@ const NOTICES: Record<string, string> = {
 
 type QueueJob = {
   id: string; title: string; role_category: string; employment_type: string; province: string; city: string;
-  pay_period: string; pay_min: number; pay_max: number; is_existing_vacancy: boolean; uses_ai_screening: boolean;
+  pay_period: string; pay_min: number; pay_max: number; is_existing_vacancy: boolean | null; uses_ai_screening: boolean | null;
   description: string; work_arrangement: string | null; territory: string | null; pay_extras: string | null; apply_method: string; apply_url: string | null; created_at: string; employer_id: string; posted_at: string | null; expires_at: string | null;
   employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; direct_hire_confirmed_at: string | null } | null;
 };
@@ -108,8 +108,8 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       <div><dt>Pay</dt><dd>{formatPay(j.pay_min, j.pay_max, j.pay_period)}</dd></div>
                       {j.territory && <div><dt>Area covered</dt><dd>{j.territory}</dd></div>}
                       {j.pay_extras && <div><dt>Anything else that is part of the pay</dt><dd>{j.pay_extras}</dd></div>}
-                      <div><dt>Existing vacancy</dt><dd>{j.is_existing_vacancy ? "Yes" : "No"}</dd></div>
-                      <div><dt>Uses AI to screen</dt><dd>{j.uses_ai_screening ? "Yes" : "No"}</dd></div>
+                      <div><dt>Existing vacancy</dt><dd>{answerLabel(j.is_existing_vacancy)}</dd></div>
+                      <div><dt>Uses AI to screen</dt><dd>{answerLabel(j.uses_ai_screening)}</dd></div>
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>
                     </dl>
                     <pre className="adtext">{j.description}</pre>

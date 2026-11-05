@@ -11,3 +11,8 @@ export const googleSignInOn = () => process.env.ENABLE_GOOGLE_SIGNIN === "yes";
 // Clinic sign up is by invitation until the free launch. While CLINIC_SIGNUP is not "yes", a new clinic account needs
 // the code in CLINIC_INVITE_CODE (see lib/invite.ts). Set CLINIC_SIGNUP to "yes" in Vercel to open it to everyone.
 export const clinicSignUpOpen = () => process.env.CLINIC_SIGNUP === "yes";
+
+// Publishing found listings (jobs read from a clinic's own careers page, at /admin/found). Off until Steve confirms his
+// disclosure conversation has happened. While it is off, pages can be read and drafts saved, but nothing is published.
+// Set ENABLE_SEEDING to "yes" in Vercel to switch it on.
+export const seedingOn = () => process.env.ENABLE_SEEDING === "yes";

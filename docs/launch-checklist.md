@@ -53,7 +53,7 @@ Add each key to Production and Preview in Vercel (Settings, Environment Variable
 | 22d | DONE: CVs with macros, scripts or embedded files are refused. A real virus scanner is still to choose, see `docs/cv-scanning.md` | Your decision |
 | 22e | DONE: one page breach plan, `docs/breach-plan.md`. Fill in the backup person and the lawyer | You |
 | 22f | Set `EMAIL_REPLY_TO` in Vercel to a real inbox (see `docs/email-addresses.md`) | You |
-| 22a | Admin tool to add found listings (seeding). Editing a live job and Post again are DONE | Nothing |
+| 22a | DONE: admin tool to add found listings, Admin, Found listings (run migration 0023 on both databases, see `docs/found-listings.md`). Publishing stays off until you set `ENABLE_SEEDING` after the disclosure conversation | You, later |
 | 22b | DONE: field based and supplier roles; blog with 3 starter posts (more topics in `docs/blog.md`) | Nothing |
 | 22c | Pricing for field and supplier roles (decide with the Stripe step) | Your decision |
 

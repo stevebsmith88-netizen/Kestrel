@@ -299,7 +299,14 @@ const money = (n: number) => {
 
 export function formatPay(min: number | string, max: number | string, period: string) {
   const unit = period === "hour" ? "an hour" : "a year";
+  if (Number(min) === Number(max)) return `${money(Number(min))} ${unit}`;
   return `${money(Number(min))} to ${money(Number(max))} ${unit}`;
+}
+
+// The 2 questions every post answers. A found listing (from a clinic's own careers page) leaves them empty when the clinic's
+// page does not say, because Kestrel never states a fact for a clinic.
+export function answerLabel(value: boolean | null | undefined) {
+  return value === true ? "Yes" : value === false ? "No" : "Not stated by the clinic";
 }
 
 export function expiryFrom(date: Date, days = JOB_LIFETIME_DAYS) {

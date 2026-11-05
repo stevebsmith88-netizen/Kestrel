@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { employmentLabel, formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { answerLabel, employmentLabel, formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { getLiveJob } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -31,8 +31,11 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
   const job = await getLiveJob(id);
   if (!job) notFound();
   const clinic = job.employers;
-  // Structured data is only added while the job is live, and it matches what is on the page.
-  const jsonLd = clinic ? jobPostingJsonLd(job, clinic, SITE) : null;
+  // Structured data is only added while the job is live, and it matches what is on the page. A found listing that the clinic
+  // has not claimed gets none: the clinic's own page is the original, and Kestrel cannot know the moment the job is filled
+  // (audit finding R19, decision (a)). It still shows on Kestrel and in Kestrel's own search.
+  const unclaimedFound = job.is_seeded && !clinic?.claimed;
+  const jsonLd = clinic && !unclaimedFound ? jobPostingJsonLd(job, clinic, SITE) : null;
 
   return (
     <>
@@ -91,8 +94,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
                   <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
                   {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
-                  <div><dt>Existing vacancy</dt><dd>{job.is_existing_vacancy ? "Yes" : "No"}</dd></div>
-                  <div><dt>Uses AI to screen candidates</dt><dd>{job.uses_ai_screening ? "Yes" : "No"}</dd></div>
+                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}</dd></div>
+                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}</dd></div>
                   <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>
                   <div><dt>Closes</dt><dd>{longDate(job.expires_at)}</dd></div>
                 </dl>
