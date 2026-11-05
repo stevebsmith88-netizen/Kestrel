@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { CLINIC_PASS, ROLE_BANDS, dollars, perDay, perPassPost } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
@@ -30,6 +31,32 @@ export default function Clinics() {
           <p>
             Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants?
           </p>
+          <section className="pricing" aria-labelledby="pricing-h">
+            <h2 id="pricing-h">One price. 30 days.</h2>
+            <p className="pricing-free">Free to post while we launch, for the opening 30 to 60 days.</p>
+            <p>After launch, a 30 day post costs around the price of a coffee a day. No charge by the click.</p>
+            <table className="ladder">
+              <caption>Per 30 day post, before HST</caption>
+              <thead>
+                <tr><th scope="col">Role</th><th scope="col">A day</th><th scope="col">Per post</th></tr>
+              </thead>
+              <tbody>
+                {ROLE_BANDS.map((b) => (
+                  <tr key={b.key}>
+                    <th scope="row">{b.label}<span>{b.covers}</span></th>
+                    <td>{perDay(b.price)}</td>
+                    <td className="price">{dollars(b.price)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="passbox">
+              <p className="passhead"><strong>Clinic pass</strong> <span className="price">{dollars(CLINIC_PASS.monthly)}</span> a month</p>
+              <p>Up to {CLINIC_PASS.livePosts} live posts at once, {perPassPost()} a post, plus a featured clinic profile.</p>
+              <p className="founding"><strong>Founding clinics</strong> who join during launch keep {dollars(CLINIC_PASS.monthly)} a month for {CLINIC_PASS.lockMonths} months, or until they cancel. Or pay {dollars(CLINIC_PASS.yearly)} for the year, which is 2 months free.</p>
+            </div>
+            <p className="small-note">Prices in Canadian dollars, before HST. Near the end of its 30 days, any post can be extended for another 30.</p>
+          </section>
           <p>Waitlist clinics will be the first invited to post.</p>
           <Link href="/#join" className="btn">Join the waitlist</Link>
           <p className="small-note">Already have an account? <Link href="/sign-in">Sign in</Link></p>
