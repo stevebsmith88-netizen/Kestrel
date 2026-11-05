@@ -9,6 +9,7 @@ import { GROUP_LABELS, groupOf, type Group } from "@/lib/applications";
 import { declineSelected, fillRole } from "@/lib/applicant-actions";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getMyJob } from "@/lib/clinic";
+import { FILL_SOURCES } from "@/lib/job-ending";
 import { longDate } from "@/lib/jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -102,6 +103,13 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               <input type="hidden" name="jobId" value={id} />
               <h2>Role filled?</h2>
               <p className="help">This closes the job and lets the {waiting.length} {waiting.length === 1 ? "person" : "people"} still waiting know it has been filled. Candidates in an interview or with an offer are not changed.</p>
+              <div className="row">
+                <label className="lab" htmlFor="filledVia">How did you find the person?</label>
+                <select id="filledVia" name="filledVia" defaultValue="">
+                  <option value="">Choose one (optional)</option>
+                  {FILL_SOURCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                </select>
+              </div>
               <label className="consent"><input type="checkbox" name="confirm" value="yes" required /><span>Yes, close this job and tell everyone who is waiting.</span></label>
               <div><button type="submit" className="btn sm">The role is filled</button></div>
             </form>

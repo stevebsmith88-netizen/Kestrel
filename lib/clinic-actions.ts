@@ -11,6 +11,8 @@ import { cleanClinic, validateClinic, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
+import { canExtend, extendedUntil } from "@/lib/job-ending";
+import { supabaseAdmin } from "@/lib/supabase-server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const field = (form: FormData, key: string) => form.get(key) ?? "";
@@ -155,6 +157,33 @@ export async function closeJob(form: FormData) {
   if (id && db) await db.from("jobs").update({ status: "closed" }).eq("id", id).in("status", ["live", "draft", "rejected"]);
   revalidatePath("/clinic");
   redirect("/clinic?notice=job-closed");
+}
+
+// Another 30 days for a job near the end of its run, or one that ended in the last 7 days. The wording was
+// already approved, so it goes straight back up without review. The clinic is checked first, then the change is
+// made on the server, because clinics cannot change a live or expired job themselves.
+// Free while we launch. When paid posts start, this is where an extension will be charged (or counted against a pass).
+export async function extendJob(form: FormData) {
+  const session = await requireRole("clinic");
+  const id = idFrom(form);
+  const back = String(form.get("from") ?? "") === "ending" && id ? `/clinic/jobs/${id}/ending` : "/clinic";
+  const employer = await getMyEmployer(session.userId);
+  const admin = supabaseAdmin();
+  if (!id || !employer || !admin) redirect(`${back}?notice=job-extend-failed`);
+  const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count").eq("id", id).eq("employer_id", employer.id).maybeSingle();
+  if (!job || !canExtend(job)) redirect(`${back}?notice=job-extend-blocked`);
+  const until = extendedUntil(job).toISOString();
+  const { error } = await admin
+    .from("jobs")
+    .update({ status: "live", expires_at: until, extended_count: (job.extended_count ?? 0) + 1, last_extended_at: new Date().toISOString(), expiry_reminded_at: null })
+    .eq("id", id)
+    .eq("employer_id", employer.id)
+    .in("status", ["live", "expired"]);
+  if (error) redirect(`${back}?notice=job-extend-failed`);
+  revalidatePath("/clinic");
+  revalidatePath("/jobs");
+  revalidatePath(`/jobs/${id}`);
+  redirect("/clinic?notice=job-extended");
 }
 
 export async function withdrawJob(form: FormData) {

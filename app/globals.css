@@ -446,6 +446,26 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .quietdelete summary{cursor:pointer;display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:var(--muted);font-size:0.9375rem;text-decoration:underline;text-underline-offset:3px}
 .quietdelete summary:hover{color:var(--navy)}
 .quietdelete[open] summary{margin-bottom:12px}
+/* Pricing on /clinics: a ladder of 3 role bands, then the clinic pass in navy. Prices come from lib/pricing.ts. */
+.pricing{margin:34px 0 30px;padding-top:28px;border-top:1px solid var(--line)}
+.pricing h2{font:400 2rem/1.15 "DM Serif Display",Georgia,serif;margin:0 0 10px}
+.pricing .pricing-free{font:400 1.375rem/1.3 "DM Serif Display",Georgia,serif;color:var(--chestnut-d);margin:0 0 8px}
+.ladder{width:100%;border-collapse:collapse;margin:18px 0 22px}
+.ladder caption{text-align:left;font-size:0.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--chestnut-d);padding-bottom:8px}
+.ladder thead th{font-size:0.875rem;font-weight:600;color:var(--muted);text-align:right;padding:0 0 6px}
+.ladder thead th:first-child{text-align:left}
+.ladder tbody th,.ladder td{border-top:1px solid #D6C9B2;padding:12px 0;vertical-align:baseline}
+.ladder tbody th{text-align:left;font-weight:600}
+.ladder tbody th span{display:block;font-weight:400;font-size:0.9375rem;color:var(--muted)}
+.ladder td{text-align:right;color:var(--muted);font-size:0.9375rem;padding-left:12px;white-space:nowrap}
+.ladder td.price,.passbox .price{font:400 1.625rem/1 "DM Serif Display",Georgia,serif;color:var(--navy)}
+.ladder tbody tr:last-child th,.ladder tbody tr:last-child td{border-bottom:1px solid #D6C9B2}
+.passbox{background:var(--navy);color:var(--cream);border-radius:10px;padding:22px 24px;margin:0 0 14px}
+.passbox p{margin:0 0 8px;color:var(--mist)}
+.passbox .passhead{color:var(--cream);font-size:1.125rem}
+.passbox .price{color:var(--buff);margin:0 2px 0 6px}
+.passbox .founding{margin:12px 0 0;padding-top:12px;border-top:1px solid #4A5A7A;color:var(--cream)}
+.passbox .founding strong{color:var(--buff)}
 
 /* Found listings: a compact list that opens on click, like the live jobs list */
 .leadlist{display:flex;flex-direction:column;gap:10px}

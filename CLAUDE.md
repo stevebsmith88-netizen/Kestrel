@@ -73,7 +73,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 
 ## Product rules already decided
 
-- Pricing ladder: free launch (30 to 60 days), then introductory $39 support staff, $49 opticians, $59 optometrists per 30 day post, then standard $79 single post or $199 a month clinic pass (up to 5 live posts, featured profile; annual option $1,990). Prices before HST.
+- Pricing ladder (revised 5th November 2026): free launch (30 to 60 days), then per 30 day post by role band: $59 support and patient care (assistants, technicians, reception), $79 opticians and practice leads (opticians, contact lens fitters, practice managers), $99 optometrists. No separate "standard" tier. Clinic pass $199 a month for up to 5 live posts ($39.80 a post) with a featured profile. Founding clinics who take the pass during launch keep $199 a month for 12 months or until they cancel; the $1,990 yearly option is a founding offer only. Prices before HST. Marketing line: "around the price of a coffee a day" ($59 is $1.97 a day, $99 is $3.30).
 - Every post requires a pay range (max $50,000 wide unless over $200,000), a yes or no for "existing vacancy", and a yes or no for "uses AI to screen candidates". No "Canadian experience" requirements allowed in the text. This covers Ontario's January 1st 2026 rules and BC's pay range rule.
 - Paid posts expire after 30 days, seeded posts after 21. Expired posts drop their JobPosting structured data immediately.
 - Each job page carries JobPosting structured data that matches the visible page exactly.

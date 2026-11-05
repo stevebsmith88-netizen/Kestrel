@@ -18,7 +18,8 @@ The email itself is in `lib/outreach.ts`, with a picture of how it looks in `doc
 ## Rules we follow
 
 - Send only to an address published for hiring or business enquiries. Never to a personal address, and never to anything taken from Eye Recommend.
-- One email about the listing, one short follow up at most, then stop unless they reply.
+- The "we listed your job" email (about a found listing): one email, one short follow up at most, then stop unless they reply.
+- The clinic outreach sequence (decided 5th November 2026, ask the lawyer to confirm): 4 emails, on day 1, 8, 18 and 32, each from a different angle (the main email, lost ads, price, time). The last one leaves the door open. Every one carries the reason, the unsubscribe link and the address. It stops by itself when the clinic unsubscribes, joins the waitlist, opens an account or claims a listing, and Steve stops it by hand when they reply.
 - Keep a record for each send: the address, the page it came from, the date we found it, and the date we sent. This is our proof of implied consent.
 - Honour "take it down" at once, and add the address to the suppression list.
 
@@ -33,6 +34,14 @@ The email itself is in `lib/outreach.ts`, with a picture of how it looks in `doc
 ## Why a clinic gains from being listed in more than one place
 
 The outreach email says it plainly: advertising a job in more than one place helps more of the right people see it, being on Kestrel changes nothing on the clinic's own site or other boards, and there is nothing they must do. Never promise a number of applicants or a result. CASL requires the email to be accurate, and promises we cannot keep would count against us.
+
+## The outreach sequence (built, switched off)
+
+- Emails: `lib/outreach-sequence.ts`, tested in `lib/outreach-sequence.test.ts`. Prices come from `lib/pricing.ts`. The design is on the "Kestrel launch flyer" canvas.
+- Steve adds clinics in batches at Admin, Outreach (`/admin/outreach`), from province search leads that have a published address and the page it came from. Adding a batch is his approval. Migration 0029 keeps each clinic's progress (`outreach_contacts`) and every send (`outreach_sends`).
+- The daily job sends what is due, only while `ENABLE_OUTREACH` is "yes", at most `OUTREACH_DAILY_LIMIT` a day (default 20), inside the overall daily email budget.
+- A clinic's own domain counts as the same clinic (an account or claim from anyone there stops the sequence). Free mail domains such as Gmail only match the exact address.
+- Bounces and spam complaints: Resend calls `/api/resend` (signed with `RESEND_WEBHOOK_SECRET`). A permanent bounce or a complaint puts the address on the do not email list and stops its outreach sequence. Temporary bounces are ignored.
 
 ## Still to build before any outreach
 

@@ -1,8 +1,8 @@
-import { emailLayout } from "./email-layout.ts";
+import { brandEmail } from "./brand-email.ts";
 
-// The first email to a clinic whose job Kestrel has listed from the clinic's own careers page.
-// Written to meet Canada's anti-spam law (CASL):
-//  - it says who we are and gives our mailing address (added by emailLayout),
+// The first email to a clinic whose job Kestrel has listed from the clinic's own careers page, in the shared branded
+// look (lib/brand-email.ts). Written to meet Canada's anti-spam law (CASL):
+//  - it says who we are and gives our mailing address (in the footer),
 //  - it has a working unsubscribe link,
 //  - it is only about the recipient's business role (hiring), and
 //  - it is only ever sent to an address the clinic has published for hiring or business enquiries.
@@ -23,22 +23,22 @@ export function outreachEmail({
   claimUrl: string;
   unsubscribeUrl: string;
 }) {
-  const subject = `Your ${jobTitle} job is now on Kestrel Eye Care Jobs`;
-  const mail = emailLayout({
-    heading: `Your ${jobTitle} job is on Kestrel`,
+  return brandEmail({
+    subject: `Your ${jobTitle} job is now on Kestrel Eye Care Jobs`,
+    preview: "Listed free, with every Apply button going to your own page.",
+    headline: [`Your ${jobTitle} job`, "is on Kestrel."],
+    hook: ["Listed free, and yours to claim", "Every Apply button goes to your own application page."],
     paragraphs: [
       `Hello ${clinicName} team,`,
-      `We are Kestrel Eye Care Jobs, a job board for eye care across Canada. We found the ${jobTitle} job on your own careers page (${sourceUrl}), and we have listed it on Kestrel so more eye care professionals can see it.`,
-      "The listing is free. It is described in our own words, it is marked as not yet claimed, and every Apply button sends people straight to your own application page. We have not used your logo.",
-      "Advertising a job in more than one place helps more of the right people see it. Being on Kestrel does not replace or change anything on your own website or on other job boards, and there is nothing you need to do.",
-      "You can claim the listing to update it, answer anything your page did not say and see who is interested, or ask us to take it down and we will do so straight away. Just reply to this email.",
-      `We are writing to you because this address is published on your website for hiring and business enquiries, and this message is only about that job. If you would rather not hear from us, use the link at the bottom and we will stop.`,
+      `Kestrel Eye Care Jobs is a Canada-wide job board for eye care. We found the ${jobTitle} job on your own careers page (${sourceUrl}) and listed it, so more eye care professionals can see it.`,
+      "It's described in our own words and marked as not yet claimed. We haven't used your logo.",
+      "Advertising a job in more than one place helps more of the right people see it. Being on Kestrel doesn't change anything on your own website or on other job boards, and there's nothing you need to do.",
+      "If you claim the listing, you can update it, answer anything your page didn't say, and see who's interested. Or reply and ask us to take it down, and we will straight away.",
     ],
-    items: [{ text: "See your listing", url: listingUrl }],
-    buttonText: "Claim your listing",
-    buttonUrl: claimUrl,
+    button: { text: "Claim your listing", url: claimUrl },
+    links: [{ text: "See your listing", url: listingUrl }],
+    bannerUrl: listingUrl,
+    reason: "You're receiving this because this address is published on your website for hiring enquiries, and this email is only about that job.",
     unsubscribeUrl,
-    reason: "You are receiving this because this address is published on your website for hiring enquiries.",
   });
-  return { subject, ...mail };
 }
