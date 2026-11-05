@@ -20,7 +20,7 @@ On previews, scheduled posts are visible and marked "Scheduled for ...", so Stev
 
 Posts are spaced about 1 every 2 weeks, on Fridays. Never link to a post that is dated later than the one doing the linking (the tests check this). Do not change the date of a post that is already out.
 
-Schedule so far: 3 posts published on 30th October 2026, then 13th November 2026 (optometric assistant jobs and pay), then 27th November 2026 (optician interview questions).
+Schedule so far: 3 posts published on 30th October 2026, then 13th November 2026 (optometric assistant jobs and pay), 27th November 2026 (optician interview questions), 11th December 2026 (how to write an optometric assistant job ad), 8th January 2027 (independent or corporate practice) and 22nd January 2027 (optical lab technician). The 13th November post has no pay figures until the Job Bank wage reports can be checked (add them then). None of the posts uses a personal story, because Steve has not posted an ad himself.
 
 ## What to write next (about 1 post a fortnight)
 
