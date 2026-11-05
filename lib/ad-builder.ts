@@ -1,6 +1,6 @@
 "use server";
 
-import Anthropic from "@anthropic-ai/sdk";
+import { claudeClient } from "@/lib/anthropic-client";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
 import { practiceLabel, type JobFormState } from "@/lib/jobs";
@@ -67,7 +67,7 @@ export async function buildAd(_prev: JobFormState, form: FormData): Promise<JobF
   ].filter(Boolean).join("\n");
 
   try {
-    const client = new Anthropic({ apiKey: key });
+    const client = claudeClient(key);
     // Fallbacks keep a request from failing if the first model declines it.
     const response = await client.beta.messages.create({
       model: MODEL,
