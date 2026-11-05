@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0025), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0026), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1760,6 +1760,15 @@ revoke all on public.clinic_leads from anon, authenticated;
 
 
 -- ======================================================================
+-- 0026_posted_by_admin.sql
+-- ======================================================================
+-- Jobs that an admin posted on a clinic's behalf (for example when a clinic is having trouble with the form).
+-- Records who did it and when, so the record is clear. Safe to run more than once.
+
+alter table public.jobs add column if not exists posted_by_admin_id uuid references auth.users (id) on delete set null;
+alter table public.jobs add column if not exists posted_by_admin_at timestamptz;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -1804,6 +1813,7 @@ from (
     ('column: unopened reminder on applications', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'reminded_at')),
     ('table: page_reads (found listings tool record)', to_regclass('public.page_reads') is not null),
     ('table: sign_in_attempts (sign in guard)', to_regclass('public.sign_in_attempts') is not null),
+    ('column: job posted by an admin', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'posted_by_admin_id')),
     ('column: when a found listing was found', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'found_at')),
     ('rule: found listings live 21 days at most', exists (select 1 from pg_constraint where conname = 'jobs_found_listing_21_days')),
     ('table: clinic_leads (province search leads)', to_regclass('public.clinic_leads') is not null),
