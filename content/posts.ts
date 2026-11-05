@@ -4,92 +4,163 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "optical-lab-technician",
+    title: "What an optical lab technician does, and how to get started",
+    description: "Optical lab technicians turn prescriptions into finished glasses. Here is what the work involves, where it happens and how people start in it.",
+    date: "2027-01-22",
+    body: `When a patient picks out frames and an optician takes the measurements, someone still has to turn the prescription into a finished pair of glasses. That person is the optical lab technician. It is hands-on work for people who like precision, machines and seeing a job through from start to finish.
+
+## The work
+
+Details differ between labs, but the steps are familiar. Lenses start as blanks or semi-finished lenses and are shaped to the prescription. They are then cut to fit the chosen frame, a step called edging. Coatings or tints may be added, the lenses are fitted into the frame, and the finished glasses are checked with a lensometer to confirm they match the prescription before they go out. Technicians also repair frames, replace lenses and adjust how a pair sits, which is a big part of the job in a clinic.
+
+## Where it happens
+
+Some clinics and optical stores have a small lab on site, so edging and repairs happen the same day. Others send work to a central or wholesale lab, which handles larger volumes and the heavier lens work. Lab technicians work in both, and some move between them. Smaller clinics often ask an optician to do the lab work as well.
+
+## How people start
+
+Many learn on the job, starting with simple tasks such as finishing and assembly and moving on to edging and quality checks. Some opticianry programmes include lab work, and being comfortable with fine, careful work is worth more than a particular certificate. Ask the lab or clinic what training they give and who you would learn from.
+
+## What makes a good technician
+
+Accuracy comes first, because a lens cut a fraction of a millimetre off or set at the wrong angle will not give the patient the vision the prescription promised. Patience helps, as does being comfortable with machines that grind, cut and polish. The work involves standing for long stretches, handling lenses and chemicals carefully, and wearing eye and ear protection in the lab. In a clinic lab you will also talk to opticians and sometimes to patients, so being able to explain why a pair needs another day is a useful skill.
+
+## Questions to ask before you accept
+
+Ask which machines you would work on and whether you would be trained on each one. Ask how much of the work is edging, how much is repairs and how much is quality checking. Ask whether the lab is on site or central, how many people work in it, and who covers when someone is away. And, as with any job, ask for the pay range and how it is reviewed.
+
+## Where it can lead
+
+People move from the bench into lead technician or lab manager roles, into dispensing as opticians, or into the supplier side as field service technicians who install and repair lab equipment. Our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs) describes those roles.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "independent-or-corporate-eye-care",
+    title: "Independent practice or corporate group: what is different for staff",
+    description: "How working in an independent eye care practice compares with a corporate group, and the questions that help you decide which one suits you.",
+    date: "2027-01-08",
+    body: `Eye care in Canada is a mix of independent practices, owned by an optometrist or optician, and larger groups that run many locations under one name. Both hire all the time, and neither is better. They feel different to work in, and what suits you depends on what you want from the next few years.
+
+Practices vary a lot inside each group, so treat what follows as tendencies, not rules.
+
+## What tends to be different in an independent practice
+
+Decisions are usually made close by, often by the person who owns the clinic. That can mean more say over the frame collection, the suppliers and how the day runs, and a team that knows each other well. Teams are often smaller, so you may do a wider range of tasks: pre-testing one hour, dispensing the next, ordering stock after that. Pay, benefits and training are set by the owner, so they vary more from one clinic to the next, and it is worth asking about them directly.
+
+## What tends to be different in a corporate group
+
+Systems and training are more likely to be set out in writing: how new staff are onboarded, how patients are booked, how the dispensary is run. There may be defined steps to move up, openings at other locations, and a larger team to learn from. In return you may have less say over products and suppliers, and targets or policies that come from outside the clinic.
+
+## How to find out which one you are looking at
+
+Ask the same questions in both. Who makes decisions about the frame collection and the schedule? What does training look like in the first 3 months? What does a typical week look like, and who covers when someone is away? How long has the team been together? Our guide to [questions to ask in an optician interview](/blog/optician-interview-questions) has more.
+
+Kestrel lists independent and corporate practices side by side, and you can filter your search by practice type.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "optometric-assistant-job-ad",
+    title: "How to write an optometric assistant job ad that works",
+    description: "Most assistant ads say 'friendly, fast paced team player'. Here is how to write one that tells candidates what the job is and gets better applicants.",
+    date: "2026-12-11",
+    body: `Most optometric assistant ads say the same things: friendly, fast paced, a team player. They tell a candidate almost nothing, and they attract people who apply to 20 places a day. A better ad has fewer adjectives and more facts, and it is easier to write than it sounds.
+
+## Start with the week, not the person
+
+Say what the person will actually do. Which pre-tests will they run, and which will the optometrist keep? Is there contact lens teaching? How much of the day is at the front desk? How many optometrists work in the clinic, and which days does this role cover? A candidate who reads "pre-testing with our imaging equipment, 4 days a week alongside 2 optometrists" can picture the job. A candidate who reads "assist in a busy eye care environment" cannot.
+
+## Put the pay and the hours where people look
+
+In several provinces the pay has to be in the ad. On Kestrel every post also needs a yes or no on whether the vacancy is real, and a yes or no on whether you use AI to screen applicants. Beyond the rules, candidates trust an ad that gives the hours, any evenings or Saturdays, and the pay up front. Our [checklist for job ads](/blog/eye-care-job-ad-checklist) goes through each requirement.
+
+## Say how you will train
+
+Many good assistants arrive with no eye care background, so the promise of training matters more than a long list of requirements. Who will train them, for how long, and on which equipment? If you do not ask for a certificate, say so. If you do, say which ones you accept.
+
+## A before and after
+
+Here is the difference on a made up clinic. The first version could be anyone: "Busy optometry clinic seeks friendly, hard working assistant to join our dynamic team. Must be a team player."
+
+The second tells you something: "A 3 optometrist clinic in a mid sized Ontario city needs an optometric assistant, Tuesday to Saturday, with one late evening. You will run pre-testing, prepare exam rooms and teach contact lens handling, with paid training on our imaging equipment in your first month. The pay range and the benefits, and when they start, are listed below."
+
+Keep the wording about the work and the skills, not the person. Words like "young" or "energetic" can point to age, and "Canadian experience" is not allowed in a posting in Ontario.
+
+## Ready to post?
+
+Kestrel's ad builder turns a few lines about the role into a draft. You edit every word, and a person reads every post before it goes live.
+
+[See how posting works](/clinics)`,
+  },
+  {
     slug: "optician-interview-questions",
     title: "Questions to ask in an optician job interview",
     description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
     date: "2026-11-27",
-    body: `An interview works both ways. The clinic is deciding if you are right for the job, and you are deciding whether you want to spend your days there. Opticians have more choice than most people think, so it is worth asking good questions. Here are the ones that tell you the most.
+    body: `An interview works both ways. The clinic is deciding whether you are right for the job, and you are deciding whether you want to spend your days there. A few good questions tell you more than the job ad ever will.
 
-## About the practice
+## About the clinic and the day
 
-- **Is this an independent clinic or part of a group?** Neither is better. They feel different, and the answer affects who makes decisions, how much choice you have over frames and suppliers, and how you progress.
-- **Who are the patients?** Families, older patients, children, a lot of contact lens wearers, a busy sports or specialty practice? You will do your best work if the mix suits you.
-- **What does the frame collection look like?** Ask who chooses it and how much say the opticians have.
-- **How many opticians and optometrists work here?** This tells you how busy you will be and who you can learn from.
+Start with the basics. Is it an independent clinic or part of a group? Neither is better, but they feel different, and the answer affects who makes decisions, how much say you have over frames and suppliers, and how you can move up. Ask who the patients are: families, older patients, children, lots of contact lens wearers, a busy specialty practice. You will do your best work if the mix suits you. Ask who chooses the frame collection and how much say the opticians have, and how many opticians and optometrists work there, because that tells you how busy you will be and who you can learn from.
 
-## About the day
-
-- **What does a normal day or week look like?** Ask about evenings, Saturdays and holiday cover.
-- **How do patients move from the exam room to the dispensary?** A clinic that has thought about this usually runs more smoothly.
-- **Is the lab work done here or sent out?** If it is done in the clinic, ask who does edging and repairs, and whether you would be trained.
-- **What equipment do you use?** It is fair to ask whether you will get training on anything new to you.
+Then ask what a normal week looks like, including evenings, Saturdays and holiday cover. Ask how patients move from the exam room to the dispensary, since a clinic that has thought about this usually runs more smoothly. If lab work is done on site, ask who does the edging and repairs and whether you would be trained. It is fair to ask about the equipment too, and whether you will get training on anything that is new to you.
 
 ## About pay and growth
 
-- **What is the pay range?** In several provinces a job ad must show it, so it should not be a surprise. If there is commission or a bonus, ask exactly how it is worked out and what a typical month looks like.
-- **What benefits are included, and when do they start?**
-- **Is there support for continuing education and licence fees?** Many provinces require opticians to keep learning, and the cost adds up.
-- **Who would I learn from, and what could this job lead to in 2 or 3 years?**
+- What is the pay range? In several provinces a job ad must show it, so it should not come as a surprise.
+- If there is commission or a bonus, how exactly is it worked out, and what does a typical month look like?
+- Which benefits are included, and when do they start?
+- Is there help with continuing education and registration fees? Many provinces expect opticians to keep learning, and the cost adds up.
+- Who would I learn from, and where could this job lead in 2 or 3 years?
 
-## About the team
+## About the team, and what to watch for
 
-- **Who would I report to, and how are they to work for?**
-- **Why is this position open?** A new role, a retirement and a replacement for someone who left are very different stories.
-- **How long have the opticians here been in their jobs?** A team that stays is usually a good sign.
+Ask who you would report to and what they are like to work for. Ask why the position is open: a new role, a retirement and a replacement for someone who left are very different stories. Ask how long the team has been together.
 
-## Things to watch for
-
-A few things are worth a second look: no pay range anywhere, an ad that only says "fast paced" without saying what that means, a role that has been open for months, and answers that change when you ask the same question twice.
+A few things are worth a second look. No pay range anywhere. An ad that says "fast paced" without saying what that means. A role that has been open for months. Answers that change when you ask the same question twice.
 
 ## Be ready for their questions too
 
-Think of 3 short stories: a time you helped a difficult fit, a time you worked well with an optometrist, and a time you learned something new. A clear, warm [cover letter](/blog/cover-letter-optical-job) gives you a good start before you even sit down.
+Have 3 short stories ready: a time you helped a difficult fit, a time you worked well with an optometrist, and a time you learned something new. A clear, warm [cover letter](/blog/cover-letter-optical-job) gives you a good start before you sit down.
 
 [Browse eye care jobs across Canada](/jobs)`,
   },
   {
     slug: "optometric-assistant-jobs-canada",
     title: "Optometric assistant jobs in Canada: the work and the pay",
-    description: "What an optometric assistant does day to day, what the job pays across Canada, and how to start or move up in an eye care clinic.",
+    description: "What an optometric assistant does day to day, how pay varies across Canada, and how to start or move up in an eye care clinic.",
     date: "2026-11-13",
-    body: `An optometric assistant is the person who keeps an eye exam running smoothly. You are the first friendly face a patient meets after reception, and the person who gets them ready for the optometrist. It is one of the most common ways into eye care, and a good job for someone who likes people, routine and learning how the instruments work.
+    body: `An optometric assistant is the person who keeps an eye exam running smoothly. You are the first friendly face a patient meets after reception, and the person who gets them ready for the optometrist. It is one of the most common ways into eye care, and a good fit for someone who likes people, routine and working out how instruments behave.
 
 ## What the work involves
 
-The details change from clinic to clinic, and from province to province, but most days include some mix of these:
+The details change from clinic to clinic and from province to province. Most days mix pre-testing, looking after the exam room, helping patients and some work at the front of the clinic.
 
-- **Pre-testing.** Taking a patient's history and running the first tests before the exam, such as measuring eye pressure, checking how the eyes work together, and taking images of the eye. Which tests you do depends on the equipment in the clinic.
-- **Looking after the exam room.** Preparing instruments, cleaning and putting them away, and keeping the day on time.
-- **Helping patients.** Explaining what is about to happen, teaching a new contact lens wearer how to insert and remove their lenses, and answering simple questions.
-- **The front of the clinic.** Booking appointments, checking in patients, and in smaller clinics some insurance and billing work.
+Pre-testing means the first tests before the exam: taking the patient's history, measuring eye pressure, checking how the eyes work together and taking images of the eye. Which of these you do depends on the equipment in the clinic and on what the optometrist you work with is happy to hand over. Around that, you prepare and put away instruments, keep the schedule moving, explain to patients what is about to happen and, in some clinics, teach a new contact lens wearer how to put their lenses in and take them out. In a smaller clinic the job also covers booking, check in and some billing.
 
-What an assistant is allowed to do is set by the optometrist you work with and the rules in your province. If a job ad is vague, ask which tests you would be trained to do.
+What an assistant may do is set by the optometrist and by the rules in your province. If a job ad is vague, ask which tests you would be trained to do, and who trains you.
 
 ## What it pays
 
-Job Bank, the federal government's job site, shows a national median wage of about $23 an hour for optometric assistants, with most wages falling between about $18 and $30 an hour. Its most recent provincial medians were around $22 in Ontario, $22.50 in Alberta and $25 in British Columbia. These figures are updated from time to time, so check [Job Bank](https://www.jobbank.gc.ca/marketreport/wages-occupation/27193/ca) for the current numbers before you negotiate.
+Pay for optometric assistants varies by province, by how much experience you bring, by the equipment you are trained on, by your hours and by the size of the practice. We have not put a figure in this post, because wage numbers move and one that was right last year can mislead you in a negotiation. The federal government's [Job Bank](https://www.jobbank.gc.ca/) publishes wage reports by occupation and province, and it is the best place to see the current range for your area.
 
-Pay usually moves with experience, the equipment you are trained on, the hours you work and the size of the practice. In several provinces a job ad now has to show the pay, so you should not need to guess. Our [checklist for job ads](/blog/eye-care-job-ad-checklist) explains what clinics must include.
+In several provinces a job ad now has to show the pay, so you should not have to guess. Our [checklist for job ads](/blog/eye-care-job-ad-checklist) explains what clinics must include, and every job on Kestrel shows a pay range.
 
-## How to get started
+## Getting started, and where it leads
 
-Many clinics are happy to train a keen, reliable person on the job, and some prefer it. Others look for a course or certificate in optometric assistant work, which a few colleges and professional associations offer. Ask the clinics you apply to what they prefer, and do not be put off if you have no experience yet. Customer service, retail, health care and reception work all count.
+Many clinics are happy to train a keen, reliable person on the job, and some prefer it. Others ask for a course or certificate in optometric assistant work. Ask the clinics you apply to what they prefer, and do not be put off if you have no eye care experience yet: customer service, retail, health care and reception work all count. A short [cover letter](/blog/cover-letter-optical-job) that says why you want to work in eye care often matters as much as a long CV.
 
-A short [cover letter](/blog/cover-letter-optical-job) that says why you want to work in eye care often matters as much as a long CV.
-
-## Where it can lead
-
-- **Lead assistant or clinic manager.** Running the team, the schedule and the day to day of the practice.
-- **Optician.** Many assistants study to become opticians, so they can fit and dispense glasses and contact lenses.
-- **A role with a supplier.** Lens and frame companies hire people who know clinics, as trainers and account managers. See our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs).
+From there, some assistants become lead assistants or clinic managers, and many study to become opticians. Others join a supplier as a trainer or account manager, which our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs) describes.
 
 ## Questions to ask before you accept
 
 - Which tests would I be trained to do, and who trains me?
 - What are the hours, including evenings and Saturdays?
 - How many assistants and optometrists work here, and how long have they been here?
-- Is there support for courses or certification?
-- What is the pay range, and how often is pay reviewed?
+- Is there help with courses or certification?
+- What is the pay range, and how often is it reviewed?
 
 [See eye care jobs across Canada](/jobs)`,
   },
