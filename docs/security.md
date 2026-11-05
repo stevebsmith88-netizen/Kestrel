@@ -18,6 +18,7 @@ Change one by creating the new key first, putting it in Vercel (Settings, Enviro
 | --- | --- | --- | --- |
 | `SUPABASE_SERVICE_ROLE_KEY` (the Supabase secret key) | Vercel only | Read and change everything in the database, including every CV and application. The most powerful key we have. | Supabase, Project Settings, API Keys: create a new secret key, swap it into Vercel, redeploy, delete the old key. |
 | `RESEND_API_KEY` | Vercel only | Send email as Kestrel. Cannot read the database. | Resend, API Keys: create `kestrel-website`, swap, redeploy, delete the old one. |
+| `RESEND_WEBHOOK_SECRET` | Vercel only | Proves a bounce or spam complaint message really came from Resend (`/api/resend`). Someone holding it could add addresses to the do not email list. | Resend, Webhooks, the eyecarejobs.ca endpoint: roll the signing secret, paste the new one into Vercel, redeploy. |
 | Resend SMTP key (used by Supabase for sign up emails) | Supabase, Authentication, SMTP | Send email as Kestrel. | Create a new Resend key, paste it into Supabase's SMTP settings, delete the old one. |
 | `ANTHROPIC_WORKSPACE_ID` | Vercel (optional) | Not secret. Only needed if the Anthropic key is not tied to a workspace. Names which workspace requests are billed to. | Change the value in Vercel and redeploy. |
 | `ANTHROPIC_API_KEY` | Vercel only | Run AI requests on our bill. Cannot read the database. Keep a monthly spend limit on it. | Anthropic console, API keys: create, swap, redeploy, delete the old one. |

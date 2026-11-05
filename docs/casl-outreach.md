@@ -41,7 +41,7 @@ The outreach email says it plainly: advertising a job in more than one place hel
 - Steve adds clinics in batches at Admin, Outreach (`/admin/outreach`), from province search leads that have a published address and the page it came from. Adding a batch is his approval. Migration 0029 keeps each clinic's progress (`outreach_contacts`) and every send (`outreach_sends`).
 - The daily job sends what is due, only while `ENABLE_OUTREACH` is "yes", at most `OUTREACH_DAILY_LIMIT` a day (default 20), inside the overall daily email budget.
 - A clinic's own domain counts as the same clinic (an account or claim from anyone there stops the sequence). Free mail domains such as Gmail only match the exact address.
-- Not built yet: bounces and spam complaints from Resend do not reach the site automatically. Until a Resend webhook is added, check the Resend dashboard and add bounced addresses on the Do not email page.
+- Bounces and spam complaints: Resend calls `/api/resend` (signed with `RESEND_WEBHOOK_SECRET`). A permanent bounce or a complaint puts the address on the do not email list and stops its outreach sequence. Temporary bounces are ignored.
 
 ## Still to build before any outreach
 
