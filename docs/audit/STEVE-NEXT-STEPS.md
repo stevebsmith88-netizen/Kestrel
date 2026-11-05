@@ -18,8 +18,8 @@ Updated 5th November 2026. Claude does the code. These are the things only Steve
 
 | # | What | Status |
 | --- | --- | --- |
-| 6 | **Decisions for the city and radius search.** Radius options decided: 10, 25 and 50 km (50 km is the largest). Still open: do remote and field roles always show, how small a town the list includes (suggest about 1,000 people), and do Fixed term roles get a short optional end date note. | Partly decided. |
-| 7 | **Decision: hold Eye Recommend member clinics out of automated outreach at first, or not.** Outreach itself stays off until the disclosure conversation. | Open. |
+| 6 | **Decisions for the city and radius search.** Decided 5th November: radius options 10, 25 and 50 km (50 km is the largest), remote and field roles always show alongside local results, and the list includes towns of about 1,000 people or more. Still open: do Fixed term roles get a short optional end date note. | Mostly decided. |
+| 7 | **Eye Recommend member clinics.** Decided 5th November: once outreach is allowed, treat them like any other clinic. Outreach itself stays off until the disclosure conversation, and there is no member list anywhere in the project, so clinics are only ever found from their own public pages. | Decided. |
 | 8 | **Name 2 or 3 provinces you know best and believe have the most hiring pressure.** The waitlist has candidates only so far (the clinic side has not been pushed out), so there is no clinic split to check. A rough count of candidates with their provinces and roles would help too, but skip it if it is a hassle. | Open. |
 | 9 | **Check on the demo:** the Account page email options, the applicants page reply line and tick boxes, the quieter Delete my account link. | Open. |
 | 10 | **Small tidy ups** (section 1.4): test privacy@, ad builder on the live site, the lawyer's name in `docs/breach-plan.md` after the meeting. | Open. |
@@ -43,7 +43,7 @@ Steps 3 onwards in the Gate A table below: the disclosure, incorporation, bank, 
 4. Pay benchmark for clinics: Job Bank wage data first, Kestrel's own posted pay later. Check the licence and attribution, and add the benchmark question to the lawyer pack. Needs item 5.
 5. Chicken or egg plan: propose the first region, the role mix and the seeding order, once Steve names the provinces (item 8).
 6. DONE (5th November): automation plan turned into phases with sizes and gates, in `docs/automation-plan.md`, to discuss. It ends with 4 decisions for Steve.
-7. Audit items R25, R22 and R45. Decide what to do with the old `email-auto-reply` branch.
+7. IN PROGRESS (5th November): audit items R22, R25 and R45 on their own branch. R25 decided: a change to a clinic's name, website or About text after its jobs are live goes live and emails Steve the before and after. Then decide what to do with the old `email-auto-reply` branch.
 8. Add LinkedIn as count rows to the market count sheet if Steve wants it, and move any numbers he has already typed into the new layout.
 9. To plan with Steve, when he is ready: widen the profession list (what it touches, which phase); the pathways roadmap (check each step against the regulators' own pages, then decide between a blog post and a guide page); the figures check (confirm the market figures against primary sources and settle whether the VisionWatch data is from 2015 or 2019); a competitor and hiring review by hand from public pages, with no scraping; trends content (myopia, AMD, technology) that needs Steve's specifics.
 

@@ -39,7 +39,7 @@ Gate: do not publish until Gate A is close. Build it behind a switch, off by def
 - Rule: 1 email plus 1 follow up at most, then stop unless they reply.
 - Fix the claim loop (audit R40) first, so the button in the email lands on a working claim.
 
-Gates, all of them: Steve confirms the disclosure conversation, the lawyer has reviewed the outreach wording, Resend is on a paid plan (the free plan stops at 100 emails a day, shared with every other email), and the Eye Recommend member clinic hold is decided.
+Gates, all of them: Steve confirms the disclosure conversation, the lawyer has reviewed the outreach wording, Resend is on a paid plan (the free plan stops at 100 emails a day, shared with every other email), and the disclosure conversation has happened.
 
 ### Phase D: renewal and repost nudges (size S to M)
 
@@ -58,7 +58,7 @@ Individuals are never cold emailed. Reach them through job alerts (built), the w
 
 ## Decisions for Steve
 
-1. Hold Eye Recommend member clinics out of automated outreach at first, or not.
+1. DECIDED (5th November): Eye Recommend member clinics are treated like any other clinic once outreach is allowed. There is no member list in the project, so clinics are only ever found from their own public pages.
 2. Batch size for approvals (suggest 10 to start).
 3. Whether seeded listings without a stated pay range go live as "not stated by the clinic" (audit R19), or wait until the clinic claims.
 4. The Phase E bar for hands off.
