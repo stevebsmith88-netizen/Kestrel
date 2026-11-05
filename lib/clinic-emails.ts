@@ -91,3 +91,24 @@ export function applicantDigestEmail({ jobs }: { jobs: { title: string; count: n
     }),
   };
 }
+
+// Sent by the daily job 3 days before a job's 30 days end. It asks whether the role is filled (and how) or offers
+// another 30 days, both from one page. Clinics can turn reminders off in their profile.
+// The "free while we launch" line must change when paid posts start.
+export function jobEndingEmail({ title, jobId, endsLabel }: { title: string; jobId: string; endsLabel: string }) {
+  return {
+    subject: `Your ${title} job closes in 3 days`,
+    ...emailLayout({
+      heading: `Your ${title} job closes in 3 days`,
+      paragraphs: [
+        `Your ${title} job comes down from Kestrel on ${endsLabel}, after its 30 days.`,
+        "Have you filled it? Tell us in one click, and let us know how you found the person. It helps us make Kestrel better for clinics like yours.",
+        "Still hiring? You can extend it for another 30 days without posting it again. Extending is free while we launch.",
+        "Applicants you have already received stay in your dashboard either way.",
+        "The Kestrel team",
+      ],
+      buttonText: "Filled, or still hiring?",
+      buttonUrl: `${SITE}/clinic/jobs/${jobId}/ending`,
+    }),
+  };
+}

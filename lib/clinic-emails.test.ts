@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { jobLiveEmail, jobNeedsChangeEmail } from "./clinic-emails.ts";
+import { jobEndingEmail, jobLiveEmail, jobNeedsChangeEmail } from "./clinic-emails.ts";
 
 const JOB = "a0000000-0000-4000-8000-000000000003";
 
@@ -53,4 +53,12 @@ test("summary emails go out every 2 to 3 days or weekly, and a daily job that ru
   assert.equal(digestDue("few_days", ago(47.5), now), true);
   assert.equal(digestDue("weekly", ago(5 * 24), now), false);
   assert.equal(digestDue("weekly", ago(7 * 24), now), true);
+});
+
+test("the closing soon email asks if the role is filled, offers 30 more days and links to the ending page", () => {
+  const mail = jobEndingEmail({ title: "Optician", jobId: JOB, endsLabel: "8th November 2026" });
+  assert.equal(mail.subject, "Your Optician job closes in 3 days");
+  assert.ok(mail.text.includes("8th November 2026"));
+  assert.ok(mail.text.includes("another 30 days"));
+  assert.ok(mail.html.includes(`/clinic/jobs/${JOB}/ending`));
 });

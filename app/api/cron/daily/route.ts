@@ -1,6 +1,6 @@
 import { timingSafeEqual } from "node:crypto";
 import { APP_LABELS } from "@/lib/applications";
-import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue } from "@/lib/clinic-emails";
+import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } from "@/lib/clinic-emails";
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { notifyAdmin } from "@/lib/notify-admin";
@@ -18,7 +18,7 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 
 // Runs once a day (see vercel.json). It:
 //  1. marks live jobs that have passed their 30 days as expired,
-//  2. tells clinics when a job closes in 3 days,
+//  2. tells clinics when a job closes in 3 days, asking whether it is filled (and how) or offering 30 more days,
 //  3. closes out applications still waiting on a job that ended a week ago, so candidates
 //     are never left waiting,
 //  4. reminds clinics about applications they have not opened for 14 days,
@@ -94,16 +94,8 @@ async function runDaily(request: Request) {
       summary.emailsHeldBack += 1;
       continue;
     }
-    const mail = emailLayout({
-      heading: `Your ${job.title} job closes in 3 days`,
-      paragraphs: [
-        `Your ${job.title} job comes down from Kestrel on ${longDate(job.expires_at)}, after its 30 days. Applicants you have already received stay in your dashboard.`,
-        "If you are still hiring, you can post it again once it closes. Your details are kept, so it only takes a minute.",
-      ],
-      buttonText: "Open your dashboard",
-      buttonUrl: `${SITE_URL}/clinic`,
-    });
-    if (note(await deliverEmail({ to: contact.notify_email, subject: `Your ${job.title} job closes in 3 days`, ...mail }))) {
+    const mail = jobEndingEmail({ title: job.title, jobId: job.id, endsLabel: longDate(job.expires_at) });
+    if (note(await deliverEmail({ to: contact.notify_email, ...mail }))) {
       await admin.from("jobs").update({ expiry_reminded_at: now.toISOString() }).eq("id", job.id);
       summary.closingSoonEmails += 1;
     }

@@ -10,6 +10,7 @@ import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
+import { parseFillSource } from "@/lib/job-ending";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -65,19 +66,26 @@ export async function declineSelected(form: FormData) {
   redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}`);
 }
 
-// The role is filled: close the job and let everyone still waiting know, kindly.
+// The role is filled: close the job, let everyone still waiting know, kindly, and record how the clinic filled it
+// if they told us (from the job's ending page). An expired job is not reopened; only the answer is saved.
 export async function fillRole(form: FormData) {
   await requireRole("clinic");
   const jobId = String(form.get("jobId") ?? "");
+  const fromEnding = String(form.get("from") ?? "") === "ending";
   if (!UUID.test(jobId)) redirect("/clinic");
   const db = await supabaseServer();
   if (!db) redirect("/clinic");
   const { data: mine } = await db.from("jobs").select("id").eq("id", jobId).maybeSingle();
   if (!mine) redirect("/clinic");
   await db.from("jobs").update({ status: "closed" }).eq("id", jobId).in("status", ["live", "draft", "rejected"]);
+  const { via, other } = parseFillSource(form.get("filledVia"), form.get("filledViaOther"));
+  const admin = supabaseAdmin();
+  if (admin) await admin.from("jobs").update({ filled_at: new Date().toISOString(), filled_via: via, filled_via_other: other }).eq("id", jobId);
   const done = await closeWaiting(jobId, null, "role_filled");
   revalidatePath("/clinic");
+  revalidatePath("/jobs");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  if (fromEnding) redirect(`/clinic?notice=job-filled&sent=${done}`);
   redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}&filled=1`);
 }
 

@@ -72,6 +72,8 @@ Found listings are added from Admin, Found listings (see `docs/found-listings.md
 - The review queue marks these with "Changes to a job that was already live since ...", so you can compare. You also get an email when a job is submitted or edited (needs `ADMIN_ALERT_EMAIL`).
 - A live job cannot be saved as a draft. It can be closed.
 - Closed and expired jobs have "Post again", which copies the job into a new draft (counts toward the 10 open jobs limit).
+- Extending (migration 0028, `lib/job-ending.ts`): a live job in its last 7 days, or an expired one within 7 days of ending, gets an "Extend 30 days" button on the dashboard. It goes straight back up with the same wording, no review, and the closing soon reminder is reset. Free while we launch; when paid posts start, `extendJob` in `lib/clinic-actions.ts` is where it gets charged.
+- 3 days before a job ends, the daily job sends "Your job closes in 3 days" (`jobEndingEmail`), linking to `/clinic/jobs/[id]/ending`. That page asks "Filled it?" with how they found the person (Kestrel, Indeed, LinkedIn, word of mouth, own website, another way), which closes the job and tells waiting applicants, or offers the 30 day extension. The answer is saved in `jobs.filled_via`, and the same question appears on the applicants page "Role filled?" form.
 - Database rule: migration 0014 lets a clinic move a live job to in review (and nothing else), and still blocks any edit while it stays live, any change to the dates, and any move to live by the clinic.
 
 ## Deleting, closing and keeping records (migration 0019)
