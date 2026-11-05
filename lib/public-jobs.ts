@@ -1,11 +1,15 @@
 import "server-only";
 import { supabasePublic } from "@/lib/supabase/public";
 import { cleanEmploymentTypes, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { RADIUS_OPTIONS, findPlace, nearbyKeys, placeKey, type Place } from "@/lib/places";
 
 export const PAGE_SIZE = 20;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export type JobFilters = { q?: string; province?: string; role?: string; type?: string[]; practice?: string; arrangement?: string; page?: number };
+export type JobFilters = { q?: string; city?: string; radius?: number; province?: string; role?: string; type?: string[]; practice?: string; arrangement?: string; page?: number };
+
+// With a city chosen, jobs are matched in code against the places within the radius, from at most this many live jobs.
+const RADIUS_SEARCH_LIMIT = 1000;
 
 export type JobSummary = {
   id: string;
@@ -33,6 +37,8 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
   const page = Number.parseInt(one("page"), 10);
   return {
     q: one("q").replace(/[,()%*\\"]/g, " ").slice(0, 80).trim(),
+    city: one("city").replace(/[()%*\\"]/g, " ").slice(0, 80).trim(),
+    radius: RADIUS_OPTIONS.find((r) => String(r) === one("radius")) ?? 25,
     province: pick(one("province"), PROVINCES),
     role: pick(one("role"), ROLE_CATEGORIES),
     type: cleanEmploymentTypes(raw.type),
@@ -42,27 +48,64 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
   };
 }
 
-export async function searchJobs(filters: JobFilters): Promise<{ jobs: JobSummary[]; total: number }> {
+export type SearchResult = { jobs: JobSummary[]; total: number; place?: Place | null; placeNotFound?: boolean };
+
+const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
+
+export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   const db = supabasePublic();
   if (!db) return { jobs: [], total: 0 };
   const page = filters.page ?? 1;
-  let query = db
-    .from("jobs")
-    .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)", { count: "exact" })
-    .eq("status", "live")
-    .gt("expires_at", new Date().toISOString());
+  // A city that is not on the list of places cannot be searched, so say so instead of showing nothing.
+  const place = filters.city ? findPlace(filters.city, filters.province || undefined) : null;
+  if (filters.city && !place) return { jobs: [], total: 0, place: null, placeNotFound: true };
+
+  let query = db.from("jobs").select(SUMMARY_COLUMNS, { count: "exact" }).eq("status", "live").gt("expires_at", new Date().toISOString());
   if (filters.province) query = query.eq("province", filters.province);
   if (filters.role) query = query.eq("role_category", filters.role);
   if (filters.type?.length) query = query.in("employment_type", filters.type);
   if (filters.arrangement) query = query.eq("work_arrangement", filters.arrangement);
   if (filters.practice) query = query.eq("employers.practice_type", filters.practice);
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
-  const { data, count, error } = await query.order("posted_at", { ascending: false }).range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+  query = query.order("posted_at", { ascending: false });
+
+  if (!place) {
+    const { data, count, error } = await query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+    if (error) {
+      console.error("Job search failed:", error.code, error.message);
+      return { jobs: [], total: 0 };
+    }
+    return { jobs: (data ?? []) as unknown as JobSummary[], total: count ?? 0 };
+  }
+
+  // City and radius: jobs in or near the place, and field based jobs, which are not tied to one town, always show too.
+  const { data, error } = await query.range(0, RADIUS_SEARCH_LIMIT - 1);
   if (error) {
     console.error("Job search failed:", error.code, error.message);
-    return { jobs: [], total: 0 };
+    return { jobs: [], total: 0, place };
   }
-  return { jobs: (data ?? []) as unknown as JobSummary[], total: count ?? 0 };
+  const near = nearbyKeys(place, filters.radius ?? 25);
+  const all = ((data ?? []) as unknown as JobSummary[]).filter((j) => j.work_arrangement === "field" || near.has(placeKey(j.city, j.province)));
+  return { jobs: all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), total: all.length, place };
+}
+
+// How many live jobs there are for each role and each province, so the filters only offer choices that have jobs.
+export async function getFilterCounts(): Promise<{ total: number; roles: Record<string, number>; provinces: Record<string, number> }> {
+  const empty = { total: 0, roles: {}, provinces: {} };
+  const db = supabasePublic();
+  if (!db) return empty;
+  const { data, error } = await db.from("jobs").select("role_category, province").eq("status", "live").gt("expires_at", new Date().toISOString()).limit(2000);
+  if (error) {
+    console.error("Filter counts failed:", error.code, error.message);
+    return empty;
+  }
+  const roles: Record<string, number> = {};
+  const provinces: Record<string, number> = {};
+  for (const j of data ?? []) {
+    if (j.role_category) roles[j.role_category] = (roles[j.role_category] ?? 0) + 1;
+    if (j.province) provinces[j.province] = (provinces[j.province] ?? 0) + 1;
+  }
+  return { total: data?.length ?? 0, roles, provinces };
 }
 
 export type LiveJob = JobSummary & {

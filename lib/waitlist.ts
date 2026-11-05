@@ -12,6 +12,7 @@ export const ROLES = [
   "Optometric assistant or technician",
   "Practice or clinic manager",
   "Patient care or reception",
+  "Vision therapist",
 ] as const;
 
 export const PROVINCES = [
