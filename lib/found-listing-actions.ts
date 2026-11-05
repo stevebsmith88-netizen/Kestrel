@@ -4,6 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { claudeClient } from "@/lib/anthropic-client";
 import { requireRole } from "@/lib/auth";
 import { seedingOn } from "@/lib/features";
 import { fetchPage } from "@/lib/fetch-page";
@@ -87,7 +88,7 @@ function describe(error: unknown) {
 }
 
 async function askClaude(key: string, url: string, page: ReadPage): Promise<Reading> {
-  const client = new Anthropic({ apiKey: key, timeout: 45_000, maxRetries: 0 });
+  const client = claudeClient(key, { timeout: 45_000, maxRetries: 0 });
   const content = pageForClaude(url, page);
   // 3 ways of asking, best first. If the API turns a request down as invalid (a 400, for example a setting this
   // account does not have), the next, simpler one is tried: the same request without the fallback setting, then a plain
@@ -126,6 +127,7 @@ async function askClaude(key: string, url: string, page: ReadPage): Promise<Read
     if (lastError instanceof Anthropic.RateLimitError) throw new ReaderProblem("The reader is busy. Please try again in a minute.");
     if (lastError instanceof Anthropic.APIConnectionTimeoutError) throw new ReaderProblem("The reader took too long. Please try again, or paste the link to one job.");
     if (lastError instanceof Anthropic.AuthenticationError) throw new ReaderProblem("The Anthropic key in Vercel was not accepted. Check ANTHROPIC_API_KEY in this Vercel project, then redeploy.");
+    if (/workspace/i.test(describe(lastError))) throw new ReaderProblem("The Anthropic key is not tied to a workspace. Make a new key inside the Kestrel workspace in the Anthropic console (or add ANTHROPIC_WORKSPACE_ID in Vercel), then redeploy.");
     throw new ReaderProblem(`The reader had a problem talking to Claude (${describe(lastError)}).`);
   }
   if (response.stop_reason === "refusal") throw new ReaderProblem("The reader would not read this page. Check that it is a clinic careers page.");

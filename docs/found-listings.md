@@ -36,6 +36,8 @@ A live found listing comes down by itself after 21 days, unless the clinic claim
 3. When you are ready to publish (after the disclosure conversation): add `ENABLE_SEEDING` = `yes` in Vercel for the live project, and redeploy. Only add it to the demo project if you want to try publishing there, and remember the demo site is public too.
 4. On the demo site, run `supabase/demo/seed.sql` again after step 1 if you want its 2 sample found listings to show "Not stated by the clinic".
 
+If the reader says the key is not scoped to a workspace, make the key inside the Kestrel workspace in the Anthropic console, or set `ANTHROPIC_WORKSPACE_ID` (the workspace's ID) in Vercel. The ad builder uses the same key and setting.
+
 Optional: `PAGE_READER_MODEL` chooses the Claude model (Sonnet 5.5 by default, as for the ad builder). Each page read costs a few cents at most.
 
 ## What it cannot do yet
