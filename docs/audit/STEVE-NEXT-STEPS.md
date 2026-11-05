@@ -4,48 +4,68 @@ Updated 5th November 2026. Claude does the code. These are the things only Steve
 
 ## Priority order
 
+Updated with Steve's notes of 5th November 2026.
+
 ### Priority 1: this week, blocks launch or has a date
 
 | # | What | Status |
 | --- | --- | --- |
-| 1 | **Lawyer.** The lawyer review pack and the employment agreement are with the lawyer. Next: the first meeting, then anything they send back (also anything back from the paralegal friend). | Paperwork sent (4th November). Waiting on the meeting. |
-| 2 | **Free name and trademark searches** (CIPO, Ontario and federal corporation name searches, a web search for "Kestrel" in eye care and job boards). Send Claude anything found, for example another "Kestrel" in eye care. | In progress (4th November). |
-| 3 | **Notes for the 13th November blog post, by about the 8th.** A real anonymised moment, 1 or 2 specifics (a number, a type of town, a role that led somewhere), what a good ad tells you that a weak one hides, and one thing you would tell a new grad or assistant. Rough bullets are fine. Names stay out. | Open. Due in 3 days. |
-| 4 | **Two step sign in, and moving accounts to kestrel@eyecarejobs.ca.** One service at a time, steps in section 1.1. | Starting 4th November. |
-| 5 | **Allow 3 hosts in the cloud environment, or download the files yourself.** Cloud environment menu in the title bar, Edit, Network access, Allowed domains (leave Allow package managers ticked): `jobbank.gc.ca`, `open.canada.ca`, `download.geonames.org`. Steps: https://code.claude.com/docs/en/cloud-environments#network-access. Or download the Job Bank wage file and the GeoNames Canada places file and tell Claude where they are. This unlocks the city and radius search and the pay benchmark. | Open. |
+| 1 | **Lawyer.** The review pack and the employment agreement are with the lawyer. The backup person, the privacy policy wording (Privacy Officer title only) and help with incorporating all sit with the lawyer too. | Waiting for a response. |
+| 2 | **Name searches.** Only a "Kestrel Ophthalmics" in the UK turned up, which does not operate in Canada. Trademarking is dropped for now. | DONE. |
+| 3 | **The 2 scheduled blog posts (13th and 27th November).** Steve has not posted an ad, so he cannot supply the "real moment" notes. Claude writes them from public sources and plain, factual advice, with no invented stories, and drafts more simple posts for SEO in the meantime. Steve reads the previews. | Claude to do. |
+| 4 | **Accounts and 2 step sign in.** GitHub, Namecheap and Supabase are on kestrel@ and 2 step sign in is on. Vercel is on kestrel@ too, but it is a trial, so ownership cannot move until Vercel Pro starts (about 2 weeks). The repo moves into the Kestrel organisation then. | DONE, except Vercel (about 2 weeks). |
+| 5 | **Allowed hosts.** Steve added `download.geonames.org`, `open.canada.ca`, `jobbank.gc.ca`, `jobs4ecps.ca` and `jobs-optometry.com`. Tested from the session: GeoNames and open.canada.ca work. `jobbank.gc.ca` redirects to `www.jobbank.gc.ca`, which is still blocked, so add `www.jobbank.gc.ca` too (or `*.jobbank.gc.ca`). The other 2 job boards stay hand reading only: the project rule is no scraping or automated reading of Jobs4ECPs or similar boards. | Needs `www.jobbank.gc.ca`. |
 
 ### Priority 2: the next 2 weeks
 
 | # | What | Status |
 | --- | --- | --- |
-| 6 | **Decisions for the city and radius search.** Decided 5th November: radius options 10, 25 and 50 km (50 km is the largest), remote and field roles always show alongside local results, and the list includes towns of about 1,000 people or more. Still open: do Fixed term roles get a short optional end date note. | Mostly decided. |
-| 7 | **Eye Recommend member clinics.** Decided 5th November: once outreach is allowed, treat them like any other clinic. Outreach itself stays off until the disclosure conversation, and there is no member list anywhere in the project, so clinics are only ever found from their own public pages. | Decided. |
-| 8 | **Name 2 or 3 provinces you know best and believe have the most hiring pressure.** The waitlist has candidates only so far (the clinic side has not been pushed out), so there is no clinic split to check. A rough count of candidates with their provinces and roles would help too, but skip it if it is a hassle. | Open. |
-| 9 | **Check on the demo:** the Account page email options, the applicants page reply line and tick boxes, the quieter Delete my account link. | Open. |
-| 10 | **Small tidy ups** (section 1.4): test privacy@, ad builder on the live site, the lawyer's name in `docs/breach-plan.md` after the meeting. | Open. |
-| 11 | **Weekly market counts** in `docs/market-count-sheet.xlsx`. One week of data so far. Hiring trends become clear after about 12 weeks. | Ongoing. |
+| 6 | **City and radius search decisions.** Radius 10, 25 and 50 km. Remote and field roles always show. Towns of about 1,000 people or more. Fixed term end date note: Claude's default is no, because it makes posting longer. Steve can change this. | DECIDED. |
+| 7 | **Eye Recommend member clinics.** No hold. Treated like any other clinic once outreach is allowed. Outreach stays off until the disclosure conversation. | DECIDED. |
+| 8 | **First region.** Ontario, Alberta and British Columbia (the most populated), starting with Toronto and Ontario. A rough count of candidates by province is optional. | DECIDED. |
+| 9 | **The demo site.** Running fine. | DONE. |
+| 10 | **Tidy ups.** privacy@ sends and receives. The ad builder works on the demo (draft, in review, approved, live). It cannot be tested on the live site while the live site is locked down. The lawyer's name goes in `docs/breach-plan.md` when known. | Mostly done. |
+| 11 | **Market counts.** Steve keeps his own 12 week artifact. He reports week 1 after Saturday's run, with an annual estimate, then the month 1 total with an annual estimate, then the quarter total with an annual estimate. | Starts after Saturday. |
 
 ### Priority 3: Gate A, in order (needs the lawyer)
 
-Steps 3 onwards in the Gate A table below: the disclosure, incorporation, bank, Stripe, assigning the brand to the company, the legal policy review, and upgrading the services. Free launch waits for it.
+The Gate A table below. Steve's notes number the steps differently from the table, so the statuses of steps 4, 5 and 6 (meeting held, disclosure given, company incorporated) are to be confirmed before anything is treated as passed. Free launch waits for Gate A.
 
 ### Parked: no date, nothing waits on these
 
-- Read `docs/agency-pathway.md` (on the `docs/agency-pathway` branch, not yet merged) and correct anything that is wrong. It records your answers and the questions for the lawyer about the long term agency option.
-- Choose a phase for widening the profession list (decided yes, not scheduled).
-- Zest, the agency idea and the Fathom trial. All wait for the disclosure and for your time. If Zest is revived, it goes through the disclosure conversation and the lawyer first.
+- Merge pull request 18 (the agency notes and this file). It is open, not yet merged. Steve says when.
+- Choose a phase for widening the profession list (decided yes, not scheduled). The reason is in the chat of 5th November: the 5 professions on the site do not separate contact lens fitters, ophthalmic medical assistants (COA and COT) or optical lab technicians, who are different jobs with different employers.
+- Zest: closed. Steve is launching solo and is not reaching back out.
+- The agency idea stays a long term option, in `docs/agency-pathway.md`.
+- Fathom (a meeting notes recorder): dropped unless Steve wants it.
+- Benched idea: Kestrel as a parent company with Eye Care Jobs as the first of several industry job boards (dental, medical and others later). Raise when incorporating, so the company name and structure leave room for it.
 
 ## Claude's list, in priority order
 
-1. Rewrite the 2 scheduled blog posts once Steve's notes arrive (item 3).
-2. DONE (5th November): read the published blog posts for generic advice and list what only Steve can supply. See the review at the end of `docs/blog.md`.
-3. City and radius search, with counts beside each option (radius 10, 25 and 50 km). SQL on both databases. Needs the places data (item 5) and the decisions in item 6.
-4. Pay benchmark for clinics: Job Bank wage data first, Kestrel's own posted pay later. Check the licence and attribution, and add the benchmark question to the lawyer pack. Needs item 5.
-5. Chicken or egg plan: propose the first region, the role mix and the seeding order, once Steve names the provinces (item 8).
-6. DONE (5th November): automation plan turned into phases with sizes and gates, in `docs/automation-plan.md`, to discuss. It ends with 4 decisions for Steve.
-7. IN PROGRESS (5th November): audit items R22, R25 and R45 on their own branch. R25 decided: a change to a clinic's name, website or About text after its jobs are live goes live and emails Steve the before and after. Then decide what to do with the old `email-auto-reply` branch.
-8. Add LinkedIn as count rows to the market count sheet if Steve wants it, and move any numbers he has already typed into the new layout.
-9. To plan with Steve, when he is ready: widen the profession list (what it touches, which phase); the pathways roadmap (check each step against the regulators' own pages, then decide between a blog post and a guide page); the figures check (confirm the market figures against primary sources and settle whether the VisionWatch data is from 2015 or 2019); a competitor and hiring review by hand from public pages, with no scraping; trends content (myopia, AMD, technology) that needs Steve's specifics.
+1. Rewrite the 2 scheduled blog posts without anecdotes, check them against Job Bank once it is reachable, and draft more simple SEO posts. Steve reads the previews.
+2. DONE: review of the published posts (end of `docs/blog.md`).
+3. City and radius search with counts beside each option. Needs the GeoNames file, which now loads. SQL on both databases.
+4. Pay benchmark from Job Bank wage data. Needs `www.jobbank.gc.ca`. It is separate from the automation plan: it helps clinics choose a pay range when they post.
+5. First region plan: Toronto and Ontario first, then Alberta and British Columbia.
+6. DONE: automation plan phases, in `docs/automation-plan.md`.
+7. DONE on branch `audit/r22-r25-r45` (not yet merged): R22 sign in guard (migration 0024), R25 admin email when a live clinic changes its profile, R45 maintenance switch and click by click steps. SQL on both databases and a Vercel setting only when merged.
+8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in. Claude can add the rows to a count sheet.
+9. Plan with Steve: widen the profession list, the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
+10. Check that the found listings tool (`/admin/found`) works end to end on the demo. Needs Steve's test with a real careers page.
+11. Admin can post a job for a clinic that is having trouble (separate from found listings). To plan.
+12. Ad builder improvements: use the clinic's profile, a "paste your existing ad and improve it" mode, and variety so no 2 ads look alike. Needs Steve's templates and rules.
+
+## Extra questions raised on 5th November (status)
+
+1. SEO add on through Namecheap (about $11 CAD a month) and its LLC partner: not recommended for now. An LLC is a US company type, and Kestrel will be a Canadian corporation set up with the lawyer.
+2. Holding off the Supabase upgrade until launch: acceptable while only Steve uses real data. Upgrade before any invitations or the free launch, for daily backups. The waitlist already holds real emails, so export it from the admin waitlist page now and then.
+3. Admin posting a job for a clinic: planned (Claude's list, item 11).
+4. AI ad builder: the clinic "Write my ad" button is built. The "paste your existing ad" mode and variety are not (Claude's list, item 12).
+5. Fee breakdown and positioning: write up from the pricing ladder in CLAUDE.md. Steve's view stands: launch pricing stays, with full price reviewed once the database is heavy with clinics and ads.
+6. Incorporating: with the lawyer (Gate A step 6). Claude can prepare the decisions list.
+7. Raising money (a SAFE for about 10%) or grants: a question for the lawyer and accountant. Running costs are planned at well under $10,000 a year.
+8. More SEO: see the chat of 5th November. A short SEO plan can follow.
+9. The parent company idea: benched, see Parked.
 
 ## Planning items (decided direction, not started)
 
@@ -122,7 +142,7 @@ Gate A means: the disclosure is given and acknowledged, the company and bank exi
 | # | Step | Who | Depends on | Rough time |
 | --- | --- | --- | --- | --- |
 | 1 | DONE (4th November): read through `docs/legal/Kestrel-lawyer-review-pack.pdf`, correct anything wrong, and find your employment agreement. The pack states plainly that your employer offers a job board to the same clinics Kestrel targets | You | Nothing | 1 hour |
-| 2 | IN PROGRESS: do the free first searches: CIPO trademark database, Ontario and federal corporation name searches, and a web search for "Kestrel" in eye care and job boards. A formal NUANS name report is done by the lawyer or an incorporator, and has a fee | You | Nothing | 1 to 2 hours |
+| 2 | DONE: free name searches. Only a "Kestrel Ophthalmics" in the UK turned up. A formal NUANS name report is done by the lawyer or an incorporator, and has a fee | You | Nothing | 1 to 2 hours |
 | 3 | DONE (4th November): book the fixed fee lawyer meeting and send the pack beforehand. Paperwork is with the lawyer | You | 1 | Book this week |
 | 4 | Meeting 1: employment agreement (sections 7 and 9), what the disclosure should say, how to handle the overlap with your employer's job board, incorporation and ownership of the brand and code. Ask the lawyer to draft or review the disclosure letter | You, lawyer | 3 | 2 hours plus follow up |
 | 5 | Give the disclosure to your employer and get the acknowledgement in writing. Clinic outreach stays off until this is done | You | 4 | Aim for mid December |
@@ -138,32 +158,13 @@ Gate A means: the disclosure is given and acknowledged, the company and bank exi
 
 **If the disclosure takes longer, wait. Do not soft launch.** A mid January free launch is realistic only if step 5 happens by mid December.
 
-#### Does the company need to be trademarked?
-
-No. These are two different things:
-- **A company** is incorporated, which registers its legal name. That does not by itself stop someone else using a similar name in the same field or in another province.
-- **A trademark** protects a brand (a name, a logo) as a mark used in trade. It is optional. It is worth considering for "Kestrel" and your feather logo, but "Kestrel" is a common word, and "Eye Care Jobs" is descriptive, so the protectable part may be narrower than it looks.
-
-A practical order: do the free searches now, let the lawyer advise on whether to apply, and decide before launch whether to file. Fees change, so check the Canadian Intellectual Property Office's current fee schedule. The lawyer pack includes this question (number 9).
-
 ### Market counts (check 19)
 
-**Use `docs/market-count-sheet.xlsx`.** It has a weekly grid, the rules, and a Summary tab that turns your counts into a yearly estimate. The table below is the older paper version of the same idea. One week of data is in so far.
+Steve keeps a 12 week artifact. He reports week 1 after Saturday's run with an annual estimate, then the month 1 total with an annual estimate, then the quarter total with an annual estimate. `docs/market-count-sheet.xlsx` is the older version and can be ignored.
 
-Claude cannot run these. The project rules forbid scraping or automated reading of Indeed, LinkedIn, Jobs4ECPs and the college registers, and the sites' own terms forbid it too. A person reading a number off a search page and writing it down is fine, and is what the audit asked for.
+The project rules forbid scraping or automated reading of Indeed, LinkedIn, Jobs4ECPs and the college registers, and the sites' own terms forbid it too. A person reading a number off a search page and writing it down is fine. Counts only. Do not copy any ads.
 
-Do this once a week for 4 weeks, and keep going to about 12 weeks for a clear trend. Counts only. Do not copy any ads.
-
-| Date | Site | Search | Province or all Canada | Number shown | Notes |
-| --- | --- | --- | --- | --- | --- |
-| | Jobs4ECPs | All jobs | Canada | | |
-| | Indeed | optometrist | Canada | | |
-| | Indeed | optician | Canada | | |
-| | Indeed | optometric assistant | Canada | | |
-| | Indeed | ophthalmic technician | Canada | | |
-| | Indeed | eye care manager | Canada | | |
-
-What you are working out: how many eye care job ads there are in Canada in a year (the useful number, rather than the number of practices). New ads a week, times 52, gives a first estimate. The top down estimate from public statistics is in `docs/market-sizing.md`, with sources and assumptions marked. Your weekly counts are the cross check on it.
+On accuracy: these counts are a cross check on the top down estimate in `docs/market-sizing.md`, not an exact figure. Job sites repeat ads and count some roles twice, so the number to trust is the trend and the range, not any single week. Keep the same searches, the same day and the same method every week, write a note when something looks odd, and the annual estimate will settle as the weeks add up.
 
 ### What Claude does next (when you say so)
 

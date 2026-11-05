@@ -204,3 +204,10 @@ Sources used so far (all to be verified at the originals):
 [University of Waterloo, what you need to practise optometry in Canada](https://uwaterloo.atlassian.net/wiki/x/rAH9UQo),
 [CHCPBC, optician Prior Learning Assessment and Recognition](https://chcpbc.org/wp-content/uploads/2024/08/RO-Prior-Learning-Assessment-and-Recognition.pdf),
 [New Brunswick, opticians registration](https://www.nbjobs.ca/sites/default/files/registration/Opticians.pdf).
+
+## Update, 5th November 2026
+
+- **Zest is closed.** Steve is launching solo and is not reaching back out. Question 3 above no longer applies.
+- **Benched idea: Kestrel as a parent company.** Kestrel as the parent, Eye Care Jobs as the first brand, and possibly Dental Jobs, Medical Jobs and other industries later. Not started. Worth raising at incorporation, so the company name, the ownership of the brand and code, and the structure leave room for it without forcing a choice now. Other industries have no overlap with Eye Recommend.
+- **Fathom is dropped** unless Steve asks for it again.
+- **Profession list:** widening is still decided but not scheduled. Reason: the 5 professions on the site do not separate contact lens fitters, ophthalmic medical assistants (COA and COT, who work for ophthalmologists) or optical lab technicians.
