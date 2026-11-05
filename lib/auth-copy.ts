@@ -18,7 +18,8 @@ export const MIN_PASSWORD = 10;
 
 export const NOT_CONNECTED = "Sign in isn't connected yet. Please try again shortly.";
 
-export type FormState = { error?: string; message?: string; email?: string };
+// "check" asks the form to show the bot check (used by sign in after too many failed attempts).
+export type FormState = { error?: string; message?: string; email?: string; check?: boolean };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export const isEmail = (value: string) => EMAIL.test(value);
