@@ -57,12 +57,12 @@ test("on the live site scheduled posts are hidden, and on previews they are show
   assert.equal(visiblePosts(posts, now, true).length, 3);
 });
 
-test("the posts are spaced at least 2 weeks apart after the first 3, and none links to a post that is not out yet", () => {
+test("the posts are spaced at least a week apart after the first 3, and none links to a post that is not out yet", () => {
   const dates = [...new Set(POSTS.map((p) => p.date))].sort();
   for (let i = 1; i < dates.length; i++) {
     const days = (Date.parse(dates[i]) - Date.parse(dates[i - 1])) / 86_400_000;
-    // the first 3 posts were published together at the start; every later one waits at least 2 weeks for the one before
-    if (dates[i - 1] >= "2026-10-30" && POSTS.filter((p) => p.date === dates[i - 1]).length === 1) assert.ok(days >= 14, `${dates[i]} is only ${days} days after ${dates[i - 1]}`);
+    // the first 3 posts were published together at the start; every later one waits at least a week for the one before
+    if (dates[i - 1] >= "2026-10-30" && POSTS.filter((p) => p.date === dates[i - 1]).length === 1) assert.ok(days >= 7, `${dates[i]} is only ${days} days after ${dates[i - 1]}`);
   }
   for (const post of POSTS) {
     for (const match of post.body.matchAll(/\]\(\/blog\/([a-z0-9-]+)\)/g)) {

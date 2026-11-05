@@ -4,6 +4,320 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "ask-for-a-raise",
+    title: "How to ask for a raise in an eye care job",
+    description: "Asking for more pay is easier with a plan. Here is how to prepare, when to ask, what to say and what to do if the answer is not yet.",
+    date: "2027-04-02",
+    body: `Asking for a raise is uncomfortable for most people. It helps to treat it as a business conversation with a plan, not a confrontation. Clinics generally expect that good staff will ask at some point, and a well prepared request is easier to say yes to.
+
+## Know where you stand
+
+Look at what similar roles pay. Many job ads now show a pay range, and the federal government's [Job Bank](https://www.jobbank.gc.ca/) publishes wage reports by occupation and province. Compare like with like: your role, your experience, your province and the size of the clinic. If you have gained skills since you started, such as new equipment, contact lens teaching or training others, note the date you did.
+
+## List what you have added
+
+Write down what has changed since your last pay review. Examples: tasks you took on, patients or colleagues who mentioned you, problems you solved, the time you covered for someone. Keep it factual and short, a page at most.
+
+## Choose the moment
+
+The best time is after a good result, at a regular review, or before the clinic sets its budget. A busy Monday morning or the middle of a staffing crisis is a poor time. Ask for a short meeting and say what it is about, so the person is not caught by surprise.
+
+## Say it clearly
+
+Open with what you enjoy about the work, then make the request: "Based on what I have taken on and what similar roles pay, I would like to talk about moving to X." Give a number or a range, and the reasons. Then stop and let them respond.
+
+## If the answer is not yet
+
+Ask what would need to happen for a raise, and when you can revisit it. Get that in writing, if you can. You can also ask for things that are not pay: more hours, a course paid for, a title change or a clearer path. If the answer is a firm no and the reasons do not change, you can then decide whether it is time to look elsewhere. Our guide to [standing out in an interview](/blog/stand-out-in-interview) helps if you do.
+
+## If the answer is yes
+
+Thank them, confirm the date it starts and the new amount in writing, and keep delivering.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "eye-care-cv",
+    title: "How to write a CV for an eye care job",
+    description: "A clear one or two page CV is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
+    date: "2027-03-26",
+    body: `A CV for an eye care job does not need to be fancy. The person reading it is often a busy owner or practice manager with a pile to get through. A clean, honest one or two pages that shows what you have done gets read.
+
+## What to put at the top
+
+Your name, a phone number and an email address that sounds professional, and the city and province where you live. If the job requires registration, add the regulator and your registration status, such as "Registered Optician, Ontario" or "registration in progress". You do not need a photo, your date of birth or your home address. In Canada, those are not expected, and leaving them out helps keep the process fair.
+
+## A short summary
+
+Two or three lines at the top that say who you are and what you offer. For example: "Optometric assistant with 3 years in a busy independent clinic, trained on imaging equipment and contact lens teaching." If you are new to eye care, say what you bring from elsewhere: customer service, retail, health care or reception.
+
+## Your experience
+
+List your most recent job first. For each, give the clinic or company, your title, the dates and 3 or 4 lines of what you did. Be specific: the tests you performed, the types of lens you fitted, the systems you used, how many patients a day you saw. If you have an achievement, such as training new staff or reducing waits, include it. Our post on [STAR stories](/blog/star-interview-method) can help you find the right examples.
+
+## Skills, equipment and software
+
+Name the instruments and the software you can use, and your languages. Be accurate: it is easy to check, and honest answers are better than long lists. If you have courses or certificates, add them with the year.
+
+## Keep it tidy
+
+Use a plain font, clear headings and consistent dates. Save it as a PDF and name the file with your name. Ask someone to read it for mistakes. Change the summary and the first few lines of experience for each job, so that they match the ad.
+
+## Pair it with a cover letter
+
+A short letter says why you want this clinic, which a CV cannot do. Our guide to [writing a cover letter](/blog/cover-letter-optical-job) shows a simple shape.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "reference-checks-eye-care",
+    title: "Reference checks: what to ask and why they matter",
+    description: "A short reference call can save months of trouble. Here is who to call, what to ask and what to do with the answers.",
+    date: "2027-03-19",
+    body: `When a candidate has done well in 2 interviews, it is tempting to skip the reference check. It only takes 15 minutes, and it is often the most honest part of the process. Here is how to do it well.
+
+## Ask the candidate first
+
+Always get the candidate's permission before you contact anyone, and ask whom they would like you to call. Ask for at least 2 references, ideally a recent manager and a colleague. If the person is still at their current job and does not want to alert their employer yet, wait until you are ready to offer, and make the offer conditional on the references.
+
+## What to ask
+
+Start with the basics: how do you know the person, for how long and in what role? Then ask things that give you a picture of how they work:
+
+- What were they best at?
+- How did they handle a busy day or a difficult patient?
+- How did they respond to feedback?
+- Was their attendance reliable?
+- Would you hire them again?
+
+The last question is the most useful. A pause before the answer, or a very careful reply, tells you something. Listen for specifics. "She was wonderful" is warm, but "she took over the contact lens teaching and the patients asked for her" is evidence.
+
+## For regulated roles
+
+If the role is an optician or optometrist, also confirm the person's registration with the provincial regulator. Regulators keep a public register where you can check the name, status and whether any conditions apply. Do it yourself, and note the date you checked. It is a separate step from the reference call, and it protects the clinic and the patients.
+
+## What to do with the answers
+
+Compare what you hear with what you saw at the interview. One lukewarm reference is worth a follow up question, not an automatic no. A pattern across 2 or 3 people deserves attention. Keep short notes and store them securely, only as long as you need them. People's personal information should be handled with care.
+
+## Be fair
+
+Ask the same questions about every candidate you take to this stage, and stick to what relates to the job. Do not ask about age, family plans, religion or anything else covered by human rights rules. Our [job ad checklist](/blog/eye-care-job-ad-checklist) covers the same wording rules for ads.
+
+[See how posting works](/clinics)`,
+  },
+  {
+    slug: "onboarding-first-30-days",
+    title: "Onboarding a new optician or assistant: the first 30 days",
+    description: "A simple plan for a new hire's first month in an eye care clinic: before day one, the first week and how to check in at 30 days.",
+    date: "2027-03-12",
+    body: `The first month decides a lot. A new person who feels welcome, knows what to do and is making progress by the end of week 4 is much more likely to stay. You do not need a big programme. You need a simple plan that you actually follow.
+
+## Before day one
+
+Confirm the start date, time, where to park and what to wear. If the role is regulated, check the person's registration with the provincial regulator and note it on file. Set up any logins, tell the team who is joining and assign someone to look after them, a buddy who is not the manager. Have a short plan for the first week written down.
+
+## The first week
+
+Spend the first morning on the basics: a tour, introductions, the schedule and where things are kept. Explain how a patient moves through the clinic, from booking to exam room to dispensary. Let the new person shadow a colleague for most of the first days, and give them one small task they can finish, so they feel useful on day one. End each day with 5 minutes: what went well, what was confusing.
+
+## Weeks 2 to 3
+
+Move from watching to doing, with support. Add one or two new skills each week and write down what they have been signed off on: pre-test equipment, frame adjustments, booking, insurance steps. Keep the checklists short. Introduce them to the rest of the team, including anyone who works different days.
+
+## Week 4 and the 30 day conversation
+
+Sit down for 20 minutes. Ask what they enjoy, what is hard and what they need. Say what you have noticed, both good and not yet there, and agree the next 30 days. This is also the moment to correct the gap if the job is different from what the ad described, and to ask what else they would tell the next new hire. Our post on [why people leave](/blog/why-people-leave-jobs) explains why this conversation matters.
+
+## Keep it light
+
+A one page checklist, a buddy and 3 short check ins will do more than a long manual. If you are hiring from outside the industry, a clear plan also supports the approach we describe in [hiring for attitude and training for skills](/blog/hire-for-attitude-train-for-skills).
+
+[See how posting works](/clinics)`,
+  },
+  {
+    slug: "hire-for-attitude-train-for-skills",
+    title: "Hire for attitude, train for skills: hiring from outside eye care",
+    description: "Many good eye care staff arrive from retail, hospitality and other health jobs. Here is when hiring for attitude works, and how to train well.",
+    date: "2027-03-05",
+    body: `A clinic can teach someone to run a pre-test. It is much harder to teach someone to be patient with a nervous patient, to turn up on time or to care about getting a fit right. That is the thinking behind hiring for attitude and training for skills. It does not suit every role, but it suits more of them than many clinics assume.
+
+## Where it works well
+
+Reception and patient care, optometric assistant and technician roles, optical sales support and many lab tasks can all be learned on the job. Retail, hospitality, health care and customer service experience carry over well: people who have managed a busy shift, calmed an upset customer or kept records straight already have much of what you need. Our post on [how people fall into optics](/blog/how-people-fall-into-optics) describes how many of your current team probably started.
+
+## Where it does not
+
+Optometrists and opticians must be registered with the provincial regulator before they use the title and practise, so you cannot train around that. Hire for attitude within the limits of what the role legally requires, and check registration before the first day.
+
+## What to look for
+
+Reliability, warmth, curiosity and the ability to take feedback matter most. Ask questions that show how someone behaves: how they handled a difficult customer, what they did when they made a mistake, what they have learned in the last year. Our guide to [STAR questions](/blog/star-interview-method) explains the format candidates may use in reply. Notice how they treat the person at the front desk.
+
+## How to train well
+
+A plan matters more than good intentions. Write down the first 3 months: what the person will learn each week, who teaches them, and how you will know they have it. Pair them with a patient colleague, give them short checklists for repeated tasks and review progress every couple of weeks. Make clear what you expect from them, and what they can expect from you.
+
+## Be honest in the ad
+
+Say you will train, and say who and how. Many strong candidates, including people moving from other careers, read "no experience necessary" as a sign the clinic has not thought about it. A clear training promise tells them you have. The [job ad checklist](/blog/eye-care-job-ad-checklist) and our post on [writing an assistant ad](/blog/optometric-assistant-job-ad) show how.
+
+[See how posting works](/clinics)`,
+  },
+  {
+    slug: "why-people-leave-jobs",
+    title: "Why people leave eye care jobs, and what clinics can do about it",
+    description: "Staff turnover costs clinics time and patients' trust. These are the common reasons people leave and practical ways to keep good people.",
+    date: "2027-02-26",
+    body: `Every clinic loses people. Some of it is unavoidable: people move, study or change direction. A lot of it is not. When a good optician or assistant leaves after a few months, there is usually a reason that could have been spotted earlier. Here are the ones clinics most often hear.
+
+## The job was not what the ad said
+
+If the ad promised one thing and the first month delivered another, trust goes quickly. That might be hours, duties, pay, or how much training was offered. The fix starts before hiring: write the ad as the job really is, and say it again at the interview. Our [job ad checklist](/blog/eye-care-job-ad-checklist) lists what to include.
+
+## Unclear expectations and little feedback
+
+People stay where they know what good looks like and hear how they are doing. A new hire who is left to guess, or who only hears when something goes wrong, will start looking. A weekly 10 minute check in for the first 2 months costs very little.
+
+## Hours and scheduling
+
+Last minute changes, long stretches without a day off, and unpredictable evenings wear people down. Where you can, publish the schedule early, share the awkward shifts fairly and say yes to reasonable swaps.
+
+## Pay that falls behind
+
+People compare. If someone learns that a similar role pays more down the road, they may not say anything. They will just apply. Review pay at set times and tell people when it will happen.
+
+## No sense of progress
+
+Even small clinics can offer a path: more tests, a lead role, help with a course, a chance to train others. A clear answer to "where can this lead?" keeps people who want to grow.
+
+## Not feeling heard
+
+Staff often see problems first: a booking system that slows the day, a piece of equipment that needs attention. A clinic that listens, and acts on some of it, keeps the people who notice things.
+
+## Ask before they go
+
+Short "stay conversations" help: what do you enjoy, what would you change, what would make you leave? Then, when someone does leave, ask for an honest exit conversation and write down what you hear. Patterns show up quickly.
+
+[See how posting works](/clinics)`,
+  },
+  {
+    slug: "attract-right-candidates",
+    title: "How to attract the right candidates to your clinic",
+    description: "Good candidates choose clinics as much as clinics choose them. Here is what makes the right people apply, and what makes them look elsewhere.",
+    date: "2027-02-19",
+    body: `Most clinics hire in a hurry, when someone leaves or the schedule is stretched. That is when the ad is written fastest and the right candidate is easiest to miss. A small amount of care at the start brings better applicants and fewer weeks with an empty chair.
+
+## Say what the job really is
+
+Applicants decide quickly. An ad that describes the week, the tests the person will do, the team and the hours gets read. One that says "fast paced, friendly team" gets scrolled past. Our post on [writing an optometric assistant ad](/blog/optometric-assistant-job-ad) has a before and after, and the [job ad checklist](/blog/eye-care-job-ad-checklist) lists what every post should include, including the pay range.
+
+## Show the pay and the hours
+
+Candidates trust a clinic that is open about what the job pays, and in several provinces you have to be. Put the range in, along with the hours, any evenings or Saturdays, and when benefits start. Do it even if it feels uncomfortable. The people it puts off are the ones who would have left later.
+
+## Make it easy to apply
+
+If it takes 20 minutes to apply, the best people will not finish. Keep the form short, accept a CV and a short cover letter, and say what happens next and when. Reply to everyone, including the people you will not interview, and do it quickly. A candidate who hears back in 2 days feels very different from one who hears nothing.
+
+## Talk about training and the team
+
+Many good candidates are not looking for a perfect match on paper. They want to know who will teach them, what the first 3 months look like and whether the team is steady. If you have people who have stayed for years, say so.
+
+## Use the people you already have
+
+Staff know others in the industry. A simple referral thank you, and a short note about the job that your team can share, often brings more of the right people than any ad.
+
+## Post where eye care people look
+
+A general job site brings volume. A board built for eye care brings people who already work, or want to work, in it. You can post on Kestrel, and our ad builder will turn a few lines into a draft that you edit.
+
+[See how posting works](/clinics)`,
+  },
+  {
+    slug: "stand-out-in-interview",
+    title: "How to stand out in an interview for an eye care job",
+    description: "Clinics see many good candidates. These are the small things that make one memorable: preparation, curiosity, care for patients and a clear follow up.",
+    date: "2027-02-12",
+    body: `When a clinic interviews 4 or 5 people for one job, most of them are qualified. The person who gets the offer is often the one who made the clinic feel sure about them. You do not need to be flashy to do that. Here are the things that help.
+
+## Know the clinic
+
+Read the clinic's website before you arrive. Know what services it offers, whether it is independent or part of a group, and a little about the team. Mention something you noticed: the contact lens work they do, a myopia management programme, a focus on children's eye care. It shows that you chose them, and you did not send the same application everywhere.
+
+## Show how you treat people
+
+In eye care, patients notice how they are spoken to. Be warm and clear with the person at reception as well as with the interviewer, because they may be asked what they thought. Give examples of real situations: a nervous patient, a child who would not sit still, a patient who was not happy with their glasses. Our guide to [STAR questions](/blog/star-interview-method) shows how to turn them into short stories.
+
+## Be specific about what you can do
+
+Generic answers blur together. "I enjoy working with people" tells the interviewer very little. "I have fitted progressive lenses for 3 years and I like explaining to first time wearers how to adapt" tells them what you do and what you care about. If you are new to the field, say which tests or tasks you have learned, or are keen to learn.
+
+## Ask questions that show you are thinking
+
+Ask what a good first 3 months would look like, who you would learn from and what the clinic finds hardest about the role. More ideas are in our list of [questions for an optician interview](/blog/optician-interview-questions). Asking about pay, hours and training is normal, and it tells them you take the job seriously.
+
+## The small things
+
+Arrive 10 minutes early, dress as you would for work in a clinical setting, bring a copy of your CV, and switch your phone off. Afterwards, send a short thank you the same day. Clinics remember the person who followed up well.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "phone-screening-tips",
+    title: "Phone screenings: how to do well in the first call",
+    description: "A short phone screen often decides whether you get an interview. Here is how to prepare, what you will be asked and how to follow up.",
+    date: "2027-02-05",
+    body: `The phone screen is the first conversation with a clinic, and it is usually short, around 15 to 20 minutes. It is mainly to check the basics: whether you are registered if the role needs it, whether the hours work, whether the pay is in range and whether you come across as someone patients and colleagues would like. Here is how to do well.
+
+## Before the call
+
+Find a quiet place and use headphones if the signal is poor. Have your CV and the job ad in front of you, with the pay range and the hours circled. Write down a 30 second introduction: who you are, what you do now and why this role. Keep a short list of your own questions as well. If the call comes when you are at work, it is fine to ask to book a time instead.
+
+## What you will probably be asked
+
+Why are you interested in this job, and this clinic? Tell me about your current role. Are you registered, and in which province? What hours can you work, including evenings and Saturdays? When could you start? What are you looking for in pay? Having your answers ready means you sound calm. If you are asked for a pay number, you can give a range based on the ad and what the work involves. Our guide to [job ads](/blog/eye-care-job-ad-checklist) explains why many ads now show the pay.
+
+## During the call
+
+Smile as you talk, because it changes your voice. Answer the question you were asked, in about 30 seconds, and pause when you need to think instead of filling the silence. If you do not understand, ask them to repeat it. Take notes on names and next steps. Ask 2 or 3 of your own questions, such as who you would work with and what the next step is.
+
+## After the call
+
+Send a short thank you email the same day. Say you enjoyed the conversation, mention one thing you learned and confirm your availability. If you are asked to an interview, our posts on [STAR questions](/blog/star-interview-method) and [interview questions for opticians](/blog/optician-interview-questions) will help you prepare.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "star-interview-method",
+    title: "Star questions: how to answer interview questions with a story",
+    description: "The STAR method turns a vague answer into a clear one. Here is how it works, with examples from an eye care clinic.",
+    date: "2027-01-29",
+    body: `Interviewers like to ask "tell me about a time when..." questions. They are not trying to catch you out. They want evidence of how you behave, and a good story gives it. The STAR method is a simple way to build one.
+
+## What STAR stands for
+
+Situation: set the scene in a sentence or two. Task: say what you needed to do. Action: describe what you did, using "I". Result: say what happened, and what you learned. Keep the whole thing to about 2 minutes. Most people spend too long on the situation and too little on the result.
+
+## An example from the dispensary
+
+"A patient came back 3 days after picking up progressive lenses and said she could not use them. She was upset, and the clinic was busy. My task was to understand what was wrong without making her feel brushed off. I sat her down, checked how the glasses sat on her face and asked how she used them each day. The frame had slipped, so the lenses were not where her eyes were. I adjusted the fit, showed her where to look, and booked a short follow up. She stayed with the clinic, and I now check the fit before every progressive handover."
+
+## An example from the exam room
+
+"One morning 2 colleagues were off sick and the schedule was full. I needed to keep the optometrist on time. I suggested that I take the pre-testing for the first hour and moved the paperwork to the afternoon. We finished within 10 minutes of schedule, and the optometrist asked me to write down the order I used."
+
+## Build your own set
+
+Choose 4 or 5 stories before the interview. Aim for a different skill in each: a difficult patient, a busy day, learning something new, a mistake and how you fixed it, and working with a colleague you found hard. You can then bend each story to fit the question. Practise saying them out loud.
+
+## Things to avoid
+
+Do not blame colleagues, and do not make up a result. Real, small stories land better than dramatic ones, and a mistake you fixed is a good story. For the questions you should ask them back, see our guide to [interview questions for opticians](/blog/optician-interview-questions).
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "optical-lab-technician",
     title: "What an optical lab technician does, and how to get started",
     description: "Optical lab technicians turn prescriptions into finished glasses. Here is what the work involves, where it happens and how people start in it.",
@@ -37,6 +351,34 @@ People move from the bench into lead technician or lab manager roles, into dispe
 [See eye care jobs across Canada](/jobs)`,
   },
   {
+    slug: "eye-care-moving-to-canada",
+    title: "Moving to Canada from another country? Working in eye care",
+    description: "What to know if you trained or worked in eye care abroad: which roles need registration, where to start and how to work while you sort it out.",
+    date: "2027-01-15",
+    body: `If you trained or worked in eye care in another country, your skills are in demand here. The way in depends on the role, and the first step is almost always the same: ask the regulator. This post is a general guide, not legal or immigration advice, and rules change, so check each regulator's own website.
+
+## Regulated roles: start with the regulator
+
+Optometrists and opticians are regulated professions in Canada, and each province has its own regulator. You need to be registered in the province where you will work before you can use the title or practise. Because the rules and the process differ between provinces, contact the regulator for the province you plan to live in first, and ask what they require from someone trained outside Canada. As we understand it, the route for internationally trained professionals usually involves having your education assessed and passing national or provincial exams. For opticians, a national group of regulators (NACOR) is involved in assessing prior learning. For optometrists, national assessment and the national optometry exam are part of the process. Check the details with the regulator, because they update them.
+
+Useful questions to ask:
+
+- What documents do you need, and do they need to be translated or sent directly from the school?
+- What exams are required, and how often are they held?
+- How long does the process usually take, and what does it cost?
+- Can you work in a related role while it is under way?
+
+## Roles that do not need registration
+
+Many clinic jobs are not regulated in the same way, including optometric assistant, reception and patient care, clinic management support and many lab and supplier roles. These can be a good way to work in a Canadian clinic, learn the systems and meet the team while you complete registration for a regulated role. Our guide to [optometric assistant jobs](/blog/optometric-assistant-jobs-canada) explains what the work involves.
+
+## Applying
+
+You do not need to apologise for training abroad. Describe your skills, your registration status and the languages you work in. In Ontario, employers cannot ask for "Canadian experience" in a job posting, and many clinics never wanted it. A short [cover letter](/blog/cover-letter-optical-job) that says where you are in the registration process helps a clinic understand when you could start.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "independent-or-corporate-eye-care",
     title: "Independent practice or corporate group: what is different for staff",
     description: "How working in an independent eye care practice compares with a corporate group, and the questions that help you decide which one suits you.",
@@ -60,6 +402,38 @@ Ask the same questions in both. Who makes decisions about the frame collection a
 Kestrel lists independent and corporate practices side by side, and you can filter your search by practice type.
 
 [Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "start-a-career-in-optics",
+    title: "Thinking of starting a career in optics? Where to begin",
+    description: "A practical first step guide for anyone curious about working in eye care in Canada: the roles, the entry points and the questions worth asking early.",
+    date: "2026-12-18",
+    body: `Eye care has a clear ladder in some places and a lot of side doors in others. If you are wondering whether it is for you, you do not need to decide everything today. Here is a sensible way to start.
+
+## Find out what the jobs are
+
+Start by learning what each role does. Our guide to [the roles in eye care](/blog/working-in-eye-care) covers optometrists, opticians, assistants, managers, lab technicians and supplier roles. Read a few job ads, too. The better ones describe the week in plain terms, and they show the pay.
+
+## Try an entry role
+
+The quickest way to find out if you like it is to work in it. Optometric assistant, reception and patient care, and optical retail jobs are common ways in, and many clinics will train a keen, reliable person. Ask which tests you would be trained to do, who trains you and whether there is help with courses. Our post on [optometric assistant jobs](/blog/optometric-assistant-jobs-canada) lists useful questions.
+
+## Choose a direction
+
+After a few months you will probably have a sense of what draws you. A few common directions:
+
+- Becoming an optician, which is a regulated profession. You study, pass the exams and register with your province's regulator. Programmes and rules differ between provinces, so check with the regulator or a college.
+- Becoming an optometrist, which means a doctor of optometry degree. Canada has two schools of optometry, one in Waterloo and one in Montréal, and entry is competitive.
+- Moving into clinic management, where reliability and a head for people and systems matter most.
+- Joining a supplier or lab, where your clinic knowledge is a real advantage.
+
+None of these is a wrong turn. Many people try one and move to another.
+
+## Give yourself a first year
+
+A reasonable aim is to spend your first year learning the work, the patients and the team, then decide what to study or aim for next. Prepare for interviews with our questions for [optician interviews](/blog/optician-interview-questions), and send a short, honest [cover letter](/blog/cover-letter-optical-job).
+
+[See eye care jobs across Canada](/jobs)`,
   },
   {
     slug: "optometric-assistant-job-ad",
@@ -95,6 +469,31 @@ Kestrel's ad builder turns a few lines about the role into a draft. You edit eve
 [See how posting works](/clinics)`,
   },
   {
+    slug: "how-people-fall-into-optics",
+    title: "How most people fall into optics as a career",
+    description: "Few people plan a career in eye care. Here are the common ways people start, what they find when they arrive and why many of them stay.",
+    date: "2026-12-04",
+    body: `Ask a group of opticians, assistants and clinic managers how they got started, and the answer is rarely "I always wanted to work in eye care." It is more often "I needed a job and a friend knew a clinic," or "I was at the front desk and got curious." Eye care is a career many people fall into, and then find they like.
+
+## The usual doors
+
+A common start is the front desk or a part time job in an optical store, often while studying or between other plans. Some people grow up around a clinic because a parent or relative owns one. Others arrive from retail, hospitality or another part of health care, looking for work that has more purpose than the one they left. A few start as students taking a summer job and never leave.
+
+## What they find
+
+The work has a rhythm that suits some people very well. You meet patients, many of them regulars, you learn how the instruments work, and you can see the result of a good fitting when someone walks out seeing clearly or loving their frames. The teams are often small, so you get to know colleagues and learn from them directly. The learning does not stop: new lens designs, new equipment, new ways of managing myopia and dry eye.
+
+## Why it matters to the person hiring
+
+If you hire for an entry role, you are often hiring someone who will learn the rest on the job. That means attitude, reliability and how someone treats patients are worth as much as a CV.
+
+## If you are thinking about it
+
+You do not need a plan to start. A clear, warm [cover letter](/blog/cover-letter-optical-job) that says why you want to try eye care is a good first step, and many clinics will train the right person. Look at the entry roles, ask what training is offered, and see how it feels after a few months. If you like it, there are routes into regulated roles such as optician, and into management and supplier roles.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "optician-interview-questions",
     title: "Questions to ask in an optician job interview",
     description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
@@ -126,6 +525,35 @@ A few things are worth a second look. No pay range anywhere. An ad that says "fa
 Have 3 short stories ready: a time you helped a difficult fit, a time you worked well with an optometrist, and a time you learned something new. A clear, warm [cover letter](/blog/cover-letter-optical-job) gives you a good start before you sit down.
 
 [Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "working-in-eye-care",
+    title: "Working in the eye care industry: the roles and who does what",
+    description: "A plain guide to the jobs inside an eye care clinic and around it, from optometrists and opticians to managers, lab technicians and supplier teams.",
+    date: "2026-11-20",
+    body: `If you have only ever been on the patient side of an eye exam, the clinic can look like a small number of jobs. There are more than most people expect, and many of them need no university degree. Here is who does what.
+
+## The clinical side
+
+Optometrists examine eyes, test vision, diagnose and manage many eye conditions and prescribe glasses and contact lenses. They are regulated health professionals, so they must be registered in the province where they practise. Around them, optometric assistants and technicians do the first tests before the exam, prepare the room and keep the day moving. Some assistants and technicians work in specialist clinics alongside ophthalmologists, who are medical doctors and surgeons for the eye. Our guide to [optometric assistant jobs](/blog/optometric-assistant-jobs-canada) describes that work in more detail.
+
+## The optical side
+
+Opticians fit and adjust glasses and, depending on the province, contact lenses. They help patients choose frames and lenses that suit their prescription and their daily life. Opticians are also regulated by the province, and the rules differ from one province to the next. Behind the dispensary is the lab, where lenses are cut to fit the frame and finished. In some clinics that happens on site, and in others it goes to a central lab.
+
+## Running the clinic
+
+Reception and patient care teams book appointments, greet patients, handle insurance and explain what to expect. Practice and clinic managers look after staff, schedules, ordering, finances and the standards the clinic sets for itself. In a small independent practice one person may cover several of these jobs. In a larger group they are usually separate.
+
+## Beyond the clinic
+
+Lens labs, frame companies, contact lens makers, equipment suppliers and software companies all hire people who know clinics. Roles include sales and territory representatives, trainers, equipment technicians and account managers. Our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs) covers them.
+
+## Where people go from here
+
+People move between these roles more than you might think. An assistant may study to become an optician. A receptionist may become a clinic manager. An optician may move to the supplier side to train other clinics. If you are starting out, the useful question is not which job to choose forever, but which one lets you learn the most in the next 2 years.
+
+[See eye care jobs across Canada](/jobs)`,
   },
   {
     slug: "optometric-assistant-jobs-canada",
