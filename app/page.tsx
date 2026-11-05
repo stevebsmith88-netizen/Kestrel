@@ -16,7 +16,7 @@ export default function ComingSoon() {
       <main id="main" tabIndex={-1}>
         <section className="hero">
           <div className="wrap">
-            <span className="pill">Coming soon</span>
+            <span className="pill">Waitlist now open</span>
             <h1 className="sr">Kestrel Eye Care Jobs: eye care jobs across Canada</h1>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="mark" src="/logo.svg" alt="Kestrel" width={1300} height={340} />
