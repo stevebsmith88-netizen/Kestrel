@@ -82,3 +82,7 @@ Hugging Face's July 2026 breach is the example: attackers got internal datasets 
 3. For **Preview**, add Cloudflare's published test keys instead, because preview addresses are not on the real widget. Check Cloudflare's Turnstile testing page for the current values.
 4. Redeploy without the build cache. The site key is read when the site is built, so the check only appears after a new build.
 5. Both keys must be set for the check to run. If only one is set, the forms carry on without it, so a half finished setup can never lock people out.
+
+## Sign in guard
+
+Failed sign in attempts are counted per email and per visitor in `sign_in_attempts` (migration 0024), using scrambled keys. After 5 failures in 15 minutes, the sign in form asks for the bot check before another try. If Supabase's own limit is reached, people see a "wait a few minutes" message. A good sign in clears the email's count, and the daily job removes counts older than a day. If the table is missing or unreadable, sign in carries on as before and the problem is logged.
