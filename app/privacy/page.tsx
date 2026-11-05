@@ -9,7 +9,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "30th October 2026";
+const UPDATED = "5th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -31,8 +31,6 @@ export default function Privacy() {
           <h2>Who we are and how to reach us</h2>
           <p>
             Kestrel Eye Care Jobs<br />
-            6013 Yonge Street, 3rd Floor<br />
-            North York, Ontario M2M 3W2, Canada<br />
             Email: <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
           </p>
           <p>Our privacy officer looks after questions about this policy and about your personal information.</p>

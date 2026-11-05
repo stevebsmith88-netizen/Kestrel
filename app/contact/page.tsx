@@ -27,9 +27,6 @@ export default async function Contact() {
 
           <h2>Report a job</h2>
           <p>Use the &quot;Report this job&quot; link on the job&apos;s page. If you cannot, email us the job&apos;s web address and what is wrong.</p>
-
-          <h2>Mailing address</h2>
-          <p>Kestrel Eye Care Jobs<br />6013 Yonge Street, 3rd Floor<br />North York, Ontario M2M 3W2<br />Canada</p>
         </div>
       </main>
       <AppFooter />

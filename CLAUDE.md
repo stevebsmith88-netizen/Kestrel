@@ -40,7 +40,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - Accounts are live: email and password sign in with candidate, clinic and admin roles (see docs/accounts-setup.md; migrations 0002 to 0004 are applied). Sign in and sign up exist, but the candidate and clinic homes are still placeholders. The waitlist stays the main public call to action until launch.
 - Screen designs for the whole platform are in the "Kestrel platform screens" design artifact that Steve has approved (candidate tracker, apply with cover letter, clinic dashboard, post a job, applicants board, claim your listing, checkout, admin overview). Launch scope is stages 1 to 3 together, with Stripe in test mode and a free launch coupon, then prices switched on later.
 - Email: Google Workspace for people (steve@ and aliases at eyecarejobs.ca), Resend for automatic email, sending from mail.eyecarejobs.ca. Supabase sends its sign up emails through Resend SMTP.
-- The privacy policy page is live at /privacy. The mailing address is 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2.
+- The privacy policy page is live at /privacy. The mailing address is 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2. Since 5th November 2026 it appears in email footers only (CASL needs it there), not on the website, at Steve's request.
 - The Wix page never went live, so there are no Wix sign ups to import.
 - Waitlist consent wording covers launch news, job alerts, product updates and offers (CASL). Keep the wording in lib/waitlist.ts identical to what people see, since it is saved with every sign up.
 

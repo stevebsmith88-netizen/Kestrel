@@ -7,7 +7,7 @@ The email itself is in `lib/outreach.ts`, with a picture of how it looks in `doc
 ## What CASL needs in every commercial email
 
 1. Who is sending it: Kestrel Eye Care Jobs, named in the email.
-2. A mailing address: 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2. It is in the footer of every email.
+2. A mailing address: 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2. It is in the footer of every email. It is deliberately not shown on the website.
 3. A working unsubscribe, in every email, honoured within 10 business days. We aim for straight away.
 4. Permission. For a first email to a business, "implied consent" can work when all of these are true:
    - the address was conspicuously published, for example on the clinic's careers or contact page,
