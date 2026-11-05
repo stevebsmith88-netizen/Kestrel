@@ -116,3 +116,22 @@ test("the site key ignores www and subdomains, and keeps provincial addresses wh
   assert.equal(siteKey("sites.google.com"), "");
   assert.equal(siteKey("harbourside.bamboohr.com"), "");
 });
+
+test("the careers page finder picks the clinic's own careers links, best first, and never a job board", async () => {
+  const { careersLinks, startAddress } = await import("./page-reader.ts");
+  const links = [
+    { text: "Book an eye exam", url: "https://www.harbourside.ca/book" },
+    { text: "Apply now", url: "https://www.harbourside.ca/careers/optician/apply" },
+    { text: "Join our team", url: "https://www.harbourside.ca/careers" },
+    { text: "See us on Indeed", url: "https://ca.indeed.com/cmp/harbourside/jobs" },
+    { text: "Jobs", url: "https://harbourside.bamboohr.com/careers" },
+    { text: "Careers", url: "https://otherclinic.ca/careers" },
+  ];
+  const found = careersLinks({ links }, "https://www.harbourside.ca").map((l) => l.url);
+  // The clinic's hiring system page lists the jobs themselves, so it comes first, then its own careers page.
+  assert.deepEqual(found.slice(0, 2), ["https://harbourside.bamboohr.com/careers", "https://www.harbourside.ca/careers"]);
+  assert.ok(!found.some((u) => u.includes("indeed") || u.includes("otherclinic") || u.endsWith("/book")));
+  assert.equal(startAddress("harbourside.ca"), "https://harbourside.ca");
+  assert.equal(startAddress("http://harbourside.ca/"), "http://harbourside.ca/");
+  assert.equal(startAddress("  "), "");
+});

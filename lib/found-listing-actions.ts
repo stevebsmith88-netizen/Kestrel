@@ -12,7 +12,7 @@ import {
   type FoundClinic, type FoundJob, type Reading,
 } from "@/lib/found-listings";
 import type { JobFormState } from "@/lib/jobs";
-import { copiedRun, fingerprint, hostOfUrl, mentionsEyeRecommend, refuseAddress, siteKey, type ReadPage } from "@/lib/page-reader";
+import { COMMON_CAREERS_PATHS, careersLinks, copiedRun, fingerprint, hostOfUrl, mentionsEyeRecommend, refuseAddress, siteKey, startAddress, type PageLink, type ReadPage } from "@/lib/page-reader";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 // The found listings tool (admin only): read one careers page on a clinic's own website, let Claude pull out the facts
@@ -33,6 +33,7 @@ export type ReadingView = {
 };
 export type ReadState = JobFormState & { reading?: ReadingView };
 export type SaveState = JobFormState & { saved?: { jobId: string; status: "draft" | "live" } };
+export type FindState = JobFormState & { found?: { site: string; links: PageLink[] } };
 
 const SYSTEM = `You read one page from the website of a Canadian eye care employer, for Kestrel Eye Care Jobs, a job board. You pull out the facts about each open job on the page and write a short summary of each in your own words. A person at Kestrel checks everything you return against the page before anything is published.
 
@@ -118,6 +119,40 @@ async function clinicsAtSite(db: SupabaseClient, website: string) {
 }
 
 const ALREADY_ON_KESTREL = "This clinic already has its own Kestrel account, so it posts its own jobs. Found listings are only for clinics that are not on Kestrel yet.";
+
+// Careers page finder: from a clinic's website, the links that look like its careers page. No Claude, no cost, and nothing
+// is kept. It reads the home page (and, if that has no careers link, up to 4 usual addresses such as /careers), with the
+// same rules as the reader: public sites only, robots.txt obeyed, nothing connected with Eye Recommend.
+export async function findCareersPage(_prev: FindState, form: FormData): Promise<FindState> {
+  await requireRole("admin");
+  const address = startAddress(String(form.get("site") ?? "").slice(0, 300));
+  const fail = (message: string): FindState => ({ errors: { site: message }, error: message });
+  if (!address) return fail("Enter the clinic's website, for example harbourside.ca.");
+  const refused = refuseAddress(address);
+  if (refused) return fail(refused);
+  const db = supabaseAdmin();
+  if (db && (await clinicsAtSite(db, websiteOf(address))).some((c) => c.claimed || c.owner_id)) return fail(ALREADY_ON_KESTREL);
+
+  const home = await fetchPage(address);
+  if (!home.ok) return fail(home.reason);
+  if ([home.page.title, home.page.text, ...home.page.links.flatMap((l) => [l.url, l.text])].some(mentionsEyeRecommend)) {
+    return fail("This website mentions Eye Recommend. Kestrel keeps clear of anything connected with Eye Recommend, so this clinic is not added.");
+  }
+  let links = careersLinks(home.page, home.url);
+  if (!links.length) {
+    for (const path of COMMON_CAREERS_PATHS) {
+      const tryUrl = new URL(path, home.url).toString();
+      const page = await fetchPage(tryUrl);
+      // A site that answers every address with its home page has no real page here.
+      if (page.ok && new URL(page.url).pathname !== "/" && /career|job|team|employ|hiring|emploi|carri/i.test(`${page.page.title} ${page.page.text.slice(0, 3000)}`)) {
+        links = [{ text: page.page.title || path, url: page.url }];
+        break;
+      }
+    }
+  }
+  if (!links.length) return { found: { site: home.url, links: [] }, message: "We couldn't find a careers page on this website. The clinic may only advertise elsewhere, or not be hiring." };
+  return { found: { site: home.url, links }, message: links.length === 1 ? "We found 1 likely careers page." : `We found ${links.length} likely careers pages, best first.` };
+}
 
 export async function readCareersPage(_prev: ReadState, form: FormData): Promise<ReadState> {
   const session = await requireRole("admin");

@@ -301,3 +301,37 @@ export function copiedRun(text: string, pagePrint: Iterable<number>): string | n
   }
   return null;
 }
+
+// Careers page finder. From a clinic's home page, the links most likely to lead to its careers or jobs page, best first.
+// Only links on the clinic's own site or on a hiring system count. Job boards and other sites are left out.
+const CAREERS_TEXT = /career|join (our|the) team|work (with|for) us|employment|\bjobs?\b|hiring|opportunit|vacanc|emplois?|carri[eè]re|recrut|nous joindre/i;
+const CAREERS_PATH = /career|\bjobs?\b|join|employment|hiring|vacanc|emploi|carriere|recrut/i;
+export const COMMON_CAREERS_PATHS = ["/careers", "/jobs", "/join-our-team", "/employment"];
+
+export function careersLinks(page: Pick<ReadPage, "links">, siteUrl: string, limit = 5): PageLink[] {
+  const home = siteKey(hostOfUrl(siteUrl));
+  const scored = page.links
+    .map((link) => {
+      const host = hostOfUrl(link.url);
+      const hiring = isHiringSystem(host);
+      if (refuseAddress(link.url) || (!hiring && siteKey(host) !== home)) return null;
+      let path = "";
+      try {
+        path = new URL(link.url).pathname;
+      } catch {
+        return null;
+      }
+      const score = (CAREERS_TEXT.test(link.text) ? 3 : 0) + (CAREERS_PATH.test(path) ? 2 : 0) + (hiring ? 2 : 0) - (/apply|postuler/i.test(path) ? 1 : 0);
+      return score > 0 ? { link, score } : null;
+    })
+    .filter((x): x is { link: PageLink; score: number } => x !== null);
+  scored.sort((a, b) => b.score - a.score || a.link.url.length - b.link.url.length);
+  return scored.slice(0, limit).map((x) => x.link);
+}
+
+// Turns what a person types ("harbourside.ca", "www.harbourside.ca/") into a web address to start from.
+export function startAddress(typed: string) {
+  const value = typed.trim();
+  if (!value) return "";
+  return /^https?:\/\//i.test(value) ? value : `https://${value.replace(/^\/+/, "")}`;
+}
