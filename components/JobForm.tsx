@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Choices, Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { buildAd } from "@/lib/ad-builder";
+import { saveJobForClinic } from "@/lib/admin-job-actions";
 import { saveJob } from "@/lib/clinic-actions";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 
@@ -32,8 +33,9 @@ const YES_NO = [
   { value: "no", label: "No" },
 ] as const;
 
-export default function JobForm({ initial, adBuilder = false, live = false }: { initial: JobFormValues; adBuilder?: boolean; live?: boolean }) {
-  const { state, pending, submit } = useServerForm(saveJob);
+// employerId is set only when an admin posts for a clinic. The form then saves through the admin action, and skips the clinic only parts.
+export default function JobForm({ initial, adBuilder = false, live = false, employerId }: { initial: JobFormValues; adBuilder?: boolean; live?: boolean; employerId?: string }) {
+  const { state, pending, submit } = useServerForm(employerId ? saveJobForClinic : saveJob);
   const ad = useServerForm(buildAd);
   const form = useRef<HTMLFormElement>(null);
   const [description, setDescription] = useState(initial.description);
@@ -49,6 +51,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
     <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
       <RequiredNote />
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
+      {employerId && <input type="hidden" name="employerId" value={employerId} />}
 
       <h2 className="formh">The role</h2>
       <Field id="jf-title" label="Job title" required error={e.title}>
@@ -157,7 +160,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
         </Field>
       )}
 
-      {!live && (
+      {!live && !employerId && (
         <div className="templatebox">
           <label className="choice agree">
             <input type="checkbox" name="saveTemplate" value="yes" checked={saveTemplate} onChange={(ev) => setSaveTemplate(ev.target.checked)} />
@@ -175,7 +178,7 @@ export default function JobForm({ initial, adBuilder = false, live = false }: { 
         <button type="submit" name="intent" value="submit" className="btn" disabled={pending}>{pending ? "Saving" : live ? "Send my changes for review" : "Submit for review"}</button>
         {!live && <button type="submit" name="intent" value="draft" className="btn ghost" disabled={pending}>Save draft</button>}
       </div>
-      <p className="help">Our team checks every post, usually within 1 business day, before it goes live.</p>
+      <p className="help">{employerId ? "This goes to the review queue, where you approve it. A draft stays with the clinic to finish." : "Our team checks every post, usually within 1 business day, before it goes live."}</p>
     </form>
   );
 }
