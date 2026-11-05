@@ -20,62 +20,11 @@ const hostKey = (website: string) => {
 
 export default function ProvinceSearch({ onUsePage, onFindPage }: { onUsePage: (url: string) => void; onFindPage: (website: string) => void }) {
   const { state, pending, submit } = useServerForm<SearchState>(searchProvince);
-  const [sweep, setSweep] = useState<Sweep | null>(null);
-  const [form, setForm] = useState<HTMLFormElement | null>(null);
-
-  // Searches the province's larger towns one after another, so one click covers more than a whole province search can in one go.
-  // Each town is its own search, and the clinics found are put together, with each clinic once.
-  async function runSweep() {
-    if (!form) return;
-    const data = new FormData(form);
-    const province = String(data.get("province") ?? "");
-    const role = String(data.get("role") ?? "");
-    if (!province) {
-      setSweep({ running: false, progress: "", leads: [], dropped: 0, error: "Choose a province or territory first." });
-      return;
-    }
-    setSweep({ running: true, progress: "Finding the larger towns", leads: [], dropped: 0 });
-    const towns = await townsToSearch(province);
-    const seen = new Map<string, LeadView>();
-    let dropped = 0;
-    let worked = 0;
-    let lastError = "";
-    for (let i = 0; i < towns.length; i++) {
-      setSweep((s) => ({ ...(s as Sweep), running: true, progress: `Searching ${towns[i]} (${i + 1} of ${towns.length}). Each town takes up to 2 minutes.` }));
-      const one = new FormData();
-      one.set("province", province);
-      one.set("role", role);
-      one.set("city", towns[i]);
-      try {
-        const result = await searchProvince({}, one);
-        if (result.error) {
-          lastError = result.error;
-          if (/daily limit/i.test(result.error)) break;
-          continue;
-        }
-        worked += 1;
-        dropped += result.dropped ?? 0;
-        for (const lead of result.leads ?? []) if (!seen.has(hostKey(lead.website))) seen.set(hostKey(lead.website), lead);
-      } catch {
-        lastError = "A search could not be sent. Check your connection and try again.";
-      }
-      setSweep((s) => ({ ...(s as Sweep), leads: [...seen.values()], dropped }));
-    }
-    setSweep({
-      running: false,
-      progress: "",
-      leads: [...seen.values()],
-      dropped,
-      message: `${seen.size} ${seen.size === 1 ? "clinic" : "clinics"} that look like they are hiring, from ${worked} of ${towns.length} towns. Dates and pay are only shown when the page says them.`,
-      ...(lastError ? { error: lastError } : {}),
-    });
-  }
-  const shown = sweep && (sweep.running || sweep.leads.length || sweep.message || sweep.error) ? sweep : null;
   const e = state.errors ?? {};
   return (
     <section aria-label="Province search" className="stackcards">
-      <form ref={setForm} onSubmit={submit} noValidate className="panel formpanel">
-        <h2 className="formh">Search a province for clinics that are hiring</h2>
+      <form onSubmit={submit} noValidate className="panel formpanel">
+        <h2 className="formh">1. Find clinics that are hiring</h2>
         <p className="help">Claude searches the web for eye care employers in the province, then finds each one&apos;s own website. Job boards can show that a clinic is hiring, but Indeed, LinkedIn, Jobs4ECPs, college registers and Eye Recommend are never used. It takes up to 2 minutes.</p>
         <div className="pair">
           <Field id="ps-province" label="Province or territory" required error={e.province}>
@@ -84,7 +33,7 @@ export default function ProvinceSearch({ onUsePage, onFindPage }: { onUsePage: (
               {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
             </select>
           </Field>
-          <Field id="ps-role" label="Role" hint="Leave as any to look for every eye care role.">
+          <Field id="ps-role" label="Role">
             <select id="ps-role" name="role" defaultValue="">
               <option value="">Any role</option>
               {ROLE_CATEGORIES.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -95,22 +44,19 @@ export default function ProvinceSearch({ onUsePage, onFindPage }: { onUsePage: (
           <input id="ps-city" name="city" type="text" maxLength={60} autoComplete="off" />
         </Field>
         {state.error && !e.province && <p className="err form-err" role="alert">{state.error}</p>}
-        {state.message && <p className="ok-msg" role="status">{state.message}</p>}
-        <div className="formbtns">
-          <button type="submit" className="btn" disabled={pending || sweep?.running}>{pending ? "Searching (up to 2 minutes)" : "Search"}</button>
-          <button type="button" className="btn ghost" disabled={pending || sweep?.running} onClick={runSweep}>{sweep?.running ? "Searching the towns" : "Search the larger towns"}</button>
-        </div>
-        <p className="help">&quot;Search the larger towns&quot; searches up to 8 of the province&apos;s biggest towns one after another, which finds more than one search of the whole province. It takes several minutes, so keep this page open. Each town counts as one of today&apos;s searches.</p>
-        {shown?.progress && <p className="help" role="status" aria-live="polite">{shown.progress}</p>}
-        {shown?.error && <p className="err form-err" role="alert">{shown.error}</p>}
-        {shown?.message && <p className="ok-msg" role="status">{shown.message}</p>}
+        <button type="submit" className="btn" disabled={pending}>{pending ? "Searching (up to 2 minutes)" : "Search"}</button>
       </form>
-      {(shown ? shown.leads : state.leads) && (shown ? shown.leads : state.leads)!.length > 0 && (
-        <div className="joblist">
-          {(shown ? shown.leads : state.leads)!.map((lead) => <LeadCard key={lead.website} lead={lead} onUsePage={onUsePage} onFindPage={onFindPage} />)}
+      {state.message && (
+        <div role="status">
+          <p className="resultcount">{state.message}</p>
+          {state.leftOut && <p className="help">{state.leftOut}</p>}
         </div>
       )}
-      {(shown ? shown.dropped : state.leads && state.dropped) ? <p className="help">{shown ? shown.dropped : state.dropped} results were left out: no website for the clinic, a source we never use, or a clinic already on Kestrel.</p> : null}
+      {state.leads && state.leads.length > 0 && (
+        <div className="leadlist">
+          {state.leads.map((lead) => <LeadCard key={lead.website} lead={lead} onUsePage={onUsePage} onFindPage={onFindPage} />)}
+        </div>
+      )}
     </section>
   );
 }
@@ -126,55 +72,68 @@ function LeadCard({ lead, onUsePage, onFindPage }: { lead: LeadView; onUsePage: 
     setEmailSource(source);
   };
   const done = save.state.saved || lead.saved;
+  const where = [lead.city, lead.province].filter(Boolean).join(", ");
   return (
-    <article className="card review">
-      <h3>{lead.clinicName}</h3>
-      <p className="meta">{[lead.city, lead.province].filter(Boolean).join(", ")}{lead.practiceType ? ` · ${lead.practiceType}` : ""}</p>
-      <dl className="facts">
-        <div><dt>Job</dt><dd>{lead.jobTitle || "Not stated"}{lead.employmentType ? `, ${lead.employmentType}` : ""}</dd></div>
-        <div><dt>Posted</dt><dd>{lead.postedText || "Not stated on the page"}</dd></div>
-        <div><dt>Pay</dt><dd>{lead.payAsWritten || "Not stated on the page"}</dd></div>
-        <div><dt>Seen at</dt><dd>{lead.sourceUrl ? <a href={lead.sourceUrl} target="_blank" rel="noopener noreferrer">{SOURCE[lead.source]}<span className="sr"> (opens in a new tab)</span></a> : SOURCE[lead.source]}</dd></div>
-        <div><dt>Website</dt><dd><a href={lead.website} target="_blank" rel="noopener noreferrer">{lead.website.replace(/^https?:\/\//, "")}<span className="sr"> (opens in a new tab)</span></a></dd></div>
-      </dl>
-      {lead.note && <p className="help">{lead.note}</p>}
+    <details className="card leadrow">
+      <summary>
+        <span className="leadmain">
+          <strong>{lead.clinicName}</strong>
+          <span className="meta">{lead.jobTitle || "Hiring"}{lead.employmentType ? `, ${lead.employmentType}` : ""} · {where} · {lead.postedText || "no date on the page"}</span>
+        </span>
+        <span className="leadflags">
+          {!lead.locationConfirmed && <span className="chip">Location not confirmed</span>}
+          {lead.source === "job_board" && <span className="chip">Seen on a job board</span>}
+          {done && <span className="chip paychip">Saved</span>}
+        </span>
+      </summary>
+      <div className="leadbody">
+        <dl className="facts">
+          <div><dt>Job</dt><dd>{lead.jobTitle || "Not stated"}{lead.employmentType ? `, ${lead.employmentType}` : ""}</dd></div>
+          <div><dt>Where</dt><dd>{where}{lead.locationConfirmed ? "" : " (not confirmed by the page)"}</dd></div>
+          <div><dt>Posted</dt><dd>{lead.postedText || "Not stated on the page"}</dd></div>
+          <div><dt>Pay</dt><dd>{lead.payAsWritten || "Not stated on the page"}</dd></div>
+          <div><dt>Seen at</dt><dd>{lead.sourceUrl ? <a href={lead.sourceUrl} target="_blank" rel="noopener noreferrer">{SOURCE[lead.source]}<span className="sr"> (opens in a new tab)</span></a> : SOURCE[lead.source]}</dd></div>
+          <div><dt>Website</dt><dd><a href={lead.website} target="_blank" rel="noopener noreferrer">{lead.website.replace(/^https?:\/\//, "")}<span className="sr"> (opens in a new tab)</span></a></dd></div>
+        </dl>
+        {lead.note && <p className="help">{lead.note}</p>}
 
-      <div className="formbtns">
-        {lead.careersUrl
-          ? <button type="button" className="btn ghost" onClick={() => onUsePage(lead.careersUrl)}>Read their careers page</button>
-          : <button type="button" className="btn ghost" onClick={() => onFindPage(lead.website)}>Find their careers page</button>}
-        <form onSubmit={emails.submit} noValidate>
-          <input type="hidden" name="website" value={lead.website} />
-          <input type="hidden" name="careersUrl" value={lead.careersUrl} />
-          <button type="submit" className="btn ghost" disabled={emails.pending}>{emails.pending ? "Looking" : "Find a contact email"}</button>
-        </form>
+        <div className="formbtns">
+          {lead.careersUrl
+            ? <button type="button" className="btn ghost" onClick={() => onUsePage(lead.careersUrl)}>Read their careers page</button>
+            : <button type="button" className="btn ghost" onClick={() => onFindPage(lead.website)}>Find their careers page</button>}
+          <form onSubmit={emails.submit} noValidate>
+            <input type="hidden" name="website" value={lead.website} />
+            <input type="hidden" name="careersUrl" value={lead.careersUrl} />
+            <button type="submit" className="btn ghost" disabled={emails.pending}>{emails.pending ? "Looking" : "Find a contact email"}</button>
+          </form>
+        </div>
+
+        {emails.state.error && <p className="err form-err" role="alert">{emails.state.error}</p>}
+        {emails.state.message && <p className="help" role="status">{emails.state.message}</p>}
+        {chosen.length > 0 && (
+          <ul className="plainlist">
+            {chosen.map((c) => (
+              <li key={c.email}>
+                {c.email} <span className="help">published on <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer">this page<span className="sr"> (opens in a new tab)</span></a></span>{" "}
+                <button type="button" className="linkbtn" onClick={() => pick(c.email, c.sourceUrl)}>{email === c.email ? "Chosen" : "Keep this one"}</button>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {done ? <p className="ok-msg" role="status">{save.state.message || "Saved to your leads."}</p> : (
+          <form onSubmit={save.submit} noValidate>
+            {([
+              ["clinicName", lead.clinicName], ["website", lead.website], ["province", lead.province], ["city", lead.city], ["practiceType", lead.practiceType],
+              ["careersUrl", lead.careersUrl], ["jobTitle", lead.jobTitle], ["roleCategory", lead.roleCategory], ["postedText", lead.postedText],
+              ["payAsWritten", lead.payAsWritten], ["sourceUrl", lead.sourceUrl], ["source", lead.source], ["note", lead.note],
+              ["contactEmail", email], ["emailSourceUrl", emailSource],
+            ] as const).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
+            {save.state.error && <p className="err form-err" role="alert">{save.state.error}</p>}
+            <button type="submit" className="btn" disabled={save.pending}>{save.pending ? "Saving" : email ? `Save lead with ${email}` : "Save lead without an email"}</button>
+          </form>
+        )}
       </div>
-
-      {emails.state.error && <p className="err form-err" role="alert">{emails.state.error}</p>}
-      {emails.state.message && <p className="help" role="status">{emails.state.message}</p>}
-      {chosen.length > 0 && (
-        <ul className="plainlist">
-          {chosen.map((c) => (
-            <li key={c.email}>
-              {c.email} <span className="help">published on <a href={c.sourceUrl} target="_blank" rel="noopener noreferrer">this page<span className="sr"> (opens in a new tab)</span></a></span>{" "}
-              <button type="button" className="linkbtn" onClick={() => pick(c.email, c.sourceUrl)}>{email === c.email ? "Chosen" : "Keep this one"}</button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {done ? <p className="ok-msg" role="status">{save.state.message || "Saved to your leads."}</p> : (
-        <form onSubmit={save.submit} noValidate>
-          {([
-            ["clinicName", lead.clinicName], ["website", lead.website], ["province", lead.province], ["city", lead.city], ["practiceType", lead.practiceType],
-            ["careersUrl", lead.careersUrl], ["jobTitle", lead.jobTitle], ["roleCategory", lead.roleCategory], ["postedText", lead.postedText],
-            ["payAsWritten", lead.payAsWritten], ["sourceUrl", lead.sourceUrl], ["source", lead.source], ["note", lead.note],
-            ["contactEmail", email], ["emailSourceUrl", emailSource],
-          ] as const).map(([name, value]) => <input key={name} type="hidden" name={name} value={value} />)}
-          {save.state.error && <p className="err form-err" role="alert">{save.state.error}</p>}
-          <button type="submit" className="btn" disabled={save.pending}>{save.pending ? "Saving" : email ? `Save lead with ${email}` : "Save lead without an email"}</button>
-        </form>
-      )}
-    </article>
+    </details>
   );
 }

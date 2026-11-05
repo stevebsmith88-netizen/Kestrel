@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { jsonFromAnswer, normaliseLeads, sourceOf, validateLead } from "./leads.ts";
+import { describeDropped, jsonFromAnswer, normaliseLeads, sourceOf, validateLead } from "./leads.ts";
 
 const lead = (over: Record<string, unknown> = {}) => ({
   clinic_name: "Insight Optometry", city: "Halifax", province: "Nova Scotia", website: "https://insightoptometry.com/pages/careers",
@@ -51,13 +51,15 @@ test("the same clinic appears once, and unknown values are cleared", () => {
   assert.equal(leads[1].roleCategory, "");
   assert.equal(leads[1].practiceType, "");
   assert.equal(leads[1].province, "Nova Scotia");
+  assert.equal(leads[1].locationConfirmed, false, "an unknown province is marked as unconfirmed");
+  assert.equal(leads[0].locationConfirmed, true);
 });
 
 test("the answer can have words around its JSON, and nonsense gives nothing", () => {
   assert.deepEqual(jsonFromAnswer('Here you go:\n{"leads":[]}\nDone.'), { leads: [] });
   assert.equal(jsonFromAnswer("no json here"), null);
   assert.equal(jsonFromAnswer("{broken"), null);
-  assert.deepEqual(normaliseLeads(null, "Ontario"), { leads: [], dropped: 0 });
+  assert.deepEqual(normaliseLeads(null, "Ontario"), { leads: [], dropped: 0, reasons: { noWebsite: 0, neverSource: 0, duplicate: 0, otherProvince: 0 } });
   assert.equal(sourceOf("https://harbourside.bamboohr.com/careers"), "hiring_system");
 });
 
@@ -68,4 +70,18 @@ test("an email is only saved with the page it was published on", () => {
   assert.ok(validateLead({ ...ok, contactEmail: "nope" }).contactEmail);
   assert.deepEqual(validateLead({ ...ok, contactEmail: "", emailSourceUrl: "" }), {});
   assert.ok(validateLead({ ...ok, website: "" }).website);
+});
+
+test("a job in another province is left out of the search, with the reason counted", () => {
+  const { leads, dropped, reasons } = normaliseLeads({ leads: [
+    lead(),
+    lead({ clinic_name: "Alberta Eyes", website: "https://albertaeyes.ca", province: "Alberta", city: "Calgary" }),
+    lead({ clinic_name: "Toronto Optical", website: "https://torontooptical.ca", province: "Ontario", city: "Toronto" }),
+    lead({ clinic_name: "No site", website: "" }),
+  ] }, "Nova Scotia");
+  assert.deepEqual(leads.map((l) => l.clinicName), ["Insight Optometry"]);
+  assert.equal(dropped, 3);
+  assert.deepEqual(reasons, { noWebsite: 1, neverSource: 0, duplicate: 0, otherProvince: 2 });
+  assert.equal(describeDropped(reasons), "Left out: 2 in other provinces, 1 with no website for the clinic.");
+  assert.equal(describeDropped({ noWebsite: 0, neverSource: 0, duplicate: 0, otherProvince: 0 }), "");
 });

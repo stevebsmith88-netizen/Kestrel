@@ -30,7 +30,10 @@ export type Lead = {
   source: LeadSource;
   practiceType: string;
   note: string;
+  locationConfirmed: boolean; // false when the search gave no province for the job, so its place is a guess
 };
+
+export type DropReasons = { noWebsite: number; neverSource: number; duplicate: number; otherProvince: number };
 
 const cap = (v: unknown, max: number) => (typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max) : "");
 const originOf = (v: unknown) => {
@@ -69,11 +72,23 @@ export function jsonFromAnswer(text: string): unknown {
   }
 }
 
-export function normaliseLeads(raw: unknown, province: string): { leads: Lead[]; dropped: number } {
+// A line for the admin saying what was left out, and why.
+export function describeDropped(r: DropReasons): string {
+  const parts = [
+    r.otherProvince ? `${r.otherProvince} in other provinces` : "",
+    r.noWebsite ? `${r.noWebsite} with no website for the clinic` : "",
+    r.neverSource ? `${r.neverSource} from a source Kestrel never uses` : "",
+    r.duplicate ? `${r.duplicate} repeats of a clinic already shown` : "",
+  ].filter(Boolean);
+  return parts.length ? `Left out: ${parts.join(", ")}.` : "";
+}
+
+export function normaliseLeads(raw: unknown, province: string): { leads: Lead[]; dropped: number; reasons: DropReasons } {
   const list = raw && typeof raw === "object" && Array.isArray((raw as { leads?: unknown }).leads) ? ((raw as { leads: unknown[] }).leads) : [];
   const seen = new Set<string>();
   const leads: Lead[] = [];
   let dropped = 0;
+  const reasons: DropReasons = { noWebsite: 0, neverSource: 0, duplicate: 0, otherProvince: 0 };
   for (const item of list) {
     const j = (item && typeof item === "object" ? item : {}) as Record<string, unknown>;
     const website = originOf(j.website);
@@ -82,17 +97,21 @@ export function normaliseLeads(raw: unknown, province: string): { leads: Lead[];
     const careersUrl = fullUrl(j.careers_url);
     const hosts = [website, sourceUrl, careersUrl].filter(Boolean).map(hostOfUrl);
     const text = [j.clinic_name, j.job_title, j.note, website, sourceUrl, careersUrl].join(" ");
-    const bad =
-      !cap(j.clinic_name, 160) ||
-      !website ||
-      !key ||
-      isHiringSystem(hostOfUrl(website)) ||
-      isOtherJobBoard(hostOfUrl(website)) ||
-      hosts.some(isNeverHost) ||
-      mentionsEyeRecommend(text) ||
-      seen.has(key);
-    if (bad) {
+    const named = (PROVINCES as readonly string[]).includes(String(j.province)) ? String(j.province) : "";
+    // A job in another province is not a lead for this search. A job that names no province is kept, but marked as unconfirmed.
+    const reason: keyof DropReasons | "" =
+      !cap(j.clinic_name, 160) || !website || !key || isHiringSystem(hostOfUrl(website)) || isOtherJobBoard(hostOfUrl(website))
+        ? "noWebsite"
+        : hosts.some(isNeverHost) || mentionsEyeRecommend(text)
+          ? "neverSource"
+          : named && named !== province
+            ? "otherProvince"
+            : seen.has(key)
+              ? "duplicate"
+              : "";
+    if (reason) {
       dropped += 1;
+      reasons[reason] += 1;
       continue;
     }
     seen.add(key);
@@ -100,7 +119,7 @@ export function normaliseLeads(raw: unknown, province: string): { leads: Lead[];
     leads.push({
       clinicName: cap(j.clinic_name, 160),
       city: cap(j.city, 80),
-      province: (PROVINCES as readonly string[]).includes(String(j.province)) ? String(j.province) : province,
+      province,
       website,
       careersUrl: careers,
       jobTitle: cap(j.job_title, 120),
@@ -112,10 +131,11 @@ export function normaliseLeads(raw: unknown, province: string): { leads: Lead[];
       source: sourceUrl ? sourceOf(sourceUrl) : careers ? sourceOf(careers) : "own_site",
       practiceType: PRACTICE_TYPES.some((p) => p.value === j.practice_type) ? String(j.practice_type) : "",
       note: cap(j.note, 300),
+      locationConfirmed: Boolean(named),
     });
     if (leads.length >= MAX_LEADS) break;
   }
-  return { leads, dropped };
+  return { leads, dropped, reasons };
 }
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
