@@ -80,31 +80,60 @@ function pageForClaude(url: string, page: ReadPage) {
 
 class ReaderProblem extends Error {}
 
+// A short, safe description of what went wrong, for the admin only. Never includes the key.
+function describe(error: unknown) {
+  if (error instanceof Anthropic.APIError) return `${error.status ?? "no status"}: ${String(error.message).replace(/sk-ant-[\w-]+/g, "[key]").slice(0, 220)}`;
+  return error instanceof Error ? error.message.slice(0, 220) : String(error).slice(0, 220);
+}
+
 async function askClaude(key: string, url: string, page: ReadPage): Promise<Reading> {
-  const client = new Anthropic({ apiKey: key, timeout: 40_000, maxRetries: 0 });
-  let response;
-  try {
-    // Fallbacks keep a request from failing if the first model declines it.
-    response = await client.beta.messages.create({
-      model: MODEL,
-      max_tokens: 16000,
-      betas: ["server-side-fallback-2026-07-01"],
-      fallbacks: "default",
+  const client = new Anthropic({ apiKey: key, timeout: 45_000, maxRetries: 0 });
+  const content = pageForClaude(url, page);
+  // 3 ways of asking, best first. If the API turns a request down as invalid (a 400, for example a setting this
+  // account does not have), the next, simpler one is tried: the same request without the fallback setting, then a plain
+  // request that asks for JSON in words. Anything else (no credit, a bad key, too busy) stops straight away.
+  const attempts = [
+    () => client.beta.messages.create({
+      model: MODEL, max_tokens: 16000, betas: ["server-side-fallback-2026-07-01"], fallbacks: "default",
       output_config: { effort: "medium", format: { type: "json_schema", schema: READER_SCHEMA } },
-      system: SYSTEM,
-      messages: [{ role: "user", content: pageForClaude(url, page) }],
-    });
-  } catch (error) {
-    console.error("Page reader failed:", error instanceof Error ? error.message : error);
-    if (error instanceof Anthropic.RateLimitError) throw new ReaderProblem("The reader is busy. Please try again in a minute.");
-    if (error instanceof Anthropic.APIConnectionTimeoutError) throw new ReaderProblem("The reader took too long. Please try again.");
-    throw new ReaderProblem("The reader had a problem. Please try again in a few minutes.");
+      system: SYSTEM, messages: [{ role: "user", content }],
+    }),
+    () => client.messages.create({
+      model: MODEL, max_tokens: 16000,
+      output_config: { effort: "medium", format: { type: "json_schema", schema: READER_SCHEMA } },
+      system: SYSTEM, messages: [{ role: "user", content }],
+    }),
+    () => client.messages.create({
+      model: MODEL, max_tokens: 16000,
+      system: `${SYSTEM}\n\nReply with one JSON object and nothing else, following this JSON schema exactly:\n${JSON.stringify(READER_SCHEMA)}`,
+      messages: [{ role: "user", content }],
+    }),
+  ];
+  type Answer = { stop_reason: string | null; content: { type: string; text?: string }[] };
+  let response = null as Answer | null;
+  let lastError: unknown = null;
+  for (const attempt of attempts) {
+    try {
+      response = (await attempt()) as unknown as Answer;
+      break;
+    } catch (error) {
+      lastError = error;
+      console.error("Page reader failed:", describe(error));
+      if (!(error instanceof Anthropic.BadRequestError)) break;
+    }
+  }
+  if (!response) {
+    if (lastError instanceof Anthropic.RateLimitError) throw new ReaderProblem("The reader is busy. Please try again in a minute.");
+    if (lastError instanceof Anthropic.APIConnectionTimeoutError) throw new ReaderProblem("The reader took too long. Please try again, or paste the link to one job.");
+    if (lastError instanceof Anthropic.AuthenticationError) throw new ReaderProblem("The Anthropic key in Vercel was not accepted. Check ANTHROPIC_API_KEY in this Vercel project, then redeploy.");
+    throw new ReaderProblem(`The reader had a problem talking to Claude (${describe(lastError)}).`);
   }
   if (response.stop_reason === "refusal") throw new ReaderProblem("The reader would not read this page. Check that it is a clinic careers page.");
   if (response.stop_reason === "max_tokens") throw new ReaderProblem("This page has too many jobs to read at once. Paste the link to one job instead.");
-  const text = response.content.map((b) => (b.type === "text" ? b.text : "")).join("");
+  const text = response.content.map((b) => (b.type === "text" ? b.text ?? "" : "")).join("");
+  const json = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
   try {
-    return normaliseReading(JSON.parse(text), url);
+    return normaliseReading(JSON.parse(json), url);
   } catch {
     throw new ReaderProblem("The reader returned something we could not use. Please try again.");
   }
