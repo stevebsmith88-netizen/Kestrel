@@ -3,10 +3,12 @@ import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import FoundListingReader from "@/components/FoundListingReader";
+import SetupCheck from "@/components/SetupCheck";
 import { requireRole } from "@/lib/auth";
 import { seedingOn } from "@/lib/features";
 import { deleteFoundDraft, publishFoundListing, takeDownFoundListing } from "@/lib/found-listing-actions";
 import { setLeadStatus } from "@/lib/lead-actions";
+import { setupChecks } from "@/lib/setup-check";
 import { READS_PER_DAY, readingFresh } from "@/lib/found-listings";
 import { answerLabel, daysLeft, employmentLabel, formatPay, longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -79,6 +81,7 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
           )}
           {needsMigration && <p className="notice" role="status">The database needs migration 0023 before the reader can run. See docs/found-listings.md.</p>}
 
+          <SetupCheck checks={setupChecks(process.env)} />
           <FoundListingReader publishOn={publishOn} />
           {!needsMigration && <p className="help">Pages read in the last 24 hours: {reads.count ?? 0} of {READS_PER_DAY}.</p>}
 
