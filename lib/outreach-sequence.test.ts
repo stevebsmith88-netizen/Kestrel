@@ -34,6 +34,7 @@ test("each email has its own subject, and only the first carries the full price 
   const mails = [1, 2, 3, 4].map((step) => outreachSequenceEmail({ step, clinicName: "Lakeside Eye Care", unsubscribeUrl: UNSUB }));
   assert.equal(new Set(mails.map((m) => m.subject)).size, 4);
   assert.ok(mails[0].html.includes("$39.80"));
+  assert.ok(mails[0].html.includes("$349") && mails[0].html.includes("$69.80"));
   assert.ok(!mails[1].html.includes("$39.80"));
   assert.ok(mails[2].text.includes("$99 for optometrists"));
 });

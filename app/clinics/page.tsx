@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { CLINIC_PASS, ROLE_BANDS, dollars, perDay, perPassPost } from "@/lib/pricing";
+import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, perDay, perPassPost } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
@@ -52,8 +52,12 @@ export default function Clinics() {
             </table>
             <div className="passbox">
               <p className="passhead"><strong>Clinic pass</strong> <span className="price">{dollars(CLINIC_PASS.monthly)}</span> a month</p>
-              <p>Up to {CLINIC_PASS.livePosts} live posts at once, {perPassPost()} a post, plus a featured clinic profile.</p>
-              <p className="founding"><strong>Founding clinics</strong> who join during launch keep {dollars(CLINIC_PASS.monthly)} a month for {CLINIC_PASS.lockMonths} months, or until they cancel. Or pay {dollars(CLINIC_PASS.yearly)} for the year, which is 2 months free.</p>
+              <p>Up to {CLINIC_PASS.livePosts} live posts at once, {perPassPost()} a post, for support, patient care, optician and practice lead roles, plus a featured clinic profile.</p>
+            </div>
+            <div className="passbox">
+              <p className="passhead"><strong>Clinic pass Plus</strong> <span className="price">{dollars(CLINIC_PASS_PLUS.monthly)}</span> a month</p>
+              <p>Up to {CLINIC_PASS_PLUS.livePosts} live posts at once, {perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included, plus a featured clinic profile.</p>
+              <p className="founding"><strong>Founding clinics</strong> who join during launch keep their pass price for {CLINIC_PASS.lockMonths} months, or until they cancel. Or pay {dollars(CLINIC_PASS.yearly)} for the year on the Clinic pass, which is 2 months free.</p>
             </div>
             <p className="small-note">Prices in Canadian dollars, before HST. Near the end of its 30 days, any post can be extended for another 30.</p>
           </section>

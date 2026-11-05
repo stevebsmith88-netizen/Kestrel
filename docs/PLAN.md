@@ -19,7 +19,7 @@ The full plan is the v7 doc: https://claude.ai/artifact/2j9U84RzZ5vtmnNVtXPCTC. 
 | Single posts, average $76 | 550 a year | $41,800 | $40,423 |
 | Total | | $154,036 | $149,236 |
 
-Single posts use the role prices decided on 5th November 2026 ($59 support and patient care, $79 opticians and practice leads, $99 optometrists), assuming a mix of 40%, 35% and 25%, which averages $76 a post. This is an assumption to check against real posts after launch. On these numbers the target is about $800 short after fees: 11 more single posts a year, or 1 more pass clinic, closes it. Founding clinics who choose the $1,990 yearly option pay about $398 less a year than monthly, so each one lowers the pass line slightly.
+Single posts use the role prices decided on 5th November 2026 ($59 support and patient care, $79 opticians and practice leads, $99 optometrists), assuming a mix of 40%, 35% and 25%, which averages $76 a post. This is an assumption to check against real posts after launch. On these numbers the target is about $800 short after fees: 11 more single posts a year, or 1 more pass clinic, closes it. The Clinic pass at $199 covers everything except optometrists, and Clinic pass Plus at $349 covers all roles (decided 5th November 2026). The 47 pass figure above counts all passes at $199, so any clinic on Plus lifts the total, and the mix is another thing to check after launch. Founding clinics who choose the $1,990 yearly option pay about $398 less a year than monthly, so each one lowers the pass line slightly.
 
 ## Domains
 

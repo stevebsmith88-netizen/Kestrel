@@ -86,9 +86,9 @@ The key is listed in `docs/security.md` with how to rotate it.
 
 ## Planning items (decided direction, not started)
 
-### Pass tiers and competitor pricing (added 5th November 2026, not decided)
+### Pass tiers and competitor pricing (added 5th November 2026, DECIDED: Clinic pass $199 and Clinic pass Plus $349)
 
-Steve's idea: the $199 pass for 5 posts gives a 60% discount if all 5 are optometrist roles, so consider a premium pass for optometrist (associate) posts at about $349 to $350. Jobs4ECPs charges $100 a post for every role and has no pass option on its products page. Jobs-optometry reportedly lets only OSI members post (not checked). Full numbers, options and the founding offer risk are in `docs/business-setup-notes.md`, section 11. Decide this before the flyer, the For clinics page or any outreach quotes the founding offer. The launch flyer draft and the credit pack example in the notes still use older prices.
+Steve's idea: the $199 pass for 5 posts gives a 60% discount if all 5 are optometrist roles, so consider a premium pass for optometrist (associate) posts at about $349 to $350. Jobs4ECPs charges $100 a post for every role and has no pass option on its products page. Jobs-optometry reportedly lets only OSI members post (not checked). Full numbers, options and the founding offer risk are in `docs/business-setup-notes.md`, section 11. Steve chose the two named tiers. Built on a branch for preview: `lib/pricing.ts`, the /clinics page, the outreach emails and the flyer draft. Steve confirms 2 defaults: Plus at $349 with no yearly option, and founding clinics keeping the price of whichever pass they take. Still to do: say which roles each pass covers in the Terms (ask the lawyer) and recalculate the credit pack example in the notes, which still uses the old $79 standard price. Stripe is not built, so nothing is charged yet.
 
 ### Chicken or egg: which side first
 

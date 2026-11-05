@@ -10,10 +10,14 @@ export const ROLE_BANDS = [
   { key: "optometrists", label: "Optometrists", covers: "Associate and full time optometrists", price: 99 },
 ] as const;
 
+// Two passes (decided 5th November 2026). The Clinic pass covers support, patient care, optician and practice lead roles.
+// Clinic pass Plus also covers optometrists, so a clinic hiring several optometrists is not buying them at the pass discount of 60%.
+// The yearly option is a founding offer on the Clinic pass only.
 export const CLINIC_PASS = { monthly: 199, livePosts: 5, yearly: 1990, lockMonths: 12 } as const;
+export const CLINIC_PASS_PLUS = { monthly: 349, livePosts: 5, lockMonths: 12 } as const;
 
 const money = (n: number, places = 0) => "$" + n.toLocaleString("en-CA", { minimumFractionDigits: places, maximumFractionDigits: places });
 
 export const perDay = (price: number) => money(price / POST_DAYS, 2);
-export const perPassPost = () => money(CLINIC_PASS.monthly / CLINIC_PASS.livePosts, 2);
+export const perPassPost = (pass: { monthly: number; livePosts: number } = CLINIC_PASS) => money(pass.monthly / pass.livePosts, 2);
 export const dollars = (n: number) => money(n);

@@ -108,7 +108,7 @@ How to approach it: read each community's rules first. Message the moderators be
 
 ## 11. Pass tiers and the Jobs4ECPs comparison, 5th November 2026
 
-Steve's notes for later. Nothing here is built or decided.
+Steve's notes of 5th November 2026. **Decided later the same day: option 1, two named tiers (Clinic pass $199, Clinic pass Plus $349).** Built in `lib/pricing.ts`, the /clinics page, the outreach emails and the flyer draft. Plus has no yearly option, and founding clinics keep the price of whichever pass they take. Both are Claude's defaults for Steve to confirm. Terms and the lawyer pack should say which roles each pass covers.
 
 **Jobs4ECPs prices (Steve's screenshot, 5th November 2026, page www.jobs4ecps.ca/products).** Basic Single Job Posting: $100.00 for 1 job, 30 days, the same price for every role. Profile Access: $0.00, 30 days, lets an employer view current job seeker profiles. No multi post or pass option shown on that page. The site is run by Eye Care Edge Ltd. Check the page again when not signed in before quoting it anywhere. The screenshot itself is not kept in the repository because the browser frame shows work bookmarks and tabs.
 
