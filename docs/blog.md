@@ -40,3 +40,35 @@ Good topics, each aimed at a real search:
 12. Quebec: hiring in French in an eye care practice (when French is built)
 
 Rules for every post: only say what is true and current, name no real clinic without asking, include no Eye Recommend material, and link to the job board or the clinic page near the end.
+
+## Review of the 5 posts (5th November 2026): what only Steve can supply
+
+Read for generic advice, claims nobody has checked, and the style rules in CLAUDE.md. Nothing has been rewritten yet. The 2 scheduled posts (13th and 27th November) are rewritten once Steve's notes arrive. Posts already published (30th October) keep their dates. Edits to them are a separate decision.
+
+**Across all 5 posts**
+- Most advice is smooth and general, which is the habit the style guide warns about. Each post would change most with one real story, one number, or one thing only a clinic owner would say.
+- Several posts use a run of bullets that each start with a bold phrase (the interview post in every section, the optometric assistant post in "What the work involves" and "Where it can lead", the cover letter post in "A shape you can borrow"). The guide asks for paragraphs. `npm test` does not catch this one.
+- Many lists have exactly 3 items. Vary them.
+
+**Optician interview questions (scheduled 27th November)**
+- Needs from Steve: a real, anonymised moment when an answer in an interview told someone a lot about a clinic (good or bad), and what the best candidates ask that others do not.
+- Unchecked claims: "Opticians have more choice than most people think", "A team that stays is usually a good sign", "Many provinces require opticians to keep learning". Back each with a fact or soften it.
+
+**Optometric assistant jobs and pay (scheduled 13th November)**
+- Needs from Steve: which pre-tests an assistant really starts on, a typical first week, an assistant who moved up (anonymised), and what clinics actually pay against the Job Bank medians.
+- Unchecked figures: about $23 an hour nationally, most between $18 and $30, and the provincial medians (Ontario $22, Alberta $22.50, British Columbia $25). These came from search summaries and must be checked on Job Bank before the post goes out. `jobbank.gc.ca` is blocked from this session today (see Steve's next steps, item 5).
+
+**What every eye care job ad should include (published 30th October)**
+- Needs from Steve: one weak ad line and what it cost the clinic, and what a clinic got back after rewriting it.
+- Legal wording (BC pay range rule, Ontario rules from 1st January 2026) matches CLAUDE.md but has not been through the lawyer. Add it to the lawyer pack if it is not already there.
+
+**Cover letter (published 30th October)**
+- Needs from Steve: what a hiring owner actually notices in a letter, and one line that made a difference.
+- Unchecked claims: "Clinics can tell when a letter was sent to 20 places", "it often makes the difference when 2 candidates look alike on paper", "100 to 200 words is plenty". Present as opinion from Steve's experience, or remove.
+
+**Field based eye care jobs (published 30th October)**
+- Needs from Steve: what a lens or frame rep's week looks like in practice, typical territory and travel, and what clinics value in a rep.
+- The role descriptions are general knowledge, not checked against real job ads.
+
+**Before any rewrite**
+- Ask Steve for specifics, do not invent them. No real clinic named without asking. No Eye Recommend material.
