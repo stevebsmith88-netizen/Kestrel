@@ -42,7 +42,7 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 
 ## Claude's list, in priority order
 
-1. Blog: the 2 scheduled posts are rewritten and merged, and 14 more weekly posts (20th November 2026 to 2nd April 2027) are in pull request 24, waiting for Steve to read some previews and merge. Add Job Bank figures to the optometric assistant post once they can be checked.
+1. DONE and merged: the 2 rewritten posts, the 14 weekly posts (20th November 2026 to 2nd April 2027) and a post on hiring seasonal workers (9th April 2027). Add Job Bank figures to the optometric assistant post once they can be checked.
 2. DONE: review of the published posts (end of `docs/blog.md`).
 3. City and radius search with counts beside each option (10, 25 and 50 km). The GeoNames file loads now. SQL on both databases. Roles shown in filters only when they have live jobs.
 4. Pay benchmark: official Job Bank wages data from open.canada.ca first (needs `opencanada.blob.core.windows.net` allowed), a labelled AI starting range per province where data is missing, and Kestrel's own posted pay as ads arrive. Separate from the automation plan.
@@ -51,11 +51,11 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 7. DONE and merged (5th November): audit items R22, R25 and R45. Steve still runs `supabase/migrations/0024_sign_in_attempts.sql` on both databases. Until then the sign in guard does nothing and nothing breaks.
 8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in.
 9. Check that the found listings tool (`/admin/found`) works end to end on the demo. Needs Steve's test with a real careers page.
-10. Admin posts a job for a clinic that is having trouble. Steve said build it. Separate from found listings.
-11. Ad builder improvements: use the clinic's profile, a "paste your existing ad and improve it" mode, and variety so no 2 ads look alike. Needs Steve's 2 templates and rules, and a walk through of the Anthropic key (below).
+10. BUILT, in pull request 29 (waiting for Steve to try it on the preview or demo, then merge): admin posts a job for a clinic (Admin, Overview, Post for a clinic). Needs migration 0026, which is in `run-everything.sql`.
+11. DONE in another chat (Steve, 5th November): ad builder improvements.
 12. Empty state and "know a clinic?" landing page for searches with no jobs yet.
-13. DONE: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
-14. DONE: draft launch flyer (`docs/marketing/launch-flyer.html`), kept unpublished until Gate A is passed.
+13. DONE and merged: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
+14. Launch flyer: the first HTML draft was rejected. Outward facing designs are made in Canva (4 options generated on 5th November, Steve picks one and Claude adjusts it). Kept unpublished until Gate A is passed.
 15. Plan with Steve, when he is ready: PWA (installable web app), the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
 16. A shared mailbox for `ADMIN_BACKUP_EMAIL` (Steve sets up a Google group) and a labels plan for his email categories.
 
