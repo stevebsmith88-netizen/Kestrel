@@ -44,7 +44,7 @@ export const PAY_PERIODS = [
 ] as const;
 
 export const JOB_LIFETIME_DAYS = 30;
-const HOURS_IN_A_YEAR = 2080;
+export const HOURS_IN_A_YEAR = 2080;
 const MAX_RANGE = 50000;
 const NO_LIMIT_ABOVE = 200000;
 

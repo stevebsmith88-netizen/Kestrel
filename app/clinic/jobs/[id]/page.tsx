@@ -6,6 +6,7 @@ import AppFooter from "@/components/AppFooter";
 import JobForm from "@/components/JobForm";
 import { requireRole } from "@/lib/auth";
 import { getMyJob } from "@/lib/clinic";
+import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 
 export const metadata: Metadata = { title: "Edit job | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -20,6 +21,7 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
   const job = await getMyJob(id);
   if (!job) notFound();
   const live = job.status === "live";
+  const ownPay = await loadOwnPayStats();
   const editable = job.status === "draft" || job.status === "rejected" || live;
   const yesNo = (v: boolean | null) => (v === true ? "yes" : v === false ? "no" : "");
 
@@ -46,6 +48,7 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
           ) : (
             <JobForm
               live={live}
+              ownPay={ownPay}
             adBuilder={Boolean(process.env.ANTHROPIC_API_KEY)}
               initial={{
                 id: job.id,

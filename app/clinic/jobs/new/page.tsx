@@ -7,6 +7,7 @@ import JobForm from "@/components/JobForm";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer, getMyTemplate, getMyTemplates } from "@/lib/clinic";
 import { longDate } from "@/lib/jobs";
+import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { deleteTemplate } from "@/lib/template-actions";
 
 export const metadata: Metadata = { title: "Post a job | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -21,6 +22,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile?from=post");
   const templates = await getMyTemplates();
+  const ownPay = await loadOwnPayStats();
   const start = templateId && UUID.test(templateId) ? await getMyTemplate(templateId) : null;
   return (
     <>
@@ -61,6 +63,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
           <JobForm
             key={start?.id ?? "blank"}
             adBuilder={Boolean(process.env.ANTHROPIC_API_KEY)}
+            ownPay={ownPay}
             initial={{
               title: start?.title ?? "",
               role_category: start?.role_category ?? "",
