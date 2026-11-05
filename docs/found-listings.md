@@ -15,9 +15,21 @@ Admin, Overview, then the **Found listings** link under the heading (`/admin/fou
 
 A live found listing comes down by itself after 21 days, unless the clinic claims it first. **Take it down** removes one straight away, for example when a clinic asks.
 
+## Searching a whole province for clinics that are hiring
+
+At the top of the page, **Search a province for clinics that are hiring**. Choose a province, optionally a role and a city, and press Search. It takes up to 2 minutes.
+
+- **How it works.** Claude searches the web for eye care employers in the province that appear to be hiring, then finds each one's own website. It uses Claude's built-in web search on the same Anthropic key as the reader, so there is no separate search service. Web search must be switched on for your Anthropic account (Anthropic console, settings). It costs about 1 cent a search, so a province search is a few cents to 10 cents.
+- **What you get.** A card for each clinic: name, town, the job, **when it was posted and the pay, only if the page says so** (otherwise "Not stated on the page"), where it was seen, and the clinic's website. Nothing is filled in by guessing.
+- **Job boards.** Boards other than Indeed, LinkedIn and Jobs4ECPs can show that a clinic is hiring. They are only used to learn the clinic and the role, and the card says "Seen on a job board". Their ads are never copied. Indeed, LinkedIn, Jobs4ECPs, the college registers, social networks and anything about Eye Recommend are never used, even as a lead: the search is told not to, and anything that comes back from them is dropped.
+- **Next steps on a card.** **Read their careers page** sends the clinic's own careers page to the reader below (to make a listing). **Find their careers page** fills in the finder. **Find a contact email** looks on the clinic's own home and contact pages for an address the clinic publishes (hiring words first, then the clinic's own domain, then info@ and similar). It never guesses an address, and keeps each with the page it was published on. **Save lead** keeps the clinic in your leads.
+- **Saved leads** are listed lower on the page, and **Download as a spreadsheet** gives you all of them, with where and when each email was found. A lead is a note, not a listing. Nothing is published from it, and **nobody is emailed from it**. Outreach stays off until your disclosure conversation has happened and the lawyer has seen the wording.
+- **Limits.** 10 searches a day. Up to 20 clinics a search, so use a city or a role to dig into a big province.
+- **Tell the lawyer.** Add to the pack: a database of clinics' published business emails, kept with the page and date they were found, and an outreach email for clinics found through a job board (the current draft, Appendix E2, says "we found the job on your own careers page", which would not be true for them).
+
 ## The rules it follows
 
-- **Only the clinic's own website.** Job boards (Indeed, LinkedIn, Jobs4ECPs, Glassdoor, Job Bank and others), recruiters, social networks and the professional colleges and associations are refused by name. Claude also checks what kind of page it is, and refuses a job board or recruiter page it does not recognise. A careers page on a hiring system for one clinic (Workable, BambooHR, Lever and similar) is fine, but then you type in the clinic's own website.
+- **Only the clinic's own website.** The reader never takes a listing from a job board. Indeed, LinkedIn and Jobs4ECPs are refused in every part of the tool. Other boards are refused as a source of listings (a clinic's own website is the source), but they can point to a clinic in the province search. Recruiters, social networks and the professional colleges and associations are refused by name. Claude also checks what kind of page it is, and refuses a job board or recruiter page it does not recognise. A careers page on a hiring system for one clinic (Workable, BambooHR, Lever and similar) is fine, but then you type in the clinic's own website.
 - **Nothing connected with Eye Recommend.** A page that mentions Eye Recommend anywhere, in its words or its links, is refused.
 - **robots.txt is obeyed.** If a site asks automated readers to stay away, the page is not read. The reader also names itself (`KestrelEyeCareJobs`) and reads 1 page each time you press the button. It never follows links on its own.
 - **Not for clinics already on Kestrel.** If a clinic with the same website has its own account, the tool says so and stops.
@@ -31,7 +43,7 @@ A live found listing comes down by itself after 21 days, unless the clinic claim
 
 ## Setting it up
 
-1. Run `supabase/migrations/0023_found_listings.sql` in the Supabase SQL editor, **on both databases** (the live project and the demo project). Or run `supabase/combined/run-everything.sql`, which now includes it. Safe to run twice.
+1. Run `supabase/migrations/0023_found_listings.sql` and `0024_clinic_leads.sql` in the Supabase SQL editor, **on both databases** (the live project and the demo project). Or run `supabase/combined/run-everything.sql`, which now includes it. Safe to run twice.
 2. Nothing new is needed in Vercel to try it. It uses the same `ANTHROPIC_API_KEY` as the ad builder.
 3. When you are ready to publish (after the disclosure conversation): add `ENABLE_SEEDING` = `yes` in Vercel for the live project, and redeploy. Only add it to the demo project if you want to try publishing there, and remember the demo site is public too.
 4. On the demo site, run `supabase/demo/seed.sql` again after step 1 if you want its 2 sample found listings to show "Not stated by the clinic".

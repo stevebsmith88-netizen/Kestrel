@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { claudeClient } from "@/lib/anthropic-client";
+import { ALREADY_ON_KESTREL, clinicsAtSite } from "@/lib/found-db";
 import { requireRole } from "@/lib/auth";
 import { seedingOn } from "@/lib/features";
 import { fetchPage } from "@/lib/fetch-page";
@@ -141,16 +142,6 @@ async function askClaude(key: string, url: string, page: ReadPage): Promise<Read
   }
 }
 
-// Every clinic profile with the same website. A found listing is never added for a clinic that has its own account.
-async function clinicsAtSite(db: SupabaseClient, website: string) {
-  const key = siteKey(hostOfUrl(website));
-  if (!key) return [];
-  const { data } = await db.from("employers").select("id, clinic_name, claimed, owner_id, website").ilike("website", `%${key.replace(/[%_\\]/g, "\\$&")}%`).limit(50);
-  return (data ?? []).filter((e) => siteKey(hostOfUrl(e.website ?? "")) === key);
-}
-
-const ALREADY_ON_KESTREL = "This clinic already has its own Kestrel account, so it posts its own jobs. Found listings are only for clinics that are not on Kestrel yet.";
-
 // Careers page finder: from a clinic's website, the links that look like its careers page. No Claude, no cost, and nothing
 // is kept. It reads the home page (and, if that has no careers link, up to 4 usual addresses such as /careers), with the
 // same rules as the reader: public sites only, robots.txt obeyed, nothing connected with Eye Recommend.
@@ -198,7 +189,7 @@ export async function readCareersPage(_prev: ReadState, form: FormData): Promise
   if (!key) return { error: "The reader needs ANTHROPIC_API_KEY in Vercel, the same key the ad builder uses." };
 
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const { count, error: countError } = await db.from("page_reads").select("id", { count: "exact", head: true }).eq("read_by", session.userId).gte("read_at", since);
+  const { count, error: countError } = await db.from("page_reads").select("id", { count: "exact", head: true }).eq("read_by", session.userId).not("url", "like", "search:%").gte("read_at", since);
   if (countError) return { error: "The reader needs database migration 0023. Run it in Supabase, then try again." };
   if ((count ?? 0) >= READS_PER_DAY) return { error: `You have read ${READS_PER_DAY} pages today, which is the daily limit. Please carry on tomorrow.` };
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import ProvinceSearch from "@/components/ProvinceSearch";
 import { Choices, Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { findCareersPage, readCareersPage, saveFoundListing, type FindState, type ReadState, type ReadingView, type SaveState } from "@/lib/found-listing-actions";
@@ -13,6 +14,7 @@ export default function FoundListingReader({ publishOn }: { publishOn: boolean }
   const { state, pending, submit } = useServerForm<ReadState>(readCareersPage);
   const finder = useServerForm<FindState>(findCareersPage);
   const [url, setUrl] = useState("");
+  const [site, setSite] = useState("");
   const reading = state.reading;
   const e = state.errors ?? {};
   const f = finder.state.errors ?? {};
@@ -20,12 +22,17 @@ export default function FoundListingReader({ publishOn }: { publishOn: boolean }
     setUrl(link);
     document.getElementById("fl-url")?.focus();
   };
+  const findFor = (website: string) => {
+    setSite(website);
+    document.getElementById("fl-site")?.scrollIntoView({ block: "center" });
+  };
   return (
     <>
+      <ProvinceSearch onUsePage={useLink} onFindPage={findFor} />
       <form onSubmit={finder.submit} noValidate className="panel formpanel">
         <h2 className="formh">Find a clinic&apos;s careers page</h2>
         <Field id="fl-site" label="The clinic's website" error={f.site} hint="For example harbourside.ca. We look on its home page for a careers or jobs link.">
-          <input id="fl-site" name="site" type="text" inputMode="url" autoComplete="off" placeholder="harbourside.ca" />
+          <input id="fl-site" name="site" type="text" inputMode="url" autoComplete="off" placeholder="harbourside.ca" value={site} onChange={(ev) => setSite(ev.target.value)} />
         </Field>
         {finder.state.error && !f.site && <p className="err form-err" role="alert">{finder.state.error}</p>}
         {finder.state.message && <p className="ok-msg" role="status">{finder.state.message}</p>}

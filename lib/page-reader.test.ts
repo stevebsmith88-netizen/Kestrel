@@ -135,3 +135,22 @@ test("the careers page finder picks the clinic's own careers links, best first, 
   assert.equal(startAddress("http://harbourside.ca/"), "http://harbourside.ca/");
   assert.equal(startAddress("  "), "");
 });
+
+test("only job boards other than Indeed, LinkedIn and Jobs4ECPs are treated as leads, and the 3 are never used at all", async () => {
+  const m = await import("./page-reader.ts");
+  assert.match(m.refuseAddress("https://ca.indeed.com/x")!, /never reads Indeed, LinkedIn or Jobs4ECPs/);
+  assert.match(m.refuseAddress("https://www.workopolis.com/search?q=optician")!, /does not copy ads/);
+  assert.equal(m.isOtherJobBoard("workopolis.com"), true);
+  assert.equal(m.isNeverHost("ca.indeed.com"), true);
+  assert.equal(m.isNeverHost("workopolis.com"), false);
+  assert.ok(m.SEARCH_BLOCKED_DOMAINS.includes("indeed.com") && m.SEARCH_BLOCKED_DOMAINS.includes("jobs4ecps.com") && m.SEARCH_BLOCKED_DOMAINS.includes("eyerecommend.ca"));
+  assert.ok(!m.SEARCH_BLOCKED_DOMAINS.includes("workopolis.com"));
+});
+
+test("email addresses come only from the page, and image names, builders and no reply addresses are ignored", async () => {
+  const { emailsIn, rankEmails, readHtml } = await import("./page-reader.ts");
+  const html = `<p>Write to <a href="mailto:Careers@Harbourside.ca?subject=Job">us</a> or info@harbourside.ca. Logo logo@2x.png, abc123@sentry.io, noreply@harbourside.ca, jane@gmail.com.</p><script>var x="hidden@harbourside.ca"</script>`;
+  assert.deepEqual(emailsIn(html).sort(), ["careers@harbourside.ca", "info@harbourside.ca", "jane@gmail.com"]);
+  assert.deepEqual(rankEmails(["info@harbourside.ca", "jane@gmail.com", "careers@harbourside.ca"], "www.harbourside.ca"), ["careers@harbourside.ca", "info@harbourside.ca", "jane@gmail.com"]);
+  assert.deepEqual(readHtml(html, "https://harbourside.ca/contact").emails.sort(), ["careers@harbourside.ca", "info@harbourside.ca", "jane@gmail.com"]);
+});
