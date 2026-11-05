@@ -4,7 +4,7 @@ Updated 5th November 2026. Claude does the code. These are the things only Steve
 
 ## Priority order
 
-Updated with Steve's notes of 5th November 2026.
+Updated with Steve's notes of 5th November 2026 (second pass).
 
 ### Priority 1: this week, blocks launch or has a date
 
@@ -14,7 +14,7 @@ Updated with Steve's notes of 5th November 2026.
 | 2 | **Name searches.** Only a "Kestrel Ophthalmics" in the UK turned up, which does not operate in Canada. Trademarking is dropped for now. | DONE. |
 | 3 | **The 2 scheduled blog posts (13th and 27th November).** Steve has not posted an ad, so he cannot supply the "real moment" notes. Claude writes them from public sources and plain, factual advice, with no invented stories, and drafts more simple posts for SEO in the meantime. Steve reads the previews. | Claude to do. |
 | 4 | **Accounts and 2 step sign in.** GitHub, Namecheap and Supabase are on kestrel@ and 2 step sign in is on. Vercel is on kestrel@ too, but it is a trial, so ownership cannot move until Vercel Pro starts (about 2 weeks). The repo moves into the Kestrel organisation then. | DONE, except Vercel (about 2 weeks). |
-| 5 | **Allowed hosts.** Steve added `download.geonames.org`, `open.canada.ca`, `jobbank.gc.ca`, `jobs4ecps.ca` and `jobs-optometry.com`. Tested from the session: GeoNames and open.canada.ca work. `jobbank.gc.ca` redirects to `www.jobbank.gc.ca`, which is still blocked, so add `www.jobbank.gc.ca` too (or `*.jobbank.gc.ca`). The other 2 job boards stay hand reading only: the project rule is no scraping or automated reading of Jobs4ECPs or similar boards. | Needs `www.jobbank.gc.ca`. |
+| 5 | **Allowed hosts.** Steve added `download.geonames.org`, `open.canada.ca`, `jobbank.gc.ca`, `jobs4ecps.ca` and `jobs-optometry.com`. Tested from Claude's session on 5th November: GeoNames and open.canada.ca work, but `jobbank.gc.ca` only redirects to `www.jobbank.gc.ca`, which does not resolve, and open.canada.ca hands its data files to `opencanada.blob.core.windows.net`, which is refused. An allowed domain does not cover its subdomains, so add `www.jobbank.gc.ca` and `opencanada.blob.core.windows.net` (a new session may be needed to pick them up). The two job boards stay hand reading only (no scraping). | Needs 2 more hosts. |
 
 ### Priority 2: the next 2 weeks
 
@@ -29,44 +29,58 @@ Updated with Steve's notes of 5th November 2026.
 
 ### Priority 3: Gate A, in order (needs the lawyer)
 
-The Gate A table below. Steve's notes number the steps differently from the table, so the statuses of steps 4, 5 and 6 (meeting held, disclosure given, company incorporated) are to be confirmed before anything is treated as passed. Free launch waits for Gate A.
+Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (meeting held, disclosure given and acknowledged, company incorporated) are not done. An earlier mix up between 2 versions of this file made them look done. Clinic outreach and publishing found listings stay off. Free launch waits for Gate A. Steve wants to be ready for launch, so launch materials (the flyer) are prepared as drafts and kept unpublished.
 
 ### Parked: no date, nothing waits on these
 
-- Pull request 18 (the agency notes and this file) is merged (5th November 2026).
-- Choose a phase for widening the profession list (decided yes, not scheduled). The reason is in the chat of 5th November: the 5 professions on the site do not separate contact lens fitters, ophthalmic medical assistants (COA and COT) or optical lab technicians, who are different jobs with different employers.
-- Website analytics with Cloudflare Web Analytics, once traffic is flowing (decided 5th November 2026). Steve started the setup in Cloudflare. The site's code has nothing for it yet, and Cloudflare cannot inject it automatically because DNS is at Namecheap and the site is served by Vercel. When the time comes: Claude adds a small component that loads Cloudflare's snippet only on the live site (never the demo or previews), with the token held as a setting in the live Vercel project only. The privacy policy then needs a line naming Cloudflare Web Analytics (no cookies, no following individuals). It gives page views and sources only. Job views and apply clicks are separate and are already planned for Phase 3.
-- Zest: closed. Steve is launching solo and is not reaching back out.
+- DONE: pull request 18 (the agency notes and this file) is merged.
+- Profession list: widen it. Steve's correction: Contact Lens Fitter is not really a profession in Canada, and COA is rarely recruited for. Add Vision Therapist, and consider optical lab technician. Filters should show only roles that have live jobs, with a friendly "still building, tell a clinic you know" page when a search is empty. See `docs/business-setup-notes.md`.
+- Zest: closed. Steve is launching solo.
 - The agency idea stays a long term option, in `docs/agency-pathway.md`.
-- Fathom (a meeting notes recorder): dropped unless Steve wants it.
-- Benched idea: Kestrel as a parent company with Eye Care Jobs as the first of several industry job boards (dental, medical and others later). Raise when incorporating, so the company name and structure leave room for it.
+- Fathom: dropped.
+- Benched idea: Kestrel as a parent company with Eye Care Jobs as the first of several industry job boards. Raise when incorporating (see `docs/business-setup-notes.md`).
 
 ## Claude's list, in priority order
 
-1. Rewrite the 2 scheduled blog posts without anecdotes, check them against Job Bank once it is reachable, and draft more simple SEO posts. Steve reads the previews.
+1. Blog: the 2 scheduled posts are rewritten and merged, and 14 more weekly posts (20th November 2026 to 2nd April 2027) are in pull request 24, waiting for Steve to read some previews and merge. Add Job Bank figures to the optometric assistant post once they can be checked.
 2. DONE: review of the published posts (end of `docs/blog.md`).
-3. City and radius search with counts beside each option. Needs the GeoNames file, which now loads. SQL on both databases.
-4. Pay benchmark from Job Bank wage data. Needs `www.jobbank.gc.ca`. It is separate from the automation plan: it helps clinics choose a pay range when they post.
+3. City and radius search with counts beside each option (10, 25 and 50 km). The GeoNames file loads now. SQL on both databases. Roles shown in filters only when they have live jobs.
+4. Pay benchmark: official Job Bank wages data from open.canada.ca first (needs `opencanada.blob.core.windows.net` allowed), a labelled AI starting range per province where data is missing, and Kestrel's own posted pay as ads arrive. Separate from the automation plan.
 5. First region plan: Toronto and Ontario first, then Alberta and British Columbia.
 6. DONE: automation plan phases, in `docs/automation-plan.md`.
-7. DONE on branch `audit/r22-r25-r45` (not yet merged): R22 sign in guard (migration 0024), R25 admin email when a live clinic changes its profile, R45 maintenance switch and click by click steps. SQL on both databases and a Vercel setting only when merged.
-8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in. Claude can add the rows to a count sheet.
-9. Plan with Steve: widen the profession list, the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
-10. Check that the found listings tool (`/admin/found`) works end to end on the demo. Needs Steve's test with a real careers page.
-11. Admin can post a job for a clinic that is having trouble (separate from found listings). To plan.
-12. Ad builder improvements: use the clinic's profile, a "paste your existing ad and improve it" mode, and variety so no 2 ads look alike. Needs Steve's templates and rules.
+7. DONE and merged (5th November): audit items R22, R25 and R45. Steve still runs `supabase/migrations/0024_sign_in_attempts.sql` on both databases. Until then the sign in guard does nothing and nothing breaks.
+8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in.
+9. Check that the found listings tool (`/admin/found`) works end to end on the demo. Needs Steve's test with a real careers page.
+10. Admin posts a job for a clinic that is having trouble. Steve said build it. Separate from found listings.
+11. Ad builder improvements: use the clinic's profile, a "paste your existing ad and improve it" mode, and variety so no 2 ads look alike. Needs Steve's 2 templates and rules, and a walk through of the Anthropic key (below).
+12. Empty state and "know a clinic?" landing page for searches with no jobs yet.
+13. DONE: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
+14. DONE: draft launch flyer (`docs/marketing/launch-flyer.html`), kept unpublished until Gate A is passed.
+15. Plan with Steve, when he is ready: PWA (installable web app), the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
+16. A shared mailbox for `ADMIN_BACKUP_EMAIL` (Steve sets up a Google group) and a labels plan for his email categories.
+
+### Anthropic key, quick walk through (for the ad builder and the found listings tool)
+
+1. Sign in at console.anthropic.com with kestrel@eyecarejobs.ca and open API keys.
+2. Create a key named `kestrel-website` (live) and a second named `kestrel-demo` for the demo project. Copy each once.
+3. Set a monthly spend limit on the account so a mistake cannot run up a bill.
+4. In Vercel, each project, Settings, Environment Variables: add `ANTHROPIC_API_KEY` (Production and Preview), mark it Sensitive, then redeploy.
+5. Test the ad builder with Write my ad on the demo. The live site stays locked down until launch.
+The key is listed in `docs/security.md` with how to rotate it.
 
 ## Extra questions raised on 5th November (status)
 
-1. SEO add on through Namecheap (about $11 CAD a month) and its LLC partner: not recommended for now. An LLC is a US company type, and Kestrel will be a Canadian corporation set up with the lawyer.
-2. Holding off the Supabase upgrade until launch: acceptable while only Steve uses real data. Upgrade before any invitations or the free launch, for daily backups. The waitlist already holds real emails, so export it from the admin waitlist page now and then.
-3. Admin posting a job for a clinic: planned (Claude's list, item 11).
-4. AI ad builder: the clinic "Write my ad" button is built. The "paste your existing ad" mode and variety are not (Claude's list, item 12).
-5. Fee breakdown and positioning: write up from the pricing ladder in CLAUDE.md. Steve's view stands: launch pricing stays, with full price reviewed once the database is heavy with clinics and ads.
-6. Incorporating: with the lawyer (Gate A step 6). Claude can prepare the decisions list.
-7. Raising money (a SAFE for about 10%) or grants: a question for the lawyer and accountant. Running costs are planned at well under $10,000 a year.
-8. More SEO: see the chat of 5th November. A short SEO plan can follow.
-9. The parent company idea: benched, see Parked.
+1. RelateSEO (Namecheap add on, about $9.88 on promotion and about $28.88 standard, 4 week trial) is separate from the LLC partner. Not needed before launch. See `docs/business-setup-notes.md`.
+2. Supabase upgrade: hold until launch, but before any invitations. Export the waitlist now and then.
+3. Admin posting for a clinic: build it.
+4. Ad builder: Steve sends 2 templates and rules. Walk through of the key above.
+5. Fee breakdown and launch flyer: done as a draft (`docs/marketing/launch-flyer.html`). Savings shown use Kestrel's own prices only. A comparison with named platforms needs dated, written quotes first.
+6. Incorporating: with the lawyer. Ontario is the simpler default for a bootstrapped board run from Ontario, the lawyer decides. See `docs/business-setup-notes.md`.
+7. Funding: grants, a loan program and a small friends and family round, with the cautions, are in `docs/business-setup-notes.md`. The accountant and a securities lawyer decide.
+8. LinkedIn company page and an SEO plan: in `docs/business-setup-notes.md`.
+9. Parent company with subsidiaries: start with one corporation, add brands as operating names, no "Recruitment" in the name. See the notes.
+10. App wrapping: a PWA first, native apps after launch numbers. See the notes.
+11. Is the automation plan plausible: yes for most of it, with a few hours a week of Steve's time. See the notes.
 
 ## Planning items (decided direction, not started)
 
