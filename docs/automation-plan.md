@@ -16,18 +16,23 @@ Written 5th November 2026, for discussion with Steve. Nothing here is started. I
 - Daily job (`/api/cron/daily`): expires jobs, emails "closing soon" 3 days before, reminds clinics about unopened applications, closes out waiting applications, sends job alert digests, with a daily email budget (`lib/send-budget.ts`, default 50 a day).
 - Outreach email wording (`lib/outreach.ts`) with tests, the do not email list (migration 0011, `lib/suppression.ts`), signed unsubscribe links.
 - Claim your listing: `/claim`, `/admin/claims`, `lib/claims.ts` (migration 0012).
+- Found listings tool (merged to `main` in pull requests 16, 17 and 19, after this plan was first written): `/admin/found`, `docs/found-listings.md`, migration 0023. It finds a clinic's careers page, reads 1 page with Claude, refuses job boards, colleges and anything mentioning Eye Recommend, obeys robots.txt, keeps a record of each page read, and saves drafts for an admin to check. Publishing is off until `ENABLE_SEEDING` is set.
 - Ad builder for clinics writing their own post.
 - Job alerts for candidates who opt in.
 
 ## Phases
 
-### Phase A: build the "read this page" step (size M, no gate to build)
+### Phase A: the "read this page" step (BUILT, see `docs/found-listings.md`)
+
+Original plan, kept for reference. Still to do: reuse the same reader for the ad builder's "paste your job link" box (size S to M).
 
 One step, shared by the ad builder and the seeding tool. Given a careers page address, fetch the page politely (check the page's own terms and robots rules first), have Claude pull out the role facts, and return them with a source address and the date read. Missing facts come back as "not stated". Fully testable with saved sample pages. Nothing is published and nobody is contacted. This is audit items R16 and R19.
 
-### Phase B: found listing admin tool (size M, build now, switch off until Gate A is close)
+### Phase B: found listing admin tool (BUILT, publishing switched off)
 
-Admin pastes a clinic's careers page address, sees Claude's draft in our own words next to the source, edits, and approves. Approved listings are published as seeded, with the 21 day expiry. Stores the source page and date. Pay: seeded listings follow the same pay range rule or show "not stated by the clinic" per the audit decision (R19).
+Original plan, kept for reference. Publishing needs `ENABLE_SEEDING` set to `yes` in Vercel, which waits for the disclosure conversation. Not yet rechecked each day: live found listings come down after 21 days or by "Take it down".
+
+Admin pastes a clinic's careers page address, sees Claude's draft in our own words next to the source, edits, and approves. Approved listings are published as seeded, with the 21 day expiry. Stores the source page and date. Built rule: a job whose page gives no pay is left out, and the two required questions show "Not stated by the clinic" unless the page says.
 
 Gate: do not publish until Gate A is close. Build it behind a switch, off by default.
 
@@ -60,7 +65,7 @@ Individuals are never cold emailed. Reach them through job alerts (built), the w
 
 1. DECIDED (5th November): Eye Recommend member clinics are treated like any other clinic once outreach is allowed. There is no member list in the project, so clinics are only ever found from their own public pages.
 2. Batch size for approvals (suggest 10 to start).
-3. Whether seeded listings without a stated pay range go live as "not stated by the clinic" (audit R19), or wait until the clinic claims.
+3. DECIDED in the build: jobs with no pay on the page are left out of found listings.
 4. The Phase E bar for hands off.
 
 ## Risks to watch
