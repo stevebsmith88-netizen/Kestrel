@@ -105,3 +105,32 @@ Use official data first: the federal Job Bank wages dataset on open.canada.ca (W
 - OptiBoard has a Canadian Discussion Forum, which is a forum, not Reddit.
 
 How to approach it: read each community's rules first. Message the moderators before posting anything that mentions Kestrel, say who you are and what you want to share, and ask what is allowed. Spend most of your time answering questions and adding useful comments, with no links. Share a blog post only when it answers someone's actual question, and say it is yours. Never post jobs unless the rules allow it, never use fake accounts, and use your own account. Because Steve works at Eye Recommend, hold promotional posts until after the disclosure conversation, and never use Eye Recommend's name or material.
+
+## 11. Pass tiers and the Jobs4ECPs comparison, 5th November 2026
+
+Steve's notes for later. Nothing here is built or decided.
+
+**Jobs4ECPs prices (Steve's screenshot, 5th November 2026, page www.jobs4ecps.ca/products).** Basic Single Job Posting: $100.00 for 1 job, 30 days, the same price for every role. Profile Access: $0.00, 30 days, lets an employer view current job seeker profiles. No multi post or pass option shown on that page. The site is run by Eye Care Edge Ltd. Check the page again when not signed in before quoting it anywhere. The screenshot itself is not kept in the repository because the browser frame shows work bookmarks and tabs.
+
+**Kestrel against $100 a post.** Support and patient care $59 (41% lower), opticians and practice leads $79 (21% lower), optometrists $99 (about the same). The plan mix averages $76 (24% lower). Five posts on the $199 pass against $500 for 5 posts at Jobs4ECPs saves $301.
+
+**The problem with one pass.** The $199 pass for 5 live posts is priced against the average mix. If all 5 posts are optometrists, the singles total is $495, so the discount is 60% (about $296 given up). The clinics most likely to buy a pass are groups and corporates with several vacancies, and optometrists are often what they hire for. The cost to Kestrel of an extra post is only a few cents, so this is forgone revenue, not a loss, but it is the largest hole in the pass.
+
+| 5 posts at singles pricing | Singles total | Pass at $199 | Discount |
+| --- | --- | --- | --- |
+| All support and patient care ($59) | $295 | $199 | 33% |
+| All opticians and leads ($79) | $395 | $199 | 50% |
+| Plan mix (average $76) | $380 | $199 | 48% |
+| All optometrists ($99) | $495 | $199 | 60% |
+
+**Options.**
+
+1. Two named tiers. Pass at $199: up to 5 live posts for support, patient care, optician and practice lead roles. Pass Plus at about $349: up to 5 live posts including optometrists. That is about $70 a post, 29% below $99, and about $150 under 5 optometrist posts at Jobs4ECPs ($500). Steve's suggestion; Claude's lean, because it follows the 3 role bands already in the pricing.
+2. One pass, where an optometrist post counts as 2 of the 5 slots. Easy to build, harder to explain.
+3. Pass at $199 includes 1 optometrist post, and Plus removes the cap.
+
+**Decide before any clinic hears the founding offer.** Founding clinics are promised $199 a month for 12 months. If that is promised before the tiers exist, it may lock in unlimited optometrist posts at $199. Settle what the founding offer covers first, then update the launch flyer, the For clinics page (audit R42) and the Terms to match. The credit pack example in section 10 above also uses the old $79 standard price, so recalculate it from the 5th November ladder. The launch flyer draft (`docs/marketing/launch-flyer.html`) still shows the older introductory prices ($39, $49, $59) and a $79 standard post, and needs the same update.
+
+**Profile Access gap.** Jobs4ECPs gives employers free access to candidate profiles. Kestrel has saved CVs for applying but no way for clinics to browse candidates. Parked: it needs a decision on candidate consent, and a question for the lawyer, before it is considered.
+
+**Jobs-optometry.** Steve's understanding is that its job board only lets OSI members post. Not checked by Claude. If it is right, that board is closed to corporate chains, opticians, assistants and any non member, and Kestrel being open to everyone belongs on the For clinics page. Add it to the hand review of competitors (`NEXT-STEPS-PHASES.md` and the planning item in `STEVE-NEXT-STEPS.md`), by reading public pages only, with no scraping.

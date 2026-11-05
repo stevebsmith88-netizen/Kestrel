@@ -86,6 +86,10 @@ The key is listed in `docs/security.md` with how to rotate it.
 
 ## Planning items (decided direction, not started)
 
+### Pass tiers and competitor pricing (added 5th November 2026, not decided)
+
+Steve's idea: the $199 pass for 5 posts gives a 60% discount if all 5 are optometrist roles, so consider a premium pass for optometrist (associate) posts at about $349 to $350. Jobs4ECPs charges $100 a post for every role and has no pass option on its products page. Jobs-optometry reportedly lets only OSI members post (not checked). Full numbers, options and the founding offer risk are in `docs/business-setup-notes.md`, section 11. Decide this before the flyer, the For clinics page or any outreach quotes the founding offer. The launch flyer draft and the credit pack example in the notes still use older prices.
+
 ### Chicken or egg: which side first
 
 Working view: start with jobs. A few current, clean roles bring candidates. A long candidate list with nothing to apply for loses them. Sources, in order: seeded listings from clinics' own careers pages (labelled, linked back, 21 days; the admin tool is not built and waits for Gate A to be closer), free launch posts, then claim your listing. Candidates come from the waitlist, search content (the pathways guide and the blog) and job alerts. Concentrate the first 50 roles on 2 or 3 provinces and 1 or 2 role types, so the board looks full where people look. Clinic outreach, including Eye Recommend member clinics, stays off until the disclosure conversation, and nothing is scraped.
