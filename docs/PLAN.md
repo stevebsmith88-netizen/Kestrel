@@ -16,8 +16,10 @@ The full plan is the v7 doc: https://claude.ai/artifact/2j9U84RzZ5vtmnNVtXPCTC. 
 | Stream | Volume | Gross a year | Net of fees |
 | --- | --- | --- | --- |
 | Monthly pass at $199 | 47 clinics | $112,236 | $108,813 |
-| Single posts at $79 | 550 a year | $43,450 | $42,026 |
-| Total | | $155,686 | $150,839 |
+| Single posts, average $76 | 550 a year | $41,800 | $40,423 |
+| Total | | $154,036 | $149,236 |
+
+Single posts use the role prices decided on 5th November 2026 ($59 support and patient care, $79 opticians and practice leads, $99 optometrists), assuming a mix of 40%, 35% and 25%, which averages $76 a post. This is an assumption to check against real posts after launch. On these numbers the target is about $800 short after fees: 11 more single posts a year, or 1 more pass clinic, closes it. Founding clinics who choose the $1,990 yearly option pay about $398 less a year than monthly, so each one lowers the pass line slightly.
 
 ## Domains
 
