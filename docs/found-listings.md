@@ -1,6 +1,6 @@
 # Found listings (the seeding tool)
 
-Admin, Found listings (`/admin/found`). It lists real jobs from a clinic's own careers page, for clinics that are not on Kestrel yet, so candidates see a fuller board before launch (Gate C: 50 live roles across 5 or more provinces). Each listing links back to the clinic's own application page, and the clinic can claim it.
+Admin, Overview, then the **Found listings** link under the heading (`/admin/found`). It is kept off the top menu so the admin bar stays on 1 line. It lists real jobs from a clinic's own careers page, for clinics that are not on Kestrel yet, so candidates see a fuller board before launch (Gate C: 50 live roles across 5 or more provinces). Each listing links back to the clinic's own application page, and the clinic can claim it.
 
 **Publishing is switched off.** You can read pages and save drafts, but nothing goes public until `ENABLE_SEEDING` is set to `yes` in Vercel. Leave it off until your disclosure conversation at work has happened (CLAUDE.md, Non negotiables). Clinic outreach is a separate step and is still not connected to anything.
 

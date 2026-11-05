@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
@@ -22,6 +23,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
           <p className="kicker">Admin</p>
           <h1>Overview</h1>
           <p className="lede2">How Kestrel is doing. Only your account can open this page.</p>
+          <p className="help">More tools: <Link href="/admin/found">Found listings</Link>, for jobs from a clinic&apos;s own careers page.</p>
           {s ? <AdminNumbers s={s} period={period} /> : <section className="card"><p>The numbers are not available because the database is not connected.</p></section>}
         </div>
       </main>
