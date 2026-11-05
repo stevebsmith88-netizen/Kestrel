@@ -6,6 +6,8 @@ import { useServerForm } from "@/components/useServerForm";
 import { buildAd } from "@/lib/ad-builder";
 import { saveJobForClinic } from "@/lib/admin-job-actions";
 import { saveJob } from "@/lib/clinic-actions";
+import PayBenchmark from "@/components/PayBenchmark";
+import type { OwnPayStat } from "@/lib/pay-benchmark";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 
 export type JobFormValues = {
@@ -34,7 +36,7 @@ const YES_NO = [
 ] as const;
 
 // employerId is set only when an admin posts for a clinic. The form then saves through the admin action, and skips the clinic only parts.
-export default function JobForm({ initial, adBuilder = false, live = false, employerId }: { initial: JobFormValues; adBuilder?: boolean; live?: boolean; employerId?: string }) {
+export default function JobForm({ initial, adBuilder = false, live = false, employerId, ownPay = [] }: { initial: JobFormValues; adBuilder?: boolean; live?: boolean; employerId?: string; ownPay?: readonly OwnPayStat[] }) {
   const { state, pending, submit } = useServerForm(employerId ? saveJobForClinic : saveJob);
   const ad = useServerForm(buildAd);
   const form = useRef<HTMLFormElement>(null);
@@ -46,6 +48,12 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const [applyMethod, setApplyMethod] = useState(initial.apply_method || "kestrel");
   const [saveTemplate, setSaveTemplate] = useState(false);
   const [arrangement, setArrangement] = useState(initial.work_arrangement || "on_site");
+  // Followed so the pay guide can compare the range as it is typed. The guide never changes what is saved.
+  const [role, setRole] = useState(initial.role_category);
+  const [province, setProvince] = useState(initial.province);
+  const [payPeriod, setPayPeriod] = useState(initial.pay_period);
+  const [payMin, setPayMin] = useState(initial.pay_min);
+  const [payMax, setPayMax] = useState(initial.pay_max);
   const e = state.errors ?? {};
   return (
     <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
@@ -59,7 +67,7 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
       </Field>
       <div className="pair">
         <Field id="jf-role" label="Role" required error={e.roleCategory}>
-          <select id="jf-role" name="roleCategory" defaultValue={initial.role_category}>
+          <select id="jf-role" name="roleCategory" value={role} onChange={(ev) => setRole(ev.target.value)}>
             <option value="">Choose one</option>
             <optgroup label="Clinic roles">
               {CLINIC_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -96,7 +104,7 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
           <input id="jf-city" name="city" type="text" defaultValue={initial.city} />
         </Field>
         <Field id="jf-province" label="Province or territory" required error={e.province}>
-          <select id="jf-province" name="province" defaultValue={initial.province}>
+          <select id="jf-province" name="province" value={province} onChange={(ev) => setProvince(ev.target.value)}>
             <option value="">Choose one</option>
             {PROVINCES.map((p) => (
               <option key={p} value={p}>{p}</option>
@@ -107,15 +115,16 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
 
       <h2 className="formh">Pay</h2>
       <p className="help formnote">A pay range is required on every post. It can be up to $50,000 wide a year, unless the top of the range is over $200,000. This follows the pay transparency rules in Ontario and British Columbia.</p>
-      <Choices name="payPeriod" label="Paid" options={PAY_PERIODS} value={initial.pay_period} error={e.payPeriod} />
+      <Choices name="payPeriod" label="Paid" options={PAY_PERIODS} value={initial.pay_period} onChange={setPayPeriod} error={e.payPeriod} />
       <div className="pair">
         <Field id="jf-min" label="Lowest pay" required error={e.payMin}>
-          <input id="jf-min" name="payMin" type="text" inputMode="decimal" defaultValue={initial.pay_min} placeholder="62,000" />
+          <input id="jf-min" name="payMin" type="text" inputMode="decimal" value={payMin} onChange={(ev) => setPayMin(ev.target.value)} placeholder="62,000" />
         </Field>
         <Field id="jf-max" label="Highest pay" required error={e.payMax}>
-          <input id="jf-max" name="payMax" type="text" inputMode="decimal" defaultValue={initial.pay_max} placeholder="74,000" />
+          <input id="jf-max" name="payMax" type="text" inputMode="decimal" value={payMax} onChange={(ev) => setPayMax(ev.target.value)} placeholder="74,000" />
         </Field>
       </div>
+      <PayBenchmark role={role} province={province} period={payPeriod} min={payMin} max={payMax} own={ownPay} />
 
       <Field id="jf-extras" label="Anything else that is part of the pay" error={e.payExtras} hint="Optional. For example: plus commission, a car allowance or a company vehicle. The range above should be the base pay.">
         <input id="jf-extras" name="payExtras" type="text" maxLength={300} defaultValue={initial.pay_extras} />

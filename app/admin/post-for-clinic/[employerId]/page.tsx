@@ -5,6 +5,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import JobForm from "@/components/JobForm";
 import { requireRole } from "@/lib/auth";
+import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Post for a clinic | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -20,6 +21,7 @@ export default async function PostForOneClinic({ params }: { params: Promise<{ e
   const db = supabaseAdmin();
   const { data: employer } = db ? await db.from("employers").select("id, clinic_name, city, province").eq("id", employerId).maybeSingle() : { data: null };
   if (!employer) notFound();
+  const ownPay = await loadOwnPayStats();
   return (
     <>
       <AppBar session={session} current="/admin/post-for-clinic" />
@@ -30,6 +32,7 @@ export default async function PostForOneClinic({ params }: { params: Promise<{ e
           <p className="lede2">Fill in the same form the clinic would. <Link href="/admin/post-for-clinic">Choose a different clinic</Link></p>
           <JobForm
             employerId={employer.id}
+            ownPay={ownPay}
             initial={{
               title: "", role_category: "", employment_type: "", province: employer.province, city: employer.city, pay_period: "year", pay_min: "", pay_max: "",
               is_existing_vacancy: "", uses_ai_screening: "", description: "", apply_method: "kestrel", apply_url: "", work_arrangement: "on_site", territory: "", pay_extras: "",

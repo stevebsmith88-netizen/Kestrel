@@ -86,6 +86,8 @@ Filters should show only roles that have live jobs, so the board does not look e
 
 Use official data first: the federal Job Bank wages dataset on open.canada.ca (Wages, with a CSV per year). Its files are stored on `opencanada.blob.core.windows.net`, which must be allowed in the cloud environment. As a stopgap where official data is missing, an AI sweep per province can give a rough starting range, labelled "starting point, from public data" and replaced by Kestrel's own posted pay as ads arrive. AI figures must never be shown as fact without that label.
 
+**Built 5th November 2026 (not yet merged):** see `docs/pay-benchmark.md` for the source, licence, role mapping and decisions.
+
 ## 10. Follow ups, 5th November evening
 
 **Friends and family money, clarified.** Steve's idea: 10 doctors or silent investors at $1,000 each, each getting 1%, for $10,000 in total.

@@ -75,7 +75,7 @@ BRIEF = f"""
   <p>For a fixed fee review meeting. Everything that needs a lawyer's eyes is in this one document: what the business is, the questions in order of priority, and the documents themselves.</p>
   <p class="meta">Prepared on 31st October 2026 by Steve Smith, founder, from an audit of the website and its code carried out on 30th October 2026.<br>
   The legal references in this pack are an AI assistant's reading and were not checked by a lawyer. Where it is unsure, it says so. Please verify them.</p>
-  <div class="box"><strong>How to use this pack.</strong> Part 1 is the plain summary. Parts A to G are the 40 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email. The two background sections after Part G describe what the site collects and what has already been decided. The appendices are the policies exactly as they are published today, the breach plan, the consent wordings and the email list.</div>
+  <div class="box"><strong>How to use this pack.</strong> Part 1 is the plain summary. Parts A to G are the 41 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email. The two background sections after Part G describe what the site collects and what has already been decided. The appendices are the policies exactly as they are published today, the breach plan, the consent wordings and the email list.</div>
 </div>
 
 <h2 class="pb">Part 1. The business in one page</h2>
@@ -167,13 +167,14 @@ BRIEF = f"""
 {q(35,"How may Kestrel describe this in its own marketing (for example, \"helps you meet Ontario's rules\") without promising compliance? Please suggest safe wording and a disclaimer.")}
 {q(36,"Does Kestrel, as a job board, have any duty of its own under these rules, or do they fall only on the employer posting?")}
 {q(37,"An idea for later: reminding Ontario clinics of the 45 day interview outcome duty and adding an accommodation notice to job pages and the apply form. Please suggest wording, and say whether offering it creates any duty for Kestrel.")}
+{q(38,"Pay benchmark on the post a job form. While a clinic enters its pay range, Kestrel shows a line such as \"Your range is in line with what is typical for opticians in Ontario\", with the source and date. The figures come from the Government of Canada's Job Bank wages data (open.canada.ca, Open Government Licence – Canada, which I credit with the licence's own attribution statement and a link). Where Job Bank has no figure, I may show a range made by AI, labelled as a rough starting point, and later Kestrel's own posted pay once a role and province has at least 10 posts from at least 3 clinics. It is guidance only and never blocks a post. Does sharing pay benchmarks need any particular wording, limits or disclaimer? Please also say whether showing pay posted by other clinics, even as a combined median, raises any competition law concern (for example about employers sharing pay information), and whether the AI starting range should be shown at all.")}
 </ol>
 
 <h2>Part G. Smaller matters</h2>
 <ol>
-{q(38,"Accessibility: I understand AODA's website rules apply from 50 employees and reporting from 20. Is a short accessibility statement still wise?")}
-{q(39,"Analytics. I plan cookie free analytics and Google Search Console. Does that need any notice or consent?")}
-{q(40,"Anything else a new Canadian online marketplace for regulated health professionals should have in place before launch that I have not asked about?")}
+{q(39,"Accessibility: I understand AODA's website rules apply from 50 employees and reporting from 20. Is a short accessibility statement still wise?")}
+{q(40,"Analytics. I plan cookie free analytics and Google Search Console. Does that need any notice or consent?")}
+{q(41,"Anything else a new Canadian online marketplace for regulated health professionals should have in place before launch that I have not asked about?")}
 </ol>
 
 <h2>Documents to bring</h2>
@@ -218,7 +219,7 @@ rest_questions, rest_bring = rest[:bring_i], rest[bring_i:]
 
 if PACK == "business":
     cover = cover.replace("Legal review pack</p>", "Legal review pack: business, privacy and technology</p>", 1)
-    cover = cover.replace("Parts A to G are the 40 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email.", "Parts B to G are questions 7 to 40, in the order I would like to cover them. If time is short, Parts B and C come first and the rest can follow by email. Questions 1 to 6 are about employment and are being handled separately.", 1)
+    cover = cover.replace("Parts A to G are the 41 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email.", "Parts B to G are questions 7 to 41, in the order I would like to cover them. If time is short, Parts B and C come first and the rest can follow by email. Questions 1 to 6 are about employment and are being handled separately.", 1)
     part1 = part1.replace("I work full time for another organisation (see Part A). I am not a developer", "I am building Kestrel alongside other work. I am not a developer", 1)
     part1 = part1.replace("only after the matters in Part A are settled", "only after the company, policy and other legal matters in this pack are settled", 1)
     bring = '<h2>Documents to bring</h2><ul><li>This pack (the policies are in the appendices, exactly as published).</li><li>A name search result, once done.</li></ul>'
