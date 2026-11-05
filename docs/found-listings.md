@@ -65,3 +65,23 @@ Optional: `PAGE_READER_MODEL` chooses the Claude model (Sonnet 5.5 by default, a
 - It does not recheck a live found listing's page each day. The 21 day limit and the "Take it down" button cover that for now.
 - The ad builder's "Paste your job link" box for clinics will use the same page reader. It is not built yet.
 - The lawyer pack asks about this (questions 16 and 32). Question 32 lists "recheck the page" among the rules: the tool covers it with the 21 day limit, a fresh reading (under a week old) before anything is published, and the Take it down button, but it does not recheck live listings each day. The tool obeys robots.txt, but it cannot read each site's own terms of use, so skip any clinic whose site says not to copy its content.
+
+## Decisions and open items (recorded 5th November 2026)
+
+Decisions Steve made while building this, so they are not argued again:
+
+- **Blocklist.** The 3 sites named in CLAUDE.md (Indeed, LinkedIn, Jobs4ECPs) are never used in any way, even as a lead. Other job boards can show that a clinic is hiring (a lead), but their ads are never copied, and a listing always comes from the clinic's own website. Colleges, social networks and Eye Recommend stay refused.
+- **Leads, not listings.** The province search saves clinics as leads, with published contact emails kept alongside the page and date they were found. Nobody is emailed from it. Outreach stays off until the disclosure conversation, and the lawyer sees the wording first.
+- **Plain job titles.** A catchy suggested title in the ad builder was built and dropped, because Google's job results work from a plain job title. If more punch is wanted later, the safe route is a separate "headline" field (a small database change on both databases) shown on the job page and cards, with the title left plain.
+- **Ads from the same clinic.** Same clinic and same role: matching ads (the builder is shown the earlier one). A different role opens differently from the clinic's other ads.
+- **Eye Recommend separation.** Writing principles that Steve developed for ad writing are used in the ad builder in Kestrel's own words, with every Eye Recommend reference removed (members, recordings, client adverts, internal processes). Open question for the lawyer: Steve wrote those templates at work, and the IP clause in his employment agreement is under review, so confirm Kestrel may use them. The ad rules are all in `lib/ad-style.ts` and the prompt in `lib/ad-builder.ts` if they need to come out.
+
+Still to do, by Steve:
+
+- Run migrations 0023 and 0025 on **both** databases (done for the live and demo databases on 5th November 2026).
+- `ANTHROPIC_API_KEY` in **both** Vercel projects, made inside the Kestrel workspace (or `ANTHROPIC_WORKSPACE_ID` set), then a redeploy without the build cache. Use the Setup check and its test buttons to confirm. Web search must be switched on in the Anthropic console (it worked on the live site on 5th November 2026).
+- Add to the lawyer pack: the database of clinics' published business emails (kept with page and date), an outreach email for clinics found through a job board (Appendix E2 currently says "we found the job on your own careers page"), and the ad templates question above.
+- Decide whether to add the headline field.
+
+Ideas for later: a daily recheck of live found listings against the clinic's page, a bulk run of the finder over a clinic list built from open data (OpenStreetMap needs `overpass-api.de` allowed in the cloud environment), and the "Paste your job link" box in the clinic ad builder using the same page reader.
+
