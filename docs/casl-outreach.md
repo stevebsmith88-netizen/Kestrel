@@ -34,10 +34,11 @@ The email itself is in `lib/outreach.ts`, with a picture of how it looks in `doc
 
 The outreach email says it plainly: advertising a job in more than one place helps more of the right people see it, being on Kestrel changes nothing on the clinic's own site or other boards, and there is nothing they must do. Never promise a number of applicants or a result. CASL requires the email to be accurate, and promises we cannot keep would count against us.
 
+## The dry run (built, 6th November 2026)
+
+Admin, Overview, **Outreach dry run** (`/admin/outreach-check`) checks every saved lead against the conditions above and shows the exact email. It sends nothing, and nothing in Kestrel can send clinic outreach. It flags a lead that has no published address, an address that looks personal (Gmail, Hotmail and similar), an address published on a different website from the clinic's own, an address found more than 90 days ago, an address or domain on the do not email list, a clinic that is now on Kestrel, and a clinic with no listing yet. The record of where and when each address was published is kept with the lead (`clinic_leads`, migration 0025).
+
 ## Still to build before any outreach
 
-- The "claim your listing" page that the email's button points to.
-- The record of where each address was found (the careers page and the date).
-- A person (Steve) approving each batch before it goes.
-
-This is a plain English summary, not legal advice. Have a lawyer check it before the first send.
+- The "claim your listing" page that the email's button points to is built. The send queue is not: approving emails in small batches, 1 email plus 1 follow up at most, the daily budget, the slow warm up of the mail subdomain and bounce and complaint handling (a bounce or complaint adds the address to the do not email list).
+- The lawyer's review of the wording, and Steve's confirmation that the disclosure conversation has happened. Then a switch to turn sending on.
