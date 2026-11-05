@@ -2,6 +2,7 @@
 // published for hiring or business enquiries. Kept free of the database so the emails and the timing can be tested.
 // Nothing sends these unless ENABLE_OUTREACH is "yes", and that stays off until Steve's disclosure conversation.
 // See docs/casl-outreach.md.
+import { SANS, SERIF, brandEmail, esc } from "./brand-email.ts";
 import { SITE_URL } from "./email-layout.ts";
 import { CLINIC_PASS, ROLE_BANDS, dollars, perDay, perPassPost } from "./pricing.ts";
 
@@ -33,9 +34,6 @@ export function stopReason(c: { suppressed: boolean; onWaitlist: boolean; hasAcc
   return null;
 }
 
-const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const SERIF = "'DM Serif Display',Georgia,'Times New Roman',serif";
-const SANS = "'Source Sans 3',Arial,Helvetica,sans-serif";
 const JOIN_URL = `${SITE_URL}/clinics`;
 
 type Content = {
@@ -123,57 +121,32 @@ function pricesHtml() {
 </td></tr>`;
 }
 
-// One email of the sequence, in the look approved on the design canvas: navy banner with the logo centred,
-// live text throughout (so it reads with images blocked), a "Join the waitlist" button, the skyline, and a footer
-// with the reason, the unsubscribe link and the mailing address that CASL requires.
+// One email of the sequence, in the shared branded look (lib/brand-email.ts).
 export function outreachSequenceEmail({ step, clinicName, unsubscribeUrl }: { step: number; clinicName: string; unsubscribeUrl: string }) {
   const c = content(step, clinicName);
-  const reason = `You're receiving this because ${clinicName}'s email address is published on its website for business enquiries, and this is about hiring at your practice.`;
-  const html = `<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(c.subject)}</title></head><body style="margin:0;padding:0;background-color:#F7F1E6;">
-<div style="display:none;max-height:0;overflow:hidden;">${esc(c.preview)}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F7F1E6" style="background-color:#F7F1E6;"><tr><td align="center" style="padding:24px 12px;">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#FBF8F2;">
-<tr><td bgcolor="#1B2B4B" style="background-color:#1B2B4B;padding:36px 40px 40px 40px;">
-<a href="${JOIN_URL}" style="text-decoration:none;"><img src="${SITE_URL}/brand/kestrel-lockup-full-reversed.png" width="246" alt="Kestrel Eye Care Jobs" style="display:block;margin:0 auto 26px auto;width:246px;max-width:100%;height:auto;border:0;"></a>
-<p style="margin:0;font-family:${SERIF};font-size:42px;line-height:47px;color:#F7F1E6;">${esc(c.headline[0])}<br><span style="color:#D8B48A;">${esc(c.headline[1])}</span></p>
-</td></tr>
-${c.hook ? `<tr><td bgcolor="#F7F1E6" style="background-color:#F7F1E6;padding:24px 40px;border-bottom:1px solid #E3D9C8;"><p style="margin:0 0 4px 0;font-family:${SERIF};font-size:28px;line-height:32px;color:#A4502C;">${esc(c.hook[0])}</p><p style="margin:0;font-family:${SANS};font-size:17px;line-height:24px;color:#2B3F5F;">${esc(c.hook[1])}</p></td></tr>` : ""}
-<tr><td style="padding:30px 40px 0 40px;font-family:${SANS};font-size:17px;line-height:26px;color:#2B3F5F;">${c.paragraphs.map((p) => `<p style="margin:0 0 14px 0;">${esc(p)}</p>`).join("")}</td></tr>
-${c.prices ? pricesHtml() : ""}
-${c.closing ? `<tr><td style="padding:24px 40px 0 40px;font-family:${SERIF};font-size:22px;line-height:29px;color:#1B2B4B;">${esc(c.closing)}</td></tr>` : ""}
-<tr><td style="padding:28px 40px 0 40px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#A4502C" style="background-color:#A4502C;border-radius:4px;"><a href="${JOIN_URL}" style="display:inline-block;padding:16px 30px;font-family:${SANS};font-size:18px;font-weight:bold;color:#F7F1E6;text-decoration:none;">Join the waitlist</a></td></tr></table>
-<p style="margin:10px 0 0 0;font-family:${SANS};font-size:15px;"><a href="${JOIN_URL}" style="color:#A4502C;">eyecarejobs.ca/clinics</a></p></td></tr>
-<tr><td style="padding:30px 40px 26px 40px;font-family:${SANS};font-size:17px;line-height:25px;color:#2B3F5F;"><p style="margin:0;">Thanks,<br><strong style="color:#1B2B4B;">The Kestrel team</strong></p></td></tr>
-<tr><td><img src="${SITE_URL}/skyline.png" width="600" alt="" style="display:block;width:100%;max-width:600px;height:auto;border:0;"></td></tr>
-<tr><td bgcolor="#1B2B4B" style="background-color:#1B2B4B;padding:22px 40px 28px 40px;font-family:${SANS};font-size:13px;line-height:20px;color:#DCE3E6;">
-<p style="margin:0 0 8px 0;">${esc(reason)} <a href="${esc(unsubscribeUrl)}" style="color:#D8B48A;">Unsubscribe</a> and we won't email you again.</p>
-<p style="margin:0;">Prices in Canadian dollars, before HST. Kestrel Eye Care Jobs, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada.</p>
-</td></tr>
-</table></td></tr></table></body></html>`;
-  const text = [
-    `${c.headline[0]} ${c.headline[1]}`,
-    "",
-    ...(c.hook ? [`${c.hook[0]}, ${c.hook[1]}`, ""] : []),
-    ...c.paragraphs.flatMap((p) => [p, ""]),
-    ...(c.prices
-      ? [
-          "After launch, per 30 day post:",
-          ...ROLE_BANDS.map((b) => `${b.label}: ${dollars(b.price)} (${perDay(b.price)} a day)`),
-          `Clinic pass: ${dollars(CLINIC_PASS.monthly)} a month for up to ${CLINIC_PASS.livePosts} live posts, ${perPassPost()} a post. Founding clinics keep this price for ${CLINIC_PASS.lockMonths} months, or pay ${dollars(CLINIC_PASS.yearly)} for the year.`,
-          "",
-        ]
-      : []),
-    ...(c.closing ? [c.closing, ""] : []),
-    `Join the waitlist: ${JOIN_URL}`,
-    "",
-    "Thanks,",
-    "The Kestrel team",
-    "",
-    reason,
-    `Unsubscribe: ${unsubscribeUrl}`,
-    "Prices in Canadian dollars, before HST. Kestrel Eye Care Jobs, 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada.",
-  ].join("\n");
-  return { subject: c.subject, html, text };
+  return brandEmail({
+    subject: c.subject,
+    preview: c.preview,
+    headline: c.headline,
+    hook: c.hook,
+    paragraphs: c.paragraphs,
+    extra: c.prices
+      ? {
+          html: pricesHtml(),
+          text: [
+            "After launch, per 30 day post:",
+            ...ROLE_BANDS.map((b) => `${b.label}: ${dollars(b.price)} (${perDay(b.price)} a day)`),
+            `Clinic pass: ${dollars(CLINIC_PASS.monthly)} a month for up to ${CLINIC_PASS.livePosts} live posts, ${perPassPost()} a post. Founding clinics keep this price for ${CLINIC_PASS.lockMonths} months, or pay ${dollars(CLINIC_PASS.yearly)} for the year.`,
+          ],
+        }
+      : undefined,
+    closing: c.closing,
+    button: { text: "Join the waitlist", url: JOIN_URL },
+    bannerUrl: JOIN_URL,
+    reason: `You're receiving this because ${clinicName}'s email address is published on its website for business enquiries, and this is about hiring at your practice.`,
+    unsubscribeUrl,
+    footerNote: "Prices in Canadian dollars, before HST.",
+  });
 }
 
 // How to recognise the same clinic elsewhere on Kestrel (a clinic account, a claim). A clinic's own domain covers
