@@ -6,7 +6,8 @@ Admin, Overview, then the **Found listings** link under the heading (`/admin/fou
 
 ## How to use it
 
-1. Open the clinic's careers page in your browser. Copy its address.
+0. Don't know the careers page? Type the clinic's website into **Find a clinic's careers page**. It looks for a careers or jobs link on the home page (and, failing that, at the usual addresses such as /careers), with the same rules as the reader. Press **Use this page** next to the right one. This step uses no Claude and costs nothing.
+1. Or open the clinic's careers page in your browser and copy its address.
 2. Paste it into "Read a careers page", tick that it is the clinic's own website, and press **Read this page**. It takes up to a minute.
 3. The reader shows each open job it found, with every fact in a form: title, role, type, place, pay, the 2 questions, the apply link and a short summary in our own words.
 4. Check each one against the page, change anything that is wrong, tick "I have checked every fact", then **Save as a draft** (or, once publishing is on, **Publish for 21 days**).

@@ -4,21 +4,49 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Choices, Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
-import { readCareersPage, saveFoundListing, type ReadState, type ReadingView, type SaveState } from "@/lib/found-listing-actions";
+import { findCareersPage, readCareersPage, saveFoundListing, type FindState, type ReadState, type ReadingView, type SaveState } from "@/lib/found-listing-actions";
 import { ANSWERS, type FoundClinic } from "@/lib/found-listings";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PRACTICE_TYPES, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 
 // The found listings tool: paste a careers page, see what Claude found, check and fix each job, then save it.
 export default function FoundListingReader({ publishOn }: { publishOn: boolean }) {
   const { state, pending, submit } = useServerForm<ReadState>(readCareersPage);
+  const finder = useServerForm<FindState>(findCareersPage);
+  const [url, setUrl] = useState("");
   const reading = state.reading;
   const e = state.errors ?? {};
+  const f = finder.state.errors ?? {};
+  const useLink = (link: string) => {
+    setUrl(link);
+    document.getElementById("fl-url")?.focus();
+  };
   return (
     <>
+      <form onSubmit={finder.submit} noValidate className="panel formpanel">
+        <h2 className="formh">Find a clinic&apos;s careers page</h2>
+        <Field id="fl-site" label="The clinic's website" error={f.site} hint="For example harbourside.ca. We look on its home page for a careers or jobs link.">
+          <input id="fl-site" name="site" type="text" inputMode="url" autoComplete="off" placeholder="harbourside.ca" />
+        </Field>
+        {finder.state.error && !f.site && <p className="err form-err" role="alert">{finder.state.error}</p>}
+        {finder.state.message && <p className="ok-msg" role="status">{finder.state.message}</p>}
+        {finder.state.found && finder.state.found.links.length > 0 && (
+          <ul className="plainlist">
+            {finder.state.found.links.map((l) => (
+              <li key={l.url}>
+                <a href={l.url} target="_blank" rel="noopener noreferrer">{l.text || l.url}<span className="sr"> (opens in a new tab)</span></a>{" "}
+                <span className="help">{l.url}</span>{" "}
+                <button type="button" className="linkbtn" onClick={() => useLink(l.url)}>Use this page</button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <button type="submit" className="btn ghost" disabled={finder.pending}>{finder.pending ? "Looking" : "Find careers page"}</button>
+      </form>
+
       <form onSubmit={submit} noValidate className="panel formpanel">
         <h2 className="formh">Read a careers page</h2>
         <Field id="fl-url" label="The careers page or job page" required error={e.url} hint="A page on the clinic's own website. Job boards, recruiters, social networks and college registers are refused.">
-          <input id="fl-url" name="url" type="url" inputMode="url" autoComplete="off" placeholder="https://www.clinic.ca/careers" />
+          <input id="fl-url" name="url" type="url" inputMode="url" autoComplete="off" placeholder="https://www.clinic.ca/careers" value={url} onChange={(ev) => setUrl(ev.target.value)} />
         </Field>
         <div className={`row ${e.ownSite ? "invalid" : ""}`}>
           <label className="choice agree">
