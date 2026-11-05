@@ -27,10 +27,11 @@ export default function FoundListingReader({ publishOn }: { publishOn: boolean }
     document.getElementById("fl-site")?.scrollIntoView({ block: "center" });
   };
   return (
-    <>
+    <div className="stackcards">
       <ProvinceSearch onUsePage={useLink} onFindPage={findFor} />
-      <form onSubmit={finder.submit} noValidate className="panel formpanel">
-        <h2 className="formh">Find a clinic&apos;s careers page</h2>
+      <details className="card leadrow findbox">
+        <summary><span className="leadmain"><strong>Know a clinic&apos;s website?</strong><span className="meta">Find its careers page</span></span></summary>
+      <form onSubmit={finder.submit} noValidate className="leadbody">
         <Field id="fl-site" label="The clinic's website" error={f.site} hint="For example harbourside.ca. We look on its home page for a careers or jobs link.">
           <input id="fl-site" name="site" type="text" inputMode="url" autoComplete="off" placeholder="harbourside.ca" value={site} onChange={(ev) => setSite(ev.target.value)} />
         </Field>
@@ -49,9 +50,10 @@ export default function FoundListingReader({ publishOn }: { publishOn: boolean }
         )}
         <button type="submit" className="btn ghost" disabled={finder.pending}>{finder.pending ? "Looking" : "Find careers page"}</button>
       </form>
+      </details>
 
       <form onSubmit={submit} noValidate className="panel formpanel">
-        <h2 className="formh">Read a careers page</h2>
+        <h2 className="formh">2. Read a careers page</h2>
         <Field id="fl-url" label="The careers page or job page" required error={e.url} hint="A page on the clinic's own website. Job boards, recruiters, social networks and college registers are refused.">
           <input id="fl-url" name="url" type="url" inputMode="url" autoComplete="off" placeholder="https://www.clinic.ca/careers" value={url} onChange={(ev) => setUrl(ev.target.value)} />
         </Field>
@@ -67,7 +69,7 @@ export default function FoundListingReader({ publishOn }: { publishOn: boolean }
         <button type="submit" className="btn" disabled={pending}>{pending ? "Reading the page (up to a minute)" : "Read this page"}</button>
       </form>
       {reading && <Results key={reading.readId} reading={reading} publishOn={publishOn} />}
-    </>
+    </div>
   );
 }
 
@@ -139,9 +141,18 @@ function FoundJobForm({ index, total, readId, job, clinic, publishOn }: {
     );
   }
 
+  const place = [job.city, job.province].filter(Boolean).join(", ");
+  const pay = job.payMin ? (job.payMin === job.payMax ? `$${job.payMin}` : `$${job.payMin} to $${job.payMax}`) : "no pay found";
   return (
-    <form onSubmit={submit} noValidate className="panel formpanel">
-      <h3 className="formh">{total > 1 ? `Job ${index + 1} of ${total}: ` : ""}{job.title}</h3>
+    <details className="card leadrow" open={total === 1}>
+      <summary>
+        <span className="leadmain">
+          <strong>{total > 1 ? `Job ${index + 1} of ${total}: ` : ""}{job.title}</strong>
+          <span className="meta">{place || "place not found"} · {pay}</span>
+        </span>
+        <span className="leadflags">{job.copied && <span className="chip">Reword the summary</span>}{!job.payMin && <span className="chip">No pay on the page</span>}</span>
+      </summary>
+    <form onSubmit={submit} noValidate className="leadbody formpanel">
       <input type="hidden" name="readId" value={readId} />
       <input type="hidden" name="clinicName" value={clinic.name} />
       <input type="hidden" name="practiceType" value={clinic.practiceType} />
@@ -243,5 +254,6 @@ function FoundJobForm({ index, total, readId, job, clinic, publishOn }: {
       </div>
       {!publishOn && <p className="help">Publishing is switched off, so save drafts for now.</p>}
     </form>
+    </details>
   );
 }

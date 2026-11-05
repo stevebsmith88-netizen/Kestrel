@@ -466,3 +466,22 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .passbox .price{color:var(--buff);margin:0 2px 0 6px}
 .passbox .founding{margin:12px 0 0;padding-top:12px;border-top:1px solid #4A5A7A;color:var(--cream)}
 .passbox .founding strong{color:var(--buff)}
+
+/* Found listings: a compact list that opens on click, like the live jobs list */
+.leadlist{display:flex;flex-direction:column;gap:10px}
+.leadrow{padding:0}
+.leadrow>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;align-items:center;padding:14px 18px}
+.leadrow>summary::-webkit-details-marker{display:none}
+.leadrow>summary::after{content:"Open";grid-column:2;grid-row:1;justify-self:end;font-size:0.875rem;font-weight:700;color:var(--chestnut)}
+.leadrow[open]>summary::after{content:"Close"}
+.leadrow[open]>summary{border-bottom:1px solid var(--line)}
+.leadmain{display:flex;flex-direction:column;gap:2px;min-width:0;grid-column:1;grid-row:1}
+.leadmain strong{font-size:1.0625rem;color:var(--navy)}
+.leadmain .meta{margin:0}
+.leadflags{display:flex;gap:6px;flex-wrap:wrap;grid-column:1;grid-row:2}
+.leadflags:empty{display:none}
+.leadbody{padding:16px 18px 18px}
+.leadbody>.facts{margin-bottom:12px}
+.leadrow>.formpanel,.leadrow>.leadbody.formpanel{padding:16px 18px 18px;border:0;box-shadow:none;background:transparent}
+.findbox>.leadbody{padding-top:14px}
+@media (max-width:640px){.leadrow>summary{grid-template-columns:1fr}.leadrow>summary::after{grid-column:1;grid-row:3;justify-self:start}}
