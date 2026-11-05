@@ -5,7 +5,7 @@ One page. Keep it where you can find it quickly. A plain English summary of Cana
 **Privacy officer:** Steve Smith, privacy@eyecarejobs.ca
 **Backup person:** held offline by Steve (in his password manager notes). Deliberately not written in this repository.
 **Lawyer:** (add after the first meeting; keep the number in Steve's contacts, not here)
-**Last reviewed:** 30th October 2026
+**Last reviewed:** 5th November 2026
 
 ## What counts
 
@@ -35,6 +35,34 @@ If you are not sure, treat it as serious and call the lawyer.
 **5. Always: keep the record for 24 months,** including breaches that did not need reporting.
 
 **6. Afterwards:** fix the cause, update `docs/security.md`, and tell the lawyer what changed.
+
+## Four emergency switches (click by click)
+
+For the first hour of step 1 above. Each one is reversible. Try the sign out and the email steps once on a quiet day against the **demo** project (sample data only), so you know what they do before you need them. Vercel and Supabase change their menus now and then. If a name below has moved, look for the closest one.
+
+**1. Switch the whole site off (a "back soon" page)**
+1. Vercel, open the `kestrel` project, Settings, Environment Variables.
+2. Add `MAINTENANCE_MODE` with the value `yes`, for Production.
+3. Deployments, open the latest Production deployment, the three dots, Redeploy.
+4. To switch it back on: delete the `MAINTENANCE_MODE` variable and redeploy.
+
+Every page and form shows the "back soon" page. `/api/health` and the daily job keep running. The demo site is a separate Vercel project, so do the same there if needed.
+
+**2. Sign everyone out**
+1. Supabase, open the project, SQL Editor.
+2. Run: `delete from auth.refresh_tokens; delete from auth.sessions;`
+3. People are asked to sign in again. A sign in that is already open can keep working until it expires, up to an hour, so switch the site off (switch 1) at the same time if this is a breach.
+
+**3. Stop all email**
+1. Resend, API Keys, delete the `kestrel-website` key. Everything the website sends stops, and the site keeps working.
+2. Sign up emails go through Supabase, with a second Resend key (Supabase, Authentication, SMTP settings). Delete that key in Resend as well.
+3. Make new keys afterwards and put them in Vercel and Supabase (`docs/security.md`).
+4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders).
+
+**4. Go back to the last good version of the site**
+1. Vercel, open the `kestrel` project, Deployments.
+2. Find the last Production deployment that was fine, the three dots, Promote to Production (some plans call it Instant Rollback).
+3. This does not undo database changes. Ask for help before changing the database back.
 
 ## What to say to the people affected
 

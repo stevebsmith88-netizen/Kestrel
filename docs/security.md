@@ -40,6 +40,10 @@ Turn on 2 step sign in (an authenticator app, not text messages) and use a passw
 - Vercel: mark secrets Sensitive, and remove anyone who does not need access.
 - Supabase: upgrade to Pro for daily backups, and do a test restore once before launch.
 
+## Emergency switches
+
+A maintenance switch (`MAINTENANCE_MODE`) puts the whole site behind a "back soon" page, and `docs/breach-plan.md` has the click by click steps for that, for signing everyone out, for stopping all email, and for going back to the last good version. It is a setting, not a secret, and it must be set in each Vercel project (live and demo) separately.
+
 ## If personal information is lost or seen by the wrong person
 
 Follow `docs/breach-plan.md`: one page, with a message to send and a log to fill in.
