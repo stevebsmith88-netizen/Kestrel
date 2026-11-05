@@ -15,6 +15,8 @@ test("the clinic pass is cheaper per post than any single post", () => {
 test("the yearly pass is 2 months free and shows with a comma", () => {
   assert.equal(CLINIC_PASS.monthly * 10, CLINIC_PASS.yearly);
   assert.equal(dollars(CLINIC_PASS.yearly), "$1,990");
+  assert.equal(CLINIC_PASS_PLUS.monthly * 10, CLINIC_PASS_PLUS.yearly);
+  assert.equal(dollars(CLINIC_PASS_PLUS.yearly), "$3,490");
 });
 
 test("the Clinic pass is cheaper per post than the support and optician singles, and Plus is cheaper than the optometrist single", () => {

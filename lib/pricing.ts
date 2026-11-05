@@ -12,9 +12,9 @@ export const ROLE_BANDS = [
 
 // Two passes (decided 5th November 2026). The Clinic pass covers support, patient care, optician and practice lead roles.
 // Clinic pass Plus also covers optometrists, so a clinic hiring several optometrists is not buying them at the pass discount of 60%.
-// The yearly option is a founding offer on the Clinic pass only.
+// The yearly option (10 months for the price of 12) is a founding offer on both passes.
 export const CLINIC_PASS = { monthly: 199, livePosts: 5, yearly: 1990, lockMonths: 12 } as const;
-export const CLINIC_PASS_PLUS = { monthly: 349, livePosts: 5, lockMonths: 12 } as const;
+export const CLINIC_PASS_PLUS = { monthly: 349, livePosts: 5, yearly: 3490, lockMonths: 12 } as const;
 
 const money = (n: number, places = 0) => "$" + n.toLocaleString("en-CA", { minimumFractionDigits: places, maximumFractionDigits: places });
 

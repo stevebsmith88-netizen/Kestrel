@@ -32,7 +32,7 @@ export default function Clinics() {
             Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants? The form asks for them, which covers what Ontario and British Columbia now expect, so a post cannot go live without them and you are not caught out later.
           </p>
           <p>
-            Recruiters, staffing agencies and job brokers cannot post on Kestrel or contact candidates through it. Every ad you stand next to comes from a clinic or an employer in the industry.
+            Outside recruiters, staffing agencies and job brokers cannot post on Kestrel or contact candidates through it. A corporate group&apos;s own recruiting team can post for the group&apos;s own locations, so every ad you stand next to comes from the employer that is hiring.
           </p>
           <p>
             You do not need a polished ad to start. Write a few lines about the role and the ad builder gives you a draft to edit. A person reads each post before it goes live, and once it does you follow every applicant in one place.
@@ -63,7 +63,7 @@ export default function Clinics() {
             <div className="passbox">
               <p className="passhead"><strong>Clinic pass Plus</strong> <span className="price">{dollars(CLINIC_PASS_PLUS.monthly)}</span> a month</p>
               <p>Up to {CLINIC_PASS_PLUS.livePosts} live posts at once, {perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included, plus a featured clinic profile.</p>
-              <p className="founding"><strong>Founding clinics</strong> who join during launch keep their pass price for {CLINIC_PASS.lockMonths} months, or until they cancel. Or pay {dollars(CLINIC_PASS.yearly)} for the year on the Clinic pass, which is 2 months free.</p>
+              <p className="founding"><strong>Founding clinics</strong> who join during launch keep their pass price for {CLINIC_PASS.lockMonths} months, or until they cancel. Or pay for the year up front, {dollars(CLINIC_PASS.yearly)} on the Clinic pass or {dollars(CLINIC_PASS_PLUS.yearly)} on Plus, which is 2 months free.</p>
             </div>
             <p className="small-note">Prices in Canadian dollars, before HST. Near the end of its 30 days, any post can be extended for another 30.</p>
           </section>

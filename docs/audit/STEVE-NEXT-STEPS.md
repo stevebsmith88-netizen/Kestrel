@@ -46,7 +46,7 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 2. DONE: review of the published posts (end of `docs/blog.md`).
 3. DONE and merged (pull request 33, 6th November): city and radius search (10, 25 and 50 km, field based jobs always show), filters that only offer roles and provinces with live jobs and show counts, friendlier empty states, and the Vision therapist role. Steve runs `run-everything.sql` on both databases for the Vision therapist rule (migration 0027).
 4. Pay benchmark: official Job Bank wages data from open.canada.ca first (needs `opencanada.blob.core.windows.net` allowed), a labelled AI starting range per province where data is missing, and Kestrel's own posted pay as ads arrive. Separate from the automation plan.
-5. First region plan: Toronto and Ontario first, then Alberta and British Columbia.
+5. First region plan: Toronto and Ontario first, then Alberta and British Columbia. Ontario draft is in `docs/first-region-ontario.md`, with 4 questions for Steve at the end.
 6. DONE: automation plan phases, in `docs/automation-plan.md`.
 7. DONE and merged (5th November): audit items R22, R25 and R45. Steve has run `supabase/migrations/0024_sign_in_attempts.sql` on both databases, so the sign in guard is working.
 8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in.
@@ -89,7 +89,7 @@ The key is listed in `docs/security.md` with how to rotate it.
 
 ### Pass tiers and competitor pricing (added 5th November 2026, DECIDED: Clinic pass $199 and Clinic pass Plus $349)
 
-Steve's idea: the $199 pass for 5 posts gives a 60% discount if all 5 are optometrist roles, so consider a premium pass for optometrist (associate) posts at about $349 to $350. Jobs4ECPs charges $100 a post for every role and has no pass option on its products page. Jobs-optometry reportedly lets only OSI members post (not checked). Full numbers, options and the founding offer risk are in `docs/business-setup-notes.md`, section 11. Steve chose the two named tiers. Built on a branch for preview: `lib/pricing.ts`, the /clinics page, the outreach emails and the flyer draft. Steve confirms 2 defaults: Plus at $349 with no yearly option, and founding clinics keeping the price of whichever pass they take. Still to do: say which roles each pass covers in the Terms (ask the lawyer). The credit pack example in the notes has been recalculated. Stripe is not built, so nothing is charged yet.
+Steve's idea: the $199 pass for 5 posts gives a 60% discount if all 5 are optometrist roles, so consider a premium pass for optometrist (associate) posts at about $349 to $350. Jobs4ECPs charges $100 a post for every role and has no pass option on its products page. Jobs-optometry reportedly lets only OSI members post (not checked). Full numbers, options and the founding offer risk are in `docs/business-setup-notes.md`, section 11. Steve chose the two named tiers. Built on a branch for preview: `lib/pricing.ts`, the /clinics page, the outreach emails and the flyer draft. Steve confirmed (5th November): founding clinics keep the price of whichever pass they take, and Plus also gets a founding yearly option at $3,490. Still to do: say which roles each pass covers in the Terms (ask the lawyer). The credit pack example in the notes has been recalculated. Stripe is not built, so nothing is charged yet.
 
 ### Chicken or egg: which side first
 
