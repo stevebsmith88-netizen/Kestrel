@@ -12,18 +12,21 @@
 export const READER_AGENT = "KestrelEyeCareJobs";
 export const READER_USER_AGENT = `${READER_AGENT}/1.0 (+https://eyecarejobs.ca/contact; reads one clinic careers page when a person asks)`;
 
-// Sites that are never read, matched on the host and every subdomain of it (ca.indeed.com matches indeed.com).
-const JOB_BOARDS = [
-  "indeed.com", "indeed.ca", "linkedin.com", "lnkd.in", "jobs4ecps.com", "jobs4ecps.ca", "glassdoor.com", "glassdoor.ca",
-  "ziprecruiter.com", "ziprecruiter.ca", "monster.com", "monster.ca", "workopolis.com", "simplyhired.com", "simplyhired.ca",
-  "talent.com", "neuvoo.ca", "neuvoo.com", "jooble.org", "eluta.ca", "jobillico.com", "jobboom.com", "careerbeacon.com",
-  "jobbank.gc.ca", "guichetemplois.gc.ca", "kijiji.ca", "craigslist.org", "jobs.ca", "careerjet.ca", "adzuna.ca",
-  "wowjobs.ca", "workink.com", "hiringcafe.com", "builtin.com", "wellfound.com", "eyecarejobs.ca",
+// Sites Kestrel never reads, and never uses even to find clinics (CLAUDE.md, Non negotiables): Indeed, LinkedIn, Jobs4ECPs and the
+// college registers. Matched on the host and every subdomain of it (ca.indeed.com matches indeed.com).
+const NEVER_BOARDS = ["indeed.com", "indeed.ca", "linkedin.com", "lnkd.in", "jobs4ecps.com", "jobs4ecps.ca", "eyecarejobs.ca"];
+// Other job boards. Kestrel does not copy their ads, so a board page is never read as the source of a listing. A search result
+// from one of them can still tell us a clinic is hiring, and the clinic's own website is then found separately.
+const OTHER_BOARDS = [
+  "glassdoor.com", "glassdoor.ca", "glassdoor.co.uk", "ziprecruiter.com", "ziprecruiter.ca", "monster.com", "monster.ca", "workopolis.com",
+  "simplyhired.com", "simplyhired.ca", "talent.com", "neuvoo.ca", "neuvoo.com", "jooble.org", "eluta.ca", "jobillico.com", "jobboom.com",
+  "careerbeacon.com", "jobbank.gc.ca", "guichetemplois.gc.ca", "kijiji.ca", "craigslist.org", "jobs.ca", "careerjet.ca", "adzuna.ca",
+  "wowjobs.ca", "workink.com", "hiringcafe.com", "builtin.com", "wellfound.com", "canadajobs.works", "jobs.eyesoneyecare.com", "opto.ca",
 ];
 const SOCIAL = ["facebook.com", "fb.com", "instagram.com", "x.com", "twitter.com", "tiktok.com", "youtube.com", "reddit.com", "threads.net"];
 // The professional colleges and associations. Their registers and job boards are not clinic careers pages.
 const COLLEGES = [
-  "collegeoptom.on.ca", "coptont.org", "ooq.org", "ooodq.qc.ca", "chcpbc.org", "opto.ca", "opticians.ca", "optom.on.ca",
+  "collegeoptom.on.ca", "coptont.org", "ooq.org", "ooodq.qc.ca", "chcpbc.org", "opticians.ca", "optom.on.ca",
   "optometrists.ab.ca", "albertaopticians.ca", "optometrists.sk.ca",
 ];
 const EYE_RECOMMEND = ["eyerecommend.ca", "eyerecommend.com"];
@@ -38,6 +41,11 @@ export const HIRING_SYSTEMS = [
 ];
 
 const onList = (host: string, list: readonly string[]) => list.some((d) => host === d || host.endsWith(`.${d}`));
+
+// Hosts the province search must never use, even as a lead: the 3 named boards, the colleges, social networks and Eye Recommend.
+export const SEARCH_BLOCKED_DOMAINS: string[] = [...NEVER_BOARDS.filter((d) => d !== "eyecarejobs.ca"), ...SOCIAL, ...COLLEGES, ...EYE_RECOMMEND];
+export const isOtherJobBoard = (host: string) => onList(host, OTHER_BOARDS);
+export const isNeverHost = (host: string) => onList(host, NEVER_BOARDS) || onList(host, SOCIAL) || onList(host, COLLEGES) || onList(host, EYE_RECOMMEND);
 
 export const hostOfUrl = (value: string) => {
   try {
@@ -85,7 +93,8 @@ export function refuseAddress(value: string): string | null {
   if (/^[\d.]+$/.test(host) || host.includes(":") || host.startsWith("[")) return "Use the clinic's web address, not a number address.";
   const bare = host.replace(/^www\./, "");
   if (onList(bare, EYE_RECOMMEND)) return "Kestrel keeps clear of anything connected with Eye Recommend, so this page is not read.";
-  if (onList(bare, JOB_BOARDS)) return "That is a job board. Kestrel only lists jobs from a clinic's own website, and never copies other job boards.";
+  if (onList(bare, NEVER_BOARDS)) return "Kestrel never reads Indeed, LinkedIn or Jobs4ECPs, in any way. Use the clinic's own website.";
+  if (onList(bare, OTHER_BOARDS)) return "That is a job board. Kestrel does not copy ads from job boards. Use the clinic's own website, which the search can help you find.";
   if (onList(bare, SOCIAL)) return "That is a social network. Use the careers page on the clinic's own website.";
   if (onList(bare, COLLEGES)) return "That is a professional college or association. Kestrel never reads college registers or association job boards.";
   return null;
@@ -181,7 +190,7 @@ export function decodeEntities(text: string) {
 const stripTags = (html: string) => decodeEntities(html.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
 
 export type PageLink = { text: string; url: string };
-export type ReadPage = { title: string; text: string; links: PageLink[]; structured: string[]; truncated: boolean };
+export type ReadPage = { title: string; text: string; links: PageLink[]; structured: string[]; emails: string[]; truncated: boolean };
 
 export const MAX_TEXT = 60_000;
 const LINK_WORDS = /apply|career|job|position|vacanc|opening|join|hiring|application|resume|employment|emploi|carri|postuler/i;
@@ -242,7 +251,7 @@ export function readHtml(fullHtml: string, pageUrl: string): ReadPage {
     .join("\n")
     .trim();
   const truncated = body.length > MAX_TEXT;
-  return { title, text: truncated ? body.slice(0, MAX_TEXT) : body, links, structured, truncated };
+  return { title, text: truncated ? body.slice(0, MAX_TEXT) : body, links, structured, emails: emailsIn(html), truncated };
 }
 
 // Finds JobPosting objects in structured data, including inside @graph lists, and writes each as short plain lines.
@@ -334,4 +343,33 @@ export function startAddress(typed: string) {
   const value = typed.trim();
   if (!value) return "";
   return /^https?:\/\//i.test(value) ? value : `https://${value.replace(/^\/+/, "")}`;
+}
+
+// Email addresses a page publishes, from its own mailto links and its words. Read from the page only, never guessed.
+// Addresses that are plainly not a person to write to (images, website builders, placeholders, no reply) are left out.
+const EMAIL_AT = /[a-z0-9][a-z0-9._%+-]{0,63}@[a-z0-9][a-z0-9.-]{0,251}\.[a-z]{2,24}/gi;
+const NOT_REAL_EMAIL = /\.(png|jpe?g|gif|webp|svg|css|js|ico|woff2?)$|@(sentry|wixpress|sentry-next|example|domain|yourdomain|email|test|schema|w3|cloudflare|googleapis|gstatic)\.|^(noreply|no-reply|donotreply|do-not-reply|name|your|user|username|email|someone|mail)@/i;
+export const GENERIC_BUSINESS_PARTS = /^(info|contact|hello|admin|office|reception|frontdesk|appointments|booking|bookings|team|clinic|support|enquiries|inquiries|general)$/i;
+const HIRING_PARTS = /career|job|hr$|^hr|recruit|hiring|resume|employment|talent|people/i;
+
+export function emailsIn(html: string): string[] {
+  const text = decodeEntities(html.replace(/<script\b[\s\S]*?<\/script\s*>/gi, " ").replace(/<style\b[\s\S]*?<\/style\s*>/gi, " ").replace(/%40/gi, "@"));
+  const found = new Set<string>();
+  for (const m of text.matchAll(EMAIL_AT)) {
+    const address = m[0].toLowerCase().replace(/[.]+$/, "");
+    if (!NOT_REAL_EMAIL.test(address)) found.add(address);
+    if (found.size >= 30) break;
+  }
+  return [...found];
+}
+
+// Orders addresses for someone looking for where to write about hiring: hiring words first, then an address at the clinic's own
+// website, then the clinic's general addresses (info@, contact@), then anything else.
+export function rankEmails(emails: string[], siteHost: string): string[] {
+  const key = siteKey(siteHost);
+  const score = (e: string) => {
+    const [local, domain] = e.split("@");
+    return (HIRING_PARTS.test(local) ? 4 : 0) + (key && siteKey(domain) === key ? 2 : 0) + (GENERIC_BUSINESS_PARTS.test(local) ? 1 : 0);
+  };
+  return [...emails].sort((a, b) => score(b) - score(a) || a.localeCompare(b));
 }

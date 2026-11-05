@@ -6,6 +6,7 @@ import FoundListingReader from "@/components/FoundListingReader";
 import { requireRole } from "@/lib/auth";
 import { seedingOn } from "@/lib/features";
 import { deleteFoundDraft, publishFoundListing, takeDownFoundListing } from "@/lib/found-listing-actions";
+import { setLeadStatus } from "@/lib/lead-actions";
 import { READS_PER_DAY, readingFresh } from "@/lib/found-listings";
 import { answerLabel, daysLeft, employmentLabel, formatPay, longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -13,8 +14,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 export const metadata: Metadata = { title: "Found listings | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
-// Reading a page and asking Claude about it can take up to a minute.
-export const maxDuration = 60;
+// Reading a page, or searching a province, can take a minute or 2.
+export const maxDuration = 120;
 
 const NOTICES: Record<string, string> = {
   published: "Published. It is live for 21 days, or until the clinic claims it.",
@@ -39,6 +40,8 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
   const db = supabaseAdmin();
   const publishOn = seedingOn();
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { data: leadRows } = db ? await db.from("clinic_leads").select("id, clinic_name, province, city, job_title, website, contact_email, email_source_url, status, found_at").order("found_at", { ascending: false }).limit(100) : { data: null };
+  const leads = (leadRows ?? []) as { id: string; clinic_name: string; province: string; city: string | null; job_title: string | null; website: string; contact_email: string | null; email_source_url: string | null; status: string; found_at: string }[];
   const [{ data }, reads] = db
     ? await Promise.all([
         db.from("jobs")
@@ -46,7 +49,7 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
           .eq("is_seeded", true)
           .order("created_at", { ascending: false })
           .limit(200),
-        db.from("page_reads").select("id", { count: "exact", head: true }).eq("read_by", session.userId).gte("read_at", since),
+        db.from("page_reads").select("id", { count: "exact", head: true }).eq("read_by", session.userId).not("url", "like", "search:%").gte("read_at", since),
       ])
     : [{ data: null }, { count: null, error: null }];
   const jobs = (data ?? []) as unknown as FoundRow[];
@@ -78,6 +81,28 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
 
           <FoundListingReader publishOn={publishOn} />
           {!needsMigration && <p className="help">Pages read in the last 24 hours: {reads.count ?? 0} of {READS_PER_DAY}.</p>}
+
+          <h2>Saved leads ({leads.length})</h2>
+          {leads.length === 0 ? <section className="card"><p>No leads saved yet. Search a province above and save the clinics worth following up. A lead is a note, not a listing: nothing is published from it and nobody is contacted.</p></section> : (
+            <section className="card">
+              <p className="help">Contact emails are kept with the page they were published on. Nobody is emailed from here, and outreach stays off until your disclosure conversation has happened. <a href="/admin/found/leads.csv">Download as a spreadsheet</a></p>
+              <ul className="plainlist">
+                {leads.map((l) => (
+                  <li key={l.id}>
+                    <strong>{l.clinic_name}</strong>, {[l.city, l.province].filter(Boolean).join(", ")}{l.job_title ? ` · ${l.job_title}` : ""} · <a href={l.website} target="_blank" rel="noopener noreferrer">website<span className="sr"> (opens in a new tab)</span></a>
+                    {l.contact_email ? <> · {l.contact_email}{l.email_source_url && <> (<a href={l.email_source_url} target="_blank" rel="noopener noreferrer">where it was published<span className="sr"> (opens in a new tab)</span></a>)</>}</> : " · no email yet"}
+                    {" "}· {l.status} · found {longDate(l.found_at)}{" "}
+                    <form action={setLeadStatus} className="inlineform">
+                      <input type="hidden" name="id" value={l.id} />
+                      <button type="submit" name="status" value="listed" className="linkbtn">Mark listed</button>{" "}
+                      <button type="submit" name="status" value="skipped" className="linkbtn">Skip</button>{" "}
+                      <button type="submit" name="status" value="remove" className="linkbtn">Remove</button>
+                    </form>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <h2>Drafts ({drafts.length})</h2>
           {drafts.length === 0 ? <section className="card"><p>No drafts.</p></section> : (
