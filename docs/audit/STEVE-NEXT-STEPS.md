@@ -33,8 +33,9 @@ The Gate A table below. Steve's notes number the steps differently from the tabl
 
 ### Parked: no date, nothing waits on these
 
-- Merge pull request 18 (the agency notes and this file). It is open, not yet merged. Steve says when.
+- Pull request 18 (the agency notes and this file) is merged (5th November 2026).
 - Choose a phase for widening the profession list (decided yes, not scheduled). The reason is in the chat of 5th November: the 5 professions on the site do not separate contact lens fitters, ophthalmic medical assistants (COA and COT) or optical lab technicians, who are different jobs with different employers.
+- Website analytics with Cloudflare Web Analytics, once traffic is flowing (decided 5th November 2026). Steve started the setup in Cloudflare. The site's code has nothing for it yet, and Cloudflare cannot inject it automatically because DNS is at Namecheap and the site is served by Vercel. When the time comes: Claude adds a small component that loads Cloudflare's snippet only on the live site (never the demo or previews), with the token held as a setting in the live Vercel project only. The privacy policy then needs a line naming Cloudflare Web Analytics (no cookies, no following individuals). It gives page views and sources only. Job views and apply clicks are separate and are already planned for Phase 3.
 - Zest: closed. Steve is launching solo and is not reaching back out.
 - The agency idea stays a long term option, in `docs/agency-pathway.md`.
 - Fathom (a meeting notes recorder): dropped unless Steve wants it.
