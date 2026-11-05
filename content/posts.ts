@@ -4,6 +4,35 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "hiring-seasonal-workers",
+    title: "Hiring seasonal workers: the pros and cons for an eye care clinic",
+    description: "Seasonal and short term staff can cover busy weeks and holidays. Here is when it works, what it costs and how to make a short stay run smoothly.",
+    date: "2027-04-09",
+    body: `Eye care clinics have busy stretches. Many people use up their benefits near the end of the year. Back to school brings children in for exams. Summer means holidays and staff who are away. Some clinics hire seasonal or short term workers to get through those weeks. It can work well, and it can also cost more than it saves. Here is how to decide.
+
+## What you gain
+
+The most obvious benefit is cover. A short term person at the front desk or doing pre-testing means your permanent team is not stretched thin, and patients wait less. A seasonal hire is also a low risk way to see someone at work. If they are reliable, warm with patients and quick to learn, you may want to offer them a permanent or part time role, or ask them to come back next season. And it can be the right answer to a one off peak, such as a new location opening or a colleague on leave, where a permanent hire makes no sense.
+
+## What it costs
+
+Training takes time, and the shorter the stay, the larger that cost looks. If it takes 3 weeks for someone to run the pre-test equipment confidently, a 6 week contract gives you very little payoff. Patients also notice changes: a regular who sees a new face every few months may feel less looked after. And a short term hire has less reason to care about the clinic's long term standards, unless you give them one.
+
+Some roles cannot be filled this way. Optometrists and opticians must be registered with the provincial regulator to use the title and practise, so a seasonal opening in those roles means finding someone already registered, such as a locum.
+
+## Getting it right
+
+Decide what the person will do, and keep it narrow: reception, booking, tidying the dispensary, or supervised pre-testing. Write a short checklist for each task so they do not have to ask about the same thing every day. Put the start date, the end date and the pay in writing before they begin. Seasonal staff are still employees and employment standards apply to them, including pay and time off. If you use a staffing agency, ask whether it is licensed where you operate.
+
+Show the pay range in the posting, as you would for any job. Say plainly that the role is seasonal and when it ends, so the people who apply are the people who want it. Our guide to the [job ad checklist](/blog/eye-care-job-ad-checklist) lists what a post must include.
+
+## Make the short stay count
+
+A good first week matters even more for a short contract. Use a simple plan like the one in our post on [onboarding in the first 30 days](/blog/onboarding-first-30-days), and give the person a buddy. At the end, say thank you, ask what they noticed that your team may have missed, and tell them whether you would like them back. If the role would suit someone with no eye care background, our post on [hiring for attitude and training for skills](/blog/hire-for-attitude-train-for-skills) explains how to choose.
+
+[See how posting works](/clinics)`,
+  },
+  {
     slug: "ask-for-a-raise",
     title: "How to ask for a raise in an eye care job",
     description: "Asking for more pay is easier with a plan. Here is how to prepare, when to ask, what to say and what to do if the answer is not yet.",
