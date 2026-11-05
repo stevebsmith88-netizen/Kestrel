@@ -4,14 +4,15 @@ import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS, formatPay, longDate, practiceLabel } from "@/lib/jobs";
-import { PAGE_SIZE, cleanFilters, searchJobs, type JobFilters } from "@/lib/public-jobs";
+import { RADIUS_OPTIONS, placeLabel } from "@/lib/places";
+import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
 // Every search and page number is its own address with the same title, so only the plain /jobs page is offered to Google.
 // Searches and later pages can still be followed to the jobs, but they are not listed.
 export async function generateMetadata({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
   const filters = cleanFilters(await searchParams);
-  const narrowed = Boolean(filters.q || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.page ?? 1) > 1);
+  const narrowed = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.page ?? 1) > 1);
   return {
     ...shareMetadata({
       title: "Find eye care jobs",
@@ -26,7 +27,8 @@ export const dynamic = "force-dynamic";
 
 function pageHref(filters: JobFilters, page: number) {
   const params = new URLSearchParams();
-  (["q", "province", "role", "practice", "arrangement"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
+  (["q", "city", "province", "role", "practice", "arrangement"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
+  if (filters.city && filters.radius) params.set("radius", String(filters.radius));
   filters.type?.forEach((t) => params.append("type", t));
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
@@ -35,8 +37,8 @@ function pageHref(filters: JobFilters, page: number) {
 
 export default async function Jobs({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const filters = cleanFilters(await searchParams);
-  const { jobs, total } = await searchJobs(filters);
-  const filtered = Boolean(filters.q || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement);
+  const [{ jobs, total, place, placeNotFound }, counts] = await Promise.all([searchJobs(filters), getFilterCounts()]);
+  const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement);
   const page = filters.page ?? 1;
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -50,20 +52,20 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
 
           <form method="get" action="/jobs" className="searchform" role="search" aria-label="Search jobs">
             <div className="sf-main">
-              <label className="sr" htmlFor="s-q">Role, keyword or city</label>
-              <input id="s-q" name="q" type="text" placeholder="Role, keyword or city" defaultValue={filters.q} />
+              <label className="sr" htmlFor="s-q">Role or keyword</label>
+              <input id="s-q" name="q" type="text" placeholder="Role or keyword" defaultValue={filters.q} />
               <button type="submit" className="btn">Search</button>
             </div>
             <div className="sf-filters">
               <label className="sr" htmlFor="s-role">Role</label>
               <select id="s-role" name="role" defaultValue={filters.role}>
                 <option value="">Any role</option>
-                {ROLE_CATEGORIES.map((r) => <option key={r} value={r}>{r}</option>)}
+                {ROLE_CATEGORIES.filter((r) => counts.roles[r] || r === filters.role).map((r) => <option key={r} value={r}>{r} ({counts.roles[r] ?? 0})</option>)}
               </select>
               <label className="sr" htmlFor="s-province">Province or territory</label>
               <select id="s-province" name="province" defaultValue={filters.province}>
                 <option value="">All of Canada</option>
-                {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
+                {PROVINCES.filter((p) => counts.provinces[p] || p === filters.province).map((p) => <option key={p} value={p}>{p} ({counts.provinces[p] ?? 0})</option>)}
               </select>
               <label className="sr" htmlFor="s-practice">Type of employer</label>
               <select id="s-practice" name="practice" defaultValue={filters.practice}>
@@ -74,6 +76,14 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               <select id="s-arrangement" name="arrangement" defaultValue={filters.arrangement}>
                 <option value="">On site or field based</option>
                 {WORK_ARRANGEMENTS.map((w) => <option key={w.value} value={w.value}>{w.value === "field" ? "Field based only" : "On site only"}</option>)}
+              </select>
+            </div>
+            <div className="sf-filters sf-place">
+              <label className="sr" htmlFor="s-city">City or town</label>
+              <input id="s-city" name="city" type="text" placeholder="City or town, for example Ottawa" defaultValue={filters.city} autoComplete="off" />
+              <label className="sr" htmlFor="s-radius">How far from there</label>
+              <select id="s-radius" name="radius" defaultValue={String(filters.radius ?? 25)}>
+                {RADIUS_OPTIONS.map((r) => <option key={r} value={r}>Within {r} km</option>)}
               </select>
             </div>
             <fieldset className="sf-types">
@@ -89,22 +99,31 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
 
           {jobs.length === 0 ? (
             <section className="card emptystate">
-              {filtered ? (
+              {placeNotFound ? (
+                <>
+                  <h2>We could not find that place</h2>
+                  <p>Check the spelling, or try the nearest larger town. We cover towns of about 1,000 people or more. You can also <Link href="/jobs">start again</Link>.</p>
+                </>
+              ) : filtered ? (
                 <>
                   <h2>No jobs match yet</h2>
-                  <p>Try fewer filters, or <Link href="/jobs">start again</Link>. New jobs are added all the time.</p>
+                  <p>Try fewer filters{filters.city ? " or a larger distance" : ""}, or <Link href="/jobs">start again</Link>. New jobs are added all the time. If you would like a heads up when one fits, set up a job alert once you have an account.</p>
+                  <Link href="/#join" className="btn">Join the waitlist</Link>
                 </>
               ) : (
                 <>
-                  <h2>Job search opens soon</h2>
-                  <p>We are still building Kestrel, and the first jobs will appear here shortly. Join the waitlist and we will tell you the moment they do.</p>
-                  <Link href="/#join" className="btn">Join the waitlist</Link>
+                  <h2>We are still building Kestrel</h2>
+                  <p>There are no jobs here yet, and we are sorry to say so. If you know a clinic that is hiring, please tell them we exist. Join the waitlist and we will tell you the moment the first jobs appear.</p>
+                  <p className="emptyactions">
+                    <Link href="/#join" className="btn">Join the waitlist</Link>{" "}
+                    <a className="btn ghost" href="mailto:?subject=A%20new%20eye%20care%20job%20board&body=Kestrel%20Eye%20Care%20Jobs%20is%20a%20new%20job%20board%20for%20eye%20care%20in%20Canada.%20Clinics%20can%20post%20jobs%20at%20https%3A%2F%2Feyecarejobs.ca%2Fclinics">Tell a clinic you know</a>
+                  </p>
                 </>
               )}
             </section>
           ) : (
             <>
-              <p className="resultcount" role="status">{total} {total === 1 ? "job" : "jobs"}</p>
+              <p className="resultcount" role="status">{total} {total === 1 ? "job" : "jobs"}{place ? ` within ${filters.radius ?? 25} km of ${placeLabel(place)}, and field based jobs` : ""}</p>
               <div className="joblist">
                 {jobs.map((j) => (
                   <article className="card jobcard" key={j.id}>
@@ -137,6 +156,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               )}
             </>
           )}
+          <p className="help creditline">Place data from <a href="https://www.geonames.org/" rel="noopener">GeoNames</a>, used under CC BY 4.0.</p>
         </div>
       </main>
       <AppFooter />

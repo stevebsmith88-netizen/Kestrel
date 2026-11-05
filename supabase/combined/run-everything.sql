@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0026), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0027), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1767,6 +1767,40 @@ revoke all on public.clinic_leads from anon, authenticated;
 
 alter table public.jobs add column if not exists posted_by_admin_id uuid references auth.users (id) on delete set null;
 alter table public.jobs add column if not exists posted_by_admin_at timestamptz;
+
+-- ======================================================================
+-- 0027_vision_therapist.sql
+-- ======================================================================
+-- Vision therapist as a role, everywhere a role is checked (jobs, candidate profiles, job alerts and job templates).
+-- Safe to run more than once.
+
+alter table public.jobs drop constraint if exists jobs_role_category_check;
+alter table public.jobs add constraint jobs_role_category_check check (role_category in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception', 'Vision therapist',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
+
+alter table public.candidate_profiles drop constraint if exists candidate_profiles_profession_check;
+alter table public.candidate_profiles add constraint candidate_profiles_profession_check check (profession is null or profession in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception', 'Vision therapist',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
+
+alter table public.job_alerts drop constraint if exists job_alerts_role_category_check;
+alter table public.job_alerts add constraint job_alerts_role_category_check check (role_category is null or role_category in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception', 'Vision therapist',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
+
+alter table public.job_templates drop constraint if exists job_templates_role_category_check;
+alter table public.job_templates add constraint job_templates_role_category_check check (role_category is null or role_category in (
+  'Optometrist', 'Optician', 'Optometric assistant or technician',
+  'Practice or clinic manager', 'Patient care or reception', 'Vision therapist',
+  'Sales or territory representative', 'Trainer or clinical educator',
+  'Field service or equipment technician', 'Account or practice development manager'));
 
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
