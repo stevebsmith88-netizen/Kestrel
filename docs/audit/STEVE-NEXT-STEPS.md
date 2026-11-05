@@ -48,9 +48,9 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 4. Pay benchmark: official Job Bank wages data from open.canada.ca first (needs `opencanada.blob.core.windows.net` allowed), a labelled AI starting range per province where data is missing, and Kestrel's own posted pay as ads arrive. Separate from the automation plan.
 5. First region plan: Toronto and Ontario first, then Alberta and British Columbia.
 6. DONE: automation plan phases, in `docs/automation-plan.md`.
-7. DONE and merged (5th November): audit items R22, R25 and R45. Steve still runs `supabase/migrations/0024_sign_in_attempts.sql` on both databases. Until then the sign in guard does nothing and nothing breaks.
+7. DONE and merged (5th November): audit items R22, R25 and R45. Steve has run `supabase/migrations/0024_sign_in_attempts.sql` on both databases, so the sign in guard is working.
 8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in.
-9. Check that the found listings tool (`/admin/found`) works end to end on the demo. Needs Steve's test with a real careers page.
+9. Found listings tool (`/admin/found`): built, with the careers page finder, the reader, a province search that saves clinics as leads (migrations 0023 and 0025, run on both databases) and a Setup check box with test buttons. Tested on the live site with a Nova Scotia search. Steve keeps trying real clinics and tells Claude what the reader gets wrong. Publishing stays off (`ENABLE_SEEDING`). See `docs/found-listings.md`, which ends with the decisions made and the open items.
 10. DONE and merged (pull request 29, 6th November): admin posts a job for a clinic (Admin, Overview, Post for a clinic). Migration 0026 is in `run-everything.sql`. Steve tries it on the demo.
 11. DONE in another chat (Steve, 5th November): ad builder improvements.
 12. Empty state and "know a clinic?" landing page for searches with no jobs yet.
@@ -58,14 +58,16 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 14. Launch flyer: the first HTML draft was rejected. Outward facing designs are made in Canva (4 options generated on 5th November, Steve picks one and Claude adjusts it). Kept unpublished until Gate A is passed.
 15. Plan with Steve, when he is ready: PWA (installable web app), the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
 16. A shared mailbox for `ADMIN_BACKUP_EMAIL` (Steve sets up a Google group) and a labels plan for his email categories.
+17. Found listings, for Steve: add to the lawyer pack (the database of clinics' published business emails, an outreach email for clinics found through a job board, and whether Steve's ad writing templates, written at work, may be used in Kestrel). Decide whether to add a separate headline field to jobs (the job title stays plain for Google's job results). Claude rebuilds the lawyer pack when he says.
 
 ### Anthropic key, quick walk through (for the ad builder and the found listings tool)
 
 1. Sign in at console.anthropic.com with kestrel@eyecarejobs.ca and open API keys.
 2. Create a key named `kestrel-website` (live) and a second named `kestrel-demo` for the demo project. Copy each once.
-3. Set a monthly spend limit on the account so a mistake cannot run up a bill.
-4. In Vercel, each project, Settings, Environment Variables: add `ANTHROPIC_API_KEY` (Production and Preview), mark it Sensitive, then redeploy.
-5. Test the ad builder with Write my ad on the demo. The live site stays locked down until launch.
+3. Set a monthly spend limit on the account so a mistake cannot run up a bill. Make each key inside the Kestrel workspace (a key made outside a workspace is refused with "not scoped to a workspace"), or set `ANTHROPIC_WORKSPACE_ID` in Vercel.
+4. Switch on web search for the account in the console's settings (the province search needs it).
+5. In Vercel, each project, Settings, Environment Variables: add `ANTHROPIC_API_KEY` (Production and Preview), mark it Sensitive, then redeploy.
+6. Open Admin, Overview, Found listings, then the Setup check box, and press Test Claude (and Test web search). It says whether the key works on that site. Then try Write my ad on the demo.
 The key is listed in `docs/security.md` with how to rotate it.
 
 ## Extra questions raised on 5th November (status)
