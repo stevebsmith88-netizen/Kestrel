@@ -66,3 +66,16 @@ export function nearbyKeys(centre: Place, km: number): Set<string> {
 }
 
 export const placeLabel = (p: Place) => `${p.name}, ${p.province}`;
+
+// The larger towns in a province, biggest first, for searching a province town by town. Each name appears once.
+export function largerTowns(province: string, max = 8, minPopulation = 5000): string[] {
+  const seen = new Set<string>();
+  const names: string[] = [];
+  for (const p of [...PLACES].sort((a, b) => b.population - a.population)) {
+    if (p.province !== province || p.population < minPopulation || seen.has(norm(p.name))) continue;
+    seen.add(norm(p.name));
+    names.push(p.name);
+    if (names.length >= max) break;
+  }
+  return names;
+}

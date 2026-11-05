@@ -3,18 +3,78 @@
 import { useState } from "react";
 import { Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
-import { findContactEmails, saveLead, searchProvince, type EmailState, type LeadSaveState, type LeadView, type SearchState } from "@/lib/lead-actions";
+import { findContactEmails, saveLead, searchProvince, townsToSearch, type EmailState, type LeadSaveState, type LeadView, type SearchState } from "@/lib/lead-actions";
 import { PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 
 const SOURCE: Record<string, string> = { own_site: "The clinic's own site", hiring_system: "The clinic's hiring page", job_board: "Seen on a job board" };
 
 // Province search: clinics that appear to be hiring. Each card shows what the page says, and offers the next steps.
+type Sweep = { running: boolean; progress: string; leads: LeadView[]; dropped: number; message?: string; error?: string };
+const hostKey = (website: string) => {
+  try {
+    return new URL(website).hostname.replace(/^www\./, "");
+  } catch {
+    return website;
+  }
+};
+
 export default function ProvinceSearch({ onUsePage, onFindPage }: { onUsePage: (url: string) => void; onFindPage: (website: string) => void }) {
   const { state, pending, submit } = useServerForm<SearchState>(searchProvince);
+  const [sweep, setSweep] = useState<Sweep | null>(null);
+  const [form, setForm] = useState<HTMLFormElement | null>(null);
+
+  // Searches the province's larger towns one after another, so one click covers more than a whole province search can in one go.
+  // Each town is its own search, and the clinics found are put together, with each clinic once.
+  async function runSweep() {
+    if (!form) return;
+    const data = new FormData(form);
+    const province = String(data.get("province") ?? "");
+    const role = String(data.get("role") ?? "");
+    if (!province) {
+      setSweep({ running: false, progress: "", leads: [], dropped: 0, error: "Choose a province or territory first." });
+      return;
+    }
+    setSweep({ running: true, progress: "Finding the larger towns", leads: [], dropped: 0 });
+    const towns = await townsToSearch(province);
+    const seen = new Map<string, LeadView>();
+    let dropped = 0;
+    let worked = 0;
+    let lastError = "";
+    for (let i = 0; i < towns.length; i++) {
+      setSweep((s) => ({ ...(s as Sweep), running: true, progress: `Searching ${towns[i]} (${i + 1} of ${towns.length}). Each town takes up to 2 minutes.` }));
+      const one = new FormData();
+      one.set("province", province);
+      one.set("role", role);
+      one.set("city", towns[i]);
+      try {
+        const result = await searchProvince({}, one);
+        if (result.error) {
+          lastError = result.error;
+          if (/daily limit/i.test(result.error)) break;
+          continue;
+        }
+        worked += 1;
+        dropped += result.dropped ?? 0;
+        for (const lead of result.leads ?? []) if (!seen.has(hostKey(lead.website))) seen.set(hostKey(lead.website), lead);
+      } catch {
+        lastError = "A search could not be sent. Check your connection and try again.";
+      }
+      setSweep((s) => ({ ...(s as Sweep), leads: [...seen.values()], dropped }));
+    }
+    setSweep({
+      running: false,
+      progress: "",
+      leads: [...seen.values()],
+      dropped,
+      message: `${seen.size} ${seen.size === 1 ? "clinic" : "clinics"} that look like they are hiring, from ${worked} of ${towns.length} towns. Dates and pay are only shown when the page says them.`,
+      ...(lastError ? { error: lastError } : {}),
+    });
+  }
+  const shown = sweep && (sweep.running || sweep.leads.length || sweep.message || sweep.error) ? sweep : null;
   const e = state.errors ?? {};
   return (
     <section aria-label="Province search" className="stackcards">
-      <form onSubmit={submit} noValidate className="panel formpanel">
+      <form ref={setForm} onSubmit={submit} noValidate className="panel formpanel">
         <h2 className="formh">Search a province for clinics that are hiring</h2>
         <p className="help">Claude searches the web for eye care employers in the province, then finds each one&apos;s own website. Job boards can show that a clinic is hiring, but Indeed, LinkedIn, Jobs4ECPs, college registers and Eye Recommend are never used. It takes up to 2 minutes.</p>
         <div className="pair">
@@ -36,14 +96,21 @@ export default function ProvinceSearch({ onUsePage, onFindPage }: { onUsePage: (
         </Field>
         {state.error && !e.province && <p className="err form-err" role="alert">{state.error}</p>}
         {state.message && <p className="ok-msg" role="status">{state.message}</p>}
-        <button type="submit" className="btn" disabled={pending}>{pending ? "Searching (up to 2 minutes)" : "Search"}</button>
+        <div className="formbtns">
+          <button type="submit" className="btn" disabled={pending || sweep?.running}>{pending ? "Searching (up to 2 minutes)" : "Search"}</button>
+          <button type="button" className="btn ghost" disabled={pending || sweep?.running} onClick={runSweep}>{sweep?.running ? "Searching the towns" : "Search the larger towns"}</button>
+        </div>
+        <p className="help">&quot;Search the larger towns&quot; searches up to 8 of the province&apos;s biggest towns one after another, which finds more than one search of the whole province. It takes several minutes, so keep this page open. Each town counts as one of today&apos;s searches.</p>
+        {shown?.progress && <p className="help" role="status" aria-live="polite">{shown.progress}</p>}
+        {shown?.error && <p className="err form-err" role="alert">{shown.error}</p>}
+        {shown?.message && <p className="ok-msg" role="status">{shown.message}</p>}
       </form>
-      {state.leads && state.leads.length > 0 && (
+      {(shown ? shown.leads : state.leads) && (shown ? shown.leads : state.leads)!.length > 0 && (
         <div className="joblist">
-          {state.leads.map((lead) => <LeadCard key={lead.website} lead={lead} onUsePage={onUsePage} onFindPage={onFindPage} />)}
+          {(shown ? shown.leads : state.leads)!.map((lead) => <LeadCard key={lead.website} lead={lead} onUsePage={onUsePage} onFindPage={onFindPage} />)}
         </div>
       )}
-      {state.leads && state.dropped ? <p className="help">{state.dropped} results were left out: no website for the clinic, a source we never use, or a clinic already on Kestrel.</p> : null}
+      {(shown ? shown.dropped : state.leads && state.dropped) ? <p className="help">{shown ? shown.dropped : state.dropped} results were left out: no website for the clinic, a source we never use, or a clinic already on Kestrel.</p> : null}
     </section>
   );
 }
