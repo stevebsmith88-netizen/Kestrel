@@ -44,14 +44,14 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 
 1. DONE and merged: the 2 rewritten posts, the 14 weekly posts (20th November 2026 to 2nd April 2027) and a post on hiring seasonal workers (9th April 2027). Add Job Bank figures to the optometric assistant post once they can be checked.
 2. DONE: review of the published posts (end of `docs/blog.md`).
-3. City and radius search with counts beside each option (10, 25 and 50 km). The GeoNames file loads now. SQL on both databases. Roles shown in filters only when they have live jobs.
+3. DONE and merged (pull request 33, 6th November): city and radius search (10, 25 and 50 km, field based jobs always show), filters that only offer roles and provinces with live jobs and show counts, friendlier empty states, and the Vision therapist role. Steve runs `run-everything.sql` on both databases for the Vision therapist rule (migration 0027).
 4. Pay benchmark: official Job Bank wages data from open.canada.ca first (needs `opencanada.blob.core.windows.net` allowed), a labelled AI starting range per province where data is missing, and Kestrel's own posted pay as ads arrive. Separate from the automation plan.
 5. First region plan: Toronto and Ontario first, then Alberta and British Columbia.
 6. DONE: automation plan phases, in `docs/automation-plan.md`.
 7. DONE and merged (5th November): audit items R22, R25 and R45. Steve still runs `supabase/migrations/0024_sign_in_attempts.sql` on both databases. Until then the sign in guard does nothing and nothing breaks.
 8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in.
 9. Check that the found listings tool (`/admin/found`) works end to end on the demo. Needs Steve's test with a real careers page.
-10. BUILT, in pull request 29 (waiting for Steve to try it on the preview or demo, then merge): admin posts a job for a clinic (Admin, Overview, Post for a clinic). Needs migration 0026, which is in `run-everything.sql`.
+10. DONE and merged (pull request 29, 6th November): admin posts a job for a clinic (Admin, Overview, Post for a clinic). Migration 0026 is in `run-everything.sql`. Steve tries it on the demo.
 11. DONE in another chat (Steve, 5th November): ad builder improvements.
 12. Empty state and "know a clinic?" landing page for searches with no jobs yet.
 13. DONE and merged: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
