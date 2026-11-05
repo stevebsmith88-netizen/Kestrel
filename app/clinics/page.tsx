@@ -29,7 +29,13 @@ export default function Clinics() {
             Independent practices and corporate groups post side by side, with the same tools. Whether you are hiring one optician or filling roles at several locations, you see every applicant with their CV and cover letter. Your contact details stay private.
           </p>
           <p>
-            Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants?
+            Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants? The form asks for them, which covers what Ontario and British Columbia now expect, so a post cannot go live without them and you are not caught out later.
+          </p>
+          <p>
+            Recruiters, staffing agencies and job brokers cannot post on Kestrel or contact candidates through it. Every ad you stand next to comes from a clinic or an employer in the industry.
+          </p>
+          <p>
+            You do not need a polished ad to start. Write a few lines about the role and the ad builder gives you a draft to edit. A person reads each post before it goes live, and once it does you follow every applicant in one place.
           </p>
           <section className="pricing" aria-labelledby="pricing-h">
             <h2 id="pricing-h">One price. 30 days.</h2>
