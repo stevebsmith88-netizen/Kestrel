@@ -85,3 +85,23 @@ Filters should show only roles that have live jobs, so the board does not look e
 ## 9. Pay benchmark
 
 Use official data first: the federal Job Bank wages dataset on open.canada.ca (Wages, with a CSV per year). Its files are stored on `opencanada.blob.core.windows.net`, which must be allowed in the cloud environment. As a stopgap where official data is missing, an AI sweep per province can give a rough starting range, labelled "starting point, from public data" and replaced by Kestrel's own posted pay as ads arrive. AI figures must never be shown as fact without that label.
+
+## 10. Follow ups, 5th November evening
+
+**Friends and family money, clarified.** Steve's idea: 10 doctors or silent investors at $1,000 each, each getting 1%, for $10,000 in total.
+
+- 1% for $1,000 means the company is valued at $100,000 after the money goes in. That is a plausible number for a pre revenue business, but if Kestrel reaches its $150,000 a year revenue target it would be cheap equity. Giving 10% of the business away for $10,000 is a real decision: decide it with the accountant.
+- Ten small shareholders also bring paperwork: a shareholder agreement, notices, tax slips and a vote on some decisions. A SAFE or a convertible note with a valuation cap delays the valuation question and the shareholder admin until a later round. The lawyer decides the structure, and the exemptions that let each person invest (for example the family, friends and close business associates exemption, or an investor qualifying as an accredited investor).
+- **A Kickstarter style alternative that needs no equity:** founding clinic credit packs. A clinic pays up front for a pack of posts at a discount (for example $1,000 for a pack of 20 posts, which would be $1,580 at the $79 standard price) that it can use over 12 to 24 months. Ten packs raises $10,000, avoids dilution and shows real demand. Rules: write the terms down, limit the number of packs, give a refund policy, and ask the accountant about HST and how prepaid income is recorded. It is a customer prepayment, not an investment, so do not call it one. The company, bank account and Stripe (Gate A) must exist first.
+- "Free posts" for an investor should be a nominal number of posts over 1 or 2 years, written down, and kept apart from the share terms.
+- Steve works at Eye Recommend, so any investor tied to it goes into the disclosure conversation.
+
+**LinkedIn and SEO.** A company page rarely lifts Google rankings directly. What it does is build brand searches ("Kestrel Eye Care Jobs"), give people somewhere to find and share the blog, and bring links when others share a post. It is worth doing for those reasons.
+
+**Reddit.** Findings from search (verify on Reddit itself):
+
+- r/optometry is the main eye care subreddit (about 52,000 members), and many Canadian opticians and optometrists use it. Its rules limit posting to eye care professionals, and posts from others are removed. People without flair may have posts removed.
+- A dedicated Canadian eye care subreddit and r/optician could not be confirmed. Search Reddit for "Canada optician" and check each subreddit's rules.
+- OptiBoard has a Canadian Discussion Forum, which is a forum, not Reddit.
+
+How to approach it: read each community's rules first. Message the moderators before posting anything that mentions Kestrel, say who you are and what you want to share, and ask what is allowed. Spend most of your time answering questions and adding useful comments, with no links. Share a blog post only when it answers someone's actual question, and say it is yours. Never post jobs unless the rules allow it, never use fake accounts, and use your own account. Because Steve works at Eye Recommend, hold promotional posts until after the disclosure conversation, and never use Eye Recommend's name or material.
