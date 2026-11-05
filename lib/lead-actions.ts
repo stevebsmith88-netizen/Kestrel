@@ -8,6 +8,7 @@ import { ALREADY_ON_KESTREL, clinicsAtSite } from "@/lib/found-db";
 import { fetchPage } from "@/lib/fetch-page";
 import type { JobFormState } from "@/lib/jobs";
 import { PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { largerTowns } from "@/lib/places";
 import { SEARCHES_PER_DAY, jsonFromAnswer, leadWebsiteKey, normaliseLeads, validateLead, type Lead } from "@/lib/leads";
 import { SEARCH_BLOCKED_DOMAINS, hostOfUrl, mentionsEyeRecommend, rankEmails, refuseAddress } from "@/lib/page-reader";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -101,6 +102,12 @@ async function searchWithClaude(key: string, request: string): Promise<string> {
 }
 
 class SearchProblem extends Error {}
+
+// The larger towns of a province, for searching it town by town (the admin page asks for these, then searches each in turn).
+export async function townsToSearch(province: string): Promise<string[]> {
+  await requireRole("admin");
+  return (PROVINCES as readonly string[]).includes(province) ? largerTowns(province) : [];
+}
 
 export async function searchProvince(_prev: SearchState, form: FormData): Promise<SearchState> {
   const session = await requireRole("admin");

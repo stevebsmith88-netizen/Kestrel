@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { distanceKm, findPlace, nearbyKeys, norm, placeKey } from "./places.ts";
+import { distanceKm, findPlace, largerTowns, nearbyKeys, norm, placeKey } from "./places.ts";
 
 test("places are found by name, ignoring accents, full stops and capitals", () => {
   assert.equal(findPlace("toronto")?.province, "Ontario");
@@ -42,4 +42,14 @@ test("the same city name in another province is a different place", () => {
   const victoriaBc = findPlace("Victoria", "British Columbia")!;
   assert.ok(!nearbyKeys(victoriaBc, 50).has(placeKey("Victoria", "Newfoundland and Labrador")));
   assert.equal(norm("Québec City"), "quebec city");
+});
+
+test("the larger towns of a province come biggest first, once each, and only those with enough people", () => {
+  const towns = largerTowns("Nova Scotia");
+  assert.equal(towns[0], "Halifax");
+  assert.ok(towns.length >= 4 && towns.length <= 8);
+  assert.equal(new Set(towns).size, towns.length);
+  assert.ok(largerTowns("Nunavut").length <= 8);
+  assert.deepEqual(largerTowns("Atlantis"), []);
+  assert.ok(largerTowns("Ontario", 3).length === 3);
 });

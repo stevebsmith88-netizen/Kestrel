@@ -10,7 +10,8 @@
 import { PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "./jobs.ts";
 import { hostOfUrl, isHiringSystem, isNeverHost, isOtherJobBoard, mentionsEyeRecommend, siteKey } from "./page-reader.ts";
 
-export const SEARCHES_PER_DAY = 10;
+// A search of one town counts as one. A sweep of a province's larger towns uses several.
+export const SEARCHES_PER_DAY = 40;
 export const MAX_LEADS = 30;
 
 export type LeadSource = "own_site" | "hiring_system" | "job_board";
