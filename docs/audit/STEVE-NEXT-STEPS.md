@@ -38,11 +38,11 @@ Steps 3 onwards in the Gate A table below: the disclosure, incorporation, bank, 
 ## Claude's list, in priority order
 
 1. Rewrite the 2 scheduled blog posts once Steve's notes arrive (item 3).
-2. Read the 3 published blog posts for generic advice and list what only Steve can supply.
+2. DONE (5th November): read the published blog posts for generic advice and list what only Steve can supply. See the review at the end of `docs/blog.md`.
 3. City and radius search, with counts beside each option (radius 10, 25 and 50 km). SQL on both databases. Needs the places data (item 5) and the decisions in item 6.
 4. Pay benchmark for clinics: Job Bank wage data first, Kestrel's own posted pay later. Check the licence and attribution, and add the benchmark question to the lawyer pack. Needs item 5.
 5. Chicken or egg plan: propose the first region, the role mix and the seeding order, once Steve names the provinces (item 8).
-6. Automation plan: turn the 4 steps into a phased plan with sizes and gates, to discuss.
+6. DONE (5th November): automation plan turned into phases with sizes and gates, in `docs/automation-plan.md`, to discuss. It ends with 4 decisions for Steve.
 7. Audit items R25, R22 and R45. Decide what to do with the old `email-auto-reply` branch.
 8. Add LinkedIn as count rows to the market count sheet if Steve wants it, and move any numbers he has already typed into the new layout.
 9. To plan with Steve, when he is ready: widen the profession list (what it touches, which phase); the pathways roadmap (check each step against the regulators' own pages, then decide between a blog post and a guide page); the figures check (confirm the market figures against primary sources and settle whether the VisionWatch data is from 2015 or 2019); a competitor and hiring review by hand from public pages, with no scraping; trends content (myopia, AMD, technology) that needs Steve's specifics.
