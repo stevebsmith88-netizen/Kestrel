@@ -9,7 +9,7 @@ import { fetchPage } from "@/lib/fetch-page";
 import type { JobFormState } from "@/lib/jobs";
 import { PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 import { largerTowns } from "@/lib/places";
-import { SEARCHES_PER_DAY, jsonFromAnswer, leadWebsiteKey, normaliseLeads, validateLead, type Lead } from "@/lib/leads";
+import { SEARCHES_PER_DAY, describeDropped, jsonFromAnswer, leadWebsiteKey, normaliseLeads, validateLead, type Lead } from "@/lib/leads";
 import { SEARCH_BLOCKED_DOMAINS, hostOfUrl, mentionsEyeRecommend, rankEmails, refuseAddress } from "@/lib/page-reader";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -22,7 +22,7 @@ const MODEL = process.env.PAGE_READER_MODEL || "claude-sonnet-5-5";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export type LeadView = Lead & { saved: boolean };
-export type SearchState = JobFormState & { leads?: LeadView[]; dropped?: number; searched?: string };
+export type SearchState = JobFormState & { leads?: LeadView[]; dropped?: number; searched?: string; leftOut?: string };
 export type EmailState = JobFormState & { emails?: { email: string; sourceUrl: string }[] };
 export type LeadSaveState = JobFormState & { saved?: boolean };
 
@@ -36,7 +36,7 @@ Find employers in the province you are given: optometry clinics, optical stores,
 - posted_text: when the opening was posted or its closing date, copied as the page states it (for example "Posted 3 days ago" or "Closes 30 November"). An empty string if the page gives no date. Never work one out.
 - pay_as_written: the pay as the page words it, or an empty string. Never estimate pay. Ignore pay "estimates" from job boards.
 - source_url: the web address where you saw the opening.
-- city and province: where the job is. practice_type: independent, corporate (a chain, a retailer with an optical department, a large group) or supplier, or an empty string if you cannot tell.
+- city and province: where the job is, as the page states it. The job must be in the province you are given. Leave out any employer whose job is in another province or city outside it, and never guess a location. practice_type: independent, corporate (a chain, a retailer with an optical department, a large group) or supplier, or an empty string if you cannot tell.
 - note: 1 short sentence if something needs checking (for example "page looks old"), otherwise an empty string.
 
 Rules:
@@ -138,7 +138,7 @@ export async function searchProvince(_prev: SearchState, form: FormData): Promis
     await record(0, "failed", message);
     return { error: message };
   }
-  const { leads, dropped } = normaliseLeads(jsonFromAnswer(answer), province);
+  const { leads, dropped, reasons } = normaliseLeads(jsonFromAnswer(answer), province);
 
   // Leave out clinics that already have their own Kestrel account, and mark the ones already saved.
   const keep: LeadView[] = [];
@@ -159,7 +159,8 @@ export async function searchProvince(_prev: SearchState, form: FormData): Promis
     leads: keep,
     dropped: dropped + onKestrel,
     searched: label,
-    message: `${keep.length} ${keep.length === 1 ? "clinic" : "clinics"} that look like they are hiring. Dates and pay are only shown when the page says them.`,
+    leftOut: [describeDropped(reasons), onKestrel ? `${onKestrel} already on Kestrel.` : ""].filter(Boolean).join(" "),
+    message: `${keep.length} ${keep.length === 1 ? "clinic" : "clinics"} that look like they are hiring in ${province}. Dates and pay are only shown when the page says them.`,
   };
 }
 
