@@ -9,7 +9,7 @@ export default function PayGuide({ provinces, rows, initial }: { provinces: stri
   const [province, setProvince] = useState(initial);
   const id = useId();
   return (
-    <div className="payguide">
+    <div className="paytable">
       <label htmlFor={`${id}-province`}>Province</label>
       <select id={`${id}-province`} value={province} onChange={(e) => setProvince(e.target.value)}>
         {provinces.map((p) => (

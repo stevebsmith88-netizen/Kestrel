@@ -16,7 +16,7 @@ export default function PayBenchmark({ role, province, period, min, max, own }: 
       <p className="pg-kicker" id="pg-h">{m.heading}</p>
       <p className="pg-lead">{m.lead}</p>
       {m.detail && <p>{m.detail}</p>}
-      <p className="help">{m.short}</p>
+      <p className="help">{m.short} <a href="/resources#pay" target="_blank" rel="noopener noreferrer">Pay in other provinces</a>.</p>
       <details className="pgdetails">
         <summary><span className="plus" aria-hidden="true">+</span> Source and details</summary>
         <p className="help">{m.source}</p>

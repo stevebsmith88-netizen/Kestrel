@@ -504,11 +504,14 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .resources h2{margin-top:44px}
 .resources h3{font:400 1.25rem/1.25 "DM Serif Display",Georgia,serif;margin:26px 0 6px}
 .resources label{display:block;font-weight:600;margin:18px 0 6px}
-.payguide select{max-width:360px}
-.payguide .table{min-width:640px}
-.payguide .table caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
-.payguide .table tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy)}
+.paytable select{max-width:360px}
+.paytable .table{min-width:640px}
+.paytable .table caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
+.paytable .table tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy)}
 .pg-sub{display:block;color:var(--muted);font-size:0.8125rem}
 .resources .linklist{list-style:none;padding:0}
 .resources .linklist li{margin:12px 0}
 .resources .linklist span{display:block;font-size:0.9375rem}
+.cmp caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
+.cmp tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy)}
+.table.cmp{min-width:600px}

@@ -35,3 +35,9 @@ Built 6th November 2026 on branch `claude/amazing-keller-c7k18u` (waiting for St
 - Publish something quotable and dated that others can cite: the pay table and a yearly Canadian eye care hiring summary built from Job Bank data.
 - Use the same name, description and logo everywhere (site, social pages, profiles).
 - Later: ask trade publications to cover the launch, once the disclosure conversation has happened.
+
+## Built since (6th November 2026)
+
+- Resources page went live in pull request 46 (footer link). Added on the next branch, waiting for Steve's preview: a link from the pay guide on the post a job form ("Pay in other provinces") and one in the box at the end of every blog post.
+- Price comparison page at `/compare`: `app/compare/page.tsx` and `lib/compare-prices.ts`. Off on the live site until `ENABLE_COMPARE=yes`, visible on previews. Compares Kestrel (prices from `lib/pricing.ts`), Eluta and OJobs only. Jobs4ECPs left off (see docs/competitor-pricing.md). Needs the lawyer and a fresh price check first.
+- Buying groups blog post: draft in `docs/blog-drafts/buying-groups.md`, held back.

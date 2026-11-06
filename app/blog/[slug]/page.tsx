@@ -56,7 +56,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           <BlogBody body={post.body} />
           <section className="card blogcta" aria-labelledby="blogcta-h">
             <h2 id="blogcta-h">Looking for work, or hiring?</h2>
-            <p>Kestrel is a Canada-wide eye care job board for clinics and professionals.</p>
+            <p>Kestrel is a Canada-wide eye care job board for clinics and professionals. See typical pay by province and the hiring rules on our <Link href="/resources">Resources page</Link>.</p>
             <p className="formbtns"><Link href="/jobs" className="btn">Find jobs</Link><Link href="/clinics" className="btn ghost">Post a job</Link></p>
           </section>
           {more.length > 0 && (

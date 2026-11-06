@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { comparePageOn } from "@/lib/compare-prices";
 import { POSTS } from "@/content/posts";
 import { visiblePosts } from "@/lib/blog";
 import { demoMode } from "@/lib/demo";
@@ -20,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/clinics`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${SITE}/resources`, changeFrequency: "monthly", priority: 0.6 },
+    ...(comparePageOn() ? [{ url: `${SITE}/compare`, changeFrequency: "monthly" as const, priority: 0.5 }] : []),
     ...visiblePosts(POSTS, new Date(), false).map((p) => ({ url: `${SITE}/blog/${p.slug}`, lastModified: p.updated ?? p.date, changeFrequency: "monthly" as const, priority: 0.6 })),
     { url: `${SITE}/privacy`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE}/terms`, changeFrequency: "yearly", priority: 0.2 },
