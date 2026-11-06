@@ -622,6 +622,33 @@ From there, some assistants become lead assistants or clinic managers, and many 
 [See eye care jobs across Canada](/jobs)`,
   },
   {
+    slug: "choosing-an-optical-buying-group",
+    title: "How to choose an optical buying group",
+    description: "What a buying group does for an independent eye care practice, the questions to ask before you join, and a short look at 3 groups in Canada.",
+    date: "2026-11-06",
+    body: `A buying group lets independent practices buy together. One practice ordering frames and lenses has little weight with a supplier, and a few hundred practices ordering together have more. What you get beyond a discount varies a lot from group to group, and so does what you give up.
+
+Start with what you actually buy. If most of your spend is with 3 or 4 suppliers, check that those suppliers are in the group, and ask for the discount on your real orders, not the price list. Ask whether you can still buy from a supplier outside the group, and whether any rebate depends on how much you buy from the group's preferred names.
+
+Then look at the rest of the package. Some groups offer consolidated billing, so 1 invoice replaces a dozen. Some add practice software, staff training, marketing, patient financing or help with recruiting. Each is worth something only if you would otherwise pay for it or go without it. Add up the ones you would use and compare that with the fee, if there is one.
+
+Ownership matters more than most practices expect. Ask who controls the group: its members, a company, or a larger retail business. Ask what happens to your terms if ownership changes, how long the agreement runs, and how you leave, including any notice period or fee. Then ask 2 or 3 current members, not the ones the group suggests, what they would change.
+
+It is also worth asking who the group was built for. Some were started by optometrists, some serve opticians and optical shops, and a few run a separate group for each.
+
+## A short look at 3 groups
+
+Each of these describes itself on its own site, and details change, so check them with the group. What follows is what they say about themselves, read on 6th November 2026.
+
+Eye Recommend is a co-operative of independent optometrists. It says members get buying power, consolidated billing, education and business support, and it runs a second group, Eye Care Collective, for optical professionals.
+
+OSI Group (Optometric Services Inc.) says it offers discounts with more than 130 suppliers, private label products, practice software, staff training and recruiting support, and that members choose their own suppliers.
+
+The Optical Group says it was founded in 1988 to support independent eye care professionals, and it lists group purchasing, consolidated billing, digital marketing, education and private labels.
+
+[Post an eye care job on Kestrel](/clinics)`,
+  },
+  {
     slug: "eye-care-job-ad-checklist",
     title: "What every eye care job ad in Canada should include",
     description: "A plain checklist for clinics: the pay range, vacancy and AI questions, fair wording and the details that help the right person say yes.",

@@ -30,6 +30,6 @@ export const OJOBS_FEATURED = [
   { slots: 5, each: 200, total: 1000 },
 ] as const;
 
-// Whether the page can be seen. Off on the live site until ENABLE_COMPARE is "yes" (set it in Vercel when Steve and the lawyer are ready).
-// On every preview and on a local copy, so Steve can read it first.
-export const comparePageOn = (env: Record<string, string | undefined> = process.env) => env.ENABLE_COMPARE === "yes" || env.VERCEL_ENV !== "production";
+// Whether the page can be seen. It is live (Steve approved on 6th November 2026, prices read the same day). Set ENABLE_COMPARE to "no" in Vercel
+// to switch it off at once, for example if a competitor's prices change and have not been re-checked.
+export const comparePageOn = (env: Record<string, string | undefined> = process.env) => env.ENABLE_COMPARE !== "no";

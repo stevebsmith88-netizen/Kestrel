@@ -18,7 +18,6 @@ const five = (rows: readonly { slots: number; each: number; total: number }[]) =
 
 export default async function Compare() {
   if (!comparePageOn()) notFound();
-  const live = process.env.VERCEL_ENV === "production";
   const lowest = ROLE_BANDS[0].price;
   const highest = ROLE_BANDS[ROLE_BANDS.length - 1].price;
   const regular5 = five(OJOBS_REGULAR);
@@ -28,7 +27,6 @@ export default async function Compare() {
       <SiteHeader session={await getSession()} />
       <main id="main" tabIndex={-1} className="legal resources">
         <div className="wrap legal-wrap">
-          {!live && <p className="notice" role="note">Preview only. This page is switched off on the live site until it is turned on.</p>}
           <h1>How Kestrel&apos;s prices compare</h1>
           <p className="updated">Prices checked {COMPARE_CHECKED}</p>
           <p>
