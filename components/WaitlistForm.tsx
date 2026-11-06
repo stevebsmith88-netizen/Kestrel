@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Turnstile from "@/components/Turnstile";
-import { AUDIENCES, CONSENT_TEXT, PROVINCES, ROLES, THANK_YOU, validate, type FieldErrors, type WaitlistInput } from "@/lib/waitlist";
+import { AUDIENCES, CONSENT_TEXT, PROVINCES, QUEBEC, QUEBEC_JOIN_NOTE, ROLES, THANK_YOU, validate, type FieldErrors, type WaitlistInput } from "@/lib/waitlist";
 
 const EMPTY: WaitlistInput = {
   audience: "",
@@ -176,6 +176,7 @@ export default function WaitlistForm() {
             <option key={p} value={p}>{p}</option>
           ))}
         </select>
+        {v.province === QUEBEC && <p className="help" role="status">{QUEBEC_JOIN_NOTE}</p>}
         {err("province")}
       </div>
 

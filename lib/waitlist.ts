@@ -31,6 +31,12 @@ export const PROVINCES = [
   "Yukon",
 ] as const;
 
+// Kestrel is in English for now, so jobs in Quebec are not accepted yet (Steve's decision, 6th November 2026). Quebec stays a choice on the
+// sign up and profile forms so people who want to move to another province are welcome, and Quebec is planned for a later date.
+export const QUEBEC = "Quebec";
+export const QUEBEC_JOB_MESSAGE = "Kestrel is in English for now, so we can't post jobs in Quebec yet. Quebec is planned for a later date.";
+export const QUEBEC_JOIN_NOTE = "Kestrel is in English for now and can't post jobs in Quebec yet. You can still join the waitlist and look at jobs in other provinces. Quebec is planned for a later date.";
+
 // Keep this wording identical to what people see. It is saved with every
 // sign up as the record of what they agreed to (CASL express consent).
 export const CONSENT_TEXT =

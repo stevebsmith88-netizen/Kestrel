@@ -9,7 +9,7 @@
 // All comparisons are made on a yearly basis (hourly pay x 2,080 hours, the same conversion as the pay range rule), and shown in the
 // basis the clinic chose. Wording uses "typical" and "median", never "national average".
 
-import { HOURS_IN_A_YEAR } from "./jobs.ts";
+import { HOURS_IN_A_YEAR, QUEBEC } from "./jobs.ts";
 import { JOB_BANK_SOURCE, JOB_BANK_WAGES } from "./pay-benchmark-data.ts";
 import { STARTING_RANGES } from "./pay-starting-ranges.ts";
 
@@ -35,6 +35,7 @@ const orNull = (value: number | null, basis: string) => (value === null ? null :
 
 // Picks the figure to compare against. `own` is the list from ownPayStats (the server works it out from posted jobs).
 export function findBenchmark(role: string, province: string, own: readonly OwnPayStat[] = []): Benchmark | null {
+  if (province === QUEBEC) return null; // no Quebec pay guidance while Kestrel is English only (Steve, 6th November 2026)
   const official = JOB_BANK_WAGES.find((w) => w.role === role && w.province === province);
   if (official) {
     return {

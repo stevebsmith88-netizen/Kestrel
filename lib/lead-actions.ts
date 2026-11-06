@@ -7,7 +7,7 @@ import { requireRole } from "@/lib/auth";
 import { ALREADY_ON_KESTREL, clinicsAtSite } from "@/lib/found-db";
 import { fetchPage } from "@/lib/fetch-page";
 import type { JobFormState } from "@/lib/jobs";
-import { PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLE_CATEGORIES } from "@/lib/jobs";
 import { largerTowns } from "@/lib/places";
 import { SEARCHES_PER_DAY, describeDropped, jsonFromAnswer, leadWebsiteKey, normaliseLeads, validateLead, type Lead } from "@/lib/leads";
 import { SEARCH_BLOCKED_DOMAINS, hostOfUrl, mentionsEyeRecommend, rankEmails, refuseAddress } from "@/lib/page-reader";
@@ -115,6 +115,7 @@ export async function searchProvince(_prev: SearchState, form: FormData): Promis
   const role = String(form.get("role") ?? "");
   const city = String(form.get("city") ?? "").replace(/[^\p{L}\p{N} .'-]/gu, "").trim().slice(0, 60);
   if (!(PROVINCES as readonly string[]).includes(province)) return { errors: { province: "Choose a province or territory." }, error: "Choose a province or territory." };
+  if (province === QUEBEC) return { errors: { province: QUEBEC_JOB_MESSAGE }, error: QUEBEC_JOB_MESSAGE };
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) return { error: "The search needs ANTHROPIC_API_KEY in Vercel, the same key the ad builder uses." };
   const db = supabaseAdmin();
