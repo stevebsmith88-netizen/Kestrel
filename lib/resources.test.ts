@@ -32,3 +32,7 @@ test("only links with a check date are shown, and an empty group is left out", (
 test("the page links to no job board and no supplier", () => {
   for (const l of all) assert.ok(!/indeed|linkedin|jobs4ecps|eyerecommend|eye-recommend/i.test(l.url), l.url);
 });
+
+test("the resource links do not mention Quebec (Steve's decision, 6th November 2026)", () => {
+  for (const l of all) assert.ok(!/qu[ée]bec|ooq\.org/i.test(`${l.name} ${l.url} ${l.note}`), l.name);
+});
