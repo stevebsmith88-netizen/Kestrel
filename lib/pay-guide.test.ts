@@ -2,7 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { JOB_BANK_WAGES } from "./pay-benchmark-data.ts";
-import { payGuide, payGuideProvinces, payGuideRow } from "./pay-guide.ts";
+import { LEFT_OUT_ROLES, payGuide, payGuideProvinces, payGuideRow } from "./pay-guide.ts";
 
 test("the pay table lists the provinces that have Job Bank figures, and Ontario is one of them", () => {
   const provinces = payGuideProvinces();
@@ -11,21 +11,24 @@ test("the pay table lists the provinces that have Job Bank figures, and Ontario 
   assert.ok(!provinces.includes("Prince Edward Island"), "a province with no published figure is not listed");
 });
 
-test("every figure in the Job Bank file appears in exactly one row", () => {
+test("every figure in the Job Bank file appears in exactly one row, except the roles left out", () => {
   const all = payGuide();
   const rows = Object.values(all).reduce((n, list) => n + list.length, 0);
-  assert.equal(rows, JOB_BANK_WAGES.length);
+  assert.equal(rows, JOB_BANK_WAGES.filter((w) => !LEFT_OUT_ROLES.includes(w.role)).length);
   for (const [province, list] of Object.entries(all)) {
     assert.equal(new Set(list.map((r) => r.role)).size, list.length, `${province} repeats a role`);
   }
 });
 
-test("Ontario shows the optometrist first, yearly, and the optician hourly with a yearly equivalent", () => {
+test("optometrist wages are left off the public pay table", () => {
+  assert.deepEqual(LEFT_OUT_ROLES, ["Optometrist"]);
+  assert.ok(!JSON.stringify(payGuide()).includes("Optometrist"));
+  for (const list of Object.values(payGuide())) assert.ok(list.every((r) => r.role !== "Optometrist"));
+});
+
+test("Ontario shows the optician hourly with a yearly equivalent", () => {
   const ontario = payGuide().Ontario;
-  assert.equal(ontario[0].role, "Optometrist");
-  assert.equal(ontario[0].median, "$78,000 a year");
-  assert.equal(ontario[0].yearly, "");
-  assert.equal(ontario[0].years, "2021 Census");
+  assert.equal(ontario[0].role, "Optician");
   const optician = ontario.find((r) => r.role === "Optician");
   assert.ok(optician);
   assert.equal(optician.median, "$24.04 an hour");

@@ -41,3 +41,5 @@ Built 6th November 2026 on branch `claude/amazing-keller-c7k18u` (waiting for St
 - Resources page went live in pull request 46 (footer link). Added on the next branch, waiting for Steve's preview: a link from the pay guide on the post a job form ("Pay in other provinces") and one in the box at the end of every blog post.
 - Price comparison page at `/compare`: `app/compare/page.tsx` and `lib/compare-prices.ts`. Live from 6th November 2026 (`ENABLE_COMPARE=no` switches it off). Compares Kestrel (prices from `lib/pricing.ts`), Eluta and OJobs only. Jobs4ECPs left off (see docs/competitor-pricing.md). Add it to the lawyer pack, and re-check prices monthly.
 - Buying groups blog post: published 6th November 2026.
+
+- Optometrist wages are left off the public pay table on /resources (Steve, 6th November 2026). Set by `LEFT_OUT_ROLES` in `lib/pay-guide.ts`. The post a job form still compares optometrist pay, and the price comparison page has no wage figures.
