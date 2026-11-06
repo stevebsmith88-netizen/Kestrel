@@ -479,6 +479,8 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .passbox p{margin:0 0 8px;color:var(--mist)}
 .passbox .passhead{color:var(--cream);font-size:1.125rem}
 .passbox .price{color:var(--buff);margin:0 2px 0 6px}
+.passbox .passpick{margin:12px 0 0;color:var(--cream)}
+.passbox .passpick strong{color:var(--buff)}
 .passbox .plusrow{margin:14px 0 0;padding-top:14px;border-top:1px solid #4A5A7A;color:var(--cream)}
 .passbox .plusrow .price{font-size:1.375rem;margin:0 2px 0 4px}
 .foundbox{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:18px 24px;margin:0 0 14px}

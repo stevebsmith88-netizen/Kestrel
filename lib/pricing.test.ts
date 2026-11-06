@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, perDay, perPassPost } from "./pricing.ts";
+import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, passBreakEven, perDay, perPassPost } from "./pricing.ts";
 
 test("each role band works out to around a coffee a day", () => {
   assert.deepEqual(ROLE_BANDS.map((b) => perDay(b.price)), ["$1.97", "$2.63", "$3.30"]);
@@ -25,4 +25,10 @@ test("the Clinic pass is cheaper per post than the support and optician singles,
   assert.equal(perPassPost(CLINIC_PASS_PLUS), "$69.80");
   assert.ok(CLINIC_PASS_PLUS.monthly / CLINIC_PASS_PLUS.livePosts < optometrists.price);
   assert.ok(CLINIC_PASS_PLUS.monthly > CLINIC_PASS.monthly);
+});
+
+test("the pass pays for itself from the number of posts the clinics page says", () => {
+  assert.equal(passBreakEven(79), 3);
+  assert.ok(3 * 79 > CLINIC_PASS.monthly && 2 * 79 < CLINIC_PASS.monthly);
+  assert.equal(passBreakEven(99, CLINIC_PASS_PLUS), 4);
 });
