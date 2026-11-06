@@ -27,10 +27,9 @@ test("Kestrel's pass prices per post come from lib/pricing.ts", () => {
   assert.equal(perPassPost(CLINIC_PASS_PLUS), "$69.80");
 });
 
-test("the compare page is hidden on the live site unless ENABLE_COMPARE is yes, and shown on previews", () => {
-  assert.equal(comparePageOn({ VERCEL_ENV: "production" }), false);
-  assert.equal(comparePageOn({ VERCEL_ENV: "production", ENABLE_COMPARE: "true" }), false);
-  assert.equal(comparePageOn({ VERCEL_ENV: "production", ENABLE_COMPARE: "yes" }), true);
+test("the compare page is live, and ENABLE_COMPARE set to no switches it off", () => {
+  assert.equal(comparePageOn({ VERCEL_ENV: "production" }), true);
   assert.equal(comparePageOn({ VERCEL_ENV: "preview" }), true);
   assert.equal(comparePageOn({}), true);
+  assert.equal(comparePageOn({ VERCEL_ENV: "production", ENABLE_COMPARE: "no" }), false);
 });

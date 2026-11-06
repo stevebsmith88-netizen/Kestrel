@@ -1,6 +1,6 @@
 # DRAFT: How to choose an optical buying group
 
-**Status: not published, and not in `content/posts.ts` on purpose.** Hold until Steve's disclosure conversation has happened (CLAUDE.md, the one agreed exception for naming Eye Recommend). Then Steve reads it, adds his own specifics (see the end), and Claude moves it into `content/posts.ts` with a Friday date. Never name a group's price, member count or ownership without a source that is checked again on the day.
+**Status: PUBLISHED on 6th November 2026** as `choosing-an-optical-buying-group` in `content/posts.ts`. Steve approved it to go live and the Eye Recommend line stays in. The published text left out figures the sources disagreed on (group sizes, The Optical Group's ownership changes) and keeps only what each group says about itself. This file keeps the research and sources for the next refresh.
 
 Research done 6th November 2026 from public pages and trade press. Group claims are the groups' own and must stay worded as "says". Nothing here comes from Eye Recommend internal material.
 
