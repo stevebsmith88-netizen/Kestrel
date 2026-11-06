@@ -48,7 +48,7 @@ export default function ComingSoon() {
             </svg>
             <p className="board">Canada-wide eye care job board</p>
             <p className="lede">
-              A job board for eye care in Canada. Optometrists, opticians, assistants, clinic teams and suppliers, in one place. Every job shows its pay, and a person reads every post before it goes live. We&apos;re launching soon.
+              A job board for eye care in Canada, built by someone with over 20 years in the industry. Optometrists, opticians, assistants, clinic teams and suppliers, in one place. Every job shows its pay, and a person reads every post before it goes live. We&apos;re launching soon.
             </p>
             <a className="btn" href="#join">Join the waitlist</a>
           </div>
