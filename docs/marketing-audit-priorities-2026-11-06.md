@@ -24,7 +24,7 @@
 
 | # | Move | Audit section | Impact | Ease | Who |
 | --- | --- | --- | --- | --- | --- |
-| 10 | Indexable landing pages for role plus province (for example "optician jobs in Ontario"), shown only when real jobs exist. Keep noindex on random filter combinations. | 9 | High | M | Claude |
+| 10 | BUILT on branch `claude/relaxed-babbage-itq5zq`, awaiting preview (`docs/landing-pages.md`). Indexable landing pages for role plus province (for example "optician jobs in Ontario"), shown only when real jobs exist. Keep noindex on random filter combinations. | 9 | High | M | Claude |
 | 11 | Stripe checkout in test mode with the free launch coupon, `payment_method_collection: if_required`. Already on the build list. | 5, 6 | High | L | Claude, Steve gives test keys |
 | 12 | Admin Gate C tile and the funnel numbers (free to paid, first post date, second post). | 18, 6, 19 | High | M | Claude |
 | 13 | A short public page: "How we protect your data" (Canadian region, CV handling, sign in protection). | 20 | Medium | S to M | Claude from `docs/security.md`, lawyer glance |

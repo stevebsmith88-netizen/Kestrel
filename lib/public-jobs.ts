@@ -164,3 +164,17 @@ export async function listLiveJobIds(): Promise<{ id: string; posted_at: string;
   }
   return data ?? [];
 }
+
+// Live jobs for each province and role together, for the landing pages and the sitemap. Keys are "Province|Role".
+export async function getComboCounts(): Promise<Record<string, number>> {
+  const db = supabasePublic();
+  if (!db) return {};
+  const { data, error } = await db.from("jobs").select("role_category, province").eq("status", "live").gt("expires_at", new Date().toISOString()).limit(2000);
+  if (error) {
+    console.error("Combo counts failed:", error.code, error.message);
+    return {};
+  }
+  const out: Record<string, number> = {};
+  for (const j of data ?? []) if (j.role_category && j.province) out[`${j.province}|${j.role_category}`] = (out[`${j.province}|${j.role_category}`] ?? 0) + 1;
+  return out;
+}

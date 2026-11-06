@@ -29,7 +29,7 @@ Known running costs from `docs/PLAN.md`: about CA$65 a month once Vercel Pro and
 | Analytics | $0 | Vercel Web Analytics is part of Pro for now |
 | Paid advertising | $0 until Stripe is live, then at most $500 for one test | Decide the test in the test log first, with a stated result that would make it worth repeating |
 | Print (flyer) | $0 until Gate A | Draft is in `docs/marketing/launch-flyer.html` |
-| Domains | about the yearly Namecheap renewal | No renewal date is recorded in the repo. Steve to add it to his calendar |
+| Domains | the yearly Namecheap renewal | eyecarejobs.ca renews on 29th October 2027 and is set to renew by itself (Steve, 6th November 2026). Keep a card on file that does not expire before then |
 
 **Review:** the first Monday of each month, 30 minutes. Compare spend to sign ups and first posts. Nothing is spent on a channel that has no way of being measured.
 
