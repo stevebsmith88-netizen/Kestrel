@@ -4,6 +4,8 @@ Goal, in Steve's words: be the go to place for eye care jobs in Canada, rank fir
 
 ## Resources page
 
+Built 6th November 2026 on branch `claude/amazing-keller-c7k18u` (waiting for Steve's preview). Page: `app/resources/page.tsx`. Pay table: `lib/pay-guide.ts` and `components/PayGuide.tsx`, using the same Job Bank figures as the post a job form, so a yearly refresh (docs/pay-benchmark.md) updates both. Outside links: `lib/resources.ts`. A link shows only when it has a `checked` date, so unconfirmed ones wait there with `checked: null`. Footer link and sitemap entry added. No SQL, no new setting. Still to do: confirm the held back links, add the other provinces' regulators, and link to the page from the post a job form and blog posts.
+
 - **Placement:** footer menu, plus links from the pages where each resource helps (post a job, the blog, the quiz). Not in the main menu, which stays for the main actions for candidates and clinics. A footer link appears on every page and Google follows it, so the page is not hidden.
 - **Content, in order:**
   1. Pay guidance table: province drop down, then roles, using the Job Bank figures already built for the pay benchmark (docs/pay-benchmark.md), with a link to Job Bank for each. Wording "typical" and "median" only, with the Open Government Licence line.
