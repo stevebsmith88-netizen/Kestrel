@@ -517,8 +517,28 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .resources .linklist{list-style:none;padding:0}
 .resources .linklist li{margin:12px 0}
 .resources .linklist span{display:block;font-size:0.9375rem}
-.cmp caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
-.cmp tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy)}
-.table.cmp{min-width:600px}
 .why{margin:8px 0 0;font-size:0.9375rem;color:var(--navy-2)}
 .jobside form{margin:8px 0 0}
+/* Price comparison table: light lines, one clear price per service, and stacked rows on phones */
+.table.cmp{min-width:0;border:0;border-radius:0;background:transparent;margin:18px 0 8px}
+.cmp thead th{border-bottom:1.5px solid var(--navy);padding:8px 12px}
+.cmp tbody th,.cmp td{padding:14px 12px;border-bottom:1px solid var(--line)}
+.cmp tbody th{text-transform:none;letter-spacing:0;font-size:1rem;font-weight:600;color:var(--navy);width:34%}
+.cmp .cmp-price{display:block;font-weight:600;color:var(--navy)}
+.cmp .cmp-sub{display:block;margin-top:3px;font-size:0.875rem;font-weight:400;color:var(--muted);line-height:1.4}
+.cmp .cmp-group th{border-bottom:0;padding:26px 12px 6px;font-size:0.8125rem;letter-spacing:.06em;text-transform:uppercase;color:var(--slate);width:auto}
+.cmp .cmp-us th,.cmp .cmp-us td{background:var(--paper)}
+@media (max-width:640px){
+.cmp thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:auto}
+.cmp tbody th{width:auto;padding:16px 12px 4px;border-bottom:0}
+.cmp td{padding:6px 12px;border-bottom:0}
+.cmp td:last-child{padding-bottom:16px;border-bottom:1px solid var(--line)}
+.cmp td::before{content:attr(data-label);display:block;font-size:0.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--slate)}
+.cmp .cmp-group{display:block}
+.cmp .cmp-group th{padding:22px 12px 6px}
+}
+.resources .cmp-why,.resources .cmp-cta{margin:22px 0;padding:22px 24px}
+.resources .cmp-why h2,.resources .cmp-cta h2{margin:0 0 8px;font-size:1.5rem}
+.cmp-why ul{margin:10px 0 0}
+.cmp-why li{margin:8px 0}

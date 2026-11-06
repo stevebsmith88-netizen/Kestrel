@@ -73,3 +73,11 @@ Steve is not changing prices now. This page exists to give the comparison page i
 - Describe what each product is (a sponsored search slot, a niche board, a free association board) so the table is fair. Eluta's product is not a board with applicant tracking.
 - Competition Act rules on comparative advertising apply. Add the page to the lawyer pack before it goes live.
 - Nothing from Indeed, LinkedIn or Jobs4ECPs is scraped. Prices read by hand from public pages are fine.
+
+## How the "5 jobs at once" column is worked out
+
+Kestrel: the Clinic pass price per post. OJobs: its own 5 slot price. Jobs4ECPs and Eluta show no price for several jobs, so the page assumes 5 single postings ($100 x 5 and $199 x 5), and says so (Steve's suggestion, 6th November 2026). Indeed, LinkedIn and ZipRecruiter are budget or plan based, so the column says so instead of a price.
+
+## Layout and wording of /compare (6th November 2026)
+
+A "Why clinics choose Kestrel" box sits above the table and a "Why Kestrel" box with the waitlist button sits below it, both limited to what is decided and built (pay range and 2 questions on every post, a person reads every post, no agencies, pay guide, ad builder, applicant board, candidate alerts and Recommended for you, the pass price per post, and the founding pass price lock). The table has 3 columns, groups the eye care boards apart from the search engine and general job sites, and stacks each service on phones. Keep new claims to features that are live, and do not claim audience size or results.
