@@ -16,13 +16,13 @@ Draft of 6th November 2026 for Steve to edit and the lawyer to review. It is not
 **Founding clinics**
 
 7. A clinic that takes a pass during the launch period is a founding clinic. A founding clinic keeps the price of its pass for 12 months from the day it starts paying, or until it cancels, whichever comes first.
-8. The founding price applies to the pass you choose when you start. If a founding clinic on monthly payments later moves to a different pass, the price of the new pass at that time applies. If a founding clinic that has paid for a year moves up to Clinic pass Plus before the year ends, it pays the difference between the 2 founding yearly prices for the months that are left, and keeps the founding yearly rate for Plus until that year ends. [Example: after 4 months, 8 are left, so $1,500 x 8 / 12 = $1,000. Steve and the lawyer to confirm the method.] If you cancel and come back later, the price at that time applies.
+8. The founding price applies to the pass you choose when you start. If you move to a different pass, we will show you the price before you confirm. If you cancel and come back later, the price at that time applies. [The detailed upgrade rules are an internal procedure, not Terms wording: see `docs/pass-procedures.md`.]
 9. After 12 months we may change the price. We will tell you at least 30 days before your next renewal. A price change applies to purchases and renewals made after the change. It does not change a post you have already paid for, or a period you have already paid for. [Lawyer: is 30 days enough notice?]
 
 **Paying for a year**
 
 10. During the launch period, founding clinics may pay for a year in advance: [$1,990 for the Clinic pass or $3,490 for Clinic pass Plus], which is 10 months for the price of 12. This covers 12 months of the pass.
-11. A yearly payment renews by itself for another 12 months at the yearly price then in force, unless you cancel first. If we no longer offer a yearly option by then, it continues month by month at the monthly price then in force. We will email you at least 30 days before it renews, with the price, and you can cancel at any time before the renewal date. [Lawyer: check the notice and cancellation wording for automatic renewal.]
+11. A yearly payment renews by itself for another 12 months at the same price you paid for the year just ended, unless we have given you at least 30 days notice of a price change under clause 9, or you cancel first. We will email you at least 30 days before it renews, with the price, and you can cancel at any time before the renewal date. [Lawyer: check the notice and cancellation wording for automatic renewal.]
 12. [Refund on a yearly payment. Option A: no refund once the pass has started, except where we cannot provide the service. Option B: a refund of the months not yet used, charged at the monthly price, less the 2 free months. Lawyer to advise which is fair and lawful for a business customer.]
 
 **Everything else**
@@ -41,12 +41,11 @@ Draft of 6th November 2026 for Steve to edit and the lawyer to review. It is not
 
 ## Decisions made by Steve (6th November 2026)
 
-- A founding clinic keeps the pass it first signed up for. A monthly clinic that moves up to Plus pays the Plus price at that time. The exception is a clinic that has paid for a year and then upgrades, which gets the founding yearly rate for Plus (clause 8).
-- Yearly and monthly payments both renew by themselves, with an email reminder 30 days before a yearly renewal (clauses 6 and 11).
+- A founding clinic keeps the pass it first signed up for. The upgrade rules are not advertised or written into the Terms, because they are hard to explain. They are an internal procedure for when someone upgrades (`docs/pass-procedures.md`).
+- Yearly and monthly payments both renew by themselves at the same price, with an email reminder 30 days before a yearly renewal (clauses 6 and 11). The price only changes after 30 days notice (clause 9).
 - A price change applies only to new purchases and renewals, never to a post or period already paid for (clause 9).
 
 ## Still open
 
-- What a yearly payment renews into once the founding offer is over: the wording in clause 11 covers both a yearly price and monthly, so Steve decides whether a yearly option continues after launch.
 - The refund on a yearly payment (clause 12).
 - Moving down from Plus to the Clinic pass part way through a paid year. Suggested: not until the year ends.
