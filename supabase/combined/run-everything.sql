@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0027), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0030), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1803,6 +1803,122 @@ alter table public.job_templates add constraint job_templates_role_category_chec
   'Field service or equipment technician', 'Account or practice development manager'));
 
 -- ======================================================================
+-- 0028_job_extensions_and_outcomes.sql
+-- ======================================================================
+-- Clinics can extend a job by 30 days near the end of its run (or within 7 days of it ending), and tell us
+-- how they filled a role when they close it. Both are written on the server after the clinic is checked,
+-- so clinics are not given any new rights over these columns. Safe to run more than once.
+
+alter table public.jobs add column if not exists extended_count integer not null default 0;
+alter table public.jobs add column if not exists last_extended_at timestamptz;
+alter table public.jobs add column if not exists filled_at timestamptz;
+alter table public.jobs add column if not exists filled_via text;
+alter table public.jobs add column if not exists filled_via_other text;
+
+alter table public.jobs drop constraint if exists jobs_filled_via_check;
+alter table public.jobs add constraint jobs_filled_via_check check (filled_via is null or filled_via in (
+  'kestrel', 'indeed', 'linkedin', 'word_of_mouth', 'own_website', 'other'));
+
+alter table public.jobs drop constraint if exists jobs_filled_via_other_length;
+alter table public.jobs add constraint jobs_filled_via_other_length check (filled_via_other is null or char_length(filled_via_other) <= 200);
+
+-- ======================================================================
+-- 0029_outreach_sequence.sql
+-- ======================================================================
+-- The clinic outreach sequence: 4 emails over about 5 weeks to a clinic address found by the province search
+-- (clinic_leads). Steve adds clinics in batches on the admin Outreach page, which is his approval of each send list.
+-- The daily job sends what is due, only while ENABLE_OUTREACH is "yes". Private: only the server can read or write.
+-- Safe to run more than once.
+
+create table if not exists public.outreach_contacts (
+  id            uuid primary key default gen_random_uuid(),
+  lead_id       uuid references public.clinic_leads (id) on delete set null,
+  email         text not null check (char_length(email) between 3 and 254), -- always lower case
+  clinic_name   text not null check (char_length(clinic_name) between 1 and 160),
+  -- The CASL record of implied consent: where the address was published and when we found it.
+  email_source_url text not null check (char_length(email_source_url) <= 500),
+  email_found_at   timestamptz not null,
+  steps_sent    integer not null default 0 check (steps_sent between 0 and 4),
+  status        text not null default 'active' check (status in ('active', 'stopped', 'finished')),
+  stop_reason   text check (stop_reason is null or stop_reason in ('unsubscribed', 'replied', 'joined', 'claimed', 'bounced', 'manual')),
+  next_due_at   timestamptz,
+  last_sent_at  timestamptz,
+  approved_by   uuid references auth.users (id) on delete set null,
+  approved_at   timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+create unique index if not exists outreach_contacts_email_idx on public.outreach_contacts (email);
+create index if not exists outreach_contacts_due_idx on public.outreach_contacts (status, next_due_at);
+alter table public.outreach_contacts enable row level security;
+revoke all on public.outreach_contacts from anon, authenticated;
+
+-- One row per email sent, kept as the record of what went to whom and when.
+create table if not exists public.outreach_sends (
+  id          uuid primary key default gen_random_uuid(),
+  contact_id  uuid not null references public.outreach_contacts (id) on delete cascade,
+  step        integer not null check (step between 1 and 4),
+  subject     text not null,
+  sent_at     timestamptz not null default now()
+);
+create index if not exists outreach_sends_contact_idx on public.outreach_sends (contact_id, sent_at);
+alter table public.outreach_sends enable row level security;
+revoke all on public.outreach_sends from anon, authenticated;
+
+-- ======================================================================
+-- 0030_job_stats.sql
+-- ======================================================================
+-- Job views and apply clicks, counted per job per day (audit R17). The clinic dashboard shows these numbers.
+-- No cookies, no visitor address and no account is stored: only a count. Only the website's server can add to a count,
+-- through record_job_event, and only while the job is live. A clinic can read the counts for its own jobs, and an admin
+-- can read all of them. Safe to run more than once.
+
+create table if not exists public.job_daily_stats (
+  job_id        uuid not null references public.jobs (id) on delete cascade,
+  day           date not null,
+  views         integer not null default 0 check (views >= 0),
+  apply_clicks  integer not null default 0 check (apply_clicks >= 0),
+  primary key (job_id, day)
+);
+
+alter table public.job_daily_stats enable row level security;
+revoke all on public.job_daily_stats from anon, authenticated;
+grant select on public.job_daily_stats to authenticated;
+
+drop policy if exists "Clinics can read the numbers for their own jobs" on public.job_daily_stats;
+create policy "Clinics can read the numbers for their own jobs"
+  on public.job_daily_stats for select to authenticated
+  using (exists (select 1 from public.jobs j where j.id = job_id and public.owns_employer(j.employer_id)));
+
+drop policy if exists "Admins can read every job's numbers" on public.job_daily_stats;
+create policy "Admins can read every job's numbers"
+  on public.job_daily_stats for select to authenticated
+  using (public.is_admin());
+
+-- Adds 1 to today's count (Toronto time) for a live job. Anything else is quietly ignored.
+create or replace function public.record_job_event(p_job_id uuid, p_kind text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if p_kind not in ('view', 'apply_click') then
+    return;
+  end if;
+  if not exists (select 1 from public.jobs where id = p_job_id and status = 'live' and expires_at > now()) then
+    return;
+  end if;
+  insert into public.job_daily_stats as s (job_id, day, views, apply_clicks)
+  values (p_job_id, (now() at time zone 'America/Toronto')::date, case when p_kind = 'view' then 1 else 0 end, case when p_kind = 'apply_click' then 1 else 0 end)
+  on conflict (job_id, day) do update
+    set views = s.views + excluded.views, apply_clicks = s.apply_clicks + excluded.apply_clicks;
+end;
+$$;
+
+revoke all on function public.record_job_event(uuid, text) from public, anon, authenticated;
+grant execute on function public.record_job_event(uuid, text) to service_role;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -1851,6 +1967,10 @@ from (
     ('column: when a found listing was found', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'found_at')),
     ('rule: found listings live 21 days at most', exists (select 1 from pg_constraint where conname = 'jobs_found_listing_21_days')),
     ('table: clinic_leads (province search leads)', to_regclass('public.clinic_leads') is not null),
+    ('table: outreach_contacts (clinic outreach sequence)', to_regclass('public.outreach_contacts') is not null),
+    ('column: job extensions', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'extended_count')),
+    ('table: job_daily_stats (job views and apply clicks)', to_regclass('public.job_daily_stats') is not null),
+    ('function: record_job_event', exists (select 1 from pg_proc where proname = 'record_job_event')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

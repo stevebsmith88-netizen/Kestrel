@@ -52,6 +52,7 @@ Gate C: 50 live roles across 5 or more provinces, job pages indexed, free to pai
 
 - Steve decides prices, the pass contents, field and supplier pricing and the annual option first (R46).
 - Then Stripe (test mode while building, live after the bank account), receipts, HST. Restate the revenue model net of all fees and churn (R43).
+- Sponsored posts, launched with Stripe (Steve, 6th November 2026): a flat price per day chosen when ordering a post, set from real view numbers. Plan in `docs/sponsored-ads-plan.md`.
 - Skill and internationally trained tags (R58). Logo and public clinic page if the pass sells a "featured profile".
 
 ## Phase 5: Tidy and simplify (any quiet week)

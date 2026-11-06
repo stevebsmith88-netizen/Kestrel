@@ -88,3 +88,7 @@ Found listings are added from Admin, Found listings (see `docs/found-listings.md
 ## Saves that used to fail (audit R6)
 
 Saving a cover letter draft, a cover letter and a job template used an "upsert", which the database refuses for signed in people because it also rewrites the columns that identify the row. They now update first and add only if nothing matched (`lib/save-helpers.ts`). Replacing a letter or template with the same name also no longer counts against the limit of 5 letters and 20 templates.
+
+## Job views and apply clicks (migration 0030, 6th November 2026)
+
+Each job page counts 1 view per browser tab (a small script, no cookie), and the Apply button counts a click. The numbers are kept per job per day in `job_daily_stats` and shown on the clinic dashboard (each job, and the last 30 days across all jobs). Rules: only live jobs count; search engines, link previews, the clinic that owns the job and our admins are left out; nothing about the visitor is stored. Counts are guidance, not exact: someone who uses several tabs or devices is counted more than once, and a person who scripts the counting endpoint could add to a count. An apply click is not an application, so the applicant counts stay the figure to trust. The privacy policy mentions the counts. Code: `lib/job-stats.ts` (rules and tests), `lib/job-stats-data.ts`, `app/api/job-event/route.ts`, `components/JobViewBeacon.tsx`, `components/ApplyLink.tsx`. The demo seed adds sample numbers for the demo clinic's 2 live jobs.

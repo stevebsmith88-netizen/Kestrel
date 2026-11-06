@@ -13,9 +13,11 @@ Steve's decision: Ontario, Alberta and British Columbia are the first regions, s
 
 Gate C asks for 50 live roles across 5 or more provinces. For Ontario alone, the aim is about 25 to 30 live roles that look current and clean, so a candidate searching Ontario finds enough to bother. Alberta and BC follow with about 10 each, which together make up the first 50 (see the audit phases).
 
-## Which roles first
+## Which roles first (decided: all roles)
 
-Concentrate on 1 or 2 role types so the board looks full where people look. [Steve: which 2?] Working suggestion, to test against the waitlist:
+Steve decided on 6th November 2026 to cover all roles in Ontario from the start. The filters only offer roles that have live jobs, so a quiet role does not show up as an empty option, and the city and radius search keeps a small city from looking bare. The earlier suggestion below is kept for reference only.
+
+Earlier suggestion, now replaced by "all roles":
 
 1. Opticians. The largest group (about 11,700 across Canada) and the most advertised.
 2. Optometric assistants and technicians. Hired most often, and the $59 band is the easiest price to say yes to.
@@ -36,8 +38,8 @@ All of this is semi automatic, with Steve approving, and stays off until Gate A.
 
 1. **Found listings** (`/admin/found`): the province search for Ontario, then the reader on each clinic's own careers page. 21 day expiry, labelled "Found on the clinic's website, not yet claimed". Publishing stays off (`ENABLE_SEEDING`).
 2. **Claim your listing** email to the clinic, one email plus one follow up, once outreach is allowed. Built, off.
-3. **Free launch posts** from clinics on the waitlist. Steve can see the clinic and candidate sign ups by province and role at Admin, Waitlist. [Steve: read the Ontario counts there and tell Claude, so the plan uses real numbers.]
-4. **Founding clinics** (`docs/marketing/founding-clinics-draft.md`): ask the first Ontario clinics to be founders.
+3. **Free launch posts** from clinics on the waitlist. The waitlist is not being promoted yet, so there are no Ontario counts. Once it is promoted (after Gate A), Steve can read sign ups by province and role at Admin, Waitlist, and the plan is updated with real numbers.
+4. **Founding clinics** (`docs/marketing/founding-clinics-draft.md`): ask the first Ontario clinics to be founders. Steve may approach his own personal contacts there after the disclosure conversation. Keep their names and details out of this repository. Before anyone is approached, check with the lawyer which contacts are personal relationships and which were made through Steve's role at Eye Recommend, because the project rule is that no Eye Recommend contacts or data are used, and a message selling a paid service is also covered by CASL.
 
 ## Candidates in Ontario
 
@@ -55,9 +57,9 @@ A person reads a number and writes it down, as in the market counts. Never copy 
 
 Once the Job Bank wages data can be fetched, Ontario is the first province to get a "typical pay for this role" line while posting. See `docs/business-setup-notes.md`, section 9.
 
-## Open questions for Steve
+## Decisions made (6th November 2026)
 
-1. Which 2 role types first?
-2. Is the city order right?
-3. What do the Ontario waitlist counts say?
-4. Any clinic groups in Ontario worth meeting early, as founders? Keep Eye Recommend members out of it until the disclosure conversation has happened.
+1. Roles: all roles.
+2. City order: confirmed, Toronto and the GTA first.
+3. Waitlist counts: none yet, since the waitlist is not being promoted before Gate A.
+4. Founding clinics: possibly Steve's own contacts, after the disclosure conversation (see above for the checks).

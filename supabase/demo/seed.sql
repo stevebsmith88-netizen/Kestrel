@@ -117,6 +117,12 @@ begin
     values (emp, 'Optometric assistant', 'Optometric assistant or technician', 'Part time', 'Ontario', 'Toronto', 'hour', 22, 26, true, false,
             'A part time optometric assistant to run pre-testing and support our optometrists. Training provided, with some Saturdays.', 'kestrel', 'live', now() - interval '2 days', now() + interval '28 days')
     returning id into j_assistant;
+    -- sample job views and apply clicks, so the demo dashboard shows its numbers
+    insert into public.job_daily_stats (job_id, day, views, apply_clicks)
+    select j_optician, current_date - d, 18 + d * 7, 2 + d from generate_series(0, 3) as d
+    union all
+    select j_assistant, current_date - d, 11 + d * 5, 1 + d from generate_series(0, 1) as d
+    on conflict (job_id, day) do nothing;
     insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, status)
     values (emp, 'Practice manager', 'Practice or clinic manager', 'Full time', 'Ontario', 'Toronto', 'year', 70000, 88000, false, false,
             'Run the day to day of our clinic, including scheduling, supplies and a team of 8. This post is waiting for review, so you can show how approval works.', 'kestrel', 'in_review');

@@ -85,7 +85,7 @@ function content(step: number, clinicName: string): Content {
           hello,
           "Paying by the click means you never quite know what a hire will cost until the bill arrives.",
           `On Kestrel, one price covers a 30 day post: ${dollars(support.price)} for support and patient care, ${dollars(opticians.price)} for opticians and practice leads, and ${dollars(optometrists.price)} for optometrists. That's around the price of a coffee a day, and posting is free while we launch.`,
-          `Hiring often? The clinic pass is ${dollars(CLINIC_PASS.monthly)} a month for up to ${CLINIC_PASS.livePosts} live posts, or ${dollars(CLINIC_PASS_PLUS.monthly)} with optometrist roles included. Founding clinics keep their price for ${CLINIC_PASS.lockMonths} months.`,
+          `Hiring often? The clinic pass starts at ${dollars(CLINIC_PASS.monthly)} a month for up to ${CLINIC_PASS.livePosts} live posts, or ${dollars(CLINIC_PASS_PLUS.monthly)} on Plus with optometrists included. Founding clinics keep their price for ${CLINIC_PASS.lockMonths} months.`,
         ],
       };
     }
@@ -114,11 +114,13 @@ function pricesHtml() {
 <p style="margin:0 0 6px 0;font-family:${SANS};font-size:12px;line-height:16px;font-weight:bold;letter-spacing:1.5px;text-transform:uppercase;color:#8C4024;">Per 30 day post</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rows}</table>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;"><tr><td bgcolor="#1B2B4B" style="background-color:#1B2B4B;padding:22px 24px;border-radius:6px;font-family:${SANS};color:#F7F1E6;">
-<p style="margin:0 0 8px 0;font-size:18px;"><strong>Clinic pass</strong>&nbsp; <span style="font-family:${SERIF};font-size:30px;color:#D8B48A;">${dollars(CLINIC_PASS.monthly)}</span> a month</p>
-<p style="margin:0 0 12px 0;font-size:16px;line-height:23px;color:#DCE3E6;">Up to ${CLINIC_PASS.livePosts} live posts at once, ${perPassPost()} a post, for support, patient care, optician and practice lead roles, plus a featured clinic profile.</p>
-<p style="margin:0 0 8px 0;font-size:18px;"><strong>Clinic pass Plus</strong>&nbsp; <span style="font-family:${SERIF};font-size:30px;color:#D8B48A;">${dollars(CLINIC_PASS_PLUS.monthly)}</span> a month</p>
-<p style="margin:0 0 12px 0;font-size:16px;line-height:23px;color:#DCE3E6;">Up to ${CLINIC_PASS_PLUS.livePosts} live posts at once, ${perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included.</p>
-<p style="margin:0;padding-top:12px;border-top:1px solid #4A5A7A;font-size:16px;line-height:23px;"><strong style="color:#D8B48A;">Founding clinics</strong> keep their pass price for ${CLINIC_PASS.lockMonths} months, or until you cancel. Or pay for the year up front, ${dollars(CLINIC_PASS.yearly)} on the Clinic pass or ${dollars(CLINIC_PASS_PLUS.yearly)} on Plus, which is 2 months free.</p>
+<p style="margin:0 0 8px 0;font-size:18px;"><strong>Clinic pass</strong>&nbsp; from <span style="font-family:${SERIF};font-size:30px;color:#D8B48A;">${dollars(CLINIC_PASS.monthly)}</span> a month</p>
+<p style="margin:0;font-size:16px;line-height:23px;color:#DCE3E6;">Up to ${CLINIC_PASS.livePosts} live posts at once, ${perPassPost()} a post, for support, patient care, optician and practice lead roles, plus a featured clinic profile.</p>
+<p style="margin:14px 0 0 0;padding-top:14px;border-top:1px solid #4A5A7A;font-size:16px;line-height:23px;color:#DCE3E6;"><strong style="color:#F7F1E6;">Clinic pass Plus</strong>&nbsp; <span style="font-family:${SERIF};font-size:22px;color:#D8B48A;">${dollars(CLINIC_PASS_PLUS.monthly)}</span> a month. ${perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included.</p>
+</td></tr></table>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:14px;"><tr><td bgcolor="#F7F1E6" style="background-color:#F7F1E6;padding:18px 24px;border:1px solid #D6C9B2;border-radius:6px;font-family:${SANS};color:#1B2B4B;">
+<p style="margin:0 0 6px 0;font-family:${SERIF};font-size:22px;color:#8C4024;">Founding clinics</p>
+<p style="margin:0;font-size:16px;line-height:23px;">Join during launch and keep your pass price for ${CLINIC_PASS.lockMonths} months, or until you cancel. Or pay for the year up front, ${dollars(CLINIC_PASS.yearly)} on the Clinic pass or ${dollars(CLINIC_PASS_PLUS.yearly)} on Plus, which is 2 months free.</p>
 </td></tr></table>
 </td></tr>`;
 }
@@ -138,7 +140,7 @@ export function outreachSequenceEmail({ step, clinicName, unsubscribeUrl }: { st
           text: [
             "After launch, per 30 day post:",
             ...ROLE_BANDS.map((b) => `${b.label}: ${dollars(b.price)} (${perDay(b.price)} a day)`),
-            `Clinic pass: ${dollars(CLINIC_PASS.monthly)} a month for up to ${CLINIC_PASS.livePosts} live posts, ${perPassPost()} a post, for support, patient care, optician and practice lead roles. Clinic pass Plus: ${dollars(CLINIC_PASS_PLUS.monthly)} a month for up to ${CLINIC_PASS_PLUS.livePosts} live posts, ${perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included. Founding clinics keep their pass price for ${CLINIC_PASS.lockMonths} months, or pay for the year up front, ${dollars(CLINIC_PASS.yearly)} on the Clinic pass or ${dollars(CLINIC_PASS_PLUS.yearly)} on Plus.`,
+            `Clinic pass, from ${dollars(CLINIC_PASS.monthly)} a month: up to ${CLINIC_PASS.livePosts} live posts at once, ${perPassPost()} a post, for support, patient care, optician and practice lead roles, plus a featured clinic profile. Clinic pass Plus, ${dollars(CLINIC_PASS_PLUS.monthly)} a month: ${perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included. Founding clinics keep their pass price for ${CLINIC_PASS.lockMonths} months, or pay for the year up front, ${dollars(CLINIC_PASS.yearly)} on the Clinic pass or ${dollars(CLINIC_PASS_PLUS.yearly)} on Plus.`,
           ],
         }
       : undefined,

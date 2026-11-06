@@ -46,7 +46,7 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 2. DONE: review of the published posts (end of `docs/blog.md`).
 3. DONE and merged (pull request 33, 6th November): city and radius search (10, 25 and 50 km, field based jobs always show), filters that only offer roles and provinces with live jobs and show counts, friendlier empty states, and the Vision therapist role. Steve runs `run-everything.sql` on both databases for the Vision therapist rule (migration 0027).
 4. BUILT, awaiting Steve's preview (branch `claude/great-allen-57qmq6`, not merged): the pay benchmark on the post a job form, from official Job Bank wages (Ontario, Alberta and British Columbia; optometrist, optician, assistant and technician, patient care and reception), with the source, date and licence line, an "AI starting range" path that is empty until Steve accepts ranges, and Kestrel's own posted pay once a role and province has 10 posts from 3 clinics. No database change. Details, the role mapping, what was held back and why: `docs/pay-benchmark.md`. Steve's part: preview the form, check the assistant and reception groups on Job Bank (5 minutes, instructions in that page), and say whether to fill AI starting ranges next. The lawyer pack has the new question 38.
-5. First region plan: Toronto and Ontario first, then Alberta and British Columbia. Ontario draft is in `docs/first-region-ontario.md`, with 4 questions for Steve at the end.
+5. First region plan: Toronto and Ontario first, then Alberta and British Columbia. Ontario plan is in `docs/first-region-ontario.md`; Steve answered its questions on 6th November (all roles, city order confirmed, no waitlist counts yet, his own contacts only after the disclosure and the lawyer's check).
 6. DONE: automation plan phases, in `docs/automation-plan.md`.
 7. DONE and merged (5th November): audit items R22, R25 and R45. Steve has run `supabase/migrations/0024_sign_in_attempts.sql` on both databases, so the sign in guard is working.
 8. LinkedIn counts: not automatic. The project rules and LinkedIn's terms forbid automated reading. Steve reads a number off a search page and types it in.
@@ -55,6 +55,10 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 11. DONE in another chat (Steve, 5th November): ad builder improvements.
 12. DONE (pull request 33, checked 5th November): empty state with a "tell a clinic you know" link on /jobs when a search has no results.
 13. DONE and merged: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
+13b. DONE on a branch (6th November): job views and apply clicks in the clinic dashboard (audit R17). Migration 0030 and the combined file need running on both databases. Per job, and 2 new tiles for the last 30 days. Counts leave out bots, the clinic itself and our team, and use no cookies. Admin tile for Gate C is still to do (R41).
+13c. DONE on a branch (6th November): accessibility pass on public pages, no axe violations after one fix. Signed in pages and a screen reader run through are not done, see `docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`.
+13d. DONE (design only): sponsored posts, in `docs/sponsored-ads-plan.md`. Not built, no price shown. Steve decided (6th November): it launches with Stripe in the paid launch phase, and the price should come from real view numbers.
+13e. Terms wording for the passes, founding clinics and yearly payment is drafted in `docs/legal/terms-passes-draft.md`, with 6 questions for the lawyer. Steve decided on 6th November: a founding clinic keeps the pass it first took, the upgrade rules stay an internal procedure that is not advertised (`docs/pass-procedures.md`), monthly and yearly both renew by themselves at the same price, and a price change only applies to new purchases and renewals after 30 days notice. It is not on the website. Add the questions to the lawyer pack when Steve says.
 13a. For clinics page (audit R42): on the preview branch, the page now says agencies cannot post, the form asks for the pay range and 2 questions, the ad builder drafts from a few lines and a person reads each post. It does not name Jobs4ECPs or claim any traffic. Steve reads the preview. Still open: a comparison with named boards (needs a dated quote re checked while signed out) and the Terms wording for what each pass covers.
 14. Launch flyer: the first HTML draft was rejected. Outward facing designs are made in Canva (4 options generated on 5th November, Steve picks one and Claude adjusts it). Kept unpublished until Gate A is passed.
 15. Plan with Steve, when he is ready: PWA (installable web app), the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
@@ -85,7 +89,16 @@ The key is listed in `docs/security.md` with how to rotate it.
 10. App wrapping: a PWA first, native apps after launch numbers. See the notes.
 11. Is the automation plan plausible: yes for most of it, with a few hours a week of Steve's time. See the notes.
 
+## Steve: tomorrow morning, on a laptop (6th November 2026)
+
+1. Run `supabase/combined/run-everything.sql` on **both** databases (live and demo). It adds job views and apply clicks (migration 0030), and also catches up 0028 and 0029. Then re-run `supabase/demo/seed.sql` on the demo database only, so the demo dashboard shows sample numbers. The preview shows zeros until the SQL has run.
+2. Run Chrome's Lighthouse accessibility check on the demo site, on the signed in pages: post a job, the applicants board, the clinic dashboard, the candidate profile and the apply form. Open the page, right click, Inspect, Lighthouse tab, tick Accessibility only, Analyze, and send Claude the score and the list of failed checks (a screenshot is fine). Also try VoiceOver on your phone for 3 journeys: apply for a job, post a job, track an application. Detail in `docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`.
+
 ## Planning items (decided direction, not started)
+
+### Sponsored posts (added 6th November 2026, design only)
+
+Plan in `docs/sponsored-ads-plan.md`: a flat price per day, chosen when ordering a post, 2 sponsored spots on a results page that rotate fairly among matching boosted posts, a cap per province, always labelled, same for independent and corporate. No price is shown and it is not on the website. It waits for Stripe and for a few weeks of view numbers.
 
 ### Pass tiers and competitor pricing (added 5th November 2026, DECIDED: Clinic pass $199 and Clinic pass Plus $349)
 

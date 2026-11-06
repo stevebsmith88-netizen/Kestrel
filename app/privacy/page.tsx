@@ -72,8 +72,10 @@ export default function Privacy() {
             </li>
           </ul>
           <p>
-            We do not currently use advertising cookies or tracking tools on this site. If that changes, we will update this
-            policy and ask for your consent where the law requires it.
+            We do not currently use advertising cookies or tracking tools on this site. We do count how many times each job
+            page is viewed and how many times Apply is pressed, so clinics can see how their posts are doing. These counts
+            are kept for each job and each day, without cookies, and do not record who you are. If our approach changes, we
+            will update this policy and ask for your consent where the law requires it.
           </p>
 
           <h2>Why we collect it</h2>

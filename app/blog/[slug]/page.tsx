@@ -54,11 +54,11 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           <h1>{post.title}</h1>
           <p className="updated">By The Kestrel team · {longDate(post.date)} · {readingMinutes(post.body)} min read</p>
           <BlogBody body={post.body} />
-          <aside className="card blogcta">
-            <h2>Looking for work, or hiring?</h2>
+          <section className="card blogcta" aria-labelledby="blogcta-h">
+            <h2 id="blogcta-h">Looking for work, or hiring?</h2>
             <p>Kestrel is a Canada-wide eye care job board for clinics and professionals.</p>
             <p className="formbtns"><Link href="/jobs" className="btn">Find jobs</Link><Link href="/clinics" className="btn ghost">Post a job</Link></p>
-          </aside>
+          </section>
           {more.length > 0 && (
             <>
               <h2>More from the blog</h2>
