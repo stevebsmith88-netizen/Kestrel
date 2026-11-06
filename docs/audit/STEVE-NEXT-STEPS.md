@@ -98,6 +98,10 @@ The key is listed in `docs/security.md` with how to rotate it.
 1. Run `supabase/combined/run-everything.sql` on **both** databases (live and demo). It adds job views and apply clicks (migration 0030), and also catches up 0028 and 0029. Then re-run `supabase/demo/seed.sql` on the demo database only, so the demo dashboard shows sample numbers. The preview shows zeros until the SQL has run.
 2. Run Chrome's Lighthouse accessibility check on the demo site, on the signed in pages: post a job, the applicants board, the clinic dashboard, the candidate profile and the apply form. Open the page, right click, Inspect, Lighthouse tab, tick Accessibility only, Analyze, and send Claude the score and the list of failed checks (a screenshot is fine). Also try VoiceOver on your phone for 3 journeys: apply for a job, post a job, track an application. Detail in `docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`.
 
+## Email: auto-reply on the wrong mailbox (6th November 2026)
+
+A bounce from GitHub showed an auto-reply running on kestrel@eyecarejobs.ca, which receives all service mail. Switch it off there (Gmail app, the kestrel@ account, Vacation responder, off). Then, on a laptop, put the hello@ auto-reply on a mailbox that only receives hello@ mail (a separate mailbox or a Google group). Check whether hello@ is an alias of kestrel@. Detail in `docs/email-templates/README.md`.
+
 ## Planning items (decided direction, not started)
 
 ### Sponsored posts (added 6th November 2026, design only)

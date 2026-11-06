@@ -16,6 +16,8 @@ Email the app itself sends (applications, alerts, confirmations) is built in `li
 
 This one is not for Supabase. It is a reply for the shared inbox (hello@eyecarejobs.ca), saying a person will answer within 3 business days. Change the number of days if you want a different promise.
 
+**Warning (6th November 2026): never switch this on in kestrel@eyecarejobs.ca, or any mailbox that receives mail from services.** Kestrel@ is the login address for GitHub, Namecheap, Supabase, Vercel and others. A Gmail vacation responder replies to one to one automated mail from those services, such as GitHub's `noreply@github.com` account emails, and the service bounces the reply back. Keep this reply on a mailbox that only receives mail from people writing to hello@ (a separate hello@ mailbox or a Google Group), and leave kestrel@ without any auto-reply. Do not rely on "only reply to people in my contacts", because it would also skip first time clinics and candidates.
+
 Gmail's vacation responder (Settings, See all settings, General, Vacation responder) takes formatted text, not raw HTML. What works:
 1. **Subject:** type "We have your message". Gmail puts your subject in front of the original one ("We have your message Re: Great website").
 2. **Message:** paste the text from `auto-reply.txt` (without its first "Subject" line). Then turn each of the 3 lines into a proper link: select the words (for example "Browse eye care jobs across Canada"), press the link button (or Ctrl or Cmd with K) and paste the address from the brackets, then delete the bracketed address. This avoids long web addresses wrapping on a phone.
