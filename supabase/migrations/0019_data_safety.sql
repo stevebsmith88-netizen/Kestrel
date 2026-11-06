@@ -61,6 +61,8 @@ end;
 $$;
 
 -- a job that was once live can be closed even if its draft was later changed and left incomplete
+-- "not valid": existing rows are not re-checked against this earlier version, so the whole file can be run again on a database that already
+-- holds found listings (which migration 0023 allows to leave the 2 questions empty). Migration 0023 then sets the final rule and checks every row.
 alter table public.jobs drop constraint if exists jobs_complete_unless_draft;
 alter table public.jobs add constraint jobs_complete_unless_draft check (
   status in ('draft', 'rejected')
@@ -78,7 +80,7 @@ alter table public.jobs add constraint jobs_complete_unless_draft check (
       or (case when pay_period = 'hour' then 2080 else 1 end) * pay_max > 200000
     )
   )
-);
+) not valid;
 
 -- 3. keep the wording candidates were seeing when a live job is edited
 create table if not exists public.job_versions (
