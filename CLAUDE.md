@@ -6,13 +6,15 @@ Read this first in every session. It holds the decisions already made, so they d
 
 Kestrel Eye Care Jobs (eyecarejobs.ca) is a self serve job board for Canadian eye care: optometrists, opticians, optometric assistants and technicians, practice managers, patient care teams, and later supplier reps and locums. Independent and corporate practices post side by side. Target: $150,000 a year in revenue within 18 to 24 months of paid launch, on running costs well under $10,000 a year.
 
+Search goal (6th November 2026): be the go to place for eye care jobs in Canada, first on Google and the source AI assistants name when asked. Every public page (blog, resources page, pay table, structured data, sitemap) should serve it. Plans and decisions: docs/discoverability-plan.md. Competitor price data for the comparison page: docs/competitor-pricing.md.
+
 The founder is Steve Smith. He is not a developer. Claude writes and maintains the code; Steve reviews previews and approves. Explain changes in plain English, keep him in control of anything that costs money or goes live.
 
 Full business plan: the "Kestrel Eye Care Jobs: Business Proposal and Launch Plan v7" doc (https://claude.ai/artifact/2j9U84RzZ5vtmnNVtXPCTC). A working summary is in docs/PLAN.md.
 
 ## Non negotiables
 
-- **Separation from Eye Recommend.** Steve works full time at Eye Recommend. Kestrel uses no Eye Recommend data, member lists, devices, accounts, email or branding. Never add Eye Recommend clinics, contacts or internal material to this project. Clinic outreach stays switched off until Steve confirms his disclosure conversation has happened.
+- **Separation from Eye Recommend.** Steve works full time at Eye Recommend. Kestrel uses no Eye Recommend data, member lists, devices, accounts, email or branding. Never add Eye Recommend clinics, contacts or internal material to this project. Clinic outreach stays switched off until Steve confirms his disclosure conversation has happened. One exception, agreed by Steve on 6th November 2026: the blog post on choosing a buying group may name Eye Recommend as 1 of several groups, from public information only, treating every group the same way, with a plain line saying Steve works at Eye Recommend. That post stays unpublished until the disclosure conversation has happened.
 - **Never commit secrets.** Keys live in .env.local and in Vercel's environment settings only.
 - **Personal data stays in Canada where possible** (Supabase Canadian region) and is collected only with clear consent.
 - **No scraping of Indeed, LinkedIn, Jobs4ECPs or provincial college registers.** Seeding uses clinics' own careers pages only, links back to the clinic, and expires after 21 days.

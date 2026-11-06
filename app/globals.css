@@ -499,3 +499,16 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .findbox>.leadbody{padding-top:14px}
 @media (max-width:640px){.leadrow>summary{grid-template-columns:1fr}.leadrow>summary::after{grid-column:1;grid-row:3;justify-self:start}}
 .statsnote{margin:-8px 0 20px;max-width:640px;font-size:0.9375rem;color:var(--muted)}
+
+/* Resources page: the province pay table and the link lists */
+.resources h2{margin-top:44px}
+.resources h3{font:400 1.25rem/1.25 "DM Serif Display",Georgia,serif;margin:26px 0 6px}
+.resources label{display:block;font-weight:600;margin:18px 0 6px}
+.payguide select{max-width:360px}
+.payguide .table{min-width:640px}
+.payguide .table caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
+.payguide .table tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy)}
+.pg-sub{display:block;color:var(--muted);font-size:0.8125rem}
+.resources .linklist{list-style:none;padding:0}
+.resources .linklist li{margin:12px 0}
+.resources .linklist span{display:block;font-size:0.9375rem}
