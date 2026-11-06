@@ -11,7 +11,7 @@ Built 6th November 2026 on branch `claude/amazing-keller-c7k18u` (waiting for St
   1. Pay guidance table: province drop down, then roles, using the Job Bank figures already built for the pay benchmark (docs/pay-benchmark.md), with a link to Job Bank for each. Wording "typical" and "median" only, with the Open Government Licence line.
   2. Regulator and licensing links by province (optometry colleges and optician regulators, NACOR). Links only. The provincial registers are never scraped.
   3. Canadian hiring rules: pay range, existing vacancy and AI screening disclosure (matches the posting policy page and CLAUDE.md).
-  4. Association links: optometry associations (national and provincial) and the Opticians Association of Canada. Steve wrote "OAO, AAO". Confirm which associations those are, then check every link before it goes live. No suppliers.
+  4. Association links: optometry associations (national and provincial) and the Opticians Association of Canada. "OAO" and "AAO" are the Ontario and Alberta Associations of Optometrists (confirmed 6th November 2026). Check every link before it goes live. No suppliers.
   5. The Find your fit quiz.
 - **Link backs:** links out do not bring links in. Backlinks come when associations and trade publications choose to point at a useful page, so ask them after launch. Association outreach waits for Steve's disclosure conversation, like clinic outreach.
 

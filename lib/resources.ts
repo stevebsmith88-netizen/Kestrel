@@ -13,7 +13,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     intro: "Where the profession speaks for itself, with news, events and member services.",
     links: [
       { name: "Canadian Association of Optometrists", url: "https://opto.ca", note: "The national association for optometrists.", checked: "2026-11-06" },
-      { name: "Provincial optometric associations", url: "https://opto.ca/provinces", note: "The list of provincial associations, kept by the Canadian Association of Optometrists.", checked: "2026-11-06" },
+      { name: "Provincial optometric associations", url: "https://opto.ca/provinces", note: "The list of provincial associations, kept by the Canadian Association of Optometrists: BC Doctors of Optometry, Alberta Association of Optometrists, Saskatchewan Association of Optometrists, Manitoba Association of Optometrists, Ontario Association of Optometrists, Association des optométristes du Québec, New Brunswick Association of Optometrists, Nova Scotia Association of Optometrists, Prince Edward Island Association of Optometrists, and Newfoundland and Labrador Association of Optometrists.", checked: "2026-11-06" },
       // Held back until opened and confirmed (addresses came from directory listings, not from the organisations):
       { name: "Opticians Association of Canada", url: "https://opticians.ca", note: "The national association for opticians.", checked: null },
       { name: "Ontario Association of Optometrists", url: "https://www.optom.on.ca", note: "The provincial association for optometrists in Ontario.", checked: null },
@@ -28,10 +28,10 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       { name: "College of Health and Care Professionals of BC: optometrists", url: "https://chcpbc.org/for-professions/optometrists", note: "British Columbia. The College of Optometrists of BC joined this college in June 2024.", checked: "2026-11-06" },
       { name: "College of Health and Care Professionals of BC: opticians", url: "https://chcpbc.org/for-professions/opticians", note: "British Columbia. The College of Opticians of BC joined this college in June 2024.", checked: "2026-11-06" },
       { name: "Ordre des optométristes du Québec", url: "https://www.ooq.org", note: "Quebec, optometrists.", checked: "2026-11-06" },
+      { name: "Alberta College of Optometrists", url: "https://collegeofoptometrists.ab.ca", note: "Alberta, optometrists.", checked: "2026-11-06" },
       // Held back until opened and confirmed:
       { name: "College of Optometrists of Ontario", url: "https://www.collegeoptom.on.ca", note: "Ontario, optometrists.", checked: null },
       { name: "College of Opticians of Ontario", url: "https://collegeofopticians.ca", note: "Ontario, opticians. An older address, coptont.org, also appears in listings, so confirm which is current.", checked: null },
-      { name: "Alberta College of Optometrists", url: "https://www.collegeofoptometrists.ab.ca", note: "Alberta, optometrists.", checked: null },
       { name: "National Association of Canadian Optician Regulators (NACOR)", url: "https://nacor.ca", note: "Runs the national opticianry exams for the provincial regulators.", checked: null },
     ],
   },
