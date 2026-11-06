@@ -47,6 +47,10 @@ from (
     ('column: when a found listing was found', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'found_at')),
     ('rule: found listings live 21 days at most', exists (select 1 from pg_constraint where conname = 'jobs_found_listing_21_days')),
     ('table: clinic_leads (province search leads)', to_regclass('public.clinic_leads') is not null),
+    ('table: outreach_contacts (clinic outreach sequence)', to_regclass('public.outreach_contacts') is not null),
+    ('column: job extensions', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'extended_count')),
+    ('table: job_daily_stats (job views and apply clicks)', to_regclass('public.job_daily_stats') is not null),
+    ('function: record_job_event', exists (select 1 from pg_proc where proname = 'record_job_event')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

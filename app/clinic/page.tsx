@@ -6,6 +6,8 @@ import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
+import { numbersLine, sumNumbers } from "@/lib/job-stats";
+import { getMyJobNumbers } from "@/lib/job-stats-data";
 import { closeJob, deleteJob, extendJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
 import { canExtend } from "@/lib/job-ending";
 import { saveJobAsTemplate } from "@/lib/template-actions";
@@ -41,6 +43,8 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const employer = await getMyEmployer(session.userId);
   const jobs = employer ? await getMyJobs(employer.id) : [];
   const applicants = employer ? await getApplicantCounts() : {};
+  const numbers = employer ? await getMyJobNumbers() : {};
+  const totals = sumNumbers(numbers);
   const unread = Object.values(applicants).reduce((sum, c) => sum + c.fresh, 0);
   const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
   const first = session.firstName || "there";
@@ -70,7 +74,10 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                 <section className="card tile"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></section>
                 <section className="card tile"><p className="kicker">In review</p><p className="num">{count("in_review")}</p><p>With our team</p></section>
                 <section className="card tile"><p className="kicker">Drafts</p><p className="num">{count("draft") + count("rejected")}</p><p>Not sent yet</p></section>
+                <section className="card tile"><p className="kicker">Views</p><p className="num">{totals.views30.toLocaleString("en-CA")}</p><p>Last 30 days</p></section>
+                <section className="card tile"><p className="kicker">Apply clicks</p><p className="num">{totals.clicks30.toLocaleString("en-CA")}</p><p>Last 30 days</p></section>
               </div>
+              <p className="small-note statsnote">Views count each visit to a job page once, and leave out search engines, you and our team. An apply click is someone pressing Apply, which is not the same as a finished application, so the applicant counts stay the ones to trust.</p>
 
               <div className="listhead">
                 <h2>Your jobs</h2>
@@ -88,6 +95,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                         <p className="meta">
                           {[employmentLabel(j.employment_type), j.city && j.province ? `${j.city}, ${j.province}` : null, j.pay_min && j.pay_max && j.pay_period ? formatPay(j.pay_min, j.pay_max, j.pay_period) : null].filter(Boolean).join(" · ") || "Not finished yet"}
                         </p>
+                        {j.posted_at && <p className="meta">{numbersLine(numbers[j.id])}</p>}
                         {j.status === "live" && j.expires_at && <p className="meta">Live until {longDate(j.expires_at)} ({daysLeft(j.expires_at)} days left)</p>}
                         {j.status === "in_review" && <p className="meta">With our team. We usually check posts within 1 business day.</p>}
                         {j.status === "rejected" && j.review_note && <p className="note"><strong>What to change:</strong> {j.review_note}</p>}

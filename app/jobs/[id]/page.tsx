@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
+import ApplyLink from "@/components/ApplyLink";
+import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { answerLabel, employmentLabel, formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
@@ -42,6 +44,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
       <SiteHeader session={await getSession()} />
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
       <main id="main" tabIndex={-1} className="jobpage">
+        <JobViewBeacon jobId={job.id} />
         <div className="wrap">
           <p className="back"><Link href="/jobs">Back to all jobs</Link></p>
           <header className="jobhead">
@@ -76,12 +79,12 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 {job.apply_method === "external" && job.apply_url ? (
                   <>
                     <p>Applications are made on the clinic&apos;s own website.</p>
-                    <a href={job.apply_url} className="btn" target="_blank" rel="nofollow noopener noreferrer">Apply on the clinic&apos;s website<span className="sr"> (opens in a new tab)</span></a>
+                    <ApplyLink jobId={job.id} href={job.apply_url} external>Apply on the clinic&apos;s website<span className="sr"> (opens in a new tab)</span></ApplyLink>
                   </>
                 ) : (
                   <>
                     <p>Use your saved CV and, if you like, a short cover note. It takes about a minute, and you can follow your application as the employer reviews it.</p>
-                    <Link href={`/jobs/${job.id}/apply`} className="btn">Quick Apply</Link>
+                    <ApplyLink jobId={job.id} href={`/jobs/${job.id}/apply`}>Quick Apply</ApplyLink>
                   </>
                 )}
               </section>

@@ -55,6 +55,9 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 11. DONE in another chat (Steve, 5th November): ad builder improvements.
 12. DONE (pull request 33, checked 5th November): empty state with a "tell a clinic you know" link on /jobs when a search has no results.
 13. DONE and merged: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
+13b. DONE on a branch (6th November): job views and apply clicks in the clinic dashboard (audit R17). Migration 0030 and the combined file need running on both databases. Per job, and 2 new tiles for the last 30 days. Counts leave out bots, the clinic itself and our team, and use no cookies. Admin tile for Gate C is still to do (R41).
+13c. DONE on a branch (6th November): accessibility pass on public pages, no axe violations after one fix. Signed in pages and a screen reader run through are not done, see `docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`.
+13d. DONE (design only): sponsored posts, in `docs/sponsored-ads-plan.md`. Not built, no price shown. Builds after Stripe, and the price should come from real view numbers.
 13a. For clinics page (audit R42): on the preview branch, the page now says agencies cannot post, the form asks for the pay range and 2 questions, the ad builder drafts from a few lines and a person reads each post. It does not name Jobs4ECPs or claim any traffic. Steve reads the preview. Still open: a comparison with named boards (needs a dated quote re checked while signed out) and the Terms wording for what each pass covers.
 14. Launch flyer: the first HTML draft was rejected. Outward facing designs are made in Canva (4 options generated on 5th November, Steve picks one and Claude adjusts it). Kept unpublished until Gate A is passed.
 15. Plan with Steve, when he is ready: PWA (installable web app), the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
@@ -86,6 +89,10 @@ The key is listed in `docs/security.md` with how to rotate it.
 11. Is the automation plan plausible: yes for most of it, with a few hours a week of Steve's time. See the notes.
 
 ## Planning items (decided direction, not started)
+
+### Sponsored posts (added 6th November 2026, design only)
+
+Plan in `docs/sponsored-ads-plan.md`: a flat price per day, chosen when ordering a post, 2 sponsored spots on a results page that rotate fairly among matching boosted posts, a cap per province, always labelled, same for independent and corporate. No price is shown and it is not on the website. It waits for Stripe and for a few weeks of view numbers.
 
 ### Pass tiers and competitor pricing (added 5th November 2026, DECIDED: Clinic pass $199 and Clinic pass Plus $349)
 
