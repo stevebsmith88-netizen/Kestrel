@@ -10,8 +10,8 @@
 
 | # | Move | Audit section | Impact | Ease | Who |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Write 3 definitions: waitlist member, qualified clinic (claimed profile), customer (first live post). Agree what a good first week is: clinic = first live post that gets an application; candidate = first application or opened alert. | 3, 14, 15 | High | S, about 1 hour | Steve decides, Claude drafts |
-| 2 | Save where each waitlist and sign up came from (`utm_source`, `utm_medium`, referrer), and write a one page naming guide for links. | 18 | High | S | Claude |
+| 1 | DONE 6th November 2026 (`docs/definitions.md`). Write 3 definitions: waitlist member, qualified clinic (claimed profile), customer (first live post). Agree what a good first week is: clinic = first live post that gets an application; candidate = first application or opened alert. | 3, 14, 15 | High | S, about 1 hour | Steve decides, Claude drafts |
+| 2 | BUILT on branch `claude/relaxed-babbage-itq5zq`, awaiting Steve's preview and migration 0032 on both databases (`docs/utm-guide.md`). Save where each waitlist and sign up came from (`utm_source`, `utm_medium`, referrer), and write a one page naming guide for links. | 18 | High | S | Claude |
 | 3 | Choose a privacy first analytics tool (Search Console is already done) and add the funnel steps: visit, waitlist, sign up, profile, first post, first application. | 18, 3, 15 | High | M | Steve picks, Claude installs |
 | 4 | Home page: one line under the hero stating the difference (pay on every job, a person reads every post, no agencies). Link `/compare` from the clinic card. Swap "built by people who know it" for a specific only Steve can give. | 1, 8 | High | S | Claude, Steve supplies the specific |
 | 5 | Mark the Clinic pass as the pick on `/clinics`, with a cost per post line. | 6, 5 | Medium | S | Claude |

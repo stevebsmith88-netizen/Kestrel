@@ -74,7 +74,10 @@ export default function Privacy() {
           <p>
             We do not currently use advertising cookies or tracking tools on this site. We do count how many times each job
             page is viewed and how many times Apply is pressed, so clinics can see how their posts are doing. These counts
-            are kept for each job and each day, without cookies, and do not record who you are. If our approach changes, we
+            are kept for each job and each day, without cookies, and do not record who you are. If you join the waitlist, we also
+            save how your visit began: the website that sent you, the page you landed on and any campaign tag in the link you
+            clicked. This helps us learn which of our pages and links are useful. It is held in your browser only until you close
+            the tab, and is sent to us only if you press the join button. If our approach changes, we
             will update this policy and ask for your consent where the law requires it.
           </p>
 

@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0031), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0032), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1965,6 +1965,21 @@ create policy "Candidates can bring back a hidden job"
   using ((select auth.uid()) = user_id);
 
 -- ======================================================================
+-- 0032_waitlist_attribution.sql
+-- ======================================================================
+-- 0032: where a waitlist sign up came from (marketing audit item 2).
+-- The first visit of the browser session is saved with the sign up: the link tags (utm_source, utm_medium, utm_campaign),
+-- the website that sent the visitor, and the page they landed on. No query strings are kept, so nothing personal can be
+-- saved by accident. Safe to run more than once. Run it on BOTH databases (live and demo).
+
+alter table public.waitlist
+  add column if not exists utm_source    text check (utm_source is null or char_length(utm_source) <= 60),
+  add column if not exists utm_medium    text check (utm_medium is null or char_length(utm_medium) <= 60),
+  add column if not exists utm_campaign  text check (utm_campaign is null or char_length(utm_campaign) <= 60),
+  add column if not exists referrer_host text check (referrer_host is null or char_length(referrer_host) <= 100),
+  add column if not exists landing_path  text check (landing_path is null or char_length(landing_path) <= 120);
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2019,6 +2034,7 @@ from (
     ('function: record_job_event', exists (select 1 from pg_proc where proname = 'record_job_event')),
     ('column: candidate preferences (recommended jobs)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'pref_min_pay')),
     ('table: candidate_job_hides (not interested)', to_regclass('public.candidate_job_hides') is not null),
+    ('column: where a waitlist sign up came from', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'waitlist' and column_name = 'utm_source')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
