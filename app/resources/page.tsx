@@ -40,7 +40,7 @@ export default async function Resources() {
           <p className="help">
             The median is the middle figure: half of workers earn more and half earn less. The middle half of pay runs from the first quartile to the third.
             Hourly roles also show a yearly amount, worked out over a 2,080 hour year. Where a role has no exact Job Bank group, we use the closest one and say so.
-            Optometrist figures are yearly and come from the 2021 Census, so they are the oldest on the page. A province is left out where Job Bank publishes no figure, usually
+            A province is left out where Job Bank publishes no figure, usually
             because the numbers are small.
           </p>
           <p className="help">
