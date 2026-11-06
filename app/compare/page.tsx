@@ -5,14 +5,14 @@ import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import {
-  COMPARE_CHECKED, comparePageOn, ELUTA_SPONSORED, ELUTA_URL, INDEED, INDEED_URL, JOBS4ECPS_BASIC, JOBS4ECPS_URL, LINKEDIN_URL, OJOBS_FEATURED, OJOBS_REGULAR, OJOBS_URL, over30Days,
+  COMPARE_CHECKED, comparePageOn, ZIPRECRUITER_ESTIMATE, ELUTA_SPONSORED, ELUTA_URL, INDEED, INDEED_URL, JOBS4ECPS_BASIC, JOBS4ECPS_URL, LINKEDIN_URL, OJOBS_FEATURED, OJOBS_REGULAR, OJOBS_URL, over30Days,
 } from "@/lib/compare-prices";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, dollars, perPassPost, POST_DAYS, ROLE_BANDS } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
   title: "How Kestrel's prices compare",
-  description: "What it costs to advertise an eye care job on Kestrel, Jobs4ECPs, Indeed, Eluta, OJobs and LinkedIn, from public prices, with the date we checked.",
+  description: "What it costs to advertise an eye care job on Kestrel, Jobs4ECPs, Indeed, Eluta, OJobs, LinkedIn and ZipRecruiter, with the date we checked.",
   path: "/compare",
 });
 
@@ -120,6 +120,9 @@ export default async function Compare() {
           <ul>
             <li>Kestrel prices are in Canadian dollars before HST. They apply after the free launch period.</li>
             <li>A Kestrel pass renews each month at the same price until you cancel. A single post does not renew.</li>
+            <li>
+              ZipRecruiter does not charge per advert. It sells a monthly subscription by the number of live job slots, and sponsorship by the day. Third party reports estimate about US${ZIPRECRUITER_ESTIMATE.monthlyLow} to US${ZIPRECRUITER_ESTIMATE.monthlyHigh.toLocaleString("en-CA")} a month for each live job slot, and US${ZIPRECRUITER_ESTIMATE.dailyLow} to US${ZIPRECRUITER_ESTIMATE.dailyHigh} a day for sponsorship. These are estimates, not ZipRecruiter&apos;s own prices, and Canadian prices may differ, so please check with ZipRecruiter.
+            </li>
             <li>Eluta prices are plus tax. We have not checked how the others treat tax beyond what their pages say.</li>
             <li>Indeed&apos;s figures are the daily averages its sponsoring screen showed on {COMPARE_CHECKED}. A sponsored job can cost less or more than the average.</li>
             <li>Prices can change. Please confirm on each service&apos;s own page before you buy: <a href={JOBS4ECPS_URL}>Jobs4ECPs</a>, <a href={INDEED_URL}>Indeed</a>, <a href={ELUTA_URL}>Eluta</a>, <a href={OJOBS_URL}>OJobs</a> and <a href={LINKEDIN_URL}>LinkedIn</a>.</li>

@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { comparePageOn, ELUTA_SPONSORED, INDEED, JOBS4ECPS_BASIC, OJOBS_FEATURED, OJOBS_REGULAR, over30Days } from "./compare-prices.ts";
+import { comparePageOn, ELUTA_SPONSORED, INDEED, JOBS4ECPS_BASIC, OJOBS_FEATURED, OJOBS_REGULAR, over30Days, ZIPRECRUITER_ESTIMATE } from "./compare-prices.ts";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, perPassPost } from "./pricing.ts";
 
 test("OJobs totals are the slot price times the number of slots, and each extra slot is cheaper", () => {
@@ -43,4 +43,9 @@ test("Indeed: the Premium 30 day maximum is the daily average over 30 days, and 
 
 test("Jobs4ECPs lists a single 30 day posting at $100", () => {
   assert.deepEqual({ ...JOBS4ECPS_BASIC }, { price: 100, days: 30 });
+});
+
+test("the ZipRecruiter figures are ranges, low below high", () => {
+  assert.ok(ZIPRECRUITER_ESTIMATE.monthlyLow < ZIPRECRUITER_ESTIMATE.monthlyHigh);
+  assert.ok(ZIPRECRUITER_ESTIMATE.dailyLow < ZIPRECRUITER_ESTIMATE.dailyHigh);
 });

@@ -18,6 +18,11 @@ export const JOBS4ECPS_BASIC = { price: 100, days: 30 } as const;
 export const INDEED = { standardDaily: 38, premiumDaily: 63, premiumMax30Days: 1890, freeJobsPerMonth: 3, freeDays: 30 } as const;
 export const over30Days = (daily: number) => daily * 30;
 
+// ZipRecruiter. We could not find its own price page for Canada. These are ESTIMATES reported by third party sites (a Google AI summary of CareerPlug, ADP and Pin
+// pages, seen on 6th November 2026), almost certainly in US dollars. They are shown as estimates, never as ZipRecruiter's prices, and not per advert, because ZipRecruiter
+// sells monthly plans by the number of live job slots and sponsorship by the day. Replace with figures from its own page when Steve finds one.
+export const ZIPRECRUITER_ESTIMATE = { monthlyLow: 300, monthlyHigh: 1000, dailyLow: 16, dailyHigh: 35 } as const;
+
 // Eluta, Sponsored Job (plus tax).
 export const ELUTA_SPONSORED = [
   { days: 30, total: 199 },

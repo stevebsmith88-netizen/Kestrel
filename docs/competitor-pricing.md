@@ -50,7 +50,7 @@ All slots run 30 days. The site also has an Employer of the Month panel, a class
 
 ### Left out on purpose
 
-- **ZipRecruiter:** the only figures seen came from a Google AI summary quoting third party sites (about $16 to $35 a day, or $299 to $999 a month per job slot). Not usable. Add it only from ZipRecruiter's own pricing page.
+- **ZipRecruiter:** its own Canadian price page could not be found, so it is NOT in the table. It has one line under the table, worded as a third party ESTIMATE (about US$300 to US$1,000 a month per live job slot, US$16 to US$35 a day for sponsorship), from a Google AI summary quoting CareerPlug, ADP and Pin pages seen on 6th November 2026. Replace with ZipRecruiter's own figures if Steve finds them.
 - **Jobs-Optometry (jobs-optometry.com):** no pricing found anywhere. Needs a screenshot of its own price page.
 
 ## Not yet confirmed
