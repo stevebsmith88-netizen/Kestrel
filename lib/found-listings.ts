@@ -10,7 +10,7 @@
 //    empty and shown as "Not stated by the clinic". Kestrel never guesses a fact for a clinic.
 //  * Never for a clinic that already has its own Kestrel account, and never the clinic's logo.
 
-import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, mentionsCanadianExperience, parseMoney, payRangeAllowed } from "./jobs.ts";
+import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLE_CATEGORIES, mentionsCanadianExperience, parseMoney, payRangeAllowed } from "./jobs.ts";
 import { copiedRun, hostOfUrl, isHiringSystem, refuseAddress } from "./page-reader.ts";
 
 export const FOUND_LIFETIME_DAYS = 21;
@@ -227,6 +227,7 @@ export function validateFoundInput(f: FoundInput, pagePrint?: Iterable<number>) 
   if (!(ROLE_CATEGORIES as readonly string[]).includes(f.roleCategory)) errors.roleCategory = "Choose a role. If none fits, this job is not one Kestrel lists.";
   if (!(EMPLOYMENT_TYPES as readonly string[]).includes(f.employmentType)) errors.employmentType = "Choose an employment type. If the page does not say, check before listing.";
   if (!(PROVINCES as readonly string[]).includes(f.province)) errors.province = "Choose a province or territory.";
+  else if (f.province === QUEBEC) errors.province = QUEBEC_JOB_MESSAGE;
   if (!f.city) errors.city = "Enter the city.";
   if (f.workArrangement === "field" && f.territory.length < 3) errors.territory = "Enter the area the person covers, as the page gives it.";
 

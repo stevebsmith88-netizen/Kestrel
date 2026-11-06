@@ -2,9 +2,9 @@
 // post valid, and how a job is shown. Kept free of imports from the app so the rules
 // can be tested on their own (see lib/jobs.test.ts).
 
-import { PROVINCES, ROLES } from "./waitlist.ts";
+import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLES } from "./waitlist.ts";
 
-export { PROVINCES };
+export { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE };
 // Roles that work from clinics. The waitlist uses this list too, so it is kept as it is.
 export const CLINIC_ROLES = ROLES;
 // Roles that usually travel to clinics, for suppliers, manufacturers and labs. To add another role, add it
@@ -177,6 +177,7 @@ export function validateJob(job: JobInput, submit: boolean) {
   }
   if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
   if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
+  if (job.province === QUEBEC) errors.province = QUEBEC_JOB_MESSAGE; // refused for drafts too, so a Quebec job never gets as far as review
   if (!submit) return errors;
 
   if (!(ROLE_CATEGORIES as readonly string[]).includes(job.roleCategory)) errors.roleCategory = "Choose a role.";

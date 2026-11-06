@@ -8,7 +8,7 @@ import { saveJobForClinic } from "@/lib/admin-job-actions";
 import { saveJob } from "@/lib/clinic-actions";
 import PayBenchmark from "@/components/PayBenchmark";
 import type { OwnPayStat } from "@/lib/pay-benchmark";
-import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PROVINCES, WORK_ARRANGEMENTS } from "@/lib/jobs";
+import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
 
 export type JobFormValues = {
   id?: string;
@@ -103,7 +103,7 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
         <Field id="jf-city" label={arrangement === "field" ? "City you are based in" : "City"} required error={e.city}>
           <input id="jf-city" name="city" type="text" defaultValue={initial.city} />
         </Field>
-        <Field id="jf-province" label="Province or territory" required error={e.province}>
+        <Field id="jf-province" label="Province or territory" required error={e.province} hint={province === QUEBEC ? QUEBEC_JOB_MESSAGE : undefined}>
           <select id="jf-province" name="province" value={province} onChange={(ev) => setProvince(ev.target.value)}>
             <option value="">Choose one</option>
             {PROVINCES.map((p) => (
