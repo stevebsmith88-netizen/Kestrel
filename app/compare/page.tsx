@@ -6,7 +6,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import {
   COMPARE_CHECKED, comparePageOn, ELUTA_SPONSORED, ELUTA_URL, INDEED, INDEED_URL, JOBS4ECPS_BASIC, JOBS4ECPS_URL, LINKEDIN_URL, OJOBS_FEATURED, OJOBS_REGULAR, OJOBS_URL, over30Days,
-  ZIPRECRUITER_ESTIMATE,
+  ZIPRECRUITER, ZIPRECRUITER_URL,
 } from "@/lib/compare-prices";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, dollars, perDay, perPassPost, POST_DAYS, ROLE_BANDS } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
@@ -64,6 +64,7 @@ export default async function Compare() {
               <li>Every post shows a pay range and answers 2 questions: is it an existing vacancy, and do you use AI to screen candidates. It is built around Ontario&apos;s rules from 1st January 2026 and British Columbia&apos;s pay range rule.</li>
               <li>A person reads every post before it goes live, and agencies cannot post, so candidates see jobs from the clinics themselves.</li>
               <li>A pay guide shows how your range compares with what is typical for the role and province, and an ad builder drafts the listing for you.</li>
+              <li>No credit card is needed to post during the free launch.</li>
               <li>Applications arrive on one board, with the CV and cover letter, and you update each candidate&apos;s status as you go.</li>
               <li>Candidates get job alerts and a &quot;Recommended for you&quot; list that shows why each job fits.</li>
             </ul>
@@ -87,6 +88,7 @@ export default async function Compare() {
                 name="Kestrel"
                 about="Pay range guide, ad builder, a read through by a person and an applicant board."
                 one={`${dollars(lowest)} to ${dollars(highest)}, by role`}
+                oneNote="No credit card needed to post during the free launch."
                 five={`${perPassPost(CLINIC_PASS)} a job`}
                 manyNote={`On the Clinic pass, ${dollars(CLINIC_PASS.monthly)} a month for up to ${CLINIC_PASS.livePosts} live posts. ${perPassPost(CLINIC_PASS_PLUS)} a job with optometrists included.`}
               />
@@ -134,18 +136,19 @@ export default async function Compare() {
               />
               <Row
                 name="ZipRecruiter"
-                about="A general job site."
-                one="No price per advert"
-                oneNote="Monthly plans by live job slot, or sponsorship by the day. See the note below."
-                five="Priced by plan"
+                about="A general job site. Prices are in US dollars."
+                one={`US$${ZIPRECRUITER.dailyUsd} a day`}
+                oneNote={`For each active job, about US$${over30Days(ZIPRECRUITER.dailyUsd)} over ${POST_DAYS} days, after a short free trial that needs a credit card.`}
+                five={`US$${ZIPRECRUITER.dailyUsd} a day each`}
+                manyNote={`About US$${(over30Days(ZIPRECRUITER.dailyUsd) * 5).toLocaleString("en-CA")} over ${POST_DAYS} days for 5 active jobs.`}
               />
             </tbody>
           </table>
 
           <h2>How to read this</h2>
           <p>
-            Eluta is a search engine that sells placement. Indeed, LinkedIn and ZipRecruiter are general job sites, where a basic post is often free and promotion is charged against a
-            budget, so the cost depends on how much you spend and how candidates respond. OJobs, Jobs4ECPs and Kestrel are eye care job boards. Kestrel adds a form that asks for the
+            Eluta is a search engine that sells placement. Indeed, LinkedIn and ZipRecruiter are general job sites. Indeed and LinkedIn offer a free basic post and charge for promotion against a
+            budget, and ZipRecruiter charges by the day for each active job. OJobs, Jobs4ECPs and Kestrel are eye care job boards. Kestrel adds a form that asks for the
             pay range and the 2 disclosure questions, and an applicant board for clinics. Some association and government job boards charge nothing, so it is worth checking them as well.
           </p>
           <ul>
@@ -157,21 +160,22 @@ export default async function Compare() {
               Premium to {dollars(INDEED.premiumMax30Days)}, which is its maximum for {POST_DAYS} days. A sponsored job can cost less or more than the average.
             </li>
             <li>
-              ZipRecruiter does not charge per advert. It sells a monthly subscription by the number of live job slots, and sponsorship by the day. Third party reports estimate about US${ZIPRECRUITER_ESTIMATE.monthlyLow} to
-              US${ZIPRECRUITER_ESTIMATE.monthlyHigh.toLocaleString("en-CA")} a month for each live job slot, and US${ZIPRECRUITER_ESTIMATE.dailyLow} to US${ZIPRECRUITER_ESTIMATE.dailyHigh} a day for sponsorship. These are estimates, not
-              ZipRecruiter&apos;s own prices, and Canadian prices may differ, so please check with ZipRecruiter.
+              ZipRecruiter&apos;s checkout showed US${ZIPRECRUITER.dailyUsd}.00 a day for each active job after a free trial, billed monthly, when the account reaches US${ZIPRECRUITER.billingThresholdUsd}, or on cancellation, and says
+              you can cancel at any time. The trial is short and promotional, it needs a credit card to sign up, and there is no permanent free tier for job postings. Its prices are in US dollars, so the cost in Canadian dollars
+              depends on the exchange rate.
             </li>
+            <li>Jobs-Optometry is left out of the table because it only takes postings from members of the OSI Group buying group.</li>
             <li>Eluta prices are plus tax. We have not checked how the others treat tax beyond what their pages say.</li>
             <li>
-              Prices can change. Please confirm on each service&apos;s own page before you buy: <a href={JOBS4ECPS_URL}>Jobs4ECPs</a>, <a href={INDEED_URL}>Indeed</a>, <a href={ELUTA_URL}>Eluta</a>, <a href={OJOBS_URL}>OJobs</a> and{" "}
-              <a href={LINKEDIN_URL}>LinkedIn</a>.
+              Prices can change. Please confirm on each service&apos;s own page before you buy: <a href={JOBS4ECPS_URL}>Jobs4ECPs</a>, <a href={INDEED_URL}>Indeed</a>, <a href={ELUTA_URL}>Eluta</a>, <a href={OJOBS_URL}>OJobs</a>, <a href={LINKEDIN_URL}>LinkedIn</a> and{" "}
+              <a href={ZIPRECRUITER_URL}>ZipRecruiter</a>.
             </li>
           </ul>
           <section className="card cmp-cta" aria-labelledby="cmp-cta-h">
             <h2 id="cmp-cta-h">Why Kestrel</h2>
             <p>
               A {POST_DAYS} day post works out to {perDay(lowest)} to {perDay(highest)} a day, and the Clinic pass brings it to {perPassPost(CLINIC_PASS)} a post. For that you get a board built only for eye care, the pay range and
-              both disclosure questions on every job, a person reading every post, and one place for your applicants. Clinics that take a pass during the launch keep that pass price for 12 months or until they cancel.
+              both disclosure questions on every job, a person reading every post, and one place for your applicants, with no credit card needed while it is free. Clinics that take a pass during the launch keep that pass price for 12 months or until they cancel.
             </p>
             <p className="formbtns">
               <Link href="/#join" className="btn">Join the waitlist</Link>
