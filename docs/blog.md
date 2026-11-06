@@ -38,7 +38,7 @@ Good topics, each aimed at a real search:
 10. Moving from clinic work to a supplier or lens rep role
 11. Remote and hybrid roles in eye care
 12. Quebec: hiring in French in an eye care practice (when French is built)
-13. ~~How to choose an optical buying group~~ (published 6th November 2026, slug `choosing-an-optical-buying-group`; research and sources kept in `docs/blog-drafts/buying-groups.md`): what to ask, why it matters to an independent practice, and a short neutral summary of the main groups in Canada, Eye Recommend included (added 6th November 2026). Public information only, every group treated the same way, a plain line saying Steve works at Eye Recommend, and no publishing until his disclosure conversation has happened. Check each group's current facts on its own website and name nobody's pricing or member numbers without a source.
+13. ~~How to choose an optical buying group~~ (published 6th November 2026, slug `choosing-an-optical-buying-group`; research and sources kept in `docs/blog-drafts/buying-groups.md`): what to ask, why it matters to an independent practice, and a short neutral summary of the main groups in Canada, Eye Recommend included (added 6th November 2026). Public information only, every group treated the same way, every group listed alphabetically, and no line about Steve's job (his decision, 6th November 2026, so no group is favoured or put off). Check each group's current facts on its own website and name nobody's pricing or member numbers without a source.
 
 Rules for every post: only say what is true and current, name no real clinic without asking, include no Eye Recommend material (the one exception is post 13 above), and link to the job board or the clinic page near the end.
 

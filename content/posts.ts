@@ -646,8 +646,6 @@ OSI Group (Optometric Services Inc.) says it offers discounts with more than 130
 
 The Optical Group says it was founded in 1988 to support independent eye care professionals, and it lists group purchasing, consolidated billing, digital marketing, education and private labels.
 
-A note on where this comes from: Steve Smith, who founded Kestrel, works at Eye Recommend. This post is meant to help you ask better questions of any group, including that one.
-
 [Post an eye care job on Kestrel](/clinics)`,
   },
   {

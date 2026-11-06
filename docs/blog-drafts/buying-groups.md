@@ -1,6 +1,6 @@
 # DRAFT: How to choose an optical buying group
 
-**Status: PUBLISHED on 6th November 2026** as `choosing-an-optical-buying-group` in `content/posts.ts`. Steve approved it to go live and the Eye Recommend line stays in. The published text left out figures the sources disagreed on (group sizes, The Optical Group's ownership changes) and keeps only what each group says about itself. This file keeps the research and sources for the next refresh.
+**Status: PUBLISHED on 6th November 2026** as `choosing-an-optical-buying-group` in `content/posts.ts`. Steve approved it to go live and decided it stays impartial, with no line about his job. The published text left out figures the sources disagreed on (group sizes, The Optical Group's ownership changes) and keeps only what each group says about itself. This file keeps the research and sources for the next refresh.
 
 Research done 6th November 2026 from public pages and trade press. Group claims are the groups' own and must stay worded as "says". Nothing here comes from Eye Recommend internal material.
 
@@ -27,8 +27,6 @@ Each of these describes itself on its own site, and each will have changed since
 - **Eye Recommend** is a co-operative of independent optometrists, founded in 1985 according to published profiles. It says members get buying power, consolidated billing, education and business support, and it runs a second group, Eye Care Collective, for optical professionals. Its size is reported in different ways in different places (over 500 clinics in one source, over 1,300 optometrists in another), so ask the group for a current number.
 - **OSI Group (Optometric Services Inc.)** says it has over 1,800 members and discounts with more than 130 suppliers, along with private label products, practice software, staff training and recruiting support, and no membership fees.
 - **The Optical Group** was founded in 1988 and says it offers group purchasing, consolidated billing, digital marketing, education and private labels. Trade press has reported changes in its ownership (a 2021 sale to New Look Vision Group, and a 2026 investment in the Academy of Ophthalmic Education), so ask who owns it today.
-
-A note on where this comes from: Steve Smith, who founded Kestrel, works at Eye Recommend. This post is written to help you ask better questions of any group, including that one.
 
 ## Needs from Steve before this can run
 
