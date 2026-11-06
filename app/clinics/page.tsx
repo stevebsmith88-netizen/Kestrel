@@ -58,17 +58,8 @@ export default function Clinics() {
             </table>
             <div className="passbox">
               <p className="passhead"><strong>Clinic pass</strong> from <span className="price">{dollars(CLINIC_PASS.monthly)}</span> a month</p>
-              <p>Up to {CLINIC_PASS.livePosts} live posts at once and a featured clinic profile. Choose the one that matches the roles you hire for.</p>
-              <ul className="tiers">
-                <li>
-                  <span className="tiername">Clinic pass <span className="price">{dollars(CLINIC_PASS.monthly)}</span> a month</span>
-                  {perPassPost()} a post, for support, patient care, optician and practice lead roles.
-                </li>
-                <li>
-                  <span className="tiername">Clinic pass Plus <span className="price">{dollars(CLINIC_PASS_PLUS.monthly)}</span> a month</span>
-                  {perPassPost(CLINIC_PASS_PLUS)} a post, for every role above and optometrists too.
-                </li>
-              </ul>
+              <p>Up to {CLINIC_PASS.livePosts} live posts at once, {perPassPost()} a post, for support, patient care, optician and practice lead roles, plus a featured clinic profile.</p>
+              <p className="plusrow"><strong>Clinic pass Plus</strong> <span className="price">{dollars(CLINIC_PASS_PLUS.monthly)}</span> a month. {perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included.</p>
             </div>
             <div className="foundbox">
               <p className="foundhead">Founding clinics</p>

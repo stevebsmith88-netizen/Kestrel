@@ -2,6 +2,8 @@
 
 Steve's brief: a sponsored option that shows on both independent and corporate posts, runs for a number of days, is chosen when a clinic orders a post, and stays simple for clinics and for us. No price is shown anywhere yet, and nothing about it is on the website.
 
+Decision (6th November 2026): sponsored posts launch with Stripe, in the paid launch phase (Phase 4 in `docs/audit/NEXT-STEPS-PHASES.md`).
+
 ## How it works for a clinic
 
 One extra choice when ordering a post: **Boost this post**, with None, 7 days, 14 days or 30 days. The boost can never run longer than the post itself. A clinic can also add a boost to a live post later from the dashboard. The price is one flat amount per day, the same for every clinic, independent or corporate. The dashboard shows how many times the boosted post was shown and clicked, next to its normal views.

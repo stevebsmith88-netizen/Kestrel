@@ -57,7 +57,8 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 13. DONE and merged: new automatic reply for hello@ (`docs/email-templates/auto-reply.html` and `.txt`, branch `email/auto-reply`). Steve tests it. The old `email-auto-reply` branch can then be deleted.
 13b. DONE on a branch (6th November): job views and apply clicks in the clinic dashboard (audit R17). Migration 0030 and the combined file need running on both databases. Per job, and 2 new tiles for the last 30 days. Counts leave out bots, the clinic itself and our team, and use no cookies. Admin tile for Gate C is still to do (R41).
 13c. DONE on a branch (6th November): accessibility pass on public pages, no axe violations after one fix. Signed in pages and a screen reader run through are not done, see `docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`.
-13d. DONE (design only): sponsored posts, in `docs/sponsored-ads-plan.md`. Not built, no price shown. Builds after Stripe, and the price should come from real view numbers.
+13d. DONE (design only): sponsored posts, in `docs/sponsored-ads-plan.md`. Not built, no price shown. Steve decided (6th November): it launches with Stripe in the paid launch phase, and the price should come from real view numbers.
+13e. Terms wording for the passes, founding clinics and yearly payment is drafted in `docs/legal/terms-passes-draft.md`, with 6 questions for the lawyer and 3 decisions for Steve. It is not on the website. Add the questions to the lawyer pack when Steve says.
 13a. For clinics page (audit R42): on the preview branch, the page now says agencies cannot post, the form asks for the pay range and 2 questions, the ad builder drafts from a few lines and a person reads each post. It does not name Jobs4ECPs or claim any traffic. Steve reads the preview. Still open: a comparison with named boards (needs a dated quote re checked while signed out) and the Terms wording for what each pass covers.
 14. Launch flyer: the first HTML draft was rejected. Outward facing designs are made in Canva (4 options generated on 5th November, Steve picks one and Claude adjusts it). Kept unpublished until Gate A is passed.
 15. Plan with Steve, when he is ready: PWA (installable web app), the pathways roadmap, the figures check, a competitor and hiring review by hand, and trends content.
@@ -87,6 +88,11 @@ The key is listed in `docs/security.md` with how to rotate it.
 9. Parent company with subsidiaries: start with one corporation, add brands as operating names, no "Recruitment" in the name. See the notes.
 10. App wrapping: a PWA first, native apps after launch numbers. See the notes.
 11. Is the automation plan plausible: yes for most of it, with a few hours a week of Steve's time. See the notes.
+
+## Steve: tomorrow morning, on a laptop (6th November 2026)
+
+1. Run `supabase/combined/run-everything.sql` on **both** databases (live and demo). It adds job views and apply clicks (migration 0030), and also catches up 0028 and 0029. Then re-run `supabase/demo/seed.sql` on the demo database only, so the demo dashboard shows sample numbers. The preview shows zeros until the SQL has run.
+2. Run Chrome's Lighthouse accessibility check on the demo site, on the signed in pages: post a job, the applicants board, the clinic dashboard, the candidate profile and the apply form. Open the page, right click, Inspect, Lighthouse tab, tick Accessibility only, Analyze, and send Claude the score and the list of failed checks (a screenshot is fine). Also try VoiceOver on your phone for 3 journeys: apply for a job, post a job, track an application. Detail in `docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`.
 
 ## Planning items (decided direction, not started)
 
