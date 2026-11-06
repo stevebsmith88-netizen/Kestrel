@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, perDay, perPassPost } from "@/lib/pricing";
+import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, passBreakEven, perDay, perPassPost } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
@@ -11,7 +11,10 @@ export const metadata: Metadata = shareMetadata({
   path: "/clinics",
 });
 
+const OPTICIAN_BAND = ROLE_BANDS[1];
+
 export default function Clinics() {
+  const pickAt = passBreakEven(OPTICIAN_BAND.price);
   return (
     <>
       <SiteHeader />
@@ -59,6 +62,7 @@ export default function Clinics() {
             <div className="passbox">
               <p className="passhead"><strong>Clinic pass</strong> from <span className="price">{dollars(CLINIC_PASS.monthly)}</span> a month</p>
               <p>Up to {CLINIC_PASS.livePosts} live posts at once, {perPassPost()} a post, for support, patient care, optician and practice lead roles, plus a featured clinic profile.</p>
+              <p className="passpick"><strong>Our pick if you are hiring for {pickAt} or more roles at once.</strong> {pickAt} optician posts cost {dollars(pickAt * OPTICIAN_BAND.price)} one at a time and {dollars(CLINIC_PASS.monthly)} on the pass. With 1 or 2 roles, single posts cost less.</p>
               <p className="plusrow"><strong>Clinic pass Plus</strong> <span className="price">{dollars(CLINIC_PASS_PLUS.monthly)}</span> a month. {perPassPost(CLINIC_PASS_PLUS)} a post, with optometrist roles included.</p>
             </div>
             <div className="foundbox">

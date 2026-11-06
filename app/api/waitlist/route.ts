@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { cleanAttribution } from "@/lib/attribution";
 import { emailLayout, sendEmail } from "@/lib/email";
 import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 import { TURNSTILE_MESSAGE, passesTurnstile } from "@/lib/turnstile";
@@ -35,24 +36,23 @@ export async function POST(req: Request) {
   // address is saved here. The answer is the same either way, so the form cannot be used to find out who is on the list.
   let id = existing?.id;
   if (action === "add") {
-    const { data: added, error } = await db
-      .from("waitlist")
-      .upsert(
-        {
-          audience: values.audience,
-          first_name: values.firstName,
-          last_name: values.lastName || null,
-          email: values.email,
-          clinic_name: values.audience === "clinic" ? values.clinicName : null,
-          role: values.role || null,
-          province: values.province,
-          consent: true,
-          consent_text: CONSENT_TEXT,
-          consent_at: new Date().toISOString(),
-        },
-        { onConflict: "email", ignoreDuplicates: true },
-      )
-      .select("id");
+    const row = {
+      audience: values.audience,
+      first_name: values.firstName,
+      last_name: values.lastName || null,
+      email: values.email,
+      clinic_name: values.audience === "clinic" ? values.clinicName : null,
+      role: values.role || null,
+      province: values.province,
+      consent: true,
+      consent_text: CONSENT_TEXT,
+      consent_at: new Date().toISOString(),
+    };
+    const save = (data: Record<string, unknown>) => db.from("waitlist").upsert(data, { onConflict: "email", ignoreDuplicates: true }).select("id");
+    // Where the visit came from (migration 0032). If that migration has not been run on this database yet, the sign up
+    // is still saved, just without the source, so a missing column can never stop someone joining.
+    let { data: added, error } = await save({ ...row, ...cleanAttribution((body as Record<string, unknown>).attribution) });
+    if (error && /utm_|referrer_host|landing_path/.test(error.message)) ({ data: added, error } = await save(row));
     if (error) {
       console.error("Waitlist insert failed:", error.message);
       return NextResponse.json({ error: "Something went wrong sending your details. Please try again." }, { status: 500 });

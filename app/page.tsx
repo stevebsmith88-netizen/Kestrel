@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import EyeCareNumbers from "@/components/EyeCareNumbers";
 import HomeBlogStrip from "@/components/HomeBlogStrip";
+import { comparePageOn } from "@/lib/compare-prices";
 import { homeBlogOn } from "@/lib/features";
 import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
@@ -9,9 +10,30 @@ import WaitlistForm from "@/components/WaitlistForm";
 // Built ahead of time, and rebuilt at least hourly, so a scheduled post appears on the home page soon after its date.
 export const revalidate = 3600;
 
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
+
+// Tells search engines and AI assistants who we are. The same name, line and logo are used everywhere. Social page
+// links (sameAs) are added when those pages exist.
+const ORGANIZATION = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#organization`,
+      name: "Kestrel Eye Care Jobs",
+      url: SITE,
+      logo: `${SITE}/brand/kestrel-lockup-full.png`,
+      description: "A Canada-wide job board for eye care: optometrists, opticians, assistants, clinic teams and suppliers. Every job shows its pay.",
+      areaServed: { "@type": "Country", name: "Canada" },
+    },
+    { "@type": "WebSite", "@id": `${SITE}/#website`, name: "Kestrel Eye Care Jobs", url: SITE, inLanguage: "en-CA", publisher: { "@id": `${SITE}/#organization` } },
+  ],
+};
+
 export default function ComingSoon() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION).replace(/</g, "\\u003c") }} />
       <SiteHeader logo={false} />
       <main id="main" tabIndex={-1}>
         <section className="hero">
@@ -26,7 +48,7 @@ export default function ComingSoon() {
             </svg>
             <p className="board">Canada-wide eye care job board</p>
             <p className="lede">
-              A job board for eye care in Canada, built by people who know it. Optometrists, opticians, assistants, clinic teams and suppliers, in one place. We&apos;re launching soon.
+              A job board for eye care in Canada, built by someone with over 20 years in the industry. Optometrists, opticians, assistants, clinic teams and suppliers, in one place. Every job shows its pay, and a person reads every post before it goes live. We&apos;re launching soon.
             </p>
             <a className="btn" href="#join">Join the waitlist</a>
           </div>
@@ -47,6 +69,11 @@ export default function ComingSoon() {
                 <li>Independent and corporate practices post side by side</li>
                 <li>Waitlist clinics will be the first invited to post</li>
               </ul>
+              {comparePageOn() && (
+                <p>
+                  <Link href="/compare">See how our prices compare</Link> with other places to advertise an eye care job.
+                </p>
+              )}
             </article>
             <article className="card">
               <p className="kicker">For eye care professionals</p>

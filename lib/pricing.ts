@@ -21,3 +21,7 @@ const money = (n: number, places = 0) => "$" + n.toLocaleString("en-CA", { minim
 export const perDay = (price: number) => money(price / POST_DAYS, 2);
 export const perPassPost = (pass: { monthly: number; livePosts: number } = CLINIC_PASS) => money(pass.monthly / pass.livePosts, 2);
 export const dollars = (n: number) => money(n);
+
+// How many posts at one price it takes before the pass costs less than buying them one at a time.
+// Used for the "our pick" line on the clinics page, so the line stays true if a price changes.
+export const passBreakEven = (postPrice: number, pass: { monthly: number } = CLINIC_PASS) => Math.floor(pass.monthly / postPrice) + 1;

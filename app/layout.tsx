@@ -6,6 +6,7 @@ import "@fontsource/source-sans-3/400.css";
 import "@fontsource/source-sans-3/600.css";
 import "@fontsource/source-sans-3/700.css";
 import "./globals.css";
+import AttributionCapture from "@/components/AttributionCapture";
 import CloseMenuOnEscape from "@/components/CloseMenuOnEscape";
 import DemoBanner from "@/components/DemoBanner";
 import { demoMode } from "@/lib/demo";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en-CA">
       <body>
         <a className="skip" href="#main">Skip to main content</a>
+        <AttributionCapture />
         <CloseMenuOnEscape />
         <DemoBanner />
         {children}

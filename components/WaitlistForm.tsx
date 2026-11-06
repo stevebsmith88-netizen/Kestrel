@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Turnstile from "@/components/Turnstile";
+import { storedFirstTouch } from "@/lib/attribution";
 import { AUDIENCES, CONSENT_TEXT, PROVINCES, QUEBEC, QUEBEC_JOIN_NOTE, ROLES, THANK_YOU, validate, type FieldErrors, type WaitlistInput } from "@/lib/waitlist";
 
 const EMPTY: WaitlistInput = {
@@ -58,7 +59,7 @@ export default function WaitlistForm() {
       const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...v, turnstileToken: token }),
+        body: JSON.stringify({ ...v, turnstileToken: token, attribution: storedFirstTouch() }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok) {
