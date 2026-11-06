@@ -21,10 +21,12 @@ test("only links with a check date are shown, and an empty group is left out", (
   const shown = listedGroups().flatMap((g) => g.links);
   assert.ok(shown.length > 0);
   assert.ok(shown.every((l) => l.checked !== null && /^\d{4}-\d{2}-\d{2}$/.test(l.checked)));
-  const held = all.filter((l) => l.checked === null);
-  assert.ok(held.length > 0, "the held back links are kept in the file");
-  for (const l of held) assert.ok(!shown.some((s) => s.url === l.url));
-  assert.deepEqual(listedGroups([{ id: "x", heading: "x", intro: "x", links: [{ name: "Held back", url: "https://example.ca", note: "note", checked: null }] }]), []);
+  // Any link that is held back (none is, today) must stay out of the page.
+  for (const l of all.filter((x) => x.checked === null)) assert.ok(!shown.some((s) => s.url === l.url));
+  const held = { name: "Held back", url: "https://example.ca", note: "note", checked: null };
+  const live = { name: "Live", url: "https://example.org", note: "note", checked: "2026-11-06" };
+  assert.deepEqual(listedGroups([{ id: "x", heading: "x", intro: "x", links: [held] }]), []);
+  assert.deepEqual(listedGroups([{ id: "x", heading: "x", intro: "x", links: [held, live] }])[0].links, [live]);
 });
 
 test("the page links to no job board and no supplier", () => {
