@@ -89,6 +89,18 @@ export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   return { jobs: all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), total: all.length, place };
 }
 
+// Live jobs for the "Recommended for you" rules to choose from (newest first, at most this many).
+export async function listLiveJobsForMatching(limit = 1000): Promise<JobSummary[]> {
+  const db = supabasePublic();
+  if (!db) return [];
+  const { data, error } = await db.from("jobs").select(SUMMARY_COLUMNS).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(limit);
+  if (error) {
+    console.error("Listing live jobs for recommendations failed:", error.code, error.message);
+    return [];
+  }
+  return (data ?? []) as unknown as JobSummary[];
+}
+
 // How many live jobs there are for each role and each province, so the filters only offer choices that have jobs.
 export async function getFilterCounts(): Promise<{ total: number; roles: Record<string, number>; provinces: Record<string, number> }> {
   const empty = { total: 0, roles: {}, provinces: {} };

@@ -520,3 +520,5 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .cmp caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
 .cmp tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy)}
 .table.cmp{min-width:600px}
+.why{margin:8px 0 0;font-size:0.9375rem;color:var(--navy-2)}
+.jobside form{margin:8px 0 0}
