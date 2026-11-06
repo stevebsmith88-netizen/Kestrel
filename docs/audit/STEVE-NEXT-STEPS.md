@@ -33,7 +33,7 @@ Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (mee
 
 ### Quebec (added 6th November 2026, needs a decision and a Quebec lawyer)
 
-How to operate in Quebec and how to produce French content so Quebec jobs can be displayed: `docs/quebec.md`. The site is English only and anyone can already pick Quebec. Claude suggests option A now (keep Quebec out until the lawyer has advised, about 1 hour of work), then B or C later. Steve decides, and the 6 questions in that file go to a Quebec lawyer. Audit finding R31.
+How to operate in Quebec and how to produce French content so Quebec jobs can be displayed: `docs/quebec.md`. The site is English only and anyone can already pick Quebec. Steve chose option A on 6th November: Quebec is no longer offered anywhere on the site, with a "not open in Quebec yet" note. The rest (B and C, and the 6 questions for a Quebec lawyer) is benched until Steve picks it up. Audit finding R31 is handled for now.
 
 ### Parked: no date, nothing waits on these
 

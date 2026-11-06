@@ -21,7 +21,8 @@ test("the Job Bank file covers Ontario, Alberta and British Columbia for every m
 test("every Job Bank row is sensible: known role and province, median present, quartiles in order, plausible size", () => {
   for (const w of JOB_BANK_WAGES) {
     assert.ok((ROLE_CATEGORIES as readonly string[]).includes(w.role));
-    assert.ok((PROVINCES as readonly string[]).includes(w.province));
+    // Quebec rows are kept for when Quebec opens (docs/quebec.md), even though Quebec is not offered for now.
+    assert.ok(([...PROVINCES, "Quebec"] as readonly string[]).includes(w.province));
     assert.ok(w.median > 0);
     if (w.q1 !== null) assert.ok(w.q1 <= w.median);
     if (w.q3 !== null) assert.ok(w.q3 >= w.median);

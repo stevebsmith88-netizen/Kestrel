@@ -4,6 +4,7 @@ import { Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveCandidateProfile } from "@/lib/candidate-actions";
 import { PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { QUEBEC_NOTE } from "@/lib/waitlist";
 
 type Initial = { profession: string | null; licensed_provinces: string[]; years_experience: string | null; available_from: string | null; phone: string | null };
 
@@ -27,7 +28,7 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
 
       <fieldset className="row provinces">
         <legend className="lab">Licensed or registered in</legend>
-        <p className="help">Tick every province or territory that applies. Leave blank if it does not apply to your role.</p>
+        <p className="help">Tick every province or territory that applies. Leave blank if it does not apply to your role. {QUEBEC_NOTE}</p>
         <div className="checkgrid">
           {PROVINCES.map((p) => (
             <label className="consent" key={p}>

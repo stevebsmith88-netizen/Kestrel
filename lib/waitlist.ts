@@ -15,6 +15,9 @@ export const ROLES = [
   "Vision therapist",
 ] as const;
 
+// Quebec is left out on purpose for now (decided by Steve on 6th November 2026). Quebec has its own language and privacy rules,
+// and the site is English only. Everything that offers or checks a province uses this list, so adding "Quebec" back here
+// reopens it everywhere. See docs/quebec.md before doing that.
 export const PROVINCES = [
   "Alberta",
   "British Columbia",
@@ -26,10 +29,12 @@ export const PROVINCES = [
   "Nunavut",
   "Ontario",
   "Prince Edward Island",
-  "Quebec",
   "Saskatchewan",
   "Yukon",
 ] as const;
+
+// Shown beside the places where a province is chosen.
+export const QUEBEC_NOTE = "Kestrel is not open in Quebec yet. We plan to add Quebec, with French, later.";
 
 // Keep this wording identical to what people see. It is saved with every
 // sign up as the record of what they agreed to (CASL express consent).

@@ -5,6 +5,7 @@ import { Choices, Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveClinic } from "@/lib/clinic-actions";
 import { PRACTICE_TYPES, PROVINCES } from "@/lib/jobs";
+import { QUEBEC_NOTE } from "@/lib/waitlist";
 
 type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; direct_hire_confirmed_at: string | null };
 
@@ -22,7 +23,7 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
         <Field id="cp-city" label="City" required error={e.city}>
           <input id="cp-city" name="city" type="text" autoComplete="address-level2" defaultValue={initial?.city ?? ""} />
         </Field>
-        <Field id="cp-province" label="Province or territory" required error={e.province}>
+        <Field id="cp-province" label="Province or territory" required error={e.province} hint={QUEBEC_NOTE}>
           <select id="cp-province" name="province" defaultValue={initial?.province ?? ""}>
             <option value="">Choose one</option>
             {PROVINCES.map((p) => (

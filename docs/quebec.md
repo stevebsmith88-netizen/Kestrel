@@ -1,5 +1,7 @@
 # Operating in Quebec: what it takes, and how to produce things so they can be displayed (draft, 6th November 2026)
 
+**Decision (Steve, 6th November 2026): option A, then bench.** Quebec is not offered for now. It was removed from the one province list in `lib/waitlist.ts`, so the waitlist, clinic profiles, job posts, candidate profiles, job alerts, the found listings tool and the quiz no longer offer it, and a Quebec post or sign up is turned down. A short note says "Kestrel is not open in Quebec yet. We plan to add Quebec, with French, later." Everything below (options B and C, the lawyer questions) is benched until Steve picks it up again. To reopen Quebec, add "Quebec" back to `PROVINCES` and read this file first. Job Bank pay rows for Quebec are kept in the data for later. Anyone who already chose Quebec before this change (if anyone did) keeps their record, and cannot edit it until Quebec reopens.
+
 Steve's question: what are the legalities of operating in Quebec, and how do we produce things so that Quebec content can be displayed? This note collects what the audit already found (finding R31, `docs/audit/2026-10-30/lens-4.md` section 4.6) and turns it into options. **None of it is legal advice and none of it has been checked by a Quebec lawyer.** The statute references come from the audit's reading and must be confirmed by a lawyer who practises in Quebec before anything is built or promised.
 
 ## Where things stand today
