@@ -31,7 +31,7 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
       { name: "College of Optometrists of Ontario", url: "https://collegeoptom.on.ca", note: "Ontario, optometrists.", checked: "2026-11-06" },
       { name: "National Alliance of Canadian Optician Regulators (NACOR)", url: "https://nacor.ca", note: "Runs the national opticianry exams for the provincial regulators.", checked: "2026-11-06" },
       // Held back until opened and confirmed:
-      { name: "College of Opticians of Ontario", url: "https://collegeofopticians.ca", note: "Ontario, opticians. An older address, coptont.org, also appears in listings, so confirm which is current.", checked: null },
+      { name: "College of Opticians of Ontario", url: "https://collegeofopticians.ca", note: "Ontario, opticians.", checked: "2026-11-06" },
     ],
   },
   {
