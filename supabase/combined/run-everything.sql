@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0030), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0031), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1421,6 +1421,8 @@ end;
 $$;
 
 -- a job that was once live can be closed even if its draft was later changed and left incomplete
+-- "not valid": existing rows are not re-checked against this earlier version, so the whole file can be run again on a database that already
+-- holds found listings (which migration 0023 allows to leave the 2 questions empty). Migration 0023 then sets the final rule and checks every row.
 alter table public.jobs drop constraint if exists jobs_complete_unless_draft;
 alter table public.jobs add constraint jobs_complete_unless_draft check (
   status in ('draft', 'rejected')
@@ -1438,7 +1440,7 @@ alter table public.jobs add constraint jobs_complete_unless_draft check (
       or (case when pay_period = 'hour' then 2080 else 1 end) * pay_max > 200000
     )
   )
-);
+) not valid;
 
 -- 3. keep the wording candidates were seeing when a live job is edited
 create table if not exists public.job_versions (
@@ -1919,6 +1921,50 @@ revoke all on function public.record_job_event(uuid, text) from public, anon, au
 grant execute on function public.record_job_event(uuid, text) to service_role;
 
 -- ======================================================================
+-- 0031_candidate_preferences.sql
+-- ======================================================================
+-- 0031: what a candidate is looking for, for the "Recommended for you" list on their home page.
+-- The list is worked out by rules in the website code (no AI). These columns only hold the candidate's own choices, and row level security
+-- keeps them private to the candidate (the existing candidate_profiles policies already cover new columns).
+-- Safe to run more than once.
+
+alter table public.candidate_profiles
+  add column if not exists home_city            text check (home_city is null or char_length(home_city) <= 80),
+  add column if not exists home_province        text check (home_province is null or char_length(home_province) <= 40),
+  add column if not exists pref_radius_km       integer not null default 25 check (pref_radius_km in (10, 25, 50)),
+  add column if not exists pref_provinces       text[] not null default '{}',
+  add column if not exists pref_employment_types text[] not null default '{}',
+  add column if not exists pref_other_roles     text[] not null default '{}',
+  add column if not exists pref_min_pay         numeric(10, 2) check (pref_min_pay is null or pref_min_pay > 0),
+  add column if not exists pref_pay_period      text check (pref_pay_period is null or pref_pay_period in ('hour', 'year')),
+  add column if not exists pref_practice        text check (pref_practice is null or pref_practice in ('independent', 'corporate'));
+
+-- Jobs a candidate has said they are not interested in, so they stop appearing in their recommendations.
+create table if not exists public.candidate_job_hides (
+  user_id    uuid not null references auth.users (id) on delete cascade,
+  job_id     uuid not null references public.jobs (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (user_id, job_id)
+);
+
+alter table public.candidate_job_hides enable row level security;
+
+drop policy if exists "Candidates can read their own hidden jobs" on public.candidate_job_hides;
+create policy "Candidates can read their own hidden jobs"
+  on public.candidate_job_hides for select to authenticated
+  using ((select auth.uid()) = user_id);
+
+drop policy if exists "Candidates can hide a job for themselves" on public.candidate_job_hides;
+create policy "Candidates can hide a job for themselves"
+  on public.candidate_job_hides for insert to authenticated
+  with check ((select auth.uid()) = user_id);
+
+drop policy if exists "Candidates can bring back a hidden job" on public.candidate_job_hides;
+create policy "Candidates can bring back a hidden job"
+  on public.candidate_job_hides for delete to authenticated
+  using ((select auth.uid()) = user_id);
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -1971,6 +2017,8 @@ from (
     ('column: job extensions', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'extended_count')),
     ('table: job_daily_stats (job views and apply clicks)', to_regclass('public.job_daily_stats') is not null),
     ('function: record_job_event', exists (select 1 from pg_proc where proname = 'record_job_event')),
+    ('column: candidate preferences (recommended jobs)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'pref_min_pay')),
+    ('table: candidate_job_hides (not interested)', to_regclass('public.candidate_job_hides') is not null),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

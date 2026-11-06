@@ -31,9 +31,30 @@ An optical job board. Looks inactive: nothing in its news since 2018, no LinkedI
 
 All slots run 30 days. The site also has an Employer of the Month panel, a classified section, a resumes menu and sidebar adverts.
 
+## Added 6th November 2026 (Steve's screenshots)
+
+### Jobs4ECPs (https://www.jobs4ecps.ca/products)
+
+- Basic Single Job Posting: $100.00, 1 job, 30 days. Profile Access (view job seeker profiles, 30 days): $0.00. No price for several jobs on the page.
+- The page footer names the operator as **Eye Care Edge Ltd.** (info@jobs4ecps.ca). A 2025 press release lists Jobs4ECPs.com among Eye Recommend's resources and a company profile says it partners with Eye Recommend. Ownership is not confirmed either way. Steve chose to include Jobs4ECPs on the comparison page.
+
+### Indeed (the sponsor budget screen in Steve's Indeed account)
+
+- Standard: $38 a day on average (better visibility, automatic replies). Premium: $63 a day on average (spotlight your job, first page boost, invite matched candidates). Premium budget options: runs continuously (max $472.50 a week), 30 days (max $1,890.00), 15 days (max $945.00), or a custom end date.
+- Currency is not shown on the screen. It is an Indeed Canada account, so presumably Canadian dollars. Steve to confirm.
+- Indeed's own pricing page (via search, not opened): up to 3 free jobs a month, each live up to 30 days. Sponsored jobs are charged by clicks or applications against a budget.
+
+### LinkedIn (https://business.linkedin.com/talent-solutions/jobs-101/pricing)
+
+- A basic post is free. A promoted job is charged per click against a daily or total budget, and LinkedIn says the cost per click varies and cannot be known until the job is posted. Taken from LinkedIn's own pricing page and tipsheet as shown in search results, not from a screenshot. No Canadian dollar figures found.
+
+### Left out on purpose
+
+- **ZipRecruiter:** its own Canadian price page could not be found, so it is NOT in the table. It has one line under the table, worded as a third party ESTIMATE (about US$300 to US$1,000 a month per live job slot, US$16 to US$35 a day for sponsorship), from a Google AI summary quoting CareerPlug, ADP and Pin pages seen on 6th November 2026. Replace with ZipRecruiter's own figures if Steve finds them.
+- **Jobs-Optometry (jobs-optometry.com):** no pricing found anywhere. Needs a screenshot of its own price page.
+
 ## Not yet confirmed
 
-- **Jobs4ECPs:** third party sites disagree (from C$100 a post, or first post free). No official price page found. A 2025 press release describes Eye Recommend's resources as including Jobs4ECPs.com, and a company profile says Jobs4ECPs partners with Eye Recommend. Ownership is not confirmed. Because of that link, Jobs4ECPs is left off the comparison page until Steve has talked to Eye Recommend and the lawyer.
 - **CAO job board (opto.ca):** reported as free to post, not confirmed on the CAO's own site.
 - **Job Bank:** free to employers.
 - **Indeed and LinkedIn:** pricing depends on budget and bidding, so not comparable on a table.

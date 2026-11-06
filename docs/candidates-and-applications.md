@@ -31,3 +31,12 @@
 ## Tests
 
 `npm test` covers the application rules (statuses, which moves a clinic may make, kind messages, and the check that a CV file is really a PDF or Word file).
+
+## Recommended for you (built 6th November 2026, migration 0031)
+
+A list of up to 8 jobs on the candidate's home page, chosen by plain rules with no AI. Each job shows why it fits ("Optician role", "About 12 km from Toronto", "Pay starts at or above your minimum", "Posted this week"), and a "Not interested" button removes it for that candidate only.
+
+- **What the candidate tells us** (profile page, "What you are looking for", private, never shown to clinics): town and how far they would travel (10, 25 or 50 km), provinces they would work in anywhere (handy for people planning to move, including people in Quebec), type of work, lowest pay, independent or corporate, and other roles they would consider. Saved in new columns on `candidate_profiles` and a new `candidate_job_hides` table.
+- **The rules** (`lib/recommend.ts`, tested in `lib/recommend.test.ts`): a job is left out if it is not one of their roles, not an employment type they chose, not the practice type they chose, cannot reach their pay minimum even at the top of its range, is outside their distance and chosen provinces, or they already applied or hid it. What remains is scored: role (40, or 25 for another role they would consider), distance (up to 25), pay (up to 15), registered in that province (8), posted this week (8), plus 5 each for a chosen type and practice. With no town or provinces chosen, the provinces they are registered in stand in. Same profile and same jobs always give the same list.
+- **Where**: `lib/candidate-prefs.ts` (checking the form), `lib/recommendations.ts` (loading jobs and hidden jobs), `lib/recommendation-actions.ts` (Not interested), `app/candidate/page.tsx`, `components/CandidateProfileForm.tsx`.
+- **Not built, on purpose**: AI ranking of applicants for clinics; AI reading of CVs (only if profiles prove hard to complete, and with clear consent); "learning" from hides.

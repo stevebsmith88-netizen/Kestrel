@@ -4,13 +4,15 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { COMPARE_CHECKED, comparePageOn, ELUTA_SPONSORED, ELUTA_URL, OJOBS_FEATURED, OJOBS_REGULAR, OJOBS_URL } from "@/lib/compare-prices";
+import {
+  COMPARE_CHECKED, comparePageOn, ZIPRECRUITER_ESTIMATE, ELUTA_SPONSORED, ELUTA_URL, INDEED, INDEED_URL, JOBS4ECPS_BASIC, JOBS4ECPS_URL, LINKEDIN_URL, OJOBS_FEATURED, OJOBS_REGULAR, OJOBS_URL, over30Days,
+} from "@/lib/compare-prices";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, dollars, perPassPost, POST_DAYS, ROLE_BANDS } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
   title: "How Kestrel's prices compare",
-  description: "What it costs to advertise an eye care job on Kestrel, Eluta and OJobs, from each service's public prices, with the date we checked.",
+  description: "What it costs to advertise an eye care job on Kestrel, Jobs4ECPs, Indeed, Eluta, OJobs, LinkedIn and ZipRecruiter, with the date we checked.",
   path: "/compare",
 });
 
@@ -56,6 +58,12 @@ export default async function Compare() {
                   </td>
                 </tr>
                 <tr>
+                  <th scope="row">Jobs4ECPs, Basic Single Job Posting</th>
+                  <td>A listing on an eye care job board in Canada. Access to job seeker profiles for {JOBS4ECPS_BASIC.days} days at no charge.</td>
+                  <td>{dollars(JOBS4ECPS_BASIC.price)} for {JOBS4ECPS_BASIC.days} days</td>
+                  <td>No price for several jobs shown on the page we read.</td>
+                </tr>
+                <tr>
                   <th scope="row">Eluta, Sponsored Job</th>
                   <td>A job placed above the search results in a Canada wide job search engine, with your logo and reporting. Candidates apply on your own site.</td>
                   <td>
@@ -75,23 +83,52 @@ export default async function Compare() {
                   <td>{dollars(OJOBS_FEATURED[0].each)}</td>
                   <td>{dollars(featured5.each)} a job ({dollars(featured5.total)} in all)</td>
                 </tr>
+                <tr>
+                  <th scope="row">Indeed, free post</th>
+                  <td>A basic listing on a general job site.</td>
+                  <td>{dollars(0)}, for up to {INDEED.freeJobsPerMonth} jobs a month, each live up to {INDEED.freeDays} days</td>
+                  <td>Over the free limit, a job is sponsored (below).</td>
+                </tr>
+                <tr>
+                  <th scope="row">Indeed, Standard sponsorship</th>
+                  <td>Better visibility and automatic replies.</td>
+                  <td>{dollars(INDEED.standardDaily)} a day on average, about {dollars(over30Days(INDEED.standardDaily))} over {POST_DAYS} days</td>
+                  <td>You set a budget for each job. Spend follows clicks or applications.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Indeed, Premium sponsorship</th>
+                  <td>Everything in Standard, plus a spotlight on the job, a first page boost and invitations to matched candidates.</td>
+                  <td>{dollars(INDEED.premiumDaily)} a day on average, up to {dollars(INDEED.premiumMax30Days)} over {POST_DAYS} days</td>
+                  <td>You set a budget for each job. Spend follows clicks or applications.</td>
+                </tr>
+                <tr>
+                  <th scope="row">LinkedIn</th>
+                  <td>A basic post is free. A promoted job is shown to more people and charged per click.</td>
+                  <td>{dollars(0)} for a basic post. A promoted job is charged against a daily or total budget you set.</td>
+                  <td>LinkedIn says the cost per click varies and is not known until the job is posted.</td>
+                </tr>
               </tbody>
             </table>
           </div>
 
           <h2>How to read this</h2>
           <p>
-            Eluta is a search engine that sells placement. OJobs and Kestrel are job boards. Kestrel adds a form that asks for the pay range and the 2 disclosure questions, and
-            an applicant board for clinics. Some association and government job boards charge nothing, so it is worth checking them as well.
+            Eluta is a search engine that sells placement. OJobs, Jobs4ECPs and Kestrel are job boards. Indeed and LinkedIn are general job sites where a basic post is free and
+            promotion is charged against a budget, so their cost depends on how much you choose to spend and how candidates respond. Kestrel adds a form that asks for the
+            pay range and the 2 disclosure questions, and an applicant board for clinics. Some association and government job boards charge nothing, so it is worth checking them as well.
           </p>
           <ul>
             <li>Kestrel prices are in Canadian dollars before HST. They apply after the free launch period.</li>
             <li>A Kestrel pass renews each month at the same price until you cancel. A single post does not renew.</li>
-            <li>Eluta prices are plus tax. We have not checked how OJobs and Eluta treat tax beyond what their pages say.</li>
-            <li>Prices can change. Please confirm on each service&apos;s own page before you buy: <a href={ELUTA_URL}>Eluta</a> and <a href={OJOBS_URL}>OJobs</a>.</li>
+            <li>
+              ZipRecruiter does not charge per advert. It sells a monthly subscription by the number of live job slots, and sponsorship by the day. Third party reports estimate about US${ZIPRECRUITER_ESTIMATE.monthlyLow} to US${ZIPRECRUITER_ESTIMATE.monthlyHigh.toLocaleString("en-CA")} a month for each live job slot, and US${ZIPRECRUITER_ESTIMATE.dailyLow} to US${ZIPRECRUITER_ESTIMATE.dailyHigh} a day for sponsorship. These are estimates, not ZipRecruiter&apos;s own prices, and Canadian prices may differ, so please check with ZipRecruiter.
+            </li>
+            <li>Eluta prices are plus tax. We have not checked how the others treat tax beyond what their pages say.</li>
+            <li>Indeed&apos;s figures are the daily averages its sponsoring screen showed on {COMPARE_CHECKED}. A sponsored job can cost less or more than the average.</li>
+            <li>Prices can change. Please confirm on each service&apos;s own page before you buy: <a href={JOBS4ECPS_URL}>Jobs4ECPs</a>, <a href={INDEED_URL}>Indeed</a>, <a href={ELUTA_URL}>Eluta</a>, <a href={OJOBS_URL}>OJobs</a> and <a href={LINKEDIN_URL}>LinkedIn</a>.</li>
           </ul>
           <p>
-            Kestrel is not connected to Eluta or OJobs. See <Link href="/clinics">how Kestrel works for clinics</Link>.
+            See <Link href="/clinics">how Kestrel works for clinics</Link>.
           </p>
         </div>
       </main>

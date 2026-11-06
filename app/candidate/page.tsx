@@ -6,7 +6,9 @@ import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
 import { getMyApplications, getMyCandidateProfile, profileReady, profileStrength } from "@/lib/candidate";
-import { longDate } from "@/lib/jobs";
+import { employmentLabel, formatPay, longDate } from "@/lib/jobs";
+import { hideRecommendation } from "@/lib/recommendation-actions";
+import { getRecommendations } from "@/lib/recommendations";
 
 export const metadata: Metadata = { title: "Your home | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -19,6 +21,7 @@ export default async function CandidateHome() {
   const strength = profileStrength(profile);
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
   const latest = applications.slice(0, 3);
+  const { recs, needsRole, needsWhere } = await getRecommendations(profile, applications.map((a) => a.job_id));
 
   return (
     <>
@@ -51,6 +54,52 @@ export default async function CandidateHome() {
               <Link href="/jobs" className="btn sm">Find jobs</Link>
             </section>
           </div>
+
+          <div className="listhead"><h2>Recommended for you</h2><Link href="/candidate/profile#looking-for">What you are looking for</Link></div>
+          {needsRole ? (
+            <section className="card">
+              <p>Choose your role in your profile and we will suggest jobs that fit.</p>
+              <Link href="/candidate/profile" className="btn sm">Choose my role</Link>
+            </section>
+          ) : (
+            <>
+              {needsWhere && <p className="help">Add your town, or the provinces you would work in, to sharpen these. <Link href="/candidate/profile#looking-for">Add where</Link></p>}
+              {recs.length === 0 ? (
+                <section className="card">
+                  <h3>Nothing matches yet</h3>
+                  <p>Clinics add jobs as they post them. You can widen your distance or lower your pay minimum, or set a job alert and we will email you when something fits.</p>
+                  <p className="formbtns">
+                    <Link href="/candidate/profile#looking-for" className="btn sm ghost">Change what I am looking for</Link>
+                    <Link href="/candidate/alerts" className="btn sm ghost">Job alerts</Link>
+                  </p>
+                </section>
+              ) : (
+                <div className="joblist">
+                  {recs.map(({ job: j, reasons }) => (
+                    <article className="card jobrow" key={j.id}>
+                      <div className="jobmain">
+                        <h3><Link href={`/jobs/${j.id}`}>{j.title}</Link></h3>
+                        <p className="meta">{j.employers?.clinic_name} · {j.city}, {j.province}</p>
+                        <p className="chips">
+                          <span className="chip">{employmentLabel(j.employment_type)}</span>
+                          <span className="chip paychip">{formatPay(j.pay_min, j.pay_max, j.pay_period)}</span>
+                        </p>
+                        <p className="why"><strong>Why this fits:</strong> {reasons.slice(0, 4).join(" · ")}</p>
+                      </div>
+                      <div className="jobside">
+                        <Link href={`/jobs/${j.id}`} className="btn sm" aria-label={`View job: ${j.title}`}>View job</Link>
+                        <form action={hideRecommendation}>
+                          <input type="hidden" name="jobId" value={j.id} />
+                          <button type="submit" className="btn sm ghost" aria-label={`Not interested in ${j.title}`}>Not interested</button>
+                        </form>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+              <p className="help">These come from simple rules applied to what you told us. There is no AI in them, and nothing about you is shared with clinics.</p>
+            </>
+          )}
 
           {latest.length > 0 && (
             <>

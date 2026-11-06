@@ -154,10 +154,15 @@ begin
 
   if cand_user is not null then
     -- the demo candidate: a profile, one application to follow in the tracker, and a job alert
-    insert into public.candidate_profiles (user_id, profession, licensed_provinces, years_experience, available_from, phone)
-    values (cand_user, 'Optician', array['Ontario'], '5 to 9 years', current_date + 14, '416 555 0199')
+    insert into public.candidate_profiles (user_id, profession, licensed_provinces, years_experience, available_from, phone,
+      home_city, home_province, pref_radius_km, pref_provinces, pref_employment_types, pref_other_roles, pref_min_pay, pref_pay_period, pref_practice)
+    values (cand_user, 'Optician', array['Ontario'], '5 to 9 years', current_date + 14, '416 555 0199',
+      'Toronto', 'Ontario', 50, '{}', array['Full time'], array['Optometric assistant or technician'], 25, 'hour', null)
     on conflict (user_id) do update set profession = excluded.profession, licensed_provinces = excluded.licensed_provinces,
-      years_experience = excluded.years_experience, available_from = excluded.available_from, phone = excluded.phone;
+      years_experience = excluded.years_experience, available_from = excluded.available_from, phone = excluded.phone,
+      home_city = excluded.home_city, home_province = excluded.home_province, pref_radius_km = excluded.pref_radius_km, pref_provinces = excluded.pref_provinces,
+      pref_employment_types = excluded.pref_employment_types, pref_other_roles = excluded.pref_other_roles, pref_min_pay = excluded.pref_min_pay,
+      pref_pay_period = excluded.pref_pay_period, pref_practice = excluded.pref_practice;
     delete from public.applications where candidate_id = cand_user;
     app := null;
     insert into public.applications (job_id, candidate_id, cover_letter, status, applicant, job_title, clinic_name, job_location, viewed_at)

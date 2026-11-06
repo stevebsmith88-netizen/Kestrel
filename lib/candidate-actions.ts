@@ -8,6 +8,7 @@ import { CV_MAX_BYTES, activeContent, cleanCoverLetter, detectCv, isClosed, safe
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { newApplicationEmail } from "@/lib/clinic-emails";
+import { cleanPrefs } from "@/lib/candidate-prefs";
 import { PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -47,11 +48,26 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
   if (years && !EXPERIENCE.includes(years)) errors.yearsExperience = "Choose one of the options.";
   if (available && !/^\d{4}-\d{2}-\d{2}$/.test(available)) errors.availableFrom = "Enter a date.";
   if (phone && !/^[\d\s().+\-]{7,30}$/.test(phone)) errors.phone = "Enter a phone number, or leave it blank.";
+  const prefs = cleanPrefs(
+    {
+      homeCity: text(form, "homeCity", 80),
+      homeProvince: text(form, "homeProvince", 40),
+      radius: text(form, "radius", 4),
+      extraProvinces: form.getAll("extraProvinces").map(String),
+      employmentTypes: form.getAll("employmentTypes").map(String),
+      otherRoles: form.getAll("otherRoles").map(String),
+      minPay: text(form, "minPay", 20),
+      payPeriod: text(form, "payPeriod", 10),
+      practice: text(form, "practice", 12),
+    },
+    profession,
+  );
+  Object.assign(errors, prefs.errors);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
-  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null };
+  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...prefs.row };
 
   const { data: existing } = await db.from("candidate_profiles").select("user_id").eq("user_id", session.userId).maybeSingle();
   const { error } = existing
