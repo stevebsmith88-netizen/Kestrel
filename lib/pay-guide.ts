@@ -7,7 +7,9 @@ import { JOB_BANK_WAGES, type JobBankWage } from "./pay-benchmark-data.ts";
 
 // Roles the public pay table leaves out (Steve's decision, 6th November 2026). The post a job form still compares optometrist pay.
 export const LEFT_OUT_ROLES: readonly string[] = ["Optometrist"];
-const shown = (wages: readonly JobBankWage[]) => wages.filter((w) => !LEFT_OUT_ROLES.includes(w.role));
+// Provinces the public pay table leaves out (Steve's decision, 6th November 2026).
+export const LEFT_OUT_PROVINCES: readonly string[] = ["Quebec"];
+const shown = (wages: readonly JobBankWage[]) => wages.filter((w) => !LEFT_OUT_ROLES.includes(w.role) && !LEFT_OUT_PROVINCES.includes(w.province));
 
 const ROLE_ORDER = ["Optometrist", "Optician", "Optometric assistant or technician", "Patient care or reception", "Practice or clinic manager"];
 
@@ -42,7 +44,7 @@ export function payGuideProvinces(wages: readonly JobBankWage[] = JOB_BANK_WAGES
   return [...new Set(shown(wages).map((w) => w.province))].sort((a, b) => a.localeCompare(b, "en-CA"));
 }
 
-// Every province's rows, roles in a fixed order. Roles in LEFT_OUT_ROLES are not included.
+// Every province's rows, roles in a fixed order. Roles in LEFT_OUT_ROLES and provinces in LEFT_OUT_PROVINCES are not included.
 export function payGuide(wages: readonly JobBankWage[] = JOB_BANK_WAGES): Record<string, PayGuideRow[]> {
   const out: Record<string, PayGuideRow[]> = {};
   for (const province of payGuideProvinces(wages)) {
