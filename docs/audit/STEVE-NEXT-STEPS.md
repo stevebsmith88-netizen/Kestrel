@@ -31,6 +31,10 @@ Updated with Steve's notes of 5th November 2026 (second pass).
 
 Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (meeting held, disclosure given and acknowledged, company incorporated) are not done. An earlier mix up between 2 versions of this file made them look done. Clinic outreach and publishing found listings stay off. Free launch waits for Gate A. Steve wants to be ready for launch, so launch materials (the flyer) are prepared as drafts and kept unpublished.
 
+### Quebec (added 6th November 2026, needs a decision and a Quebec lawyer)
+
+How to operate in Quebec and how to produce French content so Quebec jobs can be displayed: `docs/quebec.md`. The site is English only and anyone can already pick Quebec. Claude suggests option A now (keep Quebec out until the lawyer has advised, about 1 hour of work), then B or C later. Steve decides, and the 6 questions in that file go to a Quebec lawyer. Audit finding R31.
+
 ### Parked: no date, nothing waits on these
 
 - DONE: pull request 18 (the agency notes and this file) is merged.
