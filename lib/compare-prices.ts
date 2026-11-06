@@ -12,16 +12,17 @@ export const LINKEDIN_URL = "https://business.linkedin.com/talent-solutions/jobs
 // Jobs4ECPs, Basic Single Job Posting (its products page, 6th November 2026). The page shows no price for several jobs. Operator named on the page: Eye Care Edge Ltd.
 export const JOBS4ECPS_BASIC = { price: 100, days: 30 } as const;
 
-// Indeed, sponsored job (the budget screen in Steve's Indeed account, 6th November 2026). The figure is a daily average, and the real spend follows clicks or
+// Indeed, sponsored job (the budget screen in Steve's Indeed account, 6th November 2026; Steve confirmed the amounts are Canadian dollars). The figure is a daily average, and the real spend follows clicks or
 // applications, so it is shown as an average and never as a price. Premium's 30 day maximum budget is shown on the same screen. Indeed's own page says
 // employers can post up to 3 jobs a month free, each live up to 30 days.
 export const INDEED = { standardDaily: 38, premiumDaily: 63, premiumMax30Days: 1890, freeJobsPerMonth: 3, freeDays: 30 } as const;
 export const over30Days = (daily: number) => daily * 30;
 
-// ZipRecruiter. We could not find its own price page for Canada. These are ESTIMATES reported by third party sites (a Google AI summary of CareerPlug, ADP and Pin
-// pages, seen on 6th November 2026), almost certainly in US dollars. They are shown as estimates, never as ZipRecruiter's prices, and not per advert, because ZipRecruiter
-// sells monthly plans by the number of live job slots and sponsorship by the day. Replace with figures from its own page when Steve finds one.
-export const ZIPRECRUITER_ESTIMATE = { monthlyLow: 300, monthlyHigh: 1000, dailyLow: 16, dailyHigh: 35 } as const;
+// ZipRecruiter, from its own employer checkout page (Steve's screenshot, 6th November 2026): after a short free trial, US$24.00 a day for each active job, billed monthly,
+// when the account reaches US$500, or on cancellation, whichever comes first, and the employer can cancel at any time. US dollars, as ZipRecruiter shows them.
+// Steve found that the trial needs a credit card to sign up, and that ZipRecruiter has no permanent free tier for job postings.
+export const ZIPRECRUITER = { dailyUsd: 24, billingThresholdUsd: 500 } as const;
+export const ZIPRECRUITER_URL = "https://www.ziprecruiter.com";
 
 // Eluta, Sponsored Job (plus tax).
 export const ELUTA_SPONSORED = [

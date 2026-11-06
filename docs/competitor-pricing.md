@@ -41,17 +41,22 @@ All slots run 30 days. The site also has an Employer of the Month panel, a class
 ### Indeed (the sponsor budget screen in Steve's Indeed account)
 
 - Standard: $38 a day on average (better visibility, automatic replies). Premium: $63 a day on average (spotlight your job, first page boost, invite matched candidates). Premium budget options: runs continuously (max $472.50 a week), 30 days (max $1,890.00), 15 days (max $945.00), or a custom end date.
-- Currency is not shown on the screen. It is an Indeed Canada account, so presumably Canadian dollars. Steve to confirm.
+- Currency: Canadian dollars (Steve confirmed, 6th November 2026).
 - Indeed's own pricing page (via search, not opened): up to 3 free jobs a month, each live up to 30 days. Sponsored jobs are charged by clicks or applications against a budget.
 
 ### LinkedIn (https://business.linkedin.com/talent-solutions/jobs-101/pricing)
 
 - A basic post is free. A promoted job is charged per click against a daily or total budget, and LinkedIn says the cost per click varies and cannot be known until the job is posted. Taken from LinkedIn's own pricing page and tipsheet as shown in search results, not from a screenshot. No Canadian dollar figures found.
 
-### Left out on purpose
+### ZipRecruiter (its employer checkout page, Steve's screenshot, 6th November 2026)
 
-- **ZipRecruiter:** its own Canadian price page could not be found, so it is NOT in the table. It has one line under the table, worded as a third party ESTIMATE (about US$300 to US$1,000 a month per live job slot, US$16 to US$35 a day for sponsorship), from a Google AI summary quoting CareerPlug, ADP and Pin pages seen on 6th November 2026. Replace with ZipRecruiter's own figures if Steve finds them.
-- **Jobs-Optometry (jobs-optometry.com):** no pricing found anywhere. Needs a screenshot of its own price page.
+- After a short free trial: US$24.00 a day for each active job. Billed monthly, when the account reaches US$500, or on cancellation, whichever comes first. Can be cancelled at any time. In US dollars. In the table as about US$720 over 30 days, and US$3,600 for 5 active jobs.
+- Steve found that the trial needs a credit card to sign up, and that there is no permanent free tier for job postings. Both are stated on the page.
+- The earlier third party estimate (from a Google AI summary) is removed.
+
+### Left out of the table on purpose
+
+- **Jobs-Optometry (jobs-optometry.com):** only takes postings from members of the OSI Group buying group (Steve, 6th November 2026), so it is not an open option. One line in the notes under the table says so, and Steve does not want any buying group put off, so the wording stays neutral. No price needed.
 
 ## Not yet confirmed
 
@@ -76,7 +81,7 @@ Steve is not changing prices now. This page exists to give the comparison page i
 
 ## How the "5 jobs at once" column is worked out
 
-Kestrel: the Clinic pass price per post. OJobs: its own 5 slot price. Jobs4ECPs and Eluta show no price for several jobs, so the page assumes 5 single postings ($100 x 5 and $199 x 5), and says so (Steve's suggestion, 6th November 2026). Indeed, LinkedIn and ZipRecruiter are budget or plan based, so the column says so instead of a price.
+Kestrel: the Clinic pass price per post. OJobs: its own 5 slot price. Jobs4ECPs and Eluta show no price for several jobs, so the page assumes 5 single postings ($100 x 5 and $199 x 5), and says so (Steve's suggestion, 6th November 2026). Indeed and LinkedIn are budget based, so the column says so instead of a price. ZipRecruiter charges US$24 a day for each active job, so 5 jobs are shown as 5 times that.
 
 ## Layout and wording of /compare (6th November 2026)
 
