@@ -34,7 +34,7 @@ export default async function Resources() {
             bodies that license and represent the profession.
           </p>
 
-          <h2>What eye care roles typically pay</h2>
+          <h2 id="pay">What eye care roles typically pay</h2>
           <p>Choose a province to see the median and the middle half of pay for each role. The figures come from Job Bank, the Government of Canada&apos;s labour market service.</p>
           <PayGuide provinces={provinces} rows={payGuide()} initial={provinces.includes("Ontario") ? "Ontario" : provinces[0]} />
           <p className="help">
@@ -48,7 +48,7 @@ export default async function Resources() {
             <a href={JOB_BANK_SOURCE.dataset}>dataset</a>). {LICENCE_STATEMENT} (<a href={LICENCE_URL}>licence</a>). Adapted by Kestrel, and not endorsed by the Government of Canada.
           </p>
 
-          <h2>Hiring rules that affect a job ad</h2>
+          <h2 id="hiring-rules">Hiring rules that affect a job ad</h2>
           <p>
             Rules differ by province and by the size of the employer. These are the ones behind what Kestrel asks of every post, wherever the clinic is. This is general
             information, not legal advice, so check the current rules for your province or ask a lawyer.

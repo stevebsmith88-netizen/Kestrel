@@ -33,7 +33,7 @@ All slots run 30 days. The site also has an Employer of the Month panel, a class
 
 ## Not yet confirmed
 
-- **Jobs4ECPs:** third party sites disagree (from C$100 a post, or first post free). No official price page found.
+- **Jobs4ECPs:** third party sites disagree (from C$100 a post, or first post free). No official price page found. A 2025 press release describes Eye Recommend's resources as including Jobs4ECPs.com, and a company profile says Jobs4ECPs partners with Eye Recommend. Ownership is not confirmed. Because of that link, Jobs4ECPs is left off the comparison page until Steve has talked to Eye Recommend and the lawyer.
 - **CAO job board (opto.ca):** reported as free to post, not confirmed on the CAO's own site.
 - **Job Bank:** free to employers.
 - **Indeed and LinkedIn:** pricing depends on budget and bidding, so not comparable on a table.
