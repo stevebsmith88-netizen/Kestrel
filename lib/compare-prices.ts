@@ -5,6 +5,18 @@
 export const COMPARE_CHECKED = "6th November 2026";
 export const ELUTA_URL = "https://www.eluta.ca/postjobs";
 export const OJOBS_URL = "https://www.ojobs.ca/pricing";
+export const JOBS4ECPS_URL = "https://www.jobs4ecps.ca/products";
+export const INDEED_URL = "https://ca.indeed.com/hire/resources/howtohub/how-pricing-works-on-indeed";
+export const LINKEDIN_URL = "https://business.linkedin.com/talent-solutions/jobs-101/pricing";
+
+// Jobs4ECPs, Basic Single Job Posting (its products page, 6th November 2026). The page shows no price for several jobs. Operator named on the page: Eye Care Edge Ltd.
+export const JOBS4ECPS_BASIC = { price: 100, days: 30 } as const;
+
+// Indeed, sponsored job (the budget screen in Steve's Indeed account, 6th November 2026). The figure is a daily average, and the real spend follows clicks or
+// applications, so it is shown as an average and never as a price. Premium's 30 day maximum budget is shown on the same screen. Indeed's own page says
+// employers can post up to 3 jobs a month free, each live up to 30 days.
+export const INDEED = { standardDaily: 38, premiumDaily: 63, premiumMax30Days: 1890, freeJobsPerMonth: 3, freeDays: 30 } as const;
+export const over30Days = (daily: number) => daily * 30;
 
 // Eluta, Sponsored Job (plus tax).
 export const ELUTA_SPONSORED = [
