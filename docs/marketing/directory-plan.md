@@ -97,3 +97,7 @@ A 12 month term at 10 months for the price of 12, as with the passes. A founding
 3. Build the category pages (tables in the page, filters on top), with a "last checked" date, after launch and Stripe.
 4. Tell listed suppliers they are in it, after Gate A, with a way to claim and correct their entry.
 5. Sponsored tiers, once there are views to price from.
+
+## Batch 1 (9th November 2026): lens makers, contact lenses and distributors
+
+`docs/marketing/directory-batches/batch-01-lenses-contacts-distributors.csv`. 38 rows from Steve's candidate list, each searched for a public page. Results: 24 verified, 4 need Steve's input (weak or unclear), 3 to remove (wrong country or a retailer), 7 not found. Descriptions are written fresh and each row has its source page. Websites marked "to confirm" were not opened by Claude, only named in search results, so they stay off any public page until checked. Next batches: frames and eyewear (about 75), then services, software, clinical and pharma, with Steve's own knowledge filling the "not found" rows.
