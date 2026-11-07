@@ -24,7 +24,8 @@ export async function GET(request: Request) {
   const investor: [string, unknown][] = [
     ["Posts per clinic", s.investor.postsPerClinic],
     ["Clinics that post again (percent)", s.investor.clinicsThatRepost],
-    ["Applications per live job", s.investor.applicationsPerLiveJob],
+    ["Applications per published job", s.investor.applicationsPerJob],
+    ["Clinics that posted again within 60 days (percent)", s.repeat60.percent],
     ["Monthly recurring revenue", "not on yet"],
     ["Free to paid conversion", "not on yet"],
   ];
@@ -47,6 +48,8 @@ export async function GET(request: Request) {
     ...s.byProvince.map((p): [string, unknown] => [`Live jobs, ${p.label}`, p.count]),
     ...s.clinicFunnel.map((f): [string, unknown] => [`Clinic funnel, ${f.label}`, f.count]),
     ...s.candidateFunnel.map((f): [string, unknown] => [`Candidate funnel, ${f.label}`, f.count]),
+    ["Gate C, live jobs (need 50)", s.gateC.jobs.have],
+    ["Gate C, provinces with a live job (need 5)", s.gateC.provinces.have],
     ...investor,
   ];
   const rows = url.searchParams.get("kind") === "investor" ? [["As of", s.asOf] as [string, unknown], ...investor] : [["As of", s.asOf] as [string, unknown], ...all];

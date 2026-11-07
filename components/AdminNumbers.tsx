@@ -42,10 +42,27 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
               <section className="card tile"><p className="kicker">Live jobs</p><p className="num">{n(s.liveJobs)}</p><p>{s.publishedNow} published in the {label}. {change(s.publishedNow, s.publishedBefore)}</p></section>
               <section className="card tile"><p className="kicker">Clinics and suppliers</p><p className="num">{n(s.employers)}</p><p>{s.claimedEmployers} claimed, {s.foundEmployers} found online</p></section>
               <section className="card tile"><p className="kicker">Candidate accounts</p><p className="num">{n(s.candidateAccounts)}</p><p>{s.candidatesNow} joined in the {label}. {change(s.candidatesNow, s.candidatesBefore)}</p></section>
-              <section className="card tile"><p className="kicker">Applications</p><p className="num">{n(s.applicationsNow)}</p><p>In the {label}. {s.applicationsPerLiveJob === null ? "No live jobs yet" : `${s.applicationsPerLiveJob} per live job overall`}. {change(s.applicationsNow, s.applicationsBefore)}</p></section>
+              <section className="card tile"><p className="kicker">Applications</p><p className="num">{n(s.applicationsNow)}</p><p>In the {label}. {s.applicationsPerJob === null ? "No jobs published yet" : `${s.applicationsPerJob} per published job overall`}. {change(s.applicationsNow, s.applicationsBefore)}</p></section>
               <section className="card tile"><p className="kicker">Waitlist</p><p className="num">{n(s.waitlistConfirmed)}</p><p>Confirmed, of {s.waitlistTotal} who joined. {s.waitlistNow} joined in the {label}. <Link href="/admin/waitlist">See the list</Link></p></section>
               <section className="card tile"><p className="kicker">Revenue</p><p className="num">Not on yet</p><p>Appears here when payments are switched on.</p></section>
             </div>
+
+            <section className="card" aria-labelledby="gatec">
+              <h2 id="gatec">Gate C: ready for the paid launch?</h2>
+              <p className="help">The 4 things to show before prices are switched on. The first 2 are counted for you. The other 2 are checks only you can make.</p>
+              <ul className="gate">
+                <li>
+                  <label htmlFor="gate-jobs">Live jobs: <strong>{s.gateC.jobs.have} of {s.gateC.jobs.need}</strong>{s.gateC.jobs.met ? " (met)" : ""}</label>
+                  <progress id="gate-jobs" value={Math.min(s.gateC.jobs.have, s.gateC.jobs.need)} max={s.gateC.jobs.need} />
+                </li>
+                <li>
+                  <label htmlFor="gate-prov">Provinces with a live job: <strong>{s.gateC.provinces.have} of {s.gateC.provinces.need}</strong>{s.gateC.provinces.met ? " (met)" : ""}</label>
+                  <progress id="gate-prov" value={Math.min(s.gateC.provinces.have, s.gateC.provinces.need)} max={s.gateC.provinces.need} />
+                </li>
+              </ul>
+              <p className="help"><strong>Job pages indexed:</strong> check in Google Search Console (Pages) and Bing Webmaster Tools. Not countable here.</p>
+              <p className="help"><strong>Free to paid data recorded:</strong> starts when checkout is built. Until then Kestrel records who posted and when, but not what they paid.</p>
+            </section>
 
             <div className="twocol">
               <section className="card">
@@ -78,7 +95,8 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
                 <div><dt>Free to paid conversion</dt><dd>Not on yet</dd></div>
                 <div><dt>Posts per clinic</dt><dd>{n(s.investor.postsPerClinic)}</dd></div>
                 <div><dt>Clinics that post again</dt><dd>{s.investor.clinicsThatRepost === null ? "Not enough yet" : `${s.investor.clinicsThatRepost}%`}</dd></div>
-                <div><dt>Applications per live job</dt><dd>{n(s.investor.applicationsPerLiveJob)}</dd></div>
+                <div><dt>Applications per published job</dt><dd>{n(s.investor.applicationsPerJob)}</dd></div>
+                <div><dt>Clinics that post again within 60 days</dt><dd>{s.repeat60.percent === null ? "Not enough yet" : `${s.repeat60.percent}% (${s.repeat60.repeat} of ${s.repeat60.clinicsWithPosts})`}</dd></div>
               </dl>
               <a href={`/admin/numbers.csv?period=${period}&kind=investor`} className="btn sm ghost">Download investor summary</a>
             </section>

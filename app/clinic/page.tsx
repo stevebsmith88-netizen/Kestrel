@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import GettingStarted from "@/components/GettingStarted";
 import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
+import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
@@ -68,6 +70,10 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
             </section>
           ) : (
             <>
+              <GettingStarted
+                title="Your first application"
+                steps={clinicSteps({ hasProfile: true, submitted: jobs.filter((j) => j.status !== "draft").length, live: jobs.filter((j) => j.posted_at).length, applications: Object.values(applicants).reduce((sum, a) => sum + a.total, 0) })}
+              />
               {waiting > 0 && <p className="replynote">{waiting} {waiting === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
               <div className="tiles stats">
                 <section className="card tile"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></section>

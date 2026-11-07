@@ -25,3 +25,7 @@ export function outreachDailyLimit(env: Record<string, string | undefined> = pro
   const given = Number(env.OUTREACH_DAILY_LIMIT);
   return env.OUTREACH_DAILY_LIMIT && Number.isFinite(given) && given >= 0 ? Math.min(Math.floor(given), 200) : 20;
 }
+
+// The first week emails for new accounts (audit item 14, docs/onboarding-emails.md). Off until Steve is ready and migration 0033 has
+// been run on the database. Set ENABLE_ONBOARDING_EMAILS to "yes" in Vercel to switch them on.
+export const onboardingOn = () => process.env.ENABLE_ONBOARDING_EMAILS === "yes";

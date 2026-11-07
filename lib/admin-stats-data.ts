@@ -1,5 +1,5 @@
 import "server-only";
-import { countIn, investorNumbers, percent, periodRange, ratio, topCounts, weeklyCounts, type JobRow, type Period } from "@/lib/admin-stats";
+import { countIn, gateC, investorNumbers, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts, type JobRow, type Period } from "@/lib/admin-stats";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 type Db = NonNullable<ReturnType<typeof supabaseAdmin>>;
@@ -78,7 +78,7 @@ export async function loadStats(period: Period) {
     candidateAccounts: candidates.length, candidatesNow, candidatesBefore,
     clinicAccounts: clinicAccounts.length,
     applicationsTotal: applications.length, applicationsNow, applicationsBefore,
-    applicationsPerLiveJob: ratio(applications.length, live.length),
+    applicationsPerJob: ratio(applications.length, jobs.filter((j) => j.posted_at).length),
     waitlistTotal: waitlist.length,
     waitlistConfirmed: waitlist.filter((w) => w.confirmed_at && !w.unsubscribed_at).length,
     waitlistNow, waitlistBefore,
@@ -96,7 +96,9 @@ export async function loadStats(period: Period) {
       { label: "Profile ready to apply (role and CV)", count: ready },
       { label: "Sent an application", count: applicants.size },
     ],
-    investor: investorNumbers(jobs, live.length, applications.length),
+    investor: investorNumbers(jobs, applications.length),
+    gateC: gateC(live.length, new Set(live.map((j) => j.province).filter(Boolean)).size),
+    repeat60: repeatWithin(jobs, 60),
     jobsInReview: inReview ?? 0,
     openReports: openReports ?? 0,
     pendingClaims: pendingClaims ?? 0,
