@@ -2,6 +2,14 @@
 
 Idea from Steve, 9th November 2026. A reference directory of suppliers and anything that touches the optical world in Canada, built from a document Steve parsed from **public sources only** (company websites, public directories and listings, with no Eye Recommend lists or internal material). Not built. It starts after launch and the Stripe work, and the first step is working through Steve's document together.
 
+## Status: on hold until the source of the document is confirmed (9th November 2026)
+
+Steve shared `suppliers_only.xlsx` (260 rows: Category, Company, What they do, Notes). On reading it, 11 rows have notes that refer to Eye Recommend ("on the Eye Recommend list", "not on the Eye Recommend list", "check with the Eye Recommend rep", "Eye Recommend members get a discount"), and 6 refer to "the supplier document" or "the document". That suggests the list was built from, or checked against, a supplier or member document that is Eye Recommend's. Steve has said everything in it is public, so the next step is to find out what that document is. Until then the file is not used for anything, and none of its contents are in the repository.
+
+Project rule (CLAUDE.md): Kestrel uses no Eye Recommend data, member lists or internal material. Member benefits, rep contacts and "which suppliers are on our list" are exactly that kind of information, even if the rest is public. If the document turns out to be Eye Recommend's, the list has to be rebuilt from independent public sources, such as company websites, public trade show exhibitor lists, the Canadian Association of Optometrists' public supplier pages and trade magazine buyers' guides.
+
+Other things to fix whatever the answer: no website, province, source or last checked columns; 46 rows marked "confirm" or "not verified"; some rows hold several companies (split them); a duplicate (Bright Optical twice); a retired company; notes about creditor protection, ownership guesses and analyst opinions (leave out of anything public, since a wrong statement about a named company is a legal risk); and named individuals in notes (leave out). Eye Recommend itself would need an explicit decision from Steve to appear, since the existing exception covers only the buying group blog post.
+
 ## Why it is worth doing
 
 - A real reference page that people search for ("optical lab suppliers Canada", "frame distributors Canada"), and one that suppliers, associations and trade media have reasons to link to.
