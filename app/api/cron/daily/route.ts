@@ -4,7 +4,8 @@ import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } fro
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { outreachDailyLimit, outreachOn } from "@/lib/features";
+import { runOnboarding } from "@/lib/onboarding-run";
+import { onboardingOn, outreachDailyLimit, outreachOn } from "@/lib/features";
 import { nextDueAt, outreachSequenceEmail, sameClinicPattern, stopReason } from "@/lib/outreach-sequence";
 import { addressUnsubscribeUrl, isSuppressed } from "@/lib/suppression";
 import { candidateRecipient } from "@/lib/recipient";
@@ -28,6 +29,7 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 //     and sends the summary email to clinics who chose one every 2 to 3 days or weekly,
 //  5. emails candidates one digest of new jobs that match their job alerts,
 //     then sends the clinic outreach emails that are due (only while ENABLE_OUTREACH is "yes"),
+//     and, while ENABLE_ONBOARDING_EMAILS is "yes", the first week emails for new accounts,
 //  6. tells Steve about anything that has waited more than a day for him.
 // Vercel sends the secret in the Authorization header, so nobody else can trigger it.
 // Only one run can go at a time, it sends no more than the day's email budget, and it records when it last finished well,
@@ -55,7 +57,7 @@ async function runDaily(request: Request) {
   const started = Date.now();
   const outOfTime = () => Date.now() - started > TIME_LIMIT;
   const now = new Date();
-  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
+  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, onboardingSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
   const problems: string[] = [];
 
   // Only one run at a time. If two copies started together, every email would go twice.
@@ -282,6 +284,14 @@ async function runDaily(request: Request) {
     } else {
       await putBack();
     }
+  }
+
+  // 5c. First week emails for new accounts (day 1, 3 and 7), only while ENABLE_ONBOARDING_EMAILS is "yes". At most 1 each a day.
+  if (onboardingOn() && !outOfTime()) {
+    const onboarding = await runOnboarding(admin, { now, budget, note, outOfTime });
+    summary.onboardingSent = onboarding.sent;
+    summary.emailsHeldBack += onboarding.heldBack;
+    problems.push(...onboarding.problems);
   }
 
   // 5a. Clinic outreach sequence, only while it is switched on. Each clinic was added by Steve on the Outreach page.

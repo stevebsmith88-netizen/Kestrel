@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { change, countIn, investorNumbers, parsePeriod, percent, periodRange, ratio, topCounts, weeklyCounts } from "./admin-stats.ts";
+import { change, countIn, gateC, investorNumbers, parsePeriod, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts } from "./admin-stats.ts";
 
 const now = new Date("2026-10-30T12:00:00Z");
 
@@ -47,10 +47,26 @@ test("ratios never divide by zero", () => {
 test("investor numbers", () => {
   const job = (employer_id: string, posted_at: string | null) => ({ employer_id, status: "live", posted_at, province: "Ontario", created_at: "2026-10-01T00:00:00Z" });
   const jobs = [job("a", "2026-10-01T00:00:00Z"), job("a", "2026-10-10T00:00:00Z"), job("b", "2026-10-02T00:00:00Z"), job("c", null)];
-  const n = investorNumbers(jobs, 2, 5);
+  const n = investorNumbers(jobs, 5);
   assert.equal(n.clinicsWithPosts, 2);
   assert.equal(n.postsPerClinic, 1.5);
   assert.equal(n.clinicsThatRepost, 50);
-  assert.equal(n.applicationsPerLiveJob, 2.5);
-  assert.equal(investorNumbers([], 0, 0).postsPerClinic, null);
+  // 5 applications over the 3 jobs ever published, not over however many happen to be live today.
+  assert.equal(n.applicationsPerJob, 1.7);
+  assert.equal(investorNumbers([], 0).postsPerClinic, null);
+  assert.equal(investorNumbers([], 0).applicationsPerJob, null);
+});
+
+test("repeat clinics are those that post a second job within 60 days", () => {
+  const job = (employer_id: string, posted_at: string | null) => ({ employer_id, status: "live", posted_at, province: "Ontario", created_at: "2026-10-01T00:00:00Z" });
+  const jobs = [job("a", "2026-10-01T00:00:00Z"), job("a", "2026-11-15T00:00:00Z"), job("b", "2026-10-01T00:00:00Z"), job("b", "2027-03-01T00:00:00Z"), job("c", "2026-10-01T00:00:00Z"), job("d", null)];
+  const r = repeatWithin(jobs, 60);
+  assert.deepEqual(r, { clinicsWithPosts: 3, repeat: 1, percent: 33 });
+  assert.equal(repeatWithin([]).percent, null);
+});
+
+test("gate C needs 50 live jobs in 5 provinces", () => {
+  assert.deepEqual(gateC(12, 3), { jobs: { have: 12, need: 50, met: false }, provinces: { have: 3, need: 5, met: false } });
+  assert.equal(gateC(50, 5).jobs.met && gateC(50, 5).provinces.met, true);
+  assert.equal(gateC(60, 4).provinces.met, false);
 });

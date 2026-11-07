@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0032), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0033), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -1980,6 +1980,22 @@ alter table public.waitlist
   add column if not exists landing_path  text check (landing_path is null or char_length(landing_path) <= 120);
 
 -- ======================================================================
+-- 0033_onboarding_emails.sql
+-- ======================================================================
+-- 0033: a record of which first week emails each account has been sent (marketing audit item 14), so none is sent twice.
+-- Written only by the server with the service role key. Row level security is on with no public policies. Safe to run more than once.
+-- Run it on BOTH databases (live and demo). The emails stay off until ENABLE_ONBOARDING_EMAILS is "yes" in Vercel.
+
+create table if not exists public.onboarding_emails (
+  user_id uuid not null references auth.users (id) on delete cascade,
+  step    text not null check (char_length(step) <= 40),
+  sent_at timestamptz not null default now(),
+  primary key (user_id, step)
+);
+
+alter table public.onboarding_emails enable row level security;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2035,6 +2051,7 @@ from (
     ('column: candidate preferences (recommended jobs)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'pref_min_pay')),
     ('table: candidate_job_hides (not interested)', to_regclass('public.candidate_job_hides') is not null),
     ('column: where a waitlist sign up came from', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'waitlist' and column_name = 'utm_source')),
+    ('table: onboarding_emails (first week emails sent)', to_regclass('public.onboarding_emails') is not null),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

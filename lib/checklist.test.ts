@@ -1,0 +1,25 @@
+// Run with: npm test
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { allDone, candidateSteps, clinicSteps, nextStep } from "./checklist.ts";
+
+test("a new clinic starts at the profile and the list ends at the first application", () => {
+  const steps = clinicSteps({ hasProfile: false, submitted: 0, live: 0, applications: 0 });
+  assert.equal(steps.length, 4);
+  assert.equal(nextStep(steps)?.label, "Set up your clinic profile");
+  assert.equal(allDone(steps), false);
+  assert.equal(allDone(clinicSteps({ hasProfile: true, submitted: 1, live: 1, applications: 1 })), true);
+});
+
+test("clinic steps tick off in order of what the clinic has done", () => {
+  const steps = clinicSteps({ hasProfile: true, submitted: 1, live: 0, applications: 0 });
+  assert.deepEqual(steps.map((s) => s.done), [true, true, false, false]);
+  assert.equal(nextStep(steps)?.label, "Get it live");
+});
+
+test("a candidate is done once they have applied, and every link goes somewhere on the site", () => {
+  const steps = candidateSteps({ profileReady: true, lookingFor: true, hasAlert: true, applications: 1 });
+  assert.equal(allDone(steps), true);
+  assert.equal(nextStep(steps), null);
+  for (const s of [...clinicSteps({ hasProfile: false, submitted: 0, live: 0, applications: 0 }), ...candidateSteps({ profileReady: false, lookingFor: false, hasAlert: false, applications: 0 })]) assert.ok(s.href.startsWith("/"));
+});

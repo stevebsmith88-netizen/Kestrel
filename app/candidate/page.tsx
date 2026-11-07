@@ -3,12 +3,15 @@ import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { AppStatusBadge } from "@/components/AppStatus";
+import GettingStarted from "@/components/GettingStarted";
 import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
+import { candidateSteps } from "@/lib/checklist";
 import { getMyApplications, getMyCandidateProfile, profileReady, profileStrength } from "@/lib/candidate";
 import { employmentLabel, formatPay, longDate } from "@/lib/jobs";
 import { hideRecommendation } from "@/lib/recommendation-actions";
 import { getRecommendations } from "@/lib/recommendations";
+import { supabaseServer } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Your home | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -22,6 +25,8 @@ export default async function CandidateHome() {
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
   const latest = applications.slice(0, 3);
   const { recs, needsRole, needsWhere } = await getRecommendations(profile, applications.map((a) => a.job_id));
+  const db = await supabaseServer();
+  const { count: alertCount } = db ? await db.from("job_alerts").select("id", { count: "exact", head: true }) : { count: 0 };
 
   return (
     <>
@@ -31,6 +36,11 @@ export default async function CandidateHome() {
           <p className="kicker">Your home</p>
           <h1>Welcome, {first}</h1>
           <p className="lede2">Keep your CV and details here, and apply to any job in a few clicks.</p>
+
+          <GettingStarted
+            title="Your first application"
+            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: !needsRole && !needsWhere, hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
+          />
 
           <div className="tiles">
             <section className="card">

@@ -551,3 +551,21 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .resources .cmp-why h2,.resources .cmp-cta h2{margin:0 0 8px;font-size:1.5rem}
 .cmp-why ul{margin:10px 0 0}
 .cmp-why li{margin:8px 0}
+.gate{list-style:none;padding:0;margin:0 0 12px}
+.gate li{padding:8px 0}
+.gate label{display:block;margin-bottom:4px}
+.gate progress{width:100%;height:14px;accent-color:var(--chestnut)}
+.card .gate li::before{content:none}
+.checklist{margin:0 0 24px}
+.checklist ol{list-style:none;padding:0;margin:12px 0 0}
+.checklist li{padding:10px 0;border-top:1px solid var(--line)}
+.checklist li::before{content:none}
+.checklist li:first-child{border-top:0}
+.gs-label{margin:0;display:flex;align-items:center;gap:10px}
+.gs-mark{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:2px solid var(--buff);font-size:.8rem;line-height:1;color:var(--cream);flex:none}
+.gs-done .gs-mark{background:var(--navy);border-color:var(--navy)}
+.gs-done .gs-mark::after{content:"";width:5px;height:10px;border:solid var(--cream);border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+.gs-done strong{color:var(--slate);font-weight:600}
+.gs-next .gs-mark{border-color:var(--chestnut)}
+.gs-detail{margin:4px 0 8px 32px;color:var(--slate)}
+.gs-next .btn{margin:0 0 0 32px}
