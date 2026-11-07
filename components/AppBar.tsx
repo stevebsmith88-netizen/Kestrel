@@ -31,6 +31,13 @@ const NAV: Record<Role, { href: string; label: string }[]> = {
   ],
 };
 
+function initials(session: Session): string {
+  const words = (session.fullName || "").trim().split(/\s+/).filter(Boolean);
+  if (words.length >= 2) return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  if (words.length === 1) return words[0][0].toUpperCase();
+  return (session.email[0] || "?").toUpperCase();
+}
+
 // The bar across the top of every signed in page. Pass the page's own address as
 // `current` and its link is highlighted. On a phone the links fold into a Menu button.
 export default function AppBar({ session, current }: { session: Session; current?: string }) {
@@ -50,12 +57,19 @@ export default function AppBar({ session, current }: { session: Session; current
             </Link>
           ))}
         </nav>
-        <div className="topbar-who app-wide">
-          <span>{session.fullName || session.email}</span>
-          <form action={signOut}>
-            <button type="submit" className="linkbtn">Sign out</button>
-          </form>
-        </div>
+        <details className="topbar-who app-wide">
+          <summary aria-label={`Account menu for ${session.fullName || session.email}`}>
+            <span className="avatar" aria-hidden="true">{initials(session)}</span>
+          </summary>
+          <div className="who-panel">
+            <p>{session.fullName || session.email}</p>
+            {session.fullName && <p className="who-email">{session.email}</p>}
+            <Link href="/account">Account</Link>
+            <form action={signOut}>
+              <button type="submit" className="linkbtn">Sign out</button>
+            </form>
+          </div>
+        </details>
         <details className="site-narrow app-narrow">
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
