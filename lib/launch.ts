@@ -9,7 +9,7 @@ const gateOpen = unstable_cache(async () => signupsOpen(), ["launch-gate-open"],
 // Which home page and header to show (lib/launch-rules.ts has the rule).
 export async function homeModeNow(): Promise<HomeMode> {
   const forced = (process.env.LAUNCH_HOME ?? "").trim().toLowerCase();
-  const open = forced === "yes" || forced === "no" ? false : await gateOpen();
+  const open = forced === "yes" || forced === "no" || forced === "prelaunch" ? false : await gateOpen();
   return homeMode(process.env.LAUNCH_HOME, process.env.PRELAUNCH_HOME, open);
 }
 
