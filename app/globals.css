@@ -571,7 +571,10 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .gs-next .btn{margin:0 0 0 32px}
 .site-brand{display:flex;flex-direction:column;gap:3px}
 .site-tag{font:400 .5625rem/1.2 Poppins,"Source Sans 3",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--navy);white-space:nowrap}
+/* On a wide screen the tagline sits to the right of the wordmark, centred on it, behind a thin gold rule. Below that width the header
+   has less room, so it stays underneath, where it reads best on a phone. */
 @media(min-width:760px){.site-tag{font-size:.625rem;letter-spacing:.3em}}
+@media(min-width:1000px){.site-brand{flex-direction:row;align-items:center;gap:14px}.site-tag{border-left:1.5px solid var(--buff);padding-left:14px}}
 .lh-hero{padding:48px 0 0;text-align:center;overflow:hidden}
 .lh-hero h1{font:400 clamp(2.25rem,5.5vw,3.75rem)/1.08 "DM Serif Display",Georgia,serif;color:var(--navy);margin:0 auto;max-width:15ch}
 .lh-lede{font-size:clamp(1.0625rem,2vw,1.25rem);color:var(--navy-2);max-width:620px;margin:18px auto 0}
