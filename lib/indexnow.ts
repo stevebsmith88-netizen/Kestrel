@@ -14,7 +14,8 @@ export type IndexNowResult = { ok: boolean; sent: number; note: string };
 export async function submitToIndexNow(urls: string[]): Promise<IndexNowResult> {
   if (demoMode()) return { ok: false, sent: 0, note: "This is the demo site, which never contacts search engines." };
   const key = indexNowKey();
-  if (!validKey(key)) return { ok: false, sent: 0, note: "INDEXNOW_KEY is not set, so nothing was sent." };
+  if (!key) return { ok: false, sent: 0, note: "INDEXNOW_KEY is not set on this deployment, so nothing was sent. Has the site been redeployed since it was added?" };
+  if (!validKey(key)) return { ok: false, sent: 0, note: `INDEXNOW_KEY is set but is not a valid key (it has ${key.length} characters, and must be 8 to 128 letters, numbers or hyphens with no quotes or spaces).` };
   const payload = indexNowPayload(SITE, key, urls);
   if (payload.urlList.length === 0) return { ok: true, sent: 0, note: "No pages to send." };
   try {
