@@ -6,11 +6,11 @@ Built 7th November 2026 (marketing audit and Steve's request). Before launch the
 
 | Look | When | What it is |
 | --- | --- | --- |
-| Coming soon | Today (the default) | The original page: large wordmark, tagline, skyline, waitlist form |
-| Pre launch | Optional, before launch | The new look with the waitlist still the call to action: tagline under the wordmark, headline "Eye care jobs across Canada, opening soon", skyline, the two cards, the numbers box and the same waitlist form |
+| Coming soon | Only if asked for (`PRELAUNCH_HOME=no`) | The original page: large wordmark, tagline, skyline, waitlist form |
+| Pre launch | Live from 8th November 2026, until sign up opens | The new look with the waitlist still the call to action: tagline under the wordmark, headline "Eye care jobs across Canada, opening soon", skyline, the two cards, the numbers box and the same waitlist form |
 | Launch | When sign up opens | Job search first, as described below |
 
-To use the pre launch look on the live site, set `PRELAUNCH_HOME` to `yes` in Vercel and redeploy. It only applies while sign up is closed, so it can stay set: when you open sign up, the launch layout takes over whatever it says. Preview it at `/launch-preview?mode=prelaunch`.
+The pre launch look is the default (Steve, 8th November 2026), so nothing needs setting in Vercel. To put the original coming soon page back, set `PRELAUNCH_HOME` to `no` and redeploy. It only applies while sign up is closed, so it can never get in the way of launch: when you open sign up, the launch layout takes over whatever it says. Preview the pre launch look at `/launch-preview?mode=prelaunch`.
 
 ## What changes at launch
 
