@@ -16,8 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
   const mode = await homeModeNow();
   if (mode === "coming-soon") return {};
   // Its own title, description and canonical address, so search engines are not left with the default "Coming soon" title.
-  if (mode === "prelaunch") return shareMetadata({ title: "Eye care jobs across Canada, opening soon", description: "Kestrel is a Canada-wide eye care job board for optometrists, opticians, assistants, clinic teams and suppliers. Every job shows its pay. Join the waitlist.", path: "/" });
-  return shareMetadata({ title: "Eye care jobs across Canada", description: "A Canada-wide eye care job board. Independent and corporate practices post side by side, and every job shows its pay.", path: "/" });
+  if (mode === "prelaunch") return shareMetadata({ title: "Optometrist, Optician and Assistant Jobs in Canada", shareTitle: "Eye care jobs across Canada, opening soon", description: "A Canada-wide eye care job board for optometrists, opticians, optometric assistants, technicians, practice managers and suppliers. Every job shows its pay. Join the waitlist.", path: "/" });
+  return shareMetadata({ title: "Optometrist, Optician and Assistant Jobs in Canada", shareTitle: "Eye care jobs across Canada", description: "A Canada-wide eye care job board for optometrists, opticians, optometric assistants and clinic teams. Independent and corporate practices post side by side, and every job shows its pay.", path: "/" });
 }
 
 // At launch the sign up gate opens (docs/launch-checklist.md) and the launch layout takes over from the coming soon page by itself.
