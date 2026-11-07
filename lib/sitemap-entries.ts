@@ -9,8 +9,7 @@ import { LANDING_PROVINCES, LANDING_ROLES, comboHref, landingIndexable, province
 import { PAGE_DATES } from "@/lib/page-dates";
 import { getComboCounts, listLiveJobIds } from "@/lib/public-jobs";
 
-// Every public page that belongs in the sitemap. The sitemap and the "tell search engines about every page" button both use it, so
-// they can never disagree.
+// Every public page that belongs in the sitemap, in one place.
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
