@@ -615,3 +615,9 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .menu-icon{display:block}
 .auth-tag{display:block;margin:-14px 0 24px;font:400 .5625rem/1.2 Poppins,"Source Sans 3",sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--navy)}
 @media(max-width:720px){.lh-skyline{margin-top:14px}}
+.directory .dir-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin:6px 0 4px}
+@media (max-width:640px){.directory .dir-controls{grid-template-columns:1fr}}
+.directory .dir-table{min-width:720px}
+.directory .dir-table caption{text-align:left;font-weight:600;padding:0 0 8px;color:var(--navy)}
+.directory .dir-table tbody th{text-transform:none;letter-spacing:0;font-size:inherit;font-weight:600;color:var(--navy);min-width:180px}
+.directory .dir-table td{vertical-align:top}
