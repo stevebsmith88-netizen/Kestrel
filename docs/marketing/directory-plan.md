@@ -40,12 +40,38 @@ A list built by parsing with AI needs checking before it goes public. Typical fa
 
 ## Sponsored listings as revenue
 
-Possible, with rules:
+Steve's thinking, 9th November 2026: sponsors rotate automatically in 2 places, a logo strip on the home page and the top of the relevant category page (a local lab would sit at the top of the lens lab section, rotating with any other sponsors there). A minimum term of 6 months. Always labelled "Sponsored". Ads and traffic come first, then the offer to suppliers.
+
+### Rules
+
 - Free basic listing for everyone, so the directory stays useful and impartial.
-- Paid tiers add presence, not ranking tricks: a featured profile (logo, longer description, links to their open jobs), category sponsorship, and the supplier job post products already planned (pricing for field and supplier roles is still to decide with Stripe).
-- Everything paid is labelled "Sponsored" on the page, and its link carries `rel="sponsored"`. Show the label in the table as well as the profile.
-- Do not sell sponsored positions to suppliers before the disclosure conversation, because many suppliers are also vendors to buying groups. Steve should raise the directory and any sponsored listings in that conversation and with the lawyer, as with the agency pathway.
-- Price after launch from real numbers (views and clicks), as with sponsored job posts (`docs/sponsored-ads-plan.md`).
+- Paid placement adds presence only: a featured profile (logo, longer description, links to their open jobs) and the two placements above, plus the supplier job posts already planned.
+- Everything paid says "Sponsored" in the page, and its link carries `rel="sponsored"`. Keep the sponsored block compact, so ads never push the content down.
+- **Fair rotation:** the order is shuffled on each visit, so every sponsor gets the same exposure over time. No auto playing carousel (it is hard to use and fails accessibility needs). All sponsors are in the page for crawlers and screen readers.
+- **Caps:** at most 6 on the home page and 3 per category, so a slot stays worth buying. The same idea as the sponsored job posts (`docs/sponsored-ads-plan.md`): build the rotation once and use it for both.
+- **Province matching later:** a lab's slot can show first when a visitor filters to its province.
+- **Reporting:** the same cookie free view and click counts as job posts, sent to each sponsor monthly. That report is what renews the sponsorship.
+- Sponsors pay by prepaid term (6 or 12 months), not by cancellable monthly subscription, so the minimum term is simple to keep. Terms for the lawyer.
+- Do not sell sponsored positions to suppliers before the disclosure conversation, because many suppliers are also vendors to buying groups. Steve should raise the directory and any sponsored listings in that conversation and with the lawyer.
+
+### Pricing: starting hypotheses to test, not market data
+
+No reliable published benchmark was found for Canadian optical trade sponsorship, so these are value based starting points to test with real suppliers. Prices before HST.
+
+| Product | Monthly, on a 6 month term | 6 months |
+| --- | --- | --- |
+| Featured profile | $39 | $234 |
+| Category sponsor (top of 1 category, shared with up to 2 others) | $99 | $594 |
+| Home page logo strip (up to 6) | $149 | $894 |
+| Bundle of all 3 | $199 | $1,194 |
+
+A 12 month term at 10 months for the price of 12, as with the passes. A founding sponsor rate held for 12 months for the first 10 sponsors, as with founding clinics.
+
+**What the slot design allows:** 6 home slots at $149 a month is about $10,700 a year if every slot is sold, and about 12 categories with 3 slots each at $99 a month is about $42,800. The most it could bring in is about $53,500 a year, and at 30% to 50% filled about $16,000 to $27,000. That is roughly 10% to 18% of the $150,000 target: worthwhile extra income, with job posts still the core.
+
+**Finding the real price:** ask 3 to 5 suppliers what they spend a year on trade advertising, and ask the trade magazines and the CAO and OAC for their media kits (many publish rate cards). One new clinic is worth thousands of dollars a year to a lens lab, so a few hundred dollars for a year of visibility is easy to justify, if the audience is real.
+
+**When to sell:** after launch, and once there are 2 to 3 months of visitor numbers (Vercel Web Analytics comes with Pro). Sell on audience quality: clinic owners and eye care staff in Canada, not raw visitor counts. Before then, only a free listing and a founding sponsor waiting list.
 
 ## Order of work
 
