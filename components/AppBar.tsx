@@ -3,22 +3,24 @@ import { signOut } from "@/lib/auth-actions";
 import { homeFor, type Role, type Session } from "@/lib/auth";
 import { findYourFitOn } from "@/lib/features";
 
-const QUIZ = { href: "/find-your-fit", label: "Find your fit" };
-const NAV: Record<Role, { href: string; label: string }[]> = {
+type NavItem = { href: string; label: string; menu?: boolean };
+const QUIZ: NavItem = { href: "/find-your-fit", label: "Find your fit" };
+// `menu: true` items sit under the initials badge on wide screens. On a phone every link is in the Menu button.
+const NAV: Record<Role, NavItem[]> = {
   candidate: [
     { href: "/candidate", label: "Home" },
     { href: "/jobs", label: "Find jobs" },
-    { href: "/candidate/applications", label: "My applications" },
-    { href: "/candidate/profile", label: "Profile and CV" },
+    { href: "/candidate/applications", label: "My applications", menu: true },
+    { href: "/candidate/profile", label: "Profile and CV", menu: true },
     { href: "/candidate/alerts", label: "Job alerts" },
-    { href: "/account", label: "Account" },
+    { href: "/account", label: "Account settings", menu: true },
   ],
   clinic: [
     { href: "/clinic", label: "Dashboard" },
     { href: "/clinic/jobs/new", label: "Post a job" },
-    { href: "/clinic/profile", label: "Clinic profile" },
+    { href: "/clinic/profile", label: "Clinic profile", menu: true },
     { href: "/jobs", label: "Live jobs" },
-    { href: "/account", label: "Account" },
+    { href: "/account", label: "Account settings", menu: true },
   ],
   admin: [
     { href: "/admin", label: "Overview" },
@@ -43,6 +45,9 @@ function initials(session: Session): string {
 export default function AppBar({ session, current }: { session: Session; current?: string }) {
   const here = current ?? homeFor(session.role);
   const links = session.role === "candidate" && findYourFitOn() ? [...NAV.candidate.slice(0, 2), QUIZ, ...NAV.candidate.slice(2)] : NAV[session.role];
+  const barLinks = links.filter((l) => !l.menu);
+  const menuLinks = links.filter((l) => l.menu);
+  if (!menuLinks.some((l) => l.href === "/account")) menuLinks.push({ href: "/account", label: "Account settings", menu: true });
   return (
     <header className="topbar">
       <div className="wrap">
@@ -51,7 +56,7 @@ export default function AppBar({ session, current }: { session: Session; current
           <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={132} height={39} />
         </Link>
         <nav className="app-wide" aria-label="Main">
-          {links.map((item) => (
+          {barLinks.map((item) => (
             <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>
               {item.label}
             </Link>
@@ -64,7 +69,9 @@ export default function AppBar({ session, current }: { session: Session; current
           <div className="who-panel">
             <p>{session.fullName || session.email}</p>
             {session.fullName && <p className="who-email">{session.email}</p>}
-            <Link href="/account">Account</Link>
+            {menuLinks.map((item) => (
+              <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>{item.label}</Link>
+            ))}
             <form action={signOut}>
               <button type="submit" className="linkbtn">Sign out</button>
             </form>
