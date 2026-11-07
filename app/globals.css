@@ -605,3 +605,5 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
   .lh-cols,.lh-clinicsgrid{grid-template-columns:1fr}
   .lh-hero{padding-top:32px}
 }
+.lh-hero .pill{display:inline-block;margin:0 0 16px}
+.lh-ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:26px 0 0;position:relative;z-index:1}

@@ -1,14 +1,23 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { TAGLINE, launchChoice } from "./launch-rules.ts";
+import { TAGLINE, homeMode } from "./launch-rules.ts";
 
-test("the launch layout follows the sign up gate unless forced", () => {
-  assert.equal(launchChoice(undefined, false), false);
-  assert.equal(launchChoice("", true), true);
-  assert.equal(launchChoice(" Yes ", false), true);
-  assert.equal(launchChoice("no", true), false);
-  assert.equal(launchChoice("maybe", true), true);
+test("before launch the original page shows, unless the pre launch look is chosen", () => {
+  assert.equal(homeMode(undefined, undefined, false), "coming-soon");
+  assert.equal(homeMode("", "no", false), "coming-soon");
+  assert.equal(homeMode(undefined, " Yes ", false), "prelaunch");
+});
+
+test("opening sign up always wins, so a pre launch setting never blocks launch", () => {
+  assert.equal(homeMode(undefined, undefined, true), "launch");
+  assert.equal(homeMode(undefined, "yes", true), "launch");
+});
+
+test("LAUNCH_HOME forces a page either way", () => {
+  assert.equal(homeMode("yes", undefined, false), "launch");
+  assert.equal(homeMode("no", "yes", true), "coming-soon");
+  assert.equal(homeMode("maybe", undefined, true), "launch");
 });
 
 test("the tagline stays as the brand wording", () => {

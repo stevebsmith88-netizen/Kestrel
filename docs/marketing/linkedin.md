@@ -16,7 +16,11 @@ Page: https://www.linkedin.com/company/kestrel-eye-care-jobs/ (created by Steve,
 | Location | Canada |
 | Employees | Leave empty. Do not list yourself as an employee |
 
-## Commitments to keep (a small set, so they can be kept)
+## LinkedIn's own "Commitments" section (separate from the rules below)
+
+LinkedIn pages have a Commitments box. It is for promises an employer makes to its employees and the wider community, with relevant links, public reports and accurate credentials as proof. It says not to use it to restate a mission or promote products. Kestrel has no staff, so **leave it empty for now**. If one is added later, the only one Kestrel can prove today is pay transparency, linking to the public pay table (`/resources#pay`) and, once the lawyer has cleared it and the draft banner is gone, the posting policy. Do not add diversity, sustainability or accessibility commitments without something public to point to.
+
+## Posting rules (Kestrel's own commitments to itself, not the LinkedIn box)
 
 1. **1 post a week, at most.** Skipping a week is fine. A quiet page is better than one that posts filler.
 2. **Posts come from things Kestrel owns:** a new blog post, the pay table, the resources page, the hiring rules, and later the landing pages. Nothing is invented, and every number has a source on the site.

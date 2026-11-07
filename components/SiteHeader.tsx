@@ -2,16 +2,19 @@ import Link from "next/link";
 import { signOut } from "@/lib/auth-actions";
 import { homeFor, type Session } from "@/lib/auth";
 import { findYourFitOn } from "@/lib/features";
-import { launchLayoutOn } from "@/lib/launch";
+import { homeModeNow } from "@/lib/launch";
 import { TAGLINE } from "@/lib/launch-rules";
 
 // The menu across the top of the public pages. On a phone it folds into a Menu button.
 // Pages that know who is signed in pass `session`, so a signed in person sees a way back to
 // their own dashboard instead of "Sign in" and "Join the waitlist".
-// Once Kestrel has launched (lib/launch.ts), the wordmark carries the tagline under it and the call to action is Create account, not the waitlist.
-export default async function SiteHeader({ logo = true, session = null, launch }: { logo?: boolean; session?: Session | null; launch?: boolean }) {
+// In the new look (pre launch and launch, lib/launch.ts) the wordmark carries the tagline under it. Once launched, the call to action is
+// Create account, not the waitlist.
+export default async function SiteHeader({ logo = true, session = null, launch, tagline }: { logo?: boolean; session?: Session | null; launch?: boolean; tagline?: boolean }) {
   const dashboard = session ? homeFor(session.role) : null;
-  const launched = launch ?? (await launchLayoutOn());
+  // `launch` and `tagline` let a page that already knows which look it has (the launch and pre launch home pages) say so.
+  const mode = launch ? "launch" : tagline ? "prelaunch" : await homeModeNow();
+  const launched = mode === "launch";
   const join = launched ? { href: "/sign-up", label: "Create account" } : { href: "/#join", label: "Join the waitlist" };
   return (
     <header className="site">
@@ -22,7 +25,7 @@ export default async function SiteHeader({ logo = true, session = null, launch }
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={101} height={30} />
             </Link>
-            {launched && <span className="site-tag">{TAGLINE}</span>}
+            {mode !== "coming-soon" && <span className="site-tag">{TAGLINE}</span>}
           </div>
         ) : (
           <span />
