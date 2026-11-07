@@ -106,8 +106,16 @@ footer a{color:#fff}
 .topbar nav.app-wide{display:flex;gap:4px;flex:1;flex-wrap:wrap}
 .topbar nav.app-wide a{color:var(--navy);text-decoration:none;font-weight:600;padding:10px 14px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
 .topbar nav a[aria-current=page],.site-narrow nav a[aria-current=page]{background:var(--cream)}
-.topbar-who{display:flex;align-items:center;gap:6px;font-size:0.9375rem;color:var(--navy-2)}
-.topbar-who span{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar-who{position:relative;margin-left:auto;font-size:0.9375rem;color:var(--navy-2)}
+.topbar-who summary{list-style:none;cursor:pointer;display:flex;align-items:center;min-height:44px}
+.topbar-who summary::-webkit-details-marker{display:none}
+.topbar-who .avatar{width:40px;height:40px;border-radius:50%;background:var(--navy);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-weight:600;font-size:0.9375rem;letter-spacing:0.02em}
+.topbar-who summary:focus-visible .avatar{outline:3px solid var(--chestnut);outline-offset:2px}
+.who-panel{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:220px;max-width:300px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(27,43,75,0.12);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.who-panel p{margin:0;font-weight:600;color:var(--navy);overflow-wrap:anywhere}
+.who-panel .who-email{font-weight:400;color:var(--slate);font-size:0.875rem;margin-bottom:6px}
+.who-panel a{color:var(--navy);text-decoration:none;font-weight:600;padding:10px 0;min-height:44px;display:flex;align-items:center}
+.who-panel .linkbtn{padding:10px 0;text-align:left}
 .linkbtn{background:none;border:0;color:var(--chestnut-d);font:600 0.9375rem "Source Sans 3",sans-serif;cursor:pointer;padding:10px 12px;min-height:44px;text-decoration:underline}
 .app{padding:40px 0 72px}
 .app h1{font:400 clamp(2rem,4.5vw,2.75rem)/1.1 "DM Serif Display",Georgia,serif;margin:0}
