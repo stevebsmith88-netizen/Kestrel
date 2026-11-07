@@ -1,19 +1,34 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import EyeCareNumbers from "@/components/EyeCareNumbers";
+import LaunchHome from "@/components/LaunchHome";
 import HomeBlogStrip from "@/components/HomeBlogStrip";
 import { comparePageOn } from "@/lib/compare-prices";
 import { homeBlogOn } from "@/lib/features";
+import { launchLayoutOn } from "@/lib/launch";
 import SiteHeader from "@/components/SiteHeader";
 import WaitlistForm from "@/components/WaitlistForm";
+import { shareMetadata } from "@/lib/share";
 
 // Built ahead of time, and rebuilt at least hourly, so a scheduled post appears on the home page soon after its date.
 export const revalidate = 3600;
 
+// Before launch the page keeps the site's default "Coming soon" title. After launch (lib/launch.ts) it gets its own.
+export async function generateMetadata(): Promise<Metadata> {
+  if (!(await launchLayoutOn())) return {};
+  return shareMetadata({ title: "Eye care jobs across Canada", description: "A Canada-wide eye care job board. Independent and corporate practices post side by side, and every job shows its pay.", path: "/" });
+}
+
+// At launch the sign up gate opens (docs/launch-checklist.md) and the launch layout takes over from the coming soon page by itself.
+export default async function Home() {
+  return (await launchLayoutOn()) ? <LaunchHome /> : <ComingSoon />;
+}
+
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 // Tells search engines and AI assistants who we are. The same name, line and logo are used everywhere. Social page
-// links (sameAs) are added when those pages exist.
+// links (sameAs) are added as those pages are created.
 const ORGANIZATION = {
   "@context": "https://schema.org",
   "@graph": [
@@ -25,12 +40,13 @@ const ORGANIZATION = {
       logo: `${SITE}/brand/kestrel-lockup-full.png`,
       description: "A Canada-wide job board for eye care: optometrists, opticians, assistants, clinic teams and suppliers. Every job shows its pay.",
       areaServed: { "@type": "Country", name: "Canada" },
+      sameAs: ["https://www.linkedin.com/company/kestrel-eye-care-jobs/"],
     },
     { "@type": "WebSite", "@id": `${SITE}/#website`, name: "Kestrel Eye Care Jobs", url: SITE, inLanguage: "en-CA", publisher: { "@id": `${SITE}/#organization` } },
   ],
 };
 
-export default function ComingSoon() {
+function ComingSoon() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION).replace(/</g, "\\u003c") }} />
