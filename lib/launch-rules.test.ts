@@ -17,6 +17,7 @@ test("opening sign up always wins, so a pre launch setting never blocks launch",
 test("LAUNCH_HOME forces a page either way", () => {
   assert.equal(homeMode("yes", undefined, false), "launch");
   assert.equal(homeMode("no", undefined, true), "coming-soon");
+  assert.equal(homeMode("prelaunch", undefined, true), "prelaunch");
   assert.equal(homeMode("maybe", undefined, true), "launch");
 });
 

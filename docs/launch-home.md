@@ -26,7 +26,7 @@ The wordmark is the existing file, unchanged. The tagline is text in Poppins, as
 
 Nothing new to remember. At launch you already run `update public.signup_gate set open = true;` (see `docs/launch-checklist.md`). The layout follows that same gate, remembered for 5 minutes, and the home page refreshes at least hourly, so it changes within the hour. Redeploying in Vercel makes it immediate.
 
-Optional override `LAUNCH_HOME` in Vercel: `yes` forces the launch layout (use this on the demo site, so it shows the new layout with sample data) and `no` forces the original coming soon page back in an emergency. Leave it unset on the live site. The demo is a separate Vercel project, so set it there only.
+Optional override `LAUNCH_HOME` in Vercel: `yes` forces the launch layout, `prelaunch` forces the pre launch look, and `no` forces the original coming soon page back in an emergency. Leave it unset on the live site. The demo is a separate Vercel project, so set it there only. Its sign up gate is open (anyone with the link can make a demo account), so without a setting it shows the launch layout. Steve wants it to match the live site, so set `LAUNCH_HOME` to `prelaunch` there until launch, then to `yes` (or remove it, once the live gate opens the demo can follow its own).
 
 ## Looking at it before launch
 

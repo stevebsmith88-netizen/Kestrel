@@ -7,12 +7,14 @@
 // By default the launch layout follows the sign up gate, the one switch Steve flips at launch (docs/launch-checklist.md): while sign up
 // is closed the pre launch look shows (decided by Steve on 8th November 2026), and the moment it opens the launch layout takes over.
 // PRELAUNCH_HOME=no puts the original coming soon page back for the time before launch only, so it can never get in the way of launch.
-// LAUNCH_HOME can force a page either way, for the demo site ("yes") or for switching back in an emergency ("no").
+// LAUNCH_HOME can force a page: "yes" for the launch layout, "prelaunch" for the pre launch look (the demo site uses this to match the live
+// site, because its sign up gate is open), or "no" for the original coming soon page in an emergency.
 export type HomeMode = "coming-soon" | "prelaunch" | "launch";
 
 export function homeMode(launchEnv: string | undefined, prelaunchEnv: string | undefined, signupsOpen: boolean): HomeMode {
   const forced = (launchEnv ?? "").trim().toLowerCase();
   if (forced === "yes") return "launch";
+  if (forced === "prelaunch") return "prelaunch";
   if (forced === "no") return "coming-soon";
   if (signupsOpen) return "launch";
   return (prelaunchEnv ?? "").trim().toLowerCase() === "no" ? "coming-soon" : "prelaunch";
