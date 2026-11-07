@@ -102,10 +102,8 @@ A 12 month term at 10 months for the price of 12, as with the passes. A founding
 
 `docs/marketing/directory-batches/batch-01-lenses-contacts-distributors.csv`. 38 rows from Steve's candidate list, each searched for a public page. East Optical was merged into the MyoPro row, so the sheet has 37 entries. Results after Steve supplied 3 websites (Tokai, Kodak, Vision Rx Lab, all confirmed): 27 verified, 2 need Steve's input (Viscon, Contamac), 2 to remove (a US company and a retailer), 6 not found. Descriptions are written fresh and each row has its source page. Websites marked "to confirm" were not opened by Claude, only named in search results, so they stay off any public page until checked. Next batches: frames and eyewear (about 75), then services, software, clinical and pharma, with Steve's own knowledge filling the "not found" rows.
 
-## Verification run, 9th November 2026 (rows 1 to 176 of the spreadsheet)
+## Verification run, 9th November 2026 (whole list)
 
-Batches 1 to 4 in `docs/marketing/directory-batches/`, merged in `directory-verified-so-far.csv`. 149 companies checked: 94 Verified, 34 Needs your input, 19 Not found, 2 Remove. Frames, distributors, contact lenses, pharma, diagnostics, EMR software and AI are done.
+Batches 1 to 5 in `docs/marketing/directory-batches/`, merged in `directory-all-checked.csv`. `FOR-STEVE-to-check.csv` holds every row that is not Verified, with what is needed. Rules held to: no Eye Recommend rows, no named individuals, no finance or ownership commentary beyond what a public page states, fresh wording, source URL and date on every row. Many Verified rows rest on trade press from 2014 to 2021 and say "confirm the website". Nothing is published until Steve has been through the non Verified rows.
 
-Not yet done: the spreadsheet rows after about 176 (retail and clinics, online and direct to consumer, laser and surgical, groups, associations, insurers). The working copy was deleted at Steve's request, so those need the file again.
-
-Rules held to: no Eye Recommend rows, no named individuals, no finance or ownership commentary beyond what a public page states, fresh wording, source URL and date on every row. Many "Verified" rows rest on trade press from 2014 to 2021 and say "confirm the website" in the last column. Nothing here is published until Steve has been through the "Needs your input" rows.
+Decisions waiting for Steve: whether government programs, regulators, banks and general business tools belong in a supplier directory; whether EyePloyment (a hiring service for eye care, a direct competitor to Kestrel) is listed; bundled rows to split or drop; Aviaan Accounting looks like a content farm.
