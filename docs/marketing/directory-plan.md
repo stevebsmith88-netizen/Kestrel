@@ -2,13 +2,22 @@
 
 Idea from Steve, 9th November 2026. A reference directory of suppliers and anything that touches the optical world in Canada, built from a document Steve parsed from **public sources only** (company websites, public directories and listings, with no Eye Recommend lists or internal material). Not built. It starts after launch and the Stripe work, and the first step is working through Steve's document together.
 
-## Status: on hold until the source of the document is confirmed (9th November 2026)
+## Status: going ahead under a verification rule (9th November 2026)
 
-Steve shared `suppliers_only.xlsx` (260 rows: Category, Company, What they do, Notes). On reading it, 11 rows have notes that refer to Eye Recommend ("on the Eye Recommend list", "not on the Eye Recommend list", "check with the Eye Recommend rep", "Eye Recommend members get a discount"), and 6 refer to "the supplier document" or "the document". That suggests the list was built from, or checked against, a supplier or member document that is Eye Recommend's. Steve has said everything in it is public, so the next step is to find out what that document is. A second file arrived the same day. It is the same list with 9 notes edited (the Eye Recommend phrases removed): 259 of 260 rows are identical in Category, Company and What they do, and the "supplier document" notes and the "Listed under Services or Medical devices" labels remain. Removing the notes does not change where the list of companies came from, so the question stands. A third file ("Supplier List OPENSOURCE") arrived after that: the same 260 rows in the same order (the obscure companies sit on the same row numbers as in the first file), with the descriptions reworded, the categories renamed and the notes removed. Rewording does not change where the list came from either. Until the question is answered the list is not used for anything, and none of its contents are in the repository.
+Steve shared a spreadsheet of about 260 suppliers and optical businesses, in 3 versions (the same list each time, with notes edited and then descriptions reworded). The first version had 11 notes that referred to Eye Recommend ("on the Eye Recommend list", "check with the Eye Recommend rep", "members get a discount") and 6 that referred to "the supplier document". Those were removed in the later versions, but the list of companies is the same, so the original source was never answered. Steve then said, plainly, that the businesses are all legitimate and open to the public and that the list is fine to use.
 
-Project rule (CLAUDE.md): Kestrel uses no Eye Recommend data, member lists or internal material. Member benefits, rep contacts and "which suppliers are on our list" are exactly that kind of information, even if the rest is public. If the document turns out to be Eye Recommend's, the list has to be rebuilt from independent public sources, such as company websites, public trade show exhibitor lists, the Canadian Association of Optometrists' public supplier pages and trade magazine buyers' guides.
+Decision: use the list as **a list of candidate names only**, and publish nothing from it that has not been checked against a public page found independently. Every published row needs:
 
-Other things to fix whatever the answer: no website, province, source or last checked columns; 46 rows marked "confirm" or "not verified"; some rows hold several companies (split them); a duplicate (Bright Optical twice); a retired company; notes about creditor protection, ownership guesses and analyst opinions (leave out of anything public, since a wrong statement about a named company is a legal risk); and named individuals in notes (leave out). Eye Recommend itself would need an explicit decision from Steve to appear, since the existing exception covers only the buying group blog post.
+- a public source page (the company's own website, or a public directory), recorded as a source URL with the date checked;
+- a description written fresh from that page, never carried over from the spreadsheet;
+- no notes carried over, and nothing about Eye Recommend members, reps, discounts or lists;
+- no commentary on a named company's finances, ownership guesses or analyst opinions, and no named individuals.
+
+A row that cannot be verified is not published. The Eye Recommend row, and the "Eye Recommend private label lens programme" row (a programme, not a company), are left out until Steve says otherwise, and any buying group listing is treated exactly like the others.
+
+**Spot check (9th November 2026):** the 10 rows the spreadsheet itself marked "not verified" or "purpose not known" were searched. 3 were found as Canadian businesses (one under a corrected name, Optik K&R Inc., Markham ON; one with an inconsistent address; one with no description of services), 1 was found only as a US company, and 6 could not be found. The search tool is not Google, and small businesses may have little online presence or a different trading name, so "not found" means "ask Steve for the website", not "does not exist".
+
+Spreadsheet copies were deleted from the session at Steve's request. The file needs to be sent again to continue.
 
 ## Why it is worth doing
 
