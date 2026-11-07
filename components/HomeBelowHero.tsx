@@ -36,6 +36,7 @@ export default function HomeBelowHero() {
                 <li>Filter by role, province and type of practice, from independent clinics to suppliers</li>
                 <li>Roles run from assistant and optician to manager, trainer and field rep, so you can see where a career could go</li>
                 <li>Every job shows its pay</li>
+                <li>Jobs run for 30 days at a time, so you are not scrolling past ads from last year</li>
               </ul>
             </article>
           </div>
