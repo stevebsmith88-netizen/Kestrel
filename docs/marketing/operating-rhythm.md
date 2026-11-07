@@ -59,6 +59,7 @@ Every 1st of the month, 20 minutes. Read each public page by hand. Do not scrape
 | Indeed | Employer sponsor budget screen | $38 and $63 a day on average | 6th November 2026 | None. Budget based, not comparable |
 | LinkedIn | LinkedIn's own pricing page | Free basic post, promoted per click | 6th November 2026 | None |
 | ZipRecruiter | Its employer checkout page | US$24 a day per active job | 6th November 2026 | None |
+| CAO job board (opto.ca/job-board, also the CCOA career centre) | The board's public posting information | Not captured. Reported free to post, not confirmed | | Run by the Canadian Association of Optometrists on jobs.opto.ca. Named by Copilot in every eye care answer. Both a competitor for optometrist and assistant ads and the most useful association to approach after Gate A |
 | OPClassifieds (opclassifieds.ca) | The site's public posting page | Not captured | 7th November 2026 | Steve looked on 7th November 2026: about 1,200 optician ads in one search, no filters, newest first, and ads still showing from 2024 after a long scroll. Probably cross posts from other boards, so it is not a source of leads and not worth a monthly read. Named by Gemini in 2 answers (prompts 6 and 10), not by ChatGPT. Only check it again if an assistant keeps naming it. Not on the compare page without a published price |
 | OAC job list (Opticians Association of Canada) | The association's public job list page | Not yet captured | | Named by Gemini for optician jobs, 7th November 2026. Check whether it is free or members only |
 

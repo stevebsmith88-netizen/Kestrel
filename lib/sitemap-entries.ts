@@ -6,6 +6,7 @@ import { visiblePosts } from "@/lib/blog";
 import { demoMode } from "@/lib/demo";
 import { findYourFitOn } from "@/lib/features";
 import { LANDING_PROVINCES, LANDING_ROLES, comboHref, landingIndexable, provinceHref } from "@/lib/landing";
+import { PAGE_DATES } from "@/lib/page-dates";
 import { getComboCounts, listLiveJobIds } from "@/lib/public-jobs";
 
 // Every public page that belongs in the sitemap. The sitemap and the "tell search engines about every page" button both use it, so
@@ -29,14 +30,15 @@ export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/jobs`, changeFrequency: "daily", priority: 0.9 },
     ...landing,
     { url: `${SITE}/clinics`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${SITE}/resources/ontario-job-ads`, lastModified: PAGE_DATES.ontarioJobAds, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.6 },
-    { url: `${SITE}/resources`, changeFrequency: "monthly", priority: 0.6 },
-    ...(comparePageOn() ? [{ url: `${SITE}/compare`, changeFrequency: "monthly" as const, priority: 0.5 }] : []),
+    { url: `${SITE}/resources`, lastModified: PAGE_DATES.resources, changeFrequency: "monthly", priority: 0.6 },
+    ...(comparePageOn() ? [{ url: `${SITE}/compare`, lastModified: PAGE_DATES.compare, changeFrequency: "monthly" as const, priority: 0.5 }] : []),
     ...visiblePosts(POSTS, new Date(), false).map((p) => ({ url: `${SITE}/blog/${p.slug}`, lastModified: p.updated ?? p.date, changeFrequency: "monthly" as const, priority: 0.6 })),
-    { url: `${SITE}/privacy`, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${SITE}/security`, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${SITE}/terms`, changeFrequency: "yearly", priority: 0.2 },
-    { url: `${SITE}/posting-policy`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE}/privacy`, lastModified: PAGE_DATES.privacy, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE}/security`, lastModified: PAGE_DATES.security, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${SITE}/terms`, lastModified: PAGE_DATES.terms, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE}/posting-policy`, lastModified: PAGE_DATES.postingPolicy, changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE}/contact`, changeFrequency: "yearly", priority: 0.3 },
     ...jobs.map((j) => ({ url: `${SITE}/jobs/${j.id}`, lastModified: j.posted_at, changeFrequency: "weekly" as const, priority: 0.8 })),
   ];

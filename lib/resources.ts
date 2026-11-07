@@ -14,6 +14,8 @@ export const RESOURCE_GROUPS: ResourceGroup[] = [
     links: [
       { name: "Canadian Association of Optometrists", url: "https://opto.ca", note: "The national association for optometrists.", checked: "2026-11-06" },
       { name: "Provincial optometric associations", url: "https://opto.ca/provinces", note: "The list of provincial associations, kept by the Canadian Association of Optometrists: BC Doctors of Optometry, Alberta Association of Optometrists, Saskatchewan Association of Optometrists, Manitoba Association of Optometrists, Ontario Association of Optometrists, New Brunswick Association of Optometrists, Nova Scotia Association of Optometrists, Prince Edward Island Association of Optometrists, and Newfoundland and Labrador Association of Optometrists.", checked: "2026-11-06" },
+      { name: "Canadian Association of Optometrists job board", url: "https://opto.ca/job-board", note: "The association's job board for optometrists and optometric assistants.", checked: "2026-11-08" },
+      { name: "Canadian Certified Optometric Assistants (CCOA)", url: "https://opto.ca/ccoa", note: "The Canadian Association of Optometrists program for certified optometric assistants. Its career centre is the association's job board.", checked: null },
       { name: "Opticians Association of Canada", url: "https://www.opticians.ca", note: "The national association for opticians.", checked: "2026-11-06" },
       { name: "Ontario Association of Optometrists", url: "https://optom.on.ca", note: "The provincial association for optometrists in Ontario.", checked: "2026-11-06" },
       { name: "Alberta Association of Optometrists", url: "https://www.optometrists.ab.ca", note: "The provincial association for optometrists in Alberta.", checked: "2026-11-06" },

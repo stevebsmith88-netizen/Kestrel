@@ -8,9 +8,8 @@ IndexNow tells Bing the moment a page is added, changed or removed, instead of w
 
 1. **Set `INDEXNOW_KEY`** in the live Vercel project only (not the demo) and redeploy. The key is public by design, since Bing reads it from a file on the site. Use: `48ba0c3b847275dfb3d599dcddf308cd` (any 8 to 128 letters, numbers or hyphens works).
 2. **Check the key file:** `https://eyecarejobs.ca/indexnow-key.txt` should show the key and nothing else.
-3. **Admin overview, "Tell search engines about every page":** sends the whole sitemap once. Do it once after step 1, and again after big changes.
-4. **After that it is automatic:** the daily job sends jobs that went live, changed or ended in the last day, and blog posts dated that day. Nothing is sent while the setting is empty or on the demo site.
-5. **Check it worked:** Bing Webmaster Tools, IndexNow shows the submissions.
+3. **It is automatic from then on:** the daily job sends jobs that went live, changed or ended in the last day, blog posts dated that day, and any page whose "last updated" date (`lib/page-dates.ts`) is within the last 3 days. Nothing is sent while the setting is empty or on the demo site. The admin button that sent the whole sitemap was used once on 8th November 2026 and then removed.
+4. **Check it worked:** Bing Webmaster Tools, IndexNow shows the submissions.
 
 Also in Bing Webmaster Tools, URL Submission lets Steve submit up to the daily quota by hand. Good first picks: the home page, `/clinics`, `/resources`, `/compare`, `/blog`, `/security`.
 

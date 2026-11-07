@@ -43,4 +43,4 @@ ChatGPT only: prompt 2 (Indeed, Jobs4ECPs, CAO, Job Bank, LinkedIn, Glassdoor), 
 2. **The Ontario rules are now confirmed by 2 assistants and an ontario.ca citation:** they apply to employers with 25 or more employees. Kestrel's own pages do not say this (see the Resources page and `/clinics`). Copilot's answer also mixed an Alberta example into an Ontario answer, so an accurate eye care specific page, with real examples, could be the better source.
 3. **The gap is real.** Copilot itself says no comprehensive eye care board covers the whole team.
 4. **Pay:** 2 assistants quote the same Job Bank figures. Kestrel's median matches. The bottom of the range differs (see the note in `docs/pay-benchmark.md`).
-5. **New names for the association list:** the CCOA Career Centre and HealthCareCAN.
+5. **Association list:** the CCOA (Canadian Certified Optometric Assistants) is a program of the Canadian Association of Optometrists, and its career centre is the CAO job board (opto.ca/job-board). They are 1 target for outreach, not 2. HealthCareCAN is a new name, for later.
