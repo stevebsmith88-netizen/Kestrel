@@ -12,8 +12,9 @@ export const metadata: Metadata = shareMetadata({
 });
 
 const UPDATED = "8th November 2026";
-// Set to false once Steve has checked this page against the Ontario government's guide and a lawyer has read it.
-const DRAFT = true;
+// Steve checked this page against the Ontario government's guide and asked for the draft banner to come off on 9th November 2026.
+// It is still on the list for the lawyer to read. Set back to true if the rules change and the page needs rechecking.
+const DRAFT = false;
 const GUIDE = "https://www.ontario.ca/document/your-guide-employment-standards-act-0/requirements-related-publicly-advertised-job";
 const REGULATION = "https://www.ontario.ca/laws/regulation/240476";
 
