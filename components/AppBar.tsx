@@ -57,7 +57,7 @@ export default function AppBar({ session, current }: { session: Session; current
           </form>
         </div>
         <details className="site-narrow app-narrow">
-          <summary>Menu</summary>
+          <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
             {links.map((item) => (
               <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>

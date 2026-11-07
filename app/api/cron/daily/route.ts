@@ -1,9 +1,11 @@
 import { timingSafeEqual } from "node:crypto";
+import { POSTS } from "@/content/posts";
 import { APP_LABELS } from "@/lib/applications";
 import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } from "@/lib/clinic-emails";
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { submitToIndexNow } from "@/lib/indexnow";
 import { runOnboarding } from "@/lib/onboarding-run";
 import { onboardingOn, outreachDailyLimit, outreachOn } from "@/lib/features";
 import { nextDueAt, outreachSequenceEmail, sameClinicPattern, stopReason } from "@/lib/outreach-sequence";
@@ -57,7 +59,7 @@ async function runDaily(request: Request) {
   const started = Date.now();
   const outOfTime = () => Date.now() - started > TIME_LIMIT;
   const now = new Date();
-  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, onboardingSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
+  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, onboardingSent: 0, indexNowSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
   const problems: string[] = [];
 
   // Only one run at a time. If two copies started together, every email would go twice.
@@ -77,6 +79,20 @@ async function runDaily(request: Request) {
   const { data: expired, error: expireError } = await admin.from("jobs").update({ status: "expired" }).eq("status", "live").lt("expires_at", now.toISOString()).select("id");
   if (expireError) problems.push(`Expiring jobs: ${expireError.message}`);
   summary.expiredJobs = expired?.length ?? 0;
+
+  // 1b. Tell search engines (IndexNow) about jobs that went live or ended in the last day, and blog posts dated in that time, so Bing
+  // does not have to wait to find them. Does nothing until INDEXNOW_KEY is set, and a failure here never stops the rest of the job.
+  {
+    const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
+    const since = new Date(now.getTime() - 26 * 60 * 60 * 1000).toISOString();
+    const { data: fresh } = await admin.from("jobs").select("id").eq("status", "live").or(`posted_at.gte.${since},updated_at.gte.${since}`).limit(500);
+    const ids = [...new Set([...(fresh ?? []).map((j) => j.id as string), ...(expired ?? []).map((j) => j.id as string)])];
+    const today = now.toISOString().slice(0, 10);
+    const dayAgo = new Date(now.getTime() - DAY).toISOString().slice(0, 10);
+    const posts = POSTS.filter((p) => p.date >= dayAgo && p.date <= today).map((p) => `${SITE}/blog/${p.slug}`);
+    const pinged = await submitToIndexNow([...ids.map((id) => `${SITE}/jobs/${id}`), ...posts]);
+    summary.indexNowSent = pinged.sent;
+  }
 
   // 2. Tell clinics a job closes in 3 days, once.
   const { data: closing, error: closingError } = await admin

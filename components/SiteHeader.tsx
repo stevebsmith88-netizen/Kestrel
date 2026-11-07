@@ -25,7 +25,14 @@ export default async function SiteHeader({ logo = true, session = null, launch, 
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={101} height={30} />
             </Link>
-            {mode !== "coming-soon" && <span className="site-tag">{TAGLINE}</span>}
+            {mode !== "coming-soon" && (
+              <>
+                {/* The small chestnut maple leaf from the brand files separates the wordmark from the tagline when they sit side by side. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="site-leaf" src="/brand/kestrel-maple-leaf.svg" alt="" width={14} height={14} aria-hidden="true" />
+                <span className="site-tag">{TAGLINE}</span>
+              </>
+            )}
           </div>
         ) : (
           <span />
@@ -50,7 +57,7 @@ export default async function SiteHeader({ logo = true, session = null, launch, 
         </nav>
 
         <details className="site-narrow">
-          <summary>Menu</summary>
+          <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
             {session ? <Link href={dashboard!} className="menu-cta">My dashboard</Link> : <Link href={join.href} className="menu-cta">{join.label}</Link>}
             <Link href="/jobs">Find jobs</Link>
