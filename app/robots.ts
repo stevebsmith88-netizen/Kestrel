@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
   // The demo site asks every search engine to stay away.
   if (demoMode()) return { rules: [{ userAgent: "*", disallow: "/" }] };
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/candidate", "/clinic/", "/clinic$", "/dashboard", "/account", "/claim", "/welcome", "/goodbye", "/auth", "/unsubscribe", "/sign-in", "/sign-up", "/forgot-password", "/reset-password"] }],
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/admin", "/candidate", "/clinic/", "/clinic$", "/dashboard", "/account", "/claim", "/welcome", "/goodbye", "/auth", "/unsubscribe", "/launch-preview", "/sign-in", "/sign-up", "/forgot-password", "/reset-password"] }],
     sitemap: `${SITE}/sitemap.xml`,
   };
 }
