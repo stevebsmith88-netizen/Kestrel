@@ -6,6 +6,7 @@ import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/emai
 import { longDate } from "@/lib/jobs";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { submitToIndexNow } from "@/lib/indexnow";
+import { recentlyChangedPages } from "@/lib/page-dates";
 import { runOnboarding } from "@/lib/onboarding-run";
 import { onboardingOn, outreachDailyLimit, outreachOn } from "@/lib/features";
 import { nextDueAt, outreachSequenceEmail, sameClinicPattern, stopReason } from "@/lib/outreach-sequence";
@@ -80,7 +81,8 @@ async function runDaily(request: Request) {
   if (expireError) problems.push(`Expiring jobs: ${expireError.message}`);
   summary.expiredJobs = expired?.length ?? 0;
 
-  // 1b. Tell search engines (IndexNow) about jobs that went live or ended in the last day, and blog posts dated in that time, so Bing
+  // 1b. Tell search engines (IndexNow) about jobs that went live or ended in the last day, blog posts dated in that time, and pages whose
+  // last updated date is new (lib/page-dates.ts), so Bing
   // does not have to wait to find them. Does nothing until INDEXNOW_KEY is set, and a failure here never stops the rest of the job.
   {
     const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
@@ -90,7 +92,7 @@ async function runDaily(request: Request) {
     const today = now.toISOString().slice(0, 10);
     const dayAgo = new Date(now.getTime() - DAY).toISOString().slice(0, 10);
     const posts = POSTS.filter((p) => p.date >= dayAgo && p.date <= today).map((p) => `${SITE}/blog/${p.slug}`);
-    const pinged = await submitToIndexNow([...ids.map((id) => `${SITE}/jobs/${id}`), ...posts]);
+    const pinged = await submitToIndexNow([...ids.map((id) => `${SITE}/jobs/${id}`), ...posts, ...recentlyChangedPages(SITE, now)]);
     summary.indexNowSent = pinged.sent;
   }
 

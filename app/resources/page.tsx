@@ -17,7 +17,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/resources",
 });
 
-const UPDATED = "6th November 2026";
+const UPDATED = "8th November 2026";
 
 export default async function Resources() {
   const provinces = payGuideProvinces();
@@ -54,13 +54,13 @@ export default async function Resources() {
             information, not legal advice, so check the current rules for your province or ask a lawyer.
           </p>
           <ul>
-            <li>A pay range, as a yearly salary or an hourly rate. It can be no more than $50,000 wide unless the top of the range is over $200,000 a year. This covers Ontario&apos;s rules from 1st January 2026 and British Columbia&apos;s pay range rule.</li>
+            <li>A pay range, as a yearly salary or an hourly rate. It can be no more than $50,000 wide unless the top of the range is over $200,000 a year. This covers Ontario&apos;s rules from 1st January 2026, which apply to employers with 25 or more employees, and British Columbia&apos;s pay range rule.</li>
             <li>Whether the job is an existing vacancy, yes or no.</li>
             <li>Whether you use AI to screen candidates, yes or no.</li>
             <li>No &quot;Canadian experience&quot; requirement. Ask for the skills and qualifications the job needs.</li>
           </ul>
           <p>
-            The <Link href="/posting-policy">posting policy</Link> has the full list. The pay table above is a good place to start when you set a range.
+            The <Link href="/posting-policy">posting policy</Link> has the full list, and <Link href="/resources/ontario-job-ads">Ontario job ad rules for eye care clinics</Link> explains who the Ontario rules apply to. The pay table above is a good place to start when you set a range.
           </p>
 
           <h2>Associations and regulators</h2>

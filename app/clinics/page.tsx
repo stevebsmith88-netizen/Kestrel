@@ -32,7 +32,7 @@ export default function Clinics() {
             Independent practices and corporate groups post side by side, with the same tools. Whether you are hiring one optician or filling roles at several locations, you see every applicant with their CV and cover letter. Your contact details stay private.
           </p>
           <p>
-            Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants? The form asks for them, which covers what Ontario and British Columbia now expect, so a post cannot go live without them and you are not caught out later.
+            Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants? The form asks for them on every post, wherever the clinic is, and a post cannot go live without them. Ontario&apos;s rules apply to employers with 25 or more employees, and British Columbia has its own pay range rule. <Link href="/resources/ontario-job-ads">Read what the Ontario rules ask of a clinic</Link>.
           </p>
           <p>
             Outside recruiters, staffing agencies and job brokers cannot post on Kestrel or contact candidates through it. A corporate group&apos;s own recruiting team can post for the group&apos;s own locations, so every ad you stand next to comes from the employer that is hiring.

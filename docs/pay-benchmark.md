@@ -62,3 +62,14 @@ Job Bank publishes a new file each November or December. Download it, run `scrip
 ## Where the code is
 
 `lib/pay-benchmark.ts` (rules and wording), `lib/pay-benchmark-data.ts` (generated figures), `lib/pay-benchmark-server.ts` (Kestrel's own posted pay, totals only), `lib/pay-starting-ranges.ts`, `components/PayBenchmark.tsx`, and tests in `lib/pay-benchmark.test.ts`. No new database change, key or service.
+
+## Check before the next refresh: "low" and "high" on Job Bank's own page (8th November 2026)
+
+ChatGPT and Copilot both quote Job Bank's page for Alberta opticians as $17.36 low, $28.00 median and $39.40 high. Kestrel's table, built from the open data file, shows Q1 $25.00, median $28.00 and Q3 $39.40 and calls the range "the middle half of pay". The median and the top figure agree. The bottom does not, and the public wording depends on what Job Bank's "low" and "high" mean.
+
+**To check (Steve, 5 minutes):** open Job Bank's wages page for Opticians in Alberta (https://www.jobbank.gc.ca/marketreport/wages-occupation/4345/AB, which uses the older occupation code) and the current one for NOC 32100, and read how Job Bank defines Low and High (it explains them on the page). Then tell Claude which is true:
+
+- If Job Bank's low and high are the 25th and 75th percentiles, our Q1 should match and the data file or the mapping needs a look.
+- If they are the 10th and 90th percentiles, or a different measure, our "middle half" label is right for our figures, and the Resources page should say in a line why it differs from the Job Bank page, since assistants and people compare the two.
+
+Nothing on the site changes until that is known. The same check applies to every province and role in the table.
