@@ -107,3 +107,7 @@ A 12 month term at 10 months for the price of 12, as with the passes. A founding
 Batches 1 to 5 in `docs/marketing/directory-batches/`, merged in `directory-all-checked.csv`. `FOR-STEVE-to-check.csv` holds every row that is not Verified, with what is needed. Rules held to: no Eye Recommend rows, no named individuals, no finance or ownership commentary beyond what a public page states, fresh wording, source URL and date on every row. Many Verified rows rest on trade press from 2014 to 2021 and say "confirm the website". Nothing is published until Steve has been through the non Verified rows.
 
 Decisions waiting for Steve: whether government programs, regulators, banks and general business tools belong in a supplier directory; whether EyePloyment (a hiring service for eye care, a direct competitor to Kestrel) is listed; bundled rows to split or drop; Aviaan Accounting looks like a content farm.
+
+## Final list (9th November 2026)
+
+Steve removed every row that was not confirmed. `docs/marketing/directory-batches/directory-final.csv` holds the 171 Verified rows plus Eye Recommend as a buying group (public information only, listed like every other group, per Steve). Public pages come after launch, and sponsored listings wait for the disclosure conversation.
