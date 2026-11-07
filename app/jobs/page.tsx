@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
+import JobCard from "@/components/JobCard";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS, formatPay, longDate, practiceLabel } from "@/lib/jobs";
+import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { RADIUS_OPTIONS, placeLabel } from "@/lib/places";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
@@ -125,27 +126,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             <>
               <p className="resultcount" role="status">{total} {total === 1 ? "job" : "jobs"}{place ? ` within ${filters.radius ?? 25} km of ${placeLabel(place)}, and field based jobs` : ""}</p>
               <div className="joblist">
-                {jobs.map((j) => (
-                  <article className="card jobcard" key={j.id}>
-                    <div>
-                      <h2><Link href={`/jobs/${j.id}`}>{j.title}</Link></h2>
-                      <p className="meta">
-                        {j.employers?.clinic_name} · {j.city}, {j.province}
-                      </p>
-                      <p className="chips">
-                        <span className="chip">{employmentLabel(j.employment_type)}</span>
-                        <span className="chip paychip">{formatPay(j.pay_min, j.pay_max, j.pay_period)}</span>
-                        <span className="chip">{practiceLabel(j.employers?.practice_type)}</span>
-                        {j.work_arrangement === "field" && <span className="chip">Field based</span>}
-                      </p>
-                      {j.is_seeded && !j.employers?.claimed && <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed</p>}
-                    </div>
-                    <div className="jobside">
-                      <span className="meta">Posted {longDate(j.posted_at)}</span>
-                      <Link href={`/jobs/${j.id}`} className="btn sm" aria-label={`View job: ${j.title}`}>View job</Link>
-                    </div>
-                  </article>
-                ))}
+                {jobs.map((j) => <JobCard key={j.id} job={j} />)}
               </div>
               {pages > 1 && (
                 <nav className="pager" aria-label="Pages of jobs">
@@ -156,6 +137,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               )}
             </>
           )}
+          <p className="help"><Link href="/eye-care-jobs">Browse eye care jobs by province and role</Link></p>
           <p className="help creditline">Place data from <a href="https://www.geonames.org/" rel="noopener">GeoNames</a>, used under CC BY 4.0.</p>
         </div>
       </main>

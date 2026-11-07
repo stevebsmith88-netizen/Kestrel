@@ -16,15 +16,15 @@
 | 4 | BUILT, awaiting preview (the lede now states the difference and the compare link is on the clinic card; the "built by people who know it" claim is removed until Steve gives a specific). Home page: one line under the hero stating the difference (pay on every job, a person reads every post, no agencies). Link `/compare` from the clinic card. Swap "built by people who know it" for a specific only Steve can give. | 1, 8 | High | S | Claude, Steve supplies the specific |
 | 5 | BUILT, awaiting preview (the pick is by number of roles, not one tier for everyone). Mark the Clinic pass as the pick on `/clinics`, with a cost per post line. | 6, 5 | Medium | S | Claude |
 | 6 | BUILT, awaiting preview (Organization and WebSite data; social links are added when those pages exist). Add Organization structured data to the home page. | 9 | Medium | S | Claude |
-| 7 | Baseline for AI assistants: ask 10 fixed prompts (for example "where do I find optician jobs in Canada") and log whether Kestrel is named. Repeat monthly. | 9 | Medium | S, 30 minutes | Steve |
-| 8 | Create the Bing Webmaster, Google Business, LinkedIn and Facebook pages with the exact brand name, line and description. Kestrel's own accounts only. | 4, 11 | Medium | S, about 2 hours | Steve |
-| 9 | Write the small process docs: a channel owner table, a launch quarter budget (even $0 for ads), a test log with the first 3 tests, and a monthly competitor check in the calendar. | 4, 21 | Medium | S, about 2 hours | Steve, Claude drafts |
+| 7 | PREPARED (`docs/marketing/ai-visibility-baseline.md`): Steve runs it. Baseline for AI assistants: ask 10 fixed prompts (for example "where do I find optician jobs in Canada") and log whether Kestrel is named. Repeat monthly. | 9 | Medium | S, 30 minutes | Steve |
+| 8 | PREPARED (`docs/marketing/profiles-checklist.md`): Steve creates the pages; Google Business Profile probably not allowed for an online only business. Create the Bing Webmaster, Google Business, LinkedIn and Facebook pages with the exact brand name, line and description. Kestrel's own accounts only. | 4, 11 | Medium | S, about 2 hours | Steve |
+| 9 | DRAFTED (`docs/marketing/operating-rhythm.md`): Steve edits the proposed numbers. Write the small process docs: a channel owner table, a launch quarter budget (even $0 for ads), a test log with the first 3 tests, and a monthly competitor check in the calendar. | 4, 21 | Medium | S, about 2 hours | Steve, Claude drafts |
 
 ## B. Next: high impact, more work (December, no gate)
 
 | # | Move | Audit section | Impact | Ease | Who |
 | --- | --- | --- | --- | --- | --- |
-| 10 | Indexable landing pages for role plus province (for example "optician jobs in Ontario"), shown only when real jobs exist. Keep noindex on random filter combinations. | 9 | High | M | Claude |
+| 10 | BUILT on branch `claude/relaxed-babbage-itq5zq`, awaiting preview (`docs/landing-pages.md`). Indexable landing pages for role plus province (for example "optician jobs in Ontario"), shown only when real jobs exist. Keep noindex on random filter combinations. | 9 | High | M | Claude |
 | 11 | Stripe checkout in test mode with the free launch coupon, `payment_method_collection: if_required`. Already on the build list. | 5, 6 | High | L | Claude, Steve gives test keys |
 | 12 | Admin Gate C tile and the funnel numbers (free to paid, first post date, second post). | 18, 6, 19 | High | M | Claude |
 | 13 | A short public page: "How we protect your data" (Canadian region, CV handling, sign in protection). | 20 | Medium | S to M | Claude from `docs/security.md`, lawyer glance |
