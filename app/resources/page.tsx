@@ -67,7 +67,7 @@ export default async function Resources() {
 
           <h2 id="directory">Eye care suppliers and organisations in Canada</h2>
           <p>
-            A reference list of frame houses, lens makers, labs, distributors, software vendors, buying groups, insurers and associations that work with Canadian eye care. Pick a category or search by name.
+            A reference list of frame houses, lens makers, labs, distributors, software vendors, buying groups, insurers and associations that work with Canadian eye care. Choose a category or search by name to open the list.
             Each entry was checked against public pages on {DIRECTORY_CHECKED}, and the descriptions are ours.
           </p>
           <DirectoryTable entries={DIRECTORY} categories={DIRECTORY_CATEGORIES} />

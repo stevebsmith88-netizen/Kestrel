@@ -3,22 +3,25 @@
 import { useId, useState } from "react";
 import type { DirectoryEntry } from "@/lib/directory-data";
 
-// A category drop down and a search box over the industry directory. Every row is in the page, and the filter only hides rows,
-// so the whole directory is there for search engines and for people reading without scripts.
+// A category drop down and a search box over the industry directory. It opens collapsed, and the list appears once a category is chosen
+// or something is typed. Every row is in the page all the same, and the filter only hides rows, so the whole directory is there for
+// search engines and for people reading without scripts.
 export default function DirectoryTable({ entries, categories }: { entries: DirectoryEntry[]; categories: string[] }) {
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState("");
   const [text, setText] = useState("");
   const id = useId();
   const needle = text.trim().toLowerCase();
   const shown = (e: DirectoryEntry) =>
     (category === "All" || e.category === category) && (!needle || `${e.name} ${e.what} ${e.based}`.toLowerCase().includes(needle));
   const count = entries.filter(shown).length;
+  const open = category !== "" || needle !== "";
   return (
     <div className="directory">
       <div className="dir-controls">
         <div>
           <label htmlFor={`${id}-cat`}>Category</label>
           <select id={`${id}-cat`} value={category} onChange={(e) => setCategory(e.target.value)}>
+            <option value="">Choose a category</option>
             <option value="All">All categories ({entries.length})</option>
             {categories.map((c) => (
               <option key={c} value={c}>{c} ({entries.filter((e) => e.category === c).length})</option>
@@ -30,8 +33,10 @@ export default function DirectoryTable({ entries, categories }: { entries: Direc
           <input id={`${id}-q`} type="text" value={text} onChange={(e) => setText(e.target.value)} placeholder="Company, product or place" />
         </div>
       </div>
-      <p className="help" role="status">Showing {count} of {entries.length} companies and organisations.</p>
-      <div className="tablewrap">
+      <p className="help" role="status">
+        {open ? `Showing ${count} of ${entries.length} companies and organisations.` : `${entries.length} companies and organisations in ${categories.length} categories. Choose a category or search to see the list.`}
+      </p>
+      <div className="tablewrap" hidden={!open}>
         <table className="table dir-table">
           <caption>Eye care suppliers and organisations in Canada</caption>
           <thead>
