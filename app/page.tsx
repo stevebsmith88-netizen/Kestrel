@@ -13,7 +13,10 @@ export const revalidate = 3600;
 
 // Before launch the page keeps the site's default "Coming soon" title. After launch (lib/launch.ts) it gets its own.
 export async function generateMetadata(): Promise<Metadata> {
-  if ((await homeModeNow()) !== "launch") return {};
+  const mode = await homeModeNow();
+  if (mode === "coming-soon") return {};
+  // Its own title, description and canonical address, so search engines are not left with the default "Coming soon" title.
+  if (mode === "prelaunch") return shareMetadata({ title: "Eye care jobs across Canada, opening soon", description: "Kestrel is a Canada-wide eye care job board for optometrists, opticians, assistants, clinic teams and suppliers. Every job shows its pay. Join the waitlist.", path: "/" });
   return shareMetadata({ title: "Eye care jobs across Canada", description: "A Canada-wide eye care job board. Independent and corporate practices post side by side, and every job shows its pay.", path: "/" });
 }
 
