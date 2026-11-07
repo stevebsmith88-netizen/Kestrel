@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
+import DirectoryTable from "@/components/DirectoryTable";
 import PayGuide from "@/components/PayGuide";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
+import { DIRECTORY, DIRECTORY_CATEGORIES, DIRECTORY_CHECKED } from "@/lib/directory-data";
 import { findYourFitOn } from "@/lib/features";
 import { JOB_BANK_SOURCE } from "@/lib/pay-benchmark-data";
 import { LICENCE_STATEMENT, LICENCE_URL, plainDate } from "@/lib/pay-benchmark";
@@ -13,11 +15,11 @@ import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
   title: "Eye care resources for Canada",
-  description: "Typical pay by province and role, the rules behind an eye care job ad, and links to the associations and regulators for optometrists and opticians.",
+  description: "Typical pay by province and role, the rules behind an eye care job ad, a directory of Canadian eye care suppliers and organisations, and links to the associations and regulators.",
   path: "/resources",
 });
 
-const UPDATED = "8th November 2026";
+const UPDATED = "9th November 2026";
 
 export default async function Resources() {
   const provinces = payGuideProvinces();
@@ -30,7 +32,7 @@ export default async function Resources() {
           <h1>Eye care resources for Canada</h1>
           <p className="updated">Last updated {UPDATED}</p>
           <p>
-            A page for people who work in eye care and the clinics that hire them: typical pay by province, the rules behind a job ad, and links to the
+            A page for people who work in eye care and the clinics that hire them: typical pay by province, the rules behind a job ad, a directory of suppliers and organisations, and links to the
             bodies that license and represent the profession.
           </p>
 
@@ -61,6 +63,17 @@ export default async function Resources() {
           </ul>
           <p>
             The <Link href="/posting-policy">posting policy</Link> has the full list, and <Link href="/resources/ontario-job-ads">Ontario job ad rules for eye care clinics</Link> explains who the Ontario rules apply to. The pay table above is a good place to start when you set a range.
+          </p>
+
+          <h2 id="directory">Eye care suppliers and organisations in Canada</h2>
+          <p>
+            A reference list of frame houses, lens makers, labs, distributors, software vendors, buying groups, insurers and associations that work with Canadian eye care. Pick a category or search by name.
+            Each entry was checked against public pages on {DIRECTORY_CHECKED}, and the descriptions are ours.
+          </p>
+          <DirectoryTable entries={DIRECTORY} categories={DIRECTORY_CATEGORIES} />
+          <p className="help">
+            Kestrel is not affiliated with any company or organisation listed, and a listing is not an endorsement. Entries are in no order of preference. If something is wrong or out of date,
+            or you would like an entry added or removed, email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>.
           </p>
 
           <h2>Associations and regulators</h2>
