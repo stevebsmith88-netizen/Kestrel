@@ -59,7 +59,7 @@ Every 1st of the month, 20 minutes. Read each public page by hand. Do not scrape
 | Indeed | Employer sponsor budget screen | $38 and $63 a day on average | 6th November 2026 | None. Budget based, not comparable |
 | LinkedIn | LinkedIn's own pricing page | Free basic post, promoted per click | 6th November 2026 | None |
 | ZipRecruiter | Its employer checkout page | US$24 a day per active job | 6th November 2026 | None |
-| OPClassifieds | Its public posting page (Steve to find) | Not yet captured | | Named by Gemini as an eye care job board, 7th November 2026 |
+| OPClassifieds (opclassifieds.ca) | The site's public posting page | Not captured | 7th November 2026 | Steve looked on 7th November 2026: about 1,200 optician ads in one search, no filters, newest first, and ads still showing from 2024 after a long scroll. Probably cross posts from other boards, so it is not a source of leads and not worth a monthly read. Named by Gemini in 2 answers (prompts 6 and 10), not by ChatGPT. Only check it again if an assistant keeps naming it. Not on the compare page without a published price |
 | OAC job list (Opticians Association of Canada) | The association's public job list page | Not yet captured | | Named by Gemini for optician jobs, 7th November 2026. Check whether it is free or members only |
 
 Next check: 1st December 2026. If a price changed, send the new figure and the date to Claude, who updates `lib/compare-prices.ts` and the date shown on `/compare`. Also note any new eye care board, and any change in what a competitor says about itself (audience size claims are quoted as "X says", never as fact).

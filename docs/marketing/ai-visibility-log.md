@@ -21,6 +21,6 @@ ChatGPT only: prompt 2 (Indeed, Jobs4ECPs, CAO, Job Bank, LinkedIn, Glassdoor), 
 
 1. **The niche boards the assistants know:** Jobs4ECPs in every eye care answer, then the CAO board, OJobs, OPClassifieds and the OAC list. Kestrel needs to be on the same kind of page (association lists, comparison pages) to be named. Association requests wait for Gate A.
 2. **Associations and schools come up a lot:** provincial association boards, OAC, Waterloo, Montreal and the colleges. They are channels for candidates as well as a route to being named.
-3. **New names for the competitor check:** OPClassifieds and the OAC job list (not yet captured, see `docs/marketing/operating-rhythm.md`), plus Jobillico and Knighthunter as general boards.
+3. **New names for the competitor check:** OPClassifieds (Steve looked: an unfiltered list of about 1,200 optician ads with ads from 2024 still showing, so a weak competitor that assistants still name) and the OAC job list (not yet captured, see `docs/marketing/operating-rhythm.md`), plus Jobillico and Knighthunter as general boards.
 4. **The pay table matches what an assistant quotes** (Job Bank median). Keep it current each year.
 5. **Ontario rules:** ChatGPT says the posting rules apply to employers with 25 or more employees. Verify on ontario.ca and with the lawyer, then publish an accurate page on who the rules apply to (small clinics may be exempt).
