@@ -27,7 +27,7 @@ New chats start from `main`, and this file lives on branch `claude/gallant-mccar
 
 The Gemini documents did not include the full code audit. That is the audit of 30th October 2026 (`docs/audit/AUDIT-REPORT-2026-10-30.md`, findings R1 to R60) and its phased plan (`docs/audit/NEXT-STEPS-PHASES.md`). Phases 0 and 1 of that plan are done. The later audit phases (legal and Gate B, free launch evidence, paid launch, tidy up) still run on their own timetable and are not replaced by anything here. The Project Summary mentions a "6 phase pre launch audit playbook" but the playbook itself was not in the 5 PDFs. If Steve has it, a chat should compare it to the October audit and add only what is new.
 
-New code from Phases 1, 2 and 4 of this plan changes what the October audit looked at. Before launch, run one final full audit as its own chat: security, accessibility with a real screen reader, every flow end to end, a backup restore test, and the launch checklist in `docs/launch-checklist.md`, section 4. Target: the week before the launch date.
+New code from Phases 1, 2 and 4 of this plan, and Stripe checkout, changes what the October audit looked at. The final pre launch audit is Phase 6 below. Steve supplied the playbook on 8th November 2026 (written in Gemini). It has been triaged and reworked into Phase 6, because several of its prompts assume decisions that were since changed.
 
 ## Corrected facts (stale figures in the Gemini documents)
 
@@ -58,8 +58,9 @@ Fixed profession list. Pay range, existing vacancy and AI screening rules. Job a
 | 3 | Content: pillar hubs and the next posts | S per post, ongoing | None | No |
 | 4 | Launch liquidity: leads, claim outreach, pre load, schools, guide | M | Gate A for anything sent | Maybe |
 | 5 | After launch: SMS, alert reach, pass value, supply features | L | Real launch data | Yes |
+| 6 | Final pre launch code audit (6 report only chats, then fixes, then Go or No Go) | L | After Phases 1, 2, 4 and Stripe checkout are built | Only for fixes |
 
-Run 0, then 1. Phase 3 can start any time after Phase 0 because it needs no code. Phase 2 can run beside Phase 3. Phase 4 drafts can be prepared now but nothing is sent until Gate A. Phase 5 waits for launch.
+Run 0, then 1. Phase 6 is the last thing before launch, and it is described in full after Phase 5. Phase 3 can start any time after Phase 0 because it needs no code. Phase 2 can run beside Phase 3. Phase 4 drafts can be prepared now but nothing is sent until Gate A. Phase 5 waits for launch.
 
 ## Rules every chat follows
 
@@ -134,7 +135,15 @@ Run 0, then 1. Phase 3 can start any time after Phase 0 because it needs no code
 
 > Read CLAUDE.md, docs/gemini-intake-plan-2026-11-08.md (Phase 2) and docs/pay-benchmark.md. Propose before you build: a one page design covering the pay basis options for optometrist roles, how the pay range rule and the $50,000 width rule work for each basis, what JobPosting structured data shows for a percentage basis, and the data model (fixed lists in code, new columns in one migration). Show me the form wording and the list contents for approval. Only then build it on a branch, with the migration added to supabase/combined/run-everything.sql and tested twice on a scratch database. Pay stays public on every post. Do not gate any pay behind a login. Remind me to run the SQL on both databases and add any setting to both Vercel projects.
 
-**Done when.** Steve posts a test optometrist job with a percentage basis, tags show on the card and filter, and the employee count appears in Admin.
+**Test cases to build against (from the audit playbook).** Each of these must save, show on the job card and the job page, and never render as `$0`, `$NaN`, `null` or `undefined`, or break the card:
+a. a daily minimum guarantee range (for example $600 to $800 a day),
+b. a percentage of production range (for example 16% to 20%),
+c. a daily minimum and a percentage together,
+d. hourly or salary plus a bonus or commission note (common for opticians and assistants),
+e. a blank or "negotiable, discussed at interview" entry, which stays refused because a range is required.
+Allow combination (c) and a short optional bonus or commission note in the design.
+
+**Done when.** Steve posts a test optometrist job with a percentage basis, all 5 test cases above behave, tags show on the card and filter, and the employee count appears in Admin.
 
 ---
 
@@ -208,6 +217,65 @@ Run these as separate chats, each started only when launch data supports it. Pro
 | Installable web app | Wrap the website first. Native app is a later decision. |
 | Supplier rep networks | Needs Gate A and the lawyer. Take care with Steve's employer's supplier relationships. |
 | "Verified Kestrel partner clinic" | Define what is verified before using the words. |
+
+## Phase 6: Final pre launch code audit
+
+**Goal.** One more careful pass over the code that has changed since the October audit, finishing with a Go or No Go. Delivered before launch, after the features it checks exist.
+
+**When.** Start only after Phases 1, 2 and 4 are merged and Stripe checkout is built (checkout is item 17 on `docs/launch-checklist.md`, and there is no payment webhook in the code yet, so the billing audit cannot run earlier). Aim to start about 3 weeks before the launch date and finish fixes about 1 week before it, so there is time to fix and retest. The existing October audit phases (legal and Gate B, free launch evidence, paid launch) continue on their own timetable and are not replaced by this.
+
+**How it runs (kept from the playbook).**
+1. One sub chat at a time, so each file is read properly instead of skimmed.
+2. Report only first. No code changes until the chat has listed findings with file names and line numbers, labelled [CRITICAL], [HIGH], [MEDIUM] or [LOW]. The October audit used the same style, see `docs/audit/REPORT-TEMPLATE.md`.
+3. Then Steve replies: "Fix the CRITICAL and HIGH items from this report one by one. Show me the exact diff for each and check it does not break types before moving to the next." Fixes go on a branch with a preview, and every migration is run on both databases.
+4. Before each sub chat, it reads the October report so it does not repeat settled findings: `docs/audit/AUDIT-REPORT-2026-10-30.md`.
+
+**What changed from the original playbook.**
+
+| In the playbook | Now |
+| --- | --- |
+| Check that optometrist wages are hidden from non optometrists, in the page, API and JSON-LD | Dropped. Pay is public on every post (decision 3). The check becomes: the pay shown on the page, in the data sent to the browser and in JobPosting markup all agree exactly |
+| Role selection unlocks pay views, and a non optometrist cannot toggle their role to bypass | Dropped, because nothing is gated |
+| Tiers: waitlist free, single post, $199 unlimited pass | Role band prices $59, $79, $99, Clinic pass $199 and Plus $349 (5 live posts each), the free launch coupon, and card details asked only when money is due (`payment_method_collection` set to `if_required`) |
+| Magic link sign in | Not used. Sign in is email and password plus Google |
+| Cutover from demo.eyecarejobs.ca to production | The demo is a separate site with its own database and Vercel project, and stays. The cutover is production switching from the waitlist look to the launch home (`docs/launch-home.md`) and turning on the right settings. The check is that demo and production cannot touch each other's data |
+| "Automated inquiry responses, 3 business day SLA" and clinic email routing to a practice manager | Unconfirmed that either exists. The email chat checks and reports; it does not assume |
+| Ontario AODA | The target stays WCAG 2.1 AA. Whether AODA's website rules legally apply to a business of Kestrel's size is unverified, and not needed to justify the target |
+| N+1 queries and missing indexes | Kept. Matters more once the board has hundreds of jobs |
+
+**Sub chats.** Each prompt below is pasted into its own chat. Start each with the "Starting a chat" line above.
+
+### 6A: Security, access and data (report only)
+
+> Read CLAUDE.md, docs/gemini-intake-plan-2026-11-08.md (Phase 6) and docs/audit/AUDIT-REPORT-2026-10-30.md. This is audit 6A. Do not change any code. Read every auth flow, database policy (row level security), API route, Server Action and data fetch, and report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) a candidate's name, email, profile and CV are visible to a clinic only when that candidate has applied to that clinic's job, including anything sent to the browser such as page data and server component payloads; (2) CV files are in a private bucket and only reached through short lived signed links; (3) clinic isolation: clinic A cannot view, edit, pause, delete or see applicants of clinic B's jobs by changing an id in a link, form or request, across every dashboard route, Server Action and API route; (4) account deletion and the data download: do they remove or anonymise rows, sessions and CV files without failing on linked records; (5) every environment variable the code reads, with any `NEXT_PUBLIC_` one flagged to prove no secret reaches the browser (compare with docs/security.md); (6) anything new since the October audit. Confirm which October findings are fixed, and list what is still open. End with a one page summary.
+
+### 6B: Job posting logic, pay formats and apply flow (report only)
+
+> Read CLAUDE.md, docs/gemini-intake-plan-2026-11-08.md (Phase 6 and the Phase 2 test cases) and docs/pay-benchmark.md. This is audit 6B. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) the 5 optometrist pay test cases from Phase 2, traced through the form, database columns, job card, job page, emails and structured data, and what happens with blank, zero or very long values; (2) the pay range rules, the existing vacancy and AI screening answers, the Canadian experience text check and the Quebec refusal, and whether any of them can be bypassed by calling the server directly; (3) the apply flow end to end: file type and size checks on the CV, a candidate applying twice to the same job, rate limits against bots, and what happens if the email to the clinic fails (the application must still be saved and visible to the clinic); (4) job templates, drafts, expiry and reposting from the clinic dashboard; (5) the "N people clicked apply" count shows only real numbers. End with a one page summary.
+
+### 6C: Billing and entitlements (report only, run only after Stripe checkout exists)
+
+> Read CLAUDE.md, lib/pricing.ts, docs/pass-procedures.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6C. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) how the code decides whether a clinic may publish a job: free launch coupon, a single post for each role band, the Clinic pass and Clinic pass Plus (5 live posts), the founding clinic price lock, and whether an unpaid draft can be published by calling the server directly; (2) a free launch post asks for no card (payment method collected only if money is due); (3) the Stripe webhook handler: signature check, handling the same event twice, and what happens to live jobs when a pass is cancelled, a card fails or a payment is refunded; (4) HST through Stripe Tax and receipts; (5) the 30 day and 21 day expiry, expired jobs removed from search, the sitemap and structured data straight away, and a one click repost; (6) test mode versus live keys and where each is set. Use Stripe's test mode only. End with a one page summary.
+
+### 6D: Email, CASL and the AI features (report only)
+
+> Read CLAUDE.md, docs/casl-outreach.md, docs/email-addresses.md, docs/onboarding-emails.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6D. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) every email the site sends, what triggers it, and whether it can send twice or not at all; (2) CASL: sender name, mailing address, working unsubscribe, a `List-Unsubscribe` header on the right messages, the do not email list checked before every send, and outreach, onboarding and found listing emails staying off unless their setting is "yes"; (3) the daily send budget, bounce and complaint handling; (4) the AI ad builder, the found listings reader and the province search: prompt injection from a pasted page, timeouts, spend limits, rate limits per user and per address, and what the person sees when the AI is slow or down; (5) whether the "automated inquiry reply within 3 business days" and "route applications to a practice manager email" features exist, and if not say so. End with a one page summary.
+
+### 6E: Phone, accessibility and empty states (report only)
+
+> Read CLAUDE.md, docs/audit/ACCESSIBILITY-PASS-2026-11-06.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6E. Do not change any code. Use Playwright at 320, 390 and 430 pixel widths and at 200 percent text, and report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) sideways scrolling, overlapping tags and breaks with very long clinic or city names, on the home page numbers box, pay guide, job cards, filters and forms; (2) search with filters that return nothing, and what the person is offered next; (3) forms, filters and dialogs for keyboard use, focus, labels, contrast and error messages, against WCAG 2.1 AA; (4) placeholder links, broken paths, and the error and not found pages matching the brand; (5) what a real screen reader test still needs from Steve, listed as steps. End with a one page summary.
+
+### 6F: Search, structured data and launch switches (report only)
+
+> Read CLAUDE.md, docs/discoverability-plan.md, docs/landing-pages.md, docs/launch-home.md, docs/demo-site.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6F. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) JobPosting data on live job pages: every required and recommended Google property, `validThrough`, `employmentType`, `hiringOrganization`, `jobLocation`, the pay shown matching the visible page exactly, and found listings that are unclaimed kept out of the markup; (2) canonical links, robots rules, `noindex` on filter pages and thin pages, the sitemap including only live jobs and indexable landing pages, and IndexNow; (3) demo and production separation: the demo is noindex, uses its own database and cannot reach live data; no seed data, test accounts, `console.log` or `TODO` left in production paths; (4) a list of every setting that must be set to its launch value on the day (the sign up gate, `PRELAUNCH_HOME`, `ENABLE_SEEDING`, `ENABLE_OUTREACH`, `ENABLE_ONBOARDING_EMAILS` and the rest), with where each lives and its current value, ready to tick off in order; (5) slow database queries and missing indexes on the search filters. End with a one page summary.
+
+### 6G: Final check and Go or No Go
+
+> Read CLAUDE.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). Audits 6A to 6F are done and their fixes merged. Run `npm run typecheck`, `npm test`, `npm run build` and the linter. Confirm no debug logging or bypass setting was left behind by the fixes. Confirm the October findings still open, and any open [CRITICAL] or [HIGH] items from 6A to 6F. Then write a plain English Go or No Go for the launch date, with a list of anything that is a No Go and what it needs. Also run the checklist in docs/launch-checklist.md section 4 and say which items Steve still has to do himself (a backup restore test, Vercel Pro and moving the repository into the Kestrel organisation, the switch from Stripe test keys to live keys).
+
+**Steve provides.** The lawyer's outcome and Gate A status, the Stripe test keys, a few test accounts (`docs/test-accounts.md`), his phone for the screen reader step, and time to retest each fix on the preview.
+
+**Done when.** All 6 reports exist, every CRITICAL and HIGH item is fixed or has a written reason it is accepted, and 6G gives a Go.
 
 ## Parked: for information only
 
