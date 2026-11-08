@@ -286,3 +286,60 @@ Run these as separate chats, each started only when launch data supports it. Pro
 ## Questions held for the lawyer (not sent yet)
 
 For when Steve is ready, after the first document comes back: whether manual use of Indeed to find leads is acceptable; whether the "N people clicked apply" claim needs any wording; pay basis options for optometrists (percentage of production) under Ontario and BC pay range rules; whether showing optometrist pay only to signed in optometrists would count as a publicly advertised range in Ontario and BC (and what verification, if any, it would need); whether Kestrel, as the platform, carries any duty when a clinic under 25 employees in Ontario posts without a range; funding from customers and founding doctors.
+
+---
+
+## Phase 0 results (8th November 2026)
+
+Read from the code on branch `claude/gallant-mccarthy-9abc7o`, which matches `main` as of pull request 72. Nothing was changed except this section.
+
+### What is built and what is not
+
+| Item | Result |
+| --- | --- |
+| City and radius search | Built for job search (`app/jobs/page.tsx`, `lib/places.ts`, radius of 10, 25, 50 and 100 km, with field based roles always shown). |
+| Job alerts by distance | Not built. Alerts match on role, province and practice type only (`app/api/cron/daily/route.ts`). A "within 25 km of my postal code" alert, and any "N candidates near you" figure for clinics, needs new work. |
+| Employment type | Tick boxes in search for Full time, Part time, Fixed term (stored as "Contract") and Locum. Each job has one employment type. |
+| Job views and apply clicks | Counted (migration 0030) and shown to the clinic on its dashboard (`getMyJobNumbers`). The "N people clicked apply" line is possible. |
+| Optometrist pay hidden by role | Not built anywhere. Pay is public on every job. Optometrist wages are left off the public pay table only. This matches decision 3. |
+| Pay formats | Hour or year only, with a minimum and maximum, plus a free text "pay extras" note (`lib/jobs.ts`). No daily rate, no daily minimum, no percentage of production. This is the Phase 2 gap. Test case d (bonus or commission) is partly covered by the extras note. |
+| JobPosting data | Present: title, description, datePosted, validThrough, employmentType, hiringOrganization (name only), jobLocation (city, region, country), baseSalary, directApply and an identifier. Not present: street address, postal code, organisation logo and website, because the clinic website is deliberately not shown. Unclaimed found listings get no markup. A percentage or daily pay basis cannot go into `baseSalary` as it stands. |
+| Rich Results Test | Not run. Google's tool is a web page, so Steve (or a later chat with a live URL) has to run it on a real job. |
+
+### How corporate groups show pay (read only, from web search results, not from the groups' own careers pages)
+
+This is thin evidence. Results were mostly copies of postings on other sites, with unknown dates, and I did not open the groups' own pages. Treat it as a hint only.
+
+- **FYidoctors:** one Job Bank posting for an Ontario optometrist stated a pay figure ($200 a day). Other listings mentioned compensation guarantees without figures. Ranges seen on aggregator sites were estimates.
+- **IRIS:** Ontario optician postings seen had no pay. BC postings seen showed hourly ranges.
+- **New Look:** Ontario optician postings seen had no pay (both marked no longer available).
+- **Specsavers:** Ontario associate optometrist postings on aggregator sites showed yearly ranges (for example $80,000 to $120,000), and an optician posting showed an hourly figure.
+- **Costco:** a Job Bank optician posting showed $28 to $38 an hour (province not shown). Others showed no pay.
+
+What it suggests: groups of this size should already be posting a range in Ontario (the rule applies at 25 or more employees), yet several Ontario postings found had none. Check the groups' own careers pages in Phase 4 before relying on this. Corporate recruiters may paste ads without pay, so the pay field will need to be easy for them.
+
+### Proposed CLAUDE.md edit for the Indeed decision (not applied)
+
+Replace this line in "Non negotiables":
+
+> **No scraping of Indeed, LinkedIn, Jobs4ECPs or provincial college registers.** Seeding uses clinics' own careers pages only, links back to the clinic, and expires after 21 days.
+
+with:
+
+> **No automated collection from Indeed, LinkedIn, Jobs4ECPs or provincial college registers, and never any scraper.** Seeding uses clinics' own careers pages, or facts entered by hand in Kestrel's own words, links to the clinic's own application page, and expires after 21 days. One exception, agreed by Steve on 8th November 2026: Indeed may be read by hand, by Steve or a VA, only to find which clinics are hiring and who to contact. Nothing is copied from it, and no Indeed link or text appears on Kestrel.
+
+And in "Current state", change "with the job boards other than Indeed, LinkedIn and Jobs4ECPs allowed as leads only" to say that Indeed is also allowed as a lead by hand, with LinkedIn and Jobs4ECPs still off.
+
+### Other lines in CLAUDE.md and docs/PLAN.md that look stale (not changed)
+
+- CLAUDE.md "Current state": "the candidate and clinic homes are still placeholders". They are built (checklists, dashboard numbers, recommended jobs).
+- CLAUDE.md "Next tasks" lists 5 items that are almost all built.
+- CLAUDE.md pay benchmark paragraph says it is awaiting preview on a branch. Check whether it is merged.
+- docs/PLAN.md roadmap puts seeding and the free launch in February to March 2027 and the paid launch from April. Steve's goal is a mid January launch, so the roadmap dates need his decision.
+- docs/PLAN.md prices are current.
+
+### Checks that need Steve
+
+1. Run Google's Rich Results Test on one live job page.
+2. Approve (or edit) the CLAUDE.md wording above, then it can be applied.
+3. Decide the roadmap dates in docs/PLAN.md.
