@@ -138,6 +138,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
       <p className="auth-intro">
         Free to join. Candidates can save a CV and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and job alerts.
       </p>
+      <p className="help">Looking for a job? Your profile and CV stay private until you apply. A clinic sees only what you send with an application.</p>
       {google && <GoogleButton next={`/welcome?type=${defaultType}${next ? `&next=${encodeURIComponent(next)}` : ""}`} note="Next, you will choose whether you are looking for a job or hiring." />}
     <form onSubmit={submit} noValidate>
       {next && <input type="hidden" name="next" value={next} />}

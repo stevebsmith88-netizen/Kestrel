@@ -59,7 +59,7 @@ function ComingSoon() {
             <span className="pill">Waitlist now open</span>
             <h1 className="sr">Kestrel Eye Care Jobs: eye care jobs across Canada</h1>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="mark" src="/logo.svg" alt="Kestrel" width={1300} height={340} />
+            <img className="mark" src="/logo.svg" alt="Kestrel Eye Care Jobs" width={1300} height={340} />
             <p className="tag" aria-hidden="true">Eye care jobs</p>
             <svg className="leaf" viewBox="0 0 100 100" aria-hidden="true">
               <path fill="#A4502C" d="M50 2L57 16L64 12L61 36L75 22L79 30L93 27L89 41L97 46L77 62L81 71L57 67L56 86L52 86L52 100L48 100L48 86L44 86L43 67L19 71L23 62L3 46L11 41L7 27L21 30L25 22L39 36L36 12L43 16Z" />

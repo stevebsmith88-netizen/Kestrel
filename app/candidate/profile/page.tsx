@@ -26,7 +26,7 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
         <div className="wrap narrow">
           <p className="kicker">My profile</p>
           <h1>Your profile and CV</h1>
-          <p className="lede2">Save your CV once, then apply to any job in a few clicks. Clinics only see your details when you apply to them. Your profile is never public.</p>
+          <p className="lede2">Save your CV once, then apply to any job in a few clicks. Your profile is private. A clinic sees only what you send with an application.</p>
           {notice === "cv-deleted" && <p className="notice" role="status">Your CV is deleted.</p>}
           {back && (
             <section className="card setup" role="status">
