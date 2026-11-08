@@ -1,0 +1,347 @@
+# Gemini documents: phased plan (8th November 2026)
+
+Status: agreed with Steve on 8th November 2026. Nothing in this file is built. Each phase below is one chat. Steve pastes the prompt for that phase into a new chat, and attaches or supplies the items under "Steve provides".
+
+## Where this came from
+
+5 PDFs made in Gemini: an agency blueprint, a growth playbook, an SEO content calendar of 20 topics, a SWOT and platform audit, and a project summary. They are AI output and none of their figures are sourced. Treat every number in them as unverified. Do not commit the PDFs to the repository. Each prompt below carries the useful extract, so a new chat never needs the PDFs.
+
+## Decisions on record (Steve, 8th November 2026)
+
+1. **Indeed.** The ban on Indeed as a lead source is lifted, for manual use only. Steve (or later a VA) reads Indeed by hand to find which clinics are hiring, then reaches out to the clinic with a "claim your listing" offer. No automated scraper is built, ever. Listing text comes from the clinic's own careers page where one exists, in Kestrel's own words. CLAUDE.md must be updated to say this (Phase 0).
+2. **Applications stay with the clinic.** On listings the clinic has not claimed, candidates are sent to the clinic's own website to apply. Kestrel does not hold applications for clinics that have not joined. A claim email may say "N people clicked apply on your listing" only when that number is real, from the job stats already counted (migration 0030). Never invent or round up a number.
+3. **Pay stays public on every post.** Optometrist pay gets extra pay basis options (see Phase 2), and the range is still required. Steve asked on 8th November 2026 whether optometrist pay could be visible only to optometrists. Advice given: a pay range shown only after sign in is very unlikely to count as "publicly advertised", it would be left out of Google's job markup, and a self selected "optometrist" profile is not verification. Not decided as a rule. Possible middle path for Steve to weigh: keep the required range public, and gate extra detail (exact production formula, equipment support) to signed in optometrists. Optometrist wages stay off the public pay table (decision of 6th November 2026). The lawyer is asked (see the end of this file).
+4. **Employee count.** Ask a clinic how many employees it has when it creates an account. Store it. Steve has verified that Ontario's pay range rule applies to employers with 25 or more employees. The count is self declared and cannot be checked, and Kestrel's own rule (a range on every post) is stricter than the law, so do not switch the rule off for smaller Ontario clinics unless Steve decides to. BC has no such threshold as far as is known (unverified). The stored count is what lets that decision be made later.
+5. **Blog.** Stays human, fortnightly, ranked by SEO benefit. The two pillar pages (hub guides) are kept.
+6. **SMS alerts.** Wanted, but after the pay phase and after launch data exists. Email alerts are the channel at launch. SMS needs its own express consent under CASL and a per message cost.
+7. **App.** Later. Wrap the website (an installable web app first) rather than build native.
+8. **Parked, for information only.** The agency blueprint (`docs/agency-pathway.md`), sister companies, funding (a $50,000 SAFE note, raising from founding doctors) and a native app. The funding idea raises securities law and conflict questions, and the Eye Recommend question, so it goes to the lawyer when Steve chooses.
+9. **Lawyer addendum.** Not now. Wait for the first document back from the lawyer.
+10. **Timing.** Steve is waiting on the lawyer's documents. The disclosure conversation (Gate A) happens after that. Goal: launch in mid January 2027, whether the conversation lands a few days or a month later.
+
+## Starting a chat
+
+This file is on `main` (merged 8th November 2026), so every new chat can read it. Begin each prompt with: "Read `docs/gemini-intake-plan-2026-11-08.md`." If a chat cannot find it, run `git fetch origin main` first. Work for each phase goes on its own new branch.
+
+## Audit track (existing, separate from the Gemini ideas)
+
+The Gemini documents did not include the full code audit. That is the audit of 30th October 2026 (`docs/audit/AUDIT-REPORT-2026-10-30.md`, findings R1 to R60) and its phased plan (`docs/audit/NEXT-STEPS-PHASES.md`). Phases 0 and 1 of that plan are done. The later audit phases (legal and Gate B, free launch evidence, paid launch, tidy up) still run on their own timetable and are not replaced by anything here. The Project Summary mentions a "6 phase pre launch audit playbook" but the playbook itself was not in the 5 PDFs. If Steve has it, a chat should compare it to the October audit and add only what is new.
+
+New code from Phases 1, 2 and 4 of this plan, and Stripe checkout, changes what the October audit looked at. The final pre launch audit is Phase 6 below. Steve supplied the playbook on 8th November 2026 (written in Gemini). It has been triaged and reworked into Phase 6, because several of its prompts assume decisions that were since changed.
+
+## Corrected facts (stale figures in the Gemini documents)
+
+| Gemini says | Truth in this repository |
+| --- | --- |
+| Single posts $39, $49, $79, or $249 to $299 | $59, $79, $99 a 30 day post (`lib/pricing.ts`) |
+| $199 a month "unlimited" | Clinic pass $199 for up to 5 live posts. Plus $349 includes optometrists |
+| 63 passes at $199 reaches $150,000 | The revenue model was restated net of fees and churn (audit R43). Do not quote the 63 |
+| Wix CMS and Velo | Next.js, Supabase, Vercel, Stripe. The Wix page never went live |
+| Do not link to the clinic, keep applicants on Kestrel | Link to the clinic's application page (decision 2 above) |
+| 38 "verified" professionals alerted | Nobody is verified yet. Say "N candidates have alerts matching this role" |
+| $100k native app, $50k SAFE | Parked. Running costs are planned well under $10,000 a year |
+| Programmatic pages at `/optometrist-jobs-ontario` | Built at `/eye-care-jobs` (`docs/landing-pages.md`), indexable only with live jobs |
+| Locum as a future toggle | Locum is already an employment type option. A locum board is later |
+| Candidates "visible only when they apply" | True today. A clinic sees only what a candidate sent. Not yet said loudly on the site |
+
+## Already built or decided, so do not rebuild
+
+Fixed profession list. Pay range, existing vacancy and AI screening rules. Job and apply click counting. Job alerts by email. Found listings tool (off). Claim your listing. Outreach sequence (off). Role and province landing pages. Resources page and pay table. `/compare`. Pay benchmark while posting. 24 blog posts. Gate C target of 50 live roles across 5 provinces. Ontario first plan (`docs/first-region-ontario.md`). A city and radius search was agreed on 31st October; Phase 0 confirms whether it is finished.
+
+## The phases
+
+| Phase | Name | Ease | Gate | New migration |
+| --- | --- | --- | --- | --- |
+| 0 | Confirm what is built, fix the facts | S | None | No |
+| 1 | Quick wins | S | None | No |
+| 2 | Optometrist pay basis, tech tags, employee count | M | Lawyer glance on pay basis | Yes, both databases |
+| 3 | Content: pillar hubs and the next posts | S per post, ongoing | None | No |
+| 4 | Launch liquidity: leads, claim outreach, pre load, schools, guide | M | Gate A for anything sent | Maybe |
+| 5 | After launch: SMS, alert reach, pass value, supply features | L | Real launch data | Yes |
+| 6 | Final pre launch code audit (6 report only chats, then fixes, then Go or No Go) | L | After Phases 1, 2, 4 and Stripe checkout are built | Only for fixes |
+
+Run 0, then 1. Phase 6 is the last thing before launch, and it is described in full after Phase 5. Phase 3 can start any time after Phase 0 because it needs no code. Phase 2 can run beside Phase 3. Phase 4 drafts can be prepared now but nothing is sent until Gate A. Phase 5 waits for launch.
+
+## Rules every chat follows
+
+- Read `CLAUDE.md` first, then `docs/audit/NEXT-STEPS-PHASES.md`.
+- Work on a branch, run `npm run typecheck && npm test && npm run build`, push, and give Steve a preview link. Steve approves before anything merges. Do not open a pull request unless asked.
+- Every SQL change is a numbered migration, added to the combined file, and run on both databases (live and demo). Every new setting goes in both Vercel projects. Tell Steve each time.
+- Writing for the site follows the CLAUDE.md style rules: no em dashes, numerals, British spelling with Canadian conventions, ordinal dates, no banned words, no emoji.
+- Clinic outreach and seeding stay off until Steve confirms the disclosure conversation has happened (Gate A).
+- No Eye Recommend data, contacts, accounts or branding.
+- Anything involving money, outreach or going live needs Steve's approval first.
+
+---
+
+## Phase 0: Confirm what is built, fix the facts
+
+**Goal.** Make sure no later chat works from a stale fact, and settle what is already built.
+
+**Steve provides.** Nothing. Optionally, names of 5 corporate eye care groups he wants checked for how they post pay.
+
+**Claude reads first.** `CLAUDE.md`, `docs/audit/NEXT-STEPS-PHASES.md`, `docs/found-listings.md`, `docs/landing-pages.md`, `docs/first-region-ontario.md`, `lib/pricing.ts`, migration 0030.
+
+**Prompt to paste.**
+
+> Read CLAUDE.md and docs/gemini-intake-plan-2026-11-08.md. This is Phase 0. Do the following and report in plain English, with a short table at the end.
+>
+> 1. Confirm what is built and what is not, by reading the code and migrations: the city and radius search (and whether job alerts use it), employment type as tick boxes, job views and apply click counting and where the clinic sees it, whether any optometrist pay is hidden from logged out or non optometrist visitors, and whether JobPosting structured data is valid on a live job page. For anything unconfirmed, say what Steve would need to check.
+> 2. Search the public careers pages of 5 corporate eye care groups in Canada (I will name them, or pick the largest 5) and report how they show pay on Ontario and BC postings: a range, a single figure, or nothing. Read only. Do not copy any ad text.
+> 3. Draft the CLAUDE.md edit for the Indeed decision: Indeed may be read by hand to find clinics that are hiring, as a lead only. No automated collection of Indeed or any job board. Listing text comes from the clinic's own page or is entered as facts in Kestrel's own words. Show me the exact wording before you change the file.
+> 4. Correct any other stale line in CLAUDE.md or docs/PLAN.md that disagrees with the "Corrected facts" table in the plan file. Show the change, do not guess.
+> 5. Add what you found to the bottom of the plan file under "Phase 0 results".
+>
+> Do not build anything new in this chat.
+
+**Done when.** The built or not built table exists, CLAUDE.md has the Indeed wording Steve approved, and the next phases have their facts checked.
+
+---
+
+## Phase 1: Quick wins
+
+**Goal.** Cheap changes that help sign ups and trust, with no database change.
+
+**What is in it.**
+1. Say "private until you apply" where it is true: candidate sign up, profile, job pages and the FAQ. First check that it is still true everywhere, including recommendations and any admin view.
+2. Naming check. The brand is Kestrel Eye Care Jobs at eyecarejobs.ca. Find places that read as 2 different names and make them consistent, without touching the logo, wordmark or skyline.
+3. Home page proof. The new launch home page may already show product visuals. If a visitor still has to leave for demo.eyecarejobs.ca to see the product, add a clear "see the demo board" link, or 2 or 3 real screens. Brand assets are never redrawn.
+4. Run Google's Rich Results Test on a live job page and fix anything it flags. JobPosting data must match the visible page exactly.
+5. Zero result search pages: a friendly state that offers a job alert instead of an empty list.
+
+**Steve provides.** One live (or preview) job page link for the Rich Results test. A yes or no on whether the demo link belongs on the public home page.
+
+**Prompt to paste.**
+
+> Read CLAUDE.md and docs/gemini-intake-plan-2026-11-08.md. This is Phase 1, quick wins, no migration. Work on a new branch. Do items 1 to 5 under Phase 1 in the plan file, in that order, and stop to show me a preview after items 1 to 3 before you continue. For item 1, first prove the claim is true by listing every place a candidate's details are visible and to whom. Keep every word of public copy inside the CLAUDE.md style rules. Report each change in plain English and run typecheck, tests and build before you push.
+
+**Done when.** Steve has checked the preview on his phone and the Rich Results Test passes on a real job page.
+
+---
+
+## Phase 2: Optometrist pay basis, tech tags, employee count
+
+**Goal.** Make posting natural for optometrist roles, and let clinics show their equipment and software, without hiding any pay.
+
+**What is in it.**
+1. **Pay basis for optometrist roles.** Options such as annual salary, hourly, daily rate, daily minimum guarantee, and a percentage of production or billings (for example 28% to 35%). A range is still required for every basis, and the existing width rule needs a sensible version for percentages. "Competitive, discussed at interview" is not accepted on its own. Check how JobPosting `baseSalary` should behave for a percentage basis (it cannot hold a percentage, so decide what the markup shows without breaking the rule that markup matches the visible page). The pay benchmark line applies only to bases it can compare.
+2. **Clinic tech and specialty tags.** Fixed lists a clinic ticks on a job: EHR and practice software, diagnostic equipment, clinical specialties (dry eye and IPL, myopia control and ortho-k, vision therapy, on site edging lab). Show them on the job card and page, and as search filters.
+3. **Candidate software skills.** A fixed multi select on the candidate profile, optional, with the same list. This also serves a later matching opt in (see `docs/agency-pathway.md` Stage 1). Not shared with clinics except as part of an application.
+4. **Employee count.** A band chosen when a clinic creates its account or profile (for example 1 to 9, 10 to 24, 25 to 99, 100 or more). Stored for the admin numbers and for the lawyer's answer. It does not change any rule yet.
+
+**Steve provides.** The lists, from his industry knowledge: which EHR and practice management systems matter in Canada (the Gemini documents name Visual Eyes, RevolutionEHR, Wink, Acuitas, Officemate and Telus Health eClaims), which diagnostic equipment, and which specialties. Which pay bases real optometrist ads use. The wording he wants for the pay basis labels. Confirmation that the lawyer should glance at the pay basis (it is not urgent).
+
+**Prompt to paste.**
+
+> Read CLAUDE.md, docs/gemini-intake-plan-2026-11-08.md (Phase 2) and docs/pay-benchmark.md. Propose before you build: a one page design covering the pay basis options for optometrist roles, how the pay range rule and the $50,000 width rule work for each basis, what JobPosting structured data shows for a percentage basis, and the data model (fixed lists in code, new columns in one migration). Show me the form wording and the list contents for approval. Only then build it on a branch, with the migration added to supabase/combined/run-everything.sql and tested twice on a scratch database. Pay stays public on every post. Do not gate any pay behind a login. Remind me to run the SQL on both databases and add any setting to both Vercel projects.
+
+**Test cases to build against (from the audit playbook).** Each of these must save, show on the job card and the job page, and never render as `$0`, `$NaN`, `null` or `undefined`, or break the card:
+a. a daily minimum guarantee range (for example $600 to $800 a day),
+b. a percentage of production range (for example 16% to 20%),
+c. a daily minimum and a percentage together,
+d. hourly or salary plus a bonus or commission note (common for opticians and assistants),
+e. a blank or "negotiable, discussed at interview" entry, which stays refused because a range is required.
+Allow combination (c) and a short optional bonus or commission note in the design.
+
+**Done when.** Steve posts a test optometrist job with a percentage basis, all 5 test cases above behave, tags show on the card and filter, and the employee count appears in Admin.
+
+---
+
+## Phase 3: Content, pillar hubs and the next posts
+
+**Goal.** Build topical authority for search and for AI assistants, in a human voice, fortnightly.
+
+**Key point.** Most of the cluster posts for both hubs already exist among the 24 published posts, so the 2 hubs can be written now rather than after 20 new posts.
+
+**Hub 1, employers: "The clinic owner's guide to hiring and keeping optical staff".** Likely links down to: how to attract the right candidates, how to write an optometric assistant job ad, what every job ad should include, onboarding the first 30 days, hire for attitude and train for skills, why people leave and what clinics can do, reference checks, seasonal workers, independent or corporate, how to choose a buying group.
+
+**Hub 2, job seekers: "Building a career in eye care in Canada".** Likely links down to: where to begin, how most people fall into optics, the roles and who does what, optometric assistant jobs and pay, what a lab technician does, moving to Canada, how to write a CV, cover letter, phone screening, interviews and star questions, questions to ask, how to ask for a raise.
+
+**New posts, in priority order (search benefit and a job board link to point at):**
+1. How to write an optometrist job description, with a template that matches the ad builder.
+2. Pay transparency in eye care job ads: what Ontario and BC require and why it helps. Use Job Bank and the rules only, no invented statistics.
+3. How to hire your first associate optometrist.
+4. Optician or ophthalmic technician: the difference in duties, certification and pay (Job Bank figures only).
+5. Interview questions for optical dispensers and assistants (the employer side. The candidate side exists).
+6. Independent or corporate, from a clinic owner's side. The staff side exists.
+7. Moving an optician's licence between provinces. High intent, but every step must be checked against each regulator's own page first, so it is slower.
+8. Associate optometrist contracts for new graduates. Plain information, not legal advice, with a "get your own advice" line.
+
+**Held until there is real data or a source:** a salary guide (conflicts with leaving optometrist wages off), staff turnover rate, best cities ranking, 5 year market outlook, "will AI replace jobs", tele optometry, scope of practice, dry eye staffing, myopia careers. Dry eye and myopia are good later topics once Steve can supply a clinic's real experience. "Best places to post" waits for the lawyer to clear `/compare`, since it is comparative.
+
+**Steve provides.** For each post, 1 to 3 things only he or a real clinic can say: a number, a place, a story, a mistake he has seen. Claude asks for them before drafting. His review time for each draft.
+
+**Prompt to paste.**
+
+> Read CLAUDE.md (Writing style section), docs/blog.md, content/posts.ts and docs/gemini-intake-plan-2026-11-08.md (Phase 3). Step 1: check the 2 hub lists in the plan file against the 24 published posts and tell me which posts fit which hub and where there are gaps. Step 2: propose the URL and page design for 2 hub pages, how each post links up to its hub and the hub links down, and a "related guides" block on posts. Show me before building. Step 3: draft hub 1 first, in paragraphs with few headings, for a clinic owner, using only facts you can source. Before you draft any post, ask me for the specifics only I can give. No invented statistics, no optometrist wage figures, no recruiter clichés. Rewrite any LinkedIn hook so it follows the style rules. Run npm test, because it checks banned words and "not just X but Y" patterns.
+
+**Done when.** Both hubs are live, linked both ways with the existing posts, and the first 2 new posts are published on a fortnightly rhythm.
+
+---
+
+## Phase 4: Launch liquidity
+
+**Goal.** A board that is not empty on day one. Everything here is prepared as drafts and processes now. Nothing is sent or published until Gate A.
+
+**What is in it.**
+1. **Manual lead process.** A lead sheet (clinic name, website, careers page, a published hiring email, where it was found, date found, role, province) and a one page guide that Steve, and later a VA, follows: find the clinic on Indeed by hand, go to the clinic's own site, record the published hiring contact, never copy ad text. Also a short video script for a VA and a monthly volume and cost estimate.
+2. **Creating the listing.** The found listings tool reads 1 page on the clinic's own site and refuses job boards. Where the ad exists only on Indeed, there is a gap: the tool cannot read it. This chat decides the smallest safe fix, probably entering the facts in Kestrel's own words through the existing admin post for a clinic, with the apply link set to the clinic's own website. Pay is required and the 21 day expiry applies.
+3. **Claim email variants.** The offer is "we listed your role, claim it free". A line such as "N people clicked apply on your listing" is allowed only when the job stats show it. Include the honest alert count variant. All emails meet CASL (`docs/casl-outreach.md`).
+4. **Mid December pre load.** Email waitlist clinics (who opted in): reply with a link to your ad or 3 bullet points and we post it for you. Draft it, with the fallback that if Gate A slips past mid December, the same offer runs in launch week.
+5. **Schools and new graduates.** A short approach for student associations and programs (Waterloo, Seneca, Georgian, NAIT, Stenberg). Drafts only. School and association contact waits for Gate A.
+6. **Pay guide lead magnet.** A downloadable guide for clinics built only from Job Bank figures for non optometrist roles, behind an email form with the same consent wording style as the waitlist. Optometrist wages are left out.
+
+**Steve provides.** The Gate A date as soon as he knows it. His decision on a VA (hours a week, budget). A first batch of 20 clinics he has found by hand. A list of school and student contacts that does not come from Eye Recommend. The lawyer's feedback when it arrives.
+
+**Prompt to paste.**
+
+> Read CLAUDE.md, docs/casl-outreach.md, docs/found-listings.md, docs/first-region-ontario.md and docs/gemini-intake-plan-2026-11-08.md (Phase 4). Clinic outreach is off until I confirm Gate A, so prepare drafts and tooling only. Step 1: write the manual lead sheet template and the VA guide. Step 2: look at what the found listings tool and the admin post for a clinic can already do, tell me the gap for ads that exist only on Indeed, and propose the smallest safe change. Step 3: draft the claim email variants, with the click count line wired to the real job stats and impossible to show when the number is 0 or unknown. Step 4: draft the mid December pre load email and the launch week fallback. Show me each before building anything. Nothing is sent. Do not use any Eye Recommend contact or data.
+
+**Done when.** The first 20 leads are processed to the point of being ready to send, the emails are checked against the CASL document, and the day Gate A clears, Steve can switch outreach on.
+
+---
+
+## Phase 5: After launch
+
+Run these as separate chats, each started only when launch data supports it. Prompts are written when the time comes, from what has been learned.
+
+| Item | Notes |
+| --- | --- |
+| No applicants nudge | Idea from Steve, 8th November 2026. When a live job has had views but no applications after 7 days, email the clinic account owner. First email: practical help, including a suggested rewrite of the ad if it was not made with the ad builder. In the paid phase, a second line can offer a sponsored post (`docs/sponsored-ads-plan.md`), only when real view numbers show the job is not being seen. During the free launch, rewrite help only, since sponsored posts launch with Stripe. Triggered by `job_daily_stats`, never by a guess. Fits the inactive and upsell emails in `docs/marketing-audit-priorities-2026-11-06.md` (items 24 and 29). |
+| SMS alerts | After Phase 2. Needs express consent, a provider with Canadian numbers, a cost per message, and a quiet hours rule. Email stays the default. |
+| Alert reach in notifications | "N candidates have alerts matching your role", from real data. The word "verified" only after verification exists. |
+| Pass value in the quiet months | An always interested clinic profile, locum cover posts, a quarterly pay update. Decide after seeing pass retention. |
+| Confidential inquiry | A candidate asks a clinic a question before applying, without giving a name. Needs a privacy and abuse design. |
+| Corporate bulk import or feed | Only if a corporate group asks, since their systems push to Indeed. |
+| Locum board | Already a later feature in CLAUDE.md. |
+| Installable web app | Wrap the website first. Native app is a later decision. |
+| Supplier rep networks | Needs Gate A and the lawyer. Take care with Steve's employer's supplier relationships. |
+| "Verified Kestrel partner clinic" | Define what is verified before using the words. |
+
+## Phase 6: Final pre launch code audit
+
+**Goal.** One more careful pass over the code that has changed since the October audit, finishing with a Go or No Go. Delivered before launch, after the features it checks exist.
+
+**When.** Start only after Phases 1, 2 and 4 are merged and Stripe checkout is built (checkout is item 17 on `docs/launch-checklist.md`, and there is no payment webhook in the code yet, so the billing audit cannot run earlier). Aim to start about 3 weeks before the launch date and finish fixes about 1 week before it, so there is time to fix and retest. The existing October audit phases (legal and Gate B, free launch evidence, paid launch) continue on their own timetable and are not replaced by this.
+
+**How it runs (kept from the playbook).**
+1. One sub chat at a time, so each file is read properly instead of skimmed.
+2. Report only first. No code changes until the chat has listed findings with file names and line numbers, labelled [CRITICAL], [HIGH], [MEDIUM] or [LOW]. The October audit used the same style, see `docs/audit/REPORT-TEMPLATE.md`.
+3. Then Steve replies: "Fix the CRITICAL and HIGH items from this report one by one. Show me the exact diff for each and check it does not break types before moving to the next." Fixes go on a branch with a preview, and every migration is run on both databases.
+4. Before each sub chat, it reads the October report so it does not repeat settled findings: `docs/audit/AUDIT-REPORT-2026-10-30.md`.
+
+**What changed from the original playbook.**
+
+| In the playbook | Now |
+| --- | --- |
+| Check that optometrist wages are hidden from non optometrists, in the page, API and JSON-LD | Dropped. Pay is public on every post (decision 3). The check becomes: the pay shown on the page, in the data sent to the browser and in JobPosting markup all agree exactly |
+| Role selection unlocks pay views, and a non optometrist cannot toggle their role to bypass | Dropped, because nothing is gated |
+| Tiers: waitlist free, single post, $199 unlimited pass | Role band prices $59, $79, $99, Clinic pass $199 and Plus $349 (5 live posts each), the free launch coupon, and card details asked only when money is due (`payment_method_collection` set to `if_required`) |
+| Magic link sign in | Not used. Sign in is email and password plus Google |
+| Cutover from demo.eyecarejobs.ca to production | The demo is a separate site with its own database and Vercel project, and stays. The cutover is production switching from the waitlist look to the launch home (`docs/launch-home.md`) and turning on the right settings. The check is that demo and production cannot touch each other's data |
+| "Automated inquiry responses, 3 business day SLA" and clinic email routing to a practice manager | Unconfirmed that either exists. The email chat checks and reports; it does not assume |
+| Ontario AODA | The target stays WCAG 2.1 AA. Whether AODA's website rules legally apply to a business of Kestrel's size is unverified, and not needed to justify the target |
+| N+1 queries and missing indexes | Kept. Matters more once the board has hundreds of jobs |
+
+**Sub chats.** Each prompt below is pasted into its own chat. Start each with the "Starting a chat" line above.
+
+### 6A: Security, access and data (report only)
+
+> Read CLAUDE.md, docs/gemini-intake-plan-2026-11-08.md (Phase 6) and docs/audit/AUDIT-REPORT-2026-10-30.md. This is audit 6A. Do not change any code. Read every auth flow, database policy (row level security), API route, Server Action and data fetch, and report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) a candidate's name, email, profile and CV are visible to a clinic only when that candidate has applied to that clinic's job, including anything sent to the browser such as page data and server component payloads; (2) CV files are in a private bucket and only reached through short lived signed links; (3) clinic isolation: clinic A cannot view, edit, pause, delete or see applicants of clinic B's jobs by changing an id in a link, form or request, across every dashboard route, Server Action and API route; (4) account deletion and the data download: do they remove or anonymise rows, sessions and CV files without failing on linked records; (5) every environment variable the code reads, with any `NEXT_PUBLIC_` one flagged to prove no secret reaches the browser (compare with docs/security.md); (6) anything new since the October audit. Confirm which October findings are fixed, and list what is still open. End with a one page summary.
+
+### 6B: Job posting logic, pay formats and apply flow (report only)
+
+> Read CLAUDE.md, docs/gemini-intake-plan-2026-11-08.md (Phase 6 and the Phase 2 test cases) and docs/pay-benchmark.md. This is audit 6B. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) the 5 optometrist pay test cases from Phase 2, traced through the form, database columns, job card, job page, emails and structured data, and what happens with blank, zero or very long values; (2) the pay range rules, the existing vacancy and AI screening answers, the Canadian experience text check and the Quebec refusal, and whether any of them can be bypassed by calling the server directly; (3) the apply flow end to end: file type and size checks on the CV, a candidate applying twice to the same job, rate limits against bots, and what happens if the email to the clinic fails (the application must still be saved and visible to the clinic); (4) job templates, drafts, expiry and reposting from the clinic dashboard; (5) the "N people clicked apply" count shows only real numbers. End with a one page summary.
+
+### 6C: Billing and entitlements (report only, run only after Stripe checkout exists)
+
+> Read CLAUDE.md, lib/pricing.ts, docs/pass-procedures.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6C. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) how the code decides whether a clinic may publish a job: free launch coupon, a single post for each role band, the Clinic pass and Clinic pass Plus (5 live posts), the founding clinic price lock, and whether an unpaid draft can be published by calling the server directly; (2) a free launch post asks for no card (payment method collected only if money is due); (3) the Stripe webhook handler: signature check, handling the same event twice, and what happens to live jobs when a pass is cancelled, a card fails or a payment is refunded; (4) HST through Stripe Tax and receipts; (5) the 30 day and 21 day expiry, expired jobs removed from search, the sitemap and structured data straight away, and a one click repost; (6) test mode versus live keys and where each is set. Use Stripe's test mode only. End with a one page summary.
+
+### 6D: Email, CASL and the AI features (report only)
+
+> Read CLAUDE.md, docs/casl-outreach.md, docs/email-addresses.md, docs/onboarding-emails.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6D. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) every email the site sends, what triggers it, and whether it can send twice or not at all; (2) CASL: sender name, mailing address, working unsubscribe, a `List-Unsubscribe` header on the right messages, the do not email list checked before every send, and outreach, onboarding and found listing emails staying off unless their setting is "yes"; (3) the daily send budget, bounce and complaint handling; (4) the AI ad builder, the found listings reader and the province search: prompt injection from a pasted page, timeouts, spend limits, rate limits per user and per address, and what the person sees when the AI is slow or down; (5) whether the "automated inquiry reply within 3 business days" and "route applications to a practice manager email" features exist, and if not say so. End with a one page summary.
+
+### 6E: Phone, accessibility and empty states (report only)
+
+> Read CLAUDE.md, docs/audit/ACCESSIBILITY-PASS-2026-11-06.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6E. Do not change any code. Use Playwright at 320, 390 and 430 pixel widths and at 200 percent text, and report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) sideways scrolling, overlapping tags and breaks with very long clinic or city names, on the home page numbers box, pay guide, job cards, filters and forms; (2) search with filters that return nothing, and what the person is offered next; (3) forms, filters and dialogs for keyboard use, focus, labels, contrast and error messages, against WCAG 2.1 AA; (4) placeholder links, broken paths, and the error and not found pages matching the brand; (5) what a real screen reader test still needs from Steve, listed as steps. End with a one page summary.
+
+### 6F: Search, structured data and launch switches (report only)
+
+> Read CLAUDE.md, docs/discoverability-plan.md, docs/landing-pages.md, docs/launch-home.md, docs/demo-site.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). This is audit 6F. Do not change any code. Report findings as [CRITICAL], [HIGH], [MEDIUM] or [LOW] with file names and line numbers. Cover: (1) JobPosting data on live job pages: every required and recommended Google property, `validThrough`, `employmentType`, `hiringOrganization`, `jobLocation`, the pay shown matching the visible page exactly, and found listings that are unclaimed kept out of the markup; (2) canonical links, robots rules, `noindex` on filter pages and thin pages, the sitemap including only live jobs and indexable landing pages, and IndexNow; (3) demo and production separation: the demo is noindex, uses its own database and cannot reach live data; no seed data, test accounts, `console.log` or `TODO` left in production paths; (4) a list of every setting that must be set to its launch value on the day (the sign up gate, `PRELAUNCH_HOME`, `ENABLE_SEEDING`, `ENABLE_OUTREACH`, `ENABLE_ONBOARDING_EMAILS` and the rest), with where each lives and its current value, ready to tick off in order; (5) slow database queries and missing indexes on the search filters. End with a one page summary.
+
+### 6G: Final check and Go or No Go
+
+> Read CLAUDE.md and docs/gemini-intake-plan-2026-11-08.md (Phase 6). Audits 6A to 6F are done and their fixes merged. Run `npm run typecheck`, `npm test`, `npm run build` and the linter. Confirm no debug logging or bypass setting was left behind by the fixes. Confirm the October findings still open, and any open [CRITICAL] or [HIGH] items from 6A to 6F. Then write a plain English Go or No Go for the launch date, with a list of anything that is a No Go and what it needs. Also run the checklist in docs/launch-checklist.md section 4 and say which items Steve still has to do himself (a backup restore test, Vercel Pro and moving the repository into the Kestrel organisation, the switch from Stripe test keys to live keys).
+
+**Steve provides.** The lawyer's outcome and Gate A status, the Stripe test keys, a few test accounts (`docs/test-accounts.md`), his phone for the screen reader step, and time to retest each fix on the preview.
+
+**Done when.** All 6 reports exist, every CRITICAL and HIGH item is fixed or has a written reason it is accepted, and 6G gives a Go.
+
+## Parked: for information only
+
+- **The agency pathway.** Kept in `docs/agency-pathway.md`. The Gemini blueprint adds nothing that file does not already hold, and its Ontario licensing and Quebec figures are unverified. Stage 0 stays "build nothing".
+- **Funding.** A $50,000 SAFE note, or raising from founding doctors who post jobs. Securities law, customer conflict and the Eye Recommend question all apply. A lawyer conversation, when Steve chooses.
+- **Native app.** After the web app wrapper has proved demand.
+
+## Questions held for the lawyer (not sent yet)
+
+For when Steve is ready, after the first document comes back: whether manual use of Indeed to find leads is acceptable; whether the "N people clicked apply" claim needs any wording; pay basis options for optometrists (percentage of production) under Ontario and BC pay range rules; whether showing optometrist pay only to signed in optometrists would count as a publicly advertised range in Ontario and BC (and what verification, if any, it would need); whether Kestrel, as the platform, carries any duty when a clinic under 25 employees in Ontario posts without a range; funding from customers and founding doctors.
+
+---
+
+## Phase 0 results (8th November 2026)
+
+Read from the code on branch `claude/gallant-mccarthy-9abc7o`, which matches `main` as of pull request 72. Nothing was changed except this section.
+
+### What is built and what is not
+
+| Item | Result |
+| --- | --- |
+| City and radius search | Built for job search (`app/jobs/page.tsx`, `lib/places.ts`, radius of 10, 25 or 50 km, with field based roles always shown). |
+| Job alerts by distance | Not built. Alerts match on role, province and practice type only (`app/api/cron/daily/route.ts`). A "within 25 km of my postal code" alert, and any "N candidates near you" figure for clinics, needs new work. |
+| Employment type | Tick boxes in search for Full time, Part time, Fixed term (stored as "Contract") and Locum. Each job has one employment type. |
+| Job views and apply clicks | Counted (migration 0030) and shown to the clinic on its dashboard (`getMyJobNumbers`). The "N people clicked apply" line is possible. |
+| Optometrist pay hidden by role | Not built anywhere. Pay is public on every job. Optometrist wages are left off the public pay table only. This matches decision 3. |
+| Pay formats | Hour or year only, with a minimum and maximum, plus a free text "pay extras" note (`lib/jobs.ts`). No daily rate, no daily minimum, no percentage of production. This is the Phase 2 gap. Test case d (bonus or commission) is partly covered by the extras note. |
+| JobPosting data | Present: title, description, datePosted, validThrough, employmentType, hiringOrganization (name only), jobLocation (city, region, country), baseSalary, directApply and an identifier. Not present: street address, postal code, organisation logo and website, because the clinic website is deliberately not shown. Unclaimed found listings get no markup. A percentage or daily pay basis cannot go into `baseSalary` as it stands. |
+| Rich Results Test | Not run. Google's tool is a web page, so Steve (or a later chat with a live URL) has to run it on a real job. |
+
+### How corporate groups show pay (read only, from web search results, not from the groups' own careers pages)
+
+This is thin evidence. Results were mostly copies of postings on other sites, with unknown dates, and I did not open the groups' own pages. Treat it as a hint only.
+
+- **FYidoctors:** one Job Bank posting for an Ontario optometrist stated a pay figure ($200 a day). Other listings mentioned compensation guarantees without figures. Ranges seen on aggregator sites were estimates.
+- **IRIS:** Ontario optician postings seen had no pay. BC postings seen showed hourly ranges.
+- **New Look:** Ontario optician postings seen had no pay (both marked no longer available).
+- **Specsavers:** Ontario associate optometrist postings on aggregator sites showed yearly ranges (for example $80,000 to $120,000), and an optician posting showed an hourly figure.
+- **Costco:** a Job Bank optician posting showed $28 to $38 an hour (province not shown). Others showed no pay.
+
+What it suggests: groups of this size should already be posting a range in Ontario (the rule applies at 25 or more employees), yet several Ontario postings found had none. Check the groups' own careers pages in Phase 4 before relying on this. Corporate recruiters may paste ads without pay, so the pay field will need to be easy for them.
+
+### CLAUDE.md edit for the Indeed decision (approved by Steve and applied on 8th November 2026)
+
+Steve approved the wording as written. A second small change was made in the "Current state" paragraph, as described at the end of this section. The wording that was applied:
+
+Replace this line in "Non negotiables":
+
+> **No scraping of Indeed, LinkedIn, Jobs4ECPs or provincial college registers.** Seeding uses clinics' own careers pages only, links back to the clinic, and expires after 21 days.
+
+with:
+
+> **No automated collection from Indeed, LinkedIn, Jobs4ECPs or provincial college registers, and never any scraper.** Seeding uses clinics' own careers pages, or facts entered by hand in Kestrel's own words, links to the clinic's own application page, and expires after 21 days. One exception, agreed by Steve on 8th November 2026: Indeed may be read by hand, by Steve or a VA, only to find which clinics are hiring and who to contact. Nothing is copied from it, and no Indeed link or text appears on Kestrel.
+
+And in "Current state", change "with the job boards other than Indeed, LinkedIn and Jobs4ECPs allowed as leads only" to say that Indeed is also allowed as a lead by hand, with LinkedIn and Jobs4ECPs still off.
+
+### Other lines in CLAUDE.md and docs/PLAN.md that look stale (not changed)
+
+- CLAUDE.md "Current state": "the candidate and clinic homes are still placeholders". They are built (checklists, dashboard numbers, recommended jobs).
+- CLAUDE.md "Next tasks" lists 5 items that are almost all built.
+- CLAUDE.md pay benchmark paragraph says it is awaiting preview on a branch. Check whether it is merged.
+- docs/PLAN.md roadmap puts seeding and the free launch in February to March 2027 and the paid launch from April. Steve's goal is a mid January launch, so the roadmap dates need his decision.
+- docs/PLAN.md prices are current.
+
+### Checks that need Steve
+
+1. Run Google's Rich Results Test on one live job page.
+2. Approve (or edit) the CLAUDE.md wording above, then it can be applied.
+3. Decide the roadmap dates in docs/PLAN.md.
