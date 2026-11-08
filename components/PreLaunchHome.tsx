@@ -27,6 +27,22 @@ export default function PreLaunchHome() {
             <Image src="/skyline.png" alt="" width={2000} height={462} priority sizes="100vw" />
           </div>
         </section>
+        <section className="lh-section lh-shots" aria-labelledby="pl-shots">
+          <div className="wrap">
+            <h2 id="pl-shots">What the board will look like</h2>
+            <p className="lh-shotslede">Search by role, province, type of employer and distance, then see the pay before you open a job. These are sample screens with sample clinics and jobs. Real jobs take their place when Kestrel opens.</p>
+            <div className="lh-shotgrid">
+              <figure>
+                <Image src="/home/sample-search.png" alt="The Kestrel job search page, with a search box, filters for role, province, employer type, city and distance, and the first jobs listed with their pay." width={2160} height={1540} sizes="(max-width: 860px) 100vw, 620px" />
+                <figcaption>Search and filter. Every job card shows its pay.</figcaption>
+              </figure>
+              <figure>
+                <Image src="/home/sample-job.png" alt="A Kestrel job page, with the job description, a Quick Apply button, and job facts that include pay, location, whether it is an existing vacancy, and whether AI is used to screen candidates." width={2160} height={1860} sizes="(max-width: 860px) 100vw, 520px" />
+                <figcaption>A job page. Pay, vacancy and AI screening are stated up front.</figcaption>
+              </figure>
+            </div>
+          </div>
+        </section>
         <HomeBelowHero />
       </main>
       <AppFooter />
