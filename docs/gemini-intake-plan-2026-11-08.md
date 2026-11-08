@@ -21,7 +21,7 @@ Status: agreed with Steve on 8th November 2026. Nothing in this file is built. E
 
 ## Starting a chat
 
-New chats start from `main`, and this file lives on branch `claude/gallant-mccarthy-9abc7o` until it is merged. Until then, begin each prompt with: "Run `git fetch origin claude/gallant-mccarthy-9abc7o` and read `docs/gemini-intake-plan-2026-11-08.md` from that branch." Work for each phase goes on its own new branch.
+This file is on `main` (merged 8th November 2026), so every new chat can read it. Begin each prompt with: "Read `docs/gemini-intake-plan-2026-11-08.md`." If a chat cannot find it, run `git fetch origin main` first. Work for each phase goes on its own new branch.
 
 ## Audit track (existing, separate from the Gemini ideas)
 
@@ -297,7 +297,7 @@ Read from the code on branch `claude/gallant-mccarthy-9abc7o`, which matches `ma
 
 | Item | Result |
 | --- | --- |
-| City and radius search | Built for job search (`app/jobs/page.tsx`, `lib/places.ts`, radius of 10, 25, 50 and 100 km, with field based roles always shown). |
+| City and radius search | Built for job search (`app/jobs/page.tsx`, `lib/places.ts`, radius of 10, 25 or 50 km, with field based roles always shown). |
 | Job alerts by distance | Not built. Alerts match on role, province and practice type only (`app/api/cron/daily/route.ts`). A "within 25 km of my postal code" alert, and any "N candidates near you" figure for clinics, needs new work. |
 | Employment type | Tick boxes in search for Full time, Part time, Fixed term (stored as "Contract") and Locum. Each job has one employment type. |
 | Job views and apply clicks | Counted (migration 0030) and shown to the clinic on its dashboard (`getMyJobNumbers`). The "N people clicked apply" line is possible. |
@@ -318,7 +318,9 @@ This is thin evidence. Results were mostly copies of postings on other sites, wi
 
 What it suggests: groups of this size should already be posting a range in Ontario (the rule applies at 25 or more employees), yet several Ontario postings found had none. Check the groups' own careers pages in Phase 4 before relying on this. Corporate recruiters may paste ads without pay, so the pay field will need to be easy for them.
 
-### Proposed CLAUDE.md edit for the Indeed decision (not applied)
+### CLAUDE.md edit for the Indeed decision (approved by Steve and applied on 8th November 2026)
+
+Steve approved the wording as written. A second small change was made in the "Current state" paragraph, as described at the end of this section. The wording that was applied:
 
 Replace this line in "Non negotiables":
 
