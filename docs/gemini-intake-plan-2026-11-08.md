@@ -10,14 +10,24 @@ Status: agreed with Steve on 8th November 2026. Nothing in this file is built. E
 
 1. **Indeed.** The ban on Indeed as a lead source is lifted, for manual use only. Steve (or later a VA) reads Indeed by hand to find which clinics are hiring, then reaches out to the clinic with a "claim your listing" offer. No automated scraper is built, ever. Listing text comes from the clinic's own careers page where one exists, in Kestrel's own words. CLAUDE.md must be updated to say this (Phase 0).
 2. **Applications stay with the clinic.** On listings the clinic has not claimed, candidates are sent to the clinic's own website to apply. Kestrel does not hold applications for clinics that have not joined. A claim email may say "N people clicked apply on your listing" only when that number is real, from the job stats already counted (migration 0030). Never invent or round up a number.
-3. **Pay stays public on every post.** Optometrist pay gets extra pay basis options (see Phase 2), and the range is still required. No pay hidden behind a login. Optometrist wages stay off the public pay table (decision of 6th November 2026).
-4. **Employee count.** Ask a clinic how many employees it has when it creates an account. Store it, and do not use it to switch off the pay range rule yet. Ontario's pay range rule is understood to apply to employers with 25 or more employees, but that is unverified and the self declared number cannot be checked. Revisit after the lawyer answers.
+3. **Pay stays public on every post.** Optometrist pay gets extra pay basis options (see Phase 2), and the range is still required. Steve asked on 8th November 2026 whether optometrist pay could be visible only to optometrists. Advice given: a pay range shown only after sign in is very unlikely to count as "publicly advertised", it would be left out of Google's job markup, and a self selected "optometrist" profile is not verification. Not decided as a rule. Possible middle path for Steve to weigh: keep the required range public, and gate extra detail (exact production formula, equipment support) to signed in optometrists. Optometrist wages stay off the public pay table (decision of 6th November 2026). The lawyer is asked (see the end of this file).
+4. **Employee count.** Ask a clinic how many employees it has when it creates an account. Store it. Steve has verified that Ontario's pay range rule applies to employers with 25 or more employees. The count is self declared and cannot be checked, and Kestrel's own rule (a range on every post) is stricter than the law, so do not switch the rule off for smaller Ontario clinics unless Steve decides to. BC has no such threshold as far as is known (unverified). The stored count is what lets that decision be made later.
 5. **Blog.** Stays human, fortnightly, ranked by SEO benefit. The two pillar pages (hub guides) are kept.
 6. **SMS alerts.** Wanted, but after the pay phase and after launch data exists. Email alerts are the channel at launch. SMS needs its own express consent under CASL and a per message cost.
 7. **App.** Later. Wrap the website (an installable web app first) rather than build native.
 8. **Parked, for information only.** The agency blueprint (`docs/agency-pathway.md`), sister companies, funding (a $50,000 SAFE note, raising from founding doctors) and a native app. The funding idea raises securities law and conflict questions, and the Eye Recommend question, so it goes to the lawyer when Steve chooses.
 9. **Lawyer addendum.** Not now. Wait for the first document back from the lawyer.
 10. **Timing.** Steve is waiting on the lawyer's documents. The disclosure conversation (Gate A) happens after that. Goal: launch in mid January 2027, whether the conversation lands a few days or a month later.
+
+## Starting a chat
+
+New chats start from `main`, and this file lives on branch `claude/gallant-mccarthy-9abc7o` until it is merged. Until then, begin each prompt with: "Run `git fetch origin claude/gallant-mccarthy-9abc7o` and read `docs/gemini-intake-plan-2026-11-08.md` from that branch." Work for each phase goes on its own new branch.
+
+## Audit track (existing, separate from the Gemini ideas)
+
+The Gemini documents did not include the full code audit. That is the audit of 30th October 2026 (`docs/audit/AUDIT-REPORT-2026-10-30.md`, findings R1 to R60) and its phased plan (`docs/audit/NEXT-STEPS-PHASES.md`). Phases 0 and 1 of that plan are done. The later audit phases (legal and Gate B, free launch evidence, paid launch, tidy up) still run on their own timetable and are not replaced by anything here. The Project Summary mentions a "6 phase pre launch audit playbook" but the playbook itself was not in the 5 PDFs. If Steve has it, a chat should compare it to the October audit and add only what is new.
+
+New code from Phases 1, 2 and 4 of this plan changes what the October audit looked at. Before launch, run one final full audit as its own chat: security, accessibility with a real screen reader, every flow end to end, a backup restore test, and the launch checklist in `docs/launch-checklist.md`, section 4. Target: the week before the launch date.
 
 ## Corrected facts (stale figures in the Gemini documents)
 
@@ -188,6 +198,7 @@ Run these as separate chats, each started only when launch data supports it. Pro
 
 | Item | Notes |
 | --- | --- |
+| No applicants nudge | Idea from Steve, 8th November 2026. When a live job has had views but no applications after 7 days, email the clinic account owner. First email: practical help, including a suggested rewrite of the ad if it was not made with the ad builder. In the paid phase, a second line can offer a sponsored post (`docs/sponsored-ads-plan.md`), only when real view numbers show the job is not being seen. During the free launch, rewrite help only, since sponsored posts launch with Stripe. Triggered by `job_daily_stats`, never by a guess. Fits the inactive and upsell emails in `docs/marketing-audit-priorities-2026-11-06.md` (items 24 and 29). |
 | SMS alerts | After Phase 2. Needs express consent, a provider with Canadian numbers, a cost per message, and a quiet hours rule. Email stays the default. |
 | Alert reach in notifications | "N candidates have alerts matching your role", from real data. The word "verified" only after verification exists. |
 | Pass value in the quiet months | An always interested clinic profile, locum cover posts, a quarterly pay update. Decide after seeing pass retention. |
@@ -206,4 +217,4 @@ Run these as separate chats, each started only when launch data supports it. Pro
 
 ## Questions held for the lawyer (not sent yet)
 
-For when Steve is ready, after the first document comes back: whether manual use of Indeed to find leads is acceptable; whether the "N people clicked apply" claim needs any wording; pay basis options for optometrists (percentage of production) under Ontario and BC pay range rules; whether an employee count can switch off the pay range requirement in Ontario; funding from customers and founding doctors.
+For when Steve is ready, after the first document comes back: whether manual use of Indeed to find leads is acceptable; whether the "N people clicked apply" claim needs any wording; pay basis options for optometrists (percentage of production) under Ontario and BC pay range rules; whether showing optometrist pay only to signed in optometrists would count as a publicly advertised range in Ontario and BC (and what verification, if any, it would need); whether Kestrel, as the platform, carries any duty when a clinic under 25 employees in Ontario posts without a range; funding from customers and founding doctors.
