@@ -106,6 +106,22 @@ from (values
 ) as s(clinic, title, etype, period, pmin, pmax, is_min, cmin, cmax, cof, soft, equip, spec, descr, extras, days_ago)
 join public.employers e on e.clinic_name = s.clinic;
 
+-- More pay shapes (migration 0035): dollars plus a percentage, a percentage of exam fees, and a daily rate with the days a week (shows a yearly estimate).
+insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_days_per_week,
+                         pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties,
+                         is_existing_vacancy, uses_ai_screening, description, apply_method, status, posted_at, expires_at)
+select e.id, s.title, 'Optometrist', s.etype, e.province, e.city, s.period, s.pmin, s.pmax, s.days, s.cmin, s.cmax, s.cof, s.soft, s.equip, s.spec,
+       true, false, s.descr, 'kestrel', 'live', now() - make_interval(days => s.days_ago), now() - make_interval(days => s.days_ago) + interval '30 days'
+from (values
+  ('Maple Grove Eye Care (sample)', 'Optometrist, salary plus a percentage', 'Full time', 'year', 90000, 110000, null::int, 8::numeric, 12::numeric, 'billings',
+   array['Visual Eyes']::text[], array['OCT']::text[], array[]::text[], 'A yearly salary with a percentage of billings paid on top once you reach your targets.', 6),
+  ('Capital Optometry (sample)', 'Optometrist, percentage of exam fees', 'Part time', null, null, null, null::int, 40::numeric, 50::numeric, 'exam_fees',
+   array['Wink']::text[], array['Retinal photographs']::text[], array['Vision therapy']::text[], 'Two days a week, paid a percentage of the exam fees you bill.', 7),
+  ('Fundy Family Eye Care (sample)', 'Optometrist, daily rate 4 days a week', 'Full time', 'day', 900, 1100, 4, null::numeric, null::numeric, null::text,
+   array['Acuitas']::text[], array['Optos']::text[], array['Dry eye and IPL']::text[], 'Four days a week at a daily rate. The page shows an estimate of the yearly pay.', 4)
+) as s(clinic, title, etype, period, pmin, pmax, days, cmin, cmax, cof, soft, equip, spec, descr, days_ago)
+join public.employers e on e.clinic_name = s.clinic;
+
 -- Some sample tags on the earlier sample optometrist jobs, and employee counts for the sample clinics (Admin only, changes no rule).
 update public.jobs set tags_software = array['Wink'], tags_equipment = array['OCT'] where title = 'Optometrist' and employer_id in (select id from public.employers where clinic_name like '% (sample)') and pay_period = 'year';
 insert into public.employer_contacts (employer_id, notify_email, employee_band)

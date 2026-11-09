@@ -434,3 +434,13 @@ Percentage of production, collections or billings, and a daily minimum, under On
 ### Later
 
 Distance and tag based job alerts; widening the pay bases to other roles if clinics ask; "N candidates use Wink" style figures for clinics (needs a decision on what candidates agree to).
+
+### Phase 2, second round (9th November 2026, migration 0035)
+
+Built after Steve tried the first version. **Needs migration 0035 on both databases** (run the whole combined file).
+
+- **Pay is dollars, a percentage, or both; at least one must be filled in.** This replaces the separate "daily minimum" choice. The dollar part has a unit (a year, an hour, or a day for optometrists) and an optional "guaranteed minimum" tick. A percentage (optometrists only) can sit alongside any unit, and reads "$90,000 to $110,000 a year, plus 8% to 12% of billings", or, with the minimum ticked, "a guaranteed minimum of ..., or 28% to 35% of collections when that comes to more".
+- **"Exam fees"** joins production, collections and billings as what a percentage is of.
+- **Daily rate with the days a week** (optional) gives a yearly estimate: the daily amount x days x 48 working weeks, always labelled as an estimate, shown on the job page, used by the typical pay line and Recommended for you, and never given to Google as the salary. A guaranteed minimum, or any pay with a percentage, is not compared.
+- **Re-running the combined file** on a database that already holds the newer pay shapes used to fail at an older step. Migrations 0023 and 0034 now add their older pay rules as "not valid" for existing rows, so the whole file is safe to run again.
+- Still open: Steve asked for the percentage to show 20 to 25 as an estimate. See the chat; the grey example text now shows 20 and 25.

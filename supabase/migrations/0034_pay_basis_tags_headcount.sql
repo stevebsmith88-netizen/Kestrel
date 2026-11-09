@@ -23,11 +23,11 @@ alter table public.jobs add constraint jobs_pay_percent_min_check check (pay_per
 alter table public.jobs drop constraint if exists jobs_pay_percent_max_check;
 alter table public.jobs add constraint jobs_pay_percent_max_check check (pay_percent_max is null or (pay_percent_max > 0 and pay_percent_max <= 100));
 alter table public.jobs drop constraint if exists jobs_pay_percent_of_check;
-alter table public.jobs add constraint jobs_pay_percent_of_check check (pay_percent_of is null or pay_percent_of in ('production', 'collections', 'billings'));
+alter table public.jobs add constraint jobs_pay_percent_of_check check (pay_percent_of is null or pay_percent_of in ('production', 'collections', 'billings')) not valid;
 
 -- A daily minimum is always a daily amount.
 alter table public.jobs drop constraint if exists jobs_pay_shape_check;
-alter table public.jobs add constraint jobs_pay_shape_check check (not pay_is_minimum or pay_period = 'day');
+alter table public.jobs add constraint jobs_pay_shape_check check (not pay_is_minimum or pay_period = 'day') not valid;
 
 -- 2. Tags on a job ------------------------------------------------------------------------------------------------------------------------
 create or replace function public.tags_ok(tags text[])
@@ -84,7 +84,7 @@ alter table public.jobs add constraint jobs_complete_unless_draft check (
           and pay_percent_max >= pay_percent_min and pay_percent_max - pay_percent_min <= 10)
     )
   )
-);
+) not valid; -- "not valid": a database that already has migration 0035 holds pay shapes this older rule does not know, and 0035 sets the final rule
 
 -- 4. Who may read and write the new job columns (a column missing from these lists silently fails to save).
 grant select (pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties) on public.jobs to anon;

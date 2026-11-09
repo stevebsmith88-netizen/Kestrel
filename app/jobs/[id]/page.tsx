@@ -7,7 +7,7 @@ import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { answerLabel, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
-import { payChips, payText } from "@/lib/job-pay";
+import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
@@ -96,6 +96,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 <h2>Job facts</h2>
                 <dl className="facts">
                   <div><dt>Pay</dt><dd>{payText(job)}</dd></div>
+                  {estimateText(job) && <div><dt>Yearly estimate</dt><dd>{estimateText(job)}</dd></div>}
                   <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
                   {TAG_GROUPS.map((g) => {
                     const names = tagsFromRow(job)[g.key];

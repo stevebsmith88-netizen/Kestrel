@@ -1,6 +1,6 @@
 // Turns the job form into a checked job and a database row. Used by the clinic's own form and by the admin's "post for a clinic" form,
 // so both follow exactly the same rules (pay range, the 2 questions, no Canadian experience).
-import { editBasis, payColumns, type PayFields } from "./job-pay.ts";
+import { payColumns, type PayFields } from "./job-pay.ts";
 import { tagsFromRow } from "./job-tags.ts";
 import { cleanJob, validateJob } from "./jobs.ts";
 
@@ -27,7 +27,8 @@ export function jobFromForm(form: FormData, submit: boolean) {
     payPercentMin: field(form, "payPercentMin"),
     payPercentMax: field(form, "payPercentMax"),
     payPercentOf: field(form, "payPercentOf"),
-    payPercentToo: field(form, "payPercentToo"),
+    payIsMinimum: field(form, "payIsMinimum"),
+    payDays: field(form, "payDays"),
     tagsSoftware: form.getAll("tagsSoftware"),
     tagsEquipment: form.getAll("tagsEquipment"),
     tagsSpecialties: form.getAll("tagsSpecialties"),
@@ -64,13 +65,14 @@ export function payAndTagValues(row: PayAndTagsRow | null | undefined) {
   const text = (v: number | string | null | undefined) => (v === null || v === undefined ? "" : String(v));
   const tags = tagsFromRow(r);
   return {
-    pay_period: editBasis(r),
+    pay_period: r.pay_period ?? "year",
     pay_min: text(r.pay_min),
     pay_max: text(r.pay_max),
     pay_percent_min: text(r.pay_percent_min),
     pay_percent_max: text(r.pay_percent_max),
     pay_percent_of: r.pay_percent_of ?? "",
-    pay_percent_too: r.pay_is_minimum === true && r.pay_percent_min ? "yes" : "",
+    pay_is_minimum: r.pay_is_minimum === true ? "yes" : "",
+    pay_days: text(r.pay_days_per_week),
     tags_software: tags.software,
     tags_equipment: tags.equipment,
     tags_specialties: tags.specialties,

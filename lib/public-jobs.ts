@@ -53,7 +53,7 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
 
 export type SearchResult = { jobs: JobSummary[]; total: number; place?: Place | null; placeNotFound?: boolean };
 
-const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
+const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
 
 export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   const db = supabasePublic();
@@ -146,7 +146,7 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   if (!db) return null;
   const { data, error } = await db
     .from("jobs")
-    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
+    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
     .eq("id", id)
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString())
