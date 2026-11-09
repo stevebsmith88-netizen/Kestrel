@@ -83,7 +83,7 @@ export const HELP: HelpSection[] = [
         id: "who-can-see-your-details",
         title: "Who can see my details?",
         answer: [
-          "**If you are looking for a job:** your profile and CV are private. A clinic sees only what you send with an application: your cover letter, your CV and the details you chose to give, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your CV can be opened only through a link that works for 1 minute.",
+          "**If you are looking for a job:** your profile and CV are private. A clinic sees only what you send with an application: your cover letter, your CV, and your name, email address, role, licences, experience and availability, plus your phone number if you added one, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your CV can be opened only through a link that works for 1 minute.",
           "**If you are a clinic:** your job posts are public, but the email address that applicant alerts go to is never shown on a post, and neither is the answer about how many people work for you. Candidates apply through Kestrel, so recruiters cannot harvest your address.",
           "We do not sell personal information. Our team can see account details when it needs to run the site, and a small number of service providers handle information only to provide their service to us.",
         ],
@@ -160,6 +160,158 @@ export const HELP: HelpSection[] = [
           "Type DELETE in capital letters and press **Delete my account for good**.",
         ],
         links: [{ label: "Account settings", href: "/account" }],
+      },
+    ],
+  },
+  {
+    id: "candidates",
+    title: "Candidates",
+    intro: "For people looking for a job: your account, your profile, applying and following what happens next.",
+    topics: [
+      {
+        id: "create-a-candidate-account",
+        title: "How do I create an account?",
+        answer: [
+          "It is free. Your password needs at least 10 characters. A few words you will remember work well.",
+          "After you press the button, we email you a confirmation link. Open it to confirm your address, then sign in. If you use Google, there is no password and no confirmation email, and the next screen asks whether you are looking for a job or hiring.",
+        ],
+        steps: [
+          "Choose **Create account** at the top of the page. On a phone, open **Menu** first.",
+          "Under **I am**, choose **I'm looking for a job**. Or choose **Continue with Google** if you see that button.",
+          "Type your first name, last name, email address and a password.",
+          "Tick the box to agree to the terms of use and the privacy policy. The second box, about launch news and job alerts, is optional.",
+          "Complete the security check and press **Create my account**.",
+          "Open the confirmation email, follow the link, and sign in.",
+        ],
+        links: [{ label: "Create an account", href: "/sign-up" }],
+      },
+      {
+        id: "profile-and-cv",
+        title: "How do I build my profile and add a CV?",
+        answer: [
+          "To apply through Kestrel you need 2 things: your role and a saved CV. Everything else on the profile is optional, and your profile is private. A CV can be a PDF or a Word file, up to 3 MB, and it is stored privately in Canada.",
+          "You can replace or delete your CV at any time. Replacing it does not change applications you have already sent, because a clinic keeps what you sent that day.",
+        ],
+        steps: [
+          "Open the menu under your initials at the top of the page and choose **Profile and CV**. On a phone, open **Menu** instead.",
+          "In the **Your CV** box, choose your file and press **Upload**. Once a CV is saved you can use **Download** or **Delete** next to its name, and the box offers **Replace your CV**.",
+          "Below that, choose **Your role** and tick every province or territory where you are licensed or registered. Add your years of experience and when you are available. Your phone number is optional, and it is shared only with a clinic you apply to.",
+          "Press **Save my details**.",
+          "If you like, fill in **What you are looking for** on the same page. It shapes your recommended jobs (see [What are Recommended for you and Not interested?](/help#recommended-for-you)).",
+        ],
+        links: [{ label: "Profile and CV", href: "/candidate/profile" }],
+      },
+      {
+        id: "search-and-filter-jobs",
+        title: "How do I search and filter jobs, including by distance?",
+        answer: [
+          "You do not need an account to search. Every job shows its pay, and you can narrow the list as much or as little as you like.",
+          "Distance works from a town or city. Kestrel knows towns of about 1,000 people or more, so if a place is not found, check the spelling or try the nearest larger town. You can choose within 10, 25 or 50 km, and 25 km is the usual choice. Field based jobs, such as sales and service roles that travel to clinics, are always included alongside the jobs near you.",
+        ],
+        steps: [
+          "Choose **Find jobs** in the bar at the top of the page.",
+          "Type a role or keyword, or choose a role, a province or territory, a type of employer (independent or corporate), and whether the person works on site or in the field.",
+          "To search by distance, type a city or town, then choose **Within 10 km**, **Within 25 km** or **Within 50 km**.",
+          "Tick the types of work you want, such as full time or part time. Open **Software, equipment and specialties** to narrow by what the job uses.",
+          "Press **Search**. The number of jobs found appears above the list.",
+        ],
+        links: [{ label: "Find jobs", href: "/jobs" }],
+      },
+      {
+        id: "how-to-apply",
+        title: "How do I apply, on Kestrel or on the clinic's own site?",
+        answer: [
+          "The **Apply** box on a job page tells you which kind it is. Some clinics take applications through Kestrel, and others send you to their own careers page.",
+          "When you apply through Kestrel, the clinic sees your cover note, your CV and your details: your name, email address, phone number if you added one, role, where you are licensed, years of experience and when you are available. You can follow the application under My applications. When a clinic uses its own site, the box says **Apply on the clinic's website** and opens that site in a new tab. Kestrel cannot see what happens there, so that application does not appear in My applications.",
+          "You can apply to a job once. A cover note is optional, but we recommend one, because clinics tend to read the personal ones first.",
+        ],
+        steps: [
+          "Open the job. On a phone, the small **Apply** button near the top jumps down to the Apply box.",
+          "Choose **Quick Apply**. If you are not signed in, sign in or create a free account first.",
+          "The first time, **Complete my profile** takes you to save your CV and choose your role. Then you come back to the job.",
+          "Check your name, email, role and CV under **Your details**.",
+          "Write a cover note, or choose one of your saved letters and press **Use it**. **Save as a draft** keeps it if you want to come back later.",
+          "Tick the box agreeing that the clinic can see your application. The box about keeping your details for future roles is optional.",
+          "Press **Send my application**. If the note is empty, we ask once: choose **Write a short note** or **Send without a note**.",
+        ],
+        links: [{ label: "Find jobs", href: "/jobs" }, { label: "My saved letters", href: "/candidate/letters" }],
+      },
+      {
+        id: "track-your-applications",
+        title: "How do I track my applications, and what does each status mean?",
+        answer: [
+          "Every application shows a progress bar with 5 steps: **Applied**, **Viewed**, **Shortlisted**, **Interview** and **Offer**. Applied means it is sent and the clinic has not opened it yet. Viewed means the clinic has opened it. Shortlisted means you are in the running. Interview means the clinic would like to meet you, and Offer means it has made you an offer.",
+          "An application can also close. **Not selected this time** means the clinic chose other candidates. **Role filled** means the job is no longer open. **Kept for future roles** means the clinic will keep your details for future openings, if you agreed to that when you applied. **No update from the clinic** means the job closed without a decision. **Withdrawn** means you withdrew it.",
+          "A clinic can write you a message with an update, and you see it on the application. The clinic's private notes are never shown to you. We also email you when a clinic updates an application, unless you have turned those emails off. The topic [How do I change which emails I get?](/help#email-choices) says how.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead. Your home page also shows the latest few.",
+          "Use the tabs **All**, **In review**, **Interviews**, **Offers** and **Closed** to find one.",
+          "Choose **View details** to see where it stands, the clinic's message, the history, and what you sent.",
+        ],
+        links: [{ label: "My applications", href: "/candidate/applications" }],
+      },
+      {
+        id: "job-alerts",
+        title: "How do I set up job alerts?",
+        answer: [
+          "A job alert emails you when a new job is posted that matches what you choose. You can have up to 5 alerts. You get one email with everything new, never one email per job, and every email has an unsubscribe link.",
+          "Alerts match on role, province or territory and type of employer. They do not use distance. If you turn off news and job alert emails under Account settings, your alerts are kept but no emails are sent until you turn them back on.",
+        ],
+        steps: [
+          "Choose **Job alerts** in the bar at the top of the page. On a phone, open **Menu** first.",
+          "Under **Add an alert**, choose a role, a province or territory and a type of employer. Leave a choice on \"any\" to hear about more jobs.",
+          "Choose how often we should email you: daily, weekly or monthly.",
+          "Press **Save this alert**.",
+          "To stop one, press **Remove** next to it in **Your alerts**.",
+        ],
+        links: [{ label: "Job alerts", href: "/candidate/alerts" }],
+      },
+      {
+        id: "recommended-for-you",
+        title: "What are Recommended for you and Not interested?",
+        answer: [
+          "Your home page shows up to 8 jobs that fit what you told us, each with a line saying why it fits, such as the role, how far away it is, or that its pay reaches your minimum. They come from plain rules applied to your profile, with no AI, and nothing about you is shared with clinics.",
+          "**Not interested** removes a job from your list, for you only. There is no undo, and the job still appears when you search. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
+        ],
+        steps: [
+          "Open your home page by choosing **Home** in the bar at the top.",
+          "Read the **Recommended for you** list and the line under each job that starts **Why this fits**.",
+          "Press **Not interested** on any job you do not want to see again in the list.",
+          "To change what we suggest, choose **What you are looking for**, update your details on the profile page and press **Save my details**.",
+        ],
+        links: [{ label: "What you are looking for", href: "/candidate/profile#looking-for" }],
+      },
+      {
+        id: "keep-my-details",
+        title: "What does \"Keep my details for future roles\" do?",
+        answer: [
+          "When you apply, an optional box lets the clinic keep your details if the role is filled by someone else, so it can contact you about future openings. You can leave it unticked, and your application is treated the same either way.",
+          "A clinic can only choose **Kept for future roles** on your application if you ticked the box, and you see that status in My applications. You can ask the clinic to delete your details at any time. Write to privacy@eyecarejobs.ca and we will ask the clinic for you.",
+        ],
+      },
+      {
+        id: "withdraw-an-application",
+        title: "How do I withdraw an application?",
+        answer: [
+          "You can withdraw at any step until the application is closed, including after an interview or an offer. The clinic sees the application as **Withdrawn**. We do not ask you to confirm, so the change happens as soon as you press the button.",
+          "A withdrawn application cannot be sent again. You can apply to a job only once, so if you change your mind, contact the clinic directly.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead.",
+          "Choose **View details** on the application.",
+          "Scroll to **Need to step back?** and press **Withdraw my application**.",
+        ],
+        links: [{ label: "My applications", href: "/candidate/applications" }],
+      },
+      {
+        id: "private-until-you-apply",
+        title: "Is my profile private until I apply?",
+        answer: [
+          "Yes. Clinics cannot search for you or browse candidate profiles. A clinic sees you only through an application you send to it, and only what you sent with it: your cover note, your CV, and your name, email address, role, licences, experience and availability as they were the day you applied, plus your phone number if you added one. What you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics.",
+          "Your CV is stored privately, and a clinic can open it only through a link that works for 1 minute. The topic [Who can see my details?](/help#who-can-see-your-details) has the full picture, and the privacy policy has the rest.",
+        ],
+        links: [{ label: "Privacy policy", href: "/privacy" }],
       },
     ],
   },
