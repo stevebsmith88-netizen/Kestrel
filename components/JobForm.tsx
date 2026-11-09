@@ -73,8 +73,10 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const [payMax, setPayMax] = useState(initial.pay_max);
   const [alsoPercent, setAlsoPercent] = useState(initial.pay_percent_too === "yes");
   // Daily rates, daily minimums and percentages are for optometrist roles. For any other role the choice falls back to a salary.
+  // Until a role is chosen, every choice is offered, so nobody has to pick the role first to see them.
   const isOptometrist = role === OPTOMETRIST_ROLE;
-  const bases = isOptometrist ? PAY_BASES : PAY_BASES.filter((b) => !OPTOMETRIST_ONLY_BASES.includes(b.value));
+  const roleChosen = role !== "";
+  const bases = !roleChosen || isOptometrist ? PAY_BASES : PAY_BASES.filter((b) => !OPTOMETRIST_ONLY_BASES.includes(b.value));
   const basis = bases.some((b) => b.value === payBasis) ? payBasis : "year";
   const money = MONEY_BOXES[basis];
   const showPercent = basis === "percent" || (basis === "day_minimum" && alsoPercent);
@@ -139,7 +141,7 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
 
       <h2 className="formh">Pay</h2>
       <p className="help formnote">A pay range is required on every post, however the pay is worked out. Words such as &quot;negotiable&quot; or &quot;discussed at interview&quot; are not accepted on their own. Enter the range you expect to pay, even if the final offer may be higher. Pay is shown to everyone. This follows the pay transparency rules in Ontario and British Columbia.</p>
-      <Choices key={bases.length} name="payPeriod" label="How is the pay worked out?" options={bases} value={basis} onChange={setPayBasis} error={e.payPeriod} hint={isOptometrist ? undefined : "Daily rates and percentages are available when the role is Optometrist."} />
+      <Choices key={bases.length} name="payPeriod" label="How is the pay worked out?" options={bases} value={basis} onChange={setPayBasis} error={e.payPeriod} hint={!roleChosen || isOptometrist ? undefined : "Daily rates and percentages are available when the role is Optometrist."} />
       {money && (
         <>
           <div className="pair">
