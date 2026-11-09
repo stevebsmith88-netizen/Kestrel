@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
+import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
 import { getMyEmployer } from "@/lib/clinic";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
@@ -156,10 +157,18 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}${savedTemplate ? "&template=1" : templateFailed ? "&template=failed" : ""}`);
 }
 
-// Live job: close it. Job in review: take it back to a draft so it can be changed.
+// Each dashboard button does its work in a plain function that hands back the key of the message to show (lib/dashboard-notices.ts).
+// There are 2 ways to use it. The page buttons use the "Quiet" versions: they save, refresh the dashboard where it stands, and let the
+// page show the message in place, so nothing jumps to the top. The older versions send the person to /clinic?notice=... and are kept
+// for pages that need to go somewhere afterwards (the job ending page) and for browsers without scripts.
+const quiet = (notice: string): QuickState => {
+  revalidatePath("/clinic");
+  return { notice };
+};
+
 // Clears one or more of the green "approved and now live" messages on the dashboard. Kept in a cookie in this browser (see
 // lib/notice-dismiss.ts), so it changes nothing in the database and nothing about the jobs.
-export async function dismissNotices(form: FormData) {
+async function doDismiss(form: FormData) {
   await requireRole("clinic");
   const ids = form.getAll("id").map(String);
   const jar = await cookies();
@@ -170,32 +179,49 @@ export async function dismissNotices(form: FormData) {
     path: "/clinic",
     maxAge: DISMISS_DAYS * 86_400,
   });
+}
+
+export async function dismissNotices(form: FormData) {
+  await doDismiss(form);
   redirect("/clinic");
 }
 
-export async function closeJob(form: FormData) {
+export async function dismissNoticesQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  await doDismiss(form);
+  revalidatePath("/clinic");
+  return null;
+}
+
+// A live job, or a draft or rejected one that was live before, can be closed. Closing keeps the record for candidates.
+async function doClose(form: FormData) {
   await requireRole("clinic");
   const id = idFrom(form);
   const db = await supabaseServer();
-  // A live job, or a draft or rejected one that was live before, can be closed. Closing keeps the record for candidates.
   if (id && db) await db.from("jobs").update({ status: "closed" }).eq("id", id).in("status", ["live", "draft", "rejected"]);
   revalidatePath("/clinic");
-  redirect("/clinic?notice=job-closed");
+  return "job-closed";
+}
+
+export async function closeJob(form: FormData) {
+  redirect(`/clinic?notice=${await doClose(form)}`);
+}
+
+export async function closeJobQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  return quiet(await doClose(form));
 }
 
 // Another 30 days for a job near the end of its run, or one that ended in the last 7 days. The wording was
 // already approved, so it goes straight back up without review. The clinic is checked first, then the change is
 // made on the server, because clinics cannot change a live or expired job themselves.
 // Free while we launch. When paid posts start, this is where an extension will be charged (or counted against a pass).
-export async function extendJob(form: FormData) {
+async function doExtend(form: FormData) {
   const session = await requireRole("clinic");
   const id = idFrom(form);
-  const back = String(form.get("from") ?? "") === "ending" && id ? `/clinic/jobs/${id}/ending` : "/clinic";
   const employer = await getMyEmployer(session.userId);
   const admin = supabaseAdmin();
-  if (!id || !employer || !admin) redirect(`${back}?notice=job-extend-failed`);
+  if (!id || !employer || !admin) return "job-extend-failed";
   const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count").eq("id", id).eq("employer_id", employer.id).maybeSingle();
-  if (!job || !canExtend(job)) redirect(`${back}?notice=job-extend-blocked`);
+  if (!job || !canExtend(job)) return "job-extend-blocked";
   const until = extendedUntil(job).toISOString();
   const { error } = await admin
     .from("jobs")
@@ -203,35 +229,63 @@ export async function extendJob(form: FormData) {
     .eq("id", id)
     .eq("employer_id", employer.id)
     .in("status", ["live", "expired"]);
-  if (error) redirect(`${back}?notice=job-extend-failed`);
+  if (error) return "job-extend-failed";
   revalidatePath("/clinic");
   revalidatePath("/jobs");
   revalidatePath(`/jobs/${id}`);
-  redirect("/clinic?notice=job-extended");
+  return "job-extended";
 }
 
-export async function withdrawJob(form: FormData) {
+export async function extendJob(form: FormData) {
+  const id = idFrom(form);
+  const key = await doExtend(form);
+  // A success always lands on the dashboard. A problem goes back to the page the button was on (the job ending page, or the dashboard).
+  const back = String(form.get("from") ?? "") === "ending" && id ? `/clinic/jobs/${id}/ending` : "/clinic";
+  redirect(key === "job-extended" ? `/clinic?notice=${key}` : `${back}?notice=${key}`);
+}
+
+export async function extendJobQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  return quiet(await doExtend(form));
+}
+
+async function doWithdraw(form: FormData) {
   await requireRole("clinic");
   const id = idFrom(form);
   const db = await supabaseServer();
   if (id && db) await db.from("jobs").update({ status: "draft" }).eq("id", id).eq("status", "in_review");
   revalidatePath("/clinic");
-  redirect("/clinic?notice=job-withdrawn");
+  return "job-withdrawn";
 }
 
-export async function deleteJob(form: FormData) {
+export async function withdrawJob(form: FormData) {
+  redirect(`/clinic?notice=${await doWithdraw(form)}`);
+}
+
+export async function withdrawJobQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  return quiet(await doWithdraw(form));
+}
+
+// Only a job that was never live and has no applications can be deleted. The database enforces this too.
+// Anything else is closed instead, so candidates keep their record of applying.
+async function doDelete(form: FormData) {
   await requireRole("clinic");
   const id = idFrom(form);
   const db = await supabaseServer();
-  // Only a job that was never live and has no applications can be deleted. The database enforces this too.
-  // Anything else is closed instead, so candidates keep their record of applying.
   let removed = false;
   if (id && db) {
     const { data } = await db.from("jobs").delete().eq("id", id).in("status", ["draft", "rejected"]).is("posted_at", null).select("id");
     removed = Boolean(data?.length);
   }
   revalidatePath("/clinic");
-  redirect(`/clinic?notice=${removed ? "job-deleted" : "job-delete-blocked"}`);
+  return removed ? "job-deleted" : "job-delete-blocked";
+}
+
+export async function deleteJob(form: FormData) {
+  redirect(`/clinic?notice=${await doDelete(form)}`);
+}
+
+export async function deleteJobQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  return quiet(await doDelete(form));
 }
 
 // Starts a new draft from an old job (one that has closed or expired), so it can be posted again
