@@ -656,3 +656,7 @@ fieldset.tagrow .lab { padding: 0; }
 .jobfacts .facts div{border-top:1px solid var(--line)}
 .jobfacts .facts div:first-child{border-top:1px solid var(--line)}
 .jobfacts .facts .wide{grid-column:1/-1}
+/* On a phone the full Apply box is under the job, so a small button at the top jumps down to it. */
+.applytop{display:none;margin:14px 0 0}
+.applybox{scroll-margin-top:16px}
+@media (max-width:900px){.applytop{display:block}}

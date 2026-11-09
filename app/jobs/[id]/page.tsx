@@ -61,6 +61,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             {job.is_seeded && !clinic?.claimed && (
               <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed. <Link href={`/jobs/${job.id}/claim`}>Is this your clinic? Claim this listing</Link></p>
             )}
+            <p className="applytop"><a href="#apply" className="btn sm">Apply</a></p>
           </header>
 
           <div className="jobgrid">
@@ -97,7 +98,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             </div>
 
             <aside className="jobaside">
-              <section className="card applybox">
+              <section className="card applybox" id="apply">
                 <h2>Apply</h2>
                 {job.apply_method === "external" && job.apply_url ? (
                   <>
