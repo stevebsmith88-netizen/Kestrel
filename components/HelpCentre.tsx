@@ -4,7 +4,7 @@ import HelpControls from "@/components/HelpControls";
 import type { HelpSection } from "@/lib/help";
 
 // The help centre: 3 sections, each a native details box, and inside each one every topic is a details box too. Everything starts closed.
-// It works with the keyboard, with a screen reader and without JavaScript. HelpControls adds the deep link opening and the Expand all and Collapse all buttons.
+// It works with the keyboard, with a screen reader and without JavaScript. HelpControls adds the search box, the deep link opening and the Expand all and Collapse all buttons.
 export default function HelpCentre({ sections }: { sections: readonly HelpSection[] }) {
   return (
     <div id="help-root">
@@ -18,7 +18,7 @@ export default function HelpCentre({ sections }: { sections: readonly HelpSectio
           <div className="help-body">
             <p className="help-intro">{s.intro}</p>
             {s.topics.map((t) => (
-              <details className="help-topic" id={t.id} key={t.id}>
+              <details className="help-topic" id={t.id} key={t.id} data-keywords={t.keywords?.join(" ")}>
                 <summary>{t.title}</summary>
                 <div className="help-answer">
                   {t.answer.map((p, i) => <p key={i}><Inline text={p} sameDocument /></p>)}
