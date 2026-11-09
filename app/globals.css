@@ -78,6 +78,8 @@ input.other{margin-top:10px}
 .sitefoot a:hover{color:#fff;text-decoration:none;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.75)}
 .sitefoot a:focus-visible{outline:3px solid #fff;outline-offset:2px;box-shadow:none}
 .sf-brand a{min-height:0;display:inline-block;padding:0;margin-left:0}
+/* The wordmark is a plain home link, as in the header: no box on hover. Keyboard focus still shows the ring. */
+.sitefoot .sf-brand a:hover{background:none;box-shadow:none}
 .sf-bottom{margin-top:30px;border-top:1px solid #34456A;padding:6px 0 26px;display:flex;justify-content:space-between;align-items:center;gap:6px 24px;flex-wrap:wrap}
 .sf-legal{display:flex;flex-wrap:wrap;gap:0 22px}
 .sitefoot .sf-legal a{font-weight:400;color:#C9D1DA;font-size:.875rem}
