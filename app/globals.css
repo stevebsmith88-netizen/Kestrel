@@ -650,7 +650,7 @@ fieldset.tagrow .lab { padding: 0; }
 .taglist dd { margin: 0 0 0.6rem; }
 .notice.warn{background:#FBF1E3;border-color:#E6CDA5;color:#6B4A12}
 .notice.warn a{color:#6B4A12}
-.jobfacts{margin-top:24px}
+.jobmain{display:flex;flex-direction:column;gap:24px;min-width:0}
 .jobfacts h2{font:400 1.5rem/1.2 "DM Serif Display",Georgia,serif;margin:0 0 10px}
 .jobfacts .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));column-gap:40px}
 .jobfacts .facts div{border-top:1px solid var(--line)}
