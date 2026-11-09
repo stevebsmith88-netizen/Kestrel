@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import QuickActionForm from "@/components/QuickActionForm";
+import ToastHost from "@/components/ToastHost";
 import Icon from "@/components/Icon";
 import GettingStarted from "@/components/GettingStarted";
 import StatusBadge from "@/components/StatusBadge";
@@ -12,11 +14,12 @@ import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
 import { getMyJobNumbers } from "@/lib/job-stats-data";
-import { closeJob, deleteJob, dismissNotices, extendJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
+import { closeJobQuiet, deleteJobQuiet, dismissNoticesQuiet, extendJobQuiet, repostJob, withdrawJobQuiet } from "@/lib/clinic-actions";
 import { DISMISS_COOKIE, parseDismissed, visibleNotices } from "@/lib/notice-dismiss";
 import { canExtend } from "@/lib/job-ending";
-import { saveJobAsTemplate } from "@/lib/template-actions";
+import { saveJobAsTemplateQuiet } from "@/lib/template-actions";
 import { jobNotices } from "@/lib/clinic-notices";
+import { DASHBOARD_NOTICES, noticeTone } from "@/lib/dashboard-notices";
 import { daysLeft, employmentLabel, longDate } from "@/lib/jobs";
 import { payBasisOf, payText } from "@/lib/job-pay";
 
@@ -24,25 +27,6 @@ export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jo
 
 export const dynamic = "force-dynamic";
 
-const NOTICES: Record<string, string> = {
-  "profile-created": "Your clinic profile is saved. You can post your first job now.",
-  "job-saved": "Your draft is saved.",
-  "job-submitted": "Your job is with our team. We check every post, usually within 1 business day, and it goes live as soon as it is approved.",
-  "job-closed": "The job is closed and no longer shown to candidates.",
-  "job-withdrawn": "The job is back in your drafts, so you can change it and send it again.",
-  "job-deleted": "The job is deleted.",
-  "job-delete-blocked": "That job can't be deleted because it has been live or has applications. Close it instead, so candidates keep their record.",
-  "job-edited": "Your changes are with our team. The job is offline until we approve them, usually within 1 business day. Its 30 days keep running.",
-  "template-saved": "Saved as a template. Start a new post from it under Post a job.",
-  "template-limit": "You have 20 templates already. Delete one under Post a job, then try again.",
-  "template-failed": "We couldn't save that template. Please try again.",
-  "job-limit": "You have 10 open jobs already. Close or delete one, then try again.",
-  "job-repost-failed": "We couldn't copy that job. Please try again.",
-  "job-extended": "Done. Your job is live for another 30 days, with the same wording.",
-  "job-extend-blocked": "That job can't be extended right now. A live job can be extended in its last 7 days, and an ended one within 7 days of ending.",
-  "job-extend-failed": "We couldn't extend the job. Please try again, or email us and we'll do it for you.",
-  "job-filled": "Thank you. The job is closed and marked as filled, and anyone still waiting has been told.",
-};
 
 export default async function ClinicHome({ searchParams }: { searchParams: Promise<{ notice?: string; template?: string }> }) {
   const session = await requireRole("clinic");
@@ -67,7 +51,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
         <div className="wrap">
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
+          {notice && DASHBOARD_NOTICES[notice] && <p className={noticeTone(notice) === "warn" ? "notice warn" : "notice"} role="status">{DASHBOARD_NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
           {notices.map((n) =>
             n.kind === "approved" ? (
@@ -75,10 +59,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                 <p>{n.text}</p>
                 <div className="noticeacts">
                   <Link href={`/jobs/${n.id}`} className="btn sm">See your job</Link>
-                  <form action={dismissNotices}>
-                    <input type="hidden" name="id" value={n.id} />
-                    <button type="submit" className="linkbtn" aria-label={`Dismiss the message about ${n.title}`}><Icon name="close" />Dismiss</button>
-                  </form>
+                  <QuickActionForm action={dismissNoticesQuiet} ids={[n.id]} className="linkbtn" label={`Dismiss the message about ${n.title}`}><Icon name="close" />Dismiss</QuickActionForm>
                 </div>
               </div>
             ) : (
@@ -91,10 +72,9 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
             ),
           )}
           {approvals.length > 1 && (
-            <form action={dismissNotices} className="noticeclear">
-              {approvals.map((n) => <input type="hidden" name="id" value={n.id} key={n.id} />)}
-              <button type="submit" className="linkbtn">Clear all {approvals.length} approval messages</button>
-            </form>
+            <div className="noticeclear">
+              <QuickActionForm action={dismissNoticesQuiet} ids={approvals.map((n) => n.id)} className="linkbtn">Clear all {approvals.length} approval messages</QuickActionForm>
+            </div>
           )}
 
           {!employer ? (
@@ -153,7 +133,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                             </Link>
                           )}
                           {canExtend(j) && (
-                            <form action={extendJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className={applicants[j.id] ? "btn sm ghost" : "btn sm"}>Extend 30 days</button></form>
+                            <QuickActionForm action={extendJobQuiet} ids={[j.id]} className={applicants[j.id] ? "btn sm ghost" : "btn sm"}>Extend 30 days</QuickActionForm>
                           )}
                           {(j.status === "closed" || j.status === "expired") && (
                             <form action={repostJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm ghost"><Icon name="refresh" />Post again</button></form>
@@ -166,19 +146,19 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                             <Link href={`/clinic/jobs/${j.id}/ending`} className="linkbtn"><Icon name="check" />Filled it?</Link>
                           )}
                           {j.status !== "draft" && (
-                            <form action={saveJobAsTemplate}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn"><Icon name="copy" />Save as template</button></form>
+                            <QuickActionForm action={saveJobAsTemplateQuiet} ids={[j.id]} className="linkbtn"><Icon name="copy" />Save as template</QuickActionForm>
                           )}
                           {j.status === "live" && (
-                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn"><Icon name="close" />Close</button></form>
+                            <QuickActionForm action={closeJobQuiet} ids={[j.id]} className="linkbtn"><Icon name="close" />Close</QuickActionForm>
                           )}
                           {j.status === "in_review" && (
-                            <form action={withdrawJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Take back to edit</button></form>
+                            <QuickActionForm action={withdrawJobQuiet} ids={[j.id]} className="linkbtn">Take back to edit</QuickActionForm>
                           )}
                           {(j.status === "draft" || j.status === "rejected") && (j.posted_at || applicants[j.id]) && (
-                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn"><Icon name="close" />Close</button></form>
+                            <QuickActionForm action={closeJobQuiet} ids={[j.id]} className="linkbtn"><Icon name="close" />Close</QuickActionForm>
                           )}
                           {(j.status === "draft" || j.status === "rejected") && !j.posted_at && !applicants[j.id] && (
-                            <form action={deleteJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn warn"><Icon name="trash" />Delete</button></form>
+                            <QuickActionForm action={deleteJobQuiet} ids={[j.id]} className="linkbtn warn"><Icon name="trash" />Delete</QuickActionForm>
                           )}
                         </div>
                       </div>
@@ -190,6 +170,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
           )}
         </div>
       </main>
+      <ToastHost />
       <AppFooter />
     </>
   );
