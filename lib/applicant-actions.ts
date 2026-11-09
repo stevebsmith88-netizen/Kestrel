@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { APP_LABELS, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
+import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { candidateRecipient } from "@/lib/recipient";
 import type { JobFormState } from "@/lib/jobs";
@@ -122,6 +122,24 @@ export async function declineSelectedQuiet(_prev: QuickState, form: FormData): P
   return bulkAnswer(declinedText(done));
 }
 
+// The clinic names the person it hired. Their application moves to Hired (a final step), the job remembers which application it was, and
+// the candidate is told, by email unless they turned those emails off, and in their account. Only someone still in the running can be named.
+async function markHired(jobId: string, applicationId: string): Promise<boolean> {
+  const db = await supabaseServer();
+  const admin = supabaseAdmin();
+  if (!db || !admin) return false;
+  const { data: app } = await db.from("applications").select("id, status, job_title, clinic_name, applicant, candidate_id").eq("id", applicationId).eq("job_id", jobId).in("status", [...HIREABLE]).maybeSingle();
+  if (!app) return false;
+  const message = messageTemplate("hired", app.clinic_name);
+  const now = new Date().toISOString();
+  const { error } = await admin.from("applications").update({ status: "hired", clinic_message: message, status_changed_at: now, updated_at: now }).eq("id", app.id);
+  if (error) return false;
+  await admin.from("application_events").insert({ application_id: app.id, status: "hired", note: message });
+  await admin.from("jobs").update({ filled_application_id: app.id }).eq("id", jobId);
+  await tellCandidate(admin, app, "hired", message);
+  return true;
+}
+
 // The role is filled: close the job, let everyone still waiting know, kindly, and record how the clinic filled it
 // if they told us (from the job's ending page). An expired job is not reopened; only the answer is saved.
 export async function fillRole(form: FormData) {
@@ -137,6 +155,10 @@ export async function fillRole(form: FormData) {
   const { via, other } = parseFillSource(form.get("filledVia"), form.get("filledViaOther"));
   const admin = supabaseAdmin();
   if (admin) await admin.from("jobs").update({ filled_at: new Date().toISOString(), filled_via: via, filled_via_other: other }).eq("id", jobId);
+  // If the clinic says it found the person through Kestrel and names them, that person is marked as Hired and told first, so they are
+  // not then sent the "role filled" message below (it only goes to people still waiting).
+  const hiredId = via === "kestrel" ? String(form.get("hiredApplicationId") ?? "") : "";
+  if (UUID.test(hiredId)) await markHired(jobId, hiredId);
   const done = await closeWaiting(jobId, null, "role_filled");
   revalidatePath("/clinic");
   revalidatePath("/jobs");

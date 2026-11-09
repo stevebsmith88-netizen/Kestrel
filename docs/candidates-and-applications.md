@@ -44,3 +44,14 @@ A list of up to 8 jobs on the candidate's home page, chosen by plain rules with 
 ## Shortlisting is private to the clinic (decided with Steve, November 2026)
 
 A shortlist is the clinic's own working list. The candidate is not emailed, and no message goes with it, whether the clinic shortlists one person on their application or ticks several on the applicants page. A candidate is also never shown "Shortlisted": their own pages and their data download show "Viewed" until the clinic invites them to interview, makes an offer or closes the application (`candidateStatus` and `candidateHistory` in `lib/applications.ts`, used by `lib/candidate.ts` and `app/account/export/route.ts`). The clinic still sees Shortlisted everywhere. Any new place that shows a candidate their own application status should use these helpers.
+
+## Hired (decided with Steve, November 2026, migration 0036)
+
+When a clinic marks a job as filled and says it found the person through Kestrel (the "How did you find the person?" list on the job's "Filled it?" page and on the applicants page), a second list asks "Who did you hire?" and shows everyone still in the running (`HIREABLE` in `lib/applications.ts`: applied, viewed, shortlisted, interview, offer). The person named:
+
+- moves to a new final step, **Hired**, which sits with the offers in the lists and ends both progress bars (a clinic sees 6 steps, a candidate 5);
+- is told by email (unless they turned status emails off) and in their account, with a warm message that names the clinic;
+- is left out of the "role filled" message that goes to everyone else still waiting (`markHired` runs before `closeWaiting` in `fillRole`, `lib/applicant-actions.ts`);
+- is remembered on the job as `jobs.filled_application_id`, so Kestrel can count hires made through the site. Nothing shows that count yet. A tile in Admin is the natural next step.
+
+Hired cannot be chosen from the one application status form, and a hired application cannot be moved on. One hire per job: a clinic filling 2 roles from one advert is a question for the time of posting (a number of openings), not for this step. Run migration 0036 on both databases before merging the code that uses it.

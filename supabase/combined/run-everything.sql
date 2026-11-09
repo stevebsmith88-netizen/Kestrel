@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0035), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0036), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -2243,6 +2243,24 @@ $$;
 revoke execute on function public.keep_live_version() from public, anon, authenticated;
 
 -- ======================================================================
+-- 0036_hired.sql
+-- ======================================================================
+-- 0036: "Hired" (Steve, 10th November 2026).
+--   * A clinic that fills a job through Kestrel can say which applicant it hired. That application moves to a new final step, "hired", and the
+--     candidate is told. The job remembers which application it was, so Kestrel can count hires made through the site.
+--   * Nothing else changes. Existing applications and jobs are untouched and still valid.
+-- Safe to run more than once.
+
+alter table public.applications drop constraint if exists applications_status_check;
+alter table public.applications add constraint applications_status_check check (status in (
+  'applied', 'viewed', 'shortlisted', 'interview', 'offer', 'hired',
+  'not_selected', 'role_filled', 'kept', 'no_update', 'withdrawn'));
+
+-- Set by the website's server when the clinic names the person it hired. Clinics cannot write it themselves (there is no column
+-- permission for it), and if the application is ever deleted the job simply forgets it.
+alter table public.jobs add column if not exists filled_application_id uuid references public.applications (id) on delete set null;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2306,6 +2324,8 @@ from (
     ('permission: candidates can save their job preferences', has_column_privilege('authenticated', 'public.candidate_profiles', 'home_city', 'UPDATE')),
     ('column: days a week on a daily rate', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_days_per_week')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('column: the application a clinic hired for a filled job', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'filled_application_id')),
+    ('rule: applications can be hired', exists (select 1 from pg_constraint where conname = 'applications_status_check' and pg_get_constraintdef(oid) like '%hired%')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

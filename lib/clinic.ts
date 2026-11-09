@@ -1,4 +1,5 @@
 import "server-only";
+import { HIREABLE } from "@/lib/applications";
 import { supabaseServer } from "@/lib/supabase/server";
 import type { JobStatus } from "@/lib/jobs";
 
@@ -85,6 +86,17 @@ export async function getApplicantCounts(): Promise<Record<string, { total: numb
     if (row.status === "applied") c.fresh += 1;
   });
   return counts;
+}
+
+// The people a clinic can name as the one it hired for a job: everyone who applied and is still in the running.
+// The database only returns applications for this clinic's own jobs.
+export type HireCandidate = { id: string; name: string; status: string };
+
+export async function getHireCandidates(jobId: string): Promise<HireCandidate[]> {
+  const db = await supabaseServer();
+  if (!db) return [];
+  const { data } = await db.from("applications").select("id, status, applicant").eq("job_id", jobId).in("status", [...HIREABLE]).order("created_at", { ascending: true });
+  return (data ?? []).map((a) => ({ id: a.id as string, status: a.status as string, name: String((a.applicant as { name?: string } | null)?.name ?? "").trim() || "Applicant" }));
 }
 
 export async function getMyJob(id: string): Promise<MyJob | null> {

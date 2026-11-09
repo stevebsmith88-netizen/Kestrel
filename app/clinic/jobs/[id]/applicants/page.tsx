@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import BulkApplicantPanel from "@/components/BulkApplicantPanel";
+import FilledViaFields from "@/components/FilledViaFields";
 import ToastHost from "@/components/ToastHost";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
-import { GROUP_LABELS, groupOf, type Group } from "@/lib/applications";
+import { GROUP_LABELS, HIREABLE, groupOf, type Group } from "@/lib/applications";
 import { declineSelected, declineSelectedQuiet, fillRole, interviewSelectedQuiet, shortlistSelectedQuiet } from "@/lib/applicant-actions";
 import { BULK_PROBLEMS, declinedText } from "@/lib/bulk-notices";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
@@ -42,6 +43,8 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   const active: Group | "all" = (FILTERS as string[]).includes(filter ?? "") ? (filter as Group | "all") : "all";
   const count = (f: Group | "all") => (f === "all" ? rows.length : rows.filter((r) => groupOf(r.status) === f).length);
   const waiting = rows.filter((r) => WAITING.includes(r.status));
+  // The people the clinic could name as the one it hired, for the "role filled" form.
+  const hireCandidates = rows.filter((r) => (HIREABLE as readonly string[]).includes(r.status)).map((r) => ({ id: r.id, status: r.status, name: r.applicant?.name?.trim() || "Applicant" }));
   const sentCount = Number.parseInt(sent ?? "", 10);
   const shown = active === "all" ? rows : rows.filter((r) => groupOf(r.status) === active);
   // When any row has a tick box, every row gets the tick box column, so the names line up down the page.
@@ -107,13 +110,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               <input type="hidden" name="jobId" value={id} />
               <h2>Role filled?</h2>
               <p className="help">This closes the job and lets the {waiting.length} {waiting.length === 1 ? "person" : "people"} still waiting know it has been filled. Candidates in an interview or with an offer are not changed.</p>
-              <div className="row">
-                <label className="lab" htmlFor="filledVia">How did you find the person?</label>
-                <select id="filledVia" name="filledVia" defaultValue="">
-                  <option value="">Choose one (optional)</option>
-                  {FILL_SOURCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-                </select>
-              </div>
+              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="ap" />
               <label className="consent"><input type="checkbox" name="confirm" value="yes" required /><span>Yes, close this job and tell everyone who is waiting.</span></label>
               <div><button type="submit" className="btn sm">The role is filled</button></div>
             </form>
