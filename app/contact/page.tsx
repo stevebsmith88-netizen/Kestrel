@@ -17,7 +17,7 @@ export default async function Contact() {
       <main id="main" tabIndex={-1} className="legal">
         <div className="wrap legal-wrap">
           <h1>Contact us</h1>
-          <p>A person on the Kestrel team reads every message. We aim to reply within 2 business days.</p>
+          <p>A person on the Kestrel team reads every message. We aim to reply promptly, within 1 to 3 business days.</p>
 
           <h2>General questions and help</h2>
           <p><a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a></p>

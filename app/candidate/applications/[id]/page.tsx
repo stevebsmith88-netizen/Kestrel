@@ -44,7 +44,7 @@ export default async function ApplicationDetail({ params, searchParams }: { para
               <AppStatusBadge status={a.status} />
             </div>
             <p className="meta">{APP_EXPLAINERS[a.status as AppStatus]}</p>
-            <Steps current={a.status} history={statuses} />
+            <Steps current={a.status} history={statuses} forCandidate />
           </section>
 
           {a.clinic_message && (

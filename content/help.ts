@@ -153,7 +153,7 @@ export const HELP: HelpSection[] = [
         title: "How do I contact you?",
         keywords: ["support", "help", "email", "hello", "privacy officer", "reach", "question", "feedback"],
         answer: [
-          "A person on the Kestrel team reads every message, and we aim to reply within 2 business days.",
+          "A person on the Kestrel team reads every message, and we aim to reply promptly, within 1 to 3 business days.",
           "For general questions and help, write to hello@eyecarejobs.ca. To see, correct or remove your information, write to privacy@eyecarejobs.ca. To report a job, use the **Report this job** link on the job's page.",
         ],
         links: [{ label: "Contact page", href: "/contact" }],

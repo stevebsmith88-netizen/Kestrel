@@ -5,6 +5,7 @@ import {
   CLOSED,
   activeContent,
   STEPS,
+  CANDIDATE_STEPS,
   candidateHistory,
   candidateStatus,
   clinicMoveError,
@@ -117,4 +118,11 @@ test("a candidate never sees Shortlisted: it shows as Viewed, once, in their his
   const events = [{ status: "applied" }, { status: "viewed" }, { status: "shortlisted" }, { status: "interview" }];
   assert.deepEqual(candidateHistory(events).map((e) => e.status), ["applied", "viewed", "interview"]);
   assert.deepEqual(candidateHistory([{ status: "applied" }, { status: "shortlisted" }]).map((e) => e.status), ["applied", "viewed"], "shortlisted straight from applied still shows a Viewed step");
+});
+
+test("a candidate's progress bar has 4 steps and never shows Shortlisted", () => {
+  assert.deepEqual([...CANDIDATE_STEPS], ["applied", "viewed", "interview", "offer"]);
+  assert.equal(reachedStep(["applied", "viewed"], "interview", CANDIDATE_STEPS), 2);
+  assert.equal(reachedStep(["applied", "viewed"], "not_selected", CANDIDATE_STEPS), 1);
+  assert.equal(reachedStep(["applied", "viewed", "shortlisted"], "not_selected"), 2, "a clinic still sees 5 steps");
 });

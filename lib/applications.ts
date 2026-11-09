@@ -34,6 +34,8 @@ export const APP_EXPLAINERS: Record<AppStatus, string> = {
 };
 
 export const STEPS = ["applied", "viewed", "shortlisted", "interview", "offer"] as const;
+// A candidate is never shown Shortlisted (see candidateStatus), so their progress bar has 4 steps. A clinic sees all 5.
+export const CANDIDATE_STEPS = STEPS.filter((s) => s !== "shortlisted");
 export const CLOSED: readonly AppStatus[] = ["not_selected", "role_filled", "kept", "no_update", "withdrawn"];
 export const CLINIC_MOVES: readonly AppStatus[] = ["shortlisted", "interview", "offer", "not_selected", "role_filled", "kept"];
 export const NEEDS_MESSAGE: readonly AppStatus[] = ["interview", "offer", "not_selected", "role_filled", "kept"];
@@ -69,10 +71,10 @@ export function groupOf(status: string): Group {
 
 // How far along the five steps an application got, from its history. Used to draw the
 // progress bar for closed applications.
-export function reachedStep(history: string[], current: string) {
+export function reachedStep(history: string[], current: string, steps: readonly string[] = STEPS) {
   let best = -1;
   [...history, current].forEach((s) => {
-    const i = (STEPS as readonly string[]).indexOf(s);
+    const i = steps.indexOf(s);
     if (i > best) best = i;
   });
   return Math.max(best, 0);
