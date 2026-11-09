@@ -8,6 +8,7 @@ export type HelpTopic = {
   answer: string[]; // short paragraphs. [text](/path) makes a link and **text** makes bold text, as in the blog.
   steps?: string[]; // optional numbered steps, in the order a person sees them
   links?: HelpLink[]; // optional buttons to the real page where the thing is done
+  keywords?: string[]; // optional extra words people use for this (resume, cancel, forgot). Only the search reads them; they are never shown.
 };
 
 export type HelpSectionId = "general" | "candidates" | "clinics";
@@ -31,5 +32,31 @@ export function linkedHelpIds(text: string): string[] {
 
 // Every piece of text a topic holds, so the tests can check them all the same way.
 export function topicText(topic: HelpTopic): string[] {
-  return [topic.title, ...topic.answer, ...(topic.steps ?? []), ...(topic.links ?? []).map((l) => l.label)];
+  return [topic.title, ...topic.answer, ...(topic.steps ?? []), ...(topic.links ?? []).map((l) => l.label), ...(topic.keywords ?? [])];
 }
+
+// ---------------------------------------------------------------- search
+// The search box on /help. Kept free of the page so the rules can be tested (lib/help.test.ts). A search matches a topic when every word typed
+// is the start of a word in the topic's title, answer, steps or keywords. Capitals, accents and punctuation do not matter, and a plural
+// matches its singular ("alerts" finds "alert").
+
+const fold = (text: string) => text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const stem = (word: string) => (word.length >= 3 && word.endsWith("s") ? word.slice(0, -1) : word);
+
+export const searchWords = (text: string): string[] => fold(text).split(" ").filter(Boolean).map(stem);
+
+export function topicMatches(query: string, haystack: string): boolean {
+  const wanted = searchWords(query);
+  if (wanted.length === 0) return true;
+  const words = searchWords(haystack);
+  return wanted.every((w) => words.some((h) => h.startsWith(w)));
+}
+
+// Everything the search can read for a topic, without the link addresses and bold marks.
+export function topicHaystack(topic: HelpTopic): string {
+  const plain = (t: string) => t.replace(/\]\([^)]*\)/g, "").replace(/[*[]/g, "");
+  return [...topicText(topic).map(plain), ...(topic.keywords ?? [])].join(" ");
+}
+
+// When this many topics or fewer match, the search opens them so the answer is already showing.
+export const SEARCH_OPEN_LIMIT = 5;
