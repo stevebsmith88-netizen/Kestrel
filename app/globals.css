@@ -181,6 +181,9 @@ textarea{resize:vertical;line-height:1.5}
 .jobactions{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .jobrow .note{background:#FBF3EE;border:1px solid #EBCFC0;border-radius:10px;padding:10px 12px;color:#6E3219;margin:10px 0 0}
 @media (max-width:640px){.jobrow,.jobcard{grid-template-columns:1fr}.jobside{align-items:flex-start}.jobactions{justify-content:flex-start}}
+/* The applicants list: a tick box column, then the person, then their status and the Open button. */
+.jobrow.withtick{grid-template-columns:44px minmax(0,1fr) auto}
+@media (max-width:640px){.jobrow.withtick{grid-template-columns:44px minmax(0,1fr)}.jobrow.withtick .jobside{grid-column:2}}
 .badge{display:inline-flex;align-items:center;padding:3px 11px;border-radius:999px;font-size:0.8125rem;font-weight:700;white-space:nowrap}
 .b-live{background:#E3F1EA;color:#1F6B4F}
 .b-in_review{background:#F6E7DF;color:#8C4024}
@@ -655,7 +658,7 @@ fieldset.tagrow .lab { padding: 0; }
 .taglist dd { margin: 0 0 0.6rem; }
 .notice.warn{background:#FBF1E3;border-color:#E6CDA5;color:#6B4A12}
 .notice.warn a{color:#6B4A12}
-.jobmain{display:flex;flex-direction:column;gap:24px;min-width:0}
+.jobpage .jobmain{display:flex;flex-direction:column;gap:24px;min-width:0}
 .jobfacts h2{font:400 1.5rem/1.2 "DM Serif Display",Georgia,serif;margin:0 0 10px}
 .jobfacts .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));column-gap:40px}
 .jobfacts .facts div{border-top:1px solid var(--line)}

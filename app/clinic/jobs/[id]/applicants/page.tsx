@@ -40,6 +40,8 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   const waiting = rows.filter((r) => WAITING.includes(r.status));
   const sentCount = Number.parseInt(sent ?? "", 10);
   const shown = active === "all" ? rows : rows.filter((r) => groupOf(r.status) === active);
+  // When any row has a tick box, every row gets the tick box column, so the names line up down the page.
+  const anyTick = shown.some((r) => WAITING.includes(r.status));
 
   return (
     <>
@@ -73,9 +75,11 @@ export default async function Applicants({ params, searchParams }: { params: Pro
             <input type="hidden" name="jobId" value={id} />
             <div className="joblist">
               {shown.map((r) => (
-                <article className="card jobrow" key={r.id}>
-                  {WAITING.includes(r.status) && (
+                <article className={`card jobrow${anyTick ? " withtick" : ""}`} key={r.id}>
+                  {WAITING.includes(r.status) ? (
                     <label className="rowtick"><input type="checkbox" name="ids" value={r.id} /><span className="sr">Select {r.applicant.name ?? "this applicant"}</span></label>
+                  ) : (
+                    anyTick && <span aria-hidden="true" />
                   )}
                   <div className="jobmain">
                     <h3><Link href={`/clinic/applications/${r.id}`}>{r.applicant.name ?? "Applicant"}</Link></h3>
