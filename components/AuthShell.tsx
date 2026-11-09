@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AppFooter from "@/components/AppFooter";
 import { homeModeNow } from "@/lib/launch";
 import { TAGLINE } from "@/lib/launch-rules";
 
@@ -20,16 +21,7 @@ export default async function AuthShell({ title, intro, children }: { title?: st
           </div>
         </div>
       </main>
-      <footer>
-        <div className="wrap">
-          <span>
-            <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
-          </span>
-          <span>
-            <Link href="/privacy">Privacy policy</Link> &middot; <Link href="/terms">Terms of use</Link> &middot; <Link href="/help">Help</Link>
-          </span>
-        </div>
-      </footer>
+      <AppFooter />
     </>
   );
 }

@@ -182,7 +182,6 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             </>
           )}
           <p className="help"><Link href="/eye-care-jobs">Browse eye care jobs by province and role</Link></p>
-          <p className="help creditline">Place data from <a href="https://www.geonames.org/" rel="noopener">GeoNames</a>, used under CC BY 4.0.</p>
         </div>
       </main>
       <AppFooter />

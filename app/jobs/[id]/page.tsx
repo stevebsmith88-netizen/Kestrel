@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
+import Icon from "@/components/Icon";
 import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
@@ -113,7 +114,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 )}
               </section>
-              <p className="reportlink"><Link href={`/jobs/${job.id}/report`}>Report this job</Link></p>
+              <p className="reportlink"><Link href={`/jobs/${job.id}/report`}><Icon name="warning" />Report this job</Link></p>
             </aside>
           </div>
         </div>

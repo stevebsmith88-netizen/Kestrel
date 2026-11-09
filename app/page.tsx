@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import AppFooter from "@/components/AppFooter";
 import HomeBelowHero from "@/components/HomeBelowHero";
 import LaunchHome from "@/components/LaunchHome";
 import PreLaunchHome from "@/components/PreLaunchHome";
@@ -78,16 +78,7 @@ function ComingSoon() {
 
         <HomeBelowHero />
       </main>
-      <footer>
-        <div className="wrap">
-          <span>
-            <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
-          </span>
-          <span>
-            <Link href="/eye-care-jobs">Jobs by province</Link> &middot; <Link href="/blog">Blog</Link> &middot; <Link href="/resources">Resources</Link> &middot; <Link href="/compare">Compare prices</Link> &middot; <Link href="/privacy">Privacy</Link> &middot; <Link href="/security">Security</Link> &middot; <Link href="/terms">Terms</Link> &middot; <Link href="/posting-policy">Posting policy</Link> &middot; <Link href="/help">Help</Link> &middot; <Link href="/contact">Contact</Link> &middot; &copy; {new Date().getFullYear()} Kestrel Eye Care Jobs
-          </span>
-        </div>
-      </footer>
+      <AppFooter />
     </>
   );
 }

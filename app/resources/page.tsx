@@ -108,6 +108,19 @@ export default async function Resources() {
           <p>
             <Link href="/jobs">Browse eye care jobs</Link> across Canada, or see how Kestrel works <Link href="/clinics">for clinics</Link>.
           </p>
+
+          <h2 id="data-sources">Data sources</h2>
+          <p>Kestrel uses open data from 2 sources.</p>
+          <ul>
+            <li>
+              Place names and positions adapted from <a href="https://www.geonames.org/" rel="noopener">GeoNames</a> (geonames.org), licensed under{" "}
+              <a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>. We filtered the file to Canadian places and reshaped it for our search by city and distance.
+            </li>
+            <li>
+              Typical pay figures come from <a href="https://www.jobbank.gc.ca/" rel="noopener">Job Bank</a>, the Government of Canada&apos;s labour market service, used under the{" "}
+              <a href="https://open.canada.ca/en/open-government-licence-canada" rel="noopener">Open Government Licence, Canada</a>. The pay table above gives the details.
+            </li>
+          </ul>
         </div>
       </main>
       <AppFooter />

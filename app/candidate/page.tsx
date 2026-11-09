@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import Icon from "@/components/Icon";
 import { AppStatusBadge } from "@/components/AppStatus";
 import GettingStarted from "@/components/GettingStarted";
 import { requireRole } from "@/lib/auth";
@@ -101,7 +102,7 @@ export default async function CandidateHome() {
                         <Link href={`/jobs/${j.id}`} className="btn sm" aria-label={`View job: ${j.title}`}>View job</Link>
                         <form action={hideRecommendation}>
                           <input type="hidden" name="jobId" value={j.id} />
-                          <button type="submit" className="btn sm ghost" aria-label={`Not interested in ${j.title}`}>Not interested</button>
+                          <button type="submit" className="btn sm ghost" aria-label={`Not interested in ${j.title}`}><Icon name="close" />Not interested</button>
                         </form>
                       </div>
                     </article>

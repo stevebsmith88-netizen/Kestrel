@@ -1,5 +1,5 @@
 // Places in Canada with about 1,000 people or more, for the city and radius search on the jobs page.
-// Source: GeoNames (https://www.geonames.org), file cities1000, downloaded 5th November 2026, licensed CC BY 4.0. The credit is shown on the jobs page.
+// Source: GeoNames (https://www.geonames.org), file cities1000, downloaded 5th November 2026, licensed CC BY 4.0. The credit is in the Data sources block on the Resources page (/resources#data-sources), which the footer links to.
 // Each row is [name, plain letter name or empty, province number, latitude, longitude, population]. Province numbers follow PLACE_PROVINCES.
 export const PLACE_PROVINCES = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Nova Scotia", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon", "Northwest Territories", "Nunavut"] as const;
 

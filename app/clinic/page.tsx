@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import Icon from "@/components/Icon";
 import GettingStarted from "@/components/GettingStarted";
 import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
@@ -71,16 +72,22 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
           {notices.map((n) =>
             n.kind === "approved" ? (
               <div className="notice noticerow" role="status" key={n.id + n.kind}>
-                <p>{n.text} <Link href={`/jobs/${n.id}`}>See your job</Link></p>
-                <form action={dismissNotices}>
-                  <input type="hidden" name="id" value={n.id} />
-                  <button type="submit" className="linkbtn" aria-label={`Dismiss the message about ${n.title}`}>Dismiss</button>
-                </form>
+                <p>{n.text}</p>
+                <div className="noticeacts">
+                  <Link href={`/jobs/${n.id}`} className="btn sm">See your job</Link>
+                  <form action={dismissNotices}>
+                    <input type="hidden" name="id" value={n.id} />
+                    <button type="submit" className="linkbtn" aria-label={`Dismiss the message about ${n.title}`}><Icon name="close" />Dismiss</button>
+                  </form>
+                </div>
               </div>
             ) : (
-              <p className="notice warn" role="status" key={n.id + n.kind}>
-                {n.text} <Link href={`/clinic/jobs/${n.id}`}>Open it</Link>
-              </p>
+              <div className="notice warn noticerow" role="status" key={n.id + n.kind}>
+                <p>{n.text}</p>
+                <div className="noticeacts">
+                  <Link href={`/clinic/jobs/${n.id}`} className="btn sm ghost">Open it</Link>
+                </div>
+              </div>
             ),
           )}
           {approvals.length > 1 && (
@@ -116,7 +123,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
 
               <div className="listhead">
                 <h2>Your jobs</h2>
-                <Link href="/clinic/jobs/new" className="btn sm">Post a job</Link>
+                <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>
               </div>
 
               {jobs.length === 0 ? (
@@ -124,50 +131,54 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               ) : (
                 <div className="joblist">
                   {jobs.map((j) => (
-                    <article className="card jobrow" key={j.id}>
-                      <div className="jobmain">
-                        <h3>{j.title}</h3>
-                        <p className="meta">
-                          {[employmentLabel(j.employment_type), j.city && j.province ? `${j.city}, ${j.province}` : null, payBasisOf(j) ? payText(j) : null].filter(Boolean).join(" · ") || "Not finished yet"}
-                        </p>
-                        {j.posted_at && <p className="meta">{numbersLine(numbers[j.id])}</p>}
-                        {j.status === "live" && j.expires_at && <p className="meta">Live until {longDate(j.expires_at)} ({daysLeft(j.expires_at)} days left)</p>}
-                        {j.status === "in_review" && <p className="meta">With our team. We usually check posts within 1 business day.</p>}
-                        {j.status === "rejected" && j.review_note && <p className="note"><strong>What to change:</strong> {j.review_note}</p>}
-                      </div>
-                      <div className="jobside">
+                    <article className="card jobrow stacked" key={j.id}>
+                      <div className="jobtop">
+                        <div className="jobmain">
+                          <h3>{j.title}</h3>
+                          <p className="meta">
+                            {[employmentLabel(j.employment_type), j.city && j.province ? `${j.city}, ${j.province}` : null, payBasisOf(j) ? payText(j) : null].filter(Boolean).join(" · ") || "Not finished yet"}
+                          </p>
+                          {j.posted_at && <p className="meta">{numbersLine(numbers[j.id])}</p>}
+                          {j.status === "live" && j.expires_at && <p className="meta">Live until {longDate(j.expires_at)} ({daysLeft(j.expires_at)} days left)</p>}
+                          {j.status === "in_review" && <p className="meta">With our team. We usually check posts within 1 business day.</p>}
+                          {j.status === "rejected" && j.review_note && <p className="note"><strong>What to change:</strong> {j.review_note}</p>}
+                        </div>
                         <StatusBadge status={j.status} />
+                      </div>
+                      <div className="jobfoot">
                         <div className="jobactions">
-                          {(j.status === "draft" || j.status === "rejected" || j.status === "live") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost">Edit</Link>}
-                          {canExtend(j) && (
-                            <form action={extendJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm">Extend 30 days</button></form>
-                          )}
-                          {(j.status === "live" || j.status === "expired") && (
-                            <Link href={`/clinic/jobs/${j.id}/ending`} className="linkbtn">Filled it?</Link>
-                          )}
-                          {(j.status === "closed" || j.status === "expired") && (
-                            <form action={repostJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm ghost">Post again</button></form>
-                          )}
                           {applicants[j.id] && (
                             <Link href={`/clinic/jobs/${j.id}/applicants`} className="btn sm">
                               Applicants ({applicants[j.id].total}{applicants[j.id].fresh ? `, ${applicants[j.id].fresh} new` : ""})
                             </Link>
                           )}
-                          {j.status !== "draft" && (
-                            <form action={saveJobAsTemplate}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Save as template</button></form>
+                          {canExtend(j) && (
+                            <form action={extendJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className={applicants[j.id] ? "btn sm ghost" : "btn sm"}>Extend 30 days</button></form>
                           )}
-                          {j.status === "live" && <Link href={`/jobs/${j.id}`} className="btn sm ghost">View</Link>}
+                          {(j.status === "closed" || j.status === "expired") && (
+                            <form action={repostJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm ghost"><Icon name="refresh" />Post again</button></form>
+                          )}
+                          {(j.status === "draft" || j.status === "rejected" || j.status === "live") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost"><Icon name="pencil" />Edit</Link>}
+                          {j.status === "live" && <Link href={`/jobs/${j.id}`} className="btn sm ghost"><Icon name="eye" />View</Link>}
+                        </div>
+                        <div className="jobactions quiet">
+                          {(j.status === "live" || j.status === "expired") && (
+                            <Link href={`/clinic/jobs/${j.id}/ending`} className="linkbtn"><Icon name="check" />Filled it?</Link>
+                          )}
+                          {j.status !== "draft" && (
+                            <form action={saveJobAsTemplate}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn"><Icon name="copy" />Save as template</button></form>
+                          )}
                           {j.status === "live" && (
-                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Close</button></form>
+                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn"><Icon name="close" />Close</button></form>
                           )}
                           {j.status === "in_review" && (
                             <form action={withdrawJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Take back to edit</button></form>
                           )}
                           {(j.status === "draft" || j.status === "rejected") && (j.posted_at || applicants[j.id]) && (
-                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Close</button></form>
+                            <form action={closeJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn"><Icon name="close" />Close</button></form>
                           )}
                           {(j.status === "draft" || j.status === "rejected") && !j.posted_at && !applicants[j.id] && (
-                            <form action={deleteJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn">Delete</button></form>
+                            <form action={deleteJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="linkbtn warn"><Icon name="trash" />Delete</button></form>
                           )}
                         </div>
                       </div>

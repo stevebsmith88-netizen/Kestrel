@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { shareMetadata } from "@/lib/share";
 
@@ -175,16 +176,7 @@ export default function Privacy() {
           </p>
         </div>
       </main>
-      <footer>
-        <div className="wrap">
-          <span>
-            <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
-          </span>
-          <span>
-            <Link href="/">Home</Link> &middot; &copy; {new Date().getFullYear()} Kestrel Eye Care Jobs
-          </span>
-        </div>
-      </footer>
+      <AppFooter />
     </>
   );
 }
