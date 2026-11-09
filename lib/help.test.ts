@@ -17,7 +17,7 @@ test("the page title and description fit search results", () => {
 
 test("sections come in the agreed order, and every id is unique and link safe", () => {
   const order = HELP.map((s) => s.id);
-  assert.deepEqual(order, HELP_SECTION_ORDER.filter((id) => order.includes(id)), "sections must be General, Candidates, Clinics, in that order");
+  assert.deepEqual(order, [...HELP_SECTION_ORDER], "sections must be General, Candidates, Clinics, in that order");
   const ids = helpIds(HELP);
   assert.equal(new Set(ids).size, ids.length, "duplicate id");
   for (const id of ids) assert.match(id, /^[a-z0-9-]+$/);

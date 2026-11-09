@@ -521,3 +521,25 @@ STEP 2 (after approval). Build it. Write the General section first and show me a
 
 Rules: writing style from CLAUDE.md: warm and plain, numerals, British spelling with Canadian conventions, no em dashes, no banned words, no emoji. No Eye Recommend material. I am not a developer, so explain every change in plain English.
 ```
+
+### Phase 3C results (9th November 2026)
+
+The help centre is built at `/help` (branch `claude/stoic-meitner-s4qzqp`). No database change and no new setting. Not merged until Steve approves the preview.
+
+- **What it is.** One page with 3 closed sections (General 14 topics, Candidates 10, Clinics 11, so 35 in all). Sections and topics are the browser's own `details` boxes, so they work with a keyboard, a screen reader and without JavaScript. `components/HelpControls.tsx` is the only script: it opens the right section and topic for a link such as `/help#post-a-job` (on load and when the address changes), keeps the address in step with the topic a person opens, and shows Expand all and Collapse all (only once the script has run, and they act on every section and topic).
+- **Where the words live.** `content/help.ts`, in the shape set by `lib/help.ts`. To add a topic, copy a block, change the `id`, title, `answer`, optional `steps` and `links`, then run `npm test`. Links to another topic are written `[text](/help#topic-id)`.
+- **Tests** (`lib/help.test.ts`, and the existing style guard, which already reads `content/`): title and description length, section order, unique link safe ids, every topic has an answer, no dash used as punctuation, no curly quotes, no dollar amounts (checkout is not built), every `/help#id` link points at a real topic, and every link goes to a page that exists. `lib/page-dates.test.ts` checks the page's "Last updated" line against the sitemap date.
+- **Sitemap and footer.** `/help` is in the sitemap (monthly, priority 0.4) with its date in `lib/page-dates.ts`. A single "Help" link was added to the footer in `components/AppFooter.tsx`, the home page, and the sign in and sign up pages (`components/AuthShell.tsx`). Phase 1D will fold these into its shared footer and put Help under "Company".
+- **Notice.** While sign up is closed, `/help` shows "Kestrel is opening soon. These answers describe how it works once you have an account." It reads the existing sign up gate.
+- **Changed in the code that the help depends on.** Only `components/BlogBody.tsx` (the shared text reader now also exports `Inline`).
+
+**Things the help says that differ from older docs or on page wording** (so the next person is not surprised):
+
+- The apply button reads **Quick Apply**, not "Apply with Kestrel" as `docs/candidates-and-applications.md` says.
+- A clinic sees a candidate's name, email address and phone number (if given) with an application. The help says so.
+- **A withdrawn application cannot be sent again** (the database allows 1 application per person per job), but the Withdraw box on the application page says "You can apply again later if the job is still open." The help says what really happens. The page wording is still to be corrected, or the rule changed. Steve to decide.
+- Shortlisting 1 applicant from their own page emails the candidate. Shortlisting ticked applicants in bulk does not. Documented as built. Steve is dealing with this in another chat.
+- The Contact page promises a reply within 2 business days, and `docs/definitions.md` says 1 business day for clinics. The help uses the Contact page.
+- "Not interested" has no undo. The dashboard **Close** button does not message applicants, while **Filled it?** does.
+
+**Checks still for Steve:** the line "Is it free" says creating an account, searching and applying are free (taken from the sign up page); confirm candidates never pay. Read the topics on the preview and tell Claude anything that does not match what clinics and candidates really see.
