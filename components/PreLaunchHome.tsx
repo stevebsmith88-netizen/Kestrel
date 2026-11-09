@@ -24,7 +24,7 @@ export default function PreLaunchHome() {
             </p>
           </div>
           <div className="lh-skyline" aria-hidden="true">
-            <Image src="/skyline.png" alt="" width={2000} height={462} priority sizes="100vw" />
+            <Image src="/skyline.png" alt="Illustration of Canadian mountains, forest and a city skyline" width={2000} height={462} priority sizes="100vw" />
           </div>
         </section>
         <section className="lh-section lh-shots" aria-labelledby="pl-shots">

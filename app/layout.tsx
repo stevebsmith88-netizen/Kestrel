@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ...(demoMode() ? { robots: { index: false, follow: false } } : {}),
   title: "Kestrel Eye Care Jobs | Coming soon",
   description:
-    "Kestrel Eye Care Jobs is a dedicated job board for optometrists, opticians, assistants and clinic teams across Canada. Join the waitlist to hear first when we launch.",
+    "Kestrel Eye Care Jobs is a job board for optometrists, opticians, assistants and clinic teams across Canada. Join the waitlist to hear first when we launch.",
   openGraph: {
     title: "Kestrel Eye Care Jobs | Coming soon",
     description: "Eye care jobs across Canada. Join the waitlist to hear first when we launch.",
