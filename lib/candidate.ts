@@ -1,4 +1,5 @@
 import "server-only";
+import { candidateHistory, candidateStatus } from "@/lib/applications";
 import type { PrefsRow } from "@/lib/candidate-prefs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -49,7 +50,12 @@ export async function getMyApplications(): Promise<Application[]> {
   const db = await supabaseServer();
   if (!db) return [];
   const { data } = await db.from("applications").select(APPLICATION_COLUMNS).order("created_at", { ascending: false });
-  return (data ?? []) as Application[];
+  return ((data ?? []) as Application[]).map(forCandidate);
+}
+
+// How an application looks to the candidate: "Shortlisted" is shown as "Viewed", and a message left over from an older shortlist is not shown.
+function forCandidate(a: Application): Application {
+  return a.status === "shortlisted" ? { ...a, status: candidateStatus(a.status), clinic_message: null } : a;
 }
 
 export async function getApplication(id: string): Promise<{ application: Application; history: { status: string; note: string | null; created_at: string }[] } | null> {
@@ -58,7 +64,7 @@ export async function getApplication(id: string): Promise<{ application: Applica
   const { data } = await db.from("applications").select(APPLICATION_COLUMNS).eq("id", id).maybeSingle();
   if (!data) return null;
   const { data: events } = await db.from("application_events").select("status, note, created_at").eq("application_id", id).order("created_at", { ascending: true });
-  return { application: data as Application, history: events ?? [] };
+  return { application: forCandidate(data as Application), history: candidateHistory(events ?? []) };
 }
 
 // A profile is ready to apply with once it has a CV and the basics.

@@ -41,6 +41,22 @@ export const NEEDS_MESSAGE: readonly AppStatus[] = ["interview", "offer", "not_s
 export const isClosed = (s: string) => (CLOSED as readonly string[]).includes(s);
 export const isAppStatus = (s: string): s is AppStatus => s in APP_LABELS;
 
+// Shortlisting is the clinic's own working list, so a candidate is never shown "Shortlisted". They see "Viewed" until the clinic
+// invites them to interview, makes an offer or closes the application. These helpers are used wherever a candidate's own
+// applications are loaded (lib/candidate.ts and the data download), so no candidate page or file can show it.
+export const candidateStatus = (status: string) => (status === "shortlisted" ? "viewed" : status);
+
+// A candidate's history with shortlisting taken out: a shortlist step shows as Viewed, and a Viewed that follows a Viewed is dropped.
+export function candidateHistory<T extends { status: string }>(events: readonly T[]): T[] {
+  const out: T[] = [];
+  for (const e of events) {
+    const status = candidateStatus(e.status);
+    if (out.length && out[out.length - 1].status === status) continue;
+    out.push({ ...e, status });
+  }
+  return out;
+}
+
 export type Group = "review" | "interview" | "offer" | "closed";
 export const GROUP_LABELS: Record<Group, string> = { review: "In review", interview: "Interviews", offer: "Offers", closed: "Closed" };
 
