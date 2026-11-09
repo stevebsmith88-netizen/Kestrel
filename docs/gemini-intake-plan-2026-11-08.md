@@ -561,6 +561,8 @@ Footer and link styles are built (branch `claude/vigilant-planck-dqo6bd`). No da
 
 **Not checked.** Signed in pages (the dashboard, candidate home) cannot be opened here without a database, so the new dashboard was checked on a mock page built from the same markup and the real stylesheet. Steve should open the dashboard on the preview, with a live job, a draft and an approval notice. The link counts in the design note came from a script that reads the code, so they are close, not exact.
 
+**Release note (9th November 2026).** Phase 1D first reached `main` by pushing the branch's commit to both the branch and `main`. Vercel builds a commit once, as a preview for the first branch it sees, and did not make a production build for the same commit on `main`, so the live and demo sites stayed on the older version until a new commit reached `main`. To avoid it, push or merge to `main` before the work branch, or merge through a pull request, so `main` always gets a commit Vercel has not built yet. In Vercel, Production is shown on the deployment for the newest `main` commit.
+
 ### Help centre search (10th November 2026)
 
 Added after the merge, at Steve's request. A search box above the sections (shown only once the page script has run, like Expand all, so the page is unchanged without JavaScript).
