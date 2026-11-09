@@ -61,22 +61,44 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             {job.is_seeded && !clinic?.claimed && (
               <p className="seedlabel">Found on the clinic&apos;s website, not yet claimed. <Link href={`/jobs/${job.id}/claim`}>Is this your clinic? Claim this listing</Link></p>
             )}
+            <p className="applytop"><a href="#apply" className="btn sm">Apply</a></p>
           </header>
 
           <div className="jobgrid">
-            <section className="card">
-              <h2>About the job</h2>
-              <div className="adbody">{job.description}</div>
-              {clinic?.about && (
-                <>
-                  <h2>About {clinic.clinic_name}</h2>
-                  <div className="adbody">{clinic.about}</div>
-                </>
-              )}
-            </section>
+            <div className="jobmain">
+              <section className="card">
+                <h2>About the job</h2>
+                <div className="adbody">{job.description}</div>
+                {clinic?.about && (
+                  <>
+                    <h2>About {clinic.clinic_name}</h2>
+                    <div className="adbody">{clinic.about}</div>
+                  </>
+                )}
+              </section>
+              <section className="card jobfacts">
+                <h2>Job facts</h2>
+                <dl className="facts">
+                  <div className="wide"><dt>Pay</dt><dd>{payText(job)}</dd></div>
+                  {estimateText(job) && <div className="wide"><dt>Yearly estimate</dt><dd>{estimateText(job)}</dd></div>}
+                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
+                  {TAG_GROUPS.map((g) => {
+                    const names = tagsFromRow(job)[g.key];
+                    return names.length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{names.join(", ")}</dd></div> : null;
+                  })}
+                  {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
+                  <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
+                  {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
+                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}</dd></div>
+                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}</dd></div>
+                  <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>
+                  <div><dt>Closes</dt><dd>{longDate(job.expires_at)}</dd></div>
+                </dl>
+              </section>
+            </div>
 
             <aside className="jobaside">
-              <section className="card applybox">
+              <section className="card applybox" id="apply">
                 <h2>Apply</h2>
                 {job.apply_method === "external" && job.apply_url ? (
                   <>
@@ -92,25 +114,6 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 )}
               </section>
               <p className="reportlink"><Link href={`/jobs/${job.id}/report`}>Report this job</Link></p>
-              <section className="card">
-                <h2>Job facts</h2>
-                <dl className="facts">
-                  <div><dt>Pay</dt><dd>{payText(job)}</dd></div>
-                  {estimateText(job) && <div><dt>Yearly estimate</dt><dd>{estimateText(job)}</dd></div>}
-                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
-                  {TAG_GROUPS.map((g) => {
-                    const names = tagsFromRow(job)[g.key];
-                    return names.length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{names.join(", ")}</dd></div> : null;
-                  })}
-                  {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
-                  <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
-                  {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
-                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}</dd></div>
-                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}</dd></div>
-                  <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>
-                  <div><dt>Closes</dt><dd>{longDate(job.expires_at)}</dd></div>
-                </dl>
-              </section>
             </aside>
           </div>
         </div>

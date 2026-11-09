@@ -650,3 +650,13 @@ fieldset.tagrow .lab { padding: 0; }
 .taglist dd { margin: 0 0 0.6rem; }
 .notice.warn{background:#FBF1E3;border-color:#E6CDA5;color:#6B4A12}
 .notice.warn a{color:#6B4A12}
+.jobmain{display:flex;flex-direction:column;gap:24px;min-width:0}
+.jobfacts h2{font:400 1.5rem/1.2 "DM Serif Display",Georgia,serif;margin:0 0 10px}
+.jobfacts .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));column-gap:40px}
+.jobfacts .facts div{border-top:1px solid var(--line)}
+.jobfacts .facts div:first-child{border-top:1px solid var(--line)}
+.jobfacts .facts .wide{grid-column:1/-1}
+/* On a phone the full Apply box is under the job, so a small button at the top jumps down to it. */
+.applytop{display:none;margin:14px 0 0}
+.applybox{scroll-margin-top:16px}
+@media (max-width:900px){.applytop{display:block}}
