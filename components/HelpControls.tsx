@@ -2,11 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { SEARCH_OPEN_LIMIT, topicMatches } from "@/lib/help";
+import { HELP_OPEN_BY_DEFAULT, SEARCH_OPEN_LIMIT, topicMatches, type HelpSectionId } from "@/lib/help";
 
 // The small piece of script behind the help centre. The boxes themselves are plain details elements and work without it. This adds:
 //  1. Search. Typing shows only the topics that match (rules in lib/help.ts), opens the sections that have a match, and opens the topics
-//     themselves when only a few match. Clearing the box puts everything back to closed.
+//     themselves when only a few match. Clearing the box puts the page back as it first looked (General open, the rest closed).
 //  2. Deep links. /help#post-a-job opens the section and the topic and scrolls to it, on load and whenever the address changes.
 //  3. The address follows the topic a person opens, so the link in the address bar can be copied and sent to someone.
 //  4. Expand all and Collapse all.
@@ -33,7 +33,9 @@ export default function HelpControls() {
     const { topics, sections } = boxes();
     bulk.current = true;
     if (!q.trim()) {
-      [...topics, ...sections].forEach((d) => { d.hidden = false; d.open = false; });
+      // Back to how the page first looked: every topic closed, and only the sections that start open are open.
+      topics.forEach((d) => { d.hidden = false; d.open = false; });
+      sections.forEach((d) => { d.hidden = false; d.open = HELP_OPEN_BY_DEFAULT.includes(d.id as HelpSectionId); });
       filterOn.current = false;
       setStatus({ text: "", none: false });
     } else {

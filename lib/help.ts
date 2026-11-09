@@ -17,6 +17,9 @@ export type HelpSection = { id: HelpSectionId; title: string; intro: string; top
 
 export const HELP_SECTION_ORDER: readonly HelpSectionId[] = ["general", "candidates", "clinics"];
 
+// The sections that start open, so the page does not look bare. Every topic inside still starts closed (Steve, 10th November 2026).
+export const HELP_OPEN_BY_DEFAULT: readonly HelpSectionId[] = ["general"];
+
 export const HELP_TITLE = "Help centre for candidates and clinics";
 export const HELP_DESCRIPTION = "Step by step answers for candidates and clinics using Kestrel Eye Care Jobs: accounts, applying, posting, applicants, pay, privacy and how to reach us.";
 

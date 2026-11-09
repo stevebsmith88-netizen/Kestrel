@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { Inline } from "@/components/BlogBody";
 import HelpControls from "@/components/HelpControls";
-import type { HelpSection } from "@/lib/help";
+import { HELP_OPEN_BY_DEFAULT, type HelpSection } from "@/lib/help";
 
-// The help centre: 3 sections, each a native details box, and inside each one every topic is a details box too. Everything starts closed.
+// The help centre: 3 sections, each a native details box, and inside each one every topic is a details box too. General starts open and everything else starts closed.
 // It works with the keyboard, with a screen reader and without JavaScript. HelpControls adds the search box, the deep link opening and the Expand all and Collapse all buttons.
 export default function HelpCentre({ sections }: { sections: readonly HelpSection[] }) {
   return (
     <div id="help-root">
       <HelpControls />
       {sections.map((s) => (
-        <details className="help-section" id={s.id} key={s.id}>
+        <details className="help-section" id={s.id} key={s.id} open={HELP_OPEN_BY_DEFAULT.includes(s.id)}>
           <summary>
             <span className="help-stitle">{s.title}</span>
             <span className="help-count">{s.topics.length} {s.topics.length === 1 ? "topic" : "topics"}</span>

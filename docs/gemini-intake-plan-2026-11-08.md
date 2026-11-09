@@ -570,3 +570,7 @@ Added after the merge, at Steve's request. A search box above the sections (show
 - **Keywords:** each topic in `content/help.ts` has an optional `keywords` list of the words people use (resume, cancel, forgot, scam, renew). They are never shown, only searched. All 35 topics have them. When adding a topic, add the words people would type; the tests check that every topic is found by its own title and by each keyword.
 - No database change and no new setting.
 
+### Help centre: General opens by default (10th November 2026)
+
+At Steve's request the General section starts open so the page does not look bare. Candidates and Clinics stay closed until clicked, and every topic inside General still starts closed. The list of sections that start open is `HELP_OPEN_BY_DEFAULT` in `lib/help.ts` (tested). It works without JavaScript. Clearing a search puts the page back as it first looked (General open, the rest closed), and Collapse all still closes everything. No database change and no new setting.
+
