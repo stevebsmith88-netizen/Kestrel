@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
@@ -10,7 +11,8 @@ import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
 import { getMyJobNumbers } from "@/lib/job-stats-data";
-import { closeJob, deleteJob, extendJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
+import { closeJob, deleteJob, dismissNotices, extendJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
+import { DISMISS_COOKIE, parseDismissed, visibleNotices } from "@/lib/notice-dismiss";
 import { canExtend } from "@/lib/job-ending";
 import { saveJobAsTemplate } from "@/lib/template-actions";
 import { jobNotices } from "@/lib/clinic-notices";
@@ -53,6 +55,9 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
   const first = session.firstName || "there";
   const count = (s: string) => jobs.filter((j) => j.status === s).length;
+  // The green approval messages a clinic has not cleared yet. A message about a change a clinic needs to make is never hidden.
+  const notices = visibleNotices(jobNotices(jobs), parseDismissed((await cookies()).get(DISMISS_COOKIE)?.value));
+  const approvals = notices.filter((n) => n.kind === "approved");
 
   return (
     <>
@@ -63,11 +68,27 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
           <h1>Welcome, {first}</h1>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
-          {jobNotices(jobs).map((n) => (
-            <p className={n.kind === "approved" ? "notice" : "notice warn"} role="status" key={n.id + n.kind}>
-              {n.text} {n.kind === "approved" ? <Link href={`/jobs/${n.id}`}>See your job</Link> : <Link href={`/clinic/jobs/${n.id}`}>Open it</Link>}
-            </p>
-          ))}
+          {notices.map((n) =>
+            n.kind === "approved" ? (
+              <div className="notice noticerow" role="status" key={n.id + n.kind}>
+                <p>{n.text} <Link href={`/jobs/${n.id}`}>See your job</Link></p>
+                <form action={dismissNotices}>
+                  <input type="hidden" name="id" value={n.id} />
+                  <button type="submit" className="linkbtn" aria-label={`Dismiss the message about ${n.title}`}>Dismiss</button>
+                </form>
+              </div>
+            ) : (
+              <p className="notice warn" role="status" key={n.id + n.kind}>
+                {n.text} <Link href={`/clinic/jobs/${n.id}`}>Open it</Link>
+              </p>
+            ),
+          )}
+          {approvals.length > 1 && (
+            <form action={dismissNotices} className="noticeclear">
+              {approvals.map((n) => <input type="hidden" name="id" value={n.id} key={n.id} />)}
+              <button type="submit" className="linkbtn">Clear all {approvals.length} approval messages</button>
+            </form>
+          )}
 
           {!employer ? (
             <section className="card setup">

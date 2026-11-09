@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
+import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
 import { getMyEmployer } from "@/lib/clinic";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
@@ -155,6 +157,22 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
 }
 
 // Live job: close it. Job in review: take it back to a draft so it can be changed.
+// Clears one or more of the green "approved and now live" messages on the dashboard. Kept in a cookie in this browser (see
+// lib/notice-dismiss.ts), so it changes nothing in the database and nothing about the jobs.
+export async function dismissNotices(form: FormData) {
+  await requireRole("clinic");
+  const ids = form.getAll("id").map(String);
+  const jar = await cookies();
+  jar.set(DISMISS_COOKIE, addDismissed(jar.get(DISMISS_COOKIE)?.value, ids), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/clinic",
+    maxAge: DISMISS_DAYS * 86_400,
+  });
+  redirect("/clinic");
+}
+
 export async function closeJob(form: FormData) {
   await requireRole("clinic");
   const id = idFrom(form);
