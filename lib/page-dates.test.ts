@@ -20,6 +20,7 @@ test("the sitemap dates match the 'last updated' line on each page", () => {
   assert.equal(PAGE_DATES.resources, shown("app/resources/page.tsx"));
   assert.equal(PAGE_DATES.ontarioJobAds, shown("app/resources/ontario-job-ads/page.tsx"));
   assert.equal(PAGE_DATES.compare, shown("lib/compare-prices.ts"));
+  assert.equal(PAGE_DATES.help, shown("app/help/page.tsx"));
 });
 
 test("a page changed in the last 3 days is sent to search engines, and an old one is not", () => {

@@ -9,6 +9,7 @@ export const PAGE_DATES = {
   resources: "2026-11-09",
   ontarioJobAds: "2026-11-08",
   compare: "2026-11-06",
+  help: "2026-11-09",
 } as const;
 
 // The address of each page above, so the daily job can tell search engines about a page the day it changes.
@@ -20,6 +21,7 @@ const PAGE_PATHS: Record<keyof typeof PAGE_DATES, string> = {
   resources: "/resources",
   ontarioJobAds: "/resources/ontario-job-ads",
   compare: "/compare",
+  help: "/help",
 };
 
 // Pages whose date is within the last `days` days (3 by default, so a deploy a day after the change is still covered).
