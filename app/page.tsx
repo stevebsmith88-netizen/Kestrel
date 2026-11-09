@@ -16,8 +16,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const mode = await homeModeNow();
   if (mode === "coming-soon") return {};
   // Its own title, description and canonical address, so search engines are not left with the default "Coming soon" title.
-  if (mode === "prelaunch") return shareMetadata({ title: "Optometrist, Optician and Assistant Jobs in Canada", shareTitle: "Eye care jobs across Canada, opening soon", description: "A Canada-wide eye care job board for optometrists, opticians, optometric assistants, technicians, practice managers and suppliers. Every job shows its pay. Join the waitlist.", path: "/" });
-  return shareMetadata({ title: "Optometrist, Optician and Assistant Jobs in Canada", shareTitle: "Eye care jobs across Canada", description: "A Canada-wide eye care job board for optometrists, opticians, optometric assistants and clinic teams. Independent and corporate practices post side by side, and every job shows its pay.", path: "/" });
+  // Bing's checker wants a title under about 70 characters (the site name is added to the end) and a description of about 70 to 160.
+  if (mode === "prelaunch") return shareMetadata({ title: "Optician and Optometrist Jobs in Canada", shareTitle: "Eye care jobs across Canada, opening soon", description: "A Canada-wide eye care job board for optometrists, opticians, assistants and clinic teams. Every job shows its pay. Join the waitlist.", path: "/" });
+  return shareMetadata({ title: "Optician and Optometrist Jobs in Canada", shareTitle: "Eye care jobs across Canada", description: "A Canada-wide eye care job board for optometrists, opticians, assistants and clinic teams. Independent and corporate practices, and every job shows its pay.", path: "/" });
 }
 
 // At launch the sign up gate opens (docs/launch-checklist.md) and the launch layout takes over from the coming soon page by itself.
@@ -71,7 +72,7 @@ function ComingSoon() {
             <a className="btn" href="#join">Join the waitlist</a>
           </div>
           <div className="skyline" aria-hidden="true">
-            <Image src="/skyline.png" alt="" width={2000} height={462} priority sizes="100vw" />
+            <Image src="/skyline.png" alt="Illustration of Canadian mountains, forest and a city skyline" width={2000} height={462} priority sizes="100vw" />
           </div>
         </section>
 

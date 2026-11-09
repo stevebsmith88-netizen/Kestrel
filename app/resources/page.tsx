@@ -15,7 +15,7 @@ import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
   title: "Eye care resources for Canada",
-  description: "Typical pay by province and role, the rules behind an eye care job ad, a directory of Canadian eye care suppliers and organisations, and links to the associations and regulators.",
+  description: "Typical pay by province and role, the rules for an eye care job ad in Canada, a supplier directory, and links to associations and regulators.",
   path: "/resources",
 });
 

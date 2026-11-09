@@ -40,7 +40,7 @@ export default async function LaunchHome() {
             <p className="lh-sub">Hiring for your clinic? <Link href="/clinics">Post a job</Link></p>
           </div>
           <div className="lh-skyline" aria-hidden="true">
-            <Image src="/skyline.png" alt="" width={2000} height={462} priority sizes="100vw" />
+            <Image src="/skyline.png" alt="Illustration of Canadian mountains, forest and a city skyline" width={2000} height={462} priority sizes="100vw" />
           </div>
         </section>
 

@@ -6,7 +6,7 @@ import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
   title: "Contact",
-  description: "How to reach the Kestrel team.",
+  description: "Contact the Kestrel Eye Care Jobs team with a question about a job post, your account or the site.",
   path: "/contact",
 });
 
