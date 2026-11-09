@@ -1,16 +1,22 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import { signOut } from "@/lib/auth-actions";
-import { homeFor, type Session } from "@/lib/auth";
+import { getSession, homeFor, type Session } from "@/lib/auth";
 import { findYourFitOn } from "@/lib/features";
 import { homeModeNow } from "@/lib/launch";
 import { TAGLINE } from "@/lib/launch-rules";
 
 // The menu across the top of the public pages. On a phone it folds into a Menu button.
-// Pages that know who is signed in pass `session`, so a signed in person sees a way back to
-// their own dashboard instead of "Sign in" and "Join the waitlist".
+// A signed in person sees a way back to their own dashboard instead of "Sign in" and "Join the waitlist".
+// A page that has already looked up the session can pass it in. Every other page leaves it out and the header looks it up itself,
+// so the home page, For clinics and the policy pages never show a signed in person as signed out (the lookup is shared within a
+// request, so passing it in or not costs the same).
 // In the new look (pre launch and launch, lib/launch.ts) the wordmark carries the tagline under it. Once launched, the call to action is
 // Create account, not the waitlist.
-export default async function SiteHeader({ logo = true, session = null, launch, tagline }: { logo?: boolean; session?: Session | null; launch?: boolean; tagline?: boolean }) {
+export default async function SiteHeader({ logo = true, session: passed, launch, tagline }: { logo?: boolean; session?: Session | null; launch?: boolean; tagline?: boolean }) {
+  // Says plainly that this header depends on who is asking, so the page is never served from a shared copy that shows someone else's state.
+  if (passed === undefined) await connection();
+  const session = passed === undefined ? await getSession() : passed;
   const dashboard = session ? homeFor(session.role) : null;
   // `launch` and `tagline` let a page that already knows which look it has (the launch and pre launch home pages) say so.
   const mode = launch ? "launch" : tagline ? "prelaunch" : await homeModeNow();
