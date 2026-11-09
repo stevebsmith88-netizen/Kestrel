@@ -23,7 +23,7 @@ export const HELP: HelpSection[] = [
         id: "is-it-free",
         title: "Is it free?",
         answer: [
-          "Creating an account is free, and so is searching and applying.",
+          "Creating an account is free, and so is searching and applying. Candidates never pay to use Kestrel. The costs are all on the clinic side.",
           "Posting a job is free during the free launch, which runs for the opening 30 to 60 days, and you do not need a credit card to post. When fees begin, we will say so on the site first. The For clinics page always shows the current plans.",
         ],
         links: [{ label: "For clinics", href: "/clinics" }],
@@ -240,7 +240,7 @@ export const HELP: HelpSection[] = [
         id: "track-your-applications",
         title: "How do I track my applications, and what does each status mean?",
         answer: [
-          "Every application shows a progress bar with 5 steps: **Applied**, **Viewed**, **Shortlisted**, **Interview** and **Offer**. Applied means it is sent and the clinic has not opened it yet. Viewed means the clinic has opened it. Shortlisted means you are in the running. Interview means the clinic would like to meet you, and Offer means it has made you an offer.",
+          "Every application shows a progress bar that shows how far it has got. **Applied** means it is sent and the clinic has not opened it yet. **Viewed** means the clinic has opened it, and it stays Viewed while the clinic reads through its applicants, until the clinic invites you to interview, makes an offer or closes the application. **Interview** means the clinic would like to meet you, and **Offer** means it has made you an offer.",
           "An application can also close. **Not selected this time** means the clinic chose other candidates. **Role filled** means the job is no longer open. **Kept for future roles** means the clinic will keep your details for future openings, if you agreed to that when you applied. **No update from the clinic** means the job closed without a decision. **Withdrawn** means you withdrew it.",
           "A clinic can write you a message with an update, and you see it on the application. The clinic's private notes are never shown to you. We also email you when a clinic updates an application, unless you have turned those emails off. The topic [How do I change which emails I get?](/help#email-choices) says how.",
         ],
@@ -295,7 +295,7 @@ export const HELP: HelpSection[] = [
         title: "How do I withdraw an application?",
         answer: [
           "You can withdraw at any step until the application is closed, including after an interview or an offer. The clinic sees the application as **Withdrawn**. We do not ask you to confirm, so the change happens as soon as you press the button.",
-          "A withdrawn application cannot be sent again. You can apply to a job only once, so if you change your mind, contact the clinic directly.",
+          "You can apply to a job only once, so a withdrawn application cannot be sent again for the same job. You can still apply to other jobs, now or later. If you change your mind about this one, contact the clinic directly.",
         ],
         steps: [
           "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead.",
@@ -407,16 +407,16 @@ export const HELP: HelpSection[] = [
         title: "How do I read and manage applicants, one at a time?",
         answer: [
           "We email you about new applicants as often as you chose under Email choices, and the email has no personal details in it. The applicants are always on your dashboard, newest first. Opening an application marks it **Viewed**, so the candidate can see it has been read. Then you can read the cover letter and details, download the CV, and move the application along.",
-          "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. **Kept for future roles** is only offered if the candidate agreed to that when they applied. Shortlisting does not need a message, but when you shortlist one person this way they are still emailed.",
+          "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. **Kept for future roles** is only offered if the candidate agreed to that when they applied.", "**Shortlisting** is your own working list. No message goes with it and the candidate is not emailed, whether you shortlist one person or tick several. A candidate is never shown that they are shortlisted: they see Viewed until you invite them to interview, make an offer or close the application. You see Shortlisted everywhere.", "We encourage clinics to reply to candidates within 5 days, even with a short no, and the applicants page reminds you how many are waiting. If an application has gone 2 weeks unopened, we send you a reminder email, which you can turn off under Email choices. If a job ends and people are still waiting a week later, we close their applications for you so they are never left hanging, and they see **No update from the clinic**.",
           "Your private notes on an application are for you. The candidate never sees them. Kestrel does not use AI to rank applicants, so the list shows everyone in the order they applied.",
         ],
         steps: [
           "On your dashboard, press **Applicants** next to the job. It appears once someone has applied, and the number in brackets is how many have applied and how many are new.",
           "Use the tabs **All**, **In review**, **Interviews**, **Offers** and **Closed** to narrow the list.",
           "Choose **Open** on an application to read their cover letter and details. Use **Download their CV** to open the CV.",
-          "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to keep them in the running.",
-          "Check the message and edit it if you like.",
-          "Press **Save and tell the candidate**.",
+          "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to add them to your working list. There is no message to write, and the button then reads **Save**.",
+          "Check the message and edit it if you like. Shortlisting has no message.",
+          "Press **Save and tell the candidate**, or **Save** for a shortlist.",
           "To keep a private note, write it in **Private notes** and press **Save note**.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
@@ -426,7 +426,7 @@ export const HELP: HelpSection[] = [
         title: "How do I shortlist, invite or decline several applicants at once?",
         answer: [
           "On the applicants list, tick the boxes next to the people you want, then use the panel **With the ticked applicants**. Only applications still waiting can be ticked: Applied, Viewed and Shortlisted. You can act on up to 100 at a time.",
-          "**Shortlist** sends no email. It is your own working list, and the candidate sees the step in their account. **Invite to interview** sends everyone you ticked the same message, by email and in their account, so write the date, time and how to join in the **Interview invitation** box first. For different times, open each application instead. **Send a kind no** gives each person the same warm message you would send one at a time.",
+          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. **Invite to interview** sends everyone you ticked the same message, by email and in their account, so write the date, time and how to join in the **Interview invitation** box first. The panel with these 3 buttons sits below the list. For different times, open each application instead. **Send a kind no** gives each person the same warm message you would send one at a time.",
           "Offers are never made in bulk. Open the application to make one. Applicants who are already at the interview or offer step cannot be ticked.",
         ],
         steps: [
@@ -434,7 +434,7 @@ export const HELP: HelpSection[] = [
           "Tick the box next to each applicant you want to include.",
           "For an interview, write your invitation in the **Interview invitation** box first.",
           "Press **Shortlist**, **Invite to interview** or **Send a kind no**.",
-          "The page confirms how many were moved. Anyone who was already at that step, or who had withdrawn, is left as they were.",
+          "If nothing is ticked, or the invitation is empty or still has square brackets in it, the page tells you straight away and keeps your ticks. Otherwise it confirms how many were moved. Anyone who was already at that step, or who had withdrawn, is left as they were.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
       },

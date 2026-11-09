@@ -537,9 +537,9 @@ The help centre is built at `/help` (branch `claude/stoic-meitner-s4qzqp`). No d
 
 - The apply button reads **Quick Apply**, not "Apply with Kestrel" as `docs/candidates-and-applications.md` says.
 - A clinic sees a candidate's name, email address and phone number (if given) with an application. The help says so.
-- **A withdrawn application cannot be sent again** (the database allows 1 application per person per job), but the Withdraw box on the application page says "You can apply again later if the job is still open." The help says what really happens. The page wording is still to be corrected, or the rule changed. Steve to decide.
-- Shortlisting 1 applicant from their own page emails the candidate. Shortlisting ticked applicants in bulk does not. Documented as built. Steve is dealing with this in another chat.
+- **A withdrawn application cannot be sent again** (the database allows 1 application per person per job). The Withdraw box used to say "You can apply again later if the job is still open." Steve decided on 10th November 2026 to keep the rule (no repeat applications to the same job, other jobs are fine), so the page now says "You cannot apply to this job a second time, but you can apply to other jobs, now or later."
+- Shortlisting is silent everywhere, and a candidate is shown "Viewed" instead of "Shortlisted" (merged from the applicants chat, 10th November 2026). The help follows that. The candidate's progress bar still draws a "Shortlisted" label as 1 of its 5 steps, though a candidate's application never sits on it. The help does not name that step.
 - The Contact page promises a reply within 2 business days, and `docs/definitions.md` says 1 business day for clinics. The help uses the Contact page.
 - "Not interested" has no undo. The dashboard **Close** button does not message applicants, while **Filled it?** does.
 
-**Checks still for Steve:** the line "Is it free" says creating an account, searching and applying are free (taken from the sign up page); confirm candidates never pay. Read the topics on the preview and tell Claude anything that does not match what clinics and candidates really see.
+**Decided by Steve (10th November 2026):** candidates never pay, and the costs are all on the clinic side (the "Is it free" topic says so). Clinics are encouraged to reply within 5 days, and the reminder email goes after 14 days unopened (not after a few days, as first thought). The Contact page's 2 business days stays. All 35 topics were approved.

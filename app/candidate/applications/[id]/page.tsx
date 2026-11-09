@@ -80,7 +80,7 @@ export default async function ApplicationDetail({ params, searchParams }: { para
           {!closed && (
             <section className="card">
               <h2>Need to step back?</h2>
-              <p className="help">Withdrawing tells the clinic you are no longer interested. You can apply again later if the job is still open.</p>
+              <p className="help">Withdrawing tells the clinic you are no longer interested. You cannot apply to this job a second time, but you can apply to other jobs, now or later.</p>
               <form action={withdrawApplication}>
                 <input type="hidden" name="id" value={a.id} />
                 <button type="submit" className="btn ghost">Withdraw my application</button>
