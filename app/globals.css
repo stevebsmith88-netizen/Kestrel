@@ -73,14 +73,15 @@ input.other{margin-top:10px}
 .sf-brand p{margin:14px 0 0;font:400 .625rem/1.5 Poppins,"Source Sans 3",sans-serif;letter-spacing:.28em;text-transform:uppercase;color:#C9D1DA}
 .sf-head{font:700 .8125rem/1 "Source Sans 3",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--buff);margin:0 0 10px}
 .sf-col ul,.sf-legal{list-style:none;margin:0;padding:0}
-.sitefoot a{color:#fff;font-weight:600;text-decoration:none;display:flex;align-items:center;min-height:44px;border-radius:4px}
-.sitefoot a:hover{color:var(--buff);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.25em}
+.sitefoot a{color:#fff;font-weight:600;text-decoration:none;display:flex;align-items:center;min-height:44px;border-radius:8px;padding:0 10px;margin-left:-10px}
+/* Hover: a soft white box around the link, no underline. Keyboard focus draws the stronger 3px white ring below. */
+.sitefoot a:hover{color:#fff;text-decoration:none;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.75)}
 .sitefoot a:focus-visible{outline:3px solid #fff;outline-offset:2px;box-shadow:none}
-.sf-brand a{min-height:0;display:inline-block}
+.sf-brand a{min-height:0;display:inline-block;padding:0;margin-left:0}
 .sf-bottom{margin-top:30px;border-top:1px solid #34456A;padding:6px 0 26px;display:flex;justify-content:space-between;align-items:center;gap:6px 24px;flex-wrap:wrap}
 .sf-legal{display:flex;flex-wrap:wrap;gap:0 22px}
 .sitefoot .sf-legal a{font-weight:400;color:#C9D1DA;font-size:.875rem}
-.sitefoot .sf-legal a:hover{color:var(--buff)}
+.sitefoot .sf-legal a:hover{color:#fff}
 .sf-copy{margin:0;font-size:.875rem;color:#B4BEC9}
 @media (max-width:820px){.sf-top{grid-template-columns:repeat(2,minmax(0,1fr))}.sf-brand{grid-column:1/-1}}
 .site .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
