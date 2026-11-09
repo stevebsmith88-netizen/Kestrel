@@ -56,6 +56,8 @@ Fixed profession list. Pay range, existing vacancy and AI screening rules. Job a
 | 1 | Quick wins | S | None | No |
 | 2 | Optometrist pay basis, tech tags, employee count | M | Lawyer glance on pay basis | Yes, both databases |
 | 3 | Content: pillar hubs and the next posts | S per post, ongoing | None | No |
+| 3C | Help centre at /help: General, Candidates, Clinics, all collapsible | M | None | No |
+| 1D | Site polish: one tidy footer, and a clear system for links and buttons | M | None | No |
 | 4 | Launch liquidity: leads, claim outreach, pre load, schools, guide | M | Gate A for anything sent | Maybe |
 | 5 | After launch: SMS, alert reach, pass value, supply features | L | Real launch data | Yes |
 | 6 | Final pre launch code audit (6 report only chats, then fixes, then Go or No Go) | L | After Phases 1, 2, 4 and Stripe checkout are built | Only for fixes |
@@ -208,6 +210,7 @@ Run these as separate chats, each started only when launch data supports it. Pro
 | Item | Notes |
 | --- | --- |
 | No applicants nudge | Idea from Steve, 8th November 2026. When a live job has had views but no applications after 7 days, email the clinic account owner. First email: practical help, including a suggested rewrite of the ad if it was not made with the ad builder. In the paid phase, a second line can offer a sponsored post (`docs/sponsored-ads-plan.md`), only when real view numbers show the job is not being seen. During the free launch, rewrite help only, since sponsored posts launch with Stripe. Triggered by `job_daily_stats`, never by a guess. Fits the inactive and upsell emails in `docs/marketing-audit-priorities-2026-11-06.md` (items 24 and 29). |
+| Help videos | Benched on 9th November 2026 until everything is built and ready to launch. 30 to 90 seconds each, recorded on the demo site only, with captions and a transcript on the page (WCAG 2.1 AA). Hosting and who is on camera are not decided. Each help topic can take a video slot that stays hidden until a video exists. |
 | SMS alerts | After Phase 2. Needs express consent, a provider with Canadian numbers, a cost per message, and a quiet hours rule. Email stays the default. |
 | Alert reach in notifications | "N candidates have alerts matching your role", from real data. The word "verified" only after verification exists. |
 | Pass value in the quiet months | An always interested clinic profile, locum cover posts, a quarterly pay update. Decide after seeing pass retention. |
@@ -444,3 +447,66 @@ Built after Steve tried the first version. **Needs migration 0035 on both databa
 - **Daily rate with the days a week** (optional) gives a yearly estimate: the daily amount x days x 48 working weeks, always labelled as an estimate, shown on the job page, used by the typical pay line and Recommended for you, and never given to Google as the salary. A guaranteed minimum, or any pay with a percentage, is not compared.
 - **Re-running the combined file** on a database that already holds the newer pay shapes used to fail at an older step. Migrations 0023 and 0034 now add their older pay rules as "not valid" for existing rows, so the whole file is safe to run again.
 - Still open: Steve asked for the percentage to show 20 to 25 as an estimate. See the chat; the grey example text now shows 20 and 25.
+
+
+---
+
+## Help centre and site polish (agreed 9th and 10th November 2026)
+
+Decisions from Steve:
+1. A help centre at `/help` with a footer link. 3 collapsible sections in this order: General, Candidates, Clinics. Every topic inside is collapsible too. Everything starts closed.
+2. The starting topics are listed in the Phase 3C prompt. More will be added once the site is live, from the questions people really ask.
+3. Videos are benched (see the Phase 5 table). Text comes first.
+4. The footer should look cleaner, especially on a desktop. Today it is one long line of 9 links split by dots, and 3 pages carry their own copy (`components/AppFooter.tsx`, `app/page.tsx`, `app/privacy/page.tsx`, `components/AuthShell.tsx`).
+5. Plain underlined links look rough. Turn them into buttons where that does not look messy, and set one clear system across the site. Inline links inside a sentence keep an underline or another cue besides colour, because removing it fails WCAG 1.4.1.
+
+Order: build the help centre first (it adds 1 footer link), then the polish pass, so the footer is not linked to a page that does not exist. They touch different files apart from the footer, so they can also run side by side if the polish chat checks whether `/help` exists first.
+
+### Phase 1D: footer and links
+
+Prompt to paste:
+
+```text
+Read CLAUDE.md (Brand and Writing style), docs/gemini-intake-plan-2026-11-08.md (the "Help centre and site polish" section), docs/audit/ACCESSIBILITY-PASS-2026-11-06.md and app/globals.css. This is Phase 1D: a design polish of the footer and the link styles. No database change, no new setting. New branch from main. Do not open a pull request unless I ask. Brand assets (wordmark, tagline, skyline, logo) are never redrawn, and the palette and fonts in CLAUDE.md stay.
+
+1. The footer. Today (components/AppFooter.tsx, plus separate footers in app/page.tsx, app/privacy/page.tsx and components/AuthShell.tsx) it is one long line of 9 links split by dots, which looks cluttered on a desktop. Make 1 shared footer used everywhere. Start from this proposal and change it if you have a better one: on desktop a navy footer with the wordmark and the line "Canada-wide eye care job board" on the left, then 3 short columns, For candidates (Find jobs, Jobs by province, Find your fit, Blog), For clinics (the For clinics page, Compare prices, Resources) and Company (Help, Contact, Security), then a quiet bottom row with Privacy, Terms, Posting policy and the copyright. On a phone the columns stack or sit 2 across, with 44px tap targets. The street address stays out of the website (CASL needs it in emails only). Help links to /help, which another chat is building. Check whether /help exists on main. If it does not yet, leave that link out and tell me. Keep every existing link working.
+
+2. Links. The site has a lot of plain underlined links that look rough, beyond the inline ones in paragraphs. Review every page type (home, jobs, a job page, blog and posts, clinics, resources, compare, sign in and sign up, the clinic and candidate dashboards, applicants, applications, forms, admin) and propose one simple system:
+   a. Primary and secondary buttons (.btn and .btn.ghost) for the main action on a page or card, such as "See your job", "Open it", "Back to your dashboard", "Post again", "Edit".
+   b. A quiet small button style for the small actions currently drawn as underlined text (the .linkbtn ones such as Close, Delete, Dismiss, Take back to edit). Destructive ones stay quieter than the main action, with no extra clicks beyond today.
+   c. Links inside a sentence KEEP an underline or another clear cue besides colour. Make it thinner and softer, with an offset, so it looks deliberate.
+   d. Navigation links (menus, footer, breadcrumbs, back links) are plain, bold and not underlined, with a clear hover and focus state.
+   e. Cards with a big title link keep the title link and do not get a second button repeating it.
+Do not turn everything into a button. A page with 6 buttons looks worse than one with 6 links. Where a link reads fine as it is, leave it.
+
+STEP 1 (no code yet). Use Playwright at 1280, 768 and 390 pixel widths to screenshot the footer and about 10 representative pages. Write me a short design note: what you found (counts of each link pattern), the footer layout, the link rules, and a before and after sketch of the footer and 3 other places (a simple mock page using the real stylesheet is fine). Stop and wait for my approval.
+
+STEP 2 (after approval). Build it. Run npm run typecheck, npm test and npm run build before each push. Push, give me the preview link, and list what to check on my phone and on a desktop. Check keyboard focus is visible on every new button and link style, colour contrast meets WCAG 2.1 AA, and tap targets are 44px. Add a "Phase 1D results" section to docs/gemini-intake-plan-2026-11-08.md.
+
+Rules: all public wording follows the CLAUDE.md writing style. No Eye Recommend material. I am not a developer, so explain every change in plain English.
+```
+
+### Phase 3C: help centre
+
+Prompt to paste:
+
+```text
+Read CLAUDE.md (especially Writing style), docs/gemini-intake-plan-2026-11-08.md (the "Help centre and site polish" section), docs/definitions.md, docs/candidates-and-applications.md, docs/clinics-and-jobs.md and docs/pay-benchmark.md. This is Phase 3C: a help centre at /help. New branch from main. No database change, no new setting. Do not open a pull request unless I ask. Videos are NOT part of this phase. They are benched until the site is built and ready to launch.
+
+What I want:
+- One page, /help, with a footer link labelled "Help". It is for people already using Kestrel. (The SEO guides at /guides, built in another chat, are different.)
+- Three collapsible sections, in this order: General, Candidates, Clinics. Each section is a collapsible header, and inside each one every topic is its own collapsible heading too. Use the browser's own details and summary so it works with a keyboard and a screen reader and without JavaScript. Everything starts closed. A link such as /help#post-a-job must open the right section and topic and scroll to it (that needs a small piece of script, because details does not do it by itself). Optional: Expand all and Collapse all buttons, if they look tidy.
+- Content lives in a typed data file (content/help.ts, like content/posts.ts), so adding a topic is a copy and change. Each topic has a title, a short answer or numbered steps, and optional links to the real page where the thing is done.
+- Each how to says what to click, in the order a person sees it. Check every step against the real code and pages. Never describe a feature that is not built. Do not give prices, because checkout is not built yet. Say the free launch needs no card (CLAUDE.md).
+
+Starting topics (tell me if any is wrong or missing, and I will add more once we are live):
+General: What is Kestrel Eye Care Jobs; Is it free; Why does every job show its pay; What "existing vacancy" means; What "uses AI to screen candidates" means (and that Kestrel does not rank applicants with AI); Where your data is kept; Who can see your details; Which provinces are open and why Quebec is not yet; What "Found on the clinic's website, not yet claimed" means; How to contact us; How to delete your account and download your data.
+Candidates: Create an account; Build your profile and add a CV; Search and filter jobs, including distance; Apply on Kestrel or on the clinic's own site; Track your applications and what each status means; Job alerts; Recommended for you and Not interested; Keep my details for future roles; Withdraw an application; Private until you apply.
+Clinics: Create your account and clinic profile; Post a job with the ad builder and what every post needs; Pay options for each role; What happens after you submit (review, usually 1 business day); Edit a live job; Read and manage applicants, including shortlist, interview and a kind no, one at a time or ticked in bulk (and that bulk shortlisting sends no email); Extend, close, mark filled and post again; Claim a listing we found; Job templates; What views and apply clicks mean on your dashboard.
+
+STEP 1 (no code yet). Send me a one page design: the page layout, how the nested details look on desktop and phone, how the deep link works, the data file shape, the page title and description (title under about 60 characters plus the site name, description 70 to 160), how it goes in the sitemap, and the footer link (check whether another chat has changed the footer, and add one link only). Then list any topic where the code does not match what the topic assumes. Stop and wait for my approval.
+
+STEP 2 (after approval). Build it. Write the General section first and show me a preview, then Candidates, then Clinics. Ask me for anything only I know. Add tests like the blog tests (title and description length, writing style, no dash used as punctuation, every deep link target exists). Run npm run typecheck, npm test and npm run build before each push, and push so Vercel makes a preview. Add a "Phase 3C results" section to the plan file.
+
+Rules: writing style from CLAUDE.md: warm and plain, numerals, British spelling with Canadian conventions, no em dashes, no banned words, no emoji. No Eye Recommend material. I am not a developer, so explain every change in plain English.
+```
