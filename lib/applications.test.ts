@@ -98,3 +98,11 @@ test("a CV with macros, scripts or embedded programs is refused, and ordinary on
   assert.ok(activeContent(utf16("Root Entry Macros _VBA_PROJECT_CUR"), "doc"));
   assert.ok(activeContent(utf16("Root Entry \u0001Ole10Native"), "doc"));
 });
+
+test("bulk moves: a shortlist needs no message, an interview invitation needs a finished one", () => {
+  assert.equal(clinicMoveError("viewed", "shortlisted", true, ""), null);
+  assert.ok(clinicMoveError("viewed", "interview", true, ""), "an interview invitation needs a message");
+  assert.ok(clinicMoveError("viewed", "interview", true, "Come on [date]"), "square brackets must be filled in");
+  assert.equal(clinicMoveError("shortlisted", "interview", true, "Please come on Tuesday at 2 pm."), null);
+  assert.ok(clinicMoveError("shortlisted", "shortlisted", true, ""), "already shortlisted is skipped");
+});

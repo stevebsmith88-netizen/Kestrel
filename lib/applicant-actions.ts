@@ -33,35 +33,78 @@ async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>
 // Still waiting on a decision. Interviews and offers are never closed in bulk.
 const WAITING = ["applied", "viewed", "shortlisted"];
 
-// Moves several waiting applications to one closing step with the kind ready made message, and tells each candidate.
-async function closeWaiting(jobId: string, ids: string[] | null, to: "not_selected" | "role_filled"): Promise<number> {
+// Moves several waiting applications to one step. The clinic's right to see them is checked by the database (row level security) when
+// they are read, then each change is made on the server. By default the message is the kind ready made one for that step, and each
+// candidate is told by email (unless they turned those emails off). A step can be made quietly instead: shortlisting is a private
+// step for the clinic, so it sends no email, and the candidate sees it in their account. Applications that cannot make the move
+// (already at that step, withdrawn) are skipped and counted.
+async function moveWaiting(jobId: string, ids: string[] | null, to: "shortlisted" | "interview" | "not_selected" | "role_filled", opts: { message?: string; tell?: boolean } = {}): Promise<{ moved: number; skipped: number }> {
   const db = await supabaseServer();
   const admin = supabaseAdmin();
-  if (!db || !admin) return 0;
+  if (!db || !admin) return { moved: 0, skipped: 0 };
   let query = db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id").eq("job_id", jobId).in("status", WAITING);
   if (ids) query = query.in("id", ids);
   const { data } = await query.limit(500);
-  let done = 0;
+  let moved = 0;
+  let skipped = 0;
   for (const app of data ?? []) {
-    const message = messageTemplate(to, app.clinic_name);
-    if (clinicMoveError(app.status, to, app.keep_details, message)) continue;
+    const message = opts.message ?? messageTemplate(to, app.clinic_name);
+    if (clinicMoveError(app.status, to, app.keep_details, message)) { skipped += 1; continue; }
     const now = new Date().toISOString();
-    const { error } = await admin.from("applications").update({ status: to, clinic_message: message, status_changed_at: now, updated_at: now }).eq("id", app.id);
-    if (error) continue;
-    await admin.from("application_events").insert({ application_id: app.id, status: to, note: message });
-    await tellCandidate(admin, app, to, message);
-    done += 1;
+    const { error } = await admin.from("applications").update({ status: to, clinic_message: message || null, status_changed_at: now, updated_at: now }).eq("id", app.id);
+    if (error) { skipped += 1; continue; }
+    await admin.from("application_events").insert({ application_id: app.id, status: to, note: message || null });
+    if (opts.tell !== false) await tellCandidate(admin, app, to, message);
+    moved += 1;
   }
-  return done;
+  return { moved, skipped };
+}
+
+// Closing steps: the kind no, and "the role is filled". Each candidate is told.
+async function closeWaiting(jobId: string, ids: string[] | null, to: "not_selected" | "role_filled"): Promise<number> {
+  return (await moveWaiting(jobId, ids, to)).moved;
+}
+
+const BULK_MAX = 100;
+const pickedIds = (form: FormData) => form.getAll("ids").map(String).filter((x) => UUID.test(x)).slice(0, BULK_MAX);
+
+// Tick some applicants and shortlist them. This sends no email: a shortlist is the clinic's own working list, and a candidate
+// who was told they were shortlisted and then did not get an interview would feel worse for it. They can see the step in their account.
+export async function shortlistSelected(form: FormData) {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  if (!UUID.test(jobId)) redirect("/clinic");
+  const ids = pickedIds(form);
+  if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
+  const { moved, skipped } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  redirect(`/clinic/jobs/${jobId}/applicants?moved=shortlisted&n=${moved}&skipped=${skipped}`);
+}
+
+// Tick some applicants and invite them all to interview with one message the clinic writes (the date, time and how to join).
+// Everyone gets the same words, by email and in their account. For different times, open each application instead.
+export async function interviewSelected(form: FormData) {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  if (!UUID.test(jobId)) redirect("/clinic");
+  const ids = pickedIds(form);
+  if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
+  const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
+  const problem = clinicMoveError("viewed", "interview", true, message);
+  if (problem) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=${message ? "brackets" : "message"}`);
+  const { moved, skipped } = await moveWaiting(jobId, ids, "interview", { message });
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  redirect(`/clinic/jobs/${jobId}/applicants?moved=interview&n=${moved}&skipped=${skipped}`);
 }
 
 // Tick some applicants and send each a kind no, using the same wording as sending one at a time.
 export async function declineSelected(form: FormData) {
   await requireRole("clinic");
   const jobId = String(form.get("jobId") ?? "");
-  const ids = form.getAll("ids").map(String).filter((x) => UUID.test(x)).slice(0, 100);
+  const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
-  const done = ids.length ? await closeWaiting(jobId, ids, "not_selected") : 0;
+  if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
+  const done = await closeWaiting(jobId, ids, "not_selected");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
   redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}`);
 }

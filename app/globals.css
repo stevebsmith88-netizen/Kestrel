@@ -473,6 +473,12 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .rowtick{display:flex;align-items:flex-start;padding-top:2px;min-width:44px;min-height:44px;cursor:pointer}
 .rowtick input{width:20px;height:20px;accent-color:var(--chestnut)}
 .bulkbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:16px 0}
+.bulkpanel{margin:16px 0;display:flex;flex-direction:column;gap:12px}
+.bulkpanel h2{font:400 1.25rem/1.2 "DM Serif Display",Georgia,serif;margin:0}
+.bulkbtns{display:flex;flex-wrap:wrap;gap:10px}
+.bulkhelp{margin:0;padding-left:1.1rem;color:var(--navy-2);font-size:0.9375rem;line-height:1.5}
+.bulkhelp li+li{margin-top:4px}
+.bulkpanel .help{margin:0}
 .bulkfill{margin-top:24px}
 .quietdelete{margin-top:8px}
 .quietdelete summary{cursor:pointer;display:inline-flex;align-items:center;min-height:44px;padding:0 4px;color:var(--muted);font-size:0.9375rem;text-decoration:underline;text-underline-offset:3px}
