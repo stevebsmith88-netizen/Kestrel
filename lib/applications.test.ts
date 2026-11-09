@@ -50,11 +50,12 @@ test("closing and offering needs a message with no blanks left in it", () => {
 });
 
 test("messages are kind and name the clinic", () => {
-  for (const s of ["not_selected", "role_filled", "kept", "shortlisted", "interview", "offer"]) {
+  for (const s of ["not_selected", "role_filled", "kept", "interview", "offer"]) {
     assert.ok(messageTemplate(s, "Harbourside Optical").includes("Harbourside Optical"), s);
   }
   assert.ok(!messageTemplate("not_selected", "X").toLowerCase().includes("reject"));
   assert.equal(messageTemplate("applied", "X"), "");
+  assert.equal(messageTemplate("shortlisted", "X"), "", "shortlisting is the clinic's own list, so it has no message");
 });
 
 test("CV files are recognised by what is inside them", () => {
