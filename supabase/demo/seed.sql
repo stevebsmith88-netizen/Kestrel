@@ -83,6 +83,37 @@ select e.id, s.title, s.role, s.etype, e.province, e.city, s.period, s.pmin, s.p
        now() - make_interval(days => s.days_ago) + make_interval(days => case when s.seeded then 21 else 30 end)
 from sample s join public.employers e on e.clinic_name = s.clinic;
 
+-- Optometrist jobs that show the other ways of stating pay (migration 0034): a daily rate, a daily minimum, a percentage of production,
+-- and a daily minimum with a percentage together. Each has equipment, software and specialty tags. Pay is public on every one.
+insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum,
+                         pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties,
+                         is_existing_vacancy, uses_ai_screening, description, apply_method, pay_extras, status, posted_at, expires_at)
+select e.id, s.title, 'Optometrist', s.etype, e.province, e.city, s.period, s.pmin, s.pmax, s.is_min, s.cmin, s.cmax, s.cof, s.soft, s.equip, s.spec,
+       true, false, s.descr, 'kestrel', s.extras, 'live', now() - make_interval(days => s.days_ago), now() - make_interval(days => s.days_ago) + interval '30 days'
+from (values
+  ('Northern Lights Optometry (sample)', 'Associate optometrist, paid by the day', 'Full time', 'day', 900, 1100, false, null::numeric, null::numeric, null::text,
+   array['RevolutionEHR']::text[], array['Optos', 'OCT']::text[], array['Dry eye and IPL']::text[],
+   'A busy independent practice needs an associate optometrist 4 days a week. Paid a daily rate, with a full support team, an Optos and OCT on site, and a growing dry eye clinic.', 'A yearly bonus after the first 12 months', 3),
+  ('Prairie Vision Centre (sample)', 'Optometrist, percentage of production', 'Part time', null, null, null, false, 28::numeric, 35::numeric, 'production',
+   array['Wink']::text[], array['Humphrey visual field', 'Topographer']::text[], array['Myopia control and ortho-k', 'Vision therapy']::text[],
+   'Two to three days a week in a friendly 2 optometrist clinic. Paid a percentage of production, with a strong children''s vision focus and plenty of support.', null, 5),
+  ('Okanagan Eye Group (sample)', 'Optometrist, daily minimum with a percentage', 'Full time', 'day', 600, 800, true, 28::numeric, 35::numeric, 'collections',
+   array['Visual Eyes', 'Acuitas']::text[], array['Optos', 'OCT', 'Retinal photographs']::text[], array['Dry eye and IPL', 'On-site edging lab']::text[],
+   'A guaranteed daily minimum, or a percentage of collections when that comes to more. Our Kelowna clinic has an in house lab and modern diagnostic equipment.', 'Continuing education allowance', 8),
+  ('Granite Coast Optical (sample)', 'Locum optometrist, daily minimum', 'Locum', 'day', 550, 750, true, null::numeric, null::numeric, null::text,
+   array['iFile', 'OD Office Pro']::text[], array['OCT']::text[], array[]::text[],
+   'A locum optometrist for 4 weeks in Halifax. A guaranteed minimum per day worked, with accommodation help for anyone travelling in.', null, 10)
+) as s(clinic, title, etype, period, pmin, pmax, is_min, cmin, cmax, cof, soft, equip, spec, descr, extras, days_ago)
+join public.employers e on e.clinic_name = s.clinic;
+
+-- Some sample tags on the earlier sample optometrist jobs, and employee counts for the sample clinics (Admin only, changes no rule).
+update public.jobs set tags_software = array['Wink'], tags_equipment = array['OCT'] where title = 'Optometrist' and employer_id in (select id from public.employers where clinic_name like '% (sample)') and pay_period = 'year';
+insert into public.employer_contacts (employer_id, notify_email, employee_band)
+select id, 'sample@example.invalid',
+       (array['10_24', '100_plus', '1_9', '1_9', '10_24', '25_99', '25_99', '10_24', '100_plus'])[((row_number() over (order by clinic_name) - 1) % 9)::int + 1]
+from public.employers where clinic_name like '% (sample)' and claimed
+on conflict (employer_id) do update set employee_band = excluded.employee_band;
+
 -- ------------------------------------------------------------------ PART 2: the 2 demo accounts (skipped if they do not exist yet)
 -- Change the 2 addresses below if you used different ones. They are the addresses you signed up with on the demo site.
 do $$

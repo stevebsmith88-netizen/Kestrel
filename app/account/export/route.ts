@@ -27,7 +27,7 @@ export async function GET() {
 
   if (session.role === "candidate") {
     const [cp, apps] = await Promise.all([
-      db.from("candidate_profiles").select("profession, licensed_provinces, years_experience, available_from, phone, cv_filename, cv_uploaded_at, created_at, updated_at").eq("user_id", id).maybeSingle(),
+      db.from("candidate_profiles").select("profession, licensed_provinces, software_skills, years_experience, available_from, phone, cv_filename, cv_uploaded_at, created_at, updated_at").eq("user_id", id).maybeSingle(),
       db.from("applications").select("id, job_title, clinic_name, job_location, status, cover_letter, keep_details, applicant, cv_filename, clinic_message, viewed_at, status_changed_at, created_at").eq("candidate_id", id).order("created_at", { ascending: false }),
     ]);
     const [letters, drafts] = await Promise.all([
@@ -42,13 +42,13 @@ export async function GET() {
     data.applications = (apps.data ?? []).map(({ id: appId, ...a }) => ({ ...a, history: (events.data ?? []).filter((e) => e.application_id === appId).map(({ status, note, created_at }) => ({ status, note, at: created_at })) }));
   } else {
     const employer = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).maybeSingle();
-    const contact = employer.data ? await db.from("employer_contacts").select("notify_email").eq("employer_id", employer.data.id).maybeSingle() : { data: null };
+    const contact = employer.data ? await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.data.id).maybeSingle() : { data: null };
     const jobs = employer.data
-      ? await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.data.id).order("created_at", { ascending: false })
+      ? await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.data.id).order("created_at", { ascending: false })
       : { data: [] };
-    const templates = employer.data ? await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.data.id) : { data: [] };
+    const templates = employer.data ? await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.data.id) : { data: [] };
     data.jobTemplates = templates.data ?? [];
-    data.clinic = employer.data ? { ...employer.data, id: undefined, alertEmail: contact.data?.notify_email ?? null } : null;
+    data.clinic = employer.data ? { ...employer.data, id: undefined, alertEmail: contact.data?.notify_email ?? null, employeeCount: contact.data?.employee_band ?? null } : null;
     data.jobs = jobs.data ?? [];
   }
 

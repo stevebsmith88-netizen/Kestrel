@@ -1,6 +1,8 @@
 // Turns the job form into a checked job and a database row. Used by the clinic's own form and by the admin's "post for a clinic" form,
 // so both follow exactly the same rules (pay range, the 2 questions, no Canadian experience).
-import { cleanJob, parseMoney, validateJob } from "./jobs.ts";
+import { editBasis, payColumns, type PayFields } from "./job-pay.ts";
+import { tagsFromRow } from "./job-tags.ts";
+import { cleanJob, validateJob } from "./jobs.ts";
 
 const field = (form: FormData, key: string) => form.get(key) ?? "";
 
@@ -22,6 +24,13 @@ export function jobFromForm(form: FormData, submit: boolean) {
     workArrangement: field(form, "workArrangement"),
     territory: field(form, "territory"),
     payExtras: field(form, "payExtras"),
+    payPercentMin: field(form, "payPercentMin"),
+    payPercentMax: field(form, "payPercentMax"),
+    payPercentOf: field(form, "payPercentOf"),
+    payPercentToo: field(form, "payPercentToo"),
+    tagsSoftware: form.getAll("tagsSoftware"),
+    tagsEquipment: form.getAll("tagsEquipment"),
+    tagsSpecialties: form.getAll("tagsSpecialties"),
   });
   const errors = validateJob(job, submit);
   const row = {
@@ -30,9 +39,7 @@ export function jobFromForm(form: FormData, submit: boolean) {
     employment_type: job.employmentType || null,
     province: job.province || null,
     city: job.city || null,
-    pay_period: job.payPeriod || null,
-    pay_min: parseMoney(job.payMin),
-    pay_max: parseMoney(job.payMax),
+    ...payColumns(job),
     is_existing_vacancy: job.existingVacancy === "yes" ? true : job.existingVacancy === "no" ? false : null,
     uses_ai_screening: job.usesAi === "yes" ? true : job.usesAi === "no" ? false : null,
     description: job.description || null,
@@ -41,7 +48,31 @@ export function jobFromForm(form: FormData, submit: boolean) {
     work_arrangement: job.workArrangement,
     territory: job.workArrangement === "field" ? job.territory || null : null,
     pay_extras: job.payExtras || null,
+    tags_software: job.tagsSoftware,
+    tags_equipment: job.tagsEquipment,
+    tags_specialties: job.tagsSpecialties,
     status: submit ? "in_review" : "draft",
   };
   return { job, row, errors };
+}
+
+type PayAndTagsRow = PayFields & { tags_software?: string[] | null; tags_equipment?: string[] | null; tags_specialties?: string[] | null };
+
+// The pay and tag boxes of the job form, filled in from a saved job or template (for editing, reposting or starting from a template).
+export function payAndTagValues(row: PayAndTagsRow | null | undefined) {
+  const r = row ?? {};
+  const text = (v: number | string | null | undefined) => (v === null || v === undefined ? "" : String(v));
+  const tags = tagsFromRow(r);
+  return {
+    pay_period: editBasis(r),
+    pay_min: text(r.pay_min),
+    pay_max: text(r.pay_max),
+    pay_percent_min: text(r.pay_percent_min),
+    pay_percent_max: text(r.pay_percent_max),
+    pay_percent_of: r.pay_percent_of ?? "",
+    pay_percent_too: r.pay_is_minimum === true && r.pay_percent_min ? "yes" : "",
+    tags_software: tags.software,
+    tags_equipment: tags.equipment,
+    tags_specialties: tags.specialties,
+  };
 }

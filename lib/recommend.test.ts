@@ -20,6 +20,7 @@ const job = (over: Partial<MatchJob> & { id: string }): MatchJob => ({
 });
 
 const prefs = (over: Partial<Prefs> = {}): Prefs => ({
+  software: [],
   profession: "Optician",
   otherRoles: [],
   licensedProvinces: ["Ontario"],
@@ -110,4 +111,27 @@ test("the list is capped, and the same input always gives the same list", () => 
   assert.equal(recommend(prefs(), many, { now: NOW, max: 5 }).length, 5);
   assert.deepEqual(ids(many, prefs()), ids(many, prefs()));
   assert.equal(recommend(prefs(), many, { now: NOW }).length, 8);
+});
+
+test("a daily rate, a daily minimum or a percentage is never dropped by a minimum pay, and a missing figure is not treated as $0", () => {
+  const p = prefs({ profession: "Optometrist", minPay: 100000, payPeriod: "year" });
+  const od = (id: string, pay: Partial<MatchJob>) => job({ id, role_category: "Optometrist", ...pay });
+  const jobs = [
+    od("salary-low", { pay_period: "year", pay_min: 60000, pay_max: 80000 }),
+    od("salary-ok", { pay_period: "year", pay_min: 110000, pay_max: 130000 }),
+    od("day", { pay_period: "day", pay_min: 900, pay_max: 1100 }),
+    od("minimum", { pay_period: "day", pay_min: 600, pay_max: 800, pay_is_minimum: true }),
+    od("percent", { pay_period: null, pay_min: null, pay_max: null, pay_percent_min: 28, pay_percent_max: 35, pay_percent_of: "production" }),
+  ];
+  assert.deepEqual(new Set(ids(jobs, p)), new Set(["salary-ok", "day", "minimum", "percent"]));
+  const reasons = recommend(p, jobs, { now: NOW }).flatMap((r) => (["day", "minimum", "percent"].includes(r.job.id) ? r.reasons : []));
+  assert.ok(!reasons.some((r) => /Pay/.test(r)), "no pay reason is given for pay that cannot be compared");
+});
+
+test("a job that uses the candidate's practice software ranks higher, with the reason", () => {
+  const p = prefs({ software: ["Wink", "Acuitas"] });
+  const out = recommend(p, [job({ id: "plain" }), job({ id: "wink", tags_software: ["Wink", "Optosys"] })], { now: NOW });
+  assert.equal(out[0].job.id, "wink");
+  assert.ok(out[0].reasons.includes("Uses Wink, which you use"));
+  assert.ok(!recommend(prefs(), [job({ id: "wink", tags_software: ["Wink"] })], { now: NOW })[0].reasons.some((r) => /which you use/.test(r)));
 });

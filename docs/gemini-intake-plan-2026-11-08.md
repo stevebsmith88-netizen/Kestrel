@@ -402,3 +402,35 @@ Things to watch rather than change: `directApply` is true for Quick Apply, but t
 - A job alert that uses distance, and "N candidates near you" figures for clinics (Phase 5, needs new work and a migration).
 - Running Google's Rich Results Test on a live job page, once there is one (Phase 4 or launch checks).
 - Optometrist pay basis and the pay formats that markup cannot yet express (Phase 2, then update `baseSalary` to match).
+
+---
+
+## Phase 2 results (9th November 2026)
+
+Design: `docs/phase-2-design-2026-11-09.md`. Built on branch `claude/serene-tesla-e4i39u`. **Needs migration 0034 on BOTH the live and the demo database** (it is in `supabase/combined/run-everything.sql`; run the whole file). No new Vercel setting.
+
+### Built
+
+- **Pay basis.** Salary and hourly as before. For the Optometrist role only: a daily rate, a percentage (of production, collections or billings), and a daily minimum guarantee with an optional percentage. A pay range is required for every basis, words like "negotiable" are refused. Width rules: salary and hourly unchanged, daily up to $200 a day wide, percentage up to 10 points wide. Largest values accepted: salary $1,000,000, hourly $500, daily $5,000, percentage 100. All pay wording comes from `lib/job-pay.ts` (`payText`, `payChips`), so no screen shows $0, $NaN, null or undefined. The bonus or commission note is the existing "pay extras" box, relabelled, for any role.
+- **Google markup.** Daily rate and daily minimum go in `baseSalary` with unit DAY. A percentage is never put in `baseSalary`; percentage and combined jobs carry the same pay sentence in the markup description as on the page.
+- **Pay benchmark and matching.** Quiet for the new bases (see `docs/pay-benchmark.md`).
+- **Tags.** Practice software, equipment and specialties, fixed in `lib/job-tags.ts`, ticked on the post a job form, shown on the job card (up to 3 names then "and N more") and job page, and used as search filters (any item within a group, every ticked group must match). Carried by templates, reposts, the review queue, the "what changed" view, the data download and the copy kept when a live job is edited.
+- **Candidate software skills.** Private to the candidate; used only to rank "Recommended for you" with a reason. Not sent to clinics or with applications.
+- **Employee count.** A band chosen on the clinic profile (required for a new clinic, asked of existing clinics next time they save). Stored in the private clinic contact table, so a candidate cannot read it. Shown in Admin in the review queue and as a "Clinics by size" line in Admin numbers and its CSV. It changes no rule.
+- **Fixed on the way.** Migration 0031 added the "Recommended for you" preference columns but gave candidates no permission to save them (confirmed on a scratch database). 0034 adds the permission. If saving those preferences failed on the live site, that was the cause.
+- **Tests.** `lib/job-pay.test.ts` (the 5 cases, width rules, odd values, markup), `lib/job-tags.test.ts`, `lib/job-columns.test.ts` (every column the form writes is in the permission lists), plus additions to the recommendation, diff and empty search tests.
+
+### Left alone
+
+- **Found listings** and the province search stay hourly or yearly only.
+- Nothing is hidden behind a login. Question I (extra detail for signed in optometrists) is **not built**, by Steve's decision. Recommendation: wait for the lawyer. Effort when wanted: about a day.
+- Search by pay basis, and job alerts by tag, are not built.
+- Officemate and Telus Health eClaims (named in the Gemini notes) are not on Steve's lists.
+
+### For the lawyer's list
+
+Percentage of production, collections or billings, and a daily minimum, under Ontario and BC pay range rules (does a percentage range count as a range of expected compensation); the 10 point and $200 a day width rules; any use of the self declared employee count; candidate software skills under privacy; product names shown as text only.
+
+### Later
+
+Distance and tag based job alerts; widening the pay bases to other roles if clinics ask; "N candidates use Wink" style figures for clinics (needs a decision on what candidates agree to).

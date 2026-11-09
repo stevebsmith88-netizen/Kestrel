@@ -3,6 +3,10 @@
 // can be tested on their own (see lib/jobs.test.ts).
 
 import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLES } from "./waitlist.ts";
+import { HOURS_IN_A_YEAR, markupPayLine, parseMoney, payFlags, payRangeAllowed, payText, salaryForMarkup, validatePay, type PayFields } from "./job-pay.ts";
+import { cleanTags, EQUIPMENT_TAGS, SOFTWARE_TAGS, SPECIALTY_TAGS } from "./job-tags.ts";
+
+export { HOURS_IN_A_YEAR, parseMoney, payRangeAllowed };
 
 export { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE };
 // Roles that work from clinics. The waitlist uses this list too, so it is kept as it is.
@@ -44,9 +48,6 @@ export const PAY_PERIODS = [
 ] as const;
 
 export const JOB_LIFETIME_DAYS = 30;
-export const HOURS_IN_A_YEAR = 2080;
-const MAX_RANGE = 50000;
-const NO_LIMIT_ABOVE = 200000;
 
 export type JobStatus = "draft" | "in_review" | "live" | "rejected" | "closed" | "expired";
 
@@ -76,6 +77,14 @@ export type JobInput = {
   workArrangement: string; // "on_site" | "field"
   territory: string;
   payExtras: string;
+  // How the pay is worked out is held in payPeriod (year, hour, day, day_minimum or percent). See lib/job-pay.ts.
+  payPercentMin: string;
+  payPercentMax: string;
+  payPercentOf: string;
+  payPercentToo: string; // "yes" when a daily minimum also pays a percentage
+  tagsSoftware: string[];
+  tagsEquipment: string[];
+  tagsSpecialties: string[];
 };
 
 export type JobFormState = { error?: string; message?: string; errors?: Record<string, string>; ad?: string };
@@ -89,7 +98,18 @@ export type ClinicInput = {
   about: string;
   notifyEmail: string;
   directHire: boolean;
+  employeeBand: string; // how many people work at the clinic. Private: shown to Admin only. Changes no rule.
 };
+
+// Stored values for the employee count band. The 25 band matters because Ontario's pay range rule starts at 25 employees, but nothing
+// in Kestrel changes with the answer: every post still needs a pay range.
+export const EMPLOYEE_BANDS = [
+  { value: "1_9", label: "1 to 9" },
+  { value: "10_24", label: "10 to 24" },
+  { value: "25_99", label: "25 to 99" },
+  { value: "100_plus", label: "100 or more" },
+] as const;
+export const employeeBandLabel = (value: string | null | undefined) => EMPLOYEE_BANDS.find((b) => b.value === value)?.label ?? "Not given";
 
 export const ALERT_FREQUENCIES = [
   { value: "daily", label: "Daily" },
@@ -132,21 +152,6 @@ export function mentionsCanadianExperience(text: string) {
   return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
 }
 
-// Parses "62,000", "$62000" or "24.50". Returns null for anything else.
-export function parseMoney(value: string): number | null {
-  const cleaned = value.replace(/[$,\s]/g, "");
-  if (!/^\d+(\.\d{1,2})?$/.test(cleaned)) return null;
-  const n = Number(cleaned);
-  return n > 0 ? n : null;
-}
-
-// True when a pay range is allowed: up to $50,000 wide a year (hourly pay is
-// converted to a year), unless the top of the range is over $200,000.
-export function payRangeAllowed(min: number, max: number, period: string) {
-  const factor = period === "hour" ? HOURS_IN_A_YEAR : 1;
-  return factor * (max - min) <= MAX_RANGE || factor * max > NO_LIMIT_ABOVE;
-}
-
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {
   return {
     title: clean(raw.title, 120),
@@ -154,7 +159,7 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     employmentType: clean(raw.employmentType, 30),
     province: clean(raw.province, 40),
     city: clean(raw.city, 80),
-    payPeriod: clean(raw.payPeriod, 10),
+    payPeriod: clean(raw.payPeriod, 12),
     payMin: clean(raw.payMin, 20),
     payMax: clean(raw.payMax, 20),
     existingVacancy: clean(raw.existingVacancy, 3),
@@ -165,6 +170,13 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     workArrangement: clean(raw.workArrangement, 10) === "field" ? "field" : "on_site",
     territory: clean(raw.territory, 200),
     payExtras: clean(raw.payExtras, 300),
+    payPercentMin: clean(raw.payPercentMin, 20),
+    payPercentMax: clean(raw.payPercentMax, 20),
+    payPercentOf: clean(raw.payPercentOf, 12),
+    payPercentToo: clean(raw.payPercentToo, 3) === "yes" ? "yes" : "",
+    tagsSoftware: cleanTags(raw.tagsSoftware, SOFTWARE_TAGS),
+    tagsEquipment: cleanTags(raw.tagsEquipment, EQUIPMENT_TAGS),
+    tagsSpecialties: cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS),
   };
 }
 
@@ -186,20 +198,7 @@ export function validateJob(job: JobInput, submit: boolean) {
   if (!job.city) errors.city = job.workArrangement === "field" ? "Enter the city you are based in." : "Enter the city.";
   if (job.workArrangement === "field" && job.territory.length < 3) errors.territory = "Tell us the area the person covers, for example Southern Ontario.";
 
-  if (!PAY_PERIODS.some((p) => p.value === job.payPeriod)) errors.payPeriod = "Choose whether the pay is a year or an hour.";
-  const min = parseMoney(job.payMin);
-  const max = parseMoney(job.payMax);
-  if (min === null) errors.payMin = "Enter the lowest pay, for example 62,000.";
-  if (max === null) errors.payMax = "Enter the highest pay, for example 74,000.";
-  if (min !== null && max !== null && !errors.payPeriod) {
-    if (max < min) errors.payMax = "The highest pay can't be lower than the lowest pay.";
-    else if (!payRangeAllowed(min, max, job.payPeriod)) {
-      errors.payMax =
-        job.payPeriod === "hour"
-          ? "The range is too wide. Hourly ranges can be up to $24 an hour wide, unless the top is over $96 an hour."
-          : "The range is too wide. Pay ranges can be up to $50,000 wide, unless the top is over $200,000.";
-    }
-  }
+  Object.assign(errors, validatePay(job));
 
   if (job.existingVacancy !== "yes" && job.existingVacancy !== "no") errors.existingVacancy = "Tell us whether this is an existing vacancy.";
   if (job.usesAi !== "yes" && job.usesAi !== "no") errors.usesAi = "Tell us whether you use AI to screen candidates.";
@@ -226,10 +225,11 @@ export function cleanClinic(raw: Partial<Record<keyof ClinicInput, unknown>>): C
     about: typeof raw.about === "string" ? raw.about.replace(/\r\n/g, "\n").trim().slice(0, 3000) : "",
     notifyEmail: clean(raw.notifyEmail, 254).toLowerCase(),
     directHire: raw.directHire === true,
+    employeeBand: EMPLOYEE_BANDS.some((b) => b.value === raw.employeeBand) ? String(raw.employeeBand) : "",
   };
 }
 
-export function validateClinic(c: ClinicInput) {
+export function validateClinic(c: ClinicInput, opts: { requireBand?: boolean } = {}) {
   const errors: Record<string, string> = {};
   if (!c.clinicName) errors.clinicName = "Enter your clinic's name.";
   if (!PRACTICE_TYPES.some((p) => p.value === c.practiceType)) errors.practiceType = "Choose independent, corporate or supplier.";
@@ -245,21 +245,17 @@ export function validateClinic(c: ClinicInput) {
     }
   }
   if (!EMAIL.test(c.notifyEmail)) errors.notifyEmail = "Enter an email address like hiring@yourclinic.ca.";
+  if (opts.requireBand && !c.employeeBand) errors.employeeBand = "Choose how many people work at your clinic.";
   if (!c.directHire) errors.directHire = "Please confirm that you are hiring directly for your own practice.";
   return errors;
 }
 
 // Things the admin should look at before approving a post.
-export function reviewFlags(job: { title?: string | null; description?: string | null; territory?: string | null; pay_extras?: string | null; pay_period?: string | null; pay_min?: number | string | null; pay_max?: number | string | null; apply_url?: string | null }) {
+export function reviewFlags(job: PayFields & { title?: string | null; description?: string | null; territory?: string | null; pay_extras?: string | null; apply_url?: string | null }) {
   const flags: string[] = [];
   const text = `${job.title ?? ""} ${job.description ?? ""} ${job.territory ?? ""} ${job.pay_extras ?? ""}`;
   if (mentionsCanadianExperience(text)) flags.push("Mentions Canadian experience");
-  const min = Number(job.pay_min);
-  const max = Number(job.pay_max);
-  if (min > 0 && max > 0 && job.pay_period && !payRangeAllowed(min, max, job.pay_period)) flags.push("Pay range is too wide");
-  // A typo such as $62 instead of $62,000, or 6 zeros too many, is far more likely than a real offer this low or high.
-  if (min > 0 && max > 0 && job.pay_period === "year" && (min < 25_000 || max > 500_000)) flags.push("Yearly pay looks unusually low or high. Check for a typing slip");
-  if (min > 0 && max > 0 && job.pay_period === "hour" && (min < 15 || max > 150)) flags.push("Hourly pay looks unusually low or high. Check for a typing slip");
+  flags.push(...payFlags(job));
   if (/\b(young|youthful|recent graduate only|digital native)\b/i.test(text)) flags.push("Wording that may point to age");
   for (const [pattern, message] of RIGHTS_WORDING) if (pattern.test(text)) flags.push(message);
   if (/(^|\s)(https?:\/\/|www\.)\S+/i.test(job.description ?? "")) flags.push("Contains a web link");
@@ -293,15 +289,10 @@ export function employerFlags(employer: { website?: string | null; notifyEmail?:
   return flags;
 }
 
-const money = (n: number) => {
-  const whole = Number.isInteger(n);
-  return `$${n.toLocaleString("en-CA", { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: 2 })}`;
-};
-
+// Pay as a range with a unit. Anything that is not a proper range reads "Pay not stated", never $0 or $NaN. For a whole job (daily minimums
+// and percentages too) use payText from lib/job-pay.ts.
 export function formatPay(min: number | string, max: number | string, period: string) {
-  const unit = period === "hour" ? "an hour" : "a year";
-  if (Number(min) === Number(max)) return `${money(Number(min))} ${unit}`;
-  return `${money(Number(min))} to ${money(Number(max))} ${unit}`;
+  return payText({ pay_period: period, pay_min: min, pay_max: max });
 }
 
 // The 2 questions every post answers. A found listing (from a clinic's own careers page) leaves them empty when the clinic's
@@ -337,9 +328,9 @@ const REGION_CODES: Record<string, string> = {
 // Locum work is temporary and usually done as a contractor, so both are given. Google accepts a list.
 const SCHEMA_EMPLOYMENT: Record<string, string | string[]> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: ["TEMPORARY", "CONTRACTOR"], Contract: "CONTRACTOR" };
 
-type PublicJob = {
+type PublicJob = PayFields & {
   id: string; title: string; description: string; employment_type: string; province: string; city: string;
-  pay_period: string; pay_min: number | string; pay_max: number | string; apply_method: string; apply_url: string | null;
+  apply_method: string; apply_url: string | null;
   posted_at: string; expires_at: string; territory?: string | null; pay_extras?: string | null; work_arrangement?: string | null;
 };
 type PublicClinic = { clinic_name: string; website: string | null };
@@ -348,9 +339,11 @@ const escapeHtml = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "
 
 // The job's text as Google reads it: special characters made safe first (so "<2 years" is not read as a tag), then line
 // breaks, then the 2 facts the page shows beside the ad for field roles and extra pay, so the markup says what the page says.
-export function markupDescription(job: Pick<PublicJob, "description" | "territory" | "pay_extras" | "work_arrangement">) {
+export function markupDescription(job: Pick<PublicJob, "description" | "territory" | "pay_extras" | "work_arrangement"> & PayFields) {
   const extras = [
     job.work_arrangement === "field" && job.territory ? `Area covered: ${job.territory}` : "",
+    // A percentage cannot go in baseSalary, so the page's pay sentence is given here instead (see lib/job-pay.ts).
+    markupPayLine(job) ?? "",
     job.pay_extras ? `Also part of the pay: ${job.pay_extras}` : "",
   ].filter(Boolean);
   return [escapeHtml(job.description).replace(/\n/g, "<br>"), ...extras.map(escapeHtml)].join("<br><br>");
@@ -359,6 +352,7 @@ export function markupDescription(job: Pick<PublicJob, "description" | "territor
 // Google's structured data for a job. Everything here is also shown on the page,
 // because Google requires the two to match exactly.
 export function jobPostingJsonLd(job: PublicJob, clinic: PublicClinic, siteUrl: string) {
+  const salary = salaryForMarkup(job);
   return {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -373,11 +367,10 @@ export function jobPostingJsonLd(job: PublicJob, clinic: PublicClinic, siteUrl: 
       "@type": "Place",
       address: { "@type": "PostalAddress", addressLocality: job.city, addressRegion: REGION_CODES[job.province] ?? job.province, addressCountry: "CA" },
     },
-    baseSalary: {
-      "@type": "MonetaryAmount",
-      currency: "CAD",
-      value: { "@type": "QuantitativeValue", minValue: Number(job.pay_min), maxValue: Number(job.pay_max), unitText: job.pay_period === "hour" ? "HOUR" : "YEAR" },
-    },
+    // A percentage can never be a salary figure, so a percentage only job has no baseSalary (its pay is in the description instead).
+    ...(salary
+      ? { baseSalary: { "@type": "MonetaryAmount", currency: "CAD", value: { "@type": "QuantitativeValue", minValue: salary.min, maxValue: salary.max, unitText: salary.unitText } } }
+      : {}),
     directApply: job.apply_method === "kestrel",
     url: `${siteUrl}/jobs/${job.id}`,
     identifier: { "@type": "PropertyValue", name: "Kestrel Eye Care Jobs", value: job.id },

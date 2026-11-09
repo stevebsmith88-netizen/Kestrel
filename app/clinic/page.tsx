@@ -13,7 +13,8 @@ import { getMyJobNumbers } from "@/lib/job-stats-data";
 import { closeJob, deleteJob, extendJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
 import { canExtend } from "@/lib/job-ending";
 import { saveJobAsTemplate } from "@/lib/template-actions";
-import { daysLeft, employmentLabel, formatPay, longDate } from "@/lib/jobs";
+import { daysLeft, employmentLabel, longDate } from "@/lib/jobs";
+import { payBasisOf, payText } from "@/lib/job-pay";
 
 export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -99,7 +100,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                       <div className="jobmain">
                         <h3>{j.title}</h3>
                         <p className="meta">
-                          {[employmentLabel(j.employment_type), j.city && j.province ? `${j.city}, ${j.province}` : null, j.pay_min && j.pay_max && j.pay_period ? formatPay(j.pay_min, j.pay_max, j.pay_period) : null].filter(Boolean).join(" · ") || "Not finished yet"}
+                          {[employmentLabel(j.employment_type), j.city && j.province ? `${j.city}, ${j.province}` : null, payBasisOf(j) ? payText(j) : null].filter(Boolean).join(" · ") || "Not finished yet"}
                         </p>
                         {j.posted_at && <p className="meta">{numbersLine(numbers[j.id])}</p>}
                         {j.status === "live" && j.expires_at && <p className="meta">Live until {longDate(j.expires_at)} ({daysLeft(j.expires_at)} days left)</p>}

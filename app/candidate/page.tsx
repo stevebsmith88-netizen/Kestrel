@@ -8,7 +8,8 @@ import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
 import { candidateSteps } from "@/lib/checklist";
 import { getMyApplications, getMyCandidateProfile, profileReady, profileStrength } from "@/lib/candidate";
-import { employmentLabel, formatPay, longDate } from "@/lib/jobs";
+import { employmentLabel, longDate } from "@/lib/jobs";
+import { payChips } from "@/lib/job-pay";
 import { hideRecommendation } from "@/lib/recommendation-actions";
 import { getRecommendations } from "@/lib/recommendations";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -92,7 +93,7 @@ export default async function CandidateHome() {
                         <p className="meta">{j.employers?.clinic_name} · {j.city}, {j.province}</p>
                         <p className="chips">
                           <span className="chip">{employmentLabel(j.employment_type)}</span>
-                          <span className="chip paychip">{formatPay(j.pay_min, j.pay_max, j.pay_period)}</span>
+                          {payChips(j).map((c) => <span className="chip paychip" key={c}>{c}</span>)}
                         </p>
                         <p className="why"><strong>Why this fits:</strong> {reasons.slice(0, 4).join(" · ")}</p>
                       </div>

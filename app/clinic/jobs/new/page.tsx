@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import JobForm from "@/components/JobForm";
+import { payAndTagValues } from "@/lib/job-form";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer, getMyTemplate, getMyTemplates } from "@/lib/clinic";
 import { longDate } from "@/lib/jobs";
@@ -70,9 +71,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
               employment_type: start?.employment_type ?? "",
               province: start?.province ?? employer.province,
               city: start?.city ?? employer.city,
-              pay_period: start?.pay_period ?? "year",
-              pay_min: start?.pay_min?.toString() ?? "",
-              pay_max: start?.pay_max?.toString() ?? "",
+              ...payAndTagValues(start),
               is_existing_vacancy: "",
               uses_ai_screening: "",
               description: start?.description ?? "",

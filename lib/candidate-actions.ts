@@ -59,6 +59,7 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
       minPay: text(form, "minPay", 20),
       payPeriod: text(form, "payPeriod", 10),
       practice: text(form, "practice", 12),
+      softwareSkills: form.getAll("softwareSkills").map(String),
     },
     profession,
   );

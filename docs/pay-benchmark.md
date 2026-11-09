@@ -73,3 +73,7 @@ ChatGPT and Copilot both quote Job Bank's page for Alberta opticians as $17.36 l
 - If they are the 10th and 90th percentiles, or a different measure, our "middle half" label is right for our figures, and the Resources page should say in a line why it differs from the Job Bank page, since assistants and people compare the two.
 
 Nothing on the site changes until that is known. The same check applies to every province and role in the table.
+
+## Pay bases other than salary and hourly (Phase 2, 9th November 2026)
+
+The "typical pay" line compares **salary and hourly pay only**. It stays quiet for a daily rate, a daily minimum guarantee and a percentage of production, because Job Bank has no daily or percentage figure and turning a daily rate into a year would overstate a part time optometrist. Kestrel's own posted pay statistics skip those jobs too, and "Recommended for you" never drops a job because a daily or percentage pay cannot be compared with a candidate's minimum (`yearlyPay` in `lib/job-pay.ts`). Optometrist wages stay off the public pay table.

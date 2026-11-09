@@ -1,26 +1,28 @@
 import "server-only";
 import { supabasePublic } from "@/lib/supabase/public";
 import { cleanEmploymentTypes, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { cleanTagFilters, type TagFilters } from "@/lib/job-tags";
+import type { PayFields } from "@/lib/job-pay";
 import { RADIUS_OPTIONS, findPlace, nearbyKeys, placeKey, type Place } from "@/lib/places";
 
 export const PAGE_SIZE = 20;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export type JobFilters = { q?: string; city?: string; radius?: number; province?: string; role?: string; type?: string[]; practice?: string; arrangement?: string; page?: number };
+export type JobFilters = { q?: string; city?: string; radius?: number; province?: string; role?: string; type?: string[]; practice?: string; arrangement?: string; page?: number; tags?: TagFilters };
 
 // With a city chosen, jobs are matched in code against the places within the radius, from at most this many live jobs.
 const RADIUS_SEARCH_LIMIT = 1000;
 
-export type JobSummary = {
+export type JobSummary = PayFields & {
+  tags_software?: string[] | null;
+  tags_equipment?: string[] | null;
+  tags_specialties?: string[] | null;
   id: string;
   title: string;
   role_category: string;
   employment_type: string;
   province: string;
   city: string;
-  pay_period: string;
-  pay_min: number;
-  pay_max: number;
   posted_at: string;
   is_seeded: boolean;
   work_arrangement: string;
@@ -45,12 +47,13 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
     practice: pick(one("practice"), PRACTICE_TYPES.map((p) => p.value)),
     arrangement: pick(one("arrangement"), ["on_site", "field"] as const),
     page: Number.isFinite(page) && page > 0 ? Math.min(page, 500) : 1,
+    tags: cleanTagFilters(raw),
   };
 }
 
 export type SearchResult = { jobs: JobSummary[]; total: number; place?: Place | null; placeNotFound?: boolean };
 
-const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
+const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
 
 export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   const db = supabasePublic();
@@ -66,6 +69,10 @@ export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   if (filters.type?.length) query = query.in("employment_type", filters.type);
   if (filters.arrangement) query = query.eq("work_arrangement", filters.arrangement);
   if (filters.practice) query = query.eq("employers.practice_type", filters.practice);
+  // Within one group a job matches if it has any ticked name; every group with something ticked must match.
+  if (filters.tags?.software.length) query = query.overlaps("tags_software", filters.tags.software);
+  if (filters.tags?.equipment.length) query = query.overlaps("tags_equipment", filters.tags.equipment);
+  if (filters.tags?.specialties.length) query = query.overlaps("tags_specialties", filters.tags.specialties);
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
   query = query.order("posted_at", { ascending: false });
 
@@ -139,7 +146,7 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   if (!db) return null;
   const { data, error } = await db
     .from("jobs")
-    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
+    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
     .eq("id", id)
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString())

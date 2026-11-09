@@ -8,7 +8,9 @@ import { saveJobForClinic } from "@/lib/admin-job-actions";
 import { saveJob } from "@/lib/clinic-actions";
 import PayBenchmark from "@/components/PayBenchmark";
 import type { OwnPayStat } from "@/lib/pay-benchmark";
-import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PAY_PERIODS, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
+import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
+import { OPTOMETRIST_ONLY_BASES, OPTOMETRIST_ROLE, PAY_BASES, PERCENT_OF } from "@/lib/job-pay";
+import { TAG_GROUPS } from "@/lib/job-tags";
 
 export type JobFormValues = {
   id?: string;
@@ -28,6 +30,21 @@ export type JobFormValues = {
   work_arrangement: string;
   territory: string;
   pay_extras: string;
+  pay_percent_min: string;
+  pay_percent_max: string;
+  pay_percent_of: string;
+  pay_percent_too: string; // "yes" when a daily minimum also pays a percentage
+  tags_software: string[];
+  tags_equipment: string[];
+  tags_specialties: string[];
+};
+
+// Money boxes for each way of working out pay: what they are called and what the grey example shows.
+const MONEY_BOXES: Record<string, { low: string; high: string; lowEg: string; highEg: string; hint?: string }> = {
+  year: { low: "Lowest pay", high: "Highest pay", lowEg: "62,000", highEg: "74,000" },
+  hour: { low: "Lowest pay", high: "Highest pay", lowEg: "24", highEg: "28" },
+  day: { low: "Lowest daily rate", high: "Highest daily rate", lowEg: "900", highEg: "1,100", hint: "What you pay for a full day worked. A range can be up to $200 a day wide. If you pay one set amount, type it in both boxes." },
+  day_minimum: { low: "Lowest daily minimum", high: "Highest daily minimum", lowEg: "600", highEg: "800", hint: "The amount you guarantee for a day worked. A range can be up to $200 a day wide. If you guarantee one set amount, type it in both boxes." },
 };
 
 const YES_NO = [
@@ -51,9 +68,18 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   // Followed so the pay guide can compare the range as it is typed. The guide never changes what is saved.
   const [role, setRole] = useState(initial.role_category);
   const [province, setProvince] = useState(initial.province);
-  const [payPeriod, setPayPeriod] = useState(initial.pay_period);
+  const [payBasis, setPayBasis] = useState(initial.pay_period);
   const [payMin, setPayMin] = useState(initial.pay_min);
   const [payMax, setPayMax] = useState(initial.pay_max);
+  const [alsoPercent, setAlsoPercent] = useState(initial.pay_percent_too === "yes");
+  // Daily rates, daily minimums and percentages are for optometrist roles. For any other role the choice falls back to a salary.
+  // Until a role is chosen, every choice is offered, so nobody has to pick the role first to see them.
+  const isOptometrist = role === OPTOMETRIST_ROLE;
+  const roleChosen = role !== "";
+  const bases = !roleChosen || isOptometrist ? PAY_BASES : PAY_BASES.filter((b) => !OPTOMETRIST_ONLY_BASES.includes(b.value));
+  const basis = bases.some((b) => b.value === payBasis) ? payBasis : "year";
+  const money = MONEY_BOXES[basis];
+  const showPercent = basis === "percent" || (basis === "day_minimum" && alsoPercent);
   const e = state.errors ?? {};
   return (
     <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
@@ -114,21 +140,64 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
       </div>
 
       <h2 className="formh">Pay</h2>
-      <p className="help formnote">A pay range is required on every post. It can be up to $50,000 wide a year, unless the top of the range is over $200,000. This follows the pay transparency rules in Ontario and British Columbia.</p>
-      <Choices name="payPeriod" label="Paid" options={PAY_PERIODS} value={initial.pay_period} onChange={setPayPeriod} error={e.payPeriod} />
-      <div className="pair">
-        <Field id="jf-min" label="Lowest pay" required error={e.payMin}>
-          <input id="jf-min" name="payMin" type="text" inputMode="decimal" value={payMin} onChange={(ev) => setPayMin(ev.target.value)} placeholder="62,000" />
-        </Field>
-        <Field id="jf-max" label="Highest pay" required error={e.payMax}>
-          <input id="jf-max" name="payMax" type="text" inputMode="decimal" value={payMax} onChange={(ev) => setPayMax(ev.target.value)} placeholder="74,000" />
-        </Field>
-      </div>
-      <PayBenchmark role={role} province={province} period={payPeriod} min={payMin} max={payMax} own={ownPay} />
+      <p className="help formnote">A pay range is required on every post, however the pay is worked out. Words such as &quot;negotiable&quot; or &quot;discussed at interview&quot; are not accepted on their own. Enter the range you expect to pay, even if the final offer may be higher. Pay is shown to everyone. This follows the pay transparency rules in Ontario and British Columbia.</p>
+      <Choices key={bases.length} name="payPeriod" label="How is the pay worked out?" options={bases} value={basis} onChange={setPayBasis} error={e.payPeriod} hint={!roleChosen || isOptometrist ? undefined : "Daily rates and percentages are available when the role is Optometrist."} />
+      {money && (
+        <>
+          <div className="pair">
+            <Field id="jf-min" label={money.low} required error={e.payMin} hint={money.hint}>
+              <input id="jf-min" name="payMin" type="text" inputMode="decimal" value={payMin} onChange={(ev) => setPayMin(ev.target.value)} placeholder={money.lowEg} />
+            </Field>
+            <Field id="jf-max" label={money.high} required error={e.payMax}>
+              <input id="jf-max" name="payMax" type="text" inputMode="decimal" value={payMax} onChange={(ev) => setPayMax(ev.target.value)} placeholder={money.highEg} />
+            </Field>
+          </div>
+          {basis === "day_minimum" && (
+            <label className="choice agree">
+              <input type="checkbox" name="payPercentToo" value="yes" checked={alsoPercent} onChange={(ev) => setAlsoPercent(ev.target.checked)} />
+              <span>The optometrist is also paid a percentage when it comes to more than the daily minimum</span>
+            </label>
+          )}
+        </>
+      )}
+      {showPercent && (
+        <>
+          <div className="pair">
+            <Field id="jf-pmin" label="Lowest percentage" required error={e.payPercentMin} hint="A range can be up to 10 points wide, for example 28% to 38%.">
+              <input id="jf-pmin" name="payPercentMin" type="text" inputMode="decimal" defaultValue={initial.pay_percent_min} placeholder="28" />
+            </Field>
+            <Field id="jf-pmax" label="Highest percentage" required error={e.payPercentMax}>
+              <input id="jf-pmax" name="payPercentMax" type="text" inputMode="decimal" defaultValue={initial.pay_percent_max} placeholder="35" />
+            </Field>
+          </div>
+          <Field id="jf-pof" label="The percentage is of" required error={e.payPercentOf} hint="Production is the value of the work done. Collections is the money actually received. Billings is the amount invoiced.">
+            <select id="jf-pof" name="payPercentOf" defaultValue={initial.pay_percent_of || "production"}>
+              {PERCENT_OF.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+            </select>
+          </Field>
+        </>
+      )}
+      {(basis === "year" || basis === "hour") && <PayBenchmark role={role} province={province} period={basis} min={payMin} max={payMax} own={ownPay} />}
 
-      <Field id="jf-extras" label="Anything else that is part of the pay" error={e.payExtras} hint="Optional. For example: plus commission, a car allowance or a company vehicle. The range above should be the base pay.">
+      <Field id="jf-extras" label="Bonus, commission or anything else that is part of the pay" error={e.payExtras} hint="Optional. For example: a yearly bonus, plus commission, a car allowance or a company vehicle. The range above should be the base pay.">
         <input id="jf-extras" name="payExtras" type="text" maxLength={300} defaultValue={initial.pay_extras} />
       </Field>
+
+      <h2 className="formh">Tools and specialties</h2>
+      <p className="help formnote">Optional. Tick what the person will work with. Candidates can search by these.</p>
+      {TAG_GROUPS.map((g) => (
+        <fieldset className="row tagrow" key={g.key}>
+          <legend className="lab">{g.label}</legend>
+          <div className="choices">
+            {g.list.map((name) => (
+              <label className="choice" key={name}>
+                <input type="checkbox" name={g.field} value={name} defaultChecked={initial[`tags_${g.key}` as "tags_software" | "tags_equipment" | "tags_specialties"].includes(name)} />
+                <span>{name}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ))}
 
       <h2 className="formh">2 quick questions</h2>
       <Choices name="existingVacancy" label="Is this an existing vacancy?" options={YES_NO} value={initial.is_existing_vacancy} error={e.existingVacancy} hint="Choose No if you are building a pool of candidates for the future." />

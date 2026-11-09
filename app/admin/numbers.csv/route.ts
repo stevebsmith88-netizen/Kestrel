@@ -37,6 +37,7 @@ export async function GET(request: Request) {
     ["Clinics and suppliers", s.employers],
     ["Claimed", s.claimedEmployers],
     ["Found online, not claimed", s.foundEmployers],
+    ...s.clinicSizes.map((b): [string, unknown] => [`Clinics with ${b.label} people`, b.count]),
     ["Candidate accounts", s.candidateAccounts],
     ["Candidates who joined in the period", s.candidatesNow],
     ["Candidates who joined in the previous period", s.candidatesBefore],
