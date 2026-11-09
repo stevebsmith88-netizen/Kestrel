@@ -1,5 +1,5 @@
 import "server-only";
-import { countIn, gateC, investorNumbers, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts, type JobRow, type Period } from "@/lib/admin-stats";
+import { countIn, gateC, hiresSummary, investorNumbers, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts, type JobRow, type Period } from "@/lib/admin-stats";
 import { EMPLOYEE_BANDS } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -42,7 +42,7 @@ export async function loadStats(period: Period) {
     fetchAll<{ role: string; created_at: string }>(db, "profiles", "role, created_at"),
     fetchAll<{ created_at: string; confirmed_at: string | null; unsubscribed_at: string | null }>(db, "waitlist", "created_at, confirmed_at, unsubscribed_at"),
     fetchAll<{ id: string; claimed: boolean; owner_id: string | null; created_at: string }>(db, "employers", "id, claimed, owner_id, created_at"),
-    fetchAll<JobRow & { id: string }>(db, "jobs", "id, employer_id, status, posted_at, province, created_at"),
+    fetchAll<JobRow & { id: string; filled_via: string | null; filled_application_id: string | null }>(db, "jobs", "id, employer_id, status, posted_at, province, created_at, filled_via, filled_application_id"),
     fetchAll<{ job_id: string; candidate_id: string; created_at: string }>(db, "applications", "job_id, candidate_id, created_at"),
     fetchAll<{ user_id: string; cv_path: string | null; profession: string | null }>(db, "candidate_profiles", "user_id, cv_path, profession"),
     head(db, "jobs", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "in_review")),
@@ -108,6 +108,7 @@ export async function loadStats(period: Period) {
     investor: investorNumbers(jobs, applications.length),
     gateC: gateC(live.length, new Set(live.map((j) => j.province).filter(Boolean)).size),
     repeat60: repeatWithin(jobs, 60),
+    hires: hiresSummary(jobs),
     jobsInReview: inReview ?? 0,
     openReports: openReports ?? 0,
     pendingClaims: pendingClaims ?? 0,

@@ -26,6 +26,7 @@ export async function GET(request: Request) {
     ["Clinics that post again (percent)", s.investor.clinicsThatRepost],
     ["Applications per published job", s.investor.applicationsPerJob],
     ["Clinics that posted again within 60 days (percent)", s.repeat60.percent],
+    ["Hired through Kestrel (the clinic named the person)", s.hires.hiredThroughKestrel],
     ["Monthly recurring revenue", "not on yet"],
     ["Free to paid conversion", "not on yet"],
   ];

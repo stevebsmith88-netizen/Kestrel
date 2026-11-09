@@ -47,3 +47,7 @@ These are targets to measure against, not promises. Set real numbers after the f
 ## Not decided here
 
 - Whether a clinic that only ever posts one free job counts as a customer. The proposal says yes during the free launch, but reports will always show launch customers separately from paying ones.
+
+## Hire through Kestrel (November 2026)
+
+A hire through Kestrel is a job where the clinic, on the "Filled it?" page or the applicants page's "Role filled?" box, said it found the person through Kestrel and named them from the list of applicants. That application becomes Hired and the job keeps its id (`jobs.filled_application_id`). Admin shows this count, how many clinics said Kestrel without naming anyone, how many filled another way (by source), and the share of ended jobs where the clinic told us. The numbers are self reported, so they are a floor, not a full count.
