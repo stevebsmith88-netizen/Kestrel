@@ -674,3 +674,33 @@ fieldset.tagrow .lab { padding: 0; }
 .applytop{display:none;margin:14px 0 0}
 .applybox{scroll-margin-top:16px}
 @media (max-width:900px){.applytop{display:block}}
+
+/* Help centre (/help): 3 section boxes, each holding topic boxes. Plain details elements, so they work without JavaScript. */
+.help-controls{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.help-section{background:#fff;border:1px solid var(--line);border-radius:14px;margin:0 0 14px;scroll-margin-top:16px}
+.help-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:60px;padding:14px 20px}
+.help-section>summary::-webkit-details-marker,.help-topic>summary::-webkit-details-marker{display:none}
+.help-stitle{font:400 1.5rem/1.2 "DM Serif Display",Georgia,serif}
+.help-count{margin-left:auto;font-size:0.9375rem;color:var(--slate);white-space:nowrap}
+.help-section>summary::after,.help-topic>summary::after{content:"+";flex:none;width:1.5rem;text-align:center;font-weight:700;font-size:1.5rem;line-height:1;color:var(--chestnut)}
+.help-section[open]>summary::after,.help-topic[open]>summary::after{content:"\2212"}
+.help-section[open]>summary{border-bottom:1px solid var(--line)}
+.help-body{padding:6px 20px 12px}
+.help-intro{color:var(--navy-2);margin:12px 0 8px}
+.help-topic{border-top:1px solid var(--line);scroll-margin-top:16px}
+.help-intro+.help-topic{border-top:0}
+.help-topic>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:52px;padding:10px 0;font-weight:600;font-size:1.0625rem}
+.help-answer{padding:4px 0 18px;max-width:640px}
+.help-answer p{margin:0 0 12px}
+.help-steps{margin:0 0 14px;padding-left:1.4rem}
+.help-steps li{margin:0 0 8px}
+.help-links{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0 0}
+.help-links .btn{text-decoration:none}
+.help-updated{margin:22px 0 0;font-size:0.9375rem;color:var(--slate)}
+@media (max-width:560px){
+  .help-section>summary{padding:12px 16px}
+  .help-stitle{font-size:1.3125rem}
+  .help-count{font-size:0.875rem}
+  .help-body{padding:4px 16px 8px}
+  .help-topic>summary{min-height:56px}
+}
