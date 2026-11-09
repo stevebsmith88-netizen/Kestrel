@@ -544,3 +544,13 @@ The help centre is built at `/help` (branch `claude/stoic-meitner-s4qzqp`). No d
 - "Not interested" has no undo. The dashboard **Close** button does not message applicants, while **Filled it?** does.
 
 **Decided by Steve (10th November 2026):** candidates never pay, and the costs are all on the clinic side (the "Is it free" topic says so). Clinics are encouraged to reply within 5 days, and the reminder email goes after 14 days unopened (not after a few days, as first thought). The Contact page's 2 business days stays. All 35 topics were approved.
+
+### Help centre search (10th November 2026)
+
+Added after the merge, at Steve's request. A search box above the sections (shown only once the page script has run, like Expand all, so the page is unchanged without JavaScript).
+
+- **How it matches:** every word typed must be the start of a word in a topic's title, answer, steps or keywords. Capitals, accents, punctuation and plurals do not matter ("alerts" finds "alert", "CVs" finds "CV"). The rules are in `lib/help.ts` (`topicMatches`) and tested.
+- **What it does:** shows only matching topics, opens the sections that have one, and opens the topics themselves when 5 or fewer match (`SEARCH_OPEN_LIMIT`). A line says how many were found, and "No topics match" links to Contact. Clear or Escape puts everything back to closed. A link such as `/help#job-templates` clears the search first, so a deep link always works.
+- **Keywords:** each topic in `content/help.ts` has an optional `keywords` list of the words people use (resume, cancel, forgot, scam, renew). They are never shown, only searched. All 35 topics have them. When adding a topic, add the words people would type; the tests check that every topic is found by its own title and by each keyword.
+- No database change and no new setting.
+
