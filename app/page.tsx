@@ -8,8 +8,8 @@ import { homeModeNow } from "@/lib/launch";
 import SiteHeader from "@/components/SiteHeader";
 import { shareMetadata } from "@/lib/share";
 
-// Built ahead of time, and rebuilt at least hourly, so a scheduled post appears on the home page soon after its date.
-export const revalidate = 3600;
+// The header looks up who is signed in, so this page is built for each visit. That also means a scheduled post appears on the
+// home page as soon as its date arrives.
 
 // Before launch the page keeps the site's default "Coming soon" title. After launch (lib/launch.ts) it gets its own.
 export async function generateMetadata(): Promise<Metadata> {
