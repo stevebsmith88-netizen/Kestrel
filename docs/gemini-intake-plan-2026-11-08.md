@@ -578,3 +578,75 @@ Added after the merge, at Steve's request. A search box above the sections (show
 
 At Steve's request the General section starts open so the page does not look bare. Candidates and Clinics stay closed until clicked, and every topic inside General still starts closed. The list of sections that start open is `HELP_OPEN_BY_DEFAULT` in `lib/help.ts` (tested). It works without JavaScript. Clearing a search puts the page back as it first looked (General open, the rest closed), and Collapse all still closes everything. No database change and no new setting.
 
+
+---
+
+## Candidate experience review (raised by Steve while testing, November 2026, held for Wednesday)
+
+Nothing here is built. Steve walked through the candidate side and listed 7 points. Each has what the code does today (checked), the proposal, and what needs his decision. Several cross over to the clinic side and say so.
+
+### 1. The profile asks for provinces 3 times, and a lot of repeated questions
+
+**Today** (`components/CandidateProfileForm.tsx`): "Licensed or registered in" (provinces), "Your town or city" with "Its province or territory", and "Also happy to work in" (more provinces). Then type of work, lowest pay, kind of practice, software, other roles. Recommendations use the extra provinces if given, and fall back to the licensed ones only when there is no home town or extras (`lib/recommend.ts`), which is why it is unclear whether provinces already given count.
+**Proposal:** ask where they live once. Ask "Where are you registered to practise?" only for roles that need registration (optometrist, optician), and hide it for the rest. Make "Where would you work?" start with the home province ticked and the registered provinces ticked, so nobody re ticks what they already said. Split the form into short steps (the basics needed to apply, then what you are looking for, then extras), with Optional marked and a progress line. Say plainly on the form what each answer is used for.
+**Decide:** which questions are truly needed to apply, and which can wait until after the first application.
+**Clinic cross check:** see whether "post a job" repeats the clinic profile's province and city.
+
+### 2. "Recommended for you" is not obvious while filling in the profile
+
+**Today:** it appears on the candidate home once the profile is saved, and the getting started list points to it.
+**Proposal:** show a live line on the profile ("With these answers, 12 jobs fit you now") and a link that opens the recommended list as soon as it is saved. Add "See your recommended jobs" as a getting started step.
+
+### 3 and 4. The job list should default to the person's own role
+
+**Today** (`app/jobs/page.tsx`): the list is the same for everyone, with the role filter on "Any role". A signed in optician sees optometrist and assistant jobs.
+**Proposal:** for a signed in candidate with a profile, the list starts on "For me", their role plus the "other roles you would consider", and their province and distance, with a clear line "Showing jobs for Optician in Ontario. Show all jobs" so nothing is hidden. Visitors and search engines still see everything, so Google indexing is unaffected. The role filter is a single choice today, so showing the role and the other roles needs a "My roles" choice or a multi select.
+**Decide:** "For me" as the default, or a switch the person turns on.
+
+### 5. A candidate can apply for a role that is not theirs
+
+**Today:** applying only checks that the profile has a role and a CV (`lib/candidate-actions.ts`). An optician can apply for an optometrist job.
+**Proposal:** a candidate can apply when the job's role is their role or one of "other roles you would consider". Otherwise the Apply button is replaced by a message: "This role is for an optometrist. Your profile says optician. If that is not right, you can change your role in your profile to apply." with a button to the profile, and the server refuses a mismatched application too, not only the page. Offer "add this role to the ones you would consider" as a one click choice, so a genuine career move is easy.
+**Clinic cross check:** fewer unqualified applicants is the clinics' main complaint about general boards.
+**Decide:** is the rule strict (own role or listed roles only), and do any roles count as compatible by themselves (for example opticians and contact lens fitters)?
+
+### 6. People who are not in the industry
+
+**Today:** the role list is only eye care roles, so someone outside the industry has to pick the nearest one. There is no note on sign up.
+**Proposal:** a short line at sign up ("Kestrel is for people working in, or moving into, eye care in Canada"), and a "where are you in eye care" choice on the profile: working in eye care, student or new graduate, new to eye care. Clinics see it as a small tag on the application. Blog posts already encourage hiring from outside the industry, so it should be possible to be new, but regulated roles (optometrist, optician) should need registration or student or new graduate status.
+**Decide:** which roles a person new to eye care may apply for.
+
+### 7. The profile menu only shows on the dashboard
+
+**Today:** the initials badge with "Profile and CV" and the account links is in the app bar (`components/AppBar.tsx`), used on dashboard, profile and clinic pages. Public pages such as jobs, a job, the blog and help use the public header (`components/SiteHeader.tsx`), which shows "My dashboard" and "Sign out" but no profile menu.
+**Proposal:** show the same initials badge menu in the public header when signed in, beside "My dashboard", on every page and on a phone. Same for clinics ("Clinic profile", "Post a job"). Small to medium build.
+
+### Suggested order when this is picked up
+
+1. The header menu (point 7): small and self contained.
+2. The role rule on Apply, with the message (point 5): a correctness fix, and it needs the decision above.
+3. The "For me" job list (points 3 and 4).
+4. The profile redesign with the recommended preview (points 1 and 2), the largest.
+5. The sign up note and "where are you in eye care" (point 6), after the role decision.
+
+Update the help centre topics for the profile, applying and the job list in the same change as each step.
+
+### Steve's decisions on the candidate review (November 2026)
+
+1. **Roles that can apply for each other.** Optician and contact lens fitter are the one pair of regulated roles that overlap. The unregulated front of house roles are flexible with each other: patient care or reception (front desk, receptionist) and optometric assistant or technician (which includes pre test technician). Everyone can also add any other role through "other roles you would consider". The rule for Apply: the job's role is the candidate's role, or in the same group, or in their "other roles" list. Open point: the role list has no separate "contact lens fitter" (it sits inside Optician, and the price band names contact lens fitters with opticians), so either Optician covers both or a Contact lens fitter role is added (a migration, and a change to the role checks on jobs).
+2. **"For me" is the default job list for signed in candidates**, with a "Show all jobs" choice. Visitors and search engines see the full list as today. It also gives sponsored posts a natural place later (a sponsored post can be matched to the people it is for).
+3. **No role is closed to someone new to eye care.** A newly qualified optometrist who has never worked in a clinic is still a qualified person. "Where are you in eye care" is an information tag for the clinic, never a gate. Kestrel does not check registration, so "registered in" stays self declared.
+4. **Profile length: Claude's guidance, approved in principle.** Aim for under 2 minutes to be able to apply. Needed to apply: role, CV, town and province (the distance search and recommendations need them). Everything else is optional and can wait until after the first application: other roles (offered from the group above, with one tick each), where else they would work, type of work, how far to travel (25 km unless changed), kind of practice. Tucked under "More options": lowest pay, software, phone, available from. The "registered in" question appears only for roles that need registration. Each section says what it is used for. Details to confirm on Wednesday.
+
+### Idea: fill in the profile from the uploaded CV (Steve, November 2026)
+
+Steve asked whether an uploaded CV could fill in the profile (experience, job titles, education) so people type less. Yes, it can be built, and it fits the profile redesign: upload the CV first, press "Fill in from my CV", review the answers, then save. The trigger in CLAUDE.md ("AI may later read CVs to fill in a profile, only with clear consent, and only if candidates find the profile hard to complete") has now been met by Steve's own testing.
+
+**What it should fill (only what Kestrel uses):** role (from the latest job title, matched to the fixed list), years of experience (worked out from the dates, shown as a band), registered provinces if the CV says so, town and province, phone, and practice software (matched to the fixed software list). It should not copy the whole work history or education into the database: clinics read the CV itself when someone applies, and storing more would lengthen the form and add privacy risk.
+
+**What needs deciding or care:**
+- **Consent and privacy.** A separate, unticked consent box saying the CV text is read by an AI service to suggest profile answers, saved with its date and wording, like the other consents. The CV text goes to Anthropic's API, which may process it outside Canada, so the privacy policy and help centre must say so (CLAUDE.md: personal data stays in Canada "where possible"). Add it to the lawyer's list, and check the API's data retention terms.
+- **The CV is not processed today.** `docs/cv-scanning.md` says CVs are never opened by Kestrel's servers, which is part of the safety story. Reading one changes that. The safe route: run the existing check for macros and scripts first, send a PDF straight to the AI service without opening it ourselves, and for Word files either extract the text with a well known library or ask for a PDF for this feature. One new dependency is possible. Decide on Wednesday.
+- **Never trust the CV text.** A CV could contain hidden instructions to the AI. The answers must come back in a fixed shape, be checked against the fixed lists (roles, provinces, software), and be shown to the candidate to correct. Nothing saves by itself.
+- **Cost and abuse.** About a few cents per CV. Limit it to a few tries a day per person, inside the existing spend limit on the Anthropic key.
+- **Size.** About the same as the ad builder: one chat, plus a small migration for the consent record. Best built as part of the profile redesign, not before it.
