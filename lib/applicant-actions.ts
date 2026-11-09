@@ -69,7 +69,7 @@ const BULK_MAX = 100;
 const pickedIds = (form: FormData) => form.getAll("ids").map(String).filter((x) => UUID.test(x)).slice(0, BULK_MAX);
 
 // Tick some applicants and shortlist them. This sends no email: a shortlist is the clinic's own working list, and a candidate
-// who was told they were shortlisted and then did not get an interview would feel worse for it. They can see the step in their account.
+// who was told they were shortlisted and then did not get an interview would feel worse for it.
 export async function shortlistSelected(form: FormData) {
   await requireRole("clinic");
   const jobId = String(form.get("jobId") ?? "");
@@ -138,7 +138,9 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   await requireRole("clinic");
   const id = String(form.get("id") ?? "");
   const to = String(form.get("status") ?? "");
-  const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
+  // Shortlisting is the clinic's own working list: no message goes with it and the candidate is not emailed.
+  const quiet = to === "shortlisted";
+  const message = quiet ? "" : String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
   if (!UUID.test(id) || !isAppStatus(to)) return { error: "That didn't work. Please refresh and try again." };
 
   const db = await supabaseServer();
@@ -162,10 +164,10 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   }
   await admin.from("application_events").insert({ application_id: id, status: to, note: message || null });
 
-  await tellCandidate(admin, { id, candidate_id: app.candidate_id, applicant: app.applicant, job_title: app.job_title, clinic_name: app.clinic_name }, to, message);
+  if (!quiet) await tellCandidate(admin, { id, candidate_id: app.candidate_id, applicant: app.applicant, job_title: app.job_title, clinic_name: app.clinic_name }, to, message);
 
   revalidatePath(`/clinic/applications/${id}`);
-  return { message: "Saved. The candidate is told by email unless they have turned those emails off, and they can always see it in their account." };
+  return { message: quiet ? "Saved. Shortlisting is your own working list, so the candidate was not emailed." : "Saved. The candidate is told by email unless they have turned those emails off, and they can always see it in their account." };
 }
 
 export async function saveApplicantNote(_prev: JobFormState, form: FormData): Promise<JobFormState> {

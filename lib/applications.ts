@@ -84,7 +84,8 @@ export function messageTemplate(status: string, clinic: string) {
     case "kept":
       return `Thank you for applying to ${clinic}. We are not able to offer you this role right now, but we would like to keep your details for future openings, as you agreed when you applied.`;
     case "shortlisted":
-      return `Good news. ${clinic} has added you to the shortlist for this role. We will be in touch about next steps.`;
+      // Shortlisting is the clinic's own working list. The candidate is not emailed and no message goes with it.
+      return "";
     case "interview":
       return `${clinic} would like to interview you. [Add the date, time and how to join]`;
     case "offer":
