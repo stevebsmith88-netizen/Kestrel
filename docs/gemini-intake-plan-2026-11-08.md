@@ -650,3 +650,14 @@ Steve asked whether an uploaded CV could fill in the profile (experience, job ti
 - **Never trust the CV text.** A CV could contain hidden instructions to the AI. The answers must come back in a fixed shape, be checked against the fixed lists (roles, provinces, software), and be shown to the candidate to correct. Nothing saves by itself.
 - **Cost and abuse.** About a few cents per CV. Limit it to a few tries a day per person, inside the existing spend limit on the Anthropic key.
 - **Size.** About the same as the ad builder: one chat, plus a small migration for the consent record. Best built as part of the profile redesign, not before it.
+
+### Follow up to Phase 1D: a proper sweep of the remaining hyperlink style links (Steve, November 2026, for Wednesday)
+
+Steve is still finding underlined, hyperlink looking links around the site that Phase 1D did not reach. The candidate home is the clearest example (screenshot taken on the demo site):
+
+- "My saved cover letters", "What you are looking for" and "See all" are plain underlined links where a quiet button would read better ("Edit what you are looking for", "See all applications").
+- The card titles ("Optician in a boutique independent", "Associate Optometrist in Established LC") are chestnut and underlined, which reads as a hyperlink. The 1D rule kept title links on cards, but the underline makes them look rough. A navy title with no underline, and an underline only on hover and focus, would keep the link and lose the look. The card already has a View job button, so the title does not need to shout.
+
+**Scope, counted on 9th November 2026 from the code:** 269 links in `app` and `components`, 187 of them with no class of their own. That number is an upper bound, because many of the 187 sit inside a menu, the footer or a styled container that already styles them. The files with the most plain links are `app/resources/page.tsx` (13), `components/AuthForms.tsx` (10), `components/SiteHeader.tsx` (10, mostly menu items), `app/compare/page.tsx` (6), `app/candidate/page.tsx` (6), `app/admin/found/page.tsx` (5), the policy pages (5 each), `components/LaunchHome.tsx` (5), `components/LandingView.tsx` (5) and `app/jobs/page.tsx` (4).
+
+**How the sweep should run (same rules as Phase 1D, which stand):** links inside a sentence keep a thin underline, because colour alone fails WCAG 1.4.1. Everything else is a navigation link (bold, no underline, a clear hover) or a button. Start with a list of every page and every plain link on it, sorted into 3 piles (leave as is, make a button, make a navigation link), with a before and after sketch for Steve. Cover signed in pages (candidate, clinic, admin) and public pages, and check them on a phone as well. Add a test that fails when a new page adds a plain link outside a sentence, in the style of the footer test.
