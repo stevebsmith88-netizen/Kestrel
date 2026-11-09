@@ -55,7 +55,7 @@ export default function BulkApplicantPanel({ shortlist, interview }: { shortlist
         maxLength={1500}
         aria-describedby={problem ? "bulk-problem" : undefined}
         onChange={() => problem && setProblem("")}
-        placeholder="For example: We would like to meet you at the clinic on Tuesday 24th November at 2 pm. Please reply to this email to confirm, or to suggest another time."
+        placeholder="For example: We would like to meet you at the clinic on Tuesday 24th November at 2 pm. We will contact you using the details on your application to confirm."
       />
       <p className="help">Offers are never made in bulk. Open the application to make one.</p>
       {problem && <p className="notice warn bulkproblem" id="bulk-problem" role="alert">{problem}</p>}
