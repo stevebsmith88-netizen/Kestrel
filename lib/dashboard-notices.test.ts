@@ -33,3 +33,9 @@ test("the dashboard buttons save in place, so they use the quiet actions and not
   }
   assert.ok(page.includes("<ToastHost />"), "the message host is on the page");
 });
+
+test("the applicants page bulk buttons save in place too", () => {
+  const page = readFileSync(new URL("../app/clinic/jobs/[id]/applicants/page.tsx", import.meta.url), "utf8");
+  assert.ok(page.includes("shortlist={shortlistSelectedQuiet}") && page.includes("interview={interviewSelectedQuiet}") && page.includes("decline={declineSelectedQuiet}"));
+  assert.ok(page.includes("<ToastHost />"), "the message host is on the page");
+});

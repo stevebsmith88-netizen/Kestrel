@@ -23,8 +23,8 @@ export default function QuickActionForm({ action, ids, className, label, childre
   const [, run] = useActionState(async (prev: QuickState, form: FormData): Promise<QuickState> => {
     try {
       const result = await action(prev, form);
-      const text = result?.notice ? DASHBOARD_NOTICES[result.notice] : "";
-      if (text && result) showToast(text, noticeTone(result.notice));
+      const text = result?.text ?? (result?.notice ? DASHBOARD_NOTICES[result.notice] : "");
+      if (text && result) showToast(text, result.tone ?? noticeTone(result.notice));
       return result;
     } catch (e) {
       // A redirect (for example to sign in again) is not a failure, so let it through.

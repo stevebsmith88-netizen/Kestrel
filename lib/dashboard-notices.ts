@@ -23,7 +23,8 @@ export const DASHBOARD_NOTICES: Record<string, string> = {
 };
 
 // What an action on the dashboard hands back when it saves without leaving the page: the key of the message to show.
-export type QuickState = { notice: string } | null;
+// A button may also hand back its own wording and tone (the bulk buttons on the applicants page do, because their message has counts in it).
+export type QuickState = { notice: string; text?: string; tone?: "ok" | "warn" } | null;
 
 // A message that says something did not happen is shown in the yellow style, the rest in green.
 export const noticeTone = (key: string): "ok" | "warn" => (/(blocked|failed|limit)$/.test(key) ? "warn" : "ok");
