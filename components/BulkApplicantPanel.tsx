@@ -1,14 +1,40 @@
 "use client";
 
-import { useRef, useState, type MouseEvent } from "react";
+import { useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useFormStatus } from "react-dom";
+import { showToast } from "@/components/toast";
+import { BULK_PROBLEMS } from "@/lib/bulk-notices";
+import { DASHBOARD_NOTICES, noticeTone, type QuickState } from "@/lib/dashboard-notices";
 
-type BulkAction = (form: FormData) => void | Promise<void>;
+type BulkAction = (prev: QuickState, form: FormData) => Promise<QuickState>;
+
+// A button that sends the ticked applicants (and the message) to the server and shows the answer in a small message, without
+// leaving the page. It is disabled while it saves, so a double click cannot act twice.
+function BulkButton({ action, className, onCheck, children }: { action: BulkAction; className: string; onCheck: (e: MouseEvent<HTMLButtonElement>) => void; children: ReactNode }) {
+  const { pending } = useFormStatus();
+  async function run(form: FormData) {
+    try {
+      const result = await action(null, form);
+      const text = result?.text ?? (result?.notice ? DASHBOARD_NOTICES[result.notice] : "");
+      if (text && result) showToast(text, result.tone ?? noticeTone(result.notice));
+    } catch (e) {
+      // A redirect (for example to sign in again) is not a failure, so let it through.
+      if (String((e as { digest?: unknown } | null)?.digest ?? "").startsWith("NEXT_REDIRECT")) throw e;
+      showToast("We couldn't do that just now. Please try again in a moment.", "warn");
+    }
+  }
+  return (
+    <button type="submit" formAction={run} className={className} disabled={pending} aria-busy={pending} onClick={onCheck}>
+      {children}
+    </button>
+  );
+}
 
 // The "With the ticked applicants" box on the applicants page. It sits inside the page's form, so the 3 buttons send the ticked
 // applicants (and the message) to the server. The checks for "nothing ticked" and "no interview message" happen here, on the
-// page, before anything is sent, so the ticks and the message are never lost. The server checks again, for a browser without
-// scripts (lib/applicant-actions.ts).
-export default function BulkApplicantPanel({ shortlist, interview }: { shortlist: BulkAction; interview: BulkAction }) {
+// page, before anything is sent, so the ticks and the message are never lost. The server checks again (lib/applicant-actions.ts).
+// When a button works, the applicants list refreshes where it stands, the ticks and message clear, and a small message appears.
+export default function BulkApplicantPanel({ shortlist, interview, decline }: { shortlist: BulkAction; interview: BulkAction; decline: BulkAction }) {
   const [problem, setProblem] = useState("");
   const message = useRef<HTMLTextAreaElement>(null);
 
@@ -17,20 +43,20 @@ export default function BulkApplicantPanel({ shortlist, interview }: { shortlist
     if (!form) return;
     if (!form.querySelector('input[name="ids"]:checked')) {
       e.preventDefault();
-      setProblem("Tick at least one applicant first.");
+      setProblem(BULK_PROBLEMS.none);
       return;
     }
     if (needsMessage) {
       const text = message.current?.value.trim() ?? "";
       if (!text) {
         e.preventDefault();
-        setProblem("Write your interview invitation first. Include the date, time and how to join. Everyone you tick gets the same message.");
+        setProblem(BULK_PROBLEMS.message);
         message.current?.focus();
         return;
       }
       if (/\[[^\]]+\]/.test(text)) {
         e.preventDefault();
-        setProblem("Please replace the square brackets in your message with the real details before sending.");
+        setProblem(BULK_PROBLEMS.brackets);
         message.current?.focus();
         return;
       }
@@ -60,9 +86,9 @@ export default function BulkApplicantPanel({ shortlist, interview }: { shortlist
       <p className="help">Offers are never made in bulk. Open the application to make one.</p>
       {problem && <p className="notice warn bulkproblem" id="bulk-problem" role="alert">{problem}</p>}
       <div className="bulkbtns">
-        <button type="submit" formAction={shortlist} className="btn sm" onClick={(e) => check(e, false)}>Shortlist</button>
-        <button type="submit" formAction={interview} className="btn sm" onClick={(e) => check(e, true)}>Invite to interview</button>
-        <button type="submit" className="btn sm ghost" onClick={(e) => check(e, false)}>Send a kind no</button>
+        <BulkButton action={shortlist} className="btn sm" onCheck={(e) => check(e, false)}>Shortlist</BulkButton>
+        <BulkButton action={interview} className="btn sm" onCheck={(e) => check(e, true)}>Invite to interview</BulkButton>
+        <BulkButton action={decline} className="btn sm ghost" onCheck={(e) => check(e, false)}>Send a kind no</BulkButton>
       </div>
     </section>
   );

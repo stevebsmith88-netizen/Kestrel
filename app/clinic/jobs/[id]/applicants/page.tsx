@@ -4,10 +4,13 @@ import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import BulkApplicantPanel from "@/components/BulkApplicantPanel";
+import FilledViaFields from "@/components/FilledViaFields";
+import ToastHost from "@/components/ToastHost";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
-import { GROUP_LABELS, groupOf, type Group } from "@/lib/applications";
-import { declineSelected, fillRole, interviewSelected, shortlistSelected } from "@/lib/applicant-actions";
+import { GROUP_LABELS, HIREABLE, groupOf, type Group } from "@/lib/applications";
+import { declineSelected, declineSelectedQuiet, fillRole, interviewSelectedQuiet, shortlistSelectedQuiet } from "@/lib/applicant-actions";
+import { BULK_PROBLEMS, declinedText } from "@/lib/bulk-notices";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getMyJob } from "@/lib/clinic";
 import { FILL_SOURCES } from "@/lib/job-ending";
@@ -24,19 +27,11 @@ const FILTERS: (Group | "all")[] = ["all", "review", "interview", "offer", "clos
 
 type Row = { id: string; status: string; created_at: string; cover_letter: string | null; applicant: { name?: string; profession?: string | null; years_experience?: string | null; licensed_provinces?: string[] } };
 
-// What the page says after a bulk action, and why one could not be done. The wording is fixed here, never taken from the address.
-const BULK_ERRORS: Record<string, string> = {
-  none: "Tick at least one applicant first.",
-  message: "Write your interview invitation first. Include the date, time and how to join. Everyone you tick gets the same message.",
-  brackets: "Please replace the square brackets in your message with the real details before sending.",
-};
 
-export default async function Applicants({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ filter?: string; sent?: string; filled?: string; moved?: string; n?: string; skipped?: string; bulkerror?: string }> }) {
+export default async function Applicants({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ filter?: string; sent?: string; filled?: string; bulkerror?: string }> }) {
   const session = await requireRole("clinic");
   const { id } = await params;
-  const { filter, sent, filled, moved, n, skipped, bulkerror } = await searchParams;
-  const movedCount = Number.parseInt(n ?? "", 10);
-  const skippedCount = Number.parseInt(skipped ?? "", 10);
+  const { filter, sent, filled, bulkerror } = await searchParams;
   if (!UUID.test(id)) notFound();
   const job = await getMyJob(id);
   if (!job) notFound();
@@ -48,6 +43,8 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   const active: Group | "all" = (FILTERS as string[]).includes(filter ?? "") ? (filter as Group | "all") : "all";
   const count = (f: Group | "all") => (f === "all" ? rows.length : rows.filter((r) => groupOf(r.status) === f).length);
   const waiting = rows.filter((r) => WAITING.includes(r.status));
+  // The people the clinic could name as the one it hired, for the "role filled" form.
+  const hireCandidates = rows.filter((r) => (HIREABLE as readonly string[]).includes(r.status)).map((r) => ({ id: r.id, status: r.status, name: r.applicant?.name?.trim() || "Applicant" }));
   const sentCount = Number.parseInt(sent ?? "", 10);
   const shown = active === "all" ? rows : rows.filter((r) => groupOf(r.status) === active);
   // When any row has a tick box, every row gets the tick box column, so the names line up down the page.
@@ -64,21 +61,9 @@ export default async function Applicants({ params, searchParams }: { params: Pro
           <p className="lede2">{rows.length} {rows.length === 1 ? "applicant" : "applicants"}. Open an application to read their cover letter and CV, and to let them know where they stand.</p>
 
           {Number.isFinite(sentCount) && (
-            <p className="ok-msg" role="status">
-              {filled ? "Marked as filled. " : ""}{sentCount === 0 ? "Nobody was waiting, so no messages were sent." : `${sentCount} ${sentCount === 1 ? "candidate has" : "candidates have"} been told, kindly, and can see it in their account.`}
-            </p>
+            <p className="ok-msg" role="status">{filled ? "Marked as filled. " : ""}{declinedText(sentCount)}</p>
           )}
-          {bulkerror && BULK_ERRORS[bulkerror] && <p className="notice warn" role="alert">{BULK_ERRORS[bulkerror]}</p>}
-          {(moved === "shortlisted" || moved === "interview") && Number.isFinite(movedCount) && (
-            <p className="ok-msg" role="status">
-              {movedCount === 0
-                ? "Nobody was moved."
-                : moved === "shortlisted"
-                  ? `${movedCount} ${movedCount === 1 ? "applicant is" : "applicants are"} now shortlisted. No email was sent.`
-                  : `${movedCount} ${movedCount === 1 ? "applicant has" : "applicants have"} been invited to interview, by email and in their account.`}
-              {Number.isFinite(skippedCount) && skippedCount > 0 ? ` ${skippedCount} ${skippedCount === 1 ? "was" : "were"} left as they were, because they were already at that step or had withdrawn.` : ""}
-            </p>
-          )}
+          {bulkerror && BULK_PROBLEMS[bulkerror] && <p className="notice warn" role="alert">{BULK_PROBLEMS[bulkerror]}</p>}
           {waiting.length > 0 && <p className="replynote">{waiting.length} {waiting.length === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
 
           <nav className="tabs" aria-label="Filter applicants">
@@ -115,7 +100,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               ))}
             </div>
             {shown.some((r) => WAITING.includes(r.status)) && (
-              <BulkApplicantPanel shortlist={shortlistSelected} interview={interviewSelected} />
+              <BulkApplicantPanel shortlist={shortlistSelectedQuiet} interview={interviewSelectedQuiet} decline={declineSelectedQuiet} />
             )}
             </form>
           )}
@@ -125,19 +110,14 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               <input type="hidden" name="jobId" value={id} />
               <h2>Role filled?</h2>
               <p className="help">This closes the job and lets the {waiting.length} {waiting.length === 1 ? "person" : "people"} still waiting know it has been filled. Candidates in an interview or with an offer are not changed.</p>
-              <div className="row">
-                <label className="lab" htmlFor="filledVia">How did you find the person?</label>
-                <select id="filledVia" name="filledVia" defaultValue="">
-                  <option value="">Choose one (optional)</option>
-                  {FILL_SOURCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-                </select>
-              </div>
+              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="ap" />
               <label className="consent"><input type="checkbox" name="confirm" value="yes" required /><span>Yes, close this job and tell everyone who is waiting.</span></label>
               <div><button type="submit" className="btn sm">The role is filled</button></div>
             </form>
           )}
         </div>
       </main>
+      <ToastHost />
       <AppFooter />
     </>
   );

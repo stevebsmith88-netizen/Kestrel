@@ -3,9 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import FilledViaFields from "@/components/FilledViaFields";
 import { requireRole } from "@/lib/auth";
 import { fillRole } from "@/lib/applicant-actions";
-import { getApplicantCounts, getMyJob } from "@/lib/clinic";
+import { getApplicantCounts, getHireCandidates, getMyJob } from "@/lib/clinic";
 import { extendJob } from "@/lib/clinic-actions";
 import { EXTEND_GRACE_DAYS, EXTEND_WINDOW_DAYS, FILL_SOURCES, canExtend, extendedUntil } from "@/lib/job-ending";
 import { longDate } from "@/lib/jobs";
@@ -32,6 +33,7 @@ export default async function JobEnding({ params, searchParams }: { params: Prom
   if (!job) notFound();
   const counts = await getApplicantCounts();
   const waiting = counts[id]?.waiting ?? 0;
+  const hireCandidates = await getHireCandidates(id);
   const now = new Date();
   const extendable = canExtend(job, now);
   const ended = job.status === "expired" || job.status === "closed";
@@ -66,21 +68,7 @@ export default async function JobEnding({ params, searchParams }: { params: Prom
               <input type="hidden" name="jobId" value={job.id} />
               <input type="hidden" name="from" value="ending" />
               <h2>Filled it?</h2>
-              <fieldset className="provinces">
-                <legend className="lab">How did you find the person?</legend>
-                <div className="choices">
-                  {FILL_SOURCES.map((s) => (
-                    <label className="choice" key={s.value}>
-                      <input type="radio" name="filledVia" value={s.value} />
-                      <span>{s.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </fieldset>
-              <div className="row">
-                <label className="lab" htmlFor="filledViaOther">If it was another way, how?</label>
-                <input type="text" id="filledViaOther" name="filledViaOther" maxLength={200} />
-              </div>
+              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="end" />
               <p className="help">
                 {ended ? "We'll save your answer. " : "This closes the job. "}
                 {waiting > 0

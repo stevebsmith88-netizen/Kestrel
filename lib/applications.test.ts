@@ -6,6 +6,7 @@ import {
   activeContent,
   STEPS,
   CANDIDATE_STEPS,
+  HIREABLE,
   candidateHistory,
   candidateStatus,
   clinicMoveError,
@@ -32,7 +33,7 @@ test("progress comes from how far the application got", () => {
   assert.equal(reachedStep(["applied", "viewed", "shortlisted"], "not_selected"), 2);
   assert.equal(reachedStep(["applied"], "role_filled"), 0);
   assert.equal(reachedStep(["applied", "viewed"], "interview"), 3);
-  assert.equal(STEPS.length, 5);
+  assert.equal(STEPS.length, 6, "a clinic sees 6 steps, ending with Hired");
 });
 
 test("a clinic cannot make a move it should not", () => {
@@ -120,9 +121,20 @@ test("a candidate never sees Shortlisted: it shows as Viewed, once, in their his
   assert.deepEqual(candidateHistory([{ status: "applied" }, { status: "shortlisted" }]).map((e) => e.status), ["applied", "viewed"], "shortlisted straight from applied still shows a Viewed step");
 });
 
-test("a candidate's progress bar has 4 steps and never shows Shortlisted", () => {
-  assert.deepEqual([...CANDIDATE_STEPS], ["applied", "viewed", "interview", "offer"]);
+test("a candidate's progress bar has 5 steps and never shows Shortlisted", () => {
+  assert.deepEqual([...CANDIDATE_STEPS], ["applied", "viewed", "interview", "offer", "hired"]);
   assert.equal(reachedStep(["applied", "viewed"], "interview", CANDIDATE_STEPS), 2);
   assert.equal(reachedStep(["applied", "viewed"], "not_selected", CANDIDATE_STEPS), 1);
   assert.equal(reachedStep(["applied", "viewed", "shortlisted"], "not_selected"), 2, "a clinic still sees 5 steps");
+});
+
+test("Hired is a final step: no more moves, it sits with the offers, and its message is warm and names the clinic", () => {
+  assert.ok(clinicMoveError("hired", "interview", true, "Come on Tuesday."), "a hired person cannot be moved on");
+  assert.equal(groupOf("hired"), "offer");
+  assert.equal(isClosed("hired"), false);
+  assert.equal(candidateStatus("hired"), "hired");
+  assert.ok(messageTemplate("hired", "Harbourside Optical").includes("Harbourside Optical"));
+  assert.ok(!/\[[^\]]+\]/.test(messageTemplate("hired", "X")), "no square brackets to fill in");
+  assert.equal(reachedStep(["applied", "viewed", "interview", "offer"], "hired"), 5);
+  assert.deepEqual([...HIREABLE], ["applied", "viewed", "shortlisted", "interview", "offer"], "only someone still in the running can be named");
 });

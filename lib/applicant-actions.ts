@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { APP_LABELS, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
+import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { candidateRecipient } from "@/lib/recipient";
 import type { JobFormState } from "@/lib/jobs";
@@ -11,6 +11,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { parseFillSource } from "@/lib/job-ending";
+import { BULK_PROBLEMS, declinedText, movedText } from "@/lib/bulk-notices";
+import type { QuickState } from "@/lib/dashboard-notices";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -68,35 +70,6 @@ async function closeWaiting(jobId: string, ids: string[] | null, to: "not_select
 const BULK_MAX = 100;
 const pickedIds = (form: FormData) => form.getAll("ids").map(String).filter((x) => UUID.test(x)).slice(0, BULK_MAX);
 
-// Tick some applicants and shortlist them. This sends no email: a shortlist is the clinic's own working list, and a candidate
-// who was told they were shortlisted and then did not get an interview would feel worse for it.
-export async function shortlistSelected(form: FormData) {
-  await requireRole("clinic");
-  const jobId = String(form.get("jobId") ?? "");
-  if (!UUID.test(jobId)) redirect("/clinic");
-  const ids = pickedIds(form);
-  if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
-  const { moved, skipped } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
-  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  redirect(`/clinic/jobs/${jobId}/applicants?moved=shortlisted&n=${moved}&skipped=${skipped}`);
-}
-
-// Tick some applicants and invite them all to interview with one message the clinic writes (the date, time and how to join).
-// Everyone gets the same words, by email and in their account. For different times, open each application instead.
-export async function interviewSelected(form: FormData) {
-  await requireRole("clinic");
-  const jobId = String(form.get("jobId") ?? "");
-  if (!UUID.test(jobId)) redirect("/clinic");
-  const ids = pickedIds(form);
-  if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
-  const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
-  const problem = clinicMoveError("viewed", "interview", true, message);
-  if (problem) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=${message ? "brackets" : "message"}`);
-  const { moved, skipped } = await moveWaiting(jobId, ids, "interview", { message });
-  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  redirect(`/clinic/jobs/${jobId}/applicants?moved=interview&n=${moved}&skipped=${skipped}`);
-}
-
 // Tick some applicants and send each a kind no, using the same wording as sending one at a time.
 export async function declineSelected(form: FormData) {
   await requireRole("clinic");
@@ -107,6 +80,64 @@ export async function declineSelected(form: FormData) {
   const done = await closeWaiting(jobId, ids, "not_selected");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
   redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}`);
+}
+
+// The 3 bulk actions for the buttons on the applicants page, which save without leaving the page: they hand back the words to show
+// in a small message (and its tone), and the page refreshes where it stands, so nothing jumps to the top. (declineSelected above is
+// the page form's own action, and the only one that reloads the page.)
+const bulkAnswer = (text: string, tone: "ok" | "warn" = "ok"): QuickState => ({ notice: "bulk", text, tone });
+
+export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  const ids = pickedIds(form);
+  if (!UUID.test(jobId)) redirect("/clinic");
+  if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
+  const { moved, skipped } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  return bulkAnswer(movedText("shortlisted", moved, skipped));
+}
+
+export async function interviewSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  const ids = pickedIds(form);
+  if (!UUID.test(jobId)) redirect("/clinic");
+  if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
+  const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
+  if (clinicMoveError("viewed", "interview", true, message)) return bulkAnswer(message ? BULK_PROBLEMS.brackets : BULK_PROBLEMS.message, "warn");
+  const { moved, skipped } = await moveWaiting(jobId, ids, "interview", { message });
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  return bulkAnswer(movedText("interview", moved, skipped));
+}
+
+export async function declineSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
+  await requireRole("clinic");
+  const jobId = String(form.get("jobId") ?? "");
+  const ids = pickedIds(form);
+  if (!UUID.test(jobId)) redirect("/clinic");
+  if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
+  const done = await closeWaiting(jobId, ids, "not_selected");
+  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
+  return bulkAnswer(declinedText(done));
+}
+
+// The clinic names the person it hired. Their application moves to Hired (a final step), the job remembers which application it was, and
+// the candidate is told, by email unless they turned those emails off, and in their account. Only someone still in the running can be named.
+async function markHired(jobId: string, applicationId: string): Promise<boolean> {
+  const db = await supabaseServer();
+  const admin = supabaseAdmin();
+  if (!db || !admin) return false;
+  const { data: app } = await db.from("applications").select("id, status, job_title, clinic_name, applicant, candidate_id").eq("id", applicationId).eq("job_id", jobId).in("status", [...HIREABLE]).maybeSingle();
+  if (!app) return false;
+  const message = messageTemplate("hired", app.clinic_name);
+  const now = new Date().toISOString();
+  const { error } = await admin.from("applications").update({ status: "hired", clinic_message: message, status_changed_at: now, updated_at: now }).eq("id", app.id);
+  if (error) return false;
+  await admin.from("application_events").insert({ application_id: app.id, status: "hired", note: message });
+  await admin.from("jobs").update({ filled_application_id: app.id }).eq("id", jobId);
+  await tellCandidate(admin, app, "hired", message);
+  return true;
 }
 
 // The role is filled: close the job, let everyone still waiting know, kindly, and record how the clinic filled it
@@ -124,6 +155,10 @@ export async function fillRole(form: FormData) {
   const { via, other } = parseFillSource(form.get("filledVia"), form.get("filledViaOther"));
   const admin = supabaseAdmin();
   if (admin) await admin.from("jobs").update({ filled_at: new Date().toISOString(), filled_via: via, filled_via_other: other }).eq("id", jobId);
+  // If the clinic says it found the person through Kestrel and names them, that person is marked as Hired and told first, so they are
+  // not then sent the "role filled" message below (it only goes to people still waiting).
+  const hiredId = via === "kestrel" ? String(form.get("hiredApplicationId") ?? "") : "";
+  if (UUID.test(hiredId)) await markHired(jobId, hiredId);
   const done = await closeWaiting(jobId, null, "role_filled");
   revalidatePath("/clinic");
   revalidatePath("/jobs");

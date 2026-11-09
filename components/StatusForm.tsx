@@ -11,6 +11,7 @@ export default function StatusForm({ id, current, keepDetails, clinicName }: { i
   const [status, setStatus] = useState<string>(moves[0] ?? "");
   const [message, setMessage] = useState(moves[0] ? messageTemplate(moves[0], clinicName) : "");
 
+  if (current === "hired") return <p className="help">This person is marked as hired, and has been told, so there is nothing more to do.</p>;
   if (current === "withdrawn") return <p className="help">The candidate has withdrawn this application, so there is nothing more to do.</p>;
 
   return (

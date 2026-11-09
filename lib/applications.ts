@@ -3,7 +3,7 @@
 // own (see lib/applications.test.ts).
 
 export type AppStatus =
-  | "applied" | "viewed" | "shortlisted" | "interview" | "offer"
+  | "applied" | "viewed" | "shortlisted" | "interview" | "offer" | "hired"
   | "not_selected" | "role_filled" | "kept" | "no_update" | "withdrawn";
 
 export const APP_LABELS: Record<AppStatus, string> = {
@@ -12,6 +12,7 @@ export const APP_LABELS: Record<AppStatus, string> = {
   shortlisted: "Shortlisted",
   interview: "Interview",
   offer: "Offer",
+  hired: "Hired",
   not_selected: "Not selected this time",
   role_filled: "Role filled",
   kept: "Kept for future roles",
@@ -26,6 +27,7 @@ export const APP_EXPLAINERS: Record<AppStatus, string> = {
   shortlisted: "You are in the running.",
   interview: "The clinic would like to meet you.",
   offer: "The clinic has made you an offer.",
+  hired: "The clinic has told us you are the person they hired. Congratulations.",
   not_selected: "The clinic chose other candidates this time.",
   role_filled: "This job is no longer open.",
   kept: "The clinic will keep your details for future openings.",
@@ -33,11 +35,13 @@ export const APP_EXPLAINERS: Record<AppStatus, string> = {
   withdrawn: "You withdrew this application.",
 };
 
-export const STEPS = ["applied", "viewed", "shortlisted", "interview", "offer"] as const;
-// A candidate is never shown Shortlisted (see candidateStatus), so their progress bar has 4 steps. A clinic sees all 5.
+export const STEPS = ["applied", "viewed", "shortlisted", "interview", "offer", "hired"] as const;
+// A candidate is never shown Shortlisted (see candidateStatus), so their progress bar has 5 steps. A clinic sees all 6.
 export const CANDIDATE_STEPS = STEPS.filter((s) => s !== "shortlisted");
 export const CLOSED: readonly AppStatus[] = ["not_selected", "role_filled", "kept", "no_update", "withdrawn"];
 export const CLINIC_MOVES: readonly AppStatus[] = ["shortlisted", "interview", "offer", "not_selected", "role_filled", "kept"];
+// Who a clinic can name as the person it hired: anyone still in the running (not closed out, not withdrawn).
+export const HIREABLE: readonly AppStatus[] = ["applied", "viewed", "shortlisted", "interview", "offer"];
 export const NEEDS_MESSAGE: readonly AppStatus[] = ["interview", "offer", "not_selected", "role_filled", "kept"];
 
 export const isClosed = (s: string) => (CLOSED as readonly string[]).includes(s);
@@ -64,7 +68,7 @@ export const GROUP_LABELS: Record<Group, string> = { review: "In review", interv
 
 export function groupOf(status: string): Group {
   if (status === "interview") return "interview";
-  if (status === "offer") return "offer";
+  if (status === "offer" || status === "hired") return "offer";
   if (isClosed(status)) return "closed";
   return "review";
 }
@@ -84,6 +88,7 @@ export function reachedStep(history: string[], current: string, steps: readonly 
 export function clinicMoveError(from: string, to: string, keepDetails: boolean, message: string): string | null {
   if (!(CLINIC_MOVES as readonly string[]).includes(to)) return "That is not a step you can choose.";
   if (from === "withdrawn") return "The candidate has withdrawn this application.";
+  if (from === "hired") return "This person is marked as hired, so there is nothing more to do.";
   if (from === to) return "The application is already at that step.";
   if (to === "kept" && !keepDetails) return "This candidate did not agree to have their details kept, so you can't choose this.";
   if ((NEEDS_MESSAGE as readonly string[]).includes(to)) {
@@ -108,6 +113,8 @@ export function messageTemplate(status: string, clinic: string) {
       return `${clinic} would like to interview you. [Add the date, time and how to join]`;
     case "offer":
       return `${clinic} would like to offer you this role. [Add the details, and when you need a reply by]`;
+    case "hired":
+      return `Congratulations. ${clinic} has let us know that you are the person they hired for this role. We are glad Kestrel played a part, and we wish you the very best in the new job.`;
     default:
       return "";
   }

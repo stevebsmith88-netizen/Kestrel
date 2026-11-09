@@ -317,9 +317,10 @@ textarea{resize:vertical;line-height:1.5}
 .a-shortlisted{background:#D9E1F0;color:#1B2B4B}
 .a-interview{background:#F6E7DF;color:#8C4024}
 .a-offer{background:#E3F1EA;color:#1F6B4F}
+.a-hired{background:#1F6B4F;color:#fff}
 .a-kept{background:#D9E1F0;color:#1B2B4B}
 .a-not_selected,.a-role_filled,.a-no_update,.a-withdrawn{background:#ECEEF0;color:#4A5560}
-.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;list-style:none;margin:14px 0 0;padding:0}
+.steps{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:6px;list-style:none;margin:14px 0 0;padding:0}
 .step{font-size:0.8125rem;color:var(--slate);line-height:1.2;min-width:0;overflow-wrap:anywhere}
 .step .bar{height:6px;border-radius:3px;background:var(--line);margin-bottom:5px}
 .step.done .bar{background:var(--navy)}
