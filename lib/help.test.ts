@@ -4,7 +4,7 @@ import { existsSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { HELP } from "../content/help.ts";
-import { HELP_DESCRIPTION, HELP_SECTION_ORDER, HELP_TITLE, helpIds, linkedHelpIds, searchWords, topicHaystack, topicMatches, topicText } from "./help.ts";
+import { HELP_DESCRIPTION, HELP_OPEN_BY_DEFAULT, HELP_SECTION_ORDER, HELP_TITLE, helpIds, linkedHelpIds, searchWords, topicHaystack, topicMatches, topicText } from "./help.ts";
 import { parseInline } from "./blog.ts";
 
 const allText = HELP.flatMap((s) => [s.title, s.intro, ...s.topics.flatMap(topicText)]);
@@ -133,4 +133,9 @@ test("the words people really type find the right topic", () => {
   };
   for (const [query, id] of Object.entries(expect)) assert.ok(found(query).includes(id), `"${query}" should find ${id}`);
   assert.deepEqual(found("zzzz nothing"), []);
+});
+
+test("only General starts open, and every section that starts open really exists", () => {
+  assert.deepEqual([...HELP_OPEN_BY_DEFAULT], ["general"]);
+  for (const id of HELP_OPEN_BY_DEFAULT) assert.ok(HELP.some((s) => s.id === id), `${id} is not a section`);
 });
