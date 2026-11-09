@@ -4,6 +4,8 @@ import AppFooter from "@/components/AppFooter";
 import JobCard from "@/components/JobCard";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
+import { emptySearchSuggestions } from "@/lib/empty-search";
+import { launchLayoutOn } from "@/lib/launch";
 import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { RADIUS_OPTIONS, placeLabel } from "@/lib/places";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
@@ -39,13 +41,18 @@ function pageHref(filters: JobFilters, page: number) {
 export default async function Jobs({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const filters = cleanFilters(await searchParams);
   const [{ jobs, total, place, placeNotFound }, counts] = await Promise.all([searchJobs(filters), getFilterCounts()]);
+  const session = await getSession();
+  const launched = await launchLayoutOn();
+  // Alerts are for candidates. A signed out visitor is sent to create an account once sign up is open, and to the waitlist before that.
+  const alertHref = session ? (session.role === "candidate" ? "/candidate/alerts" : null) : launched ? "/sign-up?next=%2Fcandidate%2Falerts" : null;
   const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement);
   const page = filters.page ?? 1;
+  const suggestions = filtered && jobs.length === 0 && !placeNotFound ? emptySearchSuggestions(filters) : [];
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader session={session} />
       <main id="main" tabIndex={-1} className="jobsearch">
         <div className="wrap">
           <h1>Find your next eye care job</h1>
@@ -107,9 +114,23 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 </>
               ) : filtered ? (
                 <>
-                  <h2>No jobs match yet</h2>
-                  <p>Try fewer filters{filters.city ? " or a larger distance" : ""}, or <Link href="/jobs">start again</Link>. New jobs are added all the time. If you would like a heads up when one fits, set up a job alert once you have an account.</p>
-                  <Link href="/#join" className="btn">Join the waitlist</Link>
+                  <h2>No jobs match this search yet</h2>
+                  <p>That is not a dead end. Here are quick ways to look a little wider:</p>
+                  <ul className="emptylinks">
+                    {suggestions.map((s) => <li key={s.label}><Link href={s.href}>{s.label}</Link></li>)}
+                    <li><Link href="/jobs">Start again with every job</Link></li>
+                  </ul>
+                  {alertHref ? (
+                    <>
+                      <p>Or let the job find you. A job alert emails you when a new job is posted for a role, province and type of employer you choose. Alerts do not use distance.</p>
+                      <Link href={alertHref} className="btn">{session?.role === "candidate" ? "Set up a job alert" : "Create an account to set an alert"}</Link>
+                    </>
+                  ) : session ? null : (
+                    <>
+                      <p>New jobs are added all the time. Join the waitlist and we will tell you when Kestrel opens, and you can set a job alert for your role and province.</p>
+                      <Link href="/#join" className="btn">Join the waitlist</Link>
+                    </>
+                  )}
                 </>
               ) : (
                 <>

@@ -345,3 +345,60 @@ And in "Current state", change "with the job boards other than Indeed, LinkedIn 
 1. Run Google's Rich Results Test on one live job page.
 2. Approve (or edit) the CLAUDE.md wording above, then it can be applied.
 3. Decide the roadmap dates in docs/PLAN.md.
+
+---
+
+## Phase 1 results (8th and 9th November 2026)
+
+Merged to `main` in 2 parts: items 1 to 3 (pull request 74, 8th November) and items 4 and 5 (9th November). No database change and no new setting.
+
+### Changed
+
+1. **Private until you apply.** Checked first and true (see the table below). Short lines added to candidate sign up, the profile page and under Quick Apply on job pages that take applications on Kestrel. No line was added on jobs that apply on the clinic's own website, because Kestrel does not hold those applications. There is no candidate FAQ page.
+2. **Naming.** The only clear mismatch was the hidden logo label on the coming soon page ("Kestrel"), now "Kestrel Eye Care Jobs".
+3. **Home page proof.** The pre launch home (`components/PreLaunchHome.tsx`) now shows 2 cropped screens from the demo board under "What the board will look like", labelled as samples, in `public/home/`. No link to the demo site (Steve's decision, 8th November 2026). Steve chose this over a real pay excerpt, and it moves to real jobs at launch because the launch home takes over. A sponsored section is noted in `docs/launch-home.md` and not built.
+4. **Searches that return nothing.** The page already said "No jobs match yet" and pointed to the waitlist, with no concrete next step. It now offers one click links built from the search itself (`lib/empty-search.ts`, tested): widen the distance, search the whole province or Canada, or drop the role, employer type, type of work, field based filter or search word. A signed in candidate gets a link to Job alerts, a signed out visitor gets "Create an account to set an alert" once sign up is open, and before launch the waitlist. The text says alerts match role, province and type of employer and do not use distance, which is true of the alert feature as built.
+5. **Structured data.** Reviewed only, nothing changed (below).
+
+### Where candidate details can be seen (item 1 evidence)
+
+| Where | Who |
+| --- | --- |
+| Profile, CV, saved letters, drafts, alerts, "Not interested" choices, recommendations | The candidate only. Database rules give clinics and other candidates no access. |
+| An application | The candidate, and the clinic that owns that job. The clinic sees a snapshot taken when the candidate applied, not the live profile. A withdrawn application stays visible to the clinic. |
+| CV file | Private storage. A clinic gets a link that works for 1 minute, only for an application to its own job. |
+| Search engines | Candidate, account, apply and clinic pages are blocked in `robots.txt` and marked noindex. |
+| Emails | Clinic emails carry counts only. Candidate emails go to that candidate. |
+| Job view and apply click counts | Counts only, nothing about the visitor. |
+| Admin screens | Counts only. The database owner can read everything in Supabase, and an admin login can read profile names there, but no screen uses it. So the copy says "a clinic sees only what you send", never "nobody at Kestrel can see it". |
+| Data download | The candidate's own data. |
+
+### Found and left alone
+
+- **Privacy policy wording.** It says "Candidates apply to a clinic through Kestrel", which is not true for jobs that apply on the clinic's own site. Legal text, so it goes to the lawyer pack.
+- **Fallback page title.** The site wide default title is still "Kestrel Eye Care Jobs | Coming soon". Every public page sets its own, so nothing shows it today. Change it when launch is switched on.
+- **Short "Kestrel".** Used in body text and email subjects as a short form, as the terms define it. Left as is. The `KestrelEyeCareJobs` label used when reading a clinic's page is a technical name and stays.
+
+### Structured data review (item 5, report only)
+
+`jobPostingJsonLd` in `lib/jobs.ts`. Steve had no live job to test, so the Rich Results Test is still to run once real ads are up.
+
+Present and in line with Google's guidance: title, description, datePosted, validThrough, employmentType (locum is sent as temporary and contractor), hiringOrganization name, jobLocation with city, region and country, baseSalary with a range and a unit of hour or year, directApply, identifier. Only live jobs have a page and so markup, an ended job returns a not found page, and unclaimed found listings get none on purpose.
+
+Recommended fields that are missing, and what to do:
+
+| Field | Verdict |
+| --- | --- |
+| Street address and postal code | Leave out. Kestrel does not collect or show a clinic address, so adding it would break "the markup matches the page". Google needs only the country, and the city and region are given. Revisit only if a clinic address is ever shown on the page. |
+| Organisation website (`sameAs`) | Leave out. The clinic website is deliberately not shown on the job page. |
+| Organisation logo | Leave out. Kestrel does not store a clinic logo, and unclaimed listings never use one. |
+| Experience and education requirements | Not captured by the post form, and not required. |
+| Remote location fields | Not relevant, every job has a place. Field based jobs use their base city, with the area covered in the description. |
+
+Things to watch rather than change: `directApply` is true for Quick Apply, but the candidate must have an account and a saved CV first, so Google could in theory read that as not direct. It is safe as it stands and worth confirming when the Rich Results Test is run. The extra `url` property is harmless.
+
+### Belongs in a later phase
+
+- A job alert that uses distance, and "N candidates near you" figures for clinics (Phase 5, needs new work and a migration).
+- Running Google's Rich Results Test on a live job page, once there is one (Phase 4 or launch checks).
+- Optometrist pay basis and the pay formats that markup cannot yet express (Phase 2, then update `baseSalary` to match).
