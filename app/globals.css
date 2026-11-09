@@ -557,7 +557,14 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .paylist li:first-child{border-top:0}
 .paylist li::before{content:none;display:none}
 .paylist li{padding-left:0}
-.landlinks{display:flex;flex-wrap:wrap;gap:8px 20px;list-style:none;padding:0;margin:8px 0 24px}
+.landlinks{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:10px 0 22px}
+/* Province and role lists are chips, not a run of underlined links. Each is a 44px tap target, with the count in a lighter weight. */
+.landlinks a{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 16px;border:1.5px solid #CDD5DA;background:#fff;border-radius:999px;color:var(--navy);font-weight:600;text-decoration:none}
+.landlinks a:hover{background:#EEF1F3;border-color:var(--navy-2)}
+.landlinks .count{font-weight:400;color:var(--muted)}
+.lh-all{margin:6px 0 0}
+.lh-clinics .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+.lh-clinics .btn.ghost:hover{background:rgba(255,255,255,.12)}
 .passbox .passpick{margin:12px 0 0;color:var(--cream)}
 .passbox .passpick strong{color:var(--buff)}
 .passbox .plusrow{margin:14px 0 0;padding-top:14px;border-top:1px solid #4A5A7A;color:var(--cream)}

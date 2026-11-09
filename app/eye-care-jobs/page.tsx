@@ -33,7 +33,7 @@ export default async function Hub() {
             <h2>By province</h2>
             <ul className="landlinks">
               {LANDING_PROVINCES.map((p) => (
-                <li key={p}><Link href={provinceHref(p)}>{p}</Link>{counts.provinces[p] ? ` (${counts.provinces[p]})` : ""}</li>
+                <li key={p}><Link href={provinceHref(p)}>{p}{counts.provinces[p] ? <span className="count">({counts.provinces[p]})</span> : null}</Link></li>
               ))}
             </ul>
           </section>
@@ -41,7 +41,7 @@ export default async function Hub() {
             <h2>By role</h2>
             <ul className="landlinks">
               {LANDING_ROLES.map((r) => (
-                <li key={r.slug}><Link href={`/jobs?role=${encodeURIComponent(r.role)}`}>{r.name}</Link>{counts.roles[r.role] ? ` (${counts.roles[r.role]})` : ""}</li>
+                <li key={r.slug}><Link href={`/jobs?role=${encodeURIComponent(r.role)}`}>{r.name}{counts.roles[r.role] ? <span className="count">({counts.roles[r.role]})</span> : null}</Link></li>
               ))}
             </ul>
           </section>
