@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { change, countIn, gateC, investorNumbers, parsePeriod, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts } from "./admin-stats.ts";
+import { change, countIn, gateC, hiresSummary, investorNumbers, parsePeriod, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts } from "./admin-stats.ts";
 
 const now = new Date("2026-10-30T12:00:00Z");
 
@@ -69,4 +69,30 @@ test("gate C needs 50 live jobs in 5 provinces", () => {
   assert.deepEqual(gateC(12, 3), { jobs: { have: 12, need: 50, met: false }, provinces: { have: 3, need: 5, met: false } });
   assert.equal(gateC(50, 5).jobs.met && gateC(50, 5).provinces.met, true);
   assert.equal(gateC(60, 4).provinces.met, false);
+});
+
+test("hires: counts named hires, Kestrel without a name, and other sources, and how many clinics told us", () => {
+  const job = (over: Partial<Parameters<typeof hiresSummary>[0][number]>) => ({ status: "closed", posted_at: "2026-11-01T00:00:00Z", filled_via: null, filled_application_id: null, ...over });
+  const h = hiresSummary([
+    job({ filled_via: "kestrel", filled_application_id: "a1" }),
+    job({ filled_via: "kestrel" }),
+    job({ status: "expired", filled_via: "indeed" }),
+    job({ filled_via: "word_of_mouth" }),
+    job({ status: "expired" }),
+    job({ status: "live", posted_at: "2026-11-05T00:00:00Z" }),
+    job({ status: "draft", posted_at: null }),
+  ]);
+  assert.equal(h.hiredThroughKestrel, 1);
+  assert.equal(h.viaKestrelUnnamed, 1);
+  assert.equal(h.filledElsewhere, 2);
+  assert.equal(h.ended, 5);
+  assert.equal(h.answered, 4);
+  assert.equal(h.answerRate, 80);
+  assert.deepEqual(h.elsewhere.filter((e) => e.count).map((e) => e.label), ["Indeed", "Word of mouth or a referral"]);
+});
+
+test("hires: with no ended jobs the answer rate is not a number", () => {
+  const h = hiresSummary([]);
+  assert.equal(h.answerRate, null);
+  assert.equal(h.hiredThroughKestrel, 0);
 });

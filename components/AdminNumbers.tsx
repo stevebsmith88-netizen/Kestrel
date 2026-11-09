@@ -87,6 +87,18 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
               </section>
             </div>
 
+            <section className="card" aria-labelledby="hires">
+              <h2 id="hires">Hires and where clinics fill roles</h2>
+              <p className="help">What clinics tell us when they mark a job as filled. It is self reported, so treat it as a floor: a clinic that never answers is not counted.</p>
+              <dl className="facts">
+                <div><dt>Hired through Kestrel (the clinic named the person)</dt><dd>{n(s.hires.hiredThroughKestrel)}</dd></div>
+                <div><dt>Filled through Kestrel, nobody named</dt><dd>{n(s.hires.viaKestrelUnnamed)}</dd></div>
+                <div><dt>Filled another way</dt><dd>{n(s.hires.filledElsewhere)}</dd></div>
+                <div><dt>Clinics that told us, of jobs that have ended</dt><dd>{s.hires.answerRate === null ? "No ended jobs yet" : `${s.hires.answerRate}% (${s.hires.answered} of ${s.hires.ended})`}</dd></div>
+              </dl>
+              {s.hires.filledElsewhere > 0 && <Bars rows={s.hires.elsewhere} label="Where clinics found the person, other than Kestrel" />}
+            </section>
+
             <section className="card">
               <h2>Investor snapshot</h2>
               <p className="help">The numbers an investor will ask about first. Revenue figures start when payments are switched on.</p>
@@ -96,6 +108,7 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
                 <div><dt>Posts per clinic</dt><dd>{n(s.investor.postsPerClinic)}</dd></div>
                 <div><dt>Clinics that post again</dt><dd>{s.investor.clinicsThatRepost === null ? "Not enough yet" : `${s.investor.clinicsThatRepost}%`}</dd></div>
                 <div><dt>Applications per published job</dt><dd>{n(s.investor.applicationsPerJob)}</dd></div>
+                <div><dt>Hired through Kestrel</dt><dd>{n(s.hires.hiredThroughKestrel)}</dd></div>
                 <div><dt>Clinics that post again within 60 days</dt><dd>{s.repeat60.percent === null ? "Not enough yet" : `${s.repeat60.percent}% (${s.repeat60.repeat} of ${s.repeat60.clinicsWithPosts})`}</dd></div>
               </dl>
               <a href={`/admin/numbers.csv?period=${period}&kind=investor`} className="btn sm ghost">Download investor summary</a>

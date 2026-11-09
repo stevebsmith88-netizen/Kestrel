@@ -1,4 +1,5 @@
 // The arithmetic behind the admin numbers page, kept separate from the database so it can be tested.
+import { FILL_SOURCES } from "./job-ending.ts";
 
 export type Period = "30" | "90" | "year";
 export const PERIODS: { value: Period; label: string }[] = [
@@ -91,6 +92,27 @@ export function repeatWithin(jobs: JobRow[], days = 60) {
     if (sorted.length >= 2 && sorted[1] - sorted[0] <= days * DAY) repeat += 1;
   });
   return { clinicsWithPosts: byClinic.size, repeat, percent: percent(repeat, byClinic.size) };
+}
+
+// Hires and where clinics fill their roles, from what clinics tell us when they mark a job as filled ("Filled it?", and "Role filled?" on the
+// applicants page). It is self reported, so it is a floor and not a full count: a clinic that never answers is not in it.
+export type HireJobRow = { status: string; posted_at: string | null; filled_via: string | null; filled_application_id: string | null };
+export function hiresSummary(jobs: HireJobRow[]) {
+  const ended = jobs.filter((j) => j.posted_at && (j.status === "closed" || j.status === "expired"));
+  const answered = ended.filter((j) => j.filled_via).length;
+  const filled = jobs.filter((j) => j.filled_via);
+  const named = filled.filter((j) => j.filled_application_id).length;
+  const viaKestrel = filled.filter((j) => j.filled_via === "kestrel").length;
+  const elsewhere = FILL_SOURCES.filter((f) => f.value !== "kestrel").map((f) => ({ label: f.label, count: filled.filter((j) => j.filled_via === f.value).length }));
+  return {
+    ended: ended.length,
+    answered,
+    answerRate: percent(answered, ended.length),
+    hiredThroughKestrel: named,
+    viaKestrelUnnamed: viaKestrel - named,
+    filledElsewhere: filled.length - viaKestrel,
+    elsewhere,
+  };
 }
 
 // Gate C (docs/audit/NEXT-STEPS-PHASES.md): 50 live roles across 5 or more provinces before the paid launch. Job pages indexed and free
