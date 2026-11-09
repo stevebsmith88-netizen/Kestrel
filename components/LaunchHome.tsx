@@ -67,17 +67,17 @@ export default async function LaunchHome() {
                 <div>
                   <h3>Province</h3>
                   <ul className="landlinks">
-                    {provinces.map((p) => <li key={p}><Link href={provinceHref(p)}>{p}</Link> ({counts.provinces[p]})</li>)}
+                    {provinces.map((p) => <li key={p}><Link href={provinceHref(p)}>{p}<span className="count">({counts.provinces[p]})</span></Link></li>)}
                   </ul>
                 </div>
                 <div>
                   <h3>Role</h3>
                   <ul className="landlinks">
-                    {roles.map((r) => <li key={r.slug}><Link href={`/jobs?role=${encodeURIComponent(r.role)}`}>{r.name}</Link> ({counts.roles[r.role]})</li>)}
+                    {roles.map((r) => <li key={r.slug}><Link href={`/jobs?role=${encodeURIComponent(r.role)}`}>{r.name}<span className="count">({counts.roles[r.role]})</span></Link></li>)}
                   </ul>
                 </div>
               </div>
-              <p className="help"><Link href="/eye-care-jobs">All provinces and roles</Link></p>
+              <p className="lh-all"><Link href="/eye-care-jobs" className="btn sm ghost">All provinces and roles</Link></p>
             </div>
           </section>
         )}
@@ -94,7 +94,7 @@ export default async function LaunchHome() {
               <p>After that, a 30 day post starts at {dollars(ROLE_BANDS[0].price)}, or the Clinic pass is {dollars(CLINIC_PASS.monthly)} a month for up to {CLINIC_PASS.livePosts} live posts. No charge by the click.</p>
               <p className="lh-offeractions">
                 <Link href="/clinics" className="btn">Post a job</Link>
-                <Link href="/compare">Compare prices</Link>
+                <Link href="/compare" className="btn ghost">Compare prices</Link>
               </p>
             </div>
           </div>

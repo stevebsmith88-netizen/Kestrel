@@ -98,7 +98,7 @@ export default function LandingView({
               <h2>{g.title}</h2>
               <ul className="landlinks">
                 {g.links.map((l) => (
-                  <li key={l.href}><Link href={l.href}>{l.label}</Link>{l.count ? ` (${l.count})` : ""}</li>
+                  <li key={l.href}><Link href={l.href}>{l.label}{l.count ? <span className="count">({l.count})</span> : null}</Link></li>
                 ))}
               </ul>
             </section>
