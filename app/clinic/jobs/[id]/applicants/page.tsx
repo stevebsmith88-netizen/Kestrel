@@ -6,7 +6,7 @@ import AppFooter from "@/components/AppFooter";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
 import { GROUP_LABELS, groupOf, type Group } from "@/lib/applications";
-import { declineSelected, fillRole } from "@/lib/applicant-actions";
+import { declineSelected, fillRole, interviewSelected, shortlistSelected } from "@/lib/applicant-actions";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getMyJob } from "@/lib/clinic";
 import { FILL_SOURCES } from "@/lib/job-ending";
@@ -23,10 +23,19 @@ const FILTERS: (Group | "all")[] = ["all", "review", "interview", "offer", "clos
 
 type Row = { id: string; status: string; created_at: string; cover_letter: string | null; applicant: { name?: string; profession?: string | null; years_experience?: string | null; licensed_provinces?: string[] } };
 
-export default async function Applicants({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ filter?: string; sent?: string; filled?: string }> }) {
+// What the page says after a bulk action, and why one could not be done. The wording is fixed here, never taken from the address.
+const BULK_ERRORS: Record<string, string> = {
+  none: "Tick at least one applicant first.",
+  message: "Write your interview invitation first. Include the date, time and how to join. Everyone you tick gets the same message.",
+  brackets: "Please replace the square brackets in your message with the real details before sending.",
+};
+
+export default async function Applicants({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ filter?: string; sent?: string; filled?: string; moved?: string; n?: string; skipped?: string; bulkerror?: string }> }) {
   const session = await requireRole("clinic");
   const { id } = await params;
-  const { filter, sent, filled } = await searchParams;
+  const { filter, sent, filled, moved, n, skipped, bulkerror } = await searchParams;
+  const movedCount = Number.parseInt(n ?? "", 10);
+  const skippedCount = Number.parseInt(skipped ?? "", 10);
   if (!UUID.test(id)) notFound();
   const job = await getMyJob(id);
   if (!job) notFound();
@@ -40,6 +49,8 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   const waiting = rows.filter((r) => WAITING.includes(r.status));
   const sentCount = Number.parseInt(sent ?? "", 10);
   const shown = active === "all" ? rows : rows.filter((r) => groupOf(r.status) === active);
+  // When any row has a tick box, every row gets the tick box column, so the names line up down the page.
+  const anyTick = shown.some((r) => WAITING.includes(r.status));
 
   return (
     <>
@@ -54,6 +65,17 @@ export default async function Applicants({ params, searchParams }: { params: Pro
           {Number.isFinite(sentCount) && (
             <p className="ok-msg" role="status">
               {filled ? "Marked as filled. " : ""}{sentCount === 0 ? "Nobody was waiting, so no messages were sent." : `${sentCount} ${sentCount === 1 ? "candidate has" : "candidates have"} been told, kindly, and can see it in their account.`}
+            </p>
+          )}
+          {bulkerror && BULK_ERRORS[bulkerror] && <p className="notice warn" role="alert">{BULK_ERRORS[bulkerror]}</p>}
+          {(moved === "shortlisted" || moved === "interview") && Number.isFinite(movedCount) && (
+            <p className="ok-msg" role="status">
+              {movedCount === 0
+                ? "Nobody was moved."
+                : moved === "shortlisted"
+                  ? `${movedCount} ${movedCount === 1 ? "applicant is" : "applicants are"} now shortlisted. No email was sent. They can see the step in their account.`
+                  : `${movedCount} ${movedCount === 1 ? "applicant has" : "applicants have"} been invited to interview, by email and in their account.`}
+              {Number.isFinite(skippedCount) && skippedCount > 0 ? ` ${skippedCount} ${skippedCount === 1 ? "was" : "were"} left as they were, because they were already at that step or had withdrawn.` : ""}
             </p>
           )}
           {waiting.length > 0 && <p className="replynote">{waiting.length} {waiting.length === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
@@ -73,9 +95,11 @@ export default async function Applicants({ params, searchParams }: { params: Pro
             <input type="hidden" name="jobId" value={id} />
             <div className="joblist">
               {shown.map((r) => (
-                <article className="card jobrow" key={r.id}>
-                  {WAITING.includes(r.status) && (
+                <article className={`card jobrow${anyTick ? " withtick" : ""}`} key={r.id}>
+                  {WAITING.includes(r.status) ? (
                     <label className="rowtick"><input type="checkbox" name="ids" value={r.id} /><span className="sr">Select {r.applicant.name ?? "this applicant"}</span></label>
+                  ) : (
+                    anyTick && <span aria-hidden="true" />
                   )}
                   <div className="jobmain">
                     <h3><Link href={`/clinic/applications/${r.id}`}>{r.applicant.name ?? "Applicant"}</Link></h3>
@@ -90,10 +114,22 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               ))}
             </div>
             {shown.some((r) => WAITING.includes(r.status)) && (
-              <div className="bulkbar">
-                <button type="submit" className="btn sm ghost">Send a kind no to the ticked applicants</button>
-                <span className="help">Each person gets the same warm message you would send one at a time, by email and in their account. Interviews and offers are never included.</span>
-              </div>
+              <section className="card bulkpanel" aria-labelledby="bulk-title">
+                <h2 id="bulk-title">With the ticked applicants</h2>
+                <div className="bulkbtns">
+                  <button type="submit" formAction={shortlistSelected} className="btn sm">Shortlist</button>
+                  <button type="submit" formAction={interviewSelected} className="btn sm">Invite to interview</button>
+                  <button type="submit" className="btn sm ghost">Send a kind no</button>
+                </div>
+                <ul className="bulkhelp">
+                  <li><strong>Shortlist</strong> sends no email. It is your own working list, and the candidate sees the step in their account.</li>
+                  <li><strong>Invite to interview</strong> sends everyone you tick the message below, by email and in their account. For different times, open each application.</li>
+                  <li><strong>Send a kind no</strong> gives each person the same warm message you would send one at a time, by email and in their account.</li>
+                </ul>
+                <label className="lab" htmlFor="bulkMessage">Interview invitation (used only for Invite to interview)</label>
+                <textarea id="bulkMessage" name="message" rows={3} maxLength={1500} placeholder="For example: We would like to meet you at the clinic on Tuesday 24th November at 2 pm. Please reply to this email to confirm, or to suggest another time." />
+                <p className="help">Offers are never made in bulk. Open the application to make one.</p>
+              </section>
             )}
             </form>
           )}
