@@ -56,6 +56,8 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - Industry directory idea (9th November 2026): a reference directory of suppliers and optical businesses from a document Steve parsed from public sources only (nothing from Eye Recommend). Not built. Plan, columns, SEO rules and the sponsored listings idea are in `docs/marketing/directory-plan.md`. Sponsored listings wait for the disclosure conversation.
 - Steve handles keeping his own devices, browsers and accounts apart from Eye Recommend. Do not raise it again in sessions. The rules above about Eye Recommend data, lists, accounts, email and branding stand.
 
+- Help centre (9th November 2026): `/help` has General, Candidates and Clinics sections of collapsible topics (35), written in `content/help.ts` (add a topic by copying a block; `lib/help.test.ts` checks it). It is for people already using Kestrel, and is separate from the SEO guides. Every step is checked against the real pages, so update the matching topic whenever a button, page or rule it describes changes. No prices (checkout is not built). Results and open questions are in docs/gemini-intake-plan-2026-11-08.md under Phase 3C.
+
 - Security: docs/security.md lists every secret, how to rotate it and what to do after a breach at a service we use. Keep it current whenever a new key or service is added.
 
 ## Brand

@@ -34,6 +34,7 @@ export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/resources`, lastModified: PAGE_DATES.resources, changeFrequency: "monthly", priority: 0.6 },
     ...(comparePageOn() ? [{ url: `${SITE}/compare`, lastModified: PAGE_DATES.compare, changeFrequency: "monthly" as const, priority: 0.5 }] : []),
     ...visiblePosts(POSTS, new Date(), false).map((p) => ({ url: `${SITE}/blog/${p.slug}`, lastModified: p.updated ?? p.date, changeFrequency: "monthly" as const, priority: 0.6 })),
+    { url: `${SITE}/help`, lastModified: PAGE_DATES.help, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE}/privacy`, lastModified: PAGE_DATES.privacy, changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE}/security`, lastModified: PAGE_DATES.security, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE}/terms`, lastModified: PAGE_DATES.terms, changeFrequency: "yearly", priority: 0.2 },

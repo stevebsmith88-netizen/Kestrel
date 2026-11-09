@@ -522,3 +522,25 @@ STEP 2 (after approval). Build it. Write the General section first and show me a
 
 Rules: writing style from CLAUDE.md: warm and plain, numerals, British spelling with Canadian conventions, no em dashes, no banned words, no emoji. No Eye Recommend material. I am not a developer, so explain every change in plain English.
 ```
+
+### Phase 3C results (9th November 2026)
+
+The help centre is built at `/help` (branch `claude/stoic-meitner-s4qzqp`). No database change and no new setting. Not merged until Steve approves the preview.
+
+- **What it is.** One page with 3 closed sections (General 14 topics, Candidates 10, Clinics 11, so 35 in all). Sections and topics are the browser's own `details` boxes, so they work with a keyboard, a screen reader and without JavaScript. `components/HelpControls.tsx` is the only script: it opens the right section and topic for a link such as `/help#post-a-job` (on load and when the address changes), keeps the address in step with the topic a person opens, and shows Expand all and Collapse all (only once the script has run, and they act on every section and topic).
+- **Where the words live.** `content/help.ts`, in the shape set by `lib/help.ts`. To add a topic, copy a block, change the `id`, title, `answer`, optional `steps` and `links`, then run `npm test`. Links to another topic are written `[text](/help#topic-id)`.
+- **Tests** (`lib/help.test.ts`, and the existing style guard, which already reads `content/`): title and description length, section order, unique link safe ids, every topic has an answer, no dash used as punctuation, no curly quotes, no dollar amounts (checkout is not built), every `/help#id` link points at a real topic, and every link goes to a page that exists. `lib/page-dates.test.ts` checks the page's "Last updated" line against the sitemap date.
+- **Sitemap and footer.** `/help` is in the sitemap (monthly, priority 0.4) with its date in `lib/page-dates.ts`. A single "Help" link was added to the footer in `components/AppFooter.tsx`, the home page, and the sign in and sign up pages (`components/AuthShell.tsx`). Phase 1D will fold these into its shared footer and put Help under "Company".
+- **Notice.** While sign up is closed, `/help` shows "Kestrel is opening soon. These answers describe how it works once you have an account." It reads the existing sign up gate.
+- **Changed in the code that the help depends on.** Only `components/BlogBody.tsx` (the shared text reader now also exports `Inline`).
+
+**Things the help says that differ from older docs or on page wording** (so the next person is not surprised):
+
+- The apply button reads **Quick Apply**, not "Apply with Kestrel" as `docs/candidates-and-applications.md` says.
+- A clinic sees a candidate's name, email address and phone number (if given) with an application. The help says so.
+- **A withdrawn application cannot be sent again** (the database allows 1 application per person per job). The Withdraw box used to say "You can apply again later if the job is still open." Steve decided on 10th November 2026 to keep the rule (no repeat applications to the same job, other jobs are fine), so the page now says "You cannot apply to this job a second time, but you can apply to other jobs, now or later."
+- Shortlisting is silent everywhere, and a candidate is shown "Viewed" instead of "Shortlisted" (merged from the applicants chat, 10th November 2026). The help follows that. The candidate's progress bar still draws a "Shortlisted" label as 1 of its 5 steps, though a candidate's application never sits on it. The help does not name that step.
+- The Contact page promises a reply within 2 business days, and `docs/definitions.md` says 1 business day for clinics. The help uses the Contact page.
+- "Not interested" has no undo. The dashboard **Close** button does not message applicants, while **Filled it?** does.
+
+**Decided by Steve (10th November 2026):** candidates never pay, and the costs are all on the clinic side (the "Is it free" topic says so). Clinics are encouraged to reply within 5 days, and the reminder email goes after 14 days unopened (not after a few days, as first thought). The Contact page's 2 business days stays. All 35 topics were approved.

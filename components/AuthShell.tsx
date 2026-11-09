@@ -26,7 +26,7 @@ export default async function AuthShell({ title, intro, children }: { title?: st
             <strong>Kestrel Eye Care Jobs</strong> &middot; eyecarejobs.ca
           </span>
           <span>
-            <Link href="/privacy">Privacy policy</Link> &middot; <Link href="/terms">Terms of use</Link>
+            <Link href="/privacy">Privacy policy</Link> &middot; <Link href="/terms">Terms of use</Link> &middot; <Link href="/help">Help</Link>
           </span>
         </div>
       </footer>
