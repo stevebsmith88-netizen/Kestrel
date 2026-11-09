@@ -6,7 +6,9 @@ import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { answerLabel, employmentLabel, formatPay, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { answerLabel, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { payChips, payText } from "@/lib/job-pay";
+import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -23,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return shareMetadata({
     title: `${job.title} at ${clinic}, ${where}`,
     shareTitle: `${job.title} at ${clinic}`,
-    description: `${job.title} in ${where}. ${formatPay(job.pay_min, job.pay_max, job.pay_period)}.`,
+    description: `${job.title} in ${where}. ${payText(job)}.`,
     path: `/jobs/${job.id}`,
   });
 }
@@ -52,7 +54,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             <p className="meta">{clinic?.clinic_name} · {job.city}, {job.province}</p>
             <p className="chips">
               <span className="chip">{employmentLabel(job.employment_type)}</span>
-              <span className="chip paychip">{formatPay(job.pay_min, job.pay_max, job.pay_period)}</span>
+              {payChips(job).map((c) => <span className="chip paychip" key={c}>{c}</span>)}
               <span className="chip">{practiceLabel(clinic?.practice_type)}</span>
               {job.work_arrangement === "field" && <span className="chip">Field based</span>}
             </p>
@@ -93,8 +95,12 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
               <section className="card">
                 <h2>Job facts</h2>
                 <dl className="facts">
-                  <div><dt>Pay</dt><dd>{formatPay(job.pay_min, job.pay_max, job.pay_period)}</dd></div>
+                  <div><dt>Pay</dt><dd>{payText(job)}</dd></div>
                   <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
+                  {TAG_GROUPS.map((g) => {
+                    const names = tagsFromRow(job)[g.key];
+                    return names.length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{names.join(", ")}</dd></div> : null;
+                  })}
                   {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
                   <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
                   {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}

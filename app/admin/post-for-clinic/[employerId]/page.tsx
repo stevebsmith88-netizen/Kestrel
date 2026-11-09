@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import JobForm from "@/components/JobForm";
+import { payAndTagValues } from "@/lib/job-form";
 import { requireRole } from "@/lib/auth";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -34,7 +35,7 @@ export default async function PostForOneClinic({ params }: { params: Promise<{ e
             employerId={employer.id}
             ownPay={ownPay}
             initial={{
-              title: "", role_category: "", employment_type: "", province: employer.province, city: employer.city, pay_period: "year", pay_min: "", pay_max: "",
+              title: "", role_category: "", employment_type: "", province: employer.province, city: employer.city, ...payAndTagValues(null),
               is_existing_vacancy: "", uses_ai_screening: "", description: "", apply_method: "kestrel", apply_url: "", work_arrangement: "on_site", territory: "", pay_extras: "",
             }}
           />

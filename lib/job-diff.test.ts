@@ -16,3 +16,14 @@ test("each changed field is listed with the old and new wording", () => {
   assert.deepEqual(changes[2], { label: "Anything else that is part of the pay", before: "(empty)", after: "Bonus" });
   assert.deepEqual(changes[3], { label: "Existing vacancy", before: "Yes", after: "No" });
 });
+
+test("pay basis and tag changes are listed, and an older copy with no new columns shows no false change", () => {
+  const old = { title: "Optometrist", pay_period: "year", pay_min: 90000, pay_max: 110000 };
+  assert.deepEqual(changedFields(old, { ...old, pay_is_minimum: false, tags_software: [], tags_equipment: [], tags_specialties: [], pay_percent_min: null }), []);
+  const changes = changedFields(old, { ...old, tags_software: ["Wink", "Acuitas"], pay_period: "day", pay_is_minimum: true, pay_percent_min: 28, pay_percent_of: "production" });
+  const labels = changes.map((c) => c.label);
+  assert.ok(labels.includes("Practice software") && labels.includes("Daily minimum guarantee") && labels.includes("Percentage, lowest"));
+  assert.equal(changes.find((c) => c.label === "Practice software")?.after, "Wink, Acuitas");
+  assert.equal(changes.find((c) => c.label === "Practice software")?.before, "(empty)");
+  assert.equal(changes.find((c) => c.label === "Daily minimum guarantee")?.before, "No");
+});

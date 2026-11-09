@@ -2,6 +2,7 @@
 // Kept free of app imports so it can be tested on its own (lib/candidate-prefs.test.ts).
 
 import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, parseMoney } from "./jobs.ts";
+import { SOFTWARE_TAGS, cleanTags } from "./job-tags.ts";
 import { RADIUS_OPTIONS, findPlace } from "./places.ts";
 import type { Prefs } from "./recommend.ts";
 
@@ -15,6 +16,7 @@ export type PrefsAnswers = {
   minPay?: string;
   payPeriod?: string;
   practice?: string;
+  softwareSkills?: string[];
 };
 
 // The database columns, ready to save.
@@ -28,6 +30,7 @@ export type PrefsRow = {
   pref_min_pay: number | null;
   pref_pay_period: "hour" | "year" | null;
   pref_practice: "independent" | "corporate" | null;
+  software_skills: string[];
 };
 
 const only = (values: string[] | undefined, allowed: readonly string[]) => [...new Set((values ?? []).filter((v) => allowed.includes(v)))];
@@ -77,6 +80,7 @@ export function cleanPrefs(raw: PrefsAnswers, profession: string): { row: PrefsR
       pref_min_pay: errors.minPay || errors.payPeriod ? null : minPay,
       pref_pay_period: errors.minPay || errors.payPeriod ? null : payPeriod,
       pref_practice: practice,
+      software_skills: cleanTags(raw.softwareSkills ?? [], SOFTWARE_TAGS),
     },
   };
 }
@@ -97,5 +101,6 @@ export function prefsFromProfile(p: PrefsSource | null): Prefs {
     minPay: p?.pref_min_pay === null || p?.pref_min_pay === undefined ? null : Number(p.pref_min_pay),
     payPeriod: p?.pref_pay_period ?? null,
     practice: p?.pref_practice ?? null,
+    software: p?.software_skills ?? [],
   };
 }

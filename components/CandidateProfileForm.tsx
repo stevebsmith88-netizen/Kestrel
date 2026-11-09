@@ -3,6 +3,7 @@
 import { Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveCandidateProfile } from "@/lib/candidate-actions";
+import { SOFTWARE_TAGS } from "@/lib/job-tags";
 import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, employmentLabel } from "@/lib/jobs";
 
 type Initial = {
@@ -20,6 +21,7 @@ type Initial = {
   pref_min_pay: number | string | null;
   pref_pay_period: string | null;
   pref_practice: string | null;
+  software_skills: string[];
 };
 
 const RADIUS = [10, 25, 50];
@@ -142,6 +144,19 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
           <option value="corporate">Corporate</option>
         </select>
       </Field>
+
+      <fieldset className="row provinces">
+        <legend className="lab">Practice software you have used</legend>
+        <p className="help">Optional. Private to you: clinics do not see it, and it is not sent with an application. We use it only to put jobs that use your software higher in your recommended list.</p>
+        <div className="checkgrid">
+          {SOFTWARE_TAGS.map((name) => (
+            <label className="consent" key={name}>
+              <input type="checkbox" name="softwareSkills" value={name} defaultChecked={(initial?.software_skills ?? []).includes(name)} />
+              <span>{name}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <fieldset className="row provinces">
         <legend className="lab">Other roles you would consider</legend>

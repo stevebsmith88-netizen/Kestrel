@@ -29,3 +29,12 @@ test("a link keeps the other filters and never leaves a distance without a city"
   assert.equal(searchHref({ role: "Optician", radius: 50 }), "/jobs?role=Optician");
   assert.equal(searchHref({}), "/jobs");
 });
+
+test("a search with ticked software or equipment can drop each group, and the links keep the other filters", () => {
+  const f = { role: "Optometrist", tags: { software: ["Wink"], equipment: ["Optos"], specialties: ["Vision therapy"] } };
+  const s = emptySearchSuggestions(f, 10);
+  const software = s.find((x) => x.label === "Any practice software");
+  assert.ok(software && !software.href.includes("software=") && software.href.includes("equipment=Optos") && software.href.includes("role=Optometrist"));
+  assert.ok(s.find((x) => x.label === "Any specialty")?.href.includes("software=Wink"));
+  assert.ok(searchHref(f).includes("specialty=Vision+therapy"));
+});

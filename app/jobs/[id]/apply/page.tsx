@@ -6,7 +6,8 @@ import ApplyForm from "@/components/ApplyForm";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
-import { formatPay, longDate } from "@/lib/jobs";
+import { longDate } from "@/lib/jobs";
+import { payText } from "@/lib/job-pay";
 import { getLiveJob } from "@/lib/public-jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -84,7 +85,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
           <p className="kicker">Quick Apply</p>
           <h1>Apply to {job.title}</h1>
-          <p className="lede2">{clinic} · {job.city}, {job.province} · {formatPay(job.pay_min, job.pay_max, job.pay_period)}</p>
+          <p className="lede2">{clinic} · {job.city}, {job.province} · {payText(job)}</p>
           <div className="stackcards">{body}</div>
         </div>
       </main>

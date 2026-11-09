@@ -109,8 +109,13 @@ test("an external application page must be a secure web address", () => {
 });
 
 test("clinic profile", () => {
-  const clinic = { clinicName: "Harbourside Optical", practiceType: "independent", website: "https://example.ca", province: "Ontario", city: "Toronto", about: "", notifyEmail: "hiring@example.ca", directHire: true };
+  const clinic = { clinicName: "Harbourside Optical", practiceType: "independent", website: "https://example.ca", province: "Ontario", city: "Toronto", about: "", notifyEmail: "hiring@example.ca", directHire: true, employeeBand: "10_24" };
   assert.deepEqual(validateClinic(clinic), {});
+  // the employee count is required for a new clinic only, and changes no other rule
+  assert.ok(validateClinic({ ...clinic, employeeBand: "" }, { requireBand: true }).employeeBand);
+  assert.deepEqual(validateClinic({ ...clinic, employeeBand: "" }), {});
+  assert.equal(cleanClinic({ ...clinic, employeeBand: "5000" }).employeeBand, "");
+  assert.equal(cleanClinic({ ...clinic, employeeBand: "25_99" }).employeeBand, "25_99");
   assert.ok(validateClinic({ ...clinic, directHire: false }).directHire);
   assert.ok(validateClinic({ ...clinic, notifyEmail: "nope" }).notifyEmail);
   assert.ok(validateClinic({ ...clinic, website: "javascript:alert(1)" }).website);
@@ -174,8 +179,8 @@ test("structured data matches the page", () => {
   );
   assert.equal(data.employmentType, "FULL_TIME");
   assert.equal(data.jobLocation.address.addressRegion, "BC");
-  assert.equal(data.baseSalary.value.minValue, 62000);
-  assert.equal(data.baseSalary.value.unitText, "YEAR");
+  assert.equal(data.baseSalary?.value.minValue, 62000);
+  assert.equal(data.baseSalary?.value.unitText, "YEAR");
   assert.equal(data.datePosted, "2026-11-01");
   assert.equal(data.url, "https://eyecarejobs.ca/jobs/abc");
   assert.deepEqual(data.hiringOrganization, { "@type": "Organization", name: "Harbourside Optical" });

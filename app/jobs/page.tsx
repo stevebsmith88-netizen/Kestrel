@@ -7,6 +7,7 @@ import { getSession } from "@/lib/auth";
 import { emptySearchSuggestions } from "@/lib/empty-search";
 import { launchLayoutOn } from "@/lib/launch";
 import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS } from "@/lib/jobs";
+import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, placeLabel } from "@/lib/places";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
@@ -15,7 +16,7 @@ import { shareMetadata } from "@/lib/share";
 // Searches and later pages can still be followed to the jobs, but they are not listed.
 export async function generateMetadata({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }): Promise<Metadata> {
   const filters = cleanFilters(await searchParams);
-  const narrowed = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.page ?? 1) > 1);
+  const narrowed = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.tags && hasTagFilters(filters.tags)) || (filters.page ?? 1) > 1);
   return {
     ...shareMetadata({
       title: "Find eye care jobs",
@@ -33,6 +34,9 @@ function pageHref(filters: JobFilters, page: number) {
   (["q", "city", "province", "role", "practice", "arrangement"] as const).forEach((k) => filters[k] && params.set(k, filters[k] as string));
   if (filters.city && filters.radius) params.set("radius", String(filters.radius));
   filters.type?.forEach((t) => params.append("type", t));
+  filters.tags?.software.forEach((t) => params.append("software", t));
+  filters.tags?.equipment.forEach((t) => params.append("equipment", t));
+  filters.tags?.specialties.forEach((t) => params.append("specialty", t));
   if (page > 1) params.set("page", String(page));
   const qs = params.toString();
   return qs ? `/jobs?${qs}` : "/jobs";
@@ -45,7 +49,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const launched = await launchLayoutOn();
   // Alerts are for candidates. A signed out visitor is sent to create an account once sign up is open, and to the waitlist before that.
   const alertHref = session ? (session.role === "candidate" ? "/candidate/alerts" : null) : launched ? "/sign-up?next=%2Fcandidate%2Falerts" : null;
-  const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement);
+  const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.tags && hasTagFilters(filters.tags)));
   const page = filters.page ?? 1;
   const suggestions = filtered && jobs.length === 0 && !placeNotFound ? emptySearchSuggestions(filters) : [];
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -103,6 +107,25 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 </label>
               ))}
             </fieldset>
+            <details className="sf-more" open={Boolean(filters.tags && hasTagFilters(filters.tags))}>
+              <summary>Software, equipment and specialties</summary>
+              {TAG_GROUPS.map((g) => {
+                const name = g.key === "specialties" ? "specialty" : g.key;
+                const ticked = filters.tags?.[g.key] ?? [];
+                return (
+                  <fieldset key={g.key}>
+                    <legend>{g.label}</legend>
+                    {g.list.map((tag) => (
+                      <label key={tag} className="sf-tick">
+                        <input type="checkbox" name={name} value={tag} defaultChecked={ticked.includes(tag)} />
+                        <span>{tag}</span>
+                      </label>
+                    ))}
+                  </fieldset>
+                );
+              })}
+              <p className="help">Within a group, a job matches if it has any ticked item. If you tick items in more than one group, the job must match each of those groups.</p>
+            </details>
           </form>
 
           {jobs.length === 0 ? (

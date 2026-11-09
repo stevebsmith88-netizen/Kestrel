@@ -51,6 +51,11 @@ from (
     ('column: job extensions', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'extended_count')),
     ('table: job_daily_stats (job views and apply clicks)', to_regclass('public.job_daily_stats') is not null),
     ('function: record_job_event', exists (select 1 from pg_proc where proname = 'record_job_event')),
+    ('columns: pay basis, percentage and tags on jobs', (select count(*) from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name in ('pay_is_minimum', 'pay_percent_min', 'pay_percent_max', 'pay_percent_of', 'tags_software', 'tags_equipment', 'tags_specialties')) = 7),
+    ('columns: pay basis and tags on job templates', (select count(*) from information_schema.columns where table_schema = 'public' and table_name = 'job_templates' and column_name in ('pay_is_minimum', 'pay_percent_min', 'pay_percent_max', 'pay_percent_of', 'tags_software', 'tags_equipment', 'tags_specialties')) = 7),
+    ('column: employee count band (private contact table)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_contacts' and column_name = 'employee_band')),
+    ('column: candidate software skills', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'software_skills')),
+    ('permission: candidates can save their job preferences', has_column_privilege('authenticated', 'public.candidate_profiles', 'home_city', 'UPDATE')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

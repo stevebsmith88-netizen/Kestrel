@@ -40,7 +40,7 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
 
             <div className="tiles stats">
               <section className="card tile"><p className="kicker">Live jobs</p><p className="num">{n(s.liveJobs)}</p><p>{s.publishedNow} published in the {label}. {change(s.publishedNow, s.publishedBefore)}</p></section>
-              <section className="card tile"><p className="kicker">Clinics and suppliers</p><p className="num">{n(s.employers)}</p><p>{s.claimedEmployers} claimed, {s.foundEmployers} found online</p></section>
+              <section className="card tile"><p className="kicker">Clinics and suppliers</p><p className="num">{n(s.employers)}</p><p>{s.claimedEmployers} claimed, {s.foundEmployers} found online</p><p>By number of people (as the clinic says): {s.clinicSizes.map((b) => `${b.label}: ${b.count}`).join(", ")}</p></section>
               <section className="card tile"><p className="kicker">Candidate accounts</p><p className="num">{n(s.candidateAccounts)}</p><p>{s.candidatesNow} joined in the {label}. {change(s.candidatesNow, s.candidatesBefore)}</p></section>
               <section className="card tile"><p className="kicker">Applications</p><p className="num">{n(s.applicationsNow)}</p><p>In the {label}. {s.applicationsPerJob === null ? "No jobs published yet" : `${s.applicationsPerJob} per published job overall`}. {change(s.applicationsNow, s.applicationsBefore)}</p></section>
               <section className="card tile"><p className="kicker">Waitlist</p><p className="num">{n(s.waitlistConfirmed)}</p><p>Confirmed, of {s.waitlistTotal} who joined. {s.waitlistNow} joined in the {label}. <Link href="/admin/waitlist">See the list</Link></p></section>

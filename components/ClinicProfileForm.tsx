@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Choices, Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveClinic } from "@/lib/clinic-actions";
-import { PRACTICE_TYPES, PROVINCES } from "@/lib/jobs";
+import { EMPLOYEE_BANDS, PRACTICE_TYPES, PROVINCES } from "@/lib/jobs";
 
-type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; direct_hire_confirmed_at: string | null };
+type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; employee_band: string | null; direct_hire_confirmed_at: string | null };
 
 export default function ClinicProfileForm({ initial }: { initial: Initial | null }) {
   const { state, pending, submit } = useServerForm(saveClinic);
@@ -31,6 +31,14 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
           </select>
         </Field>
       </div>
+      <Field id="cp-band" label="How many people work at your clinic or company?" required={!initial} error={e.employeeBand} hint="Private. Only the Kestrel team sees this, and it does not change what you can post.">
+        <select id="cp-band" name="employeeBand" defaultValue={initial?.employee_band ?? ""}>
+          <option value="">Choose one</option>
+          {EMPLOYEE_BANDS.map((b) => (
+            <option key={b.value} value={b.value}>{b.label}</option>
+          ))}
+        </select>
+      </Field>
       <Field id="cp-website" label="Website" error={e.website} hint="Optional. Shown on your job posts.">
         <input id="cp-website" name="website" type="url" placeholder="https://" defaultValue={initial?.website ?? ""} />
       </Field>

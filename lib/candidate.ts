@@ -39,7 +39,7 @@ export async function getMyCandidateProfile(userId: string): Promise<CandidatePr
   if (!db) return null;
   const { data } = await db
     .from("candidate_profiles")
-    .select("profession, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, cv_uploaded_at, home_city, home_province, pref_radius_km, pref_provinces, pref_employment_types, pref_other_roles, pref_min_pay, pref_pay_period, pref_practice")
+    .select("profession, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, cv_uploaded_at, home_city, home_province, pref_radius_km, pref_provinces, pref_employment_types, pref_other_roles, pref_min_pay, pref_pay_period, pref_practice, software_skills")
     .eq("user_id", userId)
     .maybeSingle();
   return (data as CandidateProfile | null) ?? null;

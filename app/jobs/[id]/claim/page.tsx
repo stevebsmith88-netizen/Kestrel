@@ -6,7 +6,8 @@ import ClaimForm from "@/components/ClaimForm";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { hostOf } from "@/lib/claims";
-import { formatPay, longDate } from "@/lib/jobs";
+import { longDate } from "@/lib/jobs";
+import { payChips } from "@/lib/job-pay";
 import { getLiveJob } from "@/lib/public-jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -58,7 +59,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
                 <p className="seedlabel">{claimed ? "This listing has been claimed" : "Found on the clinic's website, not yet claimed"}</p>
                 <h2>{job.title}</h2>
                 <p className="meta">{clinic?.clinic_name} · {job.city}, {job.province}</p>
-                <p className="chips"><span className="chip">{job.employment_type}</span><span className="chip paychip">{formatPay(job.pay_min, job.pay_max, job.pay_period)}</span></p>
+                <p className="chips"><span className="chip">{job.employment_type}</span>{payChips(job).map((c) => <span className="chip paychip" key={c}>{c}</span>)}</p>
                 <p className="help">Details are in our own words, from your careers page. Applicants are sent to your application page. Found {found === 0 ? "today" : found === 1 ? "1 day ago" : `${found} days ago`}. {claimed ? "" : `This listing is removed automatically on ${longDate(job.expires_at)} if it is not claimed.`}</p>
               </section>
 

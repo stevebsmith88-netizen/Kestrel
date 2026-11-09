@@ -7,7 +7,8 @@
 // fits, so the candidate can see why it was suggested. Nothing here is hidden or learned: the same profile and the same jobs always give the
 // same list.
 
-import { HOURS_IN_A_YEAR, employmentLabel } from "./jobs.ts";
+import { employmentLabel } from "./jobs.ts";
+import { HOURS_IN_A_YEAR, yearlyPay, type PayFields } from "./job-pay.ts";
 import { distanceKm, findPlace, nearbyKeys, placeKey } from "./places.ts";
 
 export type Prefs = {
@@ -22,6 +23,7 @@ export type Prefs = {
   minPay: number | null;
   payPeriod: "hour" | "year" | null;
   practice: "independent" | "corporate" | null; // null means either
+  software: string[]; // practice software they use. Private to them, and used only to order their own list
 };
 
 export type MatchJob = {
@@ -30,19 +32,15 @@ export type MatchJob = {
   employment_type: string;
   province: string;
   city: string;
-  pay_period: string;
-  pay_min: number | string;
-  pay_max: number | string;
   posted_at: string;
+  tags_software?: string[] | null;
   employers: { practice_type: string } | null;
-};
+} & PayFields;
 
 export type Recommendation<J extends MatchJob> = { job: J; score: number; reasons: string[] };
 
 const LICENSED_ROLES = ["Optometrist", "Optician"];
 const DAY = 86_400_000;
-
-const yearly = (value: number | string, period: string) => (period === "hour" ? Number(value) * HOURS_IN_A_YEAR : Number(value));
 
 export function hasWhere(p: Prefs) {
   return Boolean((p.homeCity && p.homeProvince) || p.extraProvinces.length > 0);
@@ -60,7 +58,7 @@ export function recommend<J extends MatchJob>(
   const near = home ? nearbyKeys(home, prefs.radiusKm) : null;
   // With no place and no provinces chosen, the provinces they are registered in stand in, so an optician in Ontario is not shown Alberta jobs.
   const provinces = prefs.extraProvinces.length > 0 || home ? prefs.extraProvinces : prefs.licensedProvinces;
-  const minYear = prefs.minPay && prefs.payPeriod ? yearly(prefs.minPay, prefs.payPeriod) : null;
+  const minYear = prefs.minPay && prefs.payPeriod ? (prefs.payPeriod === "hour" ? prefs.minPay * HOURS_IN_A_YEAR : prefs.minPay) : null;
 
   const out: Recommendation<J>[] = [];
   for (const job of jobs) {
@@ -69,9 +67,10 @@ export function recommend<J extends MatchJob>(
     if (prefs.employmentTypes.length > 0 && !prefs.employmentTypes.includes(job.employment_type)) continue;
     if (prefs.practice && job.employers?.practice_type !== prefs.practice) continue;
 
-    const jobMin = yearly(job.pay_min, job.pay_period);
-    const jobMax = yearly(job.pay_max, job.pay_period);
-    if (minYear !== null && jobMax < minYear) continue;
+    // Only salary and hourly pay can be turned into a year. A daily rate, a daily minimum or a percentage is never compared with a minimum
+    // pay (and a missing figure is never treated as $0), so those jobs stay in the list.
+    const pay = yearlyPay(job);
+    if (minYear !== null && pay && pay.max < minYear) continue;
 
     const inRadius = near ? near.has(placeKey(job.city, job.province)) : false;
     const inProvince = provinces.includes(job.province);
@@ -107,14 +106,20 @@ export function recommend<J extends MatchJob>(
       reasons.push(`In ${job.province}`);
     }
 
-    if (minYear !== null) {
-      if (jobMin >= minYear) {
+    if (minYear !== null && pay) {
+      if (pay.min >= minYear) {
         score += 15;
         reasons.push("Pay starts at or above your minimum");
       } else {
         score += 6;
         reasons.push("The top of the pay range meets your minimum");
       }
+    }
+
+    const shared = (job.tags_software ?? []).filter((name) => prefs.software.includes(name));
+    if (shared.length > 0) {
+      score += 10;
+      reasons.push(`Uses ${shared.join(" and ")}, which you use`);
     }
 
     if (prefs.employmentTypes.length > 0) {

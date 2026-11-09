@@ -4,7 +4,9 @@ import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { approveJob, rejectJob } from "@/lib/admin-actions";
 import { changedFields } from "@/lib/job-diff";
-import { answerLabel, employerFlags, employmentLabel, formatPay, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
+import { answerLabel, employeeBandLabel, employerFlags, employmentLabel, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
+import { payText, type PayFields } from "@/lib/job-pay";
+import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -18,9 +20,10 @@ const NOTICES: Record<string, string> = {
   error: "That didn't work. The job may already have been handled. Please refresh and try again.",
 };
 
-type QueueJob = {
+type QueueJob = PayFields & {
+  tags_software: string[] | null; tags_equipment: string[] | null; tags_specialties: string[] | null;
   id: string; title: string; role_category: string; employment_type: string; province: string; city: string;
-  pay_period: string; pay_min: number; pay_max: number; is_existing_vacancy: boolean | null; uses_ai_screening: boolean | null;
+  is_existing_vacancy: boolean | null; uses_ai_screening: boolean | null;
   description: string; work_arrangement: string | null; territory: string | null; pay_extras: string | null; apply_method: string; apply_url: string | null; created_at: string; employer_id: string; posted_at: string | null; expires_at: string | null;
   employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; direct_hire_confirmed_at: string | null } | null;
 };
@@ -32,15 +35,19 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   const { data } = db
     ? await db
         .from("jobs")
-        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
+        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
         .eq("status", "in_review")
         .order("created_at", { ascending: true })
     : { data: null };
   const jobs = (data ?? []) as unknown as QueueJob[];
   const notifyEmails = new Map<string, string>();
+  const bands = new Map<string, string | null>();
   if (db && jobs.length) {
-    const { data: contacts } = await db.from("employer_contacts").select("employer_id, notify_email").in("employer_id", [...new Set(jobs.map((j) => j.employer_id))]);
-    (contacts ?? []).forEach((c) => notifyEmails.set(c.employer_id, c.notify_email));
+    const { data: contacts } = await db.from("employer_contacts").select("employer_id, notify_email, employee_band").in("employer_id", [...new Set(jobs.map((j) => j.employer_id))]);
+    (contacts ?? []).forEach((c) => {
+      notifyEmails.set(c.employer_id, c.notify_email);
+      bands.set(c.employer_id, c.employee_band);
+    });
   }
 
   // For edited live jobs, the wording candidates were seeing (the most recent copy kept for each job).
@@ -76,7 +83,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       <div>
                         <h2>{j.title}</h2>
                         <p className="meta">
-                          {j.employers?.clinic_name} · {practiceLabel(j.employers?.practice_type)} · {j.city}, {j.province} · submitted {longDate(j.created_at)}
+                          {j.employers?.clinic_name} · {practiceLabel(j.employers?.practice_type)} · {employeeBandLabel(bands.get(j.employer_id))} people · {j.city}, {j.province} · submitted {longDate(j.created_at)}
                         </p>
                       </div>
                     </div>
@@ -105,9 +112,10 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                     <dl className="facts">
                       <div><dt>Role</dt><dd>{j.role_category}</dd></div>
                       <div><dt>Type</dt><dd>{employmentLabel(j.employment_type)}</dd></div>
-                      <div><dt>Pay</dt><dd>{formatPay(j.pay_min, j.pay_max, j.pay_period)}</dd></div>
+                      <div><dt>Pay</dt><dd>{payText(j)}</dd></div>
                       {j.territory && <div><dt>Area covered</dt><dd>{j.territory}</dd></div>}
                       {j.pay_extras && <div><dt>Anything else that is part of the pay</dt><dd>{j.pay_extras}</dd></div>}
+                      {TAG_GROUPS.map((g) => (tagsFromRow(j)[g.key].length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{tagsFromRow(j)[g.key].join(", ")}</dd></div> : null))}
                       <div><dt>Existing vacancy</dt><dd>{answerLabel(j.is_existing_vacancy)}</dd></div>
                       <div><dt>Uses AI to screen</dt><dd>{answerLabel(j.uses_ai_screening)}</dd></div>
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>

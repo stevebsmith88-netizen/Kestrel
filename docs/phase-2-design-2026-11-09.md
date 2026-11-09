@@ -1,5 +1,7 @@
 # Phase 2 design: optometrist pay basis, tags, employee count (9th November 2026)
 
+**Update, 9th November 2026 (Steve's answers):** the daily rate and daily minimum range is now simply up to $200 a day wide, with no "unless the top is over $770" exception (the table below that shows 260 days is superseded). Percentage range: 10 points. The "of production, collections or billings" choice stays as a short drop down defaulting to production, with a plain line of help text under it. Found listings stay hourly or yearly only. Software skills private plus a boost in Recommended for you. Employee count required for new clinics.
+
 Status: DESIGN ONLY, for Steve to approve. Nothing is built. No migration has been written. Next free migration number: **0034** (checked all 73 branches on GitHub, none uses 0034 or higher).
 
 Pay stays public on every job. Nothing here hides pay behind a login. A pay range is required for every pay basis.

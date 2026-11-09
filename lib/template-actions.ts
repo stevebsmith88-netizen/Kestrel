@@ -22,7 +22,7 @@ export async function saveJobAsTemplate(form: FormData) {
   if (!id || !db || !employer) redirect("/clinic");
   const { data: job } = await db
     .from("jobs")
-    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
+    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
     .eq("id", id)
     .eq("employer_id", employer.id)
     .maybeSingle();

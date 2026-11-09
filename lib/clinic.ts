@@ -11,6 +11,7 @@ export type Employer = {
   city: string;
   about: string | null;
   notify_email: string;
+  employee_band: string | null; // from the private contact table, never shown publicly
   direct_hire_confirmed_at: string | null;
 };
 
@@ -24,6 +25,13 @@ export type MyJob = {
   pay_period: string | null;
   pay_min: number | null;
   pay_max: number | null;
+  pay_is_minimum: boolean | null;
+  pay_percent_min: number | null;
+  pay_percent_max: number | null;
+  pay_percent_of: string | null;
+  tags_software: string[] | null;
+  tags_equipment: string[] | null;
+  tags_specialties: string[] | null;
   is_existing_vacancy: boolean | null;
   uses_ai_screening: boolean | null;
   description: string | null;
@@ -40,7 +48,7 @@ export type MyJob = {
 };
 
 const JOB_COLUMNS =
-  "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
+  "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
 
 // The signed in clinic's own profile (row level security means it can only be their own).
 export async function getMyEmployer(userId: string): Promise<Employer | null> {
@@ -52,8 +60,8 @@ export async function getMyEmployer(userId: string): Promise<Employer | null> {
     .eq("owner_id", userId)
     .maybeSingle();
   if (!data) return null;
-  const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", data.id).maybeSingle();
-  return { ...data, notify_email: contact?.notify_email ?? "" } as Employer;
+  const { data: contact } = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", data.id).maybeSingle();
+  return { ...data, notify_email: contact?.notify_email ?? "", employee_band: contact?.employee_band ?? null } as Employer;
 }
 
 export async function getMyJobs(employerId: string): Promise<MyJob[]> {
@@ -98,6 +106,13 @@ export type JobTemplate = {
   pay_period: string | null;
   pay_min: number | null;
   pay_max: number | null;
+  pay_is_minimum: boolean | null;
+  pay_percent_min: number | null;
+  pay_percent_max: number | null;
+  pay_percent_of: string | null;
+  tags_software: string[] | null;
+  tags_equipment: string[] | null;
+  tags_specialties: string[] | null;
   description: string | null;
   apply_method: string;
   apply_url: string | null;
@@ -107,7 +122,7 @@ export type JobTemplate = {
   updated_at: string;
 };
 
-const TEMPLATE_COLUMNS = "id, name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at";
+const TEMPLATE_COLUMNS = "id, name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at";
 
 export async function getMyTemplates(): Promise<JobTemplate[]> {
   const db = await supabaseServer();

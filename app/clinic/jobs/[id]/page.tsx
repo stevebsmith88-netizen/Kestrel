@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import JobForm from "@/components/JobForm";
+import { payAndTagValues } from "@/lib/job-form";
 import { requireRole } from "@/lib/auth";
 import { getMyJob } from "@/lib/clinic";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
@@ -57,9 +58,7 @@ export default async function EditJob({ params }: { params: Promise<{ id: string
                 employment_type: job.employment_type ?? "",
                 province: job.province ?? "",
                 city: job.city ?? "",
-                pay_period: job.pay_period ?? "year",
-                pay_min: job.pay_min?.toString() ?? "",
-                pay_max: job.pay_max?.toString() ?? "",
+                ...payAndTagValues(job),
                 is_existing_vacancy: yesNo(job.is_existing_vacancy),
                 uses_ai_screening: yesNo(job.uses_ai_screening),
                 description: job.description ?? "",
