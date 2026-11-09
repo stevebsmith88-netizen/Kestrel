@@ -1,6 +1,7 @@
 // The messages at the top of a clinic's dashboard about its jobs, worked out from the jobs themselves (no extra table): a job that was
 // approved in the last 7 days, and a job sent back with something to change. Kept free of imports from the app so it can be tested on its
-// own (lib/clinic-notices.test.ts). They go away by themselves, so there is nothing to dismiss.
+// own (lib/clinic-notices.test.ts). They go away by themselves after 7 days, and a clinic can also clear an approval message sooner
+// (lib/notice-dismiss.ts).
 
 export const NOTICE_DAYS = 7;
 const DAY = 86_400_000;
