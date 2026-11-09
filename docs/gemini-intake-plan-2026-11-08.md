@@ -661,3 +661,18 @@ Steve is still finding underlined, hyperlink looking links around the site that 
 **Scope, counted on 9th November 2026 from the code:** 269 links in `app` and `components`, 187 of them with no class of their own. That number is an upper bound, because many of the 187 sit inside a menu, the footer or a styled container that already styles them. The files with the most plain links are `app/resources/page.tsx` (13), `components/AuthForms.tsx` (10), `components/SiteHeader.tsx` (10, mostly menu items), `app/compare/page.tsx` (6), `app/candidate/page.tsx` (6), `app/admin/found/page.tsx` (5), the policy pages (5 each), `components/LaunchHome.tsx` (5), `components/LandingView.tsx` (5) and `app/jobs/page.tsx` (4).
 
 **How the sweep should run (same rules as Phase 1D, which stand):** links inside a sentence keep a thin underline, because colour alone fails WCAG 1.4.1. Everything else is a navigation link (bold, no underline, a clear hover) or a button. Start with a list of every page and every plain link on it, sorted into 3 piles (leave as is, make a button, make a navigation link), with a before and after sketch for Steve. Cover signed in pages (candidate, clinic, admin) and public pages, and check them on a phone as well. Add a test that fails when a new page adds a plain link outside a sentence, in the style of the footer test.
+
+### Wording: "resume", not "CV" (Steve, November 2026, for Wednesday)
+
+Steve wants the site to read as Canadian. "CV" is the British word, so everything people read says "resume" instead. Not changed yet.
+
+**Scope, counted on 9th November 2026 from the code (words people read only):** about 115 mentions in 36 files. By area: pages 38 in 16 files (the most: `app/privacy/page.tsx` 8, `app/candidate/profile/page.tsx` 6, `app/security/page.tsx` 5, the apply page 3), components 17 in 10 files (`components/CvCard.tsx` 5), the help centre 25 in `content/help.ts`, the blog 10 in `content/posts.ts`, and the rules and emails 25 in 8 files (`lib/candidate-actions.ts` 14, `lib/onboarding-emails.ts` 4).
+
+**Rules for the change:**
+- Say "resume" (no accent), and "resumes" for the plural. Keep it in step in labels, buttons, errors, emails, the help centre and the blog.
+- Only change words people read. Do not rename database columns (`cv_path`, `cv_filename`), file names or code names. They are invisible and renaming them would need a migration for no gain.
+- Help centre keywords: keep "cv" in each topic's search keywords alongside "resume", because some people will still type it.
+- The blog post "How to write a CV for an eye care job" (slug `eye-care-cv`) is scheduled for 26th March 2027 and is not published, so it can be retitled and given a new slug (`eye-care-resume`) with no redirect. Check the internal links to it first.
+- The privacy, terms and security pages are with the lawyer. Change the wording in the same pass only once the lawyer's first review is back, or tell the lawyer.
+- The Phase 3A hub pages and posts, and the CV import idea (call it "Fill in from my resume"), should use "resume" from the start. If Phase 3A has not merged, ask that chat to use it, or do this pass after it merges, to avoid conflicts.
+- After the pass, add a test that fails if "CV" appears in public wording, with a short allowed list (the keywords above).
