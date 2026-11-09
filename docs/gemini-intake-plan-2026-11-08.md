@@ -446,7 +446,18 @@ Built after Steve tried the first version. **Needs migration 0035 on both databa
 - **"Exam fees"** joins production, collections and billings as what a percentage is of.
 - **Daily rate with the days a week** (optional) gives a yearly estimate: the daily amount x days x 48 working weeks, always labelled as an estimate, shown on the job page, used by the typical pay line and Recommended for you, and never given to Google as the salary. A guaranteed minimum, or any pay with a percentage, is not compared.
 - **Re-running the combined file** on a database that already holds the newer pay shapes used to fail at an older step. Migrations 0023 and 0034 now add their older pay rules as "not valid" for existing rows, so the whole file is safe to run again.
-- Still open: Steve asked for the percentage to show 20 to 25 as an estimate. See the chat; the grey example text now shows 20 and 25.
+- The grey example text in the percentage boxes shows 20 and 25. It is an example only and is not saved. Steve confirmed this on 10th November 2026.
+
+### Phase 2 closed (10th November 2026)
+
+Steve checked on the demo site that posting works with each pay type, the daily rate estimate is calculated, and the migrations (0034 and 0035) have been run on both the live and the demo databases. Phase 2 is complete.
+
+Also changed after Steve tried it:
+
+- **Ad builder and Canadian experience.** The ad builder now never mentions Canadian experience, even to say it is not needed, because the post checker refuses the phrase however it is used. The error message says so. Whether a clearly negative phrase ("Canadian experience is not required") should be allowed is a question for the lawyer's list.
+- **Approval message.** A clinic's dashboard shows a message for 7 days after a job is approved, and while a job is sent back with a note (`lib/clinic-notices.ts`, no database change). The approval email already existed. The demo site never sends email, by design, so approval emails cannot be seen there.
+- **Job page layout.** Job facts sit under "About the job" at the same width, with the pay line across the full width of the box. On a phone a small Apply button at the top jumps down to the full Apply box. Its clicks are not counted as apply clicks; only the full box's button is.
+- **Order of changes.** A change that adds a database column must have its SQL run before the code is merged, because the public job pages read the new columns. Merging first blanks the job board until the SQL is run.
 
 
 ---
