@@ -91,10 +91,10 @@ const templateFields = (row: {
   title: string; role_category: string | null; employment_type: string | null; province: string | null; city: string | null;
   pay_period: string | null; pay_min: number | null; pay_max: number | null; description: string | null; apply_method: string;
   apply_url: string | null; work_arrangement: string; territory: string | null; pay_extras: string | null;
-  pay_is_minimum: boolean | null; pay_percent_min: number | null; pay_percent_max: number | null; pay_percent_of: string | null;
+  pay_is_minimum: boolean | null; pay_days_per_week: number | null; pay_percent_min: number | null; pay_percent_max: number | null; pay_percent_of: string | null;
   tags_software: string[] | null; tags_equipment: string[] | null; tags_specialties: string[] | null;
 }) => ({
-  pay_is_minimum: row.pay_is_minimum ?? false, pay_percent_min: row.pay_percent_min, pay_percent_max: row.pay_percent_max, pay_percent_of: row.pay_percent_of,
+  pay_is_minimum: row.pay_is_minimum ?? false, pay_days_per_week: row.pay_days_per_week, pay_percent_min: row.pay_percent_min, pay_percent_max: row.pay_percent_max, pay_percent_of: row.pay_percent_of,
   tags_software: row.tags_software ?? [], tags_equipment: row.tags_equipment ?? [], tags_specialties: row.tags_specialties ?? [],
   title: row.title, role_category: row.role_category, employment_type: row.employment_type, province: row.province, city: row.city,
   pay_period: row.pay_period, pay_min: row.pay_min, pay_max: row.pay_max, description: row.description, apply_method: row.apply_method,
@@ -226,7 +226,7 @@ export async function repostJob(form: FormData) {
   if (!id || !db || !employer) redirect("/clinic");
   const { data: old } = await db
     .from("jobs")
-    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
+    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
     .eq("id", id)
     .eq("employer_id", employer.id)
     .in("status", ["closed", "expired", "live"])

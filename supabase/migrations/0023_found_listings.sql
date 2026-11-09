@@ -49,7 +49,7 @@ alter table public.jobs add constraint jobs_complete_unless_draft check (
       or (case when pay_period = 'hour' then 2080 else 1 end) * pay_max > 200000
     )
   )
-);
+) not valid; -- "not valid": existing rows are not re-checked here, so this file can run again on a database that holds newer pay shapes (see 0034, 0035)
 
 -- 4. 21 days at most. "not valid" leaves any older test rows alone, and still checks every new or changed row.
 alter table public.jobs drop constraint if exists jobs_found_listing_21_days;

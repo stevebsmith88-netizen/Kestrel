@@ -9,7 +9,7 @@ import { saveJob } from "@/lib/clinic-actions";
 import PayBenchmark from "@/components/PayBenchmark";
 import type { OwnPayStat } from "@/lib/pay-benchmark";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
-import { OPTOMETRIST_ONLY_BASES, OPTOMETRIST_ROLE, PAY_BASES, PERCENT_OF } from "@/lib/job-pay";
+import { MONEY_PERIODS, OPTOMETRIST_ONLY_PERIODS, OPTOMETRIST_ROLE, PERCENT_OF, WORKING_WEEKS } from "@/lib/job-pay";
 import { TAG_GROUPS } from "@/lib/job-tags";
 
 export type JobFormValues = {
@@ -33,19 +33,15 @@ export type JobFormValues = {
   pay_percent_min: string;
   pay_percent_max: string;
   pay_percent_of: string;
-  pay_percent_too: string; // "yes" when a daily minimum also pays a percentage
+  pay_is_minimum: string; // "yes" when the dollar amounts are a guaranteed minimum
+  pay_days: string; // days a week, for a daily rate
   tags_software: string[];
   tags_equipment: string[];
   tags_specialties: string[];
 };
 
-// Money boxes for each way of working out pay: what they are called and what the grey example shows.
-const MONEY_BOXES: Record<string, { low: string; high: string; lowEg: string; highEg: string; hint?: string }> = {
-  year: { low: "Lowest pay", high: "Highest pay", lowEg: "62,000", highEg: "74,000" },
-  hour: { low: "Lowest pay", high: "Highest pay", lowEg: "24", highEg: "28" },
-  day: { low: "Lowest daily rate", high: "Highest daily rate", lowEg: "900", highEg: "1,100", hint: "What you pay for a full day worked. A range can be up to $200 a day wide. If you pay one set amount, type it in both boxes." },
-  day_minimum: { low: "Lowest daily minimum", high: "Highest daily minimum", lowEg: "600", highEg: "800", hint: "The amount you guarantee for a day worked. A range can be up to $200 a day wide. If you guarantee one set amount, type it in both boxes." },
-};
+// What the dollar boxes show as examples for each unit.
+const EXAMPLES: Record<string, { low: string; high: string }> = { year: { low: "62,000", high: "74,000" }, hour: { low: "24", high: "28" }, day: { low: "900", high: "1,100" } };
 
 const YES_NO = [
   { value: "yes", label: "Yes" },
@@ -68,18 +64,25 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   // Followed so the pay guide can compare the range as it is typed. The guide never changes what is saved.
   const [role, setRole] = useState(initial.role_category);
   const [province, setProvince] = useState(initial.province);
-  const [payBasis, setPayBasis] = useState(initial.pay_period);
+  const [payPeriod, setPayPeriod] = useState(initial.pay_period || "year");
   const [payMin, setPayMin] = useState(initial.pay_min);
   const [payMax, setPayMax] = useState(initial.pay_max);
-  const [alsoPercent, setAlsoPercent] = useState(initial.pay_percent_too === "yes");
-  // Daily rates, daily minimums and percentages are for optometrist roles. For any other role the choice falls back to a salary.
-  // Until a role is chosen, every choice is offered, so nobody has to pick the role first to see them.
-  const isOptometrist = role === OPTOMETRIST_ROLE;
+  const [payDays, setPayDays] = useState(initial.pay_days);
+  const [pctMin, setPctMin] = useState(initial.pay_percent_min);
+  const [pctMax, setPctMax] = useState(initial.pay_percent_max);
+  // A daily rate and a percentage are for optometrist roles. Until a role is chosen, everything is offered.
   const roleChosen = role !== "";
-  const bases = !roleChosen || isOptometrist ? PAY_BASES : PAY_BASES.filter((b) => !OPTOMETRIST_ONLY_BASES.includes(b.value));
-  const basis = bases.some((b) => b.value === payBasis) ? payBasis : "year";
-  const money = MONEY_BOXES[basis];
-  const showPercent = basis === "percent" || (basis === "day_minimum" && alsoPercent);
+  const isOptometrist = role === OPTOMETRIST_ROLE;
+  const periods = !roleChosen || isOptometrist ? MONEY_PERIODS : MONEY_PERIODS.filter((p) => !OPTOMETRIST_ONLY_PERIODS.includes(p.value));
+  const period = periods.some((p) => p.value === payPeriod) ? payPeriod : "year";
+  const example = EXAMPLES[period];
+  const showPercent = !roleChosen || isOptometrist;
+  const hasMoney = payMin.trim() !== "" || payMax.trim() !== "";
+  const hasPercent = pctMin.trim() !== "" || pctMax.trim() !== "";
+  // The typical pay line compares salary, hourly and a daily rate with the days a week given. Anything with a percentage is left alone.
+  const daysNumber = Number(payDays);
+  const compare = hasMoney && !hasPercent && (period === "year" || period === "hour" || (period === "day" && Number.isInteger(daysNumber) && daysNumber >= 1 && daysNumber <= 7));
+  const toYear = (v: string) => (period === "day" ? String(Math.round(Number(v.replace(/[$,\s]/g, "")) * daysNumber * WORKING_WEEKS)) : v);
   const e = state.errors ?? {};
   return (
     <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
@@ -140,44 +143,53 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
       </div>
 
       <h2 className="formh">Pay</h2>
-      <p className="help formnote">A pay range is required on every post, however the pay is worked out. Words such as &quot;negotiable&quot; or &quot;discussed at interview&quot; are not accepted on their own. Enter the range you expect to pay, even if the final offer may be higher. Pay is shown to everyone. This follows the pay transparency rules in Ontario and British Columbia.</p>
-      <Choices key={bases.length} name="payPeriod" label="How is the pay worked out?" options={bases} value={basis} onChange={setPayBasis} error={e.payPeriod} hint={!roleChosen || isOptometrist ? undefined : "Daily rates and percentages are available when the role is Optometrist."} />
-      {money && (
-        <>
-          <div className="pair">
-            <Field id="jf-min" label={money.low} required error={e.payMin} hint={money.hint}>
-              <input id="jf-min" name="payMin" type="text" inputMode="decimal" value={payMin} onChange={(ev) => setPayMin(ev.target.value)} placeholder={money.lowEg} />
-            </Field>
-            <Field id="jf-max" label={money.high} required error={e.payMax}>
-              <input id="jf-max" name="payMax" type="text" inputMode="decimal" value={payMax} onChange={(ev) => setPayMax(ev.target.value)} placeholder={money.highEg} />
-            </Field>
-          </div>
-          {basis === "day_minimum" && (
-            <label className="choice agree">
-              <input type="checkbox" name="payPercentToo" value="yes" checked={alsoPercent} onChange={(ev) => setAlsoPercent(ev.target.checked)} />
-              <span>The optometrist is also paid a percentage when it comes to more than the daily minimum</span>
-            </label>
-          )}
-        </>
+      <p className="help formnote">A pay range is required on every post. {showPercent ? "Fill in the dollar range, the percentage range, or both." : ""} Words such as &quot;negotiable&quot; or &quot;discussed at interview&quot; are not accepted on their own. Enter the range you expect to pay, even if the final offer may be higher. Pay is shown to everyone. This follows the pay transparency rules in Ontario and British Columbia.</p>
+      <div className="pair">
+        <Field id="jf-period" label="Paid" error={e.payPeriod}>
+          <select id="jf-period" name="payPeriod" value={period} onChange={(ev) => setPayPeriod(ev.target.value)}>
+            {periods.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+          </select>
+        </Field>
+        {period === "day" && (
+          <Field id="jf-days" label="Days a week (optional)" error={e.payDays} hint={`Used for an estimate of the yearly pay, over ${WORKING_WEEKS} working weeks. It is labelled as an estimate.`}>
+            <input id="jf-days" name="payDays" type="text" inputMode="numeric" maxLength={1} value={payDays} onChange={(ev) => setPayDays(ev.target.value)} placeholder="4" />
+          </Field>
+        )}
+      </div>
+      <div className="pair">
+        <Field id="jf-min" label="Lowest pay" error={e.payMin} hint={period === "day" ? "A range can be up to $200 a day wide. If you pay one set amount, type it in both boxes." : undefined}>
+          <input id="jf-min" name="payMin" type="text" inputMode="decimal" value={payMin} onChange={(ev) => setPayMin(ev.target.value)} placeholder={example.low} />
+        </Field>
+        <Field id="jf-max" label="Highest pay" error={e.payMax}>
+          <input id="jf-max" name="payMax" type="text" inputMode="decimal" value={payMax} onChange={(ev) => setPayMax(ev.target.value)} placeholder={example.high} />
+        </Field>
+      </div>
+      {isOptometrist && hasMoney && (
+        <label className="choice agree">
+          <input type="checkbox" name="payIsMinimum" value="yes" defaultChecked={initial.pay_is_minimum === "yes"} />
+          <span>These dollar amounts are a guaranteed minimum{hasPercent ? ", and the percentage is paid when it comes to more. Leave this unticked if the percentage is paid on top." : "."}</span>
+        </label>
       )}
       {showPercent && (
         <>
           <div className="pair">
-            <Field id="jf-pmin" label="Lowest percentage" required error={e.payPercentMin} hint="A range can be up to 10 points wide, for example 28% to 38%.">
-              <input id="jf-pmin" name="payPercentMin" type="text" inputMode="decimal" defaultValue={initial.pay_percent_min} placeholder="28" />
+            <Field id="jf-pmin" label="Lowest percentage" error={e.payPercentMin} hint="Optional if you filled in dollars. A range can be up to 10 points wide, for example 28% to 38%.">
+              <input id="jf-pmin" name="payPercentMin" type="text" inputMode="decimal" value={pctMin} onChange={(ev) => setPctMin(ev.target.value)} placeholder="20" />
             </Field>
-            <Field id="jf-pmax" label="Highest percentage" required error={e.payPercentMax}>
-              <input id="jf-pmax" name="payPercentMax" type="text" inputMode="decimal" defaultValue={initial.pay_percent_max} placeholder="35" />
+            <Field id="jf-pmax" label="Highest percentage" error={e.payPercentMax}>
+              <input id="jf-pmax" name="payPercentMax" type="text" inputMode="decimal" value={pctMax} onChange={(ev) => setPctMax(ev.target.value)} placeholder="25" />
             </Field>
           </div>
-          <Field id="jf-pof" label="The percentage is of" required error={e.payPercentOf} hint="Production is the value of the work done. Collections is the money actually received. Billings is the amount invoiced.">
-            <select id="jf-pof" name="payPercentOf" defaultValue={initial.pay_percent_of || "production"}>
-              {PERCENT_OF.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
-            </select>
-          </Field>
+          {hasPercent && (
+            <Field id="jf-pof" label="The percentage is of" error={e.payPercentOf} hint="Production is the value of the work done. Collections is the money actually received. Billings is the amount invoiced. Exam fees is the fees for eye exams only.">
+              <select id="jf-pof" name="payPercentOf" defaultValue={initial.pay_percent_of || "production"}>
+                {PERCENT_OF.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+              </select>
+            </Field>
+          )}
         </>
       )}
-      {(basis === "year" || basis === "hour") && <PayBenchmark role={role} province={province} period={basis} min={payMin} max={payMax} own={ownPay} />}
+      {compare && <PayBenchmark role={role} province={province} period={period === "hour" ? "hour" : "year"} min={period === "day" ? toYear(payMin) : payMin} max={period === "day" ? toYear(payMax) : payMax} own={ownPay} />}
 
       <Field id="jf-extras" label="Bonus, commission or anything else that is part of the pay" error={e.payExtras} hint="Optional. For example: a yearly bonus, plus commission, a car allowance or a company vehicle. The range above should be the base pay.">
         <input id="jf-extras" name="payExtras" type="text" maxLength={300} defaultValue={initial.pay_extras} />

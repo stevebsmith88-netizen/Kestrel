@@ -26,6 +26,7 @@ export type MyJob = {
   pay_min: number | null;
   pay_max: number | null;
   pay_is_minimum: boolean | null;
+  pay_days_per_week: number | null;
   pay_percent_min: number | null;
   pay_percent_max: number | null;
   pay_percent_of: string | null;
@@ -48,7 +49,7 @@ export type MyJob = {
 };
 
 const JOB_COLUMNS =
-  "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
+  "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
 
 // The signed in clinic's own profile (row level security means it can only be their own).
 export async function getMyEmployer(userId: string): Promise<Employer | null> {
@@ -107,6 +108,7 @@ export type JobTemplate = {
   pay_min: number | null;
   pay_max: number | null;
   pay_is_minimum: boolean | null;
+  pay_days_per_week: number | null;
   pay_percent_min: number | null;
   pay_percent_max: number | null;
   pay_percent_of: string | null;
@@ -122,7 +124,7 @@ export type JobTemplate = {
   updated_at: string;
 };
 
-const TEMPLATE_COLUMNS = "id, name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at";
+const TEMPLATE_COLUMNS = "id, name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at";
 
 export async function getMyTemplates(): Promise<JobTemplate[]> {
   const db = await supabaseServer();

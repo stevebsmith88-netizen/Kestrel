@@ -77,11 +77,12 @@ export type JobInput = {
   workArrangement: string; // "on_site" | "field"
   territory: string;
   payExtras: string;
-  // How the pay is worked out is held in payPeriod (year, hour, day, day_minimum or percent). See lib/job-pay.ts.
+  // payPeriod is the unit of the dollar boxes (year, hour or day). Dollars, a percentage or both can be given: see lib/job-pay.ts.
+  payIsMinimum: string; // "yes" when the dollar amounts are a guaranteed minimum
+  payDays: string; // days a week, for a daily rate
   payPercentMin: string;
   payPercentMax: string;
   payPercentOf: string;
-  payPercentToo: string; // "yes" when a daily minimum also pays a percentage
   tagsSoftware: string[];
   tagsEquipment: string[];
   tagsSpecialties: string[];
@@ -173,7 +174,8 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     payPercentMin: clean(raw.payPercentMin, 20),
     payPercentMax: clean(raw.payPercentMax, 20),
     payPercentOf: clean(raw.payPercentOf, 12),
-    payPercentToo: clean(raw.payPercentToo, 3) === "yes" ? "yes" : "",
+    payIsMinimum: clean(raw.payIsMinimum, 3) === "yes" ? "yes" : "",
+    payDays: clean(raw.payDays, 2),
     tagsSoftware: cleanTags(raw.tagsSoftware, SOFTWARE_TAGS),
     tagsEquipment: cleanTags(raw.tagsEquipment, EQUIPMENT_TAGS),
     tagsSpecialties: cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS),
