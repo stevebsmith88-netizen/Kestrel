@@ -187,10 +187,10 @@ export function validateJob(job: JobInput, submit: boolean) {
   const errors: Record<string, string> = {};
   if (!job.title) errors.title = "Give the job a title.";
   if (job.description && mentionsCanadianExperience(`${job.title} ${job.description}`)) {
-    errors.description = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
+    errors.description = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   }
-  if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
-  if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience. We do not allow it in job posts.";
+  if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
+  if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.province === QUEBEC) errors.province = QUEBEC_JOB_MESSAGE; // refused for drafts too, so a Quebec job never gets as far as review
   if (!submit) return errors;
 
