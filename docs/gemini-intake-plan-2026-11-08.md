@@ -578,3 +578,55 @@ Added after the merge, at Steve's request. A search box above the sections (show
 
 At Steve's request the General section starts open so the page does not look bare. Candidates and Clinics stay closed until clicked, and every topic inside General still starts closed. The list of sections that start open is `HELP_OPEN_BY_DEFAULT` in `lib/help.ts` (tested). It works without JavaScript. Clearing a search puts the page back as it first looked (General open, the rest closed), and Collapse all still closes everything. No database change and no new setting.
 
+
+---
+
+## Candidate experience review (raised by Steve while testing, November 2026, held for Wednesday)
+
+Nothing here is built. Steve walked through the candidate side and listed 7 points. Each has what the code does today (checked), the proposal, and what needs his decision. Several cross over to the clinic side and say so.
+
+### 1. The profile asks for provinces 3 times, and a lot of repeated questions
+
+**Today** (`components/CandidateProfileForm.tsx`): "Licensed or registered in" (provinces), "Your town or city" with "Its province or territory", and "Also happy to work in" (more provinces). Then type of work, lowest pay, kind of practice, software, other roles. Recommendations use the extra provinces if given, and fall back to the licensed ones only when there is no home town or extras (`lib/recommend.ts`), which is why it is unclear whether provinces already given count.
+**Proposal:** ask where they live once. Ask "Where are you registered to practise?" only for roles that need registration (optometrist, optician), and hide it for the rest. Make "Where would you work?" start with the home province ticked and the registered provinces ticked, so nobody re ticks what they already said. Split the form into short steps (the basics needed to apply, then what you are looking for, then extras), with Optional marked and a progress line. Say plainly on the form what each answer is used for.
+**Decide:** which questions are truly needed to apply, and which can wait until after the first application.
+**Clinic cross check:** see whether "post a job" repeats the clinic profile's province and city.
+
+### 2. "Recommended for you" is not obvious while filling in the profile
+
+**Today:** it appears on the candidate home once the profile is saved, and the getting started list points to it.
+**Proposal:** show a live line on the profile ("With these answers, 12 jobs fit you now") and a link that opens the recommended list as soon as it is saved. Add "See your recommended jobs" as a getting started step.
+
+### 3 and 4. The job list should default to the person's own role
+
+**Today** (`app/jobs/page.tsx`): the list is the same for everyone, with the role filter on "Any role". A signed in optician sees optometrist and assistant jobs.
+**Proposal:** for a signed in candidate with a profile, the list starts on "For me", their role plus the "other roles you would consider", and their province and distance, with a clear line "Showing jobs for Optician in Ontario. Show all jobs" so nothing is hidden. Visitors and search engines still see everything, so Google indexing is unaffected. The role filter is a single choice today, so showing the role and the other roles needs a "My roles" choice or a multi select.
+**Decide:** "For me" as the default, or a switch the person turns on.
+
+### 5. A candidate can apply for a role that is not theirs
+
+**Today:** applying only checks that the profile has a role and a CV (`lib/candidate-actions.ts`). An optician can apply for an optometrist job.
+**Proposal:** a candidate can apply when the job's role is their role or one of "other roles you would consider". Otherwise the Apply button is replaced by a message: "This role is for an optometrist. Your profile says optician. If that is not right, you can change your role in your profile to apply." with a button to the profile, and the server refuses a mismatched application too, not only the page. Offer "add this role to the ones you would consider" as a one click choice, so a genuine career move is easy.
+**Clinic cross check:** fewer unqualified applicants is the clinics' main complaint about general boards.
+**Decide:** is the rule strict (own role or listed roles only), and do any roles count as compatible by themselves (for example opticians and contact lens fitters)?
+
+### 6. People who are not in the industry
+
+**Today:** the role list is only eye care roles, so someone outside the industry has to pick the nearest one. There is no note on sign up.
+**Proposal:** a short line at sign up ("Kestrel is for people working in, or moving into, eye care in Canada"), and a "where are you in eye care" choice on the profile: working in eye care, student or new graduate, new to eye care. Clinics see it as a small tag on the application. Blog posts already encourage hiring from outside the industry, so it should be possible to be new, but regulated roles (optometrist, optician) should need registration or student or new graduate status.
+**Decide:** which roles a person new to eye care may apply for.
+
+### 7. The profile menu only shows on the dashboard
+
+**Today:** the initials badge with "Profile and CV" and the account links is in the app bar (`components/AppBar.tsx`), used on dashboard, profile and clinic pages. Public pages such as jobs, a job, the blog and help use the public header (`components/SiteHeader.tsx`), which shows "My dashboard" and "Sign out" but no profile menu.
+**Proposal:** show the same initials badge menu in the public header when signed in, beside "My dashboard", on every page and on a phone. Same for clinics ("Clinic profile", "Post a job"). Small to medium build.
+
+### Suggested order when this is picked up
+
+1. The header menu (point 7): small and self contained.
+2. The role rule on Apply, with the message (point 5): a correctness fix, and it needs the decision above.
+3. The "For me" job list (points 3 and 4).
+4. The profile redesign with the recommended preview (points 1 and 2), the largest.
+5. The sign up note and "where are you in eye care" (point 6), after the role decision.
+
+Update the help centre topics for the profile, applying and the job list in the same change as each step.
