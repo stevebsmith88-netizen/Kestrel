@@ -24,15 +24,19 @@ export default function StatusForm({ id, current, keepDetails, clinicName }: { i
           ))}
         </select>
       </div>
-      <div className={`row ${state.errors?.message ? "invalid" : ""}`}>
-        <label className="lab" htmlFor="sf-message">Message to the candidate</label>
-        <textarea id="sf-message" name="message" rows={5} value={message} onChange={(e) => setMessage(e.target.value)} />
-        <p className="help">The candidate sees this message and gets an email. Every candidate should get one, and you can edit it.</p>
-        {state.errors?.message && <p className="err" role="alert">{state.errors.message}</p>}
-      </div>
+      {status === "shortlisted" ? (
+        <p className="help">Shortlisting is your own working list. The candidate is not emailed and there is no message to write.</p>
+      ) : (
+        <div className={`row ${state.errors?.message ? "invalid" : ""}`}>
+          <label className="lab" htmlFor="sf-message">Message to the candidate</label>
+          <textarea id="sf-message" name="message" rows={5} value={message} onChange={(e) => setMessage(e.target.value)} />
+          <p className="help">The candidate sees this message and gets an email. Every candidate should get one, and you can edit it.</p>
+          {state.errors?.message && <p className="err" role="alert">{state.errors.message}</p>}
+        </div>
+      )}
       {state.error && !state.errors?.message && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
-      <button type="submit" className="btn" disabled={pending || !status}>{pending ? "Saving" : "Save and tell the candidate"}</button>
+      <button type="submit" className="btn" disabled={pending || !status}>{pending ? "Saving" : status === "shortlisted" ? "Save" : "Save and tell the candidate"}</button>
     </form>
   );
 }

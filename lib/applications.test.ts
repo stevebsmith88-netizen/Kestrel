@@ -5,6 +5,8 @@ import {
   CLOSED,
   activeContent,
   STEPS,
+  candidateHistory,
+  candidateStatus,
   clinicMoveError,
   detectCv,
   groupOf,
@@ -50,11 +52,12 @@ test("closing and offering needs a message with no blanks left in it", () => {
 });
 
 test("messages are kind and name the clinic", () => {
-  for (const s of ["not_selected", "role_filled", "kept", "shortlisted", "interview", "offer"]) {
+  for (const s of ["not_selected", "role_filled", "kept", "interview", "offer"]) {
     assert.ok(messageTemplate(s, "Harbourside Optical").includes("Harbourside Optical"), s);
   }
   assert.ok(!messageTemplate("not_selected", "X").toLowerCase().includes("reject"));
   assert.equal(messageTemplate("applied", "X"), "");
+  assert.equal(messageTemplate("shortlisted", "X"), "", "shortlisting is the clinic's own list, so it has no message");
 });
 
 test("CV files are recognised by what is inside them", () => {
@@ -105,4 +108,13 @@ test("bulk moves: a shortlist needs no message, an interview invitation needs a 
   assert.ok(clinicMoveError("viewed", "interview", true, "Come on [date]"), "square brackets must be filled in");
   assert.equal(clinicMoveError("shortlisted", "interview", true, "Please come on Tuesday at 2 pm."), null);
   assert.ok(clinicMoveError("shortlisted", "shortlisted", true, ""), "already shortlisted is skipped");
+});
+
+test("a candidate never sees Shortlisted: it shows as Viewed, once, in their history", () => {
+  assert.equal(candidateStatus("shortlisted"), "viewed");
+  assert.equal(candidateStatus("interview"), "interview");
+  assert.equal(candidateStatus("applied"), "applied");
+  const events = [{ status: "applied" }, { status: "viewed" }, { status: "shortlisted" }, { status: "interview" }];
+  assert.deepEqual(candidateHistory(events).map((e) => e.status), ["applied", "viewed", "interview"]);
+  assert.deepEqual(candidateHistory([{ status: "applied" }, { status: "shortlisted" }]).map((e) => e.status), ["applied", "viewed"], "shortlisted straight from applied still shows a Viewed step");
 });

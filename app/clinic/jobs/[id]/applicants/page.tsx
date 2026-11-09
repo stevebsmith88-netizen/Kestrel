@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
+import BulkApplicantPanel from "@/components/BulkApplicantPanel";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
 import { GROUP_LABELS, groupOf, type Group } from "@/lib/applications";
@@ -73,7 +74,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               {movedCount === 0
                 ? "Nobody was moved."
                 : moved === "shortlisted"
-                  ? `${movedCount} ${movedCount === 1 ? "applicant is" : "applicants are"} now shortlisted. No email was sent. They can see the step in their account.`
+                  ? `${movedCount} ${movedCount === 1 ? "applicant is" : "applicants are"} now shortlisted. No email was sent.`
                   : `${movedCount} ${movedCount === 1 ? "applicant has" : "applicants have"} been invited to interview, by email and in their account.`}
               {Number.isFinite(skippedCount) && skippedCount > 0 ? ` ${skippedCount} ${skippedCount === 1 ? "was" : "were"} left as they were, because they were already at that step or had withdrawn.` : ""}
             </p>
@@ -114,22 +115,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               ))}
             </div>
             {shown.some((r) => WAITING.includes(r.status)) && (
-              <section className="card bulkpanel" aria-labelledby="bulk-title">
-                <h2 id="bulk-title">With the ticked applicants</h2>
-                <div className="bulkbtns">
-                  <button type="submit" formAction={shortlistSelected} className="btn sm">Shortlist</button>
-                  <button type="submit" formAction={interviewSelected} className="btn sm">Invite to interview</button>
-                  <button type="submit" className="btn sm ghost">Send a kind no</button>
-                </div>
-                <ul className="bulkhelp">
-                  <li><strong>Shortlist</strong> sends no email. It is your own working list, and the candidate sees the step in their account.</li>
-                  <li><strong>Invite to interview</strong> sends everyone you tick the message below, by email and in their account. For different times, open each application.</li>
-                  <li><strong>Send a kind no</strong> gives each person the same warm message you would send one at a time, by email and in their account.</li>
-                </ul>
-                <label className="lab" htmlFor="bulkMessage">Interview invitation (used only for Invite to interview)</label>
-                <textarea id="bulkMessage" name="message" rows={3} maxLength={1500} placeholder="For example: We would like to meet you at the clinic on Tuesday 24th November at 2 pm. Please reply to this email to confirm, or to suggest another time." />
-                <p className="help">Offers are never made in bulk. Open the application to make one.</p>
-              </section>
+              <BulkApplicantPanel shortlist={shortlistSelected} interview={interviewSelected} />
             )}
             </form>
           )}
