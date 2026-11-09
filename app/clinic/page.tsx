@@ -13,6 +13,7 @@ import { getMyJobNumbers } from "@/lib/job-stats-data";
 import { closeJob, deleteJob, extendJob, repostJob, withdrawJob } from "@/lib/clinic-actions";
 import { canExtend } from "@/lib/job-ending";
 import { saveJobAsTemplate } from "@/lib/template-actions";
+import { jobNotices } from "@/lib/clinic-notices";
 import { daysLeft, employmentLabel, longDate } from "@/lib/jobs";
 import { payBasisOf, payText } from "@/lib/job-pay";
 
@@ -61,6 +62,12 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
+
+          {jobNotices(jobs).map((n) => (
+            <p className={n.kind === "approved" ? "notice" : "notice warn"} role="status" key={n.id + n.kind}>
+              {n.text} {n.kind === "approved" ? <Link href={`/jobs/${n.id}`}>See your job</Link> : <Link href={`/clinic/jobs/${n.id}`}>Open it</Link>}
+            </p>
+          ))}
 
           {!employer ? (
             <section className="card setup">
