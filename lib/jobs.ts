@@ -4,6 +4,7 @@
 
 import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLES } from "./waitlist.ts";
 import { HOURS_IN_A_YEAR, markupPayLine, parseMoney, payFlags, payRangeAllowed, payText, salaryForMarkup, validatePay, type PayFields } from "./job-pay.ts";
+import { tidyTitle } from "./job-title.ts";
 import { cleanTags, EQUIPMENT_TAGS, SOFTWARE_TAGS, SPECIALTY_TAGS } from "./job-tags.ts";
 
 export { HOURS_IN_A_YEAR, parseMoney, payRangeAllowed };
@@ -155,7 +156,7 @@ export function mentionsCanadianExperience(text: string) {
 
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {
   return {
-    title: clean(raw.title, 120),
+    title: tidyTitle(clean(raw.title, 120)),
     roleCategory: clean(raw.roleCategory, 80),
     employmentType: clean(raw.employmentType, 30),
     province: clean(raw.province, 40),
