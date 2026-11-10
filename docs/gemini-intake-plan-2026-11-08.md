@@ -676,3 +676,20 @@ Steve wants the site to read as Canadian. "CV" is the British word, so everythin
 - The privacy, terms and security pages are with the lawyer. Change the wording in the same pass only once the lawyer's first review is back, or tell the lawyer.
 - The Phase 3A hub pages and posts, and the CV import idea (call it "Fill in from my resume"), should use "resume" from the start. If Phase 3A has not merged, ask that chat to use it, or do this pass after it merges, to avoid conflicts.
 - After the pass, add a test that fails if "CV" appears in public wording, with a short allowed list (the keywords above).
+
+### Clinic dashboard tiles should be clickable (Steve, 10th November 2026, for Wednesday, not started)
+
+Each tile at the top of the clinic dashboard (`app/clinic/page.tsx`, the `tiles stats` block) should open whatever the tile is counting, so the number is a way in, not just a figure.
+
+Suggested destinations, to confirm on Wednesday:
+- **Live:** the Your jobs list showing only live jobs.
+- **New applicants:** the applicants page for the job with the most waiting, or a short list of the jobs that have applicants waiting if there is more than 1.
+- **In review:** the Your jobs list showing only jobs with our team.
+- **Drafts:** the Your jobs list showing only drafts and posts that need changes.
+- **Views and Apply clicks:** the per job numbers (views and apply clicks for each job over the last 30 days), which is where the totals come from.
+
+Notes for whoever builds it:
+- The Your jobs list has no filter today. A simple `?show=live` style link that filters on the server, with a "Show all jobs" button to clear it, would do, and keeps it working without scripts.
+- Make the whole tile the link (a real link, not a click handler), so it works with the keyboard and a screen reader, and give it the same box highlight on hover as the other links. A tile with a count of 0 can still link, to an empty state that says what to do next.
+- Keep the wording in `content/help.ts` in step if a help topic describes the tiles.
+- Use the quiet, no jump patterns already in place so filtering does not scroll the page.
