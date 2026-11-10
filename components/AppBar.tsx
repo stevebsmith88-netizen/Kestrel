@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AccountMenu from "@/components/AccountMenu";
+import NavLinks from "@/components/NavLinks";
 import { ACCOUNT_MENU } from "@/lib/account-menu";
 import { signOut } from "@/lib/auth-actions";
 import { homeFor, type Role, type Session } from "@/lib/auth";
@@ -50,11 +51,7 @@ export default function AppBar({ session, current }: { session: Session; current
           <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={132} height={39} />
         </Link>
         <nav className="app-wide" aria-label="Main">
-          {barLinks.map((item) => (
-            <Link key={item.href} href={item.href} className={item.href === homeFor(session.role) ? "dashlink" : undefined} aria-current={here === item.href ? "page" : undefined}>
-              {item.label}
-            </Link>
-          ))}
+          <NavLinks links={barLinks} dashboard={homeFor(session.role)} />
         </nav>
         <AccountMenu session={session} here={here} className="app-wide" />
         <details className="site-narrow app-narrow">
