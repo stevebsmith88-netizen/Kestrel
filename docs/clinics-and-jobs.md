@@ -4,6 +4,7 @@
 
 1. A person signs up as a **clinic**, and sets up a clinic profile (`/clinic/profile`). The alert email they give is private and is never shown on a page.
 2. They write a job at `/clinic/jobs/new`. A draft only needs a title. To **submit for review** a job needs everything, including a pay range and the two questions (existing vacancy, uses AI to screen). Pay ranges can be up to $50,000 a year wide unless the top is over $200,000. Mentioning Canadian experience is refused.
+   - **Titles (10th November 2026):** a title typed in all capitals or all lowercase is tidied on save into title case (`lib/job-title.ts`): small words like "and" and "of" stay lower case, and OD, RO, CL, ECP and similar stay in capitals. A title that already mixes cases is left as written. It applies to the clinic form, the admin post and found listings. Jobs saved before this are not changed.
 3. The admin sees it at `/admin/review`, with automatic flags (Canadian experience, pay range, age wording, links, email addresses or phone numbers). **Approve and publish** makes it live for 30 days. **Send back** needs a note, which the clinic sees on their dashboard.
 4. Live jobs appear at `/jobs` (search and filters) and `/jobs/[id]` (with Google structured data). Expired jobs disappear from the public pages at once, because the database stops showing them.
 

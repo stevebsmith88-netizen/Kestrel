@@ -10,6 +10,7 @@
 //    empty and shown as "Not stated by the clinic". Kestrel never guesses a fact for a clinic.
 //  * Never for a clinic that already has its own Kestrel account, and never the clinic's logo.
 
+import { tidyTitle } from "./job-title.ts";
 import { EMPLOYMENT_TYPES, PRACTICE_TYPES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLE_CATEGORIES, mentionsCanadianExperience, parseMoney, payRangeAllowed } from "./jobs.ts";
 import { copiedRun, hostOfUrl, isHiringSystem, refuseAddress } from "./page-reader.ts";
 
@@ -162,7 +163,7 @@ export function normaliseReading(raw: unknown, pageUrl: string): Reading {
     if (max < min) [min, max] = [max, min];
     const field = pick(j.work_arrangement, ["on_site", "field"], "on_site");
     return {
-      title: str(j.title, 120),
+      title: tidyTitle(str(j.title, 120)),
       roleCategory: pick(j.role_category, ROLE_CATEGORIES),
       employmentType: pick(j.employment_type, EMPLOYMENT_TYPES),
       province: pick(j.province, PROVINCES),
@@ -192,7 +193,7 @@ export function cleanFoundInput(raw: Record<string, unknown>): FoundInput {
     clinicName: field(raw, "clinicName", 160),
     practiceType: field(raw, "practiceType", 20),
     website: field(raw, "website", 300),
-    title: field(raw, "title", 120),
+    title: tidyTitle(field(raw, "title", 120)),
     roleCategory: field(raw, "roleCategory", 80),
     employmentType: field(raw, "employmentType", 30),
     province: field(raw, "province", 40),
