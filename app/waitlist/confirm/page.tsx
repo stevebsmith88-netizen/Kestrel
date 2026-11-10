@@ -17,7 +17,7 @@ export default async function ConfirmWaitlist({ searchParams }: { searchParams: 
     return (
       <AuthShell title="You are on the list">
         <p className="auth-intro">Thank you. Your email address is confirmed. We will email you the moment Kestrel opens.</p>
-        <p className="alt"><Link href="/">Back to Kestrel</Link></p>
+        <p className="alt"><Link href="/" className="btn sm ghost">Back to Kestrel</Link></p>
       </AuthShell>
     );
   }
@@ -25,7 +25,7 @@ export default async function ConfirmWaitlist({ searchParams }: { searchParams: 
     return (
       <AuthShell title="You unsubscribed">
         <p className="auth-intro">You have unsubscribed from Kestrel emails, so we have not added you. If you would like to join again, fill in the waitlist form on our home page.</p>
-        <p className="alt"><Link href="/#join">Join the waitlist</Link></p>
+        <p className="alt"><Link href="/#join" className="btn">Join the waitlist</Link></p>
       </AuthShell>
     );
   }
@@ -34,7 +34,7 @@ export default async function ConfirmWaitlist({ searchParams }: { searchParams: 
     return (
       <AuthShell title="That link didn't work">
         <p className="auth-intro">The link may be incomplete. Please fill in the waitlist form again and we will send you a new one, or email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a> and we will help.</p>
-        <p className="alt"><Link href="/#join">Join the waitlist</Link></p>
+        <p className="alt"><Link href="/#join" className="btn">Join the waitlist</Link></p>
       </AuthShell>
     );
   }

@@ -140,8 +140,8 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                   <h2>No jobs match this search yet</h2>
                   <p>That is not a dead end. Here are quick ways to look a little wider:</p>
                   <ul className="emptylinks">
-                    {suggestions.map((s) => <li key={s.label}><Link href={s.href}>{s.label}</Link></li>)}
-                    <li><Link href="/jobs">Start again with every job</Link></li>
+                    {suggestions.map((s) => <li key={s.label}><Link href={s.href} className="btn sm ghost">{s.label}</Link></li>)}
+                    <li><Link href="/jobs" className="btn sm ghost">Start again with every job</Link></li>
                   </ul>
                   {alertHref ? (
                     <>
@@ -181,7 +181,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               )}
             </>
           )}
-          <p className="help"><Link href="/eye-care-jobs">Browse eye care jobs by province and role</Link></p>
+          <p className="help"><Link href="/eye-care-jobs" className="btn sm ghost">Browse eye care jobs by province and role</Link></p>
         </div>
       </main>
       <AppFooter />

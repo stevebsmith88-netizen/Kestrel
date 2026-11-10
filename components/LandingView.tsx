@@ -105,7 +105,7 @@ export default function LandingView({
           ))}
 
           {blog && <p className="help">Worth a read: <Link href={`/blog/${blog.slug}`}>{blog.title}</Link></p>}
-          <p className="help"><Link href="/eye-care-jobs">Browse eye care jobs by province and role</Link></p>
+          <p className="help"><Link href="/eye-care-jobs" className="btn sm ghost">Browse eye care jobs by province and role</Link></p>
         </div>
       </main>
       <AppFooter />

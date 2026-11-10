@@ -31,7 +31,7 @@ export default async function Blog() {
                 <p className="meta">{isPublished(p) ? longDate(p.date) : `Scheduled for ${longDate(p.date)} (only visible on previews)`} · {readingMinutes(p.body)} min read</p>
                 <h2><Link href={`/blog/${p.slug}`}>{p.title}</Link></h2>
                 <p>{p.description}</p>
-                <p><Link href={`/blog/${p.slug}`}>Read the article</Link></p>
+                <p><Link href={`/blog/${p.slug}`} className="btn sm ghost">Read the article</Link></p>
               </article>
             ))}
           </div>

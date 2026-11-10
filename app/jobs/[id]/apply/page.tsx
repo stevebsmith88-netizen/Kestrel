@@ -69,7 +69,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
               <div><dt>Role</dt><dd>{profile?.profession}</dd></div>
               <div><dt>CV</dt><dd>{profile?.cv_filename}</dd></div>
             </dl>
-            <p className="help"><Link href="/candidate/profile">Change these in my profile</Link></p>
+            <p className="help"><Link href="/candidate/profile" className="btn sm ghost">Change these in my profile</Link></p>
           </section>
           <ApplyForm jobId={job.id} clinicName={clinic} draft={draft?.cover_letter ?? ""} draftSavedAt={draft ? longDate(draft.updated_at) : ""} letters={letters} />
         </>
