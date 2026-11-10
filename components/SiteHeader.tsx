@@ -23,6 +23,13 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
   // `launch` and `tagline` let a page that already knows which look it has (the launch and pre launch home pages) say so.
   const mode = launch ? "launch" : tagline ? "prelaunch" : await homeModeNow();
   const launched = mode === "launch";
+  // A signed in person gets the same links as the account pages (components/AppBar.tsx), and the plain wordmark without the tagline.
+  const fit = findYourFitOn() ? [{ href: "/find-your-fit", label: "Find your fit" }] : [];
+  const signedInLinks = !session ? [] : session.role === "candidate"
+    ? [{ href: dashboard!, label: "Home" }, { href: "/jobs", label: "Find jobs" }, ...fit, { href: "/candidate/alerts", label: "Job alerts" }]
+    : session.role === "clinic"
+      ? [{ href: dashboard!, label: "Dashboard" }, { href: "/clinic/jobs/new", label: "Post a job" }, { href: "/jobs", label: "Live jobs" }]
+      : [{ href: dashboard!, label: "Overview" }, { href: "/jobs", label: "Live jobs" }];
   const join = launched ? { href: "/sign-up", label: "Create account" } : { href: "/#join", label: "Join the waitlist" };
   return (
     <header className="site">
@@ -31,9 +38,9 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
           <div className="site-brand">
             <Link href="/" className="site-logo" aria-label="Kestrel Eye Care Jobs, home">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={101} height={30} />
+              <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={session ? 132 : 101} height={session ? 39 : 30} />
             </Link>
-            {mode !== "coming-soon" && (
+            {mode !== "coming-soon" && !session && (
               <>
                 {/* The small chestnut maple leaf from the brand files separates the wordmark from the tagline when they sit side by side. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -47,14 +54,13 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
         )}
 
         <nav className="site-wide" aria-label="Main">
-          <Link href="/jobs">Find jobs</Link>
-          {findYourFitOn() && <Link href="/find-your-fit">Find your fit</Link>}
-          {!session && <Link href="/clinics">For clinics</Link>}
-          {session?.role === "clinic" && <Link href="/clinic/jobs/new">Post a job</Link>}
           {session ? (
-            <Link href={dashboard!} className="btn sm">My dashboard</Link>
+            signedInLinks.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>)
           ) : (
             <>
+              <Link href="/jobs">Find jobs</Link>
+              {findYourFitOn() && <Link href="/find-your-fit">Find your fit</Link>}
+              <Link href="/clinics">For clinics</Link>
               <Link href="/sign-in">Sign in</Link>
               <Link href={join.href} className="btn sm">{join.label}</Link>
             </>
@@ -65,11 +71,14 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
         <details className="site-narrow">
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
-            {session ? <Link href={dashboard!} className="menu-cta">My dashboard</Link> : <Link href={join.href} className="menu-cta">{join.label}</Link>}
-            <Link href="/jobs">Find jobs</Link>
-            {findYourFitOn() && <Link href="/find-your-fit">Find your fit</Link>}
-            {!session && <Link href="/clinics">For clinics</Link>}
-            {session?.role === "clinic" && <Link href="/clinic/jobs/new">Post a job</Link>}
+            {session ? signedInLinks.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>) : (
+              <>
+                <Link href={join.href} className="menu-cta">{join.label}</Link>
+                <Link href="/jobs">Find jobs</Link>
+                {findYourFitOn() && <Link href="/find-your-fit">Find your fit</Link>}
+                <Link href="/clinics">For clinics</Link>
+              </>
+            )}
             {session ? (
               <>
                 {ACCOUNT_MENU[session.role].map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
