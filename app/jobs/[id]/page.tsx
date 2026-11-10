@@ -7,10 +7,12 @@ import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
+import { getMyCandidateProfile } from "@/lib/candidate";
 import { answerLabel, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
+import { canApplyForRole, roleMismatchText } from "@/lib/role-fit";
 import { shareMetadata } from "@/lib/share";
 
 export const dynamic = "force-dynamic";
@@ -41,10 +43,14 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
   // (audit finding R19, decision (a)). It still shows on Kestrel and in Kestrel's own search.
   const unclaimedFound = job.is_seeded && !clinic?.claimed;
   const jsonLd = clinic && !unclaimedFound ? jobPostingJsonLd(job, clinic, SITE) : null;
+  const session = await getSession();
+  // A candidate whose profile role does not fit this job sees a message instead of the Apply button (lib/role-fit.ts).
+  const me = session?.role === "candidate" ? await getMyCandidateProfile(session.userId) : null;
+  const roleProblem = me?.profession && job.apply_method !== "external" && !canApplyForRole(me.profession, me.pref_other_roles, job.role_category) ? roleMismatchText(me.profession, job.role_category) : null;
 
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader session={session} />
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
       <main id="main" tabIndex={-1} className="jobpage">
         <JobViewBeacon jobId={job.id} />
@@ -105,6 +111,11 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   <>
                     <p>Applications are made on the clinic&apos;s own website.</p>
                     <ApplyLink jobId={job.id} href={job.apply_url} external>Apply on the clinic&apos;s website<span className="sr"> (opens in a new tab)</span></ApplyLink>
+                  </>
+                ) : roleProblem ? (
+                  <>
+                    <p>{roleProblem}</p>
+                    <Link href="/candidate/profile" className="btn">Update my profile</Link>
                   </>
                 ) : (
                   <>
