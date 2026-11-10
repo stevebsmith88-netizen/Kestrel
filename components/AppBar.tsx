@@ -10,7 +10,7 @@ const QUIZ: NavItem = { href: "/find-your-fit", label: "Find your fit" };
 // Links that are in the account menu (lib/account-menu.ts) sit under the initials badge on wide screens. On a phone every link is in the Menu button.
 const NAV: Record<Role, NavItem[]> = {
   candidate: [
-    { href: "/candidate", label: "Home" },
+    { href: "/candidate", label: "My dashboard" },
     { href: "/jobs", label: "Find jobs" },
     { href: "/candidate/applications", label: "My applications" },
     { href: "/candidate/profile", label: "Profile and CV" },
@@ -18,7 +18,7 @@ const NAV: Record<Role, NavItem[]> = {
     { href: "/account", label: "Account settings" },
   ],
   clinic: [
-    { href: "/clinic", label: "Dashboard" },
+    { href: "/clinic", label: "My dashboard" },
     { href: "/clinic/jobs/new", label: "Post a job" },
     { href: "/clinic/profile", label: "Clinic profile" },
     { href: "/jobs", label: "Live jobs" },
@@ -51,7 +51,7 @@ export default function AppBar({ session, current }: { session: Session; current
         </Link>
         <nav className="app-wide" aria-label="Main">
           {barLinks.map((item) => (
-            <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>
+            <Link key={item.href} href={item.href} className={item.href === homeFor(session.role) ? "dashlink" : undefined} aria-current={here === item.href ? "page" : undefined}>
               {item.label}
             </Link>
           ))}
@@ -61,7 +61,7 @@ export default function AppBar({ session, current }: { session: Session; current
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
             {links.map((item) => (
-              <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>
+              <Link key={item.href} href={item.href} className={item.href === homeFor(session.role) ? "dashlink" : undefined} aria-current={here === item.href ? "page" : undefined}>
                 {item.label}
               </Link>
             ))}

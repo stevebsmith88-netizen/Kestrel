@@ -26,9 +26,9 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
   // A signed in person gets the same links as the account pages (components/AppBar.tsx), and the plain wordmark without the tagline.
   const fit = findYourFitOn() ? [{ href: "/find-your-fit", label: "Find your fit" }] : [];
   const signedInLinks = !session ? [] : session.role === "candidate"
-    ? [{ href: dashboard!, label: "Home" }, { href: "/jobs", label: "Find jobs" }, ...fit, { href: "/candidate/alerts", label: "Job alerts" }]
+    ? [{ href: dashboard!, label: "My dashboard" }, { href: "/jobs", label: "Find jobs" }, ...fit, { href: "/candidate/alerts", label: "Job alerts" }]
     : session.role === "clinic"
-      ? [{ href: dashboard!, label: "Dashboard" }, { href: "/clinic/jobs/new", label: "Post a job" }, { href: "/jobs", label: "Live jobs" }]
+      ? [{ href: dashboard!, label: "My dashboard" }, { href: "/clinic/jobs/new", label: "Post a job" }, { href: "/jobs", label: "Live jobs" }]
       : [{ href: dashboard!, label: "Overview" }, { href: "/jobs", label: "Live jobs" }];
   const join = launched ? { href: "/sign-up", label: "Create account" } : { href: "/#join", label: "Join the waitlist" };
   return (
@@ -55,7 +55,7 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
 
         <nav className="site-wide" aria-label="Main">
           {session ? (
-            signedInLinks.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>)
+            signedInLinks.map((l) => <Link key={l.href} href={l.href} className={l.href === dashboard ? "dashlink" : undefined}>{l.label}</Link>)
           ) : (
             <>
               <Link href="/jobs">Find jobs</Link>
@@ -71,7 +71,7 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
         <details className="site-narrow">
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
-            {session ? signedInLinks.map((l) => <Link key={l.href} href={l.href}>{l.label}</Link>) : (
+            {session ? signedInLinks.map((l) => <Link key={l.href} href={l.href} className={l.href === dashboard ? "dashlink" : undefined}>{l.label}</Link>) : (
               <>
                 <Link href={join.href} className="menu-cta">{join.label}</Link>
                 <Link href="/jobs">Find jobs</Link>

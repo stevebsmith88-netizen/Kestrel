@@ -297,7 +297,7 @@ export const HELP: HelpSection[] = [
           "**Not interested** removes a job from your list, for you only. There is no undo, and the job still appears when you search. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
         ],
         steps: [
-          "Open your home page by choosing **Home** in the bar at the top.",
+          "Open your dashboard by choosing **My dashboard** in the bar at the top.",
           "Read the **Recommended for you** list and the line under each job that starts **Why this fits**.",
           "Press **Not interested** on any job you do not want to see again in the list.",
           "To change what we suggest, choose **Edit what you are looking for**, update your details on the profile page and press **Save my details**.",
@@ -410,7 +410,7 @@ export const HELP: HelpSection[] = [
         ],
         steps: [
           "Press **Submit for review** at the bottom of the Post a job form.",
-          "Open your dashboard by choosing **Dashboard** in the bar at the top.",
+          "Open your dashboard by choosing **My dashboard** in the bar at the top.",
           "Find the job under **Your jobs**. It shows **In review** until we have read it.",
           "If it comes back, read **What to change**, press **Edit**, fix it and submit again.",
         ],

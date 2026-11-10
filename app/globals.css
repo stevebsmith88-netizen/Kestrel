@@ -93,6 +93,12 @@ input.other{margin-top:10px}
 .site .topbar-who{margin-left:0}
 .site-wide a:not(.btn){color:var(--navy);text-decoration:none;font-weight:600;padding:10px 14px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
 .site-wide a:not(.btn):hover{background:rgba(27,43,75,.07)}
+/* The links in the top bar highlight the way the footer links do: a soft box with a thin ring, no underline. Keyboard focus draws the stronger 3px ring. */
+.site-wide a:not(.btn):hover,.topbar nav.app-wide a:hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55)}
+.site-wide a:not(.btn):focus-visible,.topbar nav.app-wide a:focus-visible{outline:3px solid var(--navy);outline-offset:2px;box-shadow:none}
+/* My dashboard is the hub for a candidate or a clinic, so it is always chestnut. */
+.site-wide a.dashlink:not(.btn),.topbar nav.app-wide a.dashlink,.site-narrow nav a.dashlink{color:var(--chestnut)}
+.site-wide a.dashlink:not(.btn):hover,.topbar nav.app-wide a.dashlink:hover{box-shadow:inset 0 0 0 1.5px var(--chestnut)}
 .btn.sm{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-size:0.9375rem;min-height:44px}
 .site-narrow{display:none;position:relative}
 .site-narrow summary{list-style:none;cursor:pointer;font-weight:700;padding:10px 13px;border:1.5px solid #CDD5DA;border-radius:8px;min-height:44px;display:inline-flex;align-items:center;background:#fff}
