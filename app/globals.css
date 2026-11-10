@@ -676,7 +676,7 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .lh-search{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto;gap:10px;max-width:820px;margin:24px auto 0;position:relative;z-index:2}
 .lh-search input,.lh-search select{font:400 1.0625rem/1.2 "Source Sans 3",sans-serif;padding:15px 16px;border:1.5px solid #CDD5DA;border-radius:8px;background:#fff;color:var(--navy);min-height:50px;width:100%}
 .lh-search .btn{min-height:50px}
-.lh-sub{margin:14px 0 0;color:var(--navy-2);position:relative;z-index:2;display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.lh-sub{margin:14px 0 0;color:var(--navy-2);position:relative;z-index:2;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 12px}
 /* The top of the skyline picture is mostly empty sky, so it is pulled up under the buttons, which sit above it. */
 .lh-skyline{position:relative;margin-top:clamp(-120px,-6vw,-28px);pointer-events:none}
 .lh-skyline img{display:block;width:100%;height:auto}
