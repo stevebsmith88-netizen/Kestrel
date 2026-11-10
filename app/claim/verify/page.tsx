@@ -19,7 +19,7 @@ export default async function VerifyClaim({ searchParams }: { searchParams: Prom
     return (
       <AuthShell title="Claim confirmed">
         <p className="auth-intro">Thank you. Your email address is confirmed. Our team will take a quick look at your claim and email you, usually within 1 business day.</p>
-        <p className="alt"><Link href="/clinic">Go to my dashboard</Link></p>
+        <p className="alt"><Link href="/clinic" className="btn">Go to my dashboard</Link></p>
       </AuthShell>
     );
   }
@@ -27,7 +27,7 @@ export default async function VerifyClaim({ searchParams }: { searchParams: Prom
     return (
       <AuthShell title="That link didn't work">
         <p className="auth-intro">The link may have expired, been used already, or been opened while signed in to a different account. Go back to the listing and start your claim again, or email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a> and we will help.</p>
-        <p className="alt"><Link href="/jobs">Find jobs</Link></p>
+        <p className="alt"><Link href="/jobs" className="btn">Find jobs</Link></p>
       </AuthShell>
     );
   }

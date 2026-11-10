@@ -20,7 +20,7 @@ export default function HomeBlogStrip() {
             <p className="meta">{when(feature)} · {readingMinutes(feature.body)} min read</p>
             <h3><Link href={`/blog/${feature.slug}`}>{feature.title}</Link></h3>
             <p className="teaser">{excerpt(feature.body)}</p>
-            <p className="readmore"><Link href={`/blog/${feature.slug}`}>Read the article</Link></p>
+            <p className="readmore"><Link href={`/blog/${feature.slug}`} className="btn sm ghost">Read the article</Link></p>
           </article>
           {others.length > 0 && (
             <ul className="striplinks">
@@ -33,7 +33,7 @@ export default function HomeBlogStrip() {
             </ul>
           )}
         </div>
-        <p className="stripmore"><Link href="/blog">See all articles</Link></p>
+        <p className="stripmore"><Link href="/blog" className="btn sm ghost">See all articles</Link></p>
       </div>
     </section>
   );

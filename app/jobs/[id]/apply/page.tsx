@@ -8,6 +8,7 @@ import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
 import { payText } from "@/lib/job-pay";
+import { canApplyForRole, roleMismatchText } from "@/lib/role-fit";
 import { getLiveJob } from "@/lib/public-jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -58,6 +59,14 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
           <Link href={`/candidate/profile?next=${next}`} className="btn">Complete my profile</Link>
         </section>
       );
+    } else if (profile?.profession && !canApplyForRole(profile.profession, profile.pref_other_roles, job.role_category)) {
+      body = (
+        <section className="card setup">
+          <h2>This role is not your role</h2>
+          <p>{roleMismatchText(profile.profession, job.role_category)}</p>
+          <Link href={`/candidate/profile?next=${next}`} className="btn">Update my profile</Link>
+        </section>
+      );
     } else {
       body = (
         <>
@@ -69,7 +78,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
               <div><dt>Role</dt><dd>{profile?.profession}</dd></div>
               <div><dt>CV</dt><dd>{profile?.cv_filename}</dd></div>
             </dl>
-            <p className="help"><Link href="/candidate/profile">Change these in my profile</Link></p>
+            <p className="help"><Link href="/candidate/profile" className="btn sm ghost">Change these in my profile</Link></p>
           </section>
           <ApplyForm jobId={job.id} clinicName={clinic} draft={draft?.cover_letter ?? ""} draftSavedAt={draft ? longDate(draft.updated_at) : ""} letters={letters} />
         </>

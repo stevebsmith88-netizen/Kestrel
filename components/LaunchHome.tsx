@@ -46,7 +46,7 @@ export default async function LaunchHome() {
 
         <section className="lh-section" aria-labelledby="lh-latest">
           <div className="wrap">
-            <div className="lh-head"><h2 id="lh-latest">Latest jobs</h2><Link href="/jobs">See all jobs</Link></div>
+            <div className="lh-head"><h2 id="lh-latest">Latest jobs</h2><Link href="/jobs" className="btn sm ghost">See all jobs</Link></div>
             {latest.length > 0 ? (
               <div className="joblist">{latest.map((j) => <JobCard key={j.id} job={j} />)}</div>
             ) : (

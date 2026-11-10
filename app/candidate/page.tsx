@@ -51,7 +51,7 @@ export default async function CandidateHome() {
               <div className="meter" role="img" aria-label={`Profile ${strength} percent complete`}><i style={{ width: `${strength}%` }} /></div>
               <p>{profileReady(profile) ? "Your CV and details are saved." : "Add your role and save your CV, and you can apply to any job in a few clicks."}</p>
               <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
-              <p className="help"><Link href="/candidate/letters">My saved cover letters</Link></p>
+              <p className="help"><Link href="/candidate/letters" className="btn sm ghost">My saved cover letters</Link></p>
             </section>
             <section className="card">
               <p className="kicker">Applications</p>
@@ -67,7 +67,7 @@ export default async function CandidateHome() {
             </section>
           </div>
 
-          <div className="listhead"><h2>Recommended for you</h2><Link href="/candidate/profile#looking-for">What you are looking for</Link></div>
+          <div className="listhead"><h2>Recommended for you</h2><Link href="/candidate/profile#looking-for" className="btn sm ghost">Edit what you are looking for</Link></div>
           {needsRole ? (
             <section className="card">
               <p>Choose your role in your profile and we will suggest jobs that fit.</p>
@@ -115,7 +115,7 @@ export default async function CandidateHome() {
 
           {latest.length > 0 && (
             <>
-              <div className="listhead"><h2>Latest on your applications</h2><Link href="/candidate/applications">See all</Link></div>
+              <div className="listhead"><h2>Latest on your applications</h2><Link href="/candidate/applications" className="btn sm ghost">See all applications</Link></div>
               <div className="joblist">
                 {latest.map((a) => (
                   <article className="card jobrow" key={a.id}>

@@ -18,7 +18,7 @@ export default async function UnsubscribeAddress({ searchParams }: { searchParam
       {done ? (
         <>
           <p className="auth-intro">We will not send you any more emails like this one, and we will not email this address again about jobs we list, even if a job is posted later.</p>
-          <p className="alt"><Link href="/">Back to Kestrel</Link></p>
+          <p className="alt"><Link href="/" className="btn sm ghost">Back to Kestrel</Link></p>
         </>
       ) : address ? (
         <>
@@ -33,7 +33,7 @@ export default async function UnsubscribeAddress({ searchParams }: { searchParam
       ) : (
         <>
           <p className="auth-intro">{problem ? "Something went wrong with that link." : "That link doesn't look right."} Please email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a> and tell us which address to stop, and we will do it.</p>
-          <p className="alt"><Link href="/">Back to Kestrel</Link></p>
+          <p className="alt"><Link href="/" className="btn sm ghost">Back to Kestrel</Link></p>
         </>
       )}
     </AuthShell>

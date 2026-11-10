@@ -1,4 +1,6 @@
 import Link from "next/link";
+import AccountMenu from "@/components/AccountMenu";
+import { ACCOUNT_MENU } from "@/lib/account-menu";
 import { connection } from "next/server";
 import { signOut } from "@/lib/auth-actions";
 import { getSession, homeFor, type Session } from "@/lib/auth";
@@ -50,10 +52,7 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
           {!session && <Link href="/clinics">For clinics</Link>}
           {session?.role === "clinic" && <Link href="/clinic/jobs/new">Post a job</Link>}
           {session ? (
-            <>
-              <form action={signOut}><button type="submit" className="linkbtn menu-signout">Sign out</button></form>
-              <Link href={dashboard!} className="btn sm">My dashboard</Link>
-            </>
+            <Link href={dashboard!} className="btn sm">My dashboard</Link>
           ) : (
             <>
               <Link href="/sign-in">Sign in</Link>
@@ -61,6 +60,7 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
             </>
           )}
         </nav>
+        {session && <AccountMenu session={session} className="site-who" />}
 
         <details className="site-narrow">
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
@@ -71,7 +71,11 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
             {!session && <Link href="/clinics">For clinics</Link>}
             {session?.role === "clinic" && <Link href="/clinic/jobs/new">Post a job</Link>}
             {session ? (
-              <form action={signOut}><button type="submit" className="menu-signout-narrow">Sign out</button></form>
+              <>
+                {ACCOUNT_MENU[session.role].map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+                <p className="menu-who">{session.fullName || session.email}</p>
+                <form action={signOut}><button type="submit" className="menu-signout-narrow">Sign out</button></form>
+              </>
             ) : (
               <Link href="/sign-in">Sign in</Link>
             )}

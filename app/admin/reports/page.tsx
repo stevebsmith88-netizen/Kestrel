@@ -57,7 +57,7 @@ export default async function Reports({ searchParams }: { searchParams: Promise<
                   <div className="flags"><strong>{REPORT_REASON_LABEL[r.reason] ?? r.reason}</strong></div>
                   {r.details && <pre className="adtext">{r.details}</pre>}
                   {r.reporter_email && <p className="help">Reporter: <a href={`mailto:${r.reporter_email}`}>{r.reporter_email}</a></p>}
-                  <p><Link href={`/jobs/${r.job_id}`}>Open the job</Link></p>
+                  <p><Link href={`/jobs/${r.job_id}`} className="btn sm ghost">Open the job</Link></p>
                   <div className="reviewbtns">
                     <form action={takeDownReportedJob}><input type="hidden" name="id" value={r.id} /><button type="submit" className="btn">Take the job down</button></form>
                     <form action={dismissReport}><input type="hidden" name="id" value={r.id} /><button type="submit" className="btn ghost">Dismiss this report</button></form>

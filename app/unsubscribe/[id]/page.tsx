@@ -15,7 +15,7 @@ export default async function Unsubscribe({ params, searchParams }: { params: Pr
       {done ? (
         <>
           <p className="auth-intro">We will not send you any more marketing emails. If you have an account, you will still receive emails about it, such as password resets.</p>
-          <p className="alt"><Link href="/">Back to Kestrel</Link></p>
+          <p className="alt"><Link href="/" className="btn sm ghost">Back to Kestrel</Link></p>
         </>
       ) : (
         <>

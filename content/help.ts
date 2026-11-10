@@ -300,7 +300,7 @@ export const HELP: HelpSection[] = [
           "Open your home page by choosing **Home** in the bar at the top.",
           "Read the **Recommended for you** list and the line under each job that starts **Why this fits**.",
           "Press **Not interested** on any job you do not want to see again in the list.",
-          "To change what we suggest, choose **What you are looking for**, update your details on the profile page and press **Save my details**.",
+          "To change what we suggest, choose **Edit what you are looking for**, update your details on the profile page and press **Save my details**.",
         ],
         links: [{ label: "What you are looking for", href: "/candidate/profile#looking-for" }],
       },

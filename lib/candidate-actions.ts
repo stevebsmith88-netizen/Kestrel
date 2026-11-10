@@ -10,6 +10,7 @@ import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { newApplicationEmail } from "@/lib/clinic-emails";
 import { cleanPrefs } from "@/lib/candidate-prefs";
 import { PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
+import { canApplyForRole, roleMismatchText } from "@/lib/role-fit";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -146,15 +147,17 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
 
   const { data: job } = await admin
     .from("jobs")
-    .select("id, title, status, expires_at, apply_method, employer_id, city, province, employers(clinic_name)")
+    .select("id, title, role_category, status, expires_at, apply_method, employer_id, city, province, employers(clinic_name)")
     .eq("id", jobId)
     .maybeSingle();
   const clinicName = (job?.employers as unknown as { clinic_name: string } | null)?.clinic_name;
   if (!job || job.status !== "live" || new Date(job.expires_at) <= new Date() || !clinicName) return { error: "This job is no longer open for applications." };
   if (job.apply_method !== "kestrel") return { error: "This job takes applications on the clinic's own website." };
 
-  const { data: profile } = await admin.from("candidate_profiles").select("profession, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename").eq("user_id", session.userId).maybeSingle();
+  const { data: profile } = await admin.from("candidate_profiles").select("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename").eq("user_id", session.userId).maybeSingle();
   if (!profile?.cv_path || !profile.profession) return { error: "Please finish your profile and save your CV first." };
+  // The role on the profile has to fit the job (lib/role-fit.ts). The job page and the apply page say so first, and this stops it from the server too.
+  if (!canApplyForRole(profile.profession, profile.pref_other_roles, job.role_category)) return { error: roleMismatchText(profile.profession, job.role_category) };
 
   const { data: created, error } = await admin
     .from("applications")

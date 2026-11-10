@@ -89,6 +89,8 @@ input.other{margin-top:10px}
 .site .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:12px;padding-bottom:12px}
 .site-logo img{display:block;height:30px;width:auto}
 .site-wide{display:flex;align-items:center;gap:6px}
+.site-wide{margin-left:auto}
+.site .topbar-who{margin-left:0}
 .site-wide a:not(.btn){color:var(--navy);text-decoration:none;font-weight:600;padding:10px 14px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center}
 .site-wide a:not(.btn):hover{background:rgba(27,43,75,.07)}
 .btn.sm{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;font-size:0.9375rem;min-height:44px}
@@ -100,7 +102,7 @@ input.other{margin-top:10px}
 .site-narrow nav a:hover{background:var(--cream)}
 .site-narrow nav a.menu-cta{background:var(--chestnut);color:#fff;justify-content:center;margin-bottom:4px}
 .site-narrow nav a.menu-cta:hover{background:var(--chestnut-d)}
-@media (max-width:700px){.site-wide{display:none}.site-narrow{display:block}}
+@media (max-width:700px){.site-wide,.site-who{display:none}.site-narrow{display:block}}
 .simple{padding:56px 0 96px}
 .simple .wrap{max-width:720px}
 .simple h1{font:400 clamp(2rem,5vw,2.875rem)/1.1 "DM Serif Display",Georgia,serif;margin:18px 0 0}
@@ -121,6 +123,8 @@ input.other{margin-top:10px}
 .auth-done{outline:none}
 .auth-done .help{margin:-8px 0 0}
 .alt{font-size:0.9375rem;color:var(--muted);margin:14px 0 0;text-align:center}
+.alt a:not(.btn){font-weight:600;color:var(--navy);text-decoration:none}
+.alt a:not(.btn):hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
 .topbar{background:#fff;border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;gap:24px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
 .topbar-logo img{display:block;height:30px;width:auto}
@@ -206,6 +210,8 @@ textarea{resize:vertical;line-height:1.5}
 .jobrow,.jobcard{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:20px 24px}
 .jobrow h3,.jobcard h2{font:400 1.375rem/1.2 "DM Serif Display",Georgia,serif;margin:0 0 4px}
 .jobcard h2 a{color:var(--navy);text-decoration:none}
+.jobrow h3 a{color:var(--navy);text-decoration:none}
+.jobrow h3 a:hover,.jobrow h3 a:focus-visible{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
 .jobcard h2 a:hover{text-decoration:underline}
 .meta{color:var(--muted);font-size:0.9375rem;margin:2px 0}
 .jobside{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
