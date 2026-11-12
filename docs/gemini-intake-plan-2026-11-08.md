@@ -453,6 +453,8 @@ Built after Steve tried the first version. **Needs migration 0035 on both databa
 
 Steve checked on the demo site that posting works with each pay type, the daily rate estimate is calculated, and the migrations (0034 and 0035) have been run on both the live and the demo databases. Phase 2 is complete.
 
+Added by audit Phase B (12th November 2026): (1) the apply page now lists all 8 details a clinic receives (name, email, phone, role, where registered, years of experience, available from, resume), with "Not given" for empty ones, which is the screen where consent to share them is given, so the wording is worth a glance; (2) how long inbox messages are kept (PIPEDA, the data download and deletion). Nothing is deleted today. See "needs a decision" for P1-36 in `docs/audit/AUDIT-FIXES-LOG.md`.
+
 Also changed after Steve tried it:
 
 - **Ad builder and Canadian experience.** The ad builder now never mentions Canadian experience, even to say it is not needed, because the post checker refuses the phrase however it is used. The error message says so. Whether a clearly negative phrase ("Canadian experience is not required") should be allowed is a question for the lawyer's list.
