@@ -6,7 +6,7 @@ _Brought across from the `relaxed-babbage` branch on 12th November 2026. Some it
 
 ## Claude builds
 
-- Name change hold: first entry free, then a 30 day hold after each change, unlocked by hello@ for typos and legal changes. Needs a new column (`name_changed_at` on profiles) and a migration to run on both databases. Details in CLAUDE.md, Product rules.
+- Name change hold: first entry free, then a 30 day hold after each change, unlocked by hello@ for typos and legal changes. Needs a new column (`name_changed_at` on profiles) and a migration to run on both databases. Also locked while the candidate has an active application (decided 12th November 2026). Details in CLAUDE.md, Product rules.
 
 ## Steve to send or decide
 
