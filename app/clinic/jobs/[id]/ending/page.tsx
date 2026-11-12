@@ -10,6 +10,7 @@ import { getApplicantCounts, getHireCandidates, getMyJob } from "@/lib/clinic";
 import { extendJob } from "@/lib/clinic-actions";
 import { EXTEND_GRACE_DAYS, EXTEND_WINDOW_DAYS, FILL_SOURCES, canExtend, extendedUntil } from "@/lib/job-ending";
 import { longDate } from "@/lib/jobs";
+import { IN_TALKS } from "@/lib/still-talking";
 
 export const metadata: Metadata = { title: "Filled, or still hiring? | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -35,6 +36,8 @@ export default async function JobEnding({ params, searchParams }: { params: Prom
   const counts = await getApplicantCounts();
   const waiting = counts[id]?.waiting ?? 0;
   const hireCandidates = await getHireCandidates(id);
+  // The people at Interview or Offer, listed with a message each (P1-13).
+  const talking = hireCandidates.filter((c) => (IN_TALKS as readonly string[]).includes(c.status));
   const now = new Date();
   const extendable = canExtend(job, now);
   const ended = job.status === "expired" || job.status === "closed";
@@ -69,12 +72,12 @@ export default async function JobEnding({ params, searchParams }: { params: Prom
               <input type="hidden" name="jobId" value={job.id} />
               <input type="hidden" name="from" value="ending" />
               <h2>Filled it?</h2>
-              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="end" />
+              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="end" talking={talking} clinicName={hireCandidates[0]?.clinicName ?? ""} />
               <p className="help">
                 {ended ? "We'll save your answer. " : "This closes the job. "}
                 {waiting > 0
-                  ? `The ${waiting} ${waiting === 1 ? "person" : "people"} still waiting will hear, kindly, that the role is filled. Candidates in an interview or with an offer are not changed.`
-                  : "Your answer helps us make Kestrel better for clinics like yours."}
+                  ? `The ${waiting} ${waiting === 1 ? "person" : "people"} still waiting will hear, kindly, that the role is filled.${talking.length > 0 ? " So will the people you are still talking to, with the messages above." : ""}`
+                  : talking.length > 0 ? "The people you are still talking to will hear, with the messages above." : "Your answer helps us make Kestrel better for clinics like yours."}
               </p>
               <div><button type="submit" className="btn">{ended ? "Save my answer" : "Yes, it's filled"}</button></div>
             </form>

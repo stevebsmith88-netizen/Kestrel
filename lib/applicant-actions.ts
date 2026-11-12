@@ -14,6 +14,7 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { parseFillSource } from "@/lib/job-ending";
+import { IN_TALKS, readStillTalking } from "@/lib/still-talking";
 import { BULK_PROBLEMS, declinedText, historyNote, movedText } from "@/lib/bulk-notices";
 import { notifyAdmin } from "@/lib/notify-admin";
 import type { QuickState } from "@/lib/dashboard-notices";
@@ -168,6 +169,36 @@ async function markHired(jobId: string, applicationId: string): Promise<boolean>
   return true;
 }
 
+// People at Interview or Offer when the role is filled (audit P1-13). Each is moved to Role filled with the message the clinic wrote (or the
+// kind ready made one), and told by email and in their inbox, unless the clinic ticked "Don't close this one yet" or named them as hired.
+// The clinic's right to see them is checked by the database when they are read.
+async function closeInTalks(jobId: string, form: FormData, hiredId: string | null): Promise<number> {
+  const db = await supabaseServer();
+  const admin = supabaseAdmin();
+  if (!db || !admin) return 0;
+  const { data } = await db.from("applications").select("id, status, job_title, clinic_name, applicant, candidate_id").eq("job_id", jobId).in("status", [...IN_TALKS]).limit(100);
+  const apps = data ?? [];
+  if (!apps.length) return 0;
+  const plan = readStillTalking(form, apps[0].clinic_name, hiredId);
+  const failures: string[] = [];
+  let told = 0;
+  for (const { id, message } of plan) {
+    const app = apps.find((a) => a.id === id);
+    if (!app) continue;
+    const now = new Date().toISOString();
+    const { error } = await admin.from("applications").update({ status: "role_filled", clinic_message: message, status_changed_at: now, updated_at: now }).eq("id", app.id).in("status", [...IN_TALKS]);
+    if (error) {
+      failures.push(`Closing application ${app.id} as role filled: ${error.message}`);
+      continue;
+    }
+    if (!(await recordEvent(admin, { application_id: app.id, status: "role_filled", note: message }))) failures.push(`History line "role_filled" for application ${app.id}`);
+    await tellCandidate(admin, app, "role_filled", message);
+    told += 1;
+  }
+  await reportWriteFailures(`closing the people in interviews or offers on job ${jobId}`, failures);
+  return told;
+}
+
 // The role is filled: close the job, let everyone still waiting know, kindly, and record how the clinic filled it
 // if they told us (from the job's ending page). An expired job is not reopened; only the answer is saved.
 export async function fillRole(form: FormData) {
@@ -193,7 +224,10 @@ export async function fillRole(form: FormData) {
   // not then sent the "role filled" message below (it only goes to people still waiting).
   const hiredId = via === "kestrel" ? String(form.get("hiredApplicationId") ?? "") : "";
   if (UUID.test(hiredId)) await markHired(jobId, hiredId);
-  const { moved: done } = await closeWaiting(jobId, null, "role_filled");
+  // The people the clinic is still talking to are told first, each with their own message (P1-13).
+  const inTalks = await closeInTalks(jobId, form, UUID.test(hiredId) ? hiredId : null);
+  const { moved: waitingDone } = await closeWaiting(jobId, null, "role_filled");
+  const done = waitingDone + inTalks;
   revalidatePath("/clinic");
   revalidatePath("/jobs");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);

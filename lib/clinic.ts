@@ -90,13 +90,13 @@ export async function getApplicantCounts(): Promise<Record<string, { total: numb
 
 // The people a clinic can name as the one it hired for a job: everyone who applied and is still in the running.
 // The database only returns applications for this clinic's own jobs.
-export type HireCandidate = { id: string; name: string; status: string };
+export type HireCandidate = { id: string; name: string; status: string; clinicName?: string };
 
 export async function getHireCandidates(jobId: string): Promise<HireCandidate[]> {
   const db = await supabaseServer();
   if (!db) return [];
-  const { data } = await db.from("applications").select("id, status, applicant").eq("job_id", jobId).in("status", [...HIREABLE]).order("created_at", { ascending: true });
-  return (data ?? []).map((a) => ({ id: a.id as string, status: a.status as string, name: String((a.applicant as { name?: string } | null)?.name ?? "").trim() || "Applicant" }));
+  const { data } = await db.from("applications").select("id, status, applicant, clinic_name").eq("job_id", jobId).in("status", [...HIREABLE]).order("created_at", { ascending: true });
+  return (data ?? []).map((a) => ({ id: a.id as string, status: a.status as string, name: String((a.applicant as { name?: string } | null)?.name ?? "").trim() || "Applicant", clinicName: String(a.clinic_name ?? "") }));
 }
 
 export async function getMyJob(id: string): Promise<MyJob | null> {

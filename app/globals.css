@@ -851,3 +851,5 @@ fieldset.tagrow .lab { padding: 0; }
 .readerlist li{padding:10px 0;border-top:1px solid var(--line)}
 .readerlist li:first-child{border-top:0}
 .card .readerlist li::before{content:none}
+.stilltalking{border:1px solid var(--line);border-radius:10px;padding:12px 16px 4px;margin:8px 0 16px}
+.stilltalking legend{padding:0 4px;font-weight:600;color:var(--navy)}
