@@ -59,3 +59,61 @@ revoke all on public.waitlist, public.onboarding_emails, public.candidate_job_hi
 grant select, delete on public.candidate_job_hides to authenticated;
 grant insert (user_id, job_id) on public.candidate_job_hides to authenticated;
 grant select on public.profiles to authenticated;
+
+-- ---------------------------------------------------------------- P1-15: the shortlist stays private from the candidate
+-- A clinic's shortlist is its own working list, and the website shows a shortlisted candidate "Viewed". But a candidate could read their own
+-- row in applications, and the history in application_events, straight from the database, and see "shortlisted" there.
+-- Design chosen by Steve (12th November 2026): the database hands a candidate a masked copy.
+--   * my_applications(): the signed in candidate's own applications, with a shortlist shown as "viewed", no clinic message on it, and the
+--     time of the last change set back to when it was viewed, so nothing gives the shortlist away.
+--   * my_application_events(application): the history of one of their own applications, without the shortlist step.
+--   * Candidates can no longer read applications or application_events directly. Clinics read them exactly as before.
+-- Nothing is moved or changed in either table. The website tries these first and falls back to the old read on a database without them.
+create or replace function public.my_applications()
+returns table (
+  id uuid, job_id uuid, status text, cover_letter text, keep_details boolean, job_title text, clinic_name text, job_location text,
+  cv_filename text, clinic_message text, viewed_at timestamptz, status_changed_at timestamptz, created_at timestamptz, applicant jsonb
+)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select a.id, a.job_id,
+         case when a.status = 'shortlisted' then 'viewed' else a.status end,
+         a.cover_letter, a.keep_details, a.job_title, a.clinic_name, a.job_location, a.cv_filename,
+         case when a.status = 'shortlisted' then null else a.clinic_message end,
+         a.viewed_at,
+         case when a.status = 'shortlisted' then coalesce(a.viewed_at, a.created_at) else a.status_changed_at end,
+         a.created_at, a.applicant
+  from public.applications a
+  where a.candidate_id = (select auth.uid());
+$$;
+
+create or replace function public.my_application_events(application uuid)
+returns table (application_id uuid, status text, note text, created_at timestamptz)
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select e.application_id, e.status, e.note, e.created_at
+  from public.application_events e
+  join public.applications a on a.id = e.application_id
+  where e.application_id = application
+    and a.candidate_id = (select auth.uid())
+    and e.status <> 'shortlisted';
+$$;
+
+revoke all on function public.my_applications() from public, anon;
+revoke all on function public.my_application_events(uuid) from public, anon;
+grant execute on function public.my_applications() to authenticated;
+grant execute on function public.my_application_events(uuid) to authenticated;
+
+drop policy if exists "Candidates can read their own applications" on public.applications;
+
+drop policy if exists "People can read the history of applications they can see" on public.application_events;
+drop policy if exists "Clinics can read the history of applications to their jobs" on public.application_events;
+create policy "Clinics can read the history of applications to their jobs"
+  on public.application_events for select to authenticated
+  using (public.owns_application_job(application_id));

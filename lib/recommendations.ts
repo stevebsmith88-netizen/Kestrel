@@ -1,3 +1,4 @@
+import { readMyApplications } from "@/lib/my-applications";
 import "server-only";
 import { prefsFromProfile } from "@/lib/candidate-prefs";
 import type { CandidateProfile } from "@/lib/candidate";
@@ -34,7 +35,7 @@ export async function rankForMe(profile: CandidateProfile | null, jobs: readonly
   const db = await supabaseServer();
   const [hiddenRows, appliedRows] = await Promise.all([
     db ? db.from("candidate_job_hides").select("job_id") : Promise.resolve({ data: [] as { job_id: string }[] }),
-    db ? db.from("applications").select("job_id") : Promise.resolve({ data: [] as { job_id: string }[] }),
+    db ? readMyApplications<{ job_id: string }[]>(db, (source) => source.select("job_id")) : Promise.resolve({ data: [] as { job_id: string }[] }),
   ]);
   const hidden = new Set((hiddenRows.data ?? []).map((r) => r.job_id));
   const applied = new Set((appliedRows.data ?? []).map((r) => r.job_id));

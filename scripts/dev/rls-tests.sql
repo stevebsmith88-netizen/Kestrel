@@ -204,3 +204,15 @@ select t.try('P1-42', 'profiles: nothing for visitors', 'server', 'value', $$sel
 select t.try('P1-42', 'profiles: read only for signed in people', 'server', 'value', $$select string_agg(privilege_type, ', ' order by privilege_type) from information_schema.role_table_grants where table_schema = 'public' and table_name = 'profiles' and grantee = 'authenticated'$$, 'SELECT');
 select t.try('P1-42', 'no table lets a visitor or signed in person truncate, add triggers or add references', 'server', 'value', $$select string_agg(distinct table_name, ', ' order by table_name) from information_schema.role_table_grants where table_schema = 'public' and grantee in ('anon', 'authenticated') and privilege_type in ('TRUNCATE', 'TRIGGER', 'REFERENCES')$$, '(nothing)');
 select t.try('P1-42', 'Ann can still bring back a hidden job', 'ann', 'write', $$delete from public.candidate_job_hides where user_id = '{ann}'$$, '0 rows');
+
+-- ---------------------------------------------------------------- P1-15, the design Steve chose (C): the database hands a candidate a masked copy
+select t.try('P1-15', 'Ann reads her application through my_applications', 'ann', 'count', 'select * from public.my_applications()', '1 rows');
+select t.try('P1-15', 'my_applications shows a shortlist as Viewed', 'ann', 'value', 'select status from public.my_applications()', 'viewed');
+select t.try('P1-15', 'my_applications does not give away when the shortlist happened', 'ann', 'value', 'select (status_changed_at = viewed_at)::text from public.my_applications()', 'true');
+select t.try('P1-15', 'Ann reads her history without the shortlist step', 'ann', 'value', $$select string_agg(status, ', ' order by created_at) from public.my_application_events('{app_ann_c}')$$, 'applied, viewed');
+select t.try('P1-15', 'Ann cannot read her applications table directly any more', 'ann', 'count', 'select id from public.applications', 'blocked');
+select t.try('P1-15', 'Bo gets nothing from my_applications', 'bo', 'count', 'select * from public.my_applications()', '0 rows');
+select t.try('P1-15', 'Bo gets nothing from Ann''s history', 'bo', 'count', $$select * from public.my_application_events('{app_ann_c}')$$, '0 rows');
+select t.try('P1-15', 'clinic C gets nothing from my_applications (it is for the candidate)', 'clinic_c', 'count', 'select * from public.my_applications()', '0 rows');
+select t.try('P1-15', 'a visitor cannot call my_applications', 'visitor', 'count', 'select * from public.my_applications()', 'refused');
+select t.try('P1-15', 'a visitor cannot call my_application_events', 'visitor', 'count', $$select * from public.my_application_events('{app_ann_c}')$$, 'refused');

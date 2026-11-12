@@ -1,3 +1,4 @@
+import { readMyApplications } from "@/lib/my-applications";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -50,7 +51,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
     const { data: draft } = db ? await db.from("application_drafts").select("cover_letter, updated_at").eq("job_id", job.id).maybeSingle() : { data: null };
     const { data: letterRows } = db ? await db.from("cover_letter_templates").select("id, name, body").order("updated_at", { ascending: false }) : { data: null };
     const letters = (letterRows ?? []) as { id: string; name: string; body: string }[];
-    const { data: existing } = db ? await db.from("applications").select("id").eq("job_id", job.id).maybeSingle() : { data: null };
+    const { data: existing } = db ? await readMyApplications<{ id: string }>(db, (source) => source.select("id").eq("job_id", job.id).maybeSingle()) : { data: null };
     if (existing) {
       body = <section className="card"><h2>You have already applied</h2><p>You can follow this application under My applications.</p><Link href={`/candidate/applications/${existing.id}`} className="btn">See my application</Link></section>;
     } else if (!profileReady(profile)) {
