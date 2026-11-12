@@ -85,3 +85,59 @@ Verdict per item, then the findings. Probes were run with a throwaway test file 
 **A-21 Spelled out numbers.** Low. Confirmed. "Two quick questions" (app/candidate/start/page.tsx:21), "Three things make a difference" and "Three things to check" (lib/onboarding-emails.ts:100 and :118), "one or two page resume" (content/posts.ts:71).
 
 Also seen, for other areas: the clinic's free text message is emailed to candidates from Kestrel's address (a rogue clinic could send anything to its own applicants, D). The maintenance switch does not cover `/api/` routes (D). Emails with no unsubscribe link skip the do not email list, so bounced addresses keep being tried (G).
+
+## Area B. Database
+
+How it was tested: Postgres 16 was available. `scripts/dev/scratch-db.sh` built a throwaway database and ran the combined file twice (64 rows OK, 1 "NOT YET" for resume storage, both runs). I then built a second throwaway database that copies Supabase's habit of giving the `anon` and `authenticated` roles every permission on new tables by default, because the script's plain database does not do that and would hide mistakes. All access tests below ran on the second one, with 2 candidates (Ann, Bo), 2 clinics (C, D) and an admin, 1 application from Ann to clinic C (shortlisted), and 1 inbox message each. The test files were throwaway and are not committed.
+
+**Combined file.** Verified. `supabase/combined/run-everything.sql` holds exactly the 39 migrations, in order, with no differences (compared section by section by script), followed by the check. Re-running it on a database that already held data changed nothing (checksum of 8 tables identical before and after, and the sign up gate stayed closed).
+
+**Tables and rules.** 31 tables, all with row level security switched on. 52 policies. 19 "security definer" functions, all with a fixed search path. None of the functions can be called by a visitor or a signed in person directly (tested: `claim_job_run`, `issue_signup_ticket`, `record_job_event` all refused).
+
+### What held (tested, all refused or returned 0 rows)
+
+- A visitor (not signed in) cannot read profiles, candidate profiles, applications, inbox messages, the waitlist, clinic contact emails or the first week email record, and cannot write to the waitlist or the inbox. They see live jobs only, and only the public columns (not `review_note`, not a clinic's `owner_id`).
+- Bo (a stranger) sees only her own profile, candidate profile and inbox message, 0 applications, and cannot change Ann's profile, name or inbox.
+- Nobody can make themselves an admin or a clinic (`profiles.role` is not writable), and nobody can clear or set their own name hold date (`name_changed_at` is not writable).
+- Ann cannot change her application, create an application without the website, change where her resume file points (`cv_path` is not writable, so one person's sign in cannot be used to fetch another person's file), forge, edit or delete an inbox message, or move one to another person. She can mark her own as read, which is the intent.
+- Clinic D (no application from Ann) sees 0 candidate profiles, 0 applications and 0 history rows. Clinic C sees Ann's application and nothing of her profile: not her town, minimum pay, career stage or preferences.
+- A clinic cannot change an application directly, publish its own job, edit a live job, edit or delete another clinic's job, delete a job that has applications, take over another clinic, or mark itself claimed. A candidate account cannot create a clinic profile.
+- Migration 0037: a candidate can save `career_stage` and `start_seen_at` on their own row only, and a made up stage value is refused. Migration 0038: read own, update `read_at` only, no insert or delete. Migration 0039: column added, no permission for signed in people.
+
+### Findings
+
+**B-01 The name hold can be skipped (confirms A-14).** Low to Medium. Confirmed. With the hold switched on for Ann, an update of her own `first_name`, `last_name` and `full_name` sent as her own sign in succeeded. `profiles` gives signed in people UPDATE on those 3 columns (needed today because the website saves the name with the person's own sign in). Fix: take away that permission and save the name with the server's key after the hold check. 1 hour plus SQL on both databases.
+
+**B-02 A candidate can read "shortlisted" straight from the database (confirms A-10).** Low to Medium. Confirmed. As Ann: `select status from applications` returned `shortlisted`, and `application_events` returned applied, viewed, shortlisted. The website hides it, the database does not. It needs someone to call the database API by hand with their own sign in, so most people will never see it, but the promise "a shortlist is never shown to the candidate" is not kept at the database level. Fix options: (a) stop signed in candidates reading `applications.status` and `application_events` directly and serve them through the server only, or (b) store the clinic's shortlist in a separate clinic only table. (b) is cleaner. Half a day plus SQL.
+
+**B-03 A Quebec job can be put into the review queue through the database API (confirms A-04).** Low. Confirmed. As clinic C, an insert with province Quebec and status `in_review` was accepted. The same test with no pay, a range $120,000 wide, or the 2 questions missing was refused by the database rule `jobs_complete_unless_draft`, which is good. An admin would still have to approve the Quebec job. Fix: add Quebec to that database rule.
+
+**B-04 The database does not know that percentages and daily rates are for optometrists only.** Low. Confirmed. A percentage only job and a daily rate job for an Optician were accepted by the database (the website form refuses both). Admin review is the backstop.
+
+**B-05 Any signed in person can read every column of a live job and of a clinic that has a live job.** Low. Confirmed. Visitors are limited to a list of public columns, but signed in people have table wide read. As Bo I could read `employers.owner_id` (the clinic owner's account id) and the job columns `review_note`, `posted_by_admin_id`, `filled_application_id` and `expiry_reminded_at` for live jobs. Nothing sensitive is in them today for a live job, but it is wider than intended and `filled_via`, `filled_at` and future columns would be exposed the same way. Fix: give signed in people the same column list as visitors, with the owner's and admin's wider read handled by the existing policies through a view or the server. 2 hours plus SQL.
+
+**B-06 Three tables keep every default permission for visitors.** Low. Confirmed on the Supabase like scratch database, Possible on the live one (I cannot see it). `waitlist`, `onboarding_emails` and `candidate_job_hides` never had the default permissions taken away, so the `anon` role holds select, insert, update, delete and truncate on them. Row level security blocks the first 4 (tested: 0 rows, insert refused). Truncate is not covered by row level security, and in my test `truncate waitlist` as `anon` succeeded. The Supabase API offers no way to send a truncate, so this is not reachable from the internet today. It is a missing layer, and the waitlist is the consent record. `profiles` also keeps truncate for signed in people. Fix: `revoke all on ... from anon, authenticated` then grant back only what is needed, as 0038 does. 20 minutes plus SQL on both databases. Steve can check the live database with: `select table_name, grantee, string_agg(privilege_type, ', ') from information_schema.role_table_grants where table_schema = 'public' and grantee in ('anon', 'authenticated') group by 1, 2 order by 1, 2;`
+
+**B-07 The final check does not list every object.** Low. Confirmed. It checks 29 of the 31 tables (missing `outreach_sends` and `signup_tickets`), 1 of 14 triggers, 1 of 23 functions, 3 permissions and no policies. A half run migration that created a table but not its policies or trigger would still read "OK". Fix: add the 2 tables, a count of policies per table, and the triggers that enforce rules (`jobs_enforce_changes`, `jobs_limit_open`, `on_auth_user_created`). 30 minutes.
+
+**B-08 Deleting an account still removes the other side's records.** Medium. Confirmed, and already known (R5 in the October audit, waiting on the lawyer). Deleting clinic C's owner removed the clinic, its jobs and Ann's application to it. Deleting Ann removed her application from clinic C. Listed here so it is not lost.
+
+**B-09 Small points.** The 0038 policies call `auth.uid()` for every row where the older ones use `(select auth.uid())`, which is slower on large tables (not a concern at this size). There is no index for "unread only", and the count on every page uses the `(user_id, created_at)` index, which is fine. Inbox rows are never deleted except with the account.
+
+### Could not verify from here
+
+- The live and demo databases themselves: whether 0001 to 0036 are all applied, whether the permissions match the scratch database, and the storage bucket rules for `cvs` (the scratch database only has a stand in for storage).
+- Whether Supabase's default permissions on the real project are the ones I copied (they have been for years, and Supabase has been changing defaults for new projects).
+
+## Area C. Safe before the SQL (0037 to 0039)
+
+Method: every read and write of the new columns and table was found by search (14 places) and each was read for what happens when the database answers with an error. I could not run the website against a database without 0037 to 0039, because that needs Supabase's API program in front of the database and this session was not allowed to download it. So these are "Likely" (strong reading of the code), not "Confirmed".
+
+| Feature | Before the SQL | Verdict |
+| --- | --- | --- |
+| First step page | `needsFirstStep` reads `start_seen_at` on its own. An error means "do not send", so nobody is redirected and there is no loop. If someone opens `/candidate/start` by hand and saves, the first write fails, the error names the missing column, and the role and field tick are saved again without the new columns (lib/candidate-actions.ts:118). Skip saves nothing and moves on | Likely safe. The career stage answer is dropped without a message in that one hand typed case |
+| Inbox and its count | `notify` is wrapped so it can never throw, and logs. `unreadCount` returns 0, the inbox page shows "Nothing here yet", Mark all as read does nothing, the data download returns an empty inbox | Likely safe. Messages raised before the SQL are not kept, so the inbox starts empty. Emails are unaffected. Each event writes 1 error line to the log |
+| Name hold | The account page and the action both treat a read error as "no hold". The name is saved, and the failed write of `name_changed_at` is logged | Likely safe. No hold until the SQL is run, as documented |
+| First week emails | Uses only columns from 0031 and 0033. Off by default. If the `onboarding_emails` table were missing, every claim fails and the run reports a problem and sends nothing | Safe. Does not depend on 0037 to 0039 |
+
+Nothing in the 14 places puts a new column into a shared read, so no existing page can break. One thing to do when the SQL is run: the first step page will then be shown once to every existing candidate who has no role yet, which is intended.
