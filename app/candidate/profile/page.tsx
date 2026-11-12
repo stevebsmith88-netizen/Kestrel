@@ -3,6 +3,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import CandidateProfileForm from "@/components/CandidateProfileForm";
 import CvCard from "@/components/CvCard";
+import ResumeReader from "@/components/ResumeReader";
 import { requireRole } from "@/lib/auth";
 import Link from "next/link";
 import { safeNext } from "@/lib/auth-copy";
@@ -53,7 +54,8 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
           </section>
           <div className="stackcards">
             <CvCard filename={profile?.cv_filename ?? null} uploadedOn={profile?.cv_uploaded_at ? longDate(profile.cv_uploaded_at) : null} />
-            <CandidateProfileForm initial={profile} />
+            {profile?.cv_path && <ResumeReader />}
+            <CandidateProfileForm key={JSON.stringify(profile)} initial={profile} />
           </div>
         </div>
       </main>

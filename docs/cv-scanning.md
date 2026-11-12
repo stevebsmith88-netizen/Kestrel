@@ -6,7 +6,7 @@ A CV is a file from a stranger, opened by a clinic on its own computer. Here is 
 
 - **Only 3 kinds of file are accepted** (PDF, .docx and .doc), checked by what is inside the file and not just its name, and no bigger than 3 MB.
 - **Macros, scripts and embedded programs are refused.** The check looks for the things most harmful CVs depend on: scripts and launch actions in a PDF, macros and embedded objects in a Word file. A person who is refused is told to save their CV as a plain PDF.
-- **CVs are never opened or processed by our servers,** so a harmful file cannot attack Kestrel itself.
+- **A resume is opened by our servers only when the candidate chooses Fill in from my resume (12th November 2026).** Then Kestrel's own server reads the text of that one file, with no AI and no other service involved (`lib/resume-text.ts`, `lib/resume-reader.ts`). Only PDF and .docx are read, at most 3 MB, 12 pages and 8 seconds, and a .docx is unzipped only for its main text part, up to 8 MB. The text is never stored. Files with macros, scripts or embedded files are already refused at upload, but this does mean a harmful PDF or Word file could reach a parsing library on our side. The libraries are `unpdf` and `fflate`. Add this to the lawyer's and the security review's lists, and re-check it when the antivirus choice below is made.
 - **They sit in a private store** and open only through a download link that works for 1 minute. They download as a file, and are never shown inside a Kestrel page.
 - **Clinics are told** next to every download that no file can be promised safe, to open it in their usual viewer, and to report anything odd.
 

@@ -87,3 +87,14 @@ where id = (select id from auth.users where email = 'their@email.ca');
 ```
 
 - **Not built:** a lock while a candidate has an active application. It was suggested before it was noticed that an application keeps the name it was sent with. It is Steve's call whether it is still wanted.
+
+## Fill in from my resume (12th November 2026, no AI)
+
+On the profile page, once a resume is saved, **Read my resume** suggests profile answers. Kestrel's own server reads the text and uses fixed rules (`lib/resume-reader.ts`, tested on made up resumes in several styles). Nothing is sent to another service, the text is not stored, and nothing is saved until the person ticks the answers and presses **Save the ticked answers** (the server reads the resume again at that point, so only what the rules really found can be saved).
+
+- **What it suggests:** role (from job titles, weighting title lines, ignoring plurals like "optometrists" in an assistant's duties), years of experience (adds up the dates of jobs in the experience part, skips education and overlaps, and prefers jobs that mention eye care), registered provinces (only for optometrists and opticians, from lines with registered or licensed), phone, town and province (from the address in the first lines, checked against our places list), and practice software (our fixed list).
+- **Files:** PDF and Word .docx. An older .doc, a scan or a picture of a page is not read, and the person is told what to do.
+- **Limits:** 3 MB, 12 pages, 8 seconds, and a .docx is only unzipped for its main text. Two small libraries were added: `unpdf` and `fflate`.
+- **No SQL.** It uses columns that already exist.
+- **To improve it,** Steve uploads sample resumes in different styles and sends what it missed. Add each as a test in `lib/resume-reader.test.ts`.
+- **Privacy wording** on the privacy and security pages and in the help centre was updated. These pages are with the lawyer, so tell them.
