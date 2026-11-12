@@ -165,7 +165,7 @@ function candidateEmail(day: number, f: CandidateFacts, name: string): Built {
   return {
     subject: "Ready to apply to your first job?",
     heading: "Applying takes a few minutes",
-    paragraphs: [hello, f.profileReady ? "Your resume and details are saved, so applying is a short form. Kestrel can draft a cover letter from your profile for you to edit." : "Once your role, town and resume are saved, applying is a short form, and Kestrel can draft a cover letter for you to edit.", "Every job shows its pay, and every post was read by a person before it went live."],
+    paragraphs: [hello, f.profileReady ? "Your resume and details are saved, so applying is a short form. You can write a cover letter, save it as a draft, and keep it to reuse on later applications." : "Once your role, town and resume are saved, applying is a short form. You can write a cover letter, save it as a draft, and keep it to reuse on later applications.", "Every job shows its pay, and every post was read by a person before it went live."],
     buttonText: "Find jobs",
     buttonPath: "/jobs",
   };

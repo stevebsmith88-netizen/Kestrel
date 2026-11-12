@@ -18,7 +18,7 @@ export function candidateSteps(f: { profileReady: boolean; lookingFor: boolean; 
     { label: "Add your role, town and resume", detail: "Then you can apply to any job in a few clicks.", href: "/candidate/profile", cta: "Complete my profile", done: f.profileReady },
     { label: "Say what you are looking for", detail: "Your town or provinces, and the pay you need, so the suggestions fit.", href: "/candidate/profile#looking-for", cta: "Add what I want", done: f.lookingFor },
     { label: "Set a job alert", detail: "We email you when a job matches. Daily, weekly or monthly.", href: "/candidate/alerts", cta: "Set an alert", done: f.hasAlert },
-    { label: "Send your first application", detail: "Every job shows its pay. Kestrel can draft a cover letter for you to edit.", href: "/jobs", cta: "Find jobs", done: f.applications > 0 },
+    { label: "Send your first application", detail: "Every job shows its pay, and you can save a cover letter to reuse.", href: "/jobs", cta: "Find jobs", done: f.applications > 0 },
   ];
 }
 
