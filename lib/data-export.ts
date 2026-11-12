@@ -53,3 +53,60 @@ export function exportApplications(apps: readonly ApplicationRow[], events: read
     };
   });
 }
+
+const list = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
+
+// Everything the download holds about 1 account, looked up by that account's own id. The route checks who is asking (and the password) first.
+// A clinic's download covers its own profile and jobs, never other people's applications (audit P1-19, tested in lib/data-export.test.ts).
+export async function buildDataExport(db: ExportDb, who: { userId: string; email: string; role: string }) {
+  const { userId: id, email } = who;
+  const [profile, alerts] = await Promise.all([
+    db.from("profiles").select("role, first_name, last_name, full_name, marketing_consent, marketing_consent_text, marketing_consent_at, unsubscribed_at, created_at").eq("id", id).maybeSingle(),
+    db.from("job_alerts").select("role_category, province, practice_type, frequency, created_at").eq("user_id", id),
+  ]);
+
+  const data: Record<string, unknown> = {
+    exportedAt: new Date().toISOString(),
+    note: "This is the personal information Kestrel Eye Care Jobs holds about your account. Your resume file can be downloaded from your profile page.",
+    account: { email: email, ...(profile.data ?? {}) },
+    jobAlerts: alerts.data ?? [],
+    inbox: (await db.from("notifications").select("kind, title, body, href, read_at, created_at").eq("user_id", id).order("created_at", { ascending: false })).data ?? [],
+  };
+
+  if (who.role === "candidate") {
+    const [cp, apps] = await Promise.all([
+      db.from("candidate_profiles").select("profession, licensed_provinces, software_skills, years_experience, available_from, phone, cv_filename, cv_uploaded_at, created_at, updated_at").eq("user_id", id).maybeSingle(),
+      db.from("applications").select("id, job_title, clinic_name, job_location, status, cover_letter, keep_details, applicant, cv_filename, clinic_message, viewed_at, status_changed_at, created_at").eq("candidate_id", id).order("created_at", { ascending: false }),
+    ]);
+    const [letters, drafts] = await Promise.all([
+      db.from("cover_letter_templates").select("name, body, created_at, updated_at").eq("user_id", id),
+      db.from("application_drafts").select("cover_letter, updated_at").eq("user_id", id),
+    ]);
+    data.savedCoverLetters = letters.data ?? [];
+    data.applicationDrafts = drafts.data ?? [];
+    const appRows = list<ApplicationRow>(apps.data);
+    const appIds = appRows.map((a) => a.id);
+    const events = appIds.length ? await db.from("application_events").select("application_id, status, note, created_at").in("application_id", appIds).order("created_at") : { data: [] };
+    data.candidateProfile = cp.data ?? null;
+    // What the candidate chose for "Recommended for you", the career stage answer, hidden jobs and the name change date. All private to them.
+    const extras = await candidateExtras(db, id);
+    data.preferences = extras.preferences;
+    data.careerStage = extras.careerStage;
+    data.jobsMarkedNotInterested = extras.jobsMarkedNotInterested;
+    (data.account as Record<string, unknown>).name_last_changed_at = extras.nameLastChangedAt;
+    data.applications = exportApplications(appRows, list<EventRow>(events.data));
+  } else {
+    const employerResult = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).maybeSingle();
+    const employer = { data: (employerResult.data ?? null) as ({ id: string } & Record<string, unknown>) | null };
+    const contact = employer.data ? await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.data.id).maybeSingle() : { data: null };
+    const contactRow = contact.data as { notify_email?: string | null; employee_band?: string | null } | null;
+    const jobs = employer.data
+      ? await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.data.id).order("created_at", { ascending: false })
+      : { data: [] };
+    const templates = employer.data ? await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.data.id) : { data: [] };
+    data.jobTemplates = templates.data ?? [];
+    data.clinic = employer.data ? { ...employer.data, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null } : null;
+    data.jobs = jobs.data ?? [];
+  }
+  return data;
+}
