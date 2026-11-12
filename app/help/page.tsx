@@ -5,7 +5,7 @@ import HelpCentre from "@/components/HelpCentre";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { HELP } from "@/content/help";
-import { HELP_DESCRIPTION, HELP_TITLE } from "@/lib/help";
+import { HELP_DESCRIPTION, HELP_TITLE, helpFaqJsonLd } from "@/lib/help";
 import { signupsOpen } from "@/lib/signup-gate";
 import { shareMetadata } from "@/lib/share";
 
@@ -21,6 +21,8 @@ export default async function Help() {
   return (
     <>
       <SiteHeader session={session} />
+      {/* Every topic as a question and answer, built from the same words the page shows (audit P1-52). */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(helpFaqJsonLd(HELP)).replace(/</g, "\\u003c") }} />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">Help centre</p>
