@@ -198,7 +198,7 @@ export const HELP: HelpSection[] = [
         steps: [
           "Open the menu under your initials at the top of the page. On a phone, open **Menu** instead.",
           "Choose **Account settings**.",
-          "To download, find **Download your information** and press **Download my information**.",
+          "To download, find **Download your information**, type your password (or, if you sign in with Google, your email address) so we know it is you, and press **Download my information**.",
           "To delete, open **Delete my account** further down the page.",
           "Type your password. If you sign in with Google, type your email address instead.",
           "Type DELETE in capital letters and press **Delete my account for good**.",

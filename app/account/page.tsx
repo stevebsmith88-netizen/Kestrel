@@ -8,13 +8,15 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { longDate } from "@/lib/jobs";
 import { nameLockedUntil } from "@/lib/name-hold";
 
+import { isExportProblem } from "@/lib/export-check";
+
 export const metadata: Metadata = { title: "My account | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
-export default async function Account({ searchParams }: { searchParams: Promise<{ email?: string }> }) {
+export default async function Account({ searchParams }: { searchParams: Promise<{ email?: string; download?: string }> }) {
   const session = await requireRole("candidate", "clinic");
-  const { email: emailNotice } = await searchParams;
+  const { email: emailNotice, download } = await searchParams;
   const admin = supabaseAdmin();
 
   const { data: profile } = admin ? await admin.from("profiles").select("first_name, last_name, marketing_consent, unsubscribed_at, notify_application_updates").eq("id", session.userId).maybeSingle() : { data: null };
@@ -39,6 +41,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           hasClinic={Boolean(employer)}
           hasPassword={session.hasPassword}
           emailNotice={emailNotice}
+          downloadProblem={isExportProblem(download) ? download : undefined}
           prefs={{
             news: Boolean(profile?.marketing_consent) && !profile?.unsubscribed_at,
             applicationUpdates: profile?.notify_application_updates !== false,
