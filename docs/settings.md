@@ -65,4 +65,4 @@ The sign up gate is **not** a Vercel setting. It lives in the database (migratio
 
 ## Settings in Supabase, not Vercel
 
-These are switched on in each Supabase project's dashboard, not in Vercel: the CAPTCHA protection for sign up (Authentication, Attack Protection, audit P1-03), the SMTP settings that send sign up emails through Resend, the allowed sign in addresses (Authentication, URL Configuration), and Google sign in. The steps for each are in `docs/accounts-setup.md`, `docs/google-signin.md` and the Phase E notes in `docs/audit/AUDIT-FIXES-LOG.md`.
+These are set in each Supabase project's dashboard, not in Vercel: the CAPTCHA protection (Authentication, Attack Protection), which should stay **off** because the database's sign up ticket does that job (audit P1-03, `docs/accounts-setup.md`), the SMTP settings that send sign up emails through Resend, the allowed sign in addresses (Authentication, URL Configuration), and Google sign in. The steps for each are in `docs/accounts-setup.md`, `docs/google-signin.md` and the Phase E notes in `docs/audit/AUDIT-FIXES-LOG.md`.

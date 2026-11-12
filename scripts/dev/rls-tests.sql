@@ -18,7 +18,8 @@ insert into t.people values
 
 insert into auth.users (id, email, raw_user_meta_data)
 select id, name || '@rls.test',
-       jsonb_build_object('role', case when name like 'clinic%' then 'clinic' else 'candidate' end, 'first_name', initcap(name), 'last_name', 'Test')
+       jsonb_build_object('role', case when name like 'clinic%' then 'clinic' else 'candidate' end, 'first_name', initcap(name), 'last_name', 'Test',
+                          'signup_ticket', public.issue_signup_ticket())
 from t.people;
 update public.profiles set role = 'admin' where id = (select id from t.people where name = 'admin');
 -- Ann changed her name a moment ago, so her 30 day hold is on.
@@ -57,7 +58,8 @@ on conflict (email) do nothing;
 
 -- ---------------------------------------------------------------- the helper
 
--- who:  'visitor' (not signed in), 'server' (the website's own key), or a name from t.people (signed in as that person)
+-- who:  'visitor' (not signed in), 'server' (the website's own key), 'sign_up_service' (Supabase's own sign up service, which anyone
+--       can reach with the public browser key), or a name from t.people (signed in as that person)
 -- kind: 'count' (how many rows a read returns), 'value' (the first value a read returns), 'write' (how many rows a change touches)
 -- want: 'refused' (the database said no), 'blocked' (said no, or 0 rows), 'N rows', an exact value, or 'not X' (anything except X)
 -- In the SQL, {name} is replaced by that person's or thing's id.
@@ -71,7 +73,7 @@ begin
   end loop;
   begin
     perform set_config('request.jwt.claim.sub', uid, true);
-    if who = 'visitor' then set local role anon; elsif who <> 'server' then set local role authenticated; end if;
+    if who = 'visitor' then set local role anon; elsif who = 'sign_up_service' then set local role supabase_auth_admin; elsif who <> 'server' then set local role authenticated; end if;
     if kind = 'count' then
       execute 'select count(*) from (' || statement || ') q' into n; got := n || ' rows';
     elsif kind = 'value' then
@@ -218,3 +220,25 @@ select t.try('P1-15', 'Bo gets nothing from Ann''s history', 'bo', 'count', $$se
 select t.try('P1-15', 'clinic C gets nothing from my_applications (it is for the candidate)', 'clinic_c', 'count', 'select * from public.my_applications()', '0 rows');
 select t.try('P1-15', 'a visitor cannot call my_applications', 'visitor', 'count', 'select * from public.my_applications()', 'refused');
 select t.try('P1-15', 'a visitor cannot call my_application_events', 'visitor', 'count', $$select * from public.my_application_events('{app_ann_c}')$$, 'refused');
+
+-- ---------------------------------------------------------------- P1-03: Supabase's sign up service needs Kestrel's ticket, even with the gate open
+-- Anyone can send a sign up straight to Supabase with the public key. The website only issues a ticket after the bot check, the terms
+-- tick and (for a clinic) the invitation code, so a sign up without one skipped those checks. A Google sign up has no ticket, so it is
+-- let in without a role, and the person then chooses on the welcome page, which asks for the terms and the invitation code.
+insert into t.things (name) values ('ticket_1');
+insert into public.signup_tickets (ticket) select id from t.things where name = 'ticket_1';
+update public.signup_gate set open = true;
+select t.try('P1-03', 'gate open: a clinic sign up sent straight to Supabase with no ticket is refused', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x1@rls.test', '{"provider":"email","providers":["email"]}', '{"role":"clinic","first_name":"X"}')$$, 'refused');
+select t.try('P1-03', 'gate open: a candidate sign up sent straight to Supabase with no ticket is refused', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x2@rls.test', '{"provider":"email","providers":["email"]}', '{"role":"candidate","first_name":"X"}')$$, 'refused');
+select t.try('P1-03', 'gate open: a sign up with no provider named and no ticket is refused', 'sign_up_service', 'write', $$insert into auth.users (email, raw_user_meta_data) values ('x3@rls.test', '{"role":"clinic"}')$$, 'refused');
+select t.try('P1-03', 'gate open: a made up ticket is refused', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x4@rls.test', '{"provider":"email"}', '{"role":"clinic","signup_ticket":"00000000-0000-4000-8000-000000000000"}')$$, 'refused');
+select t.try('P1-03', 'gate open: a sign up through the website, with its ticket, goes through', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x5@rls.test', '{"provider":"email"}', '{"role":"clinic","signup_ticket":"{ticket_1}"}')$$, '1 rows');
+select t.try('P1-03', 'gate open: the ticket is not kept on the account', 'sign_up_service', 'value', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x6@rls.test', '{"provider":"email"}', '{"role":"clinic","signup_ticket":"{ticket_1}"}') returning coalesce(raw_user_meta_data ->> 'signup_ticket', 'gone')$$, 'gone');
+select t.try('P1-03', 'gate open: 1 ticket cannot make 2 accounts', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x7@rls.test', '{"provider":"email"}', '{"signup_ticket":"{ticket_1}"}'), ('x8@rls.test', '{"provider":"email"}', '{"signup_ticket":"{ticket_1}"}')$$, 'refused');
+select t.try('P1-03', 'gate open: a Google sign up goes through without a ticket', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x9@rls.test', '{"provider":"google","providers":["google"]}', '{"full_name":"X Y"}')$$, '1 rows');
+select t.try('P1-03', 'gate open: a Google sign up cannot name itself a clinic (the role is removed, so the welcome page asks)', 'sign_up_service', 'value', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x10@rls.test', '{"provider":"google"}', '{"role":"clinic","full_name":"X Y"}') returning coalesce(raw_user_meta_data ->> 'role', 'none')$$, 'none');
+select t.try('P1-03', 'gate open: any other kind of sign up (a phone, say) needs a ticket', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x11@rls.test', '{"provider":"phone"}', '{"role":"clinic"}')$$, 'refused');
+update public.signup_gate set open = false;
+select t.try('P1-03', 'gate closed: a Google sign up is refused, as before', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x12@rls.test', '{"provider":"google"}', '{"full_name":"X Y"}')$$, 'refused');
+select t.try('P1-03', 'gate closed: a sign up through the website, with its ticket, goes through, as before', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x13@rls.test', '{"provider":"email"}', '{"role":"candidate","signup_ticket":"{ticket_1}"}')$$, '1 rows');
+update public.signup_gate set open = true;

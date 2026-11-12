@@ -182,7 +182,7 @@ begin
         u := gen_random_uuid();
         insert into auth.users (id, instance_id, aud, role, email, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
         values (u, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', format('sample.applicant%s@demo.invalid', i), now(),
-                '{"provider":"email","providers":["email"]}', jsonb_build_object('role', 'candidate', 'full_name', names[i]), now(), now());
+                '{"provider":"email","providers":["email"]}', jsonb_build_object('role', 'candidate', 'full_name', names[i], 'signup_ticket', public.issue_signup_ticket()), now(), now());
       end if;
       target := case jobs_for[i] when 1 then j_optician else j_assistant end;
       insert into public.applications (job_id, candidate_id, cover_letter, status, applicant, job_title, clinic_name, job_location, viewed_at)

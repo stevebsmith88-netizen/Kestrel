@@ -15,7 +15,8 @@ export async function signupsOpen() {
   return data?.open === true;
 }
 
-// A one time ticket that lets 1 invited person create an account while the gate is closed. Lasts 15 minutes.
+// A one time ticket that lets 1 person create an account. Lasts 15 minutes. Since migration 0041 every email sign up needs one, gate open
+// or closed, and the website only asks for one after its own checks have passed (audit P1-03).
 export async function issueSignupTicket(): Promise<string | null> {
   const db = supabaseAdmin();
   if (!db) return null;
