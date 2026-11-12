@@ -12,6 +12,8 @@ import { cleanPrefs } from "@/lib/candidate-prefs";
 import { FIELD_ROLES, PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { missingSentence, readyToApply } from "@/lib/profile-ready";
 import { cleanStage } from "@/lib/career-stage";
+import { notify } from "@/lib/notifications";
+import { newApplicant } from "@/lib/notify-text";
 import { canApplyForRole, canHaveFieldRoles, roleMismatchText } from "@/lib/role-fit";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -249,7 +251,9 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   }
   await admin.from("application_events").insert({ application_id: created.id, status: "applied" });
 
-  // Tell the clinic, without putting the candidate's details in the email.
+  // Tell the clinic in its inbox, and by email below, without putting the candidate's details in either.
+  const { data: owner } = await admin.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+  await notify(admin, owner?.owner_id, newApplicant({ jobTitle: job.title, applicationId: created.id }));
   const { data: contact } = await admin.from("employer_contacts").select("*").eq("employer_id", job.employer_id).maybeSingle();
   // Clinics who chose a summary (every 2 to 3 days, or weekly) or no email get nothing here. The daily job sends their summary.
   if (contact?.notify_email && contact.notify_new_applications !== false && (contact.notify_frequency ?? "each") === "each") {

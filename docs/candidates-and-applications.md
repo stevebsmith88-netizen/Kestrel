@@ -63,3 +63,27 @@ A brand new candidate (no role yet, and not shown it before) is sent from their 
 - **Needs migration 0037** (`career_stage`, `start_seen_at`) on both databases. Until it has been run, the site skips the page and saves what it can, so nothing breaks.
 - **The stage is private.** It is never shown to a clinic, never ranks or filters jobs, and never blocks anything. Whether a clinic may ever see it is for the lawyer, because answers about a person's situation could hint at protected grounds. It cannot be edited on the profile page yet.
 - Code: `lib/career-stage.ts` (the 3 answers), `saveFirstStep` in `lib/candidate-actions.ts`, `needsFirstStep` in `lib/candidate.ts`, `components/FirstStepForm.tsx`.
+
+## The inbox (12th November 2026)
+
+An envelope beside the initials in the top bar (and **Inbox** in the phone menu and the initials menu) opens `/account/inbox`, for candidates and clinics. The number on the envelope is the unread count. One way only: Kestrel tells people things, and nobody replies in it.
+
+- **Who gets what.** Candidates: an application moved to a new step (with the clinic's message if there is one). A shortlist is never announced, because it is the clinic's private working list. Clinics: a new applicant (no applicant details in the message), a job approved, a change asked for, or a job taken down after a report.
+- **How it works.** `lib/notify-text.ts` has the wording (tested), `lib/notifications.ts` writes and reads messages, and the messages are added where the emails are already sent (`tellCandidate` in `lib/applicant-actions.ts`, the new application step in `lib/candidate-actions.ts`, `emailClinic` and the take down step in `lib/admin-actions.ts`). The inbox always gets the update, whatever the person chose about email.
+- **Safe before the SQL.** Needs migration 0038 (table `notifications`). Until it has been run, writing a message is logged and skipped, the count shows 0 and the page shows nothing, so nothing breaks.
+- **Privacy.** Row level security: a person can read their own messages and set `read_at` on them, and nothing else. Only the server adds messages. They are deleted with the account and included in the data download.
+- **Not built yet:** clearing old messages (they stay until the account is deleted), a message when a job match arrives, and anything two way.
+
+## Changing your name (12th November 2026)
+
+On the account page the first name change is free, and each change starts a 30 day hold (`lib/name-hold.ts`, `updateName` in `lib/account-settings-actions.ts`). While the hold is on, the name boxes are switched off and the page says when the next change is allowed. A change to what the name already is does not count. An application already sent keeps the name used when it was sent (`applicant.name`).
+
+- **Needs migration 0039** (`profiles.name_changed_at`). Until it is run on a database, there is no hold there.
+- **Unlocking someone early** (a typo or a legal name change, after they write to hello@): run this in the Supabase SQL editor, with their email.
+
+```sql
+update public.profiles set name_changed_at = null
+where id = (select id from auth.users where email = 'their@email.ca');
+```
+
+- **Not built:** a lock while a candidate has an active application. It was suggested before it was noticed that an application keeps the name it was sent with. It is Steve's call whether it is still wanted.

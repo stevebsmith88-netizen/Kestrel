@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0037), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0039), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -2280,6 +2280,58 @@ grant insert (career_stage, start_seen_at) on public.candidate_profiles to authe
 grant update (career_stage, start_seen_at) on public.candidate_profiles to authenticated;
 
 -- ======================================================================
+-- 0038_notifications.sql
+-- ======================================================================
+-- 0038: the in account inbox (Steve, 12th November 2026).
+--   * notifications: a short message to one person about something that happened on their account, for example an application moved to a new
+--     step, a new applicant, or a job approved. One way only: Kestrel tells people things, and nobody replies to anybody in it.
+--   * Only the website's server writes them (there is no insert permission for signed in people). A person can read their own, and can set
+--     read_at on their own (to mark them read). Nobody can read anyone else's.
+--   * Nothing else changes. Safe to run more than once.
+
+create table if not exists public.notifications (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null references auth.users (id) on delete cascade,
+  kind       text not null check (char_length(kind) <= 40),
+  title      text not null check (char_length(title) <= 160),
+  body       text check (body is null or char_length(body) <= 500),
+  href       text check (href is null or (href like '/%' and char_length(href) <= 200)),
+  read_at    timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists notifications_user_created_idx on public.notifications (user_id, created_at desc);
+
+alter table public.notifications enable row level security;
+
+drop policy if exists "People can read their own notifications" on public.notifications;
+create policy "People can read their own notifications"
+  on public.notifications for select to authenticated
+  using (user_id = auth.uid());
+
+drop policy if exists "People can mark their own notifications read" on public.notifications;
+create policy "People can mark their own notifications read"
+  on public.notifications for update to authenticated
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid());
+
+revoke all on public.notifications from anon, authenticated;
+grant select on public.notifications to authenticated;
+grant update (read_at) on public.notifications to authenticated;
+
+-- ======================================================================
+-- 0039_name_changes.sql
+-- ======================================================================
+-- 0039: the hold on changing your name (Steve, 12th November 2026).
+--   * name_changed_at: when a person last changed their name. The first change is free, and each change starts a 30 day hold before the next
+--     one. Only the website's server writes it (there is no permission for signed in people to change it), so nobody can clear their own hold.
+--   * To unlock someone early (a typo, a legal name change) after they write to hello@, run in the Supabase SQL editor:
+--       update public.profiles set name_changed_at = null where id = (select id from auth.users where email = 'their@email.ca');
+-- Nothing else changes, and nobody's name is changed. Safe to run more than once.
+
+alter table public.profiles add column if not exists name_changed_at timestamptz;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2346,6 +2398,9 @@ from (
     ('column: the application a clinic hired for a filled job', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'filled_application_id')),
     ('columns: candidate first step (career stage, first step seen)', (select count(*) from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name in ('career_stage', 'start_seen_at')) = 2),
     ('permission: candidates can save their first step answers', has_column_privilege('authenticated', 'public.candidate_profiles', 'career_stage', 'UPDATE')),
+    ('table: notifications (in account inbox)', to_regclass('public.notifications') is not null),
+    ('permission: people can mark their own notifications read', has_column_privilege('authenticated', 'public.notifications', 'read_at', 'UPDATE')),
+    ('column: when a name was last changed', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'name_changed_at')),
     ('rule: applications can be hired', exists (select 1 from pg_constraint where conname = 'applications_status_check' and pg_get_constraintdef(oid) like '%hired%')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

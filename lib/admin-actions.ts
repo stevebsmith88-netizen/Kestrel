@@ -10,6 +10,8 @@ import { expiryFrom, longDate } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
 import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { notify } from "@/lib/notifications";
+import { jobApproved, jobNeedsChange, jobTakenDown } from "@/lib/notify-text";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -19,6 +21,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 async function emailClinic(db: SupabaseClient, jobId: string, kind: "live" | "needs-change", extra: { wasEdit?: boolean; note?: string } = {}) {
   const { data: job } = await db.from("jobs").select("title, employer_id, expires_at").eq("id", jobId).maybeSingle();
   if (!job) return;
+  const { data: owner } = await db.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+  await notify(db, owner?.owner_id, kind === "live" ? jobApproved({ jobTitle: job.title, jobId, wasEdit: Boolean(extra.wasEdit) }) : jobNeedsChange({ jobTitle: job.title, jobId, note: extra.note ?? "" }));
   const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
   if (!contact?.notify_email) return;
   const mail =
@@ -88,6 +92,8 @@ export async function takeDownReportedJob(form: FormData) {
       redirect("/admin/reports?notice=error");
     }
     // Tell the clinic, so a post never just disappears.
+    const { data: owner } = await db.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+    await notify(db, owner?.owner_id, jobTakenDown({ jobTitle: job.title }));
     const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
     if (contact?.notify_email) {
       const mail = emailLayout({

@@ -24,6 +24,7 @@ export async function GET() {
     note: "This is the personal information Kestrel Eye Care Jobs holds about your account. Your resume file can be downloaded from your profile page.",
     account: { email: session.email, ...(profile.data ?? {}) },
     jobAlerts: alerts.data ?? [],
+    inbox: (await db.from("notifications").select("kind, title, body, href, read_at, created_at").eq("user_id", id).order("created_at", { ascending: false })).data ?? [],
   };
 
   if (session.role === "candidate") {

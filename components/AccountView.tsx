@@ -6,6 +6,7 @@ export type AccountViewProps = {
   role: "candidate" | "clinic";
   email: string;
   first: string;
+  nameLockedUntil?: string | null;
   last: string;
   hasClinic: boolean;
   hasPassword: boolean;
@@ -14,7 +15,7 @@ export type AccountViewProps = {
 };
 
 // What the Account page shows: the person's details, their email choices, and the download and delete options.
-export default function AccountView({ role, email, first, last, hasClinic, hasPassword, prefs, emailNotice }: AccountViewProps) {
+export default function AccountView({ role, email, first, last, nameLockedUntil, hasClinic, hasPassword, prefs, emailNotice }: AccountViewProps) {
   const home = role === "clinic" ? "/clinic" : "/candidate";
   return (
         <div className="wrap narrow">
@@ -31,7 +32,7 @@ export default function AccountView({ role, email, first, last, hasClinic, hasPa
                 <div><dt>Sign in email</dt><dd>{email}</dd></div>
               </dl>
               <h3 className="subh">Your name</h3>
-              <NameForm first={first} last={last} />
+              <NameForm first={first} last={last} lockedUntil={nameLockedUntil ?? null} />
               <h3 className="subh">Your email address</h3>
               <EmailForm current={email} hasPassword={hasPassword} />
             </section>

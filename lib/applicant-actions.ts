@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { candidateRecipient } from "@/lib/recipient";
+import { notify } from "@/lib/notifications";
+import { applicationMoved } from "@/lib/notify-text";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -20,6 +22,8 @@ type AppForEmail = { id: string; candidate_id: string; applicant: unknown; job_t
 
 // Tells the candidate by email, unless they have turned those emails off. They can always see the update in their account.
 async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>>, app: AppForEmail, to: string, message: string) {
+  // The inbox always gets the update, whatever the candidate chose about email. A shortlist is private to the clinic, so it is never announced.
+  await notify(admin, app.candidate_id, applicationMoved({ jobTitle: app.job_title, clinicName: app.clinic_name, status: to, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id }));
   const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
   if (email && wants) {
     const mail = emailLayout({

@@ -5,6 +5,8 @@ import AppFooter from "@/components/AppFooter";
 import AccountView from "@/components/AccountView";
 import { requireRole } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { longDate } from "@/lib/jobs";
+import { nameLockedUntil } from "@/lib/name-hold";
 
 export const metadata: Metadata = { title: "My account | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -19,6 +21,9 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   const { data: employer } = admin && session.role === "clinic" ? await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle() : { data: null };
   const { data: contact } = admin && employer ? await admin.from("employer_contacts").select("*").eq("employer_id", employer.id).maybeSingle() : { data: null };
 
+  // When the name can next be changed (lib/name-hold.ts). A missing column means no hold yet, so a database without migration 0039 still works.
+  const { data: held, error: heldError } = admin ? await admin.from("profiles").select("name_changed_at").eq("id", session.userId).maybeSingle() : { data: null, error: null };
+  const lockedUntil = !heldError && held?.name_changed_at ? nameLockedUntil(held.name_changed_at) : null;
   const first = profile?.first_name || session.firstName;
   const last = profile?.last_name ?? "";
   return (
@@ -30,6 +35,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           email={session.email}
           first={first}
           last={last}
+          nameLockedUntil={lockedUntil ? longDate(lockedUntil) : null}
           hasClinic={Boolean(employer)}
           hasPassword={session.hasPassword}
           emailNotice={emailNotice}
