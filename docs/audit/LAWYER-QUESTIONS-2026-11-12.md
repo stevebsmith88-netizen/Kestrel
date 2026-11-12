@@ -1,5 +1,7 @@
 # Kestrel Eye Care Jobs: follow up questions for our meeting
 
+> **Do not send as it stands (12th November 2026).** This was written as a reply to a lawyer, but the notes it answers came from a paralegal friend and no lawyer is engaged yet. It will be cut down to the few questions that need a lawyer, once one is chosen. See `LEGAL-ON-A-BUDGET-2026-11-12.md`.
+
 From Steve Smith, founder. 12th November 2026.
 
 Thank you for going through the review pack. Your notes were clear, and I have taken them as the plan. Section 1 says what I intend to do with each point, so you can correct anything before we build it. Section 2 lists the questions from the pack that your notes did not cover, grouped by subject, so we can decide which ones matter for the launch you suggested. Section 3 lists what has changed in the product since the pack was prepared.

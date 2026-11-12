@@ -4,21 +4,23 @@ Reviewed: `main` at `a67323d` (fix phases A to G merged). Branch for this review
 
 Reach: the code and history, tests, builds and 3 throwaway databases here, and the demo site (demo.eyecarejobs.ca). The live site (eyecarejobs.ca) is refused by this session's network settings, so nothing here was checked on the live site itself.
 
+> **Correction, 12th November 2026:** the feedback described in this report as "the lawyer's" came from a paralegal friend. No lawyer is engaged yet. See `LEGAL-ON-A-BUDGET-2026-11-12.md` for the low cost plan.
+
 ## 1. For Steve (one page)
 
 **Is the audit closed?** Yes, the code side of it. Of the 60 findings, 48 are fixed (36 re-tested today and passing, including all 3 High findings), 4 were partly fixed by your choice, 4 ideas were decided and built, and 4 remain: P1-20 (what happens to applications when an account is deleted), P1-25 (a ceiling at 1,000 jobs, for later), P1-58 (an idea) and P1-59 (waiting for your sample resumes). Main is healthy: 600 of 600 tests, a clean build, 0 vulnerable packages, no secrets in the history, and 117 of 117 database access tests on both kinds of test database. Nothing a fix changed broke something that used to work.
 
-**What is not closed** is the legal and launch side, and the lawyer's reply has made that sharper. The lawyer's first point is P1-20, the oldest open item in the project (October's R5).
+**What is not closed** is the legal and launch side, and the paralegal's review has made that sharper. Its first point is P1-20, the oldest open item in the project (October's R5).
 
 **The 5 biggest risks now**
-1. **A clinic deleting its account deletes every candidate's application to it**, and candidates lose them from their tracker. The lawyer wants this fixed before real applications. (X-01)
-2. **There is no published policy for fake job reports.** The report button and admin queue exist; the policy the lawyer says Ontario requires does not. (X-02)
-3. **9 sentences in the published policies and the sign up box are not true of the product today**, including the tick box that bundles job alerts with offers, which the lawyer asked to clean up now because it is live. (Section 6C)
-4. **Gate A is not passed:** the meeting is not held, the disclosure not given, the company not formed. Outreach and found listings must stay off, as the lawyer also advised.
+1. **A clinic deleting its account deletes every candidate's application to it**, and candidates lose them from their tracker. The paralegal advises fixing this before real applications. (X-01)
+2. **There is no published policy for fake job reports.** The report button and admin queue exist; the policy the paralegal says Ontario requires does not. (X-02)
+3. **9 sentences in the published policies and the sign up box are not true of the product today**, including the tick box that bundles job alerts with offers, which the paralegal suggested cleaning up now because it is live. (Section 6C)
+4. **Gate A is not passed:** the meeting is not held, the disclosure not given, the company not formed. Outreach and found listings must stay off, as the paralegal also advised.
 5. **The demo walk was only partly possible:** the candidate side is good, but the clinic's applicant screens (shortlist, decline, role filled) were not seen in a browser, because no job could be approved. On a phone, Find jobs shows 1.5 screens of filters before the first job, and the ad builder can add "internationally trained applicants are welcome" without being asked. (D-01, D-02)
 
 **The 5 things to do next**
-1. Read `LAWYER-QUESTIONS-2026-11-12.md`, change anything, forward it and book the meeting. It turns each of the lawyer's points into "here is my plan, please correct it", lists what is still open, and is written so you can send it unchanged.
+1. Read `LAWYER-QUESTIONS-2026-11-12.md`, change anything, forward it and book the meeting. It turns each of the paralegal's points into "here is my plan, please correct it", lists what is still open, and is written so you can send it unchanged.
 2. Once the lawyer agrees the plan: Claude keeps applications when a clinic or job is deleted, and publishes a retention schedule.
 3. Claude drafts the fake job policy page and fixes the sign up and waitlist wording and the 9 policy sentences.
 4. Supabase Pro with backups, and a restore test, before anyone is invited.
@@ -61,7 +63,7 @@ Reach: the code and history, tests, builds and 3 throwaway databases here, and t
 | ID | Severity | Status | Evidence on main |
 | --- | --- | --- | --- |
 | P1-01 | High | Fixed and verified | Above |
-| P1-02 | High | Fixed but now out of date | Packs rebuilt in Phase C. Since then Phases D to G and the lawyer's reply have changed things. See Part 5B |
+| P1-02 | High | Fixed but now out of date | Packs rebuilt in Phase C. Since then Phases D to G and the paralegal's review have changed things. See Part 5B |
 | P1-03 | High | Fixed and verified | Above. Migration 0041. Supabase's own CAPTCHA stays off, by your decision |
 | P1-04 | Medium | Fixed and verified | Above |
 | P1-05 | Medium | Fixed and verified | Above |
@@ -79,7 +81,7 @@ Reach: the code and history, tests, builds and 3 throwaway databases here, and t
 | P1-17 | Medium | Fixed and verified | `docs/security.md` corrected |
 | P1-18 | Medium | Fixed and verified | `docs/settings.md`, guarded by `lib/settings-doc.test.ts` |
 | P1-19 | Medium | Fixed and verified | Loader tests, data download tests and the 77 step walk through |
-| P1-20 | Medium | **Still open, and now the lawyer's first point** | Deleting a clinic still removes its jobs and the candidates' applications. The lawyer has now asked for this to be fixed before launch (Part 5) |
+| P1-20 | Medium | **Still open, and now the paralegal's first point** | Deleting a clinic still removes its jobs and the candidates' applications. The lawyer has now asked for this to be fixed before launch (Part 5) |
 | P1-21 | Medium | Fixed and verified | The privacy page says the welcome emails are switched off and nobody is sent them |
 | P1-22 | Medium | Fixed and verified (code) | The maintenance switch is checked in the waitlist, daily job, job event and unsubscribe routes |
 | P1-23 | Medium | Fixed and verified (code) | `lib/email.ts:32` checks the do not email list for every email |
@@ -151,8 +153,8 @@ Collected from the "noticed, not fixed" notes in `AUDIT-FIXES-LOG.md` (every pha
 
 | # | Severity | What | One line fix | From |
 | --- | --- | --- | --- | --- |
-| X-01 | Medium | **Deleting a clinic account still deletes the candidates' applications to it** (P1-20, R5). The lawyer now names it as the first thing to sort before launch | Keep applications (with the job title and clinic name already saved on them) when a clinic or job is deleted; decide with the lawyer how long each side keeps them, then build the purge step | P1-20, lawyer |
-| X-02 | Medium | **No published policy for fake or fraudulent job posts.** A "Report this job" link and an admin Reports queue exist, but no page says how reports are handled. The lawyer says Ontario requires this of the job board | A short "Reporting fake jobs" section (or page) linked from every job page and the footer, plus a help topic. Wording to the lawyer | **new**, lawyer |
+| X-01 | Medium | **Deleting a clinic account still deletes the candidates' applications to it** (P1-20, R5). The paralegal names it as the first thing to sort before launch | Keep applications (with the job title and clinic name already saved on them) when a clinic or job is deleted; decide with the lawyer how long each side keeps them, then build the purge step | P1-20, lawyer |
+| X-02 | Medium | **No published policy for fake or fraudulent job posts.** A "Report this job" link and an admin Reports queue exist, but no page says how reports are handled. The paralegal says Ontario requires this of the job board | A short "Reporting fake jobs" section (or page) linked from every job page and the footer, plus a help topic. Wording to the lawyer | **new**, lawyer |
 | X-03 | Medium | **The career stage answer cannot be changed or cleared after the first step page**, which says "you can change them later in your profile" | Add the question to the profile, or change the first step wording | Phase C |
 | X-04 | Medium | **Someone at Interview on a job that simply runs out is left at Interview for ever.** P1-13 covers "role filled" only | Have the daily close out tell Interview and Offer people too, with a kind standard message | Phase E |
 | X-05 | Low | **The home page is still built for every visitor** (`force-dynamic`), as is `/jobs` with no filters. It is the most visited page | Save the signed out home page like the content pages | **new**, Phase F |
@@ -256,11 +258,11 @@ Banner on every page checked; `x-robots-tag: noindex, nofollow`, the robots meta
 
 **This is preparation for the lawyer, not legal advice.** The send ready questions are in **`docs/audit/LAWYER-QUESTIONS-2026-11-12.md`**: written to the lawyer in your voice, with no internal jargon, and your employer not named (as in the packs). Read it, change anything, then forward it. It has not been sent.
 
-### 6A. The lawyer's reply, and what is still open
+### 6A. The paralegal's review, and what is still open
 
-You confirmed the feedback you pasted is from the lawyer. It answers the direction on 6 points, and the questions file turns each into "here is what I plan to do, please correct it":
+The feedback you pasted is from a paralegal friend who read the pack (corrected 12th November 2026; it was first recorded here as the lawyer's). It is informed advice, not a lawyer's legal advice. It answers the direction on 6 points, and the questions file turns each into "here is what I plan to do, please correct it":
 
-| Lawyer's point | Pack question it answers | What it means for Kestrel |
+| Paralegal's point | Pack question it answers | What it means for Kestrel |
 | --- | --- | --- |
 | Sort out what happens to a resume after applying: what the clinic may do, how long each side keeps it, what happens on deletion. Fix the clinic deletion problem before people use it | 15, 24, 25, 45 | X-01 (P1-20, R5) becomes a pre launch build item, with the terms and privacy wording |
 | Make reporting fake jobs more visible and publish a short policy; Ontario requires this of the job board | 36 (partly) | X-02: a policy page and links. The reporting tool already exists |
@@ -270,9 +272,9 @@ You confirmed the feedback you pasted is from the lawyer. It answers the directi
 | Start with Ontario clinics posting their own jobs; leave cold outreach, reposting from clinic websites and paid plans for later | 31, 32, 16, 19 | Confirms keeping `ENABLE_OUTREACH`, `ENABLE_SEEDING` and payments off at the free launch |
 | Spend the meeting on clinic terms and applicant information | | The questions file puts these first |
 
-**Not covered by the reply, and still open:** your employment and the disclosure (pack 1 to 6, still the gate for outreach and found listings), the company (7 to 11), where data is processed (22), Quebec residents who sign up (27), the privacy officer and breach plan (28, 29), the career stage answer (42), the first week emails (43), the optometrist percentage and daily rate pay (44), the posting rules as built (34), the marketing wording (35), the indemnity and changes clauses (14, 18, 20). New from this review: the ad builder adding "internationally trained applicants are welcome" unasked (D-02), Kestrel's position on a clinic's AI screening answer, and whether the buying groups blog post and the directory listing are a concern before the disclosure. The questions file groups them as you asked: privacy, anti spam, pay transparency, human rights wording, the platform's position, terms and retention, and the separation from your employer.
+**Not covered by the paralegal's notes, and still open:** your employment and the disclosure (pack 1 to 6, still the gate for outreach and found listings), the company (7 to 11), where data is processed (22), Quebec residents who sign up (27), the privacy officer and breach plan (28, 29), the career stage answer (42), the first week emails (43), the optometrist percentage and daily rate pay (44), the posting rules as built (34), the marketing wording (35), the indemnity and changes clauses (14, 18, 20). New from this review: the ad builder adding "internationally trained applicants are welcome" unasked (D-02), Kestrel's position on a clinic's AI screening answer, and whether the buying groups blog post and the directory listing are a concern before the disclosure. The questions file groups them as you asked: privacy, anti spam, pay transparency, human rights wording, the platform's position, terms and retention, and the separation from your employer.
 
-One thing to notice: the reply says "have the lawyer look at the liability clause", which reads as if someone else will look at it. Worth checking at the meeting whether that means a colleague in their firm.
+The paralegal's note "have the lawyer look at the liability clause" makes sense now: it was advice to get a lawyer for that clause.
 
 ### 6B. The lawyer packs (`docs/legal/`)
 
@@ -282,7 +284,7 @@ One thing to notice: the reply says "have the lawyer look at the liability claus
 
 **Missing:** the lawyer's own reply and what you plan to do with it; the fake job policy; the waitlist wording change.
 
-**Verdict:** do not rebuild the full packs before the meeting. The lawyer has read them and replied. Send the questions file instead: its section 3 lists what changed and section 4 lists the policy sentences that are wrong. Rebuild the packs once, after the meeting, with the agreed decisions, so the appendices (the policies as published) match what the lawyer approved.
+**Verdict:** do not rebuild the full packs before the meeting. A paralegal has read them and given notes, and no lawyer is engaged yet. Send the questions file instead: its section 3 lists what changed and section 4 lists the policy sentences that are wrong. Rebuild the packs once, after the meeting, with the agreed decisions, so the appendices (the policies as published) match what the lawyer approved.
 
 ### 6C. Sentences on /privacy, /terms, /posting-policy and /security that are not true today
 
@@ -333,7 +335,7 @@ Stripe in test mode with the free launch coupon. A $0 total must not ask for a c
 | `ENABLE_GOOGLE_SIGNIN` | `yes` | Leave unset |
 | `LAUNCH_HOME` | Unset or `yes` once the gate opens | As now |
 | `ENABLE_ONBOARDING_EMAILS` | Only after the lawyer answers the first week question | Leave unset |
-| `ENABLE_SEEDING`, `ENABLE_OUTREACH` | **Stay off** (lawyer's advice and the disclosure) | Leave unset |
+| `ENABLE_SEEDING`, `ENABLE_OUTREACH` | **Stay off** (paralegal's advice and the disclosure) | Leave unset |
 | Supabase CAPTCHA | Stays off (the database ticket does the job) | Off |
 
 ### The next 10 actions, ranked
