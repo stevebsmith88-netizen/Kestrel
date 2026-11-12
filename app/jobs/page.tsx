@@ -12,6 +12,7 @@ import { launchLayoutOn } from "@/lib/launch";
 import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, findPlace, placeLabel } from "@/lib/places";
+import { clampPage } from "@/lib/paging";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -72,20 +73,21 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const { place, placeNotFound } = found;
   let jobs = found.jobs;
   let total = found.total;
+  let shown = found.page ?? filters.page ?? 1;
   if (everything) {
     const recs = view === "me" ? await rankForMe(profile, jobs) : null;
     let ordered = recs ? recs.map((r) => r.job) : jobs;
     if (sort === "new" || sort === "near") ordered = orderJobs(ordered, sort, from);
     total = ordered.length;
-    const at = filters.page ?? 1;
-    jobs = ordered.slice((at - 1) * PAGE_SIZE, at * PAGE_SIZE);
+    shown = clampPage(filters.page ?? 1, total, PAGE_SIZE);
+    jobs = ordered.slice((shown - 1) * PAGE_SIZE, shown * PAGE_SIZE);
   }
   const keep = { view: canMe ? view : undefined, sort: sort === (view === "me" ? "best" : "new") ? undefined : sort } as { view?: string; sort?: string };
   const launched = await launchLayoutOn();
   // Alerts are for candidates. A signed out visitor is sent to create an account once sign up is open, and to the waitlist before that.
   const alertHref = session ? (session.role === "candidate" ? "/candidate/alerts" : null) : launched ? "/sign-up?next=%2Fcandidate%2Falerts" : null;
   const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.tags && hasTagFilters(filters.tags)));
-  const page = filters.page ?? 1;
+  const page = shown;
   const suggestions = filtered && jobs.length === 0 && !placeNotFound ? emptySearchSuggestions(filters) : [];
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
