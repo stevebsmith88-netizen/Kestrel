@@ -152,3 +152,81 @@ Collected from the "noticed, not fixed" notes in `AUDIT-FIXES-LOG.md` (every pha
 | X-20 | Idea | Help has a small layout shift (0.079) on a phone | Reserve the search box's space | Phase F |
 
 Nothing found where a fix broke something that used to work. The 2 changes in what people see (the "could not read this file" message for an over limit Word file, and "A few quick questions") are deliberate and recorded.
+
+## 5. The demo walk (Part 4)
+
+Done on demo.eyecarejobs.ca on 12th November 2026, at phone width (375 pixels) and desktop width (1280), with a browser driven from this session. Screenshots are in `docs/audit/post-fix/`. Times are how long the pages took for the session, plus my estimate of a real person's time, which is mostly reading and typing.
+
+**Accounts used:** an audit candidate ("Mara Auditson", an optician in Kamloops, British Columbia, with made up resumes in PDF and Word, phone 555) and an audit clinic ("Lakeview Eye Care (audit test)", Huntsville, Ontario), both on `@example.com` addresses. The 3 demo accounts in `docs/demo-site.md` were not touched. **Both audit accounts were deleted at the end with Delete account**, and signing in with them is now refused.
+
+### What could not be walked in the browser
+
+You were not around to approve a job, and the live sample jobs with applicants belong to the 3 demo accounts I was told not to touch. So my clinic never had a live job and never received an application. **These steps in 4B and 4C were therefore not done in the browser:** opening an application as the clinic, shortlist, invite to interview with a message, decline with the kind message, mark the role filled and name who was hired, Extend, the views and apply clicks on a live job, and the candidate's side of each change. The database side of shortlist, decline and deletion passes in the 77 step walk through (Part 1), and the shortlist mask passes in the access tests, but the screens were not seen. To finish it: approve the audit job in the demo admin queue during a session, or give the session a fourth demo clinic of its own to use.
+
+### 4A. Candidate journey (about 25 minutes for a real person; about 2.5 minutes of page time here)
+
+| Step | Result |
+| --- | --- |
+| Home page as a stranger | Clear headline, search box, Post a job, Latest jobs. No side scrolling at 375 pixels. Organisation data present |
+| Search by role, province, town and distance, sort | All work. Optician: 6; Optician in Alberta: 1; Calgary within 50 km: 3; Quebec: "No jobs match this search yet"; a made up town: "We could not find that place", with a next step. Sort offers Newest and, once a town is given, Closest |
+| **Find jobs on a phone** | **The first job sits about 1,240 pixels down, below about 1.5 screens of filters.** Someone arriving from Google on a phone sees a form, not jobs (screenshot 01). The home page search is fine |
+| Job page | Pay in the header and in Job facts; both required answers shown; Google markup matches the page; no layout shift (0.000, was 0.21). "Existing vacancy: Yes" means nothing to a candidate without a short explanation (screenshot 02) |
+| Sign up | Under 10 seconds. Straight to "Welcome to Kestrel" |
+| First step page | Clear, optional, short. Says the answers can be changed later in the profile; **career stage cannot be** (X-03, confirmed) |
+| Profile, upload resume, Fill in from my resume | PDF and Word both read correctly: role, about 8 years (right), registered in British Columbia, phone, and Kamloops (the audit's sample lost the town). Missed "Available from 1st February 2027" and the software (not in Kestrel's list). **After replacing the resume, the panel keeps the old file's suggestions and hides Read my resume until the page is reloaded** (screenshot 04). The file badge says "DOC" for a PDF |
+| For me and Recommended | Both empty for an optician in Kamloops within 25 km (fair for the data), each with a helpful next step. **The checklist ticked "Say what you are looking for" although I never filled it in** |
+| Apply with a cover note | The page lists all 8 details the clinic receives (P1-32 confirmed). The "keep my details for future roles" tick is there. Sending took over 4 seconds with "Sending" on the button |
+| Tracker | Shows "Sent. The clinic has not opened it yet." Clear |
+| Inbox and count | Empty, says what will appear. Envelope visible on the phone bar (P1-38 confirmed) |
+| Job alert | Saved in 1 step. Quebec can be chosen as an alert province, though no Quebec job can be posted |
+| Name change and hold | Works: "You can change your name again on 12th December 2026", boxes greyed. A live application did not stop it (decided, not built yet) |
+| Download my data | Password asked; file includes account, consent record, alert, profile, preferences, career stage, name change date and the application exactly as sent |
+| Apply outside my role (optometrist job) | "This role is not your role ... Your profile says optician", with Update my profile. Clear. The wording invites changing the role to apply, which Kestrel does not check |
+
+### 4B. Clinic journey (about 15 minutes; about 2 minutes of page time)
+
+| Step | Result |
+| --- | --- |
+| Sign up and clinic profile | Under 2 minutes, as promised. Direct hire confirmation and terms tick are clear |
+| Dashboard | Checklist, 6 tiles, a clear explanation of views and apply clicks. Good on a phone (screenshot 08) |
+| Post a job form | About 5 minutes as stated. Pay rules, the 2 questions and the Ontario AI rule explained in place. The percentage boxes hide for an optician role |
+| Refusals | All 5 refused with a clear message: range too wide, "Canadian experience", "Cdn exp.", a Quebec location, and "negotiable" with no figures (screenshot 06) |
+| **Ad builder (pressed once)** | Draft in a few seconds, warm and specific. **It added "Internationally trained applicants are welcome", which the clinic never said** (its instructions allow that line), and "apply through the job board" instead of naming Kestrel (screenshot 07) |
+| Submit for review | Works; lands on the dashboard with "Your job is with our team". Takes 3 to 4 seconds |
+| Take back to edit, Save as template, Use template | All work, with a confirmation each time |
+| Applicant steps | Not done, see above |
+
+### 4C. Both sides of the same moment
+
+Not done in the browser (no live job of my own). From the code and the tests: the candidate reads applications only through the masked copy, so a shortlist shows as Viewed (access tests and walk through pass); what the clinic sees is the `applicant` record saved at the moment of applying, which matches the 8 details on the apply page and in the download.
+
+### 4D. The sample data
+
+28 live jobs across 7 provinces (the guide says 18 in 9), independent, corporate and supplier employers, opticians at $52,000 to $74,000 a year, assistants at $20 to $28 an hour, optometrists by salary, day rate and percentage, and no Quebec. It reads like real Canadian eye care. 2 things: **3 jobs from a visitor remain** ("Riverside Family Eye Care (demo)", one titled "Associate Optometrist in Established LC"), so the demo has not been reset since it was last shown; and **every job is in a city**, so the small town clinic owner in 4F sees nobody like them. No dead links (41 internal links checked). Empty states all offer a next step.
+
+### 4E. Demo safety
+
+Banner on every page checked; `x-robots-tag: noindex, nofollow`, the robots meta tag and `Disallow: /` all present; nothing says an email was sent. The demo serves today's `main` (the saved blog page, which only exists since Phase F, comes back as a shared copy). Layout shift: Compare 0.000 (was 0.14), Help 0.087 (X-20).
+
+### 4F. First impressions
+
+**(a) An independent clinic owner in a small Ontario town.** Setting up took 2 minutes and the post form explains the Ontario rules as it goes, which will reassure someone who has read about 1st January 2026 and is nervous of getting it wrong. The ad builder is the moment they will remember. What would make them leave: every job on the site is in a city, so they wonder whether candidates near them use it at all, and the draft putting words in their mouth ("internationally trained applicants are welcome") would worry a careful owner. What would bring them back: the first applicant arriving, with the dashboard counting views so they can see it working.
+
+**(b) An optician moving from Toronto to Calgary.** Search by town and distance works, and pay on every card is the thing they cannot get elsewhere. Fill in from my resume saved them typing. What would make them leave: on a phone, Find jobs opens with a long filter form; with only a handful of Calgary jobs they may conclude the site is empty. What brings them back: a job alert for Alberta, which takes 1 step.
+
+**(c) A new optometric assistant with no eye care experience.** The first step page asks "Where are you in eye care?" kindly and says it does not affect what they can apply for. Assistant jobs at $20 to $28 an hour are there. What would make them leave: the apply page lists "Registered in" and "Years of experience" first, which can feel like a door closing for a beginner, and nothing on the job page says whether training is given. What would bring them back: a "No experience needed" or "Training given" marker on jobs that welcome beginners.
+
+### New issues from the walk
+
+| # | Severity | What | One line fix |
+| --- | --- | --- | --- |
+| D-01 | Medium | Find jobs on a phone shows about 1.5 screens of filters before the first job | Fold the filters behind a "Filters" button on a phone, results first |
+| D-02 | Medium | The ad builder may add "internationally trained applicants are welcome" unasked | Only include it when the clinic's brief says so |
+| D-03 | Low | After replacing a resume, the old file's suggestions stay and Read my resume is hidden until reload | Clear the suggestions when a new file is saved |
+| D-04 | Low | Checklist ticks "Say what you are looking for" before anything is filled in | Count it done only when a preference is saved |
+| D-05 | Low | Quebec offered as a job alert province | Remove it, or say no Quebec jobs are posted yet |
+| D-06 | Low | Ad builder says "apply through the job board" | Name Kestrel in its instructions |
+| D-07 | Low | "Existing vacancy" has no explanation for candidates on the job page | A short info note, as for Fixed term |
+| D-08 | Low | Demo not reset; guide's numbers (18 jobs, 9 provinces) out of date; no small town jobs | Run reset and seed; add 2 small town clinics to the seed |
+| D-09 | Low | PDF resumes show a "DOC" badge | Show PDF for PDFs |
+| D-10 | Idea | Applying and posting take 3 to 4 seconds | Watch after the move to Vercel Pro |
