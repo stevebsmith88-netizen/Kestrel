@@ -52,7 +52,9 @@ export default function Privacy() {
             <li>
               <strong>If you are a candidate:</strong> the details you add to your profile (your role, where you are licensed,
               your experience, when you are available, and a phone number if you choose to give one), the resume you upload, and the
-              cover letters and applications you send.
+              cover letters and applications you send. If you choose <strong>Fill in from my resume</strong>, our own server reads
+              the text of your resume once to suggest answers for your profile. It does this with fixed rules, not AI, it does not
+              keep the text, and it does not send it to any other service. Nothing from it is saved unless you tick it and save.
             </li>
             <li>
               <strong>If you are a clinic:</strong> your clinic&apos;s name, location, website and description, the job posts you

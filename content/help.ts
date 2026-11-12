@@ -244,6 +244,7 @@ export const HELP: HelpSection[] = [
           "Under **To apply you need**, choose **Your role** and enter **Your town or city** and its province or territory. Once your role, resume and town are saved, the list at the top of the page says **You are ready to apply**.",
           "If your role is optometrist or optician, you can tick the provinces or territories where you are registered. This is what you tell us, and Kestrel does not check it.",
           "Open **More about you** to add your years of experience, when you are available and a phone number. They are optional, and they are sent to a clinic only when you apply to it.",
+          "Once your resume is saved, you can choose **Read my resume** under **Fill in from my resume**. Kestrel reads your resume on its own server and suggests your role, years of experience, registration, phone, town and software, each with where it came from. It does not use AI, it does not send your resume anywhere, and nothing is saved until you tick the answers you want and press **Save the ticked answers**. It reads PDF and Word (.docx) files.",
           "Open **What you are looking for** if you want to shape your list of jobs (see [What does For me mean on Find jobs, and how do I sort?](/help#for-me-and-sort)).",
           "Press **Save my details**.",
         ],

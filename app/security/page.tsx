@@ -52,6 +52,9 @@ export default function Security() {
             Resumes are kept in a private store. Nobody can open one by guessing a web address: a clinic or a candidate opens it through a link that works for 1 minute.
             Files that contain macros, scripts or embedded files are refused when they are uploaded.
           </p>
+          <p>
+            If a candidate chooses Fill in from my resume, Kestrel&apos;s own server reads the text of that one file to suggest profile answers. It uses fixed rules and no AI, the text is not saved, and it is not sent to any other service. Only PDF and Word (.docx) files are read, with limits on size, pages and time.
+          </p>
 
           <h2>Signing in</h2>
           <p>
