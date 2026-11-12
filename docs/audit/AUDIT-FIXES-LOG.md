@@ -25,7 +25,7 @@ Branch `claude/focused-goldberg-2g7e6r` (the session could not push to `claude/a
 - **`docs/security.md` still says "CVs"** in several places. Left for Phase C with the rest of that file.
 - **The lawyer pack** describes the resume reader's limits nowhere yet (P1-02, another phase). When it is rebuilt, use the figures in `docs/cv-scanning.md`.
 
-## Phase B: things that are wrong on screen (12th November 2026). Built on a branch, waiting for Steve's check on the preview
+## Phase B: things that are wrong on screen (12th November 2026). Merged to `main` on 12th November 2026
 
 Branch `claude/kestrel-audit-fixes-phase-b-m45r56` (the session was set up on this branch, so it was used instead of `claude/audit-fix-b`). No SQL. No settings changed. Before every push: `npm run typecheck`, `npm test` (468 tests) and `npm run build` all pass. The container had no `node_modules` at the start, so `npm ci` was run first (the first typecheck result, before that, meant nothing and was redone).
 
