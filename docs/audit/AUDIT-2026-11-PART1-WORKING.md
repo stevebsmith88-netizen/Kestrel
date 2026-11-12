@@ -183,3 +183,37 @@ Verified as expected:
 **E-04 Paging past the end shows an empty list.** Low. Confirmed by reading. `page` is capped at 500 but not at the real last page, so `/jobs?page=400` shows the count and no jobs, with no message. Fix: clamp to the last page. 10 minutes.
 
 **E-05 "Show all jobs" brings hidden and already applied jobs back with no mark.** Idea. In the "all" view a job the person hid or applied to looks like any other. A small "Applied" label on the card would save people opening it.
+
+## Area F. Resume reader
+
+Tested for real: I built made up resumes and hostile files in a throwaway test (not committed) and ran them through `resumeText` and `readResume` exactly as the website does. Packages: `unpdf` 1.9.1 and `fflate` 0.8.3, both pinned, `npm audit` reports 0 problems for either, neither runs an install script, and the production build bundles both without warnings.
+
+| Test | Result |
+| --- | --- |
+| Made up optician resume as Word and as PDF | Read in 4 ms and 93 ms. Suggested role (Optician), years (10 or more, from 2 jobs), registered in Ontario, phone, 1 software name. Missed the town ("Thunder Bay, Ontario" on the same line as the phone and email) and 1 of 2 software names |
+| Old .doc name, not a real PDF, not a real zip, empty page, 1 byte over 3 MB | All refused cleanly with the right message |
+| What gets logged on a failure | Only the parser's own error ("Invalid PDF structure.", "invalid zip data"). I planted a marker in the bad files and it did not appear in the log. No `console` call anywhere in the 3 files prints resume text |
+| Is the text stored | No. It lives in the request and only ticked answers are written, after the server reads the file a second time |
+| Word file whose main part is 300 MB when unzipped (300 KB zipped) | Skipped at once (0 ms) |
+| The same file lying about its size (claims 1,000 bytes) | Not expanded in memory (+2 MB), but the unzip still walked the stream for 1.1 seconds |
+| PDF with 3,000 pages (2.3 MB) | **All 3,000 pages were processed** (2.4 seconds, +254 MB of memory). Only the first 12 pages of text were returned |
+| Word file with 100 KB of "<" characters | **10 seconds** of solid processor time |
+| Word file with 400 KB of unclosed `<w:br` tags | **45 seconds** |
+| Word file with 400 KB of "<" | Still running when I stopped it at 90 seconds |
+| The fixed rules (`readResume`) fed 200,000 characters of awkward text, 14 kinds | All under 70 ms except repeated year ranges (2.8 seconds) |
+
+### Findings
+
+**F-01 A small crafted Word file can keep the reader running for minutes.** Medium to High. Confirmed. `textFromDocx` (lib/resume-text.ts:25 to :29) cleans the file's text with patterns that take time proportional to the square of the input when the text has many "<" and no ">". 100 KB took 10 seconds here, 400 KB over 90 seconds, and the code accepts up to 8 MB. Such a file zips to a few KB, passes the upload checks (they look at the first bytes and the name) and needs only a free candidate account. The work is one unbroken step, so the 8 second timer in the code cannot fire, and it is not applied to Word files at all. Effect: each press of Read my resume holds a server function at full processor until Vercel's own time limit ends it. Nobody's data is exposed. It is a cost and availability risk, and the person could repeat it. Fix: replace the patterns with a single pass that walks the text once, cap the unzipped text at about 1 MB, and add a limit of a few reads per person per hour. 1 to 2 hours with tests.
+
+**F-02 The 12 page limit and the 8 second limit do not limit the work.** Medium. Confirmed. `textFromPdf` asks the library for every page and then keeps 12 (lib/resume-text.ts:36), so a 3 MB PDF with thousands of pages is fully processed (3,000 pages: 2.4 seconds and 254 MB here, and richer pages would cost more). The timer only stops waiting for the answer. The parsing carries on behind it and the timer itself is never cleared. Fix: read the page count first, refuse or stop at 12, and ask for those pages one at a time. Set an explicit `maxDuration` and memory for this action in the page that hosts it. 1 hour.
+
+**F-03 Nothing limits how often someone can press Read my resume.** Low. Confirmed. Each press downloads the file and parses it, and saving parses it again. Fix with F-01.
+
+**F-04 The public wording promises limits that F-01 and F-02 show are not real yet.** Low. Confirmed. `/security` says "with limits on size, pages and time" (app/security/page.tsx:56) and docs/cv-scanning.md says "at most 3 MB, 12 pages and 8 seconds". The size limit is real. Fix the code and the wording becomes true. The privacy page and the help topic match the code: no AI, nothing sent to another service, nothing saved until ticked.
+
+**F-05 A hostile PDF can still reach the PDF library.** Low. Known and written down in docs/cv-scanning.md. The upload check looks for scripts in the raw bytes and cannot see inside compressed parts. The library does not run scripts in a PDF, and I found no known problem in this version. Keep it on the list for the antivirus decision.
+
+**F-06 Could not verify on Vercel.** Whether the functions run in a Canadian region (vercel.json sets none, so the project setting decides), and the real time and memory limits for a server action on the current plan. The build works, and both packages are plain JavaScript with no native parts, so I expect them to run there. Steve: after the fix, try Read my resume once on a preview with a real PDF and a real Word file.
+
+**F-07 Accuracy notes for the improvement round.** Idea. On my made up resume the reader missed the town when it shared a line with the phone and email, and missed "Visual-Eyes". Worth adding as tests when Steve sends his samples.

@@ -20,7 +20,7 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | C. Safe before the SQL (0037 to 0039) | done | Likely safe, by code reading of all 14 places. Could not run the site against a pre 0037 database (not allowed to download Supabase's API program) |
 | D. Server actions and routes | done | 73 actions and 13 routes checked. All guarded. 7 findings (D-01 to D-07). Biggest: D-01 direct sign up to Supabase skips the bot check, invite code and terms tick once the gate opens |
 | E. Find jobs, For me and Sort | done | Sorting is fast (5 ms for 5,000 jobs). 5 findings (E-01 to E-05). Main one: everything quietly stops at 1,000 live jobs |
-| F. Resume reader | not started | |
+| F. Resume reader | done | Tested with made up and hostile files. 7 findings (F-01 to F-07). Confirmed: a crafted Word file runs the reader for minutes (F-01), and the page and time limits do not limit the work (F-02). No resume text is logged or stored |
 | G. Email and CASL | not started | |
 | H. Accessibility and mobile | not started | |
 | I. Docs against reality | not started | |
