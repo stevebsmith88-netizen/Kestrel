@@ -62,6 +62,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - Footer and links (Phase 1D, 9th November 2026): 1 shared footer (`components/AppFooter.tsx`), a quiet button style for small actions (`.linkbtn`), thin underlines on links in sentences, plain bold navigation links, and small line icons (`components/Icon.tsx`). A "Data sources" block at `/resources#data-sources` credits GeoNames and Job Bank. Results in docs/gemini-intake-plan-2026-11-08.md.
 
 - Security: docs/security.md lists every secret, how to rotate it and what to do after a breach at a service we use. Keep it current whenever a new key or service is added.
+- Settings: docs/settings.md is the 1 table of every setting the code reads, with its live and demo values and whether it is secret (audit P1-18). `lib/settings-doc.test.ts` fails if a setting is read in the code but missing from the table or from `.env.example`.
 
 ## Brand
 
