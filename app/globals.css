@@ -800,3 +800,7 @@ fieldset.tagrow .lab { padding: 0; }
 .toast.warn{background:#FBF1E3;border-color:#E6CDA5;color:#6B4A12}
 .toast p{margin:0}
 .toast .linkbtn{color:inherit;flex:none}
+
+.viewbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:14px 0 4px}
+.viewbar p{margin:0 auto 0 0;color:var(--navy-2);font-weight:600}
+.fieldtick{margin-top:12px;align-items:flex-start}

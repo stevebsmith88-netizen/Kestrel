@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { Field, RequiredNote } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { saveCandidateProfile } from "@/lib/candidate-actions";
 import { SOFTWARE_TAGS } from "@/lib/job-tags";
 import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, employmentLabel } from "@/lib/jobs";
+import { canHaveFieldRoles, openToField, otherRolesOffered } from "@/lib/role-fit";
 
 type Initial = {
   profession: string | null;
@@ -32,11 +34,13 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
   const { state, pending, submit } = useServerForm(saveCandidateProfile);
   const e = state.errors ?? {};
   const licensed = initial?.licensed_provinces ?? [];
+  // The other roles offered depend on the role chosen above, so keep it in step as it changes.
+  const [profession, setProfession] = useState(initial?.profession ?? "");
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
       <RequiredNote />
       <Field id="cpf-profession" label="Your role" required error={e.profession}>
-        <select id="cpf-profession" name="profession" defaultValue={initial?.profession ?? ""}>
+        <select id="cpf-profession" name="profession" value={profession} onChange={(ev) => setProfession(ev.target.value)}>
           <option value="">Choose one</option>
           {ROLE_CATEGORIES.map((r) => (
             <option key={r} value={r}>{r}</option>
@@ -161,13 +165,19 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
       <fieldset className="row provinces">
         <legend className="lab">Other roles you would consider</legend>
         <div className="checkgrid">
-          {ROLE_CATEGORIES.map((r) => (
+          {otherRolesOffered(profession).map((r) => (
             <label className="consent" key={r}>
               <input type="checkbox" name="otherRoles" value={r} defaultChecked={(initial?.pref_other_roles ?? []).includes(r)} />
               <span>{r}</span>
             </label>
           ))}
         </div>
+        {canHaveFieldRoles(profession) && (
+          <label className="consent fieldtick">
+            <input type="checkbox" name="openToField" defaultChecked={openToField(initial?.pref_other_roles)} />
+            <span><strong>Open to field and supplier roles.</strong> Sales, training, equipment service and account roles that travel to clinics. Jobs for these roles can then appear in your list, and you can apply for them.</span>
+          </label>
+        )}
       </fieldset>
 
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}

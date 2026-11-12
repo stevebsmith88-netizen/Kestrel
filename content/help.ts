@@ -219,6 +219,21 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Profile and resume", href: "/candidate/profile" }],
       },
       {
+        id: "for-me-and-sort",
+        title: "What does For me mean on Find jobs, and how do I sort?",
+        keywords: ["for me", "fit", "sort", "newest", "closest", "best match", "all jobs", "field", "supplier", "other roles", "recommended"],
+        answer: [
+          "When you are signed in and your profile has a role, **Find jobs** opens on **For me**. It shows only the jobs you can apply for, within the distance and other choices you saved under **What you are looking for**. Jobs you have already applied for, or marked **Not interested**, are left out. There is no AI in it, and nothing about you is shared with clinics.",
+          "An optician is never shown optometrist jobs, and an optometrist is never shown optician jobs. Under **Other roles you would consider** you can add roles that sit close to yours, such as assistant and reception roles. If you are not an optometrist, you can also tick **Open to field and supplier roles**, which lets sales, training, equipment service and account roles appear in your list, and lets you apply for them.",
+        ],
+        steps: [
+          "Open **Find jobs**. Choose **Show all jobs** to see every job, and **Show jobs for me** to come back.",
+          "Use **Sort by** to choose **Best match**, **Newest** or **Closest**. **Best match** is only offered in **For me**, and **Closest** appears once you search a town or save your home town.",
+          "To change what appears, choose **Edit what you are looking for**.",
+        ],
+        links: [{ label: "Find jobs", href: "/jobs" }, { label: "What you are looking for", href: "/candidate/profile#looking-for" }],
+      },
+      {
         id: "search-and-filter-jobs",
         title: "How do I search and filter jobs, including by distance?",
         keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "city"],

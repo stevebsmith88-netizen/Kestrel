@@ -55,7 +55,9 @@ export type SearchResult = { jobs: JobSummary[]; total: number; place?: Place | 
 
 const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
 
-export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
+// With `everything`, every matching job comes back in one list (newest first, up to a limit) and the caller orders and pages it. That is how the
+// "For me" view and the Closest sort work, because they cannot be done by the database one page at a time.
+export async function searchJobs(filters: JobFilters, opts: { everything?: boolean } = {}): Promise<SearchResult> {
   const db = supabasePublic();
   if (!db) return { jobs: [], total: 0 };
   const page = filters.page ?? 1;
@@ -77,7 +79,7 @@ export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   query = query.order("posted_at", { ascending: false });
 
   if (!place) {
-    const { data, count, error } = await query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
+    const { data, count, error } = opts.everything ? await query.range(0, RADIUS_SEARCH_LIMIT - 1) : await query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
     if (error) {
       console.error("Job search failed:", error.code, error.message);
       return { jobs: [], total: 0 };
@@ -93,7 +95,7 @@ export async function searchJobs(filters: JobFilters): Promise<SearchResult> {
   }
   const near = nearbyKeys(place, filters.radius ?? 25);
   const all = ((data ?? []) as unknown as JobSummary[]).filter((j) => j.work_arrangement === "field" || near.has(placeKey(j.city, j.province)));
-  return { jobs: all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), total: all.length, place };
+  return { jobs: opts.everything ? all : all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), total: all.length, place };
 }
 
 // Live jobs for the "Recommended for you" rules to choose from (newest first, at most this many).
