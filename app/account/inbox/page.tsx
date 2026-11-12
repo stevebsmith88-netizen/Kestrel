@@ -38,7 +38,7 @@ export default async function Inbox() {
               <ul className="inboxlist">
                 {items.map((n) => (
                   <li key={n.id} className={n.read_at ? undefined : "unread"}>
-                    <h3>{n.title}</h3>
+                    <h2>{n.title}</h2>
                     <span className="when">{longDate(n.created_at)}</span>
                     {n.body && <p>{n.body}</p>}
                     {(n.href || !n.read_at) && (

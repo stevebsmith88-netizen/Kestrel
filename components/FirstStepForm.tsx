@@ -31,7 +31,7 @@ export default function FirstStepForm() {
         </label>
       )}
 
-      <fieldset className="row provinces">
+      <fieldset className="row provinces stagepicks">
         <legend className="lab">Where are you in eye care?</legend>
         <p className="help">Optional and private. Clinics do not see it, and it does not change which jobs you can apply for.</p>
         {CAREER_STAGES.map((s) => (

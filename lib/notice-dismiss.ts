@@ -23,3 +23,15 @@ export function visibleNotices<T extends { id: string; kind: string }>(notices: 
   const hidden = new Set(dismissed);
   return notices.filter((n) => n.kind !== "approved" || !hidden.has(n.id));
 }
+
+// The green "now live" messages as they are shown. Up to 2 are shown 1 each; more than 2 would push the dashboard off a phone screen,
+// so they are folded into 1 message with a Dismiss all (P1-39).
+export const FOLD_ABOVE = 2;
+
+export function foldApprovals<T extends { id: string; title: string }>(approvals: readonly T[]): { fold: false } | { fold: true; ids: string[]; text: string } {
+  if (approvals.length <= FOLD_ABOVE) return { fold: false };
+  const shown = approvals.slice(0, 3).map((a) => a.title);
+  const rest = approvals.length - shown.length;
+  const list = rest > 0 ? `${shown.join(", ")} and ${rest} more` : `${shown.slice(0, -1).join(", ")} and ${shown[shown.length - 1]}`;
+  return { fold: true, ids: approvals.map((a) => a.id), text: `${approvals.length} of your jobs have been approved and are now live: ${list}. Candidates can see them and apply.` };
+}

@@ -15,7 +15,7 @@ import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
 import { getMyJobNumbers } from "@/lib/job-stats-data";
 import { closeJobQuiet, deleteJobQuiet, dismissNoticesQuiet, extendJobQuiet, repostJob, withdrawJobQuiet } from "@/lib/clinic-actions";
-import { DISMISS_COOKIE, parseDismissed, visibleNotices } from "@/lib/notice-dismiss";
+import { DISMISS_COOKIE, foldApprovals, parseDismissed, visibleNotices } from "@/lib/notice-dismiss";
 import { canExtend } from "@/lib/job-ending";
 import { saveJobAsTemplateQuiet } from "@/lib/template-actions";
 import { jobNotices } from "@/lib/clinic-notices";
@@ -46,6 +46,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   // The green approval messages a clinic has not cleared yet. A message about a change a clinic needs to make is never hidden.
   const notices = visibleNotices(jobNotices(jobs), parseDismissed((await cookies()).get(DISMISS_COOKIE)?.value));
   const approvals = notices.filter((n) => n.kind === "approved");
+  const folded = foldApprovals(approvals);
 
   return (
     <>
@@ -57,7 +58,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
           {notice && DASHBOARD_NOTICES[notice] && <p className={noticeTone(notice) === "warn" ? "notice warn" : "notice"} role="status">{DASHBOARD_NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
           {notices.map((n) =>
-            n.kind === "approved" ? (
+            n.kind === "approved" ? (folded.fold ? null : (
               <div className="notice noticerow" role="status" key={n.id + n.kind}>
                 <p>{n.text}</p>
                 <div className="noticeacts">
@@ -65,7 +66,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                   <QuickActionForm action={dismissNoticesQuiet} ids={[n.id]} className="linkbtn" label={`Dismiss the message about ${n.title}`}><Icon name="close" />Dismiss</QuickActionForm>
                 </div>
               </div>
-            ) : (
+            )) : (
               <div className="notice warn noticerow" role="status" key={n.id + n.kind}>
                 <p>{n.text}</p>
                 <div className="noticeacts">
@@ -74,7 +75,15 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               </div>
             ),
           )}
-          {approvals.length > 1 && (
+          {folded.fold && (
+            <div className="notice noticerow" role="status">
+              <p>{folded.text}</p>
+              <div className="noticeacts">
+                <QuickActionForm action={dismissNoticesQuiet} ids={folded.ids} className="linkbtn" label="Dismiss all the messages about approved jobs"><Icon name="close" />Dismiss all</QuickActionForm>
+              </div>
+            </div>
+          )}
+          {approvals.length === 2 && (
             <div className="noticeclear">
               <QuickActionForm action={dismissNoticesQuiet} ids={approvals.map((n) => n.id)} className="linkbtn">Clear all {approvals.length} approval messages</QuickActionForm>
             </div>

@@ -452,7 +452,7 @@ export const HELP: HelpSection[] = [
         keywords: ["review", "approval", "approved", "rejected", "sent back", "in review", "how long", "moderation", "publish"],
         answer: [
           "A person on our team reads every post before it goes live, usually within 1 business day. Your dashboard shows the job as **In review**, with the line \"With our team\".",
-          "If it is approved, it goes live for 30 days and we email you. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. Nothing can be published without that check, and you cannot publish a job yourself.",
+          "If it is approved, it goes live for 30 days and we email you. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. If 3 or more jobs are approved at about the same time, they share 1 message with a **Dismiss all** button. Nothing can be published without that check, and you cannot publish a job yourself.",
           "If we send it back, your dashboard shows a note headed **What to change**. Change what the note asks for and send it again. While a job is in review you can press **Take back to edit** to change it yourself first.",
         ],
         steps: [
