@@ -124,9 +124,9 @@ Keep dependencies few and current, check `npm audit` monthly, and prefer built i
 
 ## Next tasks
 
-Updated 12th November 2026. Accounts, profiles, posting, review, search, job pages, applications, the tracker and applicants board, email through Resend, claim your listing, job alerts, Google sign in (behind `ENABLE_GOOGLE_SIGNIN`), the bot check and the waitlist confirmation email are all built. The open list is in docs/gemini-intake-plan-2026-11-08.md. In short:
+Updated 12th November 2026. Built and merged: accounts, profiles (the short profile, the first step page, For me with Sort by, the field and supplier roles tick), posting, review, search, job pages, applications, the tracker and applicants board, the in account inbox, the name change hold, email through Resend, claim your listing, job alerts, Google sign in (behind `ENABLE_GOOGLE_SIGNIN`), the bot check, the waitlist confirmation email and the link sweep. The open list is in docs/gemini-intake-plan-2026-11-08.md. In short:
 
-1. Profile redesign (under 2 minutes to be ready to apply, with "Fill in from my resume" if the safe route is agreed), the "For me" job list, the sign up tag for people not yet in eye care, and the in account inbox.
-2. The rest of the link sweep (about 110 inline links) and the Phase 4 drafts.
+1. **SQL not yet run (Steve is away from it):** migrations 0037 to 0039 on both databases, using `supabase/combined/run-everything.sql`. Every new feature must keep working on a database that has not had its SQL yet (read new columns separately and tolerate an error), and each time SQL is added, hand Steve the whole combined file.
+2. The no AI resume reader (reads the text on our own server, matches it to the fixed lists, Steve to test with sample resumes), and the Phase 4 drafts.
 3. Stripe in test mode with the free launch coupon, then checkout. A free launch post must not ask for a card (`payment_method_collection: if_required`). Held until Steve says go.
 4. Launch switches in Vercel (both projects): sign up gate, `ENABLE_GOOGLE_SIGNIN`, `ENABLE_ONBOARDING_EMAILS`. Clinic outreach and publishing found listings stay off until Steve's disclosure conversation.
