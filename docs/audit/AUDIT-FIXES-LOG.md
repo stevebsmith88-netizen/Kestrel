@@ -193,7 +193,7 @@ Branch `claude/audit-fix-e`, from `main` after Phase D and P1-55 were merged. Be
 - **The daily close out (a week after a job ends) still only closes people at Applied, Viewed or Shortlisted.** P1-13 covers the role filled forms, as Steve asked. Someone at Interview on a job that simply runs out, with no role filled answer, is still left at Interview. Worth a decision later.
 - **The audit report's own fix for P1-03 still says to switch on Supabase's CAPTCHA.** The report is left as written; this log records the change of plan.
 
-## Phase F: search and speed (12th November 2026). Built on branch `claude/audit-fix-f`, waiting for Steve's check on the preview
+## Phase F: search and speed (12th November 2026). Merged to `main` on 12th November 2026 at Steve's request. No SQL. The demo check of saved job pages and the Search Console steps are saved in `docs/audit/STEVE-NEXT-STEPS.md` for when the audit phases are wrapped up
 
 No SQL. No settings changed. Measured on a production build run here, with the sample jobs from `scripts/dev/fake-postgrest.js`. Layout shift was measured with Playwright on a phone profile as the audit did (Moto G4, 150 ms delay, 1.6 Mbit, processor slowed 4 times, median of 5 runs). This sample data gives slightly different numbers from the audit's (0.168 here against 0.21 on the worst job page), but the cause is the same: with the font files blocked, the shift was 0.000 on every page.
 
