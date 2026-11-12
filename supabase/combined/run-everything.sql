@@ -2475,6 +2475,14 @@ from (
     ('rule: live jobs and their clinics are public through the visitor columns only (0040)', (select count(*) from pg_policies where schemaname = 'public' and policyname in ('Anyone can read live jobs', 'Anyone can read clinics that have live jobs') and roles = '{anon}') = 2),
     ('permissions: no table lets a visitor or signed in person truncate it, or add triggers or references (0040)', not exists (select 1 from information_schema.role_table_grants where table_schema = 'public' and grantee in ('anon', 'authenticated') and privilege_type in ('TRUNCATE', 'TRIGGER', 'REFERENCES'))),
     ('permissions: visitors hold nothing on the waitlist, and signed in people can read their own profile (0040)', not has_table_privilege('anon', 'public.waitlist', 'SELECT') and not has_table_privilege('authenticated', 'public.waitlist', 'SELECT') and has_table_privilege('authenticated', 'public.profiles', 'SELECT')),
+    ('table: outreach_sends (clinic outreach emails sent)', to_regclass('public.outreach_sends') is not null),
+    ('table: signup_tickets (one time sign up tickets)', to_regclass('public.signup_tickets') is not null),
+    ('row level security is on for every table (should be 0 problems)', not exists (select 1 from pg_tables where schemaname = 'public' and not rowsecurity)),
+    ('rules: at least 52 access policies are in place', (select count(*) from pg_policies where schemaname = 'public') >= 52),
+    ('rules: every table a visitor or signed in person can reach has an access policy (should be 0 problems)', not exists (select 1 from information_schema.role_table_grants g where g.table_schema = 'public' and g.grantee in ('anon', 'authenticated') and not exists (select 1 from pg_policies p where p.schemaname = 'public' and p.tablename = g.table_name)) and not exists (select 1 from information_schema.role_column_grants g where g.table_schema = 'public' and g.grantee in ('anon', 'authenticated') and not exists (select 1 from pg_policies p where p.schemaname = 'public' and p.tablename = g.table_name))),
+    ('trigger: clinics cannot publish or change a live job (jobs_enforce_changes)', exists (select 1 from pg_trigger where tgname = 'jobs_enforce_changes' and tgrelid = 'public.jobs'::regclass and tgenabled <> 'D')),
+    ('trigger: limit on open jobs for each clinic (jobs_limit_open)', exists (select 1 from pg_trigger where tgname = 'jobs_limit_open' and tgrelid = 'public.jobs'::regclass and tgenabled <> 'D')),
+    ('trigger: a profile is made for every new account (on_auth_user_created)', exists (select 1 from pg_trigger where tgname = 'on_auth_user_created' and tgrelid = 'auth.users'::regclass and tgenabled <> 'D')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;
