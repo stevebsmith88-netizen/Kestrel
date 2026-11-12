@@ -18,3 +18,14 @@ alter table public.jobs drop constraint if exists jobs_not_quebec_once_sent;
 alter table public.jobs add constraint jobs_not_quebec_once_sent check (
   status not in ('in_review', 'live') or province is null or lower(btrim(province)) not in ('quebec', 'québec', 'qc')
 ) not valid;
+
+-- ---------------------------------------------------------------- P1-44: percentages and daily rates are for optometrist roles
+-- The website's form only lets an optometrist role give pay as a percentage or a daily rate (Steve, 9th November 2026, lib/job-pay.ts).
+-- The database accepted both for any role. This rule holds the same line for a job that is in review or live. Drafts are left alone so a
+-- clinic can save a half finished job and fix it. "not valid": rows already in the table are not checked today (the check at the end counts them).
+alter table public.jobs drop constraint if exists jobs_optometrist_only_pay;
+alter table public.jobs add constraint jobs_optometrist_only_pay check (
+  status not in ('in_review', 'live')
+  or coalesce(role_category = 'Optometrist', false)
+  or ((pay_period is null or pay_period <> all (array['day'])) and pay_percent_min is null and pay_percent_max is null)
+) not valid;

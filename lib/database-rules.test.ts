@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { test } from "node:test";
+import { OPTOMETRIST_ONLY_PERIODS, OPTOMETRIST_ROLE } from "./job-pay.ts";
 import { QUEBEC, isQuebecJob } from "./jobs.ts";
 
 // The newest definition of a named rule in the migrations.
@@ -45,4 +46,13 @@ test("P1-28: approving and extending both re-check the province", () => {
   assert.ok(approve.indexOf("isQuebecJob(") > 0 && approve.indexOf("isQuebecJob(") < approve.indexOf('status: "live"'), "approveJob must check for Quebec before it makes the job live");
   const extend = action("lib/clinic-actions.ts", "async function doExtend");
   assert.ok(extend.indexOf("isQuebecJob(") > 0 && extend.indexOf("isQuebecJob(") < extend.indexOf('status: "live"'), "doExtend must check for Quebec before it extends the job");
+});
+
+test("P1-44: the database keeps percentages and the optometrist only pay periods for optometrist roles", () => {
+  const rule = latestRule("jobs_optometrist_only_pay");
+  assert.ok(rule, "the rule jobs_optometrist_only_pay was not found in the migrations");
+  assert.ok(rule.includes(`role_category = '${OPTOMETRIST_ROLE}'`));
+  const periods = [...(rule.match(/pay_period <> all \(array\[([^\]]*)\]\)/)?.[1] ?? "").matchAll(/'([a-z]+)'/g)].map((m) => m[1]);
+  assert.deepEqual(periods.sort(), [...OPTOMETRIST_ONLY_PERIODS].sort(), "the periods in the database rule must match OPTOMETRIST_ONLY_PERIODS in lib/job-pay.ts");
+  assert.match(rule, /pay_percent_min is null and pay_percent_max is null/);
 });

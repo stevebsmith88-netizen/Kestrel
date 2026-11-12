@@ -33,8 +33,11 @@ run_one() {
                 -c "alter default privileges in schema public grant all on functions to anon, authenticated, service_role"
   fi
   for pass in 1 2; do
-    local out
-    out="$($P -d "$db" -f "$COMBINED" -t -A 2>&1 | grep -v NOTICE | awk -F'|' 'NF==2{print $2}' | sort | uniq -c | tr '\n' ' ')"
+    local raw out
+    if ! raw="$($P -d "$db" -f "$COMBINED" -t -A 2>&1)"; then
+      echo "The combined file stopped with an error on run $pass:"; echo "$raw" | grep -v NOTICE | grep -A3 ERROR; return 1
+    fi
+    out="$(echo "$raw" | grep -v NOTICE | awk -F'|' 'NF==2{print $2}' | sort | uniq -c | tr '\n' ' ')"
     echo "migrations, run $pass: $out"
     if echo "$out" | grep -q MISSING; then failed=1; fi
   done

@@ -2355,6 +2355,17 @@ alter table public.jobs add constraint jobs_not_quebec_once_sent check (
   status not in ('in_review', 'live') or province is null or lower(btrim(province)) not in ('quebec', 'québec', 'qc')
 ) not valid;
 
+-- ---------------------------------------------------------------- P1-44: percentages and daily rates are for optometrist roles
+-- The website's form only lets an optometrist role give pay as a percentage or a daily rate (Steve, 9th November 2026, lib/job-pay.ts).
+-- The database accepted both for any role. This rule holds the same line for a job that is in review or live. Drafts are left alone so a
+-- clinic can save a half finished job and fix it. "not valid": rows already in the table are not checked today (the check at the end counts them).
+alter table public.jobs drop constraint if exists jobs_optometrist_only_pay;
+alter table public.jobs add constraint jobs_optometrist_only_pay check (
+  status not in ('in_review', 'live')
+  or coalesce(role_category = 'Optometrist', false)
+  or ((pay_period is null or pay_period <> all (array['day'])) and pay_percent_min is null and pay_percent_max is null)
+) not valid;
+
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
@@ -2429,6 +2440,8 @@ from (
     ('permission removed: signed in people cannot change their own name directly (0040)', not has_column_privilege('authenticated', 'public.profiles', 'first_name', 'UPDATE') and not has_column_privilege('authenticated', 'public.profiles', 'full_name', 'UPDATE')),
     ('rule: no Quebec job in review or live (0040)', exists (select 1 from pg_constraint where conname = 'jobs_not_quebec_once_sent')),
     ('Quebec jobs already in review or live (should be 0 problems)', not exists (select 1 from public.jobs where status in ('in_review', 'live') and lower(btrim(province)) in ('quebec', 'québec', 'qc'))),
+    ('rule: percentages and daily rates for optometrist roles only (0040)', exists (select 1 from pg_constraint where conname = 'jobs_optometrist_only_pay')),
+    ('jobs for other roles already in review or live with a percentage or daily rate (should be 0 problems)', not exists (select 1 from public.jobs where status in ('in_review', 'live') and role_category is distinct from 'Optometrist' and (pay_period = 'day' or pay_percent_min is not null or pay_percent_max is not null))),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;
