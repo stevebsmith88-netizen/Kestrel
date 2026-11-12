@@ -156,9 +156,9 @@ Steve's decision, 12th November 2026: "only optometrists should be able to apply
 - **A job that sends people to the clinic's own website to apply** is not covered by the apply rule (it never was), because the application happens off Kestrel.
 - **The database does not hold this rule**: it lives in the website's server, which is the only thing that can create an application (candidates have no permission to insert one, tested in Phase D).
 
-## Phase E: before the sign up gate opens (12th November 2026). Built on the branch, waiting for Steve's SQL and preview check
+## Phase E: before the sign up gate opens (12th November 2026). Completed and merged to `main` on 12th November 2026
 
-Branch `claude/audit-fix-e`, from `main` after Phase D and P1-55 were merged. Before every push: `npm run typecheck`, `npm test` (551 tests at the end) and `npm run build` all pass. No settings changed anywhere. 2 migrations, `0041_signup_ticket_always.sql` and `0042_email_send_counts.sql`, added to `supabase/combined/run-everything.sql` with a row each in the final check. The combined file was run twice on the scratch database (84 OK and the usual NOT YET for resume storage) and twice on each of the 2 access test databases (117 of 117 tests pass on both). Steve has not run them yet.
+Branch `claude/audit-fix-e`, from `main` after Phase D and P1-55 were merged. Before every push: `npm run typecheck`, `npm test` (551 tests at the end) and `npm run build` all pass. No settings changed anywhere. 2 migrations, `0041_signup_ticket_always.sql` and `0042_email_send_counts.sql`, added to `supabase/combined/run-everything.sql` with a row each in the final check. The combined file was run twice on the scratch database (84 OK and the usual NOT YET for resume storage) and twice on each of the 2 access test databases (117 of 117 tests pass on both). Steve ran the combined file (0001 to 0042) on both databases on 12th November 2026 and asked for the merge. Anything extra goes into the next phase (Steve, 12th November 2026).
 
 | Finding | Status | Commit | How it was checked |
 | --- | --- | --- | --- |
