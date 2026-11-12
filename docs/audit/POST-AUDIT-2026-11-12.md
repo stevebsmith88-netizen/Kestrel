@@ -81,7 +81,7 @@ Reach: the code and history, tests, builds and 3 throwaway databases here, and t
 | P1-17 | Medium | Fixed and verified | `docs/security.md` corrected |
 | P1-18 | Medium | Fixed and verified | `docs/settings.md`, guarded by `lib/settings-doc.test.ts` |
 | P1-19 | Medium | Fixed and verified | Loader tests, data download tests and the 77 step walk through |
-| P1-20 | Medium | **Still open, and now the paralegal's first point** | Deleting a clinic still removes its jobs and the candidates' applications. The lawyer has now asked for this to be fixed before launch (Part 5) |
+| P1-20 | Medium | **Still open, and now the paralegal's first point** | Deleting a clinic still removes its jobs and the candidates' applications. The paralegal advises fixing this before launch (Part 5) |
 | P1-21 | Medium | Fixed and verified | The privacy page says the welcome emails are switched off and nobody is sent them |
 | P1-22 | Medium | Fixed and verified (code) | The maintenance switch is checked in the waitlist, daily job, job event and unsubscribe routes |
 | P1-23 | Medium | Fixed and verified (code) | `lib/email.ts:32` checks the do not email list for every email |
@@ -132,7 +132,7 @@ Reach: the code and history, tests, builds and 3 throwaway databases here, and t
 | Item | What | Who | Evidence |
 | --- | --- | --- | --- |
 | R1 | Supabase Pro and daily backups | You | Phase 0: Free plan, no backups. "Before any invitations" |
-| R5 / R30 | What happens on deletion, and how long things are kept | Lawyer, then Claude | Still the cascade. No purge step in the code. The lawyer has now answered the direction (Part 5) |
+| R5 / R30 | What happens on deletion, and how long things are kept | Lawyer, then Claude | Still the cascade. No purge step in the code. The paralegal has suggested the direction (Part 5) |
 | R7 | Paid Resend plan | You | Resend Free (100 a day) |
 | R9 | Previews use live data | You | Phase 0: Preview ticked for the live Supabase keys. Not since re-checked |
 | R14 | Vercel ownership and 2 step sign in | You | Waiting for Vercel Pro |
