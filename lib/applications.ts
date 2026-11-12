@@ -89,6 +89,9 @@ export function clinicMoveError(from: string, to: string, keepDetails: boolean, 
   if (!(CLINIC_MOVES as readonly string[]).includes(to)) return "That is not a step you can choose.";
   if (from === "withdrawn") return "The candidate has withdrawn this application.";
   if (from === "hired") return "This person is marked as hired, so there is nothing more to do.";
+  // Shortlisting is a private working step. Moving someone back to it from Interview or Offer would show the candidate their status turning back
+  // into Viewed with no message (audit P1-31), so it is not allowed.
+  if (to === "shortlisted" && (from === "interview" || from === "offer")) return `This person is already at ${APP_LABELS[from]}, so they can't be moved back to Shortlisted.`;
   if (from === to) return "The application is already at that step.";
   if (to === "kept" && !keepDetails) return "This candidate did not agree to have their details kept, so you can't choose this.";
   if ((NEEDS_MESSAGE as readonly string[]).includes(to)) {

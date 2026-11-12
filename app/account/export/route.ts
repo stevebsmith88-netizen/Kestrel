@@ -1,6 +1,5 @@
-import { candidateHistory, candidateStatus } from "@/lib/applications";
 import { getSession } from "@/lib/auth";
-import { candidateExtras, type ExportDb } from "@/lib/data-export";
+import { candidateExtras, exportApplications, type ExportDb } from "@/lib/data-export";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { exportCheck, type ExportProblem } from "@/lib/export-check";
@@ -68,13 +67,7 @@ export async function POST(request: Request) {
     data.careerStage = extras.careerStage;
     data.jobsMarkedNotInterested = extras.jobsMarkedNotInterested;
     (data.account as Record<string, unknown>).name_last_changed_at = extras.nameLastChangedAt;
-    // A shortlist is the clinic's own working list, so the download shows it as Viewed, like the candidate's own pages do.
-    data.applications = (apps.data ?? []).map(({ id: appId, ...a }) => ({
-      ...a,
-      status: candidateStatus(a.status),
-      clinic_message: a.status === "shortlisted" ? null : a.clinic_message,
-      history: candidateHistory((events.data ?? []).filter((e) => e.application_id === appId)).map(({ status, note, created_at }) => ({ status, note, at: created_at })),
-    }));
+    data.applications = exportApplications(apps.data ?? [], events.data ?? []);
   } else {
     const employer = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).maybeSingle();
     const contact = employer.data ? await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.data.id).maybeSingle() : { data: null };

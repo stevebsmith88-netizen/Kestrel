@@ -62,7 +62,7 @@ const WAITING = ["applied", "viewed", "shortlisted"];
 // Moves several waiting applications to one step. The clinic's right to see them is checked by the database (row level security) when
 // they are read, then each change is made on the server. By default the message is the kind ready made one for that step, and each
 // candidate is told by email (unless they turned those emails off). A step can be made quietly instead: shortlisting is a private
-// step for the clinic, so it sends no email, and the candidate sees it in their account. Applications that cannot make the move
+// step for the clinic, so it sends no email, and the candidate sees no change (their account keeps showing Viewed). Applications that cannot make the move
 // (already at that step, withdrawn) are skipped and counted.
 async function moveWaiting(jobId: string, ids: string[] | null, to: "shortlisted" | "interview" | "not_selected" | "role_filled", opts: { message?: string; tell?: boolean } = {}): Promise<{ moved: number; skipped: number; historyFailed: number }> {
   const db = await supabaseServer();

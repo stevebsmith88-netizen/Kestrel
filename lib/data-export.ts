@@ -1,6 +1,8 @@
 // The parts of a candidate's data download that live in columns and tables added by later migrations (0031, 0037, 0039).
 // Each is read on its own and an error is tolerated, so the download still works on a database that has not had that SQL yet.
 
+import { candidateHistory, candidateStatus } from "./applications.ts";
+
 type Result = { data: unknown; error: { message: string } | null };
 type Chain = PromiseLike<Result> & { eq(c: string, v: string): Chain; in(c: string, v: string[]): Chain; order(c: string, o?: object): Chain; maybeSingle(): PromiseLike<Result> };
 export type ExportDb = { from(table: string): { select(columns: string): Chain } };
@@ -32,4 +34,22 @@ export async function candidateExtras(db: ExportDb, userId: string) {
     nameLastChangedAt: (nameDate as { name_changed_at?: string | null } | null)?.name_changed_at ?? null,
     jobsMarkedNotInterested: hideRows.map((h) => ({ job_title: titles.get(h.job_id) ?? null, marked_at: h.created_at })),
   };
+}
+
+type ApplicationRow = { id: string; status: string; clinic_message: string | null; status_changed_at: string | null; [column: string]: unknown };
+type EventRow = { application_id: string; status: string; note: string | null; created_at: string };
+
+// A candidate's applications as they appear in the download. A shortlist is the clinic's own working list, so it shows as Viewed, with no
+// message and no "status changed" date (that date moves the moment a clinic shortlists, audit P1-31), and the history shows it as Viewed too.
+export function exportApplications(apps: readonly ApplicationRow[], events: readonly EventRow[]) {
+  return apps.map(({ id, ...a }) => {
+    const shortlisted = a.status === "shortlisted";
+    return {
+      ...a,
+      status: candidateStatus(a.status),
+      clinic_message: shortlisted ? null : a.clinic_message,
+      status_changed_at: shortlisted ? null : a.status_changed_at,
+      history: candidateHistory(events.filter((e) => e.application_id === id)).map(({ status, note, created_at }) => ({ status, note, at: created_at })),
+    };
+  });
 }

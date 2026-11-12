@@ -138,3 +138,16 @@ test("Hired is a final step: no more moves, it sits with the offers, and its mes
   assert.equal(reachedStep(["applied", "viewed", "interview", "offer"], "hired"), 5);
   assert.deepEqual([...HIREABLE], ["applied", "viewed", "shortlisted", "interview", "offer"], "only someone still in the running can be named");
 });
+
+// Audit P1-31: a clinic cannot move someone back to Shortlisted from a later step, because the candidate would see Interview turn back into Viewed.
+test("a clinic cannot move an application back to Shortlisted from Interview or Offer", () => {
+  assert.ok(clinicMoveError("interview", "shortlisted", false, ""));
+  assert.ok(clinicMoveError("offer", "shortlisted", false, ""));
+  assert.match(clinicMoveError("interview", "shortlisted", false, "") ?? "", /Interview/);
+  assert.match(clinicMoveError("offer", "shortlisted", false, "") ?? "", /Offer/);
+  // the forward moves and the first shortlist still work
+  assert.equal(clinicMoveError("applied", "shortlisted", false, ""), null);
+  assert.equal(clinicMoveError("viewed", "shortlisted", false, ""), null);
+  assert.equal(clinicMoveError("shortlisted", "interview", false, "Come in on Friday at 2 pm."), null);
+  assert.equal(clinicMoveError("interview", "offer", false, "We would like to offer you the role, please reply by Friday."), null);
+});

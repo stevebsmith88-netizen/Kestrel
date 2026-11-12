@@ -492,7 +492,7 @@ export const HELP: HelpSection[] = [
           "On your dashboard, press **Applicants** next to the job. It appears once someone has applied, and the number in brackets is how many have applied and how many are new.",
           "Use the tabs **All**, **In review**, **Interviews**, **Offers** and **Closed** to narrow the list.",
           "Choose **Open** on an application to read their cover letter and details. Use **Download their resume** to open the resume.",
-          "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to add them to your working list. There is no message to write, and the button then reads **Save**.",
+          "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to add them to your working list. There is no message to write, and the button then reads **Save**. Once someone is at Interview or Offer they cannot be moved back to Shortlisted, because the candidate would see their step go backwards.",
           "Check the message and edit it if you like. Shortlisting has no message.",
           "Press **Save and tell the candidate**, or **Save** for a shortlist.",
           "To keep a private note, write it in **Private notes** and press **Save note**.",
