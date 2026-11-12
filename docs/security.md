@@ -2,6 +2,8 @@
 
 What we hold, who can reach it, how to change a key in 5 minutes, and what to do if a service we use is breached. Read this once now, so you are not reading it for the first time on a bad day.
 
+Every setting the code reads, secret or not, with the value it should have in the live and demo Vercel projects, is in one table in `docs/settings.md`. This file covers the secrets in more depth: how to rotate each one.
+
 ## What is worth protecting
 
 - **People's information:** names, email addresses, phone numbers, resumes and cover letters, and who applied to what. This is the part that matters most, and the part privacy law cares about (PIPEDA).

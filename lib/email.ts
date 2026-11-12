@@ -2,7 +2,10 @@ import "server-only";
 
 import { SITE_URL } from "./email-layout.ts";
 import { demoMode } from "@/lib/demo";
-import { isSuppressed } from "@/lib/suppression";
+import { emailGate } from "./email-gate.ts";
+import { unsubscribeHeaders } from "./unsubscribe-headers.ts";
+import { suppressionReasons } from "@/lib/suppression";
+import { countSend } from "@/lib/email-count";
 
 export { SITE_URL, emailLayout } from "./email-layout.ts";
 const FROM = process.env.EMAIL_FROM || "Kestrel Eye Care Jobs <hello@mail.eyecarejobs.ca>";
@@ -26,8 +29,10 @@ export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, re
     console.log("Email skipped, this is the demo site:", subject);
     return "skipped";
   }
-  // Anything with an unsubscribe link is a marketing message, and is never sent to an address on the do not email list.
-  if (unsubscribeUrl && (await isSuppressed(to))) {
+  // The do not email list is checked for every email (P1-23). An address that bounced or complained is never emailed.
+  // Anything with an unsubscribe link is a marketing message, and is never sent to any address on the list.
+  // Password and sign in emails do not come through here: Supabase sends those itself.
+  if (emailGate(await suppressionReasons(to), { marketing: Boolean(unsubscribeUrl) }) === "skip") {
     console.log("Email skipped, address is on the do not email list:", subject);
     return "skipped";
   }
@@ -40,12 +45,14 @@ export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, re
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, reply_to: replyTo ?? REPLY_TO(), ...(unsubscribeUrl ? { headers: { "List-Unsubscribe": `<${unsubscribeUrl}>` } } : {}) }),
+      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, reply_to: replyTo ?? REPLY_TO(), ...(unsubscribeUrl ? { headers: unsubscribeHeaders(unsubscribeUrl, SITE_URL) } : {}) }),
     });
     if (!res.ok) {
       console.error("Email failed:", res.status, (await res.text()).slice(0, 200));
       return "failed";
     }
+    // Added to the day's shared count, which the daily job reads, and which warns Steve at 80% of the budget (P1-24).
+    await countSend();
     return "sent";
   } catch (error) {
     console.error("Email failed:", error instanceof Error ? error.message : error);

@@ -187,3 +187,10 @@ export function onboardingEmail({ step, firstName, facts, unsubscribeUrl }: { st
     }),
   };
 }
+
+// The address to send a first week email to, or null. An account whose email was never confirmed is skipped, so a person who
+// typed someone else's address cannot cause that person to be emailed (audit P1-06).
+export function onboardingAddress(user: { email?: string | null; email_confirmed_at?: string | null } | null | undefined): string | null {
+  if (!user?.email || !user.email_confirmed_at) return null;
+  return user.email;
+}

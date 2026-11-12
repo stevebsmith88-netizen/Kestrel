@@ -1,5 +1,6 @@
 import { isBotAgent, parseEvent } from "@/lib/job-stats";
 import { isOwnerOrAdmin, recordJobEvent } from "@/lib/job-stats-data";
+import { maintenanceApiResponse } from "@/lib/maintenance";
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,8 @@ const done = () => new Response(null, { status: 204, headers });
 // Counts a job view or an apply click. It always answers 204 so nothing on the page waits for it or shows an error.
 // Nothing is stored about the visitor: only a count for the job and the day (migration 0030).
 export async function POST(request: Request) {
+  const stopped = maintenanceApiResponse();
+  if (stopped) return stopped;
   if (isBotAgent(request.headers.get("user-agent"))) return done();
   if (/prefetch|prerender/i.test(request.headers.get("sec-purpose") ?? request.headers.get("purpose") ?? "")) return done();
   const site = request.headers.get("sec-fetch-site");

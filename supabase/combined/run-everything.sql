@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0040), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0042), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -2455,6 +2455,104 @@ create policy "Clinics can read the history of applications to their jobs"
   using (public.owns_application_job(application_id));
 
 -- ======================================================================
+-- 0041_signup_ticket_always.sql
+-- ======================================================================
+-- 0041: every sign up made with an email address needs Kestrel's ticket, even once sign up is open (audit P1-03, Phase E, 12th November 2026).
+-- Anyone can send a sign up straight to Supabase with the public browser key. Kestrel's website only issues a one time ticket after the
+-- bot check, the "I agree to the terms" tick and, for a clinic, the invitation code. Before this, the ticket was only needed while the
+-- gate was closed, so the day it opened a script could skip all 3. Now:
+--   * a sign up with an email address (or any kind other than Google) needs a ticket, whether the gate is open or closed;
+--   * a Google sign up needs no ticket once the gate is open, but any role it sends is removed, so the person lands on the welcome page,
+--     which asks for the terms and, for a clinic, the invitation code (lib/auth-actions.ts, chooseAccountType);
+--   * while the gate is closed, nothing gets in without a ticket, as before.
+-- Adding a user by hand in Supabase's dashboard is refused too: make accounts through the website. To add one by SQL, include
+-- 'signup_ticket', public.issue_signup_ticket() in raw_user_meta_data (supabase/demo/seed.sql does this).
+-- Nobody's account is changed. Safe to run more than once. The access tests are in scripts/dev/rls-tests.sql (P1-03).
+
+create or replace function public.gate_new_users()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  given    text := nullif(new.raw_user_meta_data ->> 'signup_ticket', '');
+  provider text := coalesce(nullif(new.raw_app_meta_data ->> 'provider', ''), 'email');
+  used     integer := 0;
+begin
+  if given ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$' then
+    delete from public.signup_tickets where ticket = given::uuid and created_at > now() - interval '15 minutes';
+    get diagnostics used = row_count;
+  end if;
+  if used = 1 then
+    new.raw_user_meta_data := new.raw_user_meta_data - 'signup_ticket';
+    return new;
+  end if;
+  if not exists (select 1 from public.signup_gate where open) then
+    raise exception 'Sign ups are not open yet.';
+  end if;
+  if provider = 'google' then
+    -- No ticket, so nothing the sign up says about itself is trusted: the person chooses on the welcome page.
+    new.raw_user_meta_data := coalesce(new.raw_user_meta_data, '{}'::jsonb) - 'role' - 'signup_ticket' - 'terms_version' - 'marketing_consent' - 'marketing_consent_text';
+    return new;
+  end if;
+  raise exception 'Please sign up on the Kestrel website.';
+end;
+$$;
+revoke execute on function public.gate_new_users() from public, anon, authenticated;
+
+drop trigger if exists gate_new_users on auth.users;
+create trigger gate_new_users before insert on auth.users for each row execute function public.gate_new_users();
+
+-- ======================================================================
+-- 0042_email_send_counts.sql
+-- ======================================================================
+-- 0042: 1 count of the emails Kestrel's website sends each day (audit P1-24, Phase E, 12th November 2026).
+-- Every email the website sends goes through 1 place (lib/email.ts), which adds 1 here after a send. The daily job reads today's count
+-- first, so it only uses what button presses (a clinic declining 100 applicants, new applications) have left of DAILY_EMAIL_BUDGET.
+-- When the day's total reaches 80% of that budget, Steve is emailed once that day. Days run on Toronto time.
+-- Supabase's own sign up and password emails do not pass through the website, so they are not counted here.
+-- Only the website's server key can read or add to it. Nobody's data is changed. Safe to run more than once.
+
+create table if not exists public.email_send_counts (
+  day       date primary key,
+  sent      integer not null default 0 check (sent >= 0),
+  warned_at timestamptz
+);
+alter table public.email_send_counts enable row level security;
+revoke all on public.email_send_counts from public, anon, authenticated;
+
+-- Adds 1 to today's count and returns the new total, and whether this send is the one that should warn Steve (true once a day, the
+-- first time the total reaches 80% of the budget given, rounded up). Both happen in 1 step, so 2 sends at once cannot both warn.
+create or replace function public.count_email_send(budget integer)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  today date := (now() at time zone 'America/Toronto')::date;
+  total integer;
+  warn  boolean := false;
+  limit_at integer := greatest(1, ceil(greatest(budget, 0) * 0.8)::integer);
+begin
+  insert into public.email_send_counts (day, sent) values (today, 1)
+  on conflict (day) do update set sent = public.email_send_counts.sent + 1
+  returning sent into total;
+  if total >= limit_at then
+    update public.email_send_counts set warned_at = now() where day = today and warned_at is null;
+    warn := found;
+  end if;
+  return jsonb_build_object('sent', total, 'warn', warn);
+end;
+$$;
+revoke execute on function public.count_email_send(integer) from public, anon, authenticated;
+grant execute on function public.count_email_send(integer) to service_role;
+
+-- Old days are not needed for long: anything older than 90 days is removed each time this file is run.
+delete from public.email_send_counts where day < (now() at time zone 'America/Toronto')::date - 90;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2543,6 +2641,8 @@ from (
     ('trigger: a profile is made for every new account (on_auth_user_created)', exists (select 1 from pg_trigger where tgname = 'on_auth_user_created' and tgrelid = 'auth.users'::regclass and tgenabled <> 'D')),
     ('functions: a candidate reads their own applications with the shortlist hidden (0040)', (select count(*) from pg_proc where pronamespace = 'public'::regnamespace and proname in ('my_applications', 'my_application_events')) = 2 and has_function_privilege('authenticated', 'public.my_applications()', 'EXECUTE') and not has_function_privilege('anon', 'public.my_applications()', 'EXECUTE')),
     ('rule: candidates cannot read applications or their history directly (0040)', not exists (select 1 from pg_policies where schemaname = 'public' and policyname in ('Candidates can read their own applications', 'People can read the history of applications they can see'))),
+    ('rule: every email sign up needs Kestrel''s ticket, even with the gate open (0041)', exists (select 1 from pg_proc where proname = 'gate_new_users' and pronamespace = 'public'::regnamespace and prosrc like '%Please sign up on the Kestrel website%') and exists (select 1 from pg_trigger where tgname = 'gate_new_users' and tgrelid = 'auth.users'::regclass and tgenabled <> 'D')),
+    ('table: email_send_counts (emails sent each day, for the server only) (0042)', to_regclass('public.email_send_counts') is not null and exists (select 1 from pg_proc where proname = 'count_email_send' and pronamespace = 'public'::regnamespace) and not has_function_privilege('anon', 'public.count_email_send(integer)', 'EXECUTE') and not has_function_privilege('authenticated', 'public.count_email_send(integer)', 'EXECUTE')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

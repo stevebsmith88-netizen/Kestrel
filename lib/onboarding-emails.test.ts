@@ -1,7 +1,8 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { dueStep, onboardingEmail, type Facts } from "./onboarding-emails.ts";
+import { readFileSync } from "node:fs";
+import { dueStep, onboardingAddress, onboardingEmail, type Facts } from "./onboarding-emails.ts";
 
 const created = new Date("2026-12-01T12:00:00Z");
 const at = (days: number) => new Date(created.getTime() + days * 24 * 60 * 60 * 1000);
@@ -70,4 +71,17 @@ test("the day 7 candidate email only promises what the apply form does (P1-07)",
     assert.doesNotMatch(text, /draft a cover letter|Kestrel can draft/i);
     assert.match(text, /save it as a draft/i);
   }
+});
+
+test("an account whose email was never confirmed gets no first week email (P1-06)", () => {
+  assert.equal(onboardingAddress({ email: "ann@example.com", email_confirmed_at: null }), null);
+  assert.equal(onboardingAddress({ email: "ann@example.com" }), null);
+  assert.equal(onboardingAddress({ email: "", email_confirmed_at: "2026-12-01T12:05:00Z" }), null);
+  assert.equal(onboardingAddress(null), null);
+  assert.equal(onboardingAddress({ email: "ann@example.com", email_confirmed_at: "2026-12-01T12:05:00Z" }), "ann@example.com");
+});
+
+test("the daily job uses the confirmed address only (P1-06)", () => {
+  const source = readFileSync(new URL("./onboarding-run.ts", import.meta.url), "utf8");
+  assert.match(source, /const email = onboardingAddress\(user\?\.user\)/);
 });

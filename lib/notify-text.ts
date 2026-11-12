@@ -4,6 +4,8 @@
 
 export type NotifyMessage = { kind: string; title: string; body?: string; href?: string };
 
+import { writtenBy } from "./clinic-message.ts";
+
 const cut = (text: string, max: number) => (text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}...`);
 
 // A candidate's application moved to a new step. `label` is the plain name of the step ("Interview", "Not selected").
@@ -13,7 +15,8 @@ export function applicationMoved(args: { jobTitle: string; clinicName: string; s
   return {
     kind: "application",
     title: cut(`${args.jobTitle}: ${args.label}`, 150),
-    body: cut(args.message ? `${args.clinicName} wrote: ${args.message}` : `${args.clinicName} updated your application.`, 480),
+    // The writer line is always kept whole, so a long message is shortened before it (P1-47).
+    body: args.message ? `${cut(args.message, 477 - writtenBy(args.clinicName).length)} ${writtenBy(args.clinicName)}` : `${args.clinicName} updated your application.`,
     href: `/candidate/applications/${args.applicationId}`,
   };
 }

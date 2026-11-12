@@ -63,8 +63,10 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
   if (accountType === "clinic" && !clinicInviteOk(invite)) return { error: INVITE_MESSAGE };
   if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
-  const ticket = open ? undefined : await issueSignupTicket();
-  if (!open && !ticket) return { error: SIGNUP_CLOSED_MESSAGE };
+  // Every sign up carries a one time ticket, issued only now that the checks above have passed. The database refuses an email sign up
+  // without one, even once sign up is open, so nobody can skip these checks by going straight to Supabase (audit P1-03, migration 0041).
+  const ticket = await issueSignupTicket();
+  if (!ticket) return { error: open ? "We couldn't create your account just now. Please try again in a minute." : SIGNUP_CLOSED_MESSAGE };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
@@ -81,7 +83,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
         marketing_consent: marketing,
         marketing_consent_text: marketing ? MARKETING_CONSENT_TEXT : null,
         terms_version: TERMS_VERSION,
-        ...(ticket ? { signup_ticket: ticket } : {}),
+        signup_ticket: ticket,
         ...(after && accountType === "candidate" ? { signup_next: after } : {}),
       },
     },
@@ -92,6 +94,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     if (error.code === "over_email_send_rate_limit") return { error: "We have sent a lot of emails just now. Please wait a few minutes and try again." };
     if (error.code === "weak_password") return { error: "That password is too easy to guess. Please choose a stronger one." };
     if (error.code === "signup_disabled" || error.code === "email_provider_disabled" || /not open yet/i.test(error.message)) return { error: SIGNUP_CLOSED_MESSAGE };
+    if (/sign up on the Kestrel website/i.test(error.message)) return { error: "We couldn't create your account just now. Please try again in a minute." };
     return { error: `We couldn't create your account. Please try again. (Reference: ${error.code ?? error.status ?? "unknown"})` };
   }
   if (data.session) redirect(accountType === "candidate" && after ? after : "/dashboard");
@@ -196,4 +199,22 @@ export async function chooseAccountType(_prev: FormState, form: FormData): Promi
     return { error: "We couldn't save that. Please try again." };
   }
   redirect(accountType === "clinic" ? "/clinic" : safeNext(String(form.get("next") ?? ""), "/candidate"));
+}
+
+// A signed in person with no record of agreeing to the terms (an account made before the record existed, or some other way) agrees
+// here before going on (audit P1-03). Saved once, with the version and the date, as at sign up.
+export async function agreeToTerms(_prev: FormState, form: FormData): Promise<FormState> {
+  const session = await getSession();
+  if (!session) redirect("/sign-in");
+  if (!session.needsTerms) redirect(homeFor(session.role));
+  const agree = form.get("agree") === "on";
+  if (!agree) return { error: "Please agree to the terms of use and the privacy policy to continue." };
+  const admin = supabaseAdmin();
+  if (!admin) return { error: NOT_CONNECTED };
+  const { error } = await admin.from("profiles").update({ terms_version: TERMS_VERSION, terms_accepted_at: new Date().toISOString() }).eq("id", session.userId).is("terms_version", null);
+  if (error) {
+    console.error("Saving the terms agreement failed:", error.code, error.message);
+    return { error: "We couldn't save that. Please try again." };
+  }
+  redirect(safeNext(String(form.get("next") ?? ""), homeFor(session.role)));
 }

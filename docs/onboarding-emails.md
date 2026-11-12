@@ -21,7 +21,7 @@ The aim behind each is the agreed definitions in `docs/definitions.md`: a clinic
 - `lib/onboarding-run.ts`: part of the daily job. It looks at accounts opened in the last 12 days, works out what each has done, and sends at most 1 email each. A step missed by up to 3 days (budget spent, job off) is still sent, then dropped.
 - Each step is claimed in the `onboarding_emails` table before sending, so a second copy of the daily job can never send it twice. If sending fails the claim is removed and it is tried again the next day.
 - Counts against the daily email budget (`DAILY_EMAIL_BUDGET`, default 50) like every other email, and shows in the daily job's summary as `onboardingSent`.
-- Every email has the unsubscribe link, the mailing address and the line "You are receiving this because you created a Kestrel Eye Care Jobs account." It never goes to anyone on the do not email list or anyone who has unsubscribed.
+- Every email has the unsubscribe link, the mailing address and the line "You are receiving this because you created a Kestrel Eye Care Jobs account." It never goes to anyone on the do not email list, anyone who has unsubscribed, or an account whose email address was never confirmed (audit P1-06).
 
 ## To check before switching on
 

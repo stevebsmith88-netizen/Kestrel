@@ -38,7 +38,7 @@ Docs that describe each area: `docs/accounts-setup.md`, `clinics-and-jobs.md`, `
 - Every post needs a pay range (no more than $50,000 wide unless the top is over $200,000), plus two honest yes or no answers (existing vacancy, AI screening). No "Canadian experience". The review queue flags other wording that can break human rights rules, and agency wording.
 - Recruiters, agencies and job brokers are not allowed to post. Clinics confirm they hire directly. A clinic can have up to 10 open jobs. This is a core part of Kestrel's pitch.
 - Seeded listings expire in 21 days, paid ones in 30. Editing a live job sends it back to review but keeps its original 30 days.
-- The do not email list blocks every marketing or outreach email by address or whole domain. Emails about an account or an application are not marketing and still go.
+- The do not email list blocks every marketing or outreach email by address or whole domain. Emails about an account or an application are not marketing and still go, except to an address that bounced or complained, which is never emailed again (audit P1-23, `lib/email-gate.ts`).
 - Clinic outreach stays off until the disclosure conversation. Never add Eye Recommend clinics.
 - Pricing ladder and the revenue model are in `CLAUDE.md` and `docs/PLAN.md`.
 

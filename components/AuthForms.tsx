@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { focusFirstProblem } from "@/components/focus-problem";
-import { chooseAccountType, forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
+import { agreeToTerms, chooseAccountType, forgotPassword, resetPassword, signIn, signUp } from "@/lib/auth-actions";
 import GoogleButton from "@/components/GoogleButton";
 import Turnstile from "@/components/Turnstile";
 import { ACCOUNT_TYPES, MARKETING_CONSENT_TEXT, MIN_PASSWORD, type FormState } from "@/lib/auth-copy";
@@ -265,6 +265,25 @@ export function WelcomeForm({ defaultType = "candidate", email, hasName, inviteO
         <label className="consent">
           <input name="marketing" type="checkbox" />
           <span>{MARKETING_CONSENT_TEXT}</span>
+        </label>
+      </div>
+      <Problem text={state.error} />
+      <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : "Continue"}</button>
+    </form>
+  );
+}
+
+// Asked once of a signed in person who has no record of agreeing to the terms (audit P1-03, app/welcome/terms).
+export function TermsForm({ email }: { email: string }) {
+  const { state, pending, submit } = useAuthForm(agreeToTerms);
+  return (
+    <form onSubmit={submit} noValidate>
+      <h1>Before you carry on</h1>
+      <p className="auth-intro">You are signed in as <strong>{email}</strong>. We don&apos;t have a record of you agreeing to our terms of use and privacy policy, so please read them and tick the box. You only need to do this once.</p>
+      <div className="row">
+        <label className="consent">
+          <input name="agree" type="checkbox" />
+          <span>I agree to the <Link href="/terms" target="_blank">terms of use<span className="sr"> (opens in a new tab)</span></Link> and the <Link href="/privacy" target="_blank">privacy policy<span className="sr"> (opens in a new tab)</span></Link>.</span>
         </label>
       </div>
       <Problem text={state.error} />

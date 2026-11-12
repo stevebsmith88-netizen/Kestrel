@@ -14,6 +14,7 @@ import { BULK_PROBLEMS, declinedText } from "@/lib/bulk-notices";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getMyJob } from "@/lib/clinic";
 import { FILL_SOURCES } from "@/lib/job-ending";
+import { IN_TALKS } from "@/lib/still-talking";
 import { longDate } from "@/lib/jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -25,7 +26,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const WAITING = ["applied", "viewed", "shortlisted"];
 const FILTERS: (Group | "all")[] = ["all", "review", "interview", "offer", "closed"];
 
-type Row = { id: string; status: string; created_at: string; cover_letter: string | null; applicant: { name?: string; profession?: string | null; years_experience?: string | null; licensed_provinces?: string[] } };
+type Row = { id: string; status: string; clinic_name?: string; created_at: string; cover_letter: string | null; applicant: { name?: string; profession?: string | null; years_experience?: string | null; licensed_provinces?: string[] } };
 
 
 export default async function Applicants({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ filter?: string; sent?: string; filled?: string; bulkerror?: string }> }) {
@@ -37,7 +38,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   if (!job) notFound();
   const db = await supabaseServer();
   const { data } = db
-    ? await db.from("applications").select("id, status, created_at, cover_letter, applicant").eq("job_id", id).order("created_at", { ascending: false })
+    ? await db.from("applications").select("id, status, created_at, cover_letter, applicant, clinic_name").eq("job_id", id).order("created_at", { ascending: false })
     : { data: null };
   const rows = (data ?? []) as Row[];
   const active: Group | "all" = (FILTERS as string[]).includes(filter ?? "") ? (filter as Group | "all") : "all";
@@ -45,6 +46,9 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   const waiting = rows.filter((r) => WAITING.includes(r.status));
   // The people the clinic could name as the one it hired, for the "role filled" form.
   const hireCandidates = rows.filter((r) => (HIREABLE as readonly string[]).includes(r.status)).map((r) => ({ id: r.id, status: r.status, name: r.applicant?.name?.trim() || "Applicant" }));
+  // The people at Interview or Offer, listed on the "role filled" form with a message each (P1-13).
+  const talking = rows.filter((r) => (IN_TALKS as readonly string[]).includes(r.status)).map((r) => ({ id: r.id, status: r.status, name: r.applicant?.name?.trim() || "Applicant" }));
+  const clinicName = rows[0]?.clinic_name ?? "";
   const sentCount = Number.parseInt(sent ?? "", 10);
   const shown = active === "all" ? rows : rows.filter((r) => groupOf(r.status) === active);
   // When any row has a tick box, every row gets the tick box column, so the names line up down the page.
@@ -105,13 +109,13 @@ export default async function Applicants({ params, searchParams }: { params: Pro
             </form>
           )}
 
-          {waiting.length > 0 && job.status === "live" && (
+          {(waiting.length > 0 || talking.length > 0) && job.status === "live" && (
             <form action={fillRole} className="card bulkfill">
               <input type="hidden" name="jobId" value={id} />
               <h2>Role filled?</h2>
-              <p className="help">This closes the job and lets the {waiting.length} {waiting.length === 1 ? "person" : "people"} still waiting know it has been filled. Candidates in an interview or with an offer are not changed.</p>
-              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="ap" />
-              <label className="consent"><input type="checkbox" name="confirm" value="yes" required /><span>Yes, close this job and tell everyone who is waiting.</span></label>
+              <p className="help">This closes the job{waiting.length > 0 ? ` and lets the ${waiting.length} ${waiting.length === 1 ? "person" : "people"} still waiting know it has been filled` : ""}.{talking.length > 0 ? " The people you are still talking to are listed below, each with a message you can edit." : ""}</p>
+              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="ap" talking={talking} clinicName={clinicName} />
+              <label className="consent"><input type="checkbox" name="confirm" value="yes" required /><span>Yes, close this job and tell everyone listed.</span></label>
               <div><button type="submit" className="btn sm">The role is filled</button></div>
             </form>
           )}

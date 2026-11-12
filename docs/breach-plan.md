@@ -46,7 +46,7 @@ For the first hour of step 1 above. Each one is reversible. Try the sign out and
 3. Deployments, open the latest Production deployment, the three dots, Redeploy.
 4. To switch it back on: delete the `MAINTENANCE_MODE` variable and redeploy.
 
-Every page and form shows the "back soon" page. `/api/health` and the daily job keep running. The demo site is a separate Vercel project, so do the same there if needed.
+Every page and form shows the "back soon" page. The waitlist, the daily job (so its alerts and reminder emails) and the job view counter stop too (audit P1-22). 2 things keep working on purpose: `/api/health`, so the uptime monitor can still see the site, and `/api/resend`, so a bounce or spam complaint that arrives during the outage is still recorded and that address is never emailed again. While the switch is on the daily job does not run, so after 36 hours the health check reports it as late: that is expected. Account emails sent by people pressing buttons also stop, because every page is closed. Supabase's own sign up and password emails are not covered: use switch 3 for those. The demo site is a separate Vercel project, so do the same there if needed.
 
 **2. Sign everyone out**
 1. Supabase, open the project, SQL Editor.
@@ -57,7 +57,7 @@ Every page and form shows the "back soon" page. `/api/health` and the daily job 
 1. Resend, API Keys, delete the `kestrel-website` key. Everything the website sends stops, and the site keeps working.
 2. Sign up emails go through Supabase, with a second Resend key (Supabase, Authentication, SMTP settings). Delete that key in Resend as well.
 3. Make new keys afterwards and put them in Vercel and Supabase (`docs/security.md`).
-4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders).
+4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders). Once migration 0042 is run you will also get 1 "close to today's email limit" warning that day, because the warning is set at 80% of the budget: that is expected.
 
 **4. Go back to the last good version of the site**
 1. Vercel, open the `kestrel` project, Deployments.

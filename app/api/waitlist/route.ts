@@ -7,8 +7,11 @@ import { waitlistConfirmUrl } from "@/lib/waitlist-confirm";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { CONSENT_TEXT, validate } from "@/lib/waitlist";
 import { joinAction } from "@/lib/waitlist-join";
+import { maintenanceApiResponse } from "@/lib/maintenance";
 
 export async function POST(req: Request) {
+  const stopped = maintenanceApiResponse();
+  if (stopped) return stopped;
   let body: unknown;
   try {
     body = await req.json();
@@ -65,6 +68,7 @@ export async function POST(req: Request) {
   // A new address, or one not yet confirmed, is sent a link to confirm it. Nobody gets more than 1 an hour, so a
   // stranger cannot use this form to fill someone's inbox.
   if (id && (action === "add" || action === "send-confirmation")) {
+    const unsubscribeUrl = unsubscribeIdUrl(id);
     const mail = emailLayout({
       heading: "Please confirm your email",
       paragraphs: [
@@ -73,10 +77,10 @@ export async function POST(req: Request) {
       ],
       buttonText: "Confirm my email",
       buttonUrl: waitlistConfirmUrl(id),
-      unsubscribeUrl: unsubscribeIdUrl(id),
+      unsubscribeUrl,
     });
-    // No unsubscribe address check here: this answers a request the person has just made.
-    const sent = await sendEmail({ to: values.email, subject: "Please confirm your email for the Kestrel waitlist", ...mail });
+    // The unsubscribe link is passed through, so an address on the do not email list is not sent this email (P1-23).
+    const sent = await sendEmail({ to: values.email, subject: "Please confirm your email for the Kestrel waitlist", unsubscribeUrl, ...mail });
     if (sent) await db.from("waitlist").update({ confirmation_sent_at: new Date().toISOString() }).eq("id", id);
   }
   return NextResponse.json({ ok: true });

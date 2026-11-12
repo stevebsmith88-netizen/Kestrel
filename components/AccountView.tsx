@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { EmailForm, NameForm, PreferencesForm, type Prefs } from "@/components/AccountForms";
 import DeleteAccountForm from "@/components/DeleteAccountForm";
+import { Field } from "@/components/Field";
+import { EXPORT_PROBLEMS, type ExportProblem } from "@/lib/export-check";
 
 export type AccountViewProps = {
   role: "candidate" | "clinic";
@@ -12,10 +14,11 @@ export type AccountViewProps = {
   hasPassword: boolean;
   prefs: Prefs;
   emailNotice?: string;
+  downloadProblem?: ExportProblem;
 };
 
 // What the Account page shows: the person's details, their email choices, and the download and delete options.
-export default function AccountView({ role, email, first, last, nameLockedUntil, hasClinic, hasPassword, prefs, emailNotice }: AccountViewProps) {
+export default function AccountView({ role, email, first, last, nameLockedUntil, hasClinic, hasPassword, prefs, emailNotice, downloadProblem }: AccountViewProps) {
   const home = role === "clinic" ? "/clinic" : "/candidate";
   return (
         <div className="wrap narrow">
@@ -51,7 +54,19 @@ export default function AccountView({ role, email, first, last, nameLockedUntil,
             <section className="card" aria-labelledby="ac-download">
               <h2 id="ac-download">Download your information</h2>
               <p className="help">Get a copy of the information we hold about you as a file. It includes your account, {role === "clinic" ? "clinic profile and job posts" : "profile, applications and job alerts"}. Your resume file can be downloaded from your profile page.</p>
-              <a href="/account/export" className="btn ghost" download>Download my information</a>
+              {/* Asks for the password first, as delete does (P1-49). A plain form, so the browser saves the file it gets back. */}
+              <form method="post" action="/account/export" className="stackform" noValidate>
+                {hasPassword ? (
+                  <Field id="dl-password" label="Your password" required error={downloadProblem && downloadProblem !== "wrong-email" ? EXPORT_PROBLEMS[downloadProblem] : undefined} hint="So we know it is you.">
+                    <input id="dl-password" name="password" type="password" autoComplete="current-password" />
+                  </Field>
+                ) : (
+                  <Field id="dl-email" label="Type your email address" required error={downloadProblem === "wrong-email" ? EXPORT_PROBLEMS[downloadProblem] : undefined} hint={`You sign in with Google, so there is no password. Type ${email} to confirm it is you.`}>
+                    <input id="dl-email" name="confirmEmail" type="email" autoComplete="off" />
+                  </Field>
+                )}
+                <button type="submit" className="btn ghost">Download my information</button>
+              </form>
             </section>
 
             <details className="quietdelete" id="delete-account">
