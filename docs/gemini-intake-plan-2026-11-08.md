@@ -291,6 +291,13 @@ Run these as separate chats, each started only when launch data supports it. Pro
 
 For when Steve is ready, after the first document comes back: whether manual use of Indeed to find leads is acceptable; whether the "N people clicked apply" claim needs any wording; pay basis options for optometrists (percentage of production) under Ontario and BC pay range rules; whether showing optometrist pay only to signed in optometrists would count as a publicly advertised range in Ontario and BC (and what verification, if any, it would need); whether Kestrel, as the platform, carries any duty when a clinic under 25 employees in Ontario posts without a range; funding from customers and founding doctors.
 
+Added from audit part 1, Phase C (12th November 2026), and now in the rebuilt lawyer packs as Part H, questions 42 to 45 (`docs/legal/build-lawyer-pack.py`):
+
+- **42.** May a clinic ever see a candidate's career stage answer ("where are you in eye care"), for example if the candidate agrees, or should it never be shown?
+- **43.** Is an account an existing business relationship under CASL, so the first week emails can go without the consent tick, or do they need it? (They are switched off until this is answered.)
+- **44.** Does a percentage only pay line for optometrists (for example 28% to 35% of production) meet Ontario's pay range rule, and BC's? If not, should a dollar figure be required alongside it?
+- **45.** Retention (open since the October audit, R5), now including inbox messages and the new private profile information. Steve suggested 3 years for inbox messages and Claude about 12 months; neither is decided.
+
 ---
 
 ## Phase 0 results (8th November 2026)

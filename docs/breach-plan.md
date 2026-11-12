@@ -9,7 +9,7 @@ One page. Keep it where you can find it quickly. A plain English summary of Cana
 
 ## What counts
 
-Any time personal information we hold (names, emails, phone numbers, CVs, cover letters, who applied where) is lost, or seen, taken or shared by someone who should not have it. Examples: a stolen key, a bug that shows one clinic another clinic's applicants, an email sent to the wrong list, a lost laptop with a downloaded spreadsheet, or a service we use telling us they were breached.
+Any time personal information we hold (names, emails, phone numbers, resumes, cover letters, who applied where) is lost, or seen, taken or shared by someone who should not have it. Examples: a stolen key, a bug that shows one clinic another clinic's applicants, an email sent to the wrong list, a lost laptop with a downloaded spreadsheet, or a service we use telling us they were breached.
 
 ## What to do
 
@@ -20,7 +20,7 @@ Any time personal information we hold (names, emails, phone numbers, CVs, cover 
 **2. The same day: write it down.** Add a line to the log below. Do this even if you are not sure it matters. Do not delete anything that might show what happened (logs, emails, deployments).
 
 **3. Within a day or two: decide if it is serious.** The law asks whether there is a **real risk of significant harm** to the people involved. Think about:
-- How sensitive is it? A CV and phone number is personal. A health record or bank detail would be worse. We hold no health or payment details.
+- How sensitive is it? A resume and phone number is personal. A health record or bank detail would be worse. We hold no health or payment details.
 - How likely is it to be misused? Was it taken on purpose by a criminal, or seen briefly by one trusted person who has deleted it? Was it scrambled so it cannot be read?
 - How many people?
 If you are not sure, treat it as serious and call the lawyer.
@@ -70,7 +70,7 @@ Every page and form shows the "back soon" page. `/api/health` and the daily job 
 >
 > Hello [first name],
 >
-> We are writing to tell you about a security problem at Kestrel Eye Care Jobs. On [date], we found that [what happened, in plain words]. This involved your [what information, for example name, email address and CV].
+> We are writing to tell you about a security problem at Kestrel Eye Care Jobs. On [date], we found that [what happened, in plain words]. This involved your [what information, for example name, email address and resume].
 >
 > What we have done: [what you did to stop it and fix it].
 >
