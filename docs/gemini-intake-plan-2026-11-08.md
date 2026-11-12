@@ -727,3 +727,10 @@ Steve wrote a summary in Gemini while his Claude usage was maxed. Most of it des
 - **"Free first posts for waitlist clinics only".** The plan is a free launch of 30 to 60 days for everyone, with no card needed.
 - **Native app now.** Parked until the web platform pays for it.
 - **The file "Kestrel Eye Care Jobs".** Not in the repository. The business plan is the "Kestrel Eye Care Jobs: Business Proposal and Launch Plan v7" document linked in `CLAUDE.md`.
+
+### Profile redesign: Steve's answers (12th November 2026)
+
+- **Piece 1, shorter profile:** go. "Ready to apply" needs 3 things: role, resume, and town and province (Steve confirmed town and province are required). Everything else sits under "More options", closed at first, each section saying what it is used for. The "Registered in" question shows only for optometrists and opticians. Today the rule in `lib/candidate.ts` (`profileReady`) is only role and resume, so town and province are a new requirement there and in the apply checks.
+- **Piece 2, first step page and the "where are you in eye care" tag:** agreed, on a page straight after the first sign in with 3 optional questions and a skip button. One new column for the tag, so a migration to run on both databases. Steve is out and will run the SQL later.
+- **Piece 3, "Fill in from my resume":** benched to a later phase, mainly on cost. If it comes back, the first version would use no AI (read the text on our own server and match it to our fixed lists), so nothing is sent to an outside service. An AI version kept in Canada would need a Canadian hosted option checked first.
+- **The tag:** Steve asked what it is. It is the "where are you in eye care" answer from Piece 2 (for example working in a clinic, newly qualified or a student, returning, or new to eye care). Still to decide whether the clinic sees it with the application.
