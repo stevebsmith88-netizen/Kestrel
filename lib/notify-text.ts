@@ -48,3 +48,8 @@ export function jobNeedsChange(args: { jobTitle: string; jobId: string; note: st
 export function jobTakenDown(args: { jobTitle: string }): NotifyMessage {
   return { kind: "job", title: cut(`${args.jobTitle} was taken down`, 150), body: "Our team took this job down. Check your email for the reason.", href: "/clinic" };
 }
+
+// Where Open takes the person: the message's own address if it is a page on this site, otherwise back to the inbox.
+export function inboxTarget(href: string | null | undefined): string {
+  return typeof href === "string" && href.startsWith("/") && !href.startsWith("//") ? href : "/account/inbox";
+}

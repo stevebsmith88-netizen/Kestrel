@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { applicationMoved, applicationNoUpdate, jobApproved, jobNeedsChange, newApplicant } from "./notify-text.ts";
+import { applicationMoved, applicationNoUpdate, inboxTarget, jobApproved, jobNeedsChange, newApplicant } from "./notify-text.ts";
 
 test("a candidate is told about a visible step, with the clinic's message if there is one", () => {
   const m = applicationMoved({ jobTitle: "Optician", clinicName: "Riverside", status: "interview", label: "Interview", message: "We would like to meet you.", applicationId: "a1" });
@@ -50,4 +50,20 @@ test("the daily job sends that inbox message when it closes an application", asy
   const cron = readFileSync("app/api/cron/daily/route.ts", "utf8");
   assert.match(cron, /applicationNoUpdate\(/);
   assert.ok(cron.indexOf("applicationNoUpdate(") > cron.indexOf('status: "no_update", status_changed_at'), "after the application is closed");
+});
+
+test("Open only ever goes to a page on this site (P1-36)", () => {
+  
+  assert.equal(inboxTarget("/candidate/applications/a1"), "/candidate/applications/a1");
+  assert.equal(inboxTarget(null), "/account/inbox");
+  assert.equal(inboxTarget("https://evil.example"), "/account/inbox");
+  assert.equal(inboxTarget("//evil.example"), "/account/inbox");
+});
+
+test("opening a message marks it read before it redirects, and the inbox page uses the action", async () => {
+  const { readFileSync } = await import("node:fs");
+  const actions = readFileSync("lib/notification-actions.ts", "utf8");
+  const open = actions.slice(actions.indexOf("export async function openMessage"), actions.indexOf("export async function markOneRead"));
+  assert.ok(open.indexOf("read_at") > -1 && open.indexOf("read_at") < open.indexOf("redirect("), "marks read first");
+  assert.match(readFileSync("app/account/inbox/page.tsx", "utf8"), /action=\{openMessage\}/);
 });

@@ -158,8 +158,8 @@ export const HELP: HelpSection[] = [
         ],
         steps: [
           "Choose the envelope beside your initials at the top of the page. On a phone, open **Menu** and choose **Inbox**.",
-          "Choose **Open** on a message to go to the application or job it is about.",
-          "Choose **Mark all as read** to clear the number on the envelope.",
+          "Choose **Open** on a message to go to the application or job it is about. Opening a message marks it as read. A message with no page to open has its own **Mark as read** button.",
+          "Choose **Mark all as read** to clear the number on the envelope in one go.",
         ],
         links: [{ label: "Inbox", href: "/account/inbox" }],
       },

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { longDate } from "@/lib/jobs";
-import { markAllRead } from "@/lib/notification-actions";
+import { markAllRead, markOneRead, openMessage } from "@/lib/notification-actions";
 import { getMyNotifications } from "@/lib/notifications";
 
 export const metadata: Metadata = { title: "Inbox | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -42,7 +41,22 @@ export default async function Inbox() {
                     <h3>{n.title}</h3>
                     <span className="when">{longDate(n.created_at)}</span>
                     {n.body && <p>{n.body}</p>}
-                    {n.href && <span className="actions"><Link href={n.href} className="btn sm ghost">Open</Link></span>}
+                    {(n.href || !n.read_at) && (
+                      <span className="actions">
+                        {n.href && (
+                          <form action={openMessage}>
+                            <input type="hidden" name="id" value={n.id} />
+                            <button type="submit" className="btn sm ghost">Open</button>
+                          </form>
+                        )}
+                        {!n.href && !n.read_at && (
+                          <form action={markOneRead}>
+                            <input type="hidden" name="id" value={n.id} />
+                            <button type="submit" className="btn sm ghost">Mark as read</button>
+                          </form>
+                        )}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
