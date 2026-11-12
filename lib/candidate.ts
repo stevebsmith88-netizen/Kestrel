@@ -1,5 +1,6 @@
 import "server-only";
 import { readyToApply } from "./profile-ready.ts";
+export { profileStrength } from "./profile-ready.ts";
 import { viewApplication, viewForCandidate, type HistoryEvent } from "./application-view.ts";
 import type { PrefsRow } from "@/lib/candidate-prefs";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -87,10 +88,4 @@ export const getApplicationForClinic = (id: string) => loadApplication(id, "clin
 // A profile is ready to apply with once it has a resume and the basics.
 export function profileReady(p: CandidateProfile | null) {
   return readyToApply(p);
-}
-
-export function profileStrength(p: CandidateProfile | null) {
-  if (!p) return 0;
-  const parts = [p.profession, p.licensed_provinces.length > 0, p.years_experience, p.available_from, p.cv_path];
-  return Math.round((parts.filter(Boolean).length / parts.length) * 100);
 }
