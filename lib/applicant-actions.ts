@@ -14,7 +14,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { parseFillSource } from "@/lib/job-ending";
-import { BULK_PROBLEMS, declinedText, movedText } from "@/lib/bulk-notices";
+import { BULK_PROBLEMS, declinedText, historyNote, movedText } from "@/lib/bulk-notices";
+import { notifyAdmin } from "@/lib/notify-admin";
 import type { QuickState } from "@/lib/dashboard-notices";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -33,6 +34,26 @@ async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>
   }
 }
 
+type Admin = NonNullable<ReturnType<typeof supabaseAdmin>>;
+
+// Saves 1 line of an application's history. A failure is logged and reported back, never ignored (audit P1-49).
+async function recordEvent(admin: Admin, row: { application_id: string; status: string; note: string | null }): Promise<boolean> {
+  const { error } = await admin.from("application_events").insert(row);
+  if (error) console.error("Saving an application history line failed:", row.application_id, row.status, error.code, error.message);
+  return !error;
+}
+
+// Tells Steve by email when a change saved but a follow up write did not, so it can be put right by hand. Never throws.
+async function reportWriteFailures(where: string, failures: string[]) {
+  if (!failures.length) return;
+  console.error(`${where}: ${failures.length} write(s) failed:`, failures.join("; "));
+  await notifyAdmin("A clinic's change was only partly saved", [
+    `While ${where}, ${failures.length} follow up ${failures.length === 1 ? "write" : "writes"} to the database did not save. The main change did.`,
+    ...failures.slice(0, 10),
+    "Check the Vercel logs for the error, and add the missing rows by hand if they matter.",
+  ]);
+}
+
 // Still waiting on a decision. Interviews and offers are never closed in bulk.
 const WAITING = ["applied", "viewed", "shortlisted"];
 
@@ -41,31 +62,34 @@ const WAITING = ["applied", "viewed", "shortlisted"];
 // candidate is told by email (unless they turned those emails off). A step can be made quietly instead: shortlisting is a private
 // step for the clinic, so it sends no email, and the candidate sees it in their account. Applications that cannot make the move
 // (already at that step, withdrawn) are skipped and counted.
-async function moveWaiting(jobId: string, ids: string[] | null, to: "shortlisted" | "interview" | "not_selected" | "role_filled", opts: { message?: string; tell?: boolean } = {}): Promise<{ moved: number; skipped: number }> {
+async function moveWaiting(jobId: string, ids: string[] | null, to: "shortlisted" | "interview" | "not_selected" | "role_filled", opts: { message?: string; tell?: boolean } = {}): Promise<{ moved: number; skipped: number; historyFailed: number }> {
   const db = await supabaseServer();
   const admin = supabaseAdmin();
-  if (!db || !admin) return { moved: 0, skipped: 0 };
+  if (!db || !admin) return { moved: 0, skipped: 0, historyFailed: 0 };
   let query = db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id").eq("job_id", jobId).in("status", WAITING);
   if (ids) query = query.in("id", ids);
   const { data } = await query.limit(500);
   let moved = 0;
   let skipped = 0;
+  const failures: string[] = [];
   for (const app of data ?? []) {
     const message = opts.message ?? messageTemplate(to, app.clinic_name);
     if (clinicMoveError(app.status, to, app.keep_details, message)) { skipped += 1; continue; }
     const now = new Date().toISOString();
     const { error } = await admin.from("applications").update({ status: to, clinic_message: message || null, status_changed_at: now, updated_at: now }).eq("id", app.id);
     if (error) { skipped += 1; continue; }
-    await admin.from("application_events").insert({ application_id: app.id, status: to, note: message || null });
+    if (!(await recordEvent(admin, { application_id: app.id, status: to, note: message || null }))) failures.push(`History line "${to}" for application ${app.id}`);
     if (opts.tell !== false) await tellCandidate(admin, app, to, message);
     moved += 1;
   }
-  return { moved, skipped };
+  await reportWriteFailures(`moving applications on job ${jobId} to ${to}`, failures);
+  return { moved, skipped, historyFailed: failures.length };
 }
 
 // Closing steps: the kind no, and "the role is filled". Each candidate is told.
-async function closeWaiting(jobId: string, ids: string[] | null, to: "not_selected" | "role_filled"): Promise<number> {
-  return (await moveWaiting(jobId, ids, to)).moved;
+async function closeWaiting(jobId: string, ids: string[] | null, to: "not_selected" | "role_filled"): Promise<{ moved: number; historyFailed: number }> {
+  const { moved, historyFailed } = await moveWaiting(jobId, ids, to);
+  return { moved, historyFailed };
 }
 
 const BULK_MAX = 100;
@@ -78,7 +102,7 @@ export async function declineSelected(form: FormData) {
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
   if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
-  const done = await closeWaiting(jobId, ids, "not_selected");
+  const { moved: done } = await closeWaiting(jobId, ids, "not_selected");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
   redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}`);
 }
@@ -94,9 +118,9 @@ export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData):
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
   if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
-  const { moved, skipped } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
+  const { moved, skipped, historyFailed } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  return bulkAnswer(movedText("shortlisted", moved, skipped));
+  return bulkAnswer(movedText("shortlisted", moved, skipped) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
 }
 
 export async function interviewSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
@@ -107,9 +131,9 @@ export async function interviewSelectedQuiet(_prev: QuickState, form: FormData):
   if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
   const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
   if (clinicMoveError("viewed", "interview", true, message)) return bulkAnswer(message ? BULK_PROBLEMS.brackets : BULK_PROBLEMS.message, "warn");
-  const { moved, skipped } = await moveWaiting(jobId, ids, "interview", { message });
+  const { moved, skipped, historyFailed } = await moveWaiting(jobId, ids, "interview", { message });
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  return bulkAnswer(movedText("interview", moved, skipped));
+  return bulkAnswer(movedText("interview", moved, skipped) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
 }
 
 export async function declineSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
@@ -118,9 +142,9 @@ export async function declineSelectedQuiet(_prev: QuickState, form: FormData): P
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
   if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
-  const done = await closeWaiting(jobId, ids, "not_selected");
+  const { moved: done, historyFailed } = await closeWaiting(jobId, ids, "not_selected");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  return bulkAnswer(declinedText(done));
+  return bulkAnswer(declinedText(done) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
 }
 
 // The clinic names the person it hired. Their application moves to Hired (a final step), the job remembers which application it was, and
@@ -135,8 +159,11 @@ async function markHired(jobId: string, applicationId: string): Promise<boolean>
   const now = new Date().toISOString();
   const { error } = await admin.from("applications").update({ status: "hired", clinic_message: message, status_changed_at: now, updated_at: now }).eq("id", app.id);
   if (error) return false;
-  await admin.from("application_events").insert({ application_id: app.id, status: "hired", note: message });
-  await admin.from("jobs").update({ filled_application_id: app.id }).eq("id", jobId);
+  const failures: string[] = [];
+  if (!(await recordEvent(admin, { application_id: app.id, status: "hired", note: message }))) failures.push(`History line "hired" for application ${app.id}`);
+  const { error: jobError } = await admin.from("jobs").update({ filled_application_id: app.id }).eq("id", jobId);
+  if (jobError) failures.push(`Recording application ${app.id} as the hire on job ${jobId}: ${jobError.message}`);
+  await reportWriteFailures(`marking a hire on job ${jobId}`, failures);
   await tellCandidate(admin, app, "hired", message);
   return true;
 }
@@ -152,15 +179,21 @@ export async function fillRole(form: FormData) {
   if (!db) redirect("/clinic");
   const { data: mine } = await db.from("jobs").select("id").eq("id", jobId).maybeSingle();
   if (!mine) redirect("/clinic");
-  await db.from("jobs").update({ status: "closed" }).eq("id", jobId).in("status", ["live", "draft", "rejected"]);
+  const failures: string[] = [];
+  const { error: closeError } = await db.from("jobs").update({ status: "closed" }).eq("id", jobId).in("status", ["live", "draft", "rejected"]);
+  if (closeError) failures.push(`Closing job ${jobId}: ${closeError.message}`);
   const { via, other } = parseFillSource(form.get("filledVia"), form.get("filledViaOther"));
   const admin = supabaseAdmin();
-  if (admin) await admin.from("jobs").update({ filled_at: new Date().toISOString(), filled_via: via, filled_via_other: other }).eq("id", jobId);
+  if (admin) {
+    const { error: fillError } = await admin.from("jobs").update({ filled_at: new Date().toISOString(), filled_via: via, filled_via_other: other }).eq("id", jobId);
+    if (fillError) failures.push(`Recording how job ${jobId} was filled: ${fillError.message}`);
+  }
+  await reportWriteFailures(`marking job ${jobId} as filled`, failures);
   // If the clinic says it found the person through Kestrel and names them, that person is marked as Hired and told first, so they are
   // not then sent the "role filled" message below (it only goes to people still waiting).
   const hiredId = via === "kestrel" ? String(form.get("hiredApplicationId") ?? "") : "";
   if (UUID.test(hiredId)) await markHired(jobId, hiredId);
-  const done = await closeWaiting(jobId, null, "role_filled");
+  const { moved: done } = await closeWaiting(jobId, null, "role_filled");
   revalidatePath("/clinic");
   revalidatePath("/jobs");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
@@ -198,7 +231,7 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
     console.error("Status change failed:", error.code, error.message);
     return { error: "We couldn't save that change. Please try again." };
   }
-  await admin.from("application_events").insert({ application_id: id, status: to, note: message || null });
+  if (!(await recordEvent(admin, { application_id: id, status: to, note: message || null }))) await reportWriteFailures(`moving application ${id} to ${to}`, [`History line "${to}" for application ${id}`]);
 
   if (!quiet) await tellCandidate(admin, { id, candidate_id: app.candidate_id, applicant: app.applicant, job_title: app.job_title, clinic_name: app.clinic_name }, to, message);
 
