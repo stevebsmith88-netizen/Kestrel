@@ -16,7 +16,8 @@ import { onboardingOn, outreachDailyLimit, outreachOn } from "@/lib/features";
 import { nextDueAt, outreachSequenceEmail, sameClinicPattern, stopReason } from "@/lib/outreach-sequence";
 import { addressUnsubscribeUrl, isSuppressed } from "@/lib/suppression";
 import { candidateRecipient } from "@/lib/recipient";
-import { dailyBudget, makeBudget } from "@/lib/send-budget";
+import { budgetAfterClicks, dailyBudget, makeBudget } from "@/lib/send-budget";
+import { emailsSentToday } from "@/lib/email-count";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 import { maintenanceApiResponse } from "@/lib/maintenance";
@@ -75,7 +76,8 @@ async function runDaily(request: Request) {
   if (lockError) problems.push(`Run lock unavailable (has migration 0020 been run?): ${lockError.message}`);
   else if (gotLock === false) return Response.json({ ok: true, skipped: "another run is already going" });
 
-  const budget = makeBudget(dailyBudget());
+  // What button presses have already sent today comes off the budget first, so the day's total stays within it (P1-24).
+  const budget = makeBudget(budgetAfterClicks(dailyBudget(), await emailsSentToday(admin)));
   // Counts what happened to each send. Skipped (do not email list, no key) is deliberate and costs nothing.
   const note = (result: SendResult) => {
     if (result === "failed") summary.emailsFailed += 1;
@@ -389,7 +391,7 @@ async function runDaily(request: Request) {
 
   if (summary.emailsHeldBack > 0 || leftForTomorrow > 0) {
     await notifyAdmin("The daily job held some work back until tomorrow", [
-      summary.emailsHeldBack > 0 ? `${summary.emailsHeldBack} emails were held back to stay within today's send budget of ${budget.limit}.` : "",
+      summary.emailsHeldBack > 0 ? `${summary.emailsHeldBack} emails were held back to stay within today's send budget (${budget.limit} were left for the daily job after the emails people's clicks had already sent).` : "",
       leftForTomorrow > 0 ? `${leftForTomorrow} people's job alerts ran out of time and wait for tomorrow.` : "",
       "If this keeps happening, raise DAILY_EMAIL_BUDGET and check the Resend plan.",
     ].filter(Boolean));

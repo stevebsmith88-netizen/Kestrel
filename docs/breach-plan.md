@@ -57,7 +57,7 @@ Every page and form shows the "back soon" page. The waitlist, the daily job (so 
 1. Resend, API Keys, delete the `kestrel-website` key. Everything the website sends stops, and the site keeps working.
 2. Sign up emails go through Supabase, with a second Resend key (Supabase, Authentication, SMTP settings). Delete that key in Resend as well.
 3. Make new keys afterwards and put them in Vercel and Supabase (`docs/security.md`).
-4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders).
+4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders). Once migration 0042 is run you will also get 1 "close to today's email limit" warning that day, because the warning is set at 80% of the budget: that is expected.
 
 **4. Go back to the last good version of the site**
 1. Vercel, open the `kestrel` project, Deployments.

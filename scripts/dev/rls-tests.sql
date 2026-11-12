@@ -242,3 +242,11 @@ update public.signup_gate set open = false;
 select t.try('P1-03', 'gate closed: a Google sign up is refused, as before', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x12@rls.test', '{"provider":"google"}', '{"full_name":"X Y"}')$$, 'refused');
 select t.try('P1-03', 'gate closed: a sign up through the website, with its ticket, goes through, as before', 'sign_up_service', 'write', $$insert into auth.users (email, raw_app_meta_data, raw_user_meta_data) values ('x13@rls.test', '{"provider":"email"}', '{"role":"candidate","signup_ticket":"{ticket_1}"}')$$, '1 rows');
 update public.signup_gate set open = true;
+
+-- ---------------------------------------------------------------- P1-24: 1 count of emails sent today, for the website's server only
+select t.try('P1-24', 'the server counts an email and gets the total back', 'server', 'value', $$select (public.count_email_send(50) ->> 'sent')$$, '1');
+select t.try('P1-24', 'the warning is claimed once, when the count reaches 80%', 'server', 'value', $$select string_agg(public.count_email_send(5) ->> 'warn', ',') from generate_series(1, 6)$$, 'false,false,false,true,false,false');
+select t.try('P1-24', 'a visitor cannot read the count', 'visitor', 'count', 'select * from public.email_send_counts', 'refused');
+select t.try('P1-24', 'a signed in person cannot read the count', 'bo', 'count', 'select * from public.email_send_counts', 'refused');
+select t.try('P1-24', 'a signed in person cannot add to the count', 'bo', 'value', $$select public.count_email_send(50)::text$$, 'refused');
+select t.try('P1-24', 'a visitor cannot add to the count', 'visitor', 'value', $$select public.count_email_send(50)::text$$, 'refused');

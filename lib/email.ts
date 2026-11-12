@@ -5,6 +5,7 @@ import { demoMode } from "@/lib/demo";
 import { emailGate } from "./email-gate.ts";
 import { unsubscribeHeaders } from "./unsubscribe-headers.ts";
 import { suppressionReasons } from "@/lib/suppression";
+import { countSend } from "@/lib/email-count";
 
 export { SITE_URL, emailLayout } from "./email-layout.ts";
 const FROM = process.env.EMAIL_FROM || "Kestrel Eye Care Jobs <hello@mail.eyecarejobs.ca>";
@@ -50,6 +51,8 @@ export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, re
       console.error("Email failed:", res.status, (await res.text()).slice(0, 200));
       return "failed";
     }
+    // Added to the day's shared count, which the daily job reads, and which warns Steve at 80% of the budget (P1-24).
+    await countSend();
     return "sent";
   } catch (error) {
     console.error("Email failed:", error instanceof Error ? error.message : error);
