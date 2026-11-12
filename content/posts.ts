@@ -68,7 +68,7 @@ Thank them, confirm the date it starts and the new amount in writing, and keep d
   {
     slug: "eye-care-resume",
     title: "How to write a resume for an eye care job",
-    description: "A clear one or two page resume is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
+    description: "A clear 1 or 2 page resume is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
     date: "2027-03-26",
     body: `A resume for an eye care job does not need to be fancy. The person reading it is often a busy owner or practice manager with a pile to get through. A clean, honest one or two pages that shows what you have done gets read.
 

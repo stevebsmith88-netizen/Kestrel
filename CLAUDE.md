@@ -78,7 +78,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 - British spelling with Canadian conventions (centre, organisation, colour).
 - Warm, plain, industry fluent, like a colleague who knows clinics. No recruiter clichés, no generic AI phrasing.
 - Emails sign off as "The Kestrel team".
-- Avoid the habits that make writing and design read as machine made (from the AI anti pattern checklist Steve shared on 31st October 2026). `npm test` enforces the first 3:
+- Avoid the habits that make writing and design read as machine made (from the AI anti pattern checklist Steve shared on 31st October 2026). `npm test` enforces the first 3 (and also that no em or en dashes and no spelled out numbers 2 to 12 appear in wording, in `app`, `components`, `content` and `lib`):
   - Never use: delve, tapestry, testament, vibrant, bespoke, robust, furthermore, intricate, complexities, leverage, pivot, utilise, showcase, bolster, foster, seamless, transformative, scalable, unlock, elevate, streamline, empower, journey, and "align with", "underscores", "serves as", "stands as", "functions as".
   - No "not just X, but Y", "rather than X, it does Y" or "it is not a tool, it is a ...". Say what the thing is or does.
   - No emoji as icons. Straight quotes and apostrophes only (use `&apos;` and `&quot;` in page text).

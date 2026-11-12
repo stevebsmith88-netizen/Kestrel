@@ -97,7 +97,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
       heading: "Your job is live. Here is what helps",
       paragraphs: [
         hello,
-        "Applications can take a few days, especially while Kestrel is new and candidates are still finding it. Three things make a difference.",
+        "Applications can take a few days, especially while Kestrel is new and candidates are still finding it. 3 things make a difference.",
         "Check the pay range against what is typical for the role in your province. Share the job link on your clinic's own website and social pages. And put the role in the title the way candidates search for it, such as Optician or Optometric assistant.",
       ],
       buttonText: "Typical pay by province",
@@ -115,7 +115,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
   }
   return f.hasLive
     ? {
-        subject: "No applications yet? Three things to check",
+        subject: "No applications yet? 3 things to check",
         heading: "A slow first week is common",
         paragraphs: [
           hello,
