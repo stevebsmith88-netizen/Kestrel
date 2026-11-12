@@ -56,3 +56,9 @@ test("P1-44: the database keeps percentages and the optometrist only pay periods
   assert.deepEqual(periods.sort(), [...OPTOMETRIST_ONLY_PERIODS].sort(), "the periods in the database rule must match OPTOMETRIST_ONLY_PERIODS in lib/job-pay.ts");
   assert.match(rule, /pay_percent_min is null and pay_percent_max is null/);
 });
+
+test("P1-57: a field based job based outside Quebec may cover an area that includes Quebec (Steve, 12th November 2026)", () => {
+  // Only the province the job is based in is checked, by the form, by approve and extend, and by the database rule.
+  assert.equal(isQuebecJob({ province: "Ontario", territory: "Eastern Ontario and western Quebec" } as { province: string }), false);
+  assert.doesNotMatch(latestRule("jobs_not_quebec_once_sent"), /territory/);
+});

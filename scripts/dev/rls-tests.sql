@@ -169,6 +169,8 @@ select t.try('P1-28', 'a clinic cannot move a draft to Quebec and send it', 'cli
 select t.try('P1-28', 'even the server cannot make a Quebec job live', 'server', 'write', $$update public.jobs set province = 'Quebec' where id = '{job_c_live}'$$, 'refused');
 select t.try('P1-28', 'a Quebec job that somehow exists can still be closed', 'server', 'write', $$update public.jobs set province = 'Quebec', status = 'closed' where id = '{job_c_live}'$$, '1 rows');
 
+select t.try('P1-57', 'a field based job based in Ontario can cover an area that includes Quebec (Steve allowed it, 12th November 2026)', 'clinic_c', 'write', $$insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, status, work_arrangement, territory) values ('{employer_c}', 'Territory representative', 'Sales or territory representative', 'Full time', 'Ontario', 'Ottawa', 'year', 70000, 90000, true, false, 'A made up job used only by the access tests in scripts/dev.', 'in_review', 'field', 'Eastern Ontario and western Quebec')$$, '1 rows');
+
 -- ---------------------------------------------------------------- P1-44: percentages and daily rates are for optometrist roles
 
 select t.try('P1-44', 'an optician job cannot use a daily rate', 'clinic_c', 'write', $$insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, status) values ('{employer_c}', 'Optician', 'Optician', 'Locum', 'Ontario', 'Guelph', 'day', 300, 400, true, false, 'A made up job used only by the access tests in scripts/dev.', 'in_review')$$, 'refused');
