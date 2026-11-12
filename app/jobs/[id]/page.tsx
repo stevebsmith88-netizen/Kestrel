@@ -3,12 +3,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import Icon from "@/components/Icon";
+import InfoTip from "@/components/InfoTip";
 import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile } from "@/lib/candidate";
-import { answerLabel, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { answerLabel, employmentExplainer, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
@@ -88,7 +89,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 <dl className="facts">
                   <div className="wide"><dt>Pay</dt><dd>{payText(job)}</dd></div>
                   {estimateText(job) && <div className="wide"><dt>Yearly estimate</dt><dd>{estimateText(job)}</dd></div>}
-                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
+                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}{employmentExplainer(job.employment_type) && <InfoTip label={employmentLabel(job.employment_type)} text={employmentExplainer(job.employment_type) as string} />}</dd></div>
                   {TAG_GROUPS.map((g) => {
                     const names = tagsFromRow(job)[g.key];
                     return names.length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{names.join(", ")}</dd></div> : null;

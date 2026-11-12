@@ -853,3 +853,9 @@ fieldset.tagrow .lab { padding: 0; }
 .card .readerlist li::before{content:none}
 .stilltalking{border:1px solid var(--line);border-radius:10px;padding:12px 16px 4px;margin:8px 0 16px}
 .stilltalking legend{padding:0 4px;font-weight:600;color:var(--navy)}
+/* The small "i" that opens a short explanation (components/InfoTip.tsx). */
+.infotip{display:inline-block;vertical-align:middle;margin-left:4px}
+.infotip summary{list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:28px;border-radius:50%;color:var(--slate)}
+.infotip summary::-webkit-details-marker{display:none}
+.infotip summary:hover,.infotip summary:focus-visible{color:var(--navy);box-shadow:0 0 0 1.5px var(--line)}
+.infotip[open] .infotip-text{display:block;text-align:left;margin-top:6px;padding:10px 12px;background:var(--paper);border:1px solid var(--line);border-radius:8px;font-size:.9375rem;line-height:1.45;color:var(--navy);max-width:34ch}

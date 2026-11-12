@@ -424,7 +424,7 @@ export const HELP: HelpSection[] = [
         ],
         steps: [
           "Choose **Post a job** in the bar at the top of the page.",
-          "Under **The role**, type a job title and choose a role, an employment type, whether the person works on site or in the field, a city and a province or territory. A field based job also asks for the area covered.",
+          "Under **The role**, type a job title and choose a role, an employment type, whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
           "Under **Pay**, fill in the pay range. The next topic explains the options.",
           "Under **Tools and specialties**, tick anything that applies. It is optional, and candidates can search by it.",
           "Under **2 quick questions**, answer **Is this an existing vacancy?** and **Do you use AI to screen or select candidates?**",
