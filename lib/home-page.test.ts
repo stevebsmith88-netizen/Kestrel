@@ -12,3 +12,13 @@ test("the home page keeps its waitlist form, its join anchor, the numbers box an
   }
   assert.equal(page.split("<article").length - 1, 2, "the home page should have 2 cards");
 });
+
+test("every version of the home page outputs the Organization and WebSite data (P1-11)", async () => {
+  const { organizationJson } = await import("./organization-data.ts");
+  const data = JSON.parse(organizationJson());
+  assert.deepEqual(data["@graph"].map((n: { "@type": string }) => n["@type"]), ["Organization", "WebSite"]);
+  const page = readFileSync("app/page.tsx", "utf8");
+  const home = page.slice(page.indexOf("export default async function Home"), page.indexOf("function ComingSoon"));
+  assert.ok(home.includes('type="application/ld+json"') && home.includes("organizationJson()"), "the Home function must output the data itself, so the launch, pre launch and coming soon pages all carry it");
+  assert.equal(page.split("application/ld+json").length - 1, 1, "the data should be output in 1 place only");
+});

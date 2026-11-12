@@ -6,6 +6,7 @@ import LaunchHome from "@/components/LaunchHome";
 import PreLaunchHome from "@/components/PreLaunchHome";
 import { homeModeNow } from "@/lib/launch";
 import SiteHeader from "@/components/SiteHeader";
+import { organizationJson } from "@/lib/organization-data";
 import { shareMetadata } from "@/lib/share";
 
 // The header looks up who is signed in, so this page is built for each visit. That also means a scheduled post appears on the
@@ -24,35 +25,19 @@ export async function generateMetadata(): Promise<Metadata> {
 // At launch the sign up gate opens (docs/launch-checklist.md) and the launch layout takes over from the coming soon page by itself.
 export default async function Home() {
   const mode = await homeModeNow();
-  if (mode === "launch") return <LaunchHome />;
-  return mode === "prelaunch" ? <PreLaunchHome /> : <ComingSoon />;
+  const page = mode === "launch" ? <LaunchHome /> : mode === "prelaunch" ? <PreLaunchHome /> : <ComingSoon />;
+  // Who Kestrel is, for search engines and AI assistants. Every version of the home page carries it.
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: organizationJson() }} />
+      {page}
+    </>
+  );
 }
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
-
-// Tells search engines and AI assistants who we are. The same name, line and logo are used everywhere. Social page
-// links (sameAs) are added as those pages are created.
-const ORGANIZATION = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      "@id": `${SITE}/#organization`,
-      name: "Kestrel Eye Care Jobs",
-      url: SITE,
-      logo: `${SITE}/brand/kestrel-lockup-full.png`,
-      description: "A Canada-wide job board for eye care: optometrists, opticians, assistants, clinic teams and suppliers. Every job shows its pay.",
-      areaServed: { "@type": "Country", name: "Canada" },
-      sameAs: ["https://www.linkedin.com/company/kestrel-eye-care-jobs/"],
-    },
-    { "@type": "WebSite", "@id": `${SITE}/#website`, name: "Kestrel Eye Care Jobs", url: SITE, inLanguage: "en-CA", publisher: { "@id": `${SITE}/#organization` } },
-  ],
-};
 
 function ComingSoon() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION).replace(/</g, "\\u003c") }} />
       <SiteHeader logo={false} />
       <main id="main" tabIndex={-1}>
         <section className="hero">
