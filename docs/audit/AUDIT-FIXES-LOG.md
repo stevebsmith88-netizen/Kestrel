@@ -142,13 +142,13 @@ After the SQL, no row should contain TRUNCATE, TRIGGER or REFERENCES; `waitlist`
 - **During a hold the name boxes on the account page are greyed out**, so a person cannot fix capitals from the page in those 30 days, although the server would accept it. They can write to hello@ as before. Opening the boxes during a hold is a change to the page, so it was left for Steve to decide.
 - **Fixing capitals automatically (Steve's question):** possible for a name typed all in capitals or all in lowercase, the way job titles are tidied (`lib/job-title.ts`). It would get some names wrong (McDonald, van der Berg, O'Brien, de la Cruz), so it should only ever be offered for all capitals or all lowercase, and the person must be able to correct it. A small new feature, not built in this phase.
 
-## P1-55: only optometrists can apply for optometrist roles (12th November 2026). Built on a branch, waiting for Steve's check
+## P1-55: only optometrists can apply for optometrist roles (12th November 2026). Completed and merged to `main` on 12th November 2026
 
 Steve's decision, 12th November 2026: "only optometrists should be able to apply for optometrist roles". Branch `claude/kestrel-audit-fixes-phase-d-2mhi3o`, restarted from `main` after Phase D was merged. No SQL. No settings changed.
 
 | Finding | Status | Commit | How it was checked |
 | --- | --- | --- | --- |
-| P1-55 A practice manager, assistant or supplier rep could tick Optometrist under "other roles" and apply | fixed | see the branch | 2 tests failed first, then pass. `lib/role-fit.ts`: an optometrist job is closed to every other role, whatever is saved under other roles, and Optometrist is no longer offered in that list. The server refuses the application through the same function (`applyToJob`), the job page and apply page show the message with **Update my profile**, and saving a profile drops Optometrist from other roles. `lib/recommend.ts` checks saved other roles again, so a profile saved before the rule is not shown optometrist jobs. An optometrist can still add other clinic roles, apart from optician. Help topic on **For me** updated. |
+| P1-55 A practice manager, assistant or supplier rep could tick Optometrist under "other roles" and apply | fixed | `2c06cc4` | 2 tests failed first, then pass. `lib/role-fit.ts`: an optometrist job is closed to every other role, whatever is saved under other roles, and Optometrist is no longer offered in that list. The server refuses the application through the same function (`applyToJob`), the job page and apply page show the message with **Update my profile**, and saving a profile drops Optometrist from other roles. `lib/recommend.ts` checks saved other roles again, so a profile saved before the rule is not shown optometrist jobs. An optometrist can still add other clinic roles, apart from optician. Help topic on **For me** updated. |
 
 ### Noticed, not fixed
 
