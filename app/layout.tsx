@@ -23,6 +23,8 @@ export const metadata: Metadata = {
     locale: "en_CA",
     type: "website",
   },
+  // The share picture is 1200 by 630, so links shared on X and similar sites show it full width (audit P1-52).
+  twitter: { card: "summary_large_image", images: ["/brand/kestrel-share-1200x630.png"] },
 };
 
 export const viewport: Viewport = { themeColor: "#1B2B4B", width: "device-width", initialScale: 1 };
