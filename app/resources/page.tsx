@@ -9,7 +9,7 @@ import { DIRECTORY, DIRECTORY_CATEGORIES, DIRECTORY_CHECKED } from "@/lib/direct
 import { findYourFitOn } from "@/lib/features";
 import { JOB_BANK_SOURCE } from "@/lib/pay-benchmark-data";
 import { LICENCE_STATEMENT, LICENCE_URL, plainDate } from "@/lib/pay-benchmark";
-import { payGuide, payGuideProvinces } from "@/lib/pay-guide";
+import { payDatasetJsonLd, payGuide, payGuideProvinces } from "@/lib/pay-guide";
 import { listedGroups } from "@/lib/resources";
 import { shareMetadata } from "@/lib/share";
 
@@ -20,6 +20,7 @@ export const metadata: Metadata = shareMetadata({
 });
 
 const UPDATED = "9th November 2026";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export default async function Resources() {
   const provinces = payGuideProvinces();
@@ -27,6 +28,8 @@ export default async function Resources() {
   return (
     <>
       <SiteHeader session={await getSession()} />
+      {/* The pay table as a data set, with its Job Bank source, licence and date (audit P1-52). */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payDatasetJsonLd(SITE)).replace(/</g, "\\u003c") }} />
       <main id="main" tabIndex={-1} className="legal resources">
         <div className="wrap legal-wrap">
           <h1>Eye care resources for Canada</h1>
