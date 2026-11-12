@@ -18,6 +18,16 @@ export function applicationMoved(args: { jobTitle: string; clinicName: string; s
   };
 }
 
+// The job closed (or ended) while the application was still waiting, and the clinic gave no decision. Matches the email the same moment sends.
+export function applicationNoUpdate(args: { jobTitle: string; clinicName: string; label: string; applicationId: string }): NotifyMessage {
+  return {
+    kind: "application",
+    title: cut(`${args.jobTitle}: ${args.label}`, 150),
+    body: cut(`The job at ${args.clinicName} has closed, and the clinic did not send a decision. Thank you for applying.`, 480),
+    href: `/candidate/applications/${args.applicationId}`,
+  };
+}
+
 export function newApplicant(args: { jobTitle: string; applicationId: string }): NotifyMessage {
   return { kind: "applicant", title: cut(`New application for ${args.jobTitle}`, 150), body: "Open it to read the cover letter and resume, and to let the candidate know where they stand.", href: `/clinic/applications/${args.applicationId}` };
 }
@@ -37,4 +47,9 @@ export function jobNeedsChange(args: { jobTitle: string; jobId: string; note: st
 
 export function jobTakenDown(args: { jobTitle: string }): NotifyMessage {
   return { kind: "job", title: cut(`${args.jobTitle} was taken down`, 150), body: "Our team took this job down. Check your email for the reason.", href: "/clinic" };
+}
+
+// Where Open takes the person: the message's own address if it is a page on this site, otherwise back to the inbox.
+export function inboxTarget(href: string | null | undefined): string {
+  return typeof href === "string" && href.startsWith("/") && !href.startsWith("//") ? href : "/account/inbox";
 }

@@ -23,3 +23,9 @@ test("a candidate is done once they have applied, and every link goes somewhere 
   assert.equal(nextStep(steps), null);
   for (const s of [...clinicSteps({ hasProfile: false, submitted: 0, live: 0, applications: 0 }), ...candidateSteps({ profileReady: false, lookingFor: false, hasAlert: false, applications: 0 })]) assert.ok(s.href.startsWith("/"));
 });
+
+test("the candidate checklist does not say Kestrel drafts cover letters (P1-07)", () => {
+  const text = candidateSteps({ profileReady: false, lookingFor: false, hasAlert: false, applications: 0 }).map((s) => `${s.label} ${s.detail}`).join(" ");
+  assert.doesNotMatch(text, /draft a cover letter|Kestrel can draft/i);
+  assert.match(text, /save a cover letter/i);
+});

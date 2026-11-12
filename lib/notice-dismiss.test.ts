@@ -33,3 +33,22 @@ test("a dismissed approval is hidden, but a message that needs a change never is
   assert.deepEqual(visibleNotices(notices, [id(1), id(3)]).map((n) => n.id), [id(2), id(3)]);
   assert.equal(visibleNotices(notices, []).length, 3);
 });
+
+test("2 approvals are shown 1 each, and more than 2 fold into 1 message (P1-39)", async () => {
+  const { foldApprovals } = await import("./notice-dismiss.ts");
+  const job = (n: number) => ({ id: `id${n}`, title: `Job ${n}` });
+  assert.deepEqual(foldApprovals([]), { fold: false });
+  assert.deepEqual(foldApprovals([job(1), job(2)]), { fold: false });
+  const three = foldApprovals([job(1), job(2), job(3)]);
+  assert.ok(three.fold);
+  if (three.fold) {
+    assert.deepEqual(three.ids, ["id1", "id2", "id3"]);
+    assert.equal(three.text, "3 of your jobs have been approved and are now live: Job 1, Job 2 and Job 3. Candidates can see them and apply.");
+  }
+  const five = foldApprovals([1, 2, 3, 4, 5].map(job));
+  assert.ok(five.fold);
+  if (five.fold) {
+    assert.equal(five.ids.length, 5);
+    assert.match(five.text, /^5 of your jobs .*: Job 1, Job 2, Job 3 and 2 more\./);
+  }
+});

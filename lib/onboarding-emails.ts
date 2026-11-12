@@ -97,7 +97,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
       heading: "Your job is live. Here is what helps",
       paragraphs: [
         hello,
-        "Applications can take a few days, especially while Kestrel is new and candidates are still finding it. Three things make a difference.",
+        "Applications can take a few days, especially while Kestrel is new and candidates are still finding it. 3 things make a difference.",
         "Check the pay range against what is typical for the role in your province. Share the job link on your clinic's own website and social pages. And put the role in the title the way candidates search for it, such as Optician or Optometric assistant.",
       ],
       buttonText: "Typical pay by province",
@@ -115,7 +115,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
   }
   return f.hasLive
     ? {
-        subject: "No applications yet? Three things to check",
+        subject: "No applications yet? 3 things to check",
         heading: "A slow first week is common",
         paragraphs: [
           hello,
@@ -165,7 +165,7 @@ function candidateEmail(day: number, f: CandidateFacts, name: string): Built {
   return {
     subject: "Ready to apply to your first job?",
     heading: "Applying takes a few minutes",
-    paragraphs: [hello, f.profileReady ? "Your resume and details are saved, so applying is a short form. Kestrel can draft a cover letter from your profile for you to edit." : "Once your role, town and resume are saved, applying is a short form, and Kestrel can draft a cover letter for you to edit.", "Every job shows its pay, and every post was read by a person before it went live."],
+    paragraphs: [hello, f.profileReady ? "Your resume and details are saved, so applying is a short form. You can write a cover letter, save it as a draft, and keep it to reuse on later applications." : "Once your role, town and resume are saved, applying is a short form. You can write a cover letter, save it as a draft, and keep it to reuse on later applications.", "Every job shows its pay, and every post was read by a person before it went live."],
     buttonText: "Find jobs",
     buttonPath: "/jobs",
   };

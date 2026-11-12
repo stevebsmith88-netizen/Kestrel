@@ -9,7 +9,7 @@ At most 3 emails per account, on day 1, day 3 and day 7 after the account is ope
 | Account | Day 1 | Day 3 | Day 7 |
 | --- | --- | --- | --- |
 | Clinic | No profile yet: set up the profile. Profile but no post: post your first job. Skipped if a job is already submitted | Not submitted: offer help and say we can post for them. Submitted, not live: what happens to a post. Live, no applications: 3 ways to get the first applications | Has applications: reply within 5 days. Live, none yet: 3 things to check. Nothing posted: offer to help |
-| Candidate | Profile not ready: add role and CV. Ready: jobs that fit you | Set a job alert (skipped if one exists) | Ready to apply, with the cover letter draft. All skipped once the candidate has applied |
+| Candidate | Profile not ready: add role and CV. Ready: jobs that fit you | Set a job alert (skipped if one exists) | Ready to apply, with a reminder that a cover letter can be saved and reused. All skipped once the candidate has applied |
 
 The aim behind each is the agreed definitions in `docs/definitions.md`: a clinic's first application received, a candidate's first application sent.
 

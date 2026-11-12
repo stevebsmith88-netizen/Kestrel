@@ -88,7 +88,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
                     anyTick && <span aria-hidden="true" />
                   )}
                   <div className="jobmain">
-                    <h3><Link href={`/clinic/applications/${r.id}`}>{r.applicant.name ?? "Applicant"}</Link></h3>
+                    <h2><Link href={`/clinic/applications/${r.id}`}>{r.applicant.name ?? "Applicant"}</Link></h2>
                     <p className="meta">{[r.applicant.profession, r.applicant.years_experience, r.applicant.licensed_provinces?.length ? `Licensed in ${r.applicant.licensed_provinces.join(", ")}` : null].filter(Boolean).join(" · ")}</p>
                     <p className="meta">Applied {longDate(r.created_at)} · {r.cover_letter ? "Includes a cover letter" : "No cover letter"}</p>
                   </div>

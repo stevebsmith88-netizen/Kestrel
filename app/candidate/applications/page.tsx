@@ -57,7 +57,7 @@ export default async function MyApplications({ searchParams }: { searchParams: P
               {shown.map((a) => (
                 <article className="card jobrow" key={a.id}>
                   <div className="jobmain">
-                    <h3><Link href={`/candidate/applications/${a.id}`}>{a.job_title}</Link></h3>
+                    <h2><Link href={`/candidate/applications/${a.id}`}>{a.job_title}</Link></h2>
                     <p className="meta">{a.clinic_name} · {a.job_location}</p>
                     <p className="meta">Applied {longDate(a.created_at)} · {APP_EXPLAINERS[a.status as AppStatus]}</p>
                   </div>

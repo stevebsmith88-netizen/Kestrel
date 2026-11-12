@@ -8,7 +8,7 @@ import NoteForm from "@/components/NoteForm";
 import StatusForm from "@/components/StatusForm";
 import { requireRole } from "@/lib/auth";
 import { APP_LABELS, type AppStatus } from "@/lib/applications";
-import { getApplication } from "@/lib/candidate";
+import { getApplicationForClinic } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -24,7 +24,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
   const { id } = await params;
   if (!UUID.test(id)) notFound();
   // The database only returns this if the application is to one of this clinic's own jobs.
-  const found = await getApplication(id);
+  const found = await getApplicationForClinic(id);
   if (!found) notFound();
   let { application: a, history } = found;
 

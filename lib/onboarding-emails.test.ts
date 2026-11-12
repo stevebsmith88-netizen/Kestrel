@@ -61,3 +61,13 @@ test("every email names the person, links into the site and carries an unsubscri
 test("a missing first name reads as 'there'", () => {
   assert.match(onboardingEmail({ step: "candidate_day1", firstName: " ", facts: candidate(), unsubscribeUrl: "https://x.test/u" }).html, /Hello there/);
 });
+
+test("the day 7 candidate email only promises what the apply form does (P1-07)", () => {
+  const u = "https://x.test/u";
+  for (const profileReady of [true, false]) {
+    const e = onboardingEmail({ step: "candidate_day7", firstName: "Sam", facts: candidate({ profileReady }), unsubscribeUrl: u });
+    const text = `${e.subject} ${e.html}`;
+    assert.doesNotMatch(text, /draft a cover letter|Kestrel can draft/i);
+    assert.match(text, /save it as a draft/i);
+  }
+});

@@ -157,9 +157,9 @@ export const HELP: HelpSection[] = [
           "The inbox is for reading only. Nobody replies to anybody in it. To reach us, write to hello@eyecarejobs.ca. The envelope beside your initials shows how many messages you have not read yet.",
         ],
         steps: [
-          "Choose the envelope beside your initials at the top of the page. On a phone, open **Menu** and choose **Inbox**.",
-          "Choose **Open** on a message to go to the application or job it is about.",
-          "Choose **Mark all as read** to clear the number on the envelope.",
+          "Choose the envelope at the top of the page. On a computer it is beside your initials, and on a phone it is beside the **Menu** button. The number on it is how many messages you have not read.",
+          "Choose **Open** on a message to go to the application or job it is about. Opening a message marks it as read. A message with no page to open has its own **Mark as read** button.",
+          "Choose **Mark all as read** to clear the number on the envelope in one go.",
         ],
         links: [{ label: "Inbox", href: "/account/inbox" }],
       },
@@ -295,7 +295,7 @@ export const HELP: HelpSection[] = [
           "Open the job. On a phone, the small **Apply** button near the top jumps down to the Apply box.",
           "Choose **Quick Apply**. If you are not signed in, sign in or create a free account first.",
           "The first time, **Complete my profile** takes you to save your resume and choose your role. Then you come back to the job.",
-          "Check your name, email, role and resume under **Your details**.",
+          "Check the 8 details under **What the clinic receives**: your name, email, phone, role, where you are registered, years of experience, when you are available and your resume. Anything you have not filled in says **Not given**. Press **Change these in my profile** to update them.",
           "Write a cover note, or choose one of your saved letters and press **Use it**. **Save as a draft** keeps it if you want to come back later.",
           "Tick the box agreeing that the clinic can see your application. The box about keeping your details for future roles is optional.",
           "Press **Send my application**. If the note is empty, we ask once: choose **Write a short note** or **Send without a note**.",
@@ -452,7 +452,7 @@ export const HELP: HelpSection[] = [
         keywords: ["review", "approval", "approved", "rejected", "sent back", "in review", "how long", "moderation", "publish"],
         answer: [
           "A person on our team reads every post before it goes live, usually within 1 business day. Your dashboard shows the job as **In review**, with the line \"With our team\".",
-          "If it is approved, it goes live for 30 days and we email you. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. Nothing can be published without that check, and you cannot publish a job yourself.",
+          "If it is approved, it goes live for 30 days and we email you. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. If 3 or more jobs are approved at about the same time, they share 1 message with a **Dismiss all** button. Nothing can be published without that check, and you cannot publish a job yourself.",
           "If we send it back, your dashboard shows a note headed **What to change**. Change what the note asks for and send it again. While a job is in review you can press **Take back to edit** to change it yourself first.",
         ],
         steps: [

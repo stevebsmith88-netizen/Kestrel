@@ -1,5 +1,6 @@
 "use server";
 
+import { applicantSnapshot } from "./application-details.ts";
 import { APPLY_LIMIT_TEXT, MAX_APPLICATIONS_PER_DAY, applyWindowStart, overApplyLimit } from "@/lib/apply-limit";
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
@@ -223,15 +224,7 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
       candidate_id: session.userId,
       cover_letter: coverLetter || null,
       keep_details: keepDetails,
-      applicant: {
-        name: session.fullName || session.email,
-        email: session.email,
-        phone: profile.phone,
-        profession: profile.profession,
-        licensed_provinces: profile.licensed_provinces,
-        years_experience: profile.years_experience,
-        available_from: profile.available_from,
-      },
+      applicant: applicantSnapshot({ name: session.fullName || session.email, email: session.email }, profile),
       job_title: job.title,
       clinic_name: clinicName,
       job_location: `${job.city}, ${job.province}`,

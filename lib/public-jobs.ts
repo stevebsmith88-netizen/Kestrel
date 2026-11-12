@@ -1,3 +1,4 @@
+import { clampPage, pageOrLast } from "./paging.ts";
 import "server-only";
 import { supabasePublic } from "@/lib/supabase/public";
 import { cleanEmploymentTypes, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
@@ -51,7 +52,8 @@ export function cleanFilters(raw: Record<string, string | string[] | undefined>)
   };
 }
 
-export type SearchResult = { jobs: JobSummary[]; total: number; place?: Place | null; placeNotFound?: boolean };
+// `page` is the page actually shown: a page past the end is moved back to the last page.
+export type SearchResult = { jobs: JobSummary[]; total: number; page?: number; place?: Place | null; placeNotFound?: boolean };
 
 const SUMMARY_COLUMNS = "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, posted_at, is_seeded, work_arrangement, employers!inner(clinic_name, practice_type, claimed)";
 
@@ -65,7 +67,9 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   const place = filters.city ? findPlace(filters.city, filters.province || undefined) : null;
   if (filters.city && !place) return { jobs: [], total: 0, place: null, placeNotFound: true };
 
-  let query = db.from("jobs").select(SUMMARY_COLUMNS, { count: "exact" }).eq("status", "live").gt("expires_at", new Date().toISOString());
+  const nowIso = new Date().toISOString();
+  const build = (columns: string, head = false) => {
+  let query = db.from("jobs").select(columns, { count: "exact", head }).eq("status", "live").gt("expires_at", nowIso);
   if (filters.province) query = query.eq("province", filters.province);
   if (filters.role) query = query.eq("role_category", filters.role);
   if (filters.type?.length) query = query.in("employment_type", filters.type);
@@ -76,15 +80,31 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.tags?.equipment.length) query = query.overlaps("tags_equipment", filters.tags.equipment);
   if (filters.tags?.specialties.length) query = query.overlaps("tags_specialties", filters.tags.specialties);
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
-  query = query.order("posted_at", { ascending: false });
+  return query.order("posted_at", { ascending: false });
+  };
+  const query = build(SUMMARY_COLUMNS);
 
   if (!place) {
-    const { data, count, error } = opts.everything ? await query.range(0, RADIUS_SEARCH_LIMIT - 1) : await query.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
-    if (error) {
-      console.error("Job search failed:", error.code, error.message);
-      return { jobs: [], total: 0 };
+    if (opts.everything) {
+      const { data, count, error } = await query.range(0, RADIUS_SEARCH_LIMIT - 1);
+      if (error) {
+        console.error("Job search failed:", error.code, error.message);
+        return { jobs: [], total: 0 };
+      }
+      return { jobs: (data ?? []) as unknown as JobSummary[], total: count ?? 0 };
     }
-    return { jobs: (data ?? []) as unknown as JobSummary[], total: count ?? 0 };
+    // A page past the end (for example ?page=400) shows the last page instead of a count with no jobs (lib/paging.ts).
+    const result = await pageOrLast<JobSummary>(
+      page,
+      PAGE_SIZE,
+      async (p) => {
+        const { data, count, error } = await build(SUMMARY_COLUMNS).range((p - 1) * PAGE_SIZE, p * PAGE_SIZE - 1);
+        if (error && error.code !== "PGRST103") console.error("Job search failed:", error.code, error.message);
+        return { rows: (data ?? []) as unknown as JobSummary[], count: count ?? null, error: Boolean(error) };
+      },
+      async () => (await build("id", true)).count ?? 0,
+    );
+    return { jobs: result.rows, total: result.total, page: result.page };
   }
 
   // City and radius: jobs in or near the place, and field based jobs, which are not tied to one town, always show too.
@@ -95,7 +115,8 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   }
   const near = nearbyKeys(place, filters.radius ?? 25);
   const all = ((data ?? []) as unknown as JobSummary[]).filter((j) => j.work_arrangement === "field" || near.has(placeKey(j.city, j.province)));
-  return { jobs: opts.everything ? all : all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE), total: all.length, place };
+  const at = clampPage(page, all.length, PAGE_SIZE);
+  return { jobs: opts.everything ? all : all.slice((at - 1) * PAGE_SIZE, at * PAGE_SIZE), total: all.length, page: at, place };
 }
 
 // Live jobs for the "Recommended for you" rules to choose from (newest first, at most this many).

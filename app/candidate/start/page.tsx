@@ -18,7 +18,7 @@ export default async function CandidateStart() {
         <div className="wrap narrow">
           <p className="kicker">Welcome</p>
           <h1>Welcome to Kestrel, {session.firstName || "there"}</h1>
-          <p className="lede2">Two quick questions help us show you the right jobs first. Both are optional, and you can change them later in your profile.</p>
+          <p className="lede2">A few quick questions help us show you the right jobs first. All of them are optional, and you can change them later in your profile.</p>
           <FirstStepForm />
         </div>
       </main>
