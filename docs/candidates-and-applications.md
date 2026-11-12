@@ -73,3 +73,17 @@ An envelope beside the initials in the top bar (and **Inbox** in the phone menu 
 - **Safe before the SQL.** Needs migration 0038 (table `notifications`). Until it has been run, writing a message is logged and skipped, the count shows 0 and the page shows nothing, so nothing breaks.
 - **Privacy.** Row level security: a person can read their own messages and set `read_at` on them, and nothing else. Only the server adds messages. They are deleted with the account and included in the data download.
 - **Not built yet:** clearing old messages (they stay until the account is deleted), a message when a job match arrives, and anything two way.
+
+## Changing your name (12th November 2026)
+
+On the account page the first name change is free, and each change starts a 30 day hold (`lib/name-hold.ts`, `updateName` in `lib/account-settings-actions.ts`). While the hold is on, the name boxes are switched off and the page says when the next change is allowed. A change to what the name already is does not count. An application already sent keeps the name used when it was sent (`applicant.name`).
+
+- **Needs migration 0039** (`profiles.name_changed_at`). Until it is run on a database, there is no hold there.
+- **Unlocking someone early** (a typo or a legal name change, after they write to hello@): run this in the Supabase SQL editor, with their email.
+
+```sql
+update public.profiles set name_changed_at = null
+where id = (select id from auth.users where email = 'their@email.ca');
+```
+
+- **Not built:** a lock while a candidate has an active application. It was suggested before it was noticed that an application keeps the name it was sent with. It is Steve's call whether it is still wanted.

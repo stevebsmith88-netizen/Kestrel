@@ -3,6 +3,8 @@
 import { cleanFrequency } from "@/lib/clinic-emails";
 import { revalidatePath } from "next/cache";
 import { cleanName, fullName, validateEmailChange, validateName } from "@/lib/account";
+import { longDate } from "@/lib/jobs";
+import { nameDiffers, nameLockedUntil } from "@/lib/name-hold";
 import { requireRole } from "@/lib/auth";
 import { MARKETING_CONSENT_TEXT, NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
@@ -12,7 +14,8 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
-// Change your own name. It shows on your account from now on. Applications you have already sent keep the name you used then.
+// Change your own name. It shows on your account from now on. Applications you have already sent keep the name you used then. The first change is
+// free, and each change starts a 30 day hold before the next (lib/name-hold.ts). If the database has not had migration 0039 yet, there is no hold.
 export async function updateName(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("candidate", "clinic");
   const first = cleanName(form.get("firstName"));
@@ -22,14 +25,28 @@ export async function updateName(_prev: JobFormState, form: FormData): Promise<J
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
+  const admin = supabaseAdmin();
+  const { data: current } = await db.from("profiles").select("first_name, last_name").eq("id", session.userId).maybeSingle();
+  const changing = nameDiffers({ first: current?.first_name ?? session.firstName ?? "", last: current?.last_name ?? "" }, { first, last });
+  if (!changing) return { message: "Your name is saved." };
+  if (admin) {
+    const { data: held, error: heldError } = await admin.from("profiles").select("name_changed_at").eq("id", session.userId).maybeSingle();
+    const until = heldError ? null : nameLockedUntil(held?.name_changed_at);
+    if (until) return { error: `You changed your name recently. You can change it again on ${longDate(until)}. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca and we will lift the hold.` };
+  }
   const { error } = await db.from("profiles").update({ first_name: first, last_name: last, full_name: fullName(first, last) }).eq("id", session.userId);
   if (error) {
     console.error("Name change failed:", error.code, error.message);
     return { error: "We couldn't save your name. Please try again." };
   }
   await db.auth.updateUser({ data: { first_name: first, last_name: last, full_name: fullName(first, last) } });
+  // Start the hold. Only the server can write this, so a person cannot clear their own.
+  if (admin) {
+    const { error: holdError } = await admin.from("profiles").update({ name_changed_at: new Date().toISOString() }).eq("id", session.userId);
+    if (holdError) console.error("Name hold not saved:", holdError.code, holdError.message);
+  }
   revalidatePath("/", "layout");
-  return { message: "Your name is saved." };
+  return { message: "Your name is saved. You can change it again in 30 days." };
 }
 
 // Change your sign in email. It needs your password, and Supabase then asks you to confirm from your old address and the new one,
