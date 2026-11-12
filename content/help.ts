@@ -289,7 +289,7 @@ export const HELP: HelpSection[] = [
         answer: [
           "The **Apply** box on a job page tells you which kind it is. Some clinics take applications through Kestrel, and others send you to their own careers page.",
           "When you apply through Kestrel, the clinic sees your cover note, your resume and your details: your name, email address, phone number if you added one, role, where you are licensed, years of experience and when you are available. You can follow the application under My applications. When a clinic uses its own site, the box says **Apply on the clinic's website** and opens that site in a new tab. Kestrel cannot see what happens there, so that application does not appear in My applications.",
-          "You can apply to a job once. A cover note is optional, but we recommend one, because clinics tend to read the personal ones first.",
+          "You can apply to a job once, and you can send up to 30 applications in 24 hours. If you reach that, you can apply again the next day. A cover note is optional, but we recommend one, because clinics tend to read the personal ones first.",
         ],
         steps: [
           "Open the job. On a phone, the small **Apply** button near the top jumps down to the Apply box.",

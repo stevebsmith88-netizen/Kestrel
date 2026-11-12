@@ -94,7 +94,7 @@ On the profile page, once a resume is saved, **Read my resume** suggests profile
 
 - **What it suggests:** role (from job titles, weighting title lines, ignoring plurals like "optometrists" in an assistant's duties), years of experience (adds up the dates of jobs in the experience part, skips education and overlaps, and prefers jobs that mention eye care), registered provinces (only for optometrists and opticians, from lines with registered or licensed), phone, town and province (from the address in the first lines, checked against our places list), and practice software (our fixed list).
 - **Files:** PDF and Word .docx. An older .doc, a scan or a picture of a page is not read, and the person is told what to do.
-- **Limits:** 3 MB, 12 pages, 8 seconds, and a .docx is only unzipped for its main text. Two small libraries were added: `unpdf` and `fflate`.
+- **Limits:** a 3 MB file. A PDF is read 1 page at a time, up to 12 pages or 8 seconds. A .docx is only unzipped for its main text, up to 1 MB of it, and read in a single pass (details in `docs/cv-scanning.md`). Two small libraries were added: `unpdf` and `fflate`.
 - **No SQL.** It uses columns that already exist.
 - **To improve it,** Steve uploads sample resumes in different styles and sends what it missed. Add each as a test in `lib/resume-reader.test.ts`.
 - **Privacy wording** on the privacy and security pages and in the help centre was updated. These pages are with the lawyer, so tell them.

@@ -1,5 +1,6 @@
 "use server";
 
+import { APPLY_LIMIT_TEXT, MAX_APPLICATIONS_PER_DAY, applyWindowStart, overApplyLimit } from "@/lib/apply-limit";
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -203,6 +204,17 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   if (!profile.profession || !profile.cv_path) return { error: "Please finish your profile and save your resume first." };
   // The role on the profile has to fit the job (lib/role-fit.ts). The job page and the apply page say so first, and this stops it from the server too.
   if (!canApplyForRole(profile.profession, profile.pref_other_roles, job.role_category)) return { error: roleMismatchText(profile.profession, job.role_category) };
+
+  // No more than 30 applications in 24 hours (lib/apply-limit.ts). If the count cannot be read, the application goes ahead.
+  const now = new Date();
+  const { data: recent, error: recentError } = await admin
+    .from("applications")
+    .select("created_at")
+    .eq("candidate_id", session.userId)
+    .gt("created_at", applyWindowStart(now).toISOString())
+    .limit(MAX_APPLICATIONS_PER_DAY + 1);
+  if (recentError) console.error("Counting recent applications failed:", recentError.code, recentError.message);
+  else if (overApplyLimit((recent ?? []).map((row) => String(row.created_at)), now)) return { error: APPLY_LIMIT_TEXT };
 
   const { data: created, error } = await admin
     .from("applications")

@@ -53,7 +53,7 @@ export default function Security() {
             Files that contain macros, scripts or embedded files are refused when they are uploaded.
           </p>
           <p>
-            If a candidate chooses Fill in from my resume, Kestrel&apos;s own server reads the text of that one file to suggest profile answers. It uses fixed rules and no AI, the text is not saved, and it is not sent to any other service. Only PDF and Word (.docx) files are read, with limits on size, pages and time.
+            If a candidate chooses Fill in from my resume, Kestrel&apos;s own server reads the text of that one file to suggest profile answers. It uses fixed rules and no AI, the text is not saved, and it is not sent to any other service. Only PDF and Word (.docx) files are read, with a limit on size for both, and on pages and time for a PDF.
           </p>
 
           <h2>Signing in</h2>

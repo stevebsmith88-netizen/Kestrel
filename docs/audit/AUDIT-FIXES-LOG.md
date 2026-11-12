@@ -1,0 +1,26 @@
+# Audit part 1: fixes log
+
+Findings are in `docs/audit/AUDIT-2026-11-PART1.md`, with the evidence in `docs/audit/AUDIT-2026-11-PART1-WORKING.md`. One row per finding. Status is one of: fixed, will not fix (with the reason), needs a decision (with the question for Steve).
+
+## Phase A: the resume reader (12th November 2026). Completed and merged to `main` on 12th November 2026
+
+Branch `claude/focused-goldberg-2g7e6r` (the session could not push to `claude/audit-fix-a`, and Steve agreed to this branch). No SQL. No settings changed.
+
+| Finding | Status | Commit | How it was checked |
+| --- | --- | --- | --- |
+| P1-01 Word file can keep the reader running for minutes | fixed | `a40bf6d` | Before: 25 KB of "<" took 0.7 seconds, 50 KB 2.8 seconds, 100 KB 10.3 seconds, and the new tests with 400 KB had to be stopped after 100 seconds. After: `lib/resume-text.test.ts` passes in under half a second in total, with 400 KB of "<", 400 KB of unclosed "<w:br " and 6 other awkward shapes each under the 500 millisecond limit the test sets. An ordinary resume and a 400 paragraph resume read exactly as the old code read them (the old patterns are kept in the test as the reference), and 20,000 random well formed documents gave 0 differences in a one off comparison. A document.xml over 1 MB (was 8 MB) is refused before it is unzipped, and a zip that lies about its size is cut off at the size it claimed. The 8 existing resume reader tests pass unchanged. |
+| P1-04 The 12 page and 8 second limits did not limit the work | fixed | `88eda21` | Before: a PDF with 3,000 pages took 2.1 seconds and 186 MB here, and 2 timers were left running. After: the same file takes about 0.1 seconds and 17 MB, 0 timers are left, and the test counts the pages opened (12, never 3,000). Tests also cover a time limit of 0 (no page is opened) and an ordinary 2 page PDF. A 2 page PDF printed by a real browser read exactly the same through the new code as through the old. The per page calls (`numPages`, `getPage`, `getTextContent`, `loadingTask.destroy`) were read from the types and source of unpdf 1.9.1 in `node_modules`. |
+| P1-48 No cap on applications per day | fixed (applications only, as Steve asked) | `c25d79d` | The counting rule is a pure function in `lib/apply-limit.ts` with 6 tests in `lib/apply-limit.test.ts` (the 30th goes through, the 31st is refused, anything older than 24 hours does not count). The tests failed before the file existed and pass now. `applyToJob` counts from the applications table, so no SQL, and lets the application through if the count cannot be read. Help topic "How do I apply" says so. Not tried in a browser against a real database, because that needs 30 real applications. |
+| P1-48 (second half) No cap on resume reads per hour | will not fix for now | none | A cap needs a new table. After P1-01 and P1-04 a read is cheap (a few thousandths of a second for a Word file, about a tenth of a second for the worst PDF), so pressing the button often no longer costs much. Look again if the logs ever show it being hammered. |
+| P1-53 Public wording promised limits that were not real | fixed | `ccac157` | Read each statement against the code. `/security` now says "with a limit on size for both, and on pages and time for a PDF", because a Word file has a size limit only (it needs no other). `docs/cv-scanning.md` and `docs/candidates-and-applications.md` give the new figures. The 1 sentence in `docs/security.md` that said resumes are never opened by our servers is corrected. The rest of `docs/security.md` is Phase C. |
+
+### Added at Steve's request
+
+- **A 30 second time limit for the actions on the profile page** (Steve, 12th November 2026). `app/candidate/profile/page.tsx` sets `export const maxDuration = 30;`, which Next.js applies to every server action used on that page: saving the profile, uploading a resume and Read my resume. It is a backstop behind the reader's own limits. Checked by the build, which accepts the setting. It only takes effect on Vercel, so it cannot be tested here.
+
+### Noticed, not fixed
+
+- **Reading a Word file that is over the 1 MB text limit** now gives "We could not read this file. You can fill in your profile by hand below." Before, an over limit file gave the "may be a scan" message, which was wrong for it. Mentioned because it is a small change in what a person sees.
+- **Text like `&amp;lt;` in a Word file** used to be decoded twice (to "<"). It is now decoded once (to "&lt;"), which is the correct reading. It does not occur in an ordinary resume.
+- **`docs/security.md` still says "CVs"** in several places. Left for Phase C with the rest of that file.
+- **The lawyer pack** describes the resume reader's limits nowhere yet (P1-02, another phase). When it is rebuilt, use the figures in `docs/cv-scanning.md`.

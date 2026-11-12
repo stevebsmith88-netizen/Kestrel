@@ -67,7 +67,7 @@ Hugging Face's July 2026 breach is the example: attackers got internal datasets 
 - Row level security protects every table: a signed in person can only see their own rows, and we have tested the rules against a real database.
 - CVs sit in a private store and open only through a link that works for 1 minute.
 - Packages: 11 direct, all pinned to an exact version, none runs code when installed, and `npm audit` reports 0 known problems. Check it monthly.
-- We do not download or run any AI model or dataset from the internet, and CVs are never opened or processed by our servers, so there is no pipeline an uploaded file could attack. A CV is opened only by the clinic, on their own computer.
+- We do not download or run any AI model or dataset from the internet, and a resume is opened by our servers in 1 case only: when the candidate chooses Fill in from my resume, Kestrel's own server reads the text of that 1 file with fixed rules, no AI and no other service (`lib/resume-text.ts`). That reader is a place an uploaded file could attack, so it has limits on size, pages and time, with tests that build hostile files (`lib/resume-text.test.ts`, limits listed in `docs/cv-scanning.md`). Otherwise a resume is opened only by the clinic, on their own computer.
 - The ad builder sends only the job details a clinic types in, receives text, and has no access to the database or to anything else.
 
 ## Known gaps
