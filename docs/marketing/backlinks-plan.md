@@ -30,6 +30,8 @@ Earn links with pages worth linking to, then ask the people who would find them 
 
 Hold anything that names Kestrel until the disclosure conversation has happened and launch is close.
 
+The fuller plan (8 topic pillars, the communities to check, the blog posts each Reddit post leans on, and more drafts) is in `docs/marketing/reddit.md` (12th November 2026). The rules below still apply to it.
+
 1. **Account:** a Kestrel named account, never Steve's personal one, with nothing about Eye Recommend.
 2. **Learn first:** find the communities about optometry, opticians and Canadian health jobs. Read each one's rules. Note which allow links to your own site, which have a weekly promotion thread and which require moderator approval.
 3. **Help for a few weeks:** answer questions, with no links, so the account has a history.

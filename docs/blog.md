@@ -46,6 +46,14 @@ Good topics, each aimed at a real search:
     - **Search and links:** aimed at searches such as "is it worth paying for a job ad" and "cost to post an optician job in Canada". Link to `/clinics` and `/compare` near the end, and to the post "What every eye care job ad should include".
     - **Style:** paragraphs, few headings, no run of bold bullets, no "not just X, but Y" lines (see CLAUDE.md).
 
+Added 12th November 2026 from the Reddit plan (`docs/marketing/reddit.md`, which has the full angle, the checks and what Steve needs to supply for each). Each one later backs a Reddit post, so none is posted on Reddit before it is live here.
+
+15. **Summer jobs in eye care for university students** (post C). Seasonal: must be live by late January 2027, so it takes a Friday slot in January and a post that is not yet out moves later. It goes out before "Hiring seasonal workers" (9th April 2027), so only the April post can link to it.
+16. **Studying optometry in the US and coming home to practise in Canada** (post A). Check every step with OEBC and at least 2 provincial colleges.
+17. **When to start looking for your first eye care job: a timeline for new graduates** (post D).
+18. **After graduation: associate, locum, residency or your own practice** (post E). Takes in item 5 above (locum work).
+19. **What eye care jobs pay in and outside the big cities** (post B), from Job Bank's regional figures. Only if those figures exist for the roles; no "rural pays more" headline unless the numbers show it.
+
 Rules for every post: only say what is true and current, name no real clinic without asking, include no Eye Recommend material (the one exception is post 13 above), and link to the job board or the clinic page near the end.
 
 ## Review of the 5 posts (5th November 2026): what only Steve can supply
