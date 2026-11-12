@@ -59,6 +59,7 @@ Seven things change, set out in the next section. The 3 that matter most:
 | 5. When to start looking | A month by month timeline for final year optometry and optician students | New post D | r/OptometrySchool | Post D is live |
 | 6. After graduation | Associate, locum, residency or your own practice | New post E | r/OptometrySchool, then r/optometry | Post E is live |
 | 7. Build in public | The honest founder story | No blog post needed | r/SideProject, r/Entrepreneur | Stage 4 |
+| 8. Resource drops | Eye care in Canada by the numbers: how many optometrists, opticians and practices, and how much hiring | New post F, built from the home page numbers (`lib/eye-care-numbers.ts`) | r/optometry, then an optician community | Post F is live, and every figure re checked against its source |
 | 8. Resource drops | Typical pay by province from Job Bank | `/resources#pay` (live) | r/optometry, an optician community | Stage 3 |
 | 8. Resource drops | Ontario's job posting rules for clinics | `/resources/ontario-job-ads` | r/optometry (clinic owners) | When the page loses its draft banner |
 | 8. Resource drops | How to become an optician, by province | Blog list item 1 (not written yet) | Optician students | When written and checked against each college |
@@ -78,6 +79,11 @@ Each follows the blog rules: only what is true and current, no unchecked statist
 **D. When to start looking for your first eye care job: a timeline for new graduates.** Month by month for final year optometry students, and a shorter version for optician program graduates: registration, exams, the search, contracts, the start date. Needs from Steve: when clinics usually hire new graduates, from what he has seen.
 
 **E. After graduation: associate, locum, residency or your own practice.** Folds in blog list item 5 (locum work in Canada). What each path looks like in the first 2 years, what to ask before signing, and why a contract review by a lawyer is worth the fee. No income figures without a source.
+
+**F. Eye care in Canada by the numbers** (Steve's idea, 12th November 2026, from the "A big field, with a lot of hiring to do" block on the home page). About 6,400 optometrists and 11,700 opticians (Statistics Canada, 2023), more than 4,000 optometry practices (industry directories, 2025), and more than 2,000 roles advertised a year (Kestrel's own estimate). The post explains what each number means for someone hiring or job hunting: roughly 2 opticians for every optometrist, most practices hiring only 1 or 2 times a year, and why a role can sit open for weeks.
+- **Check first, this one matters most.** `docs/market-sizing.md` rates these figures low to medium confidence, because the Statistics Canada page was read through search summaries. Before the post goes out, open each source and confirm the figure and year (the network may need `statcan.gc.ca` allowed). Other sources give 5,959 to 7,135 optometrists, so the post should say "about" and give the range in a sentence. The 2,000 is an estimate and must be called one every time, including on Reddit. If any figure changes, update `lib/eye-care-numbers.ts` and the home page at the same time.
+- **Needs from Steve:** what the numbers feel like on the ground, for example how long an optician vacancy usually stays open in clinics he knows (no clinic named).
+- **Why it is a good first post:** it is the kind of page associations, schools, journalists and AI assistants quote, and it links naturally to the pay table and the job board.
 
 Suggested order, given the weekly schedule already runs to 9th April 2027: C first, because it is seasonal and must be out by late January (Claude finds a Friday slot and moves a post that is not yet out if needed, then runs the tests), then A, D, E and B in the weeks after 9th April.
 
@@ -141,6 +147,16 @@ No link in this one. It is a conversation, and the blog post can come up in the 
 > If you want patient facing hours this summer, optometry and optical clinics are worth asking. Many need summer cover for the front desk and for optometric assistant work, and the training happens on the job. Clinics start thinking about summer from January, so asking now is not too early.
 >
 > What helps: a short note to the clinic manager saying when you're free, which days, and why you're interested in eye care; reliability over polish; and asking at the end of the summer whether they'll be a reference. I put the details in a guide here: [tagged link].
+
+### For r/optometry (pillar 8, once post F is live)
+
+> **How many of us are there? Canadian eye care in numbers**
+>
+> Disclosure: I'm building Kestrel, a job board for Canadian eye care, and I pulled these together while sizing it.
+>
+> Statistics Canada put the number of optometrists working in Canada at about 6,400 in 2023, and opticians at about 11,700. Other counts of optometrists run from about 6,000 to 7,100 depending on the source. Industry directories list more than 4,000 optometry practices. My own rough estimate is that more than 2,000 eye care roles are advertised in a year, though that is an estimate, not a published figure.
+>
+> Most practices only hire once or twice a year, which may be why a vacancy can sit open for weeks. Sources and working are here: [tagged link]. If your province's numbers look off, tell me and I'll check.
 
 ## Measuring
 

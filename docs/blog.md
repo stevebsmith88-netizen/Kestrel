@@ -54,6 +54,8 @@ Added 12th November 2026 from the Reddit plan (`docs/marketing/reddit.md`, which
 18. **After graduation: associate, locum, residency or your own practice** (post E). Takes in item 5 above (locum work).
 19. **What eye care jobs pay in and outside the big cities** (post B), from Job Bank's regional figures. Only if those figures exist for the roles; no "rural pays more" headline unless the numbers show it.
 
+20. **Eye care in Canada by the numbers** (post F, Steve's idea, 12th November 2026), from the home page figures in `lib/eye-care-numbers.ts`. Recheck every figure against its source first (`docs/market-sizing.md` rates them low to medium confidence), and call the 2,000 roles figure an estimate every time. A good early slot, since it needs no seasonal timing.
+
 Rules for every post: only say what is true and current, name no real clinic without asking, include no Eye Recommend material (the one exception is post 13 above), and link to the job board or the clinic page near the end.
 
 ## Review of the 5 posts (5th November 2026): what only Steve can supply
