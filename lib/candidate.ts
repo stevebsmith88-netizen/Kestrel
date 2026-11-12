@@ -1,6 +1,6 @@
 import "server-only";
 import { readyToApply } from "./profile-ready.ts";
-import { candidateHistory, candidateStatus } from "@/lib/applications";
+import { viewApplication, viewForCandidate, type HistoryEvent } from "./application-view.ts";
 import type { PrefsRow } from "@/lib/candidate-prefs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -62,22 +62,27 @@ export async function getMyApplications(): Promise<Application[]> {
   const db = await supabaseServer();
   if (!db) return [];
   const { data } = await db.from("applications").select(APPLICATION_COLUMNS).order("created_at", { ascending: false });
-  return ((data ?? []) as Application[]).map(forCandidate);
+  return ((data ?? []) as Application[]).map(viewForCandidate);
 }
 
-// How an application looks to the candidate: "Shortlisted" is shown as "Viewed", and a message left over from an older shortlist is not shown.
-function forCandidate(a: Application): Application {
-  return a.status === "shortlisted" ? { ...a, status: candidateStatus(a.status), clinic_message: null } : a;
-}
+type LoadedApplication = { application: Application; history: HistoryEvent[] };
 
-export async function getApplication(id: string): Promise<{ application: Application; history: { status: string; note: string | null; created_at: string }[] } | null> {
+// One application and its history, as the given reader should see it. The database only returns it if the reader may see it
+// (the candidate's own, or one to a job of the clinic's own). The rules for what each reader sees are in lib/application-view.ts.
+async function loadApplication(id: string, audience: "candidate" | "clinic"): Promise<LoadedApplication | null> {
   const db = await supabaseServer();
   if (!db) return null;
   const { data } = await db.from("applications").select(APPLICATION_COLUMNS).eq("id", id).maybeSingle();
   if (!data) return null;
   const { data: events } = await db.from("application_events").select("status, note, created_at").eq("application_id", id).order("created_at", { ascending: true });
-  return { application: forCandidate(data as Application), history: candidateHistory(events ?? []) };
+  return viewApplication(data as Application, events ?? [], audience);
 }
+
+// For the candidate's pages: "Shortlisted" is shown as "Viewed".
+export const getApplication = (id: string) => loadApplication(id, "candidate");
+
+// For the clinic's application page: the real status and the real history, shortlist step included.
+export const getApplicationForClinic = (id: string) => loadApplication(id, "clinic");
 
 // A profile is ready to apply with once it has a resume and the basics.
 export function profileReady(p: CandidateProfile | null) {
