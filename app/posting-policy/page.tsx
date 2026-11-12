@@ -12,7 +12,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/posting-policy",
 });
 
-const UPDATED = "30th October 2026";
+const UPDATED = "12th November 2026";
 const DRAFT = true;
 
 export default async function PostingPolicy() {
@@ -47,6 +47,9 @@ export default async function PostingPolicy() {
             <li>If part of the pay is commission, a car allowance or similar, say so. The pay range is still required, and it should show the base pay.</li>
             <li>A clear description of the job in your own words.</li>
           </ul>
+          <p>
+            Some of these come from provincial rules. If you hire in Ontario, <Link href="/resources/ontario-job-ads">Ontario job ad rules for eye care clinics</Link> explains who those rules cover and what a covered ad must include.
+          </p>
 
           <h2>What is not allowed</h2>
           <ul>
