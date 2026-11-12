@@ -64,6 +64,15 @@ test("the same name again writes nothing and starts no hold", async () => {
   assert.equal(writes.length, 0);
 });
 
+test("fixing capital letters alone saves the name with no hold, even during a hold (Steve, 12th November 2026)", async () => {
+  const fresh = fakeDb({ first_name: "jane", last_name: "smith", name_changed_at: null });
+  assert.deepEqual(await changeName(fresh.db, "u1", { first: "Jane", last: "Smith" }, "", now), { outcome: "saved", held: false });
+  assert.deepEqual(fresh.writes, [{ first_name: "Jane", last_name: "Smith", full_name: "Jane Smith" }], "no hold date is written");
+  const held = fakeDb({ first_name: "jane", last_name: "smith", name_changed_at: "2026-11-01T12:00:00Z" });
+  assert.deepEqual(await changeName(held.db, "u1", { first: "Jane", last: "Smith" }, "", now), { outcome: "saved", held: false });
+  assert.equal(held.writes[0].name_changed_at, undefined, "an existing hold is left as it is");
+});
+
 test("before migration 0039 the name still saves, with no hold, as it does today", async () => {
   const { db, writes } = fakeDb({ first_name: "Jane", last_name: "Smith" }, { noHoldColumn: true });
   assert.deepEqual(await changeName(db, "u1", { first: "Jane", last: "Doe" }, "", now), { outcome: "saved", held: false });

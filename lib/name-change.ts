@@ -3,7 +3,7 @@
 // no permission to change the name columns themselves once migration 0040 is run. With no server key, the change is refused.
 // On a database without migration 0039 the hold column does not exist yet: the name is saved with no hold, as before.
 // Kept free of app imports so it can be tested on its own (lib/name-change.test.ts).
-import { nameDiffers, nameLockedUntil } from "./name-hold.ts";
+import { nameDiffers, nameLockedUntil, onlyCapitalsDiffer } from "./name-hold.ts";
 
 type Result = { data: unknown; error: { code?: string; message: string } | null };
 // The few database calls this needs, so a test can stand in for the database.
@@ -28,7 +28,14 @@ export async function changeName(admin: NameDb | null, userId: string, next: { f
   const current = await admin.from("profiles").select("first_name, last_name").eq("id", userId).maybeSingle();
   if (current.error) return { outcome: "failed", reason: current.error.message };
   const row = current.data as { first_name?: string | null; last_name?: string | null } | null;
-  if (!nameDiffers({ first: row?.first_name ?? fallbackFirst, last: row?.last_name ?? "" }, next)) return { outcome: "unchanged" };
+  const was = { first: row?.first_name ?? fallbackFirst, last: row?.last_name ?? "" };
+  const name = { first_name: next.first, last_name: next.last, full_name: [next.first, next.last].filter(Boolean).join(" ") };
+  // Fixing capital letters alone ("smith" to "Smith") is a tidy up: saved as typed, no hold started, and allowed during a hold.
+  if (onlyCapitalsDiffer(was, next)) {
+    const tidied = await admin.from("profiles").update(name).eq("id", userId);
+    return tidied.error ? { outcome: "failed", reason: tidied.error.message } : { outcome: "saved", held: false };
+  }
+  if (!nameDiffers(was, next)) return { outcome: "unchanged" };
 
   // Read on its own, because the column is missing until migration 0039 is run.
   const held = await admin.from("profiles").select("name_changed_at").eq("id", userId).maybeSingle();
@@ -37,7 +44,6 @@ export async function changeName(admin: NameDb | null, userId: string, next: { f
   const until = hasHoldColumn ? nameLockedUntil((held.data as { name_changed_at?: string | null } | null)?.name_changed_at, now) : null;
   if (until) return { outcome: "locked", until };
 
-  const name = { first_name: next.first, last_name: next.last, full_name: [next.first, next.last].filter(Boolean).join(" ") };
   const saved = await admin.from("profiles").update(hasHoldColumn ? { ...name, name_changed_at: now.toISOString() } : name).eq("id", userId);
   if (saved.error) return { outcome: "failed", reason: saved.error.message };
   return { outcome: "saved", held: hasHoldColumn };
