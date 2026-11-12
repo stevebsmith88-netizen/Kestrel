@@ -123,3 +123,32 @@ Reach: the code and history, tests, builds and 3 throwaway databases here, and t
 | R48, R51 to R53, R58, R60 | Low items and ideas | Claude | Phase 5. R58 (skill and internationally trained tags) not built |
 
 Looks done from the code or your notes: R2 (tick), R3, R4, R6, R8, R10, R11, R12, R13, R15 to R18, R20 to R22, R24 to R27, R29, R31 to R35, R37 to R42, R45, R47, R49, R50, R54 to R56. Not re-tested one by one here. **Extra X-01 below** suggests refreshing that plan so it stops misleading.
+
+## 4. Extras found along the way (Part 3)
+
+Collected from the "noticed, not fixed" notes in `AUDIT-FIXES-LOG.md` (every phase), the commit messages on all 7 fix branches (every one is fully merged into `main`; nothing is stranded on a branch), and a comparison of `main` with `3e42a07` in the files the fixes touched. Ranked, most important first. Severity uses the audit's scale. Items marked **new** were not in any phase's notes.
+
+| # | Severity | What | One line fix | From |
+| --- | --- | --- | --- | --- |
+| X-01 | Medium | **Deleting a clinic account still deletes the candidates' applications to it** (P1-20, R5). The lawyer now names it as the first thing to sort before launch | Keep applications (with the job title and clinic name already saved on them) when a clinic or job is deleted; decide with the lawyer how long each side keeps them, then build the purge step | P1-20, lawyer |
+| X-02 | Medium | **No published policy for fake or fraudulent job posts.** A "Report this job" link and an admin Reports queue exist, but no page says how reports are handled. The lawyer says Ontario requires this of the job board | A short "Reporting fake jobs" section (or page) linked from every job page and the footer, plus a help topic. Wording to the lawyer | **new**, lawyer |
+| X-03 | Medium | **The career stage answer cannot be changed or cleared after the first step page**, which says "you can change them later in your profile" | Add the question to the profile, or change the first step wording | Phase C |
+| X-04 | Medium | **Someone at Interview on a job that simply runs out is left at Interview for ever.** P1-13 covers "role filled" only | Have the daily close out tell Interview and Offer people too, with a kind standard message | Phase E |
+| X-05 | Low | **The home page is still built for every visitor** (`force-dynamic`), as is `/jobs` with no filters. It is the most visited page | Save the signed out home page like the content pages | **new**, Phase F |
+| X-06 | Low | **`docs/audit/NEXT-STEPS-PHASES.md` still says "nothing here is started"** and has no status per item, so it misreads as 60 open October findings | Add a status column, or replace it with the open list in section 3 | **new** |
+| X-07 | Low | **The posting policy still says "contract"** where every screen says "Fixed term" | Change with the next legal page edit | Phase F, G |
+| X-08 | Low | **The lawyer pack still gives the old prices** ($39, $49, $59 then $79) and 2 of its questions describe things fixed since | Rebuild the pack (Part 5B) | Phase C |
+| X-09 | Low | **No way to bring back a job marked "Not interested"** | A "Hidden jobs" list on For me with an Undo | Phase C |
+| X-10 | Low | **The candidate's own application page shows the clinic's message without the "written by the clinic" line** that the email and inbox now carry | Add the line | Phase E |
+| X-11 | Low | **During a name hold the name boxes are greyed out**, so capitals cannot be fixed from the page though the server allows it | Leave capitals editable during a hold | Phase D |
+| X-12 | Low | **A saved job page can show an expired job for up to about 5 minutes** after it passes its date, until the daily job clears it. Its Google markup carries the end date (`validThrough`), so Google drops it on time | None needed; noted because CLAUDE.md says "immediately" | **new** |
+| X-13 | Low | **`lib/onboarding-emails.test.ts` fails if `NEXT_PUBLIC_SITE_URL` is set** to another address | Have the test set the address itself | Phase F |
+| X-14 | Low | **Older docs tell you to run older combined files** (`docs/launch-checklist.md` says 0001 to 0021, `docs/google-signin.md` up to 0021) | Point them to "the current combined file" | Phase D |
+| X-15 | Low | **Google sign ups skip the website's bot check** once the gate opens (they need no ticket, by design). The terms are asked at `/welcome/terms` | Accept, or add the bot check to the Google button | **new**, from the P1-03 tests |
+| X-16 | Low | **The applicants list and admin pages read the database inside the page code** with no tests | Extract and test, as the loaders were | Phase G |
+| X-17 | Idea | The final SQL check still says "private CV storage"; `docs/security.md` still says "CVs" in places | Rename with the next SQL and docs change | Phase A, D |
+| X-18 | Idea | A shortlist made before the application is opened shows the candidate "Viewed" at the time of the shortlist | Leave, unless you want to hide even that | Phase G |
+| X-19 | Idea | `jobs.province` has no list of allowed values in the database | Add one with the next SQL change | Phase D |
+| X-20 | Idea | Help has a small layout shift (0.079) on a phone | Reserve the search box's space | Phase F |
+
+Nothing found where a fix broke something that used to work. The 2 changes in what people see (the "could not read this file" message for an over limit Word file, and "A few quick questions") are deliberate and recorded.
