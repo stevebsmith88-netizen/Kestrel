@@ -1,4 +1,5 @@
 import "server-only";
+import { readyToApply } from "./profile-ready.ts";
 import { countIn, gateC, hiresSummary, investorNumbers, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts, type JobRow, type Period } from "@/lib/admin-stats";
 import { EMPLOYEE_BANDS } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -44,7 +45,7 @@ export async function loadStats(period: Period) {
     fetchAll<{ id: string; claimed: boolean; owner_id: string | null; created_at: string }>(db, "employers", "id, claimed, owner_id, created_at"),
     fetchAll<JobRow & { id: string; filled_via: string | null; filled_application_id: string | null }>(db, "jobs", "id, employer_id, status, posted_at, province, created_at, filled_via, filled_application_id"),
     fetchAll<{ job_id: string; candidate_id: string; created_at: string }>(db, "applications", "job_id, candidate_id, created_at"),
-    fetchAll<{ user_id: string; cv_path: string | null; profession: string | null }>(db, "candidate_profiles", "user_id, cv_path, profession"),
+    fetchAll<{ user_id: string; cv_path: string | null; profession: string | null; home_city: string | null; home_province: string | null }>(db, "candidate_profiles", "user_id, cv_path, profession, home_city, home_province"),
     head(db, "jobs", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "in_review")),
     head(db, "job_reports", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "open")),
     head(db, "listing_claims", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "pending_review")),
@@ -71,7 +72,7 @@ export async function loadStats(period: Period) {
   const submitted = new Set(jobs.filter((j) => j.status !== "draft").map((j) => j.employer_id));
   const wentLive = new Set(jobs.filter((j) => j.posted_at).map((j) => j.employer_id));
   const gotApplication = new Set(applications.map((a) => employerOfJob.get(a.job_id)).filter(Boolean) as string[]);
-  const ready = candidateProfiles.filter((c) => c.cv_path && c.profession).length;
+  const ready = candidateProfiles.filter((c) => readyToApply(c)).length;
   const applicants = new Set(applications.map((a) => a.candidate_id));
 
   return {
@@ -102,7 +103,7 @@ export async function loadStats(period: Period) {
     ],
     candidateFunnel: [
       { label: "Candidate accounts", count: candidates.length },
-      { label: "Profile ready to apply (role and resume)", count: ready },
+      { label: "Profile ready to apply (role, resume, town and province)", count: ready },
       { label: "Sent an application", count: applicants.size },
     ],
     investor: investorNumbers(jobs, applications.length),

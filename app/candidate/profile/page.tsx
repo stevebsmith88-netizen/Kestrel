@@ -7,6 +7,7 @@ import { requireRole } from "@/lib/auth";
 import Link from "next/link";
 import { safeNext } from "@/lib/auth-copy";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
+import { APPLY_NEEDS } from "@/lib/profile-ready";
 import { longDate } from "@/lib/jobs";
 
 export const metadata: Metadata = { title: "My profile and resume | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -33,14 +34,23 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
               {profileReady(profile) ? (
                 <>
                   <h2>You are ready to apply</h2>
-                  <p>Your resume and role are saved. Carry on with the job you were looking at.</p>
+                  <p>Your role, resume and town are saved. Carry on with the job you were looking at.</p>
                   <Link href={back} className="btn">Back to the job</Link>
                 </>
               ) : (
-                <p>Save your resume and choose your role below, and we will take you back to the job you were applying for.</p>
+                <p>Add what is still needed below, and we will take you back to the job you were applying for.</p>
               )}
             </section>
           )}
+          <section className="card applycheck" aria-labelledby="ac-h">
+            <h2 id="ac-h">{profileReady(profile) ? "You are ready to apply" : "To apply you need 3 things"}</h2>
+            <ul className="applyneeds">
+              {APPLY_NEEDS.map((n) => {
+                const done = n.done(profile);
+                return <li key={n.key} className={done ? "done" : "todo"}><span>{n.label}</span><span className="state">{done ? "Done" : "Still needed"}</span></li>;
+              })}
+            </ul>
+          </section>
           <div className="stackcards">
             <CvCard filename={profile?.cv_filename ?? null} uploadedOn={profile?.cv_uploaded_at ? longDate(profile.cv_uploaded_at) : null} />
             <CandidateProfileForm initial={profile} />
