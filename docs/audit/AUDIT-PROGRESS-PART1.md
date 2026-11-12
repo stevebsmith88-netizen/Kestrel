@@ -21,7 +21,7 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | D. Server actions and routes | done | 73 actions and 13 routes checked. All guarded. 7 findings (D-01 to D-07). Biggest: D-01 direct sign up to Supabase skips the bot check, invite code and terms tick once the gate opens |
 | E. Find jobs, For me and Sort | done | Sorting is fast (5 ms for 5,000 jobs). 5 findings (E-01 to E-05). Main one: everything quietly stops at 1,000 live jobs |
 | F. Resume reader | done | Tested with made up and hostile files. 7 findings (F-01 to F-07). Confirmed: a crafted Word file runs the reader for minutes (F-01), and the page and time limits do not limit the work (F-02). No resume text is logged or stored |
-| G. Email and CASL | not started | |
+| G. Email and CASL | done | 17 send sites, 1 sender function. Address, unsubscribe, demo block and off by default all verified. 8 findings (G-01 to G-08). Main: first week emails would reach unconfirmed addresses, and 2 places promise a cover letter drafting feature that does not exist |
 | H. Accessibility and mobile | not started | |
 | I. Docs against reality | not started | |
 | J. Tests, dead code and health | not started | |

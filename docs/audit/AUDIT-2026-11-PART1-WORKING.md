@@ -217,3 +217,41 @@ Tested for real: I built made up resumes and hostile files in a throwaway test (
 **F-06 Could not verify on Vercel.** Whether the functions run in a Canadian region (vercel.json sets none, so the project setting decides), and the real time and memory limits for a server action on the current plan. The build works, and both packages are plain JavaScript with no native parts, so I expect them to run there. Steve: after the fix, try Read my resume once on a preview with a real PDF and a real Word file.
 
 **F-07 Accuracy notes for the improvement round.** Idea. On my made up resume the reader missed the town when it shared a line with the phone and email, and missed "Visual-Eyes". Worth adding as tests when Steve sends his samples.
+
+## Area G. Email and CASL
+
+Every send goes through 1 function (`deliverEmail`, lib/email.ts). There are 17 call sites. No other code talks to Resend.
+
+Verified as expected:
+- **Sender and replies.** From "Kestrel Eye Care Jobs <hello@mail.eyecarejobs.ca>" unless `EMAIL_FROM` says otherwise. Replies go to hello@eyecarejobs.ca unless `EMAIL_REPLY_TO` is set.
+- **Mailing address.** 6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2, Canada is in the footer of both layouts, HTML and plain text, so every email has it.
+- **Unsubscribe.** Job alerts, first week emails, outreach and the "you're on the list" email carry a signed unsubscribe link, the reason the person is receiving it, and a `List-Unsubscribe` header. Unsubscribing takes effect at once (well inside CASL's 10 business days), writes the address to the do not email list, and the page answers the same whether or not the code matches, so it cannot be used to test who is on a list.
+- **Do not email list.** Checked before every email that has an unsubscribe link, and if the list cannot be read the email is not sent. Bounces and complaints from Resend are added by a signed webhook.
+- **Daily budget.** The daily job stops at `DAILY_EMAIL_BUDGET` (default 50), holds the rest for tomorrow and tells Steve.
+- **Demo never sends.** `deliverEmail` returns before anything else when `DEMO_MODE` is yes.
+- **Off by default.** `ENABLE_ONBOARDING_EMAILS` and `ENABLE_OUTREACH` must be exactly "yes". Unset means off. The first week emails are claimed in the database before sending, so 2 copies of the job cannot double send (the unique rule also covers a failed read).
+- **Wording.** Plain, warm, signed "The Kestrel team", no banned words, no dashes. The first week emails are specific to what the person has done, which is good practice.
+
+### Findings
+
+**G-01 The first week emails would go to people who never confirmed their email address, and to people who did not tick the marketing box.** Medium. Confirmed in code, and off today. `runOnboarding` (lib/onboarding-run.ts:26) picks every account from the last 12 days that has not unsubscribed. It does not look at whether the address was confirmed, or at `marketing_consent`. A profile row is created the moment someone signs up, before they confirm. So if a person types someone else's address, that other person gets up to 3 "Thanks for registering with Kestrel" emails. For the consent question the doc already says to ask the lawyer whether an account is an existing business relationship. Fix before switching on: skip accounts whose email is not confirmed (the auth record has `email_confirmed_at`), and put the consent question to the lawyer. 30 minutes.
+
+**G-02 Two places promise a feature that does not exist.** Medium. Confirmed. The day 7 candidate email says "Kestrel can draft a cover letter from your profile for you to edit" (lib/onboarding-emails.ts:168), and the candidate checklist on the dashboard says "Kestrel can draft a cover letter for you to edit" (lib/checklist.ts:21, live now). The apply form offers saved letters and "Save as a draft". Nothing writes a letter for the person. It also reads like AI, which Kestrel says it does not use on candidates. Fix: change both to "you can save a cover letter and reuse it". 10 minutes.
+
+**G-03 Emails without an unsubscribe link never check the do not email list.** Low to Medium. Confirmed. Account emails (application updates, new applicant, job live, claim emails, the waitlist "please confirm") skip the check by design, because the list was built for marketing. But the list also holds addresses that hard bounced or filed a spam complaint, and those keep being emailed. Repeatedly sending to dead or complaining addresses is what damages a sending domain's standing. Fix: always skip addresses whose reason is `bounced` or `complaint`, whatever the email. 30 minutes. (D-03 is the same root.)
+
+**G-04 Emails triggered by people are outside the daily budget.** Low to Medium. Confirmed. The budget covers the daily job only. A clinic that ticks 100 applicants and presses decline sends 100 emails at once (lib/applicant-actions.ts, `BULK_MAX` 100), and every new application emails a clinic. On Resend's free plan (100 a day, shared with "confirm your email" and password resets) one busy afternoon could stop sign up emails until the next day. Fix: move to Resend's paid plan before launch (already on Steve's list from R7), and count these sends against a shared counter. Could not verify which plan is active.
+
+**G-05 The unsubscribe header has no one click form.** Low. Confirmed. `List-Unsubscribe` points at a page where the person presses a button. Gmail and Yahoo ask bulk senders for the one click version (`List-Unsubscribe-Post`). Kestrel is far below their bulk threshold, so this is polish. 1 hour.
+
+**G-06 The job alert email has no pay.** Low. See A-01.
+
+**G-07 Unsubscribing from news also stops job alerts, without saying so.** Low. Confirmed. The daily job skips anyone with `unsubscribed_at` set (cron line 255). That is the safe reading of CASL, but the alerts page still shows the alerts as active. Fix: say so on the alerts page, or ask at unsubscribe "all email, or only news?". 30 minutes.
+
+**G-08 Numerals in 2 subject lines and bodies.** Low. "Three things" twice (A-21).
+
+### Could not verify from here
+
+- Supabase's own emails (confirm your address, reset password, change email): their wording, sender and footer live in the Supabase dashboard, for the live project and the demo project. The demo banner says no email is sent, but a sign up or password reset on the demo would be sent by the demo's Supabase project if email is switched on there.
+- That SPF, DKIM and DMARC records for mail.eyecarejobs.ca are in place, the Resend plan, and that the webhook secret is set.
+- What `ENABLE_ONBOARDING_EMAILS`, `ENABLE_OUTREACH` and `DAILY_EMAIL_BUDGET` are set to in each Vercel project.
