@@ -48,6 +48,13 @@ export default async function AppBar({ session, current }: { session: Session; c
   const links = session.role === "candidate" && findYourFitOn() ? [...NAV.candidate.slice(0, 2), QUIZ, ...NAV.candidate.slice(2)] : NAV[session.role];
   const inMenu = new Set(ACCOUNT_MENU[session.role].map((l) => l.href));
   const barLinks = links.filter((l) => !inMenu.has(l.href));
+  // The envelope with its count. It sits beside the initials on a wide screen and beside the Menu button on a phone, so the count is always in view.
+  const envelope = hasInbox && (
+    <Link href="/account/inbox" className="inboxlink" aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"} aria-current={here === "/account/inbox" ? "page" : undefined}>
+      <Icon name="mail" />
+      {unread > 0 && <span className="inboxcount" aria-hidden="true">{unread > 99 ? "99+" : unread}</span>}
+    </Link>
+  );
   return (
     <header className="topbar">
       <div className="wrap">
@@ -59,15 +66,12 @@ export default async function AppBar({ session, current }: { session: Session; c
           <NavLinks links={barLinks} dashboard={homeFor(session.role)} />
         </nav>
         <div className="topbar-right app-wide">
-          {hasInbox && (
-            <Link href="/account/inbox" className="inboxlink" aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"} aria-current={here === "/account/inbox" ? "page" : undefined}>
-              <Icon name="mail" />
-              {unread > 0 && <span className="inboxcount" aria-hidden="true">{unread > 99 ? "99+" : unread}</span>}
-            </Link>
-          )}
+          {envelope}
           <AccountMenu session={session} here={here} />
         </div>
-        <details className="site-narrow app-narrow">
+        <div className="topbar-narrow">
+        {envelope}
+        <details className="site-narrow">
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
             {links.map((item) => (
@@ -80,6 +84,7 @@ export default async function AppBar({ session, current }: { session: Session; c
             <form action={signOut}><button type="submit" className="menu-signout-narrow">Sign out</button></form>
           </nav>
         </details>
+        </div>
       </div>
     </header>
   );

@@ -398,13 +398,14 @@ main:focus{outline:none}
 .skip:focus{transform:none}
 
 /* Phone menu for signed in pages, and the sign out buttons that sit inside menus. */
-.app-narrow{margin-left:auto}
 .menu-who{margin:8px 14px 2px;font-size:0.875rem;color:var(--muted);overflow-wrap:anywhere}
 .menu-signout-narrow{width:100%;text-align:left;background:none;border:0;font:inherit;font-weight:600;color:var(--navy);padding:12px 14px;min-height:44px;border-radius:8px;cursor:pointer}
 .menu-signout-narrow:hover{background:var(--cream)}
 .site-wide form{display:inline-flex}
 .site-wide .linkbtn{color:var(--navy);padding:10px 14px}
 @media (max-width:700px){.app-wide{display:none!important}}
+.topbar-narrow{display:none;align-items:center;gap:6px;margin-left:auto}
+@media (max-width:700px){.topbar-narrow{display:flex}}
 
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .reportlink{margin:0 0 12px;font-size:0.9375rem}
