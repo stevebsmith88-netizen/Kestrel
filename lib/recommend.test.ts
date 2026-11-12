@@ -142,3 +142,43 @@ test("an optometrist job is never recommended to someone who is not an optometri
   const recs = recommend(prefs({ profession: "Practice or clinic manager", otherRoles: ["Optometrist"] }), jobs, { now: NOW });
   assert.deepEqual(recs.map((r) => r.job.id), ["pm"]);
 });
+
+// Audit P1-29: the list must agree with the apply rule (lib/role-fit.ts), in both directions.
+test("an assistant is shown reception jobs, and reception staff are shown assistant jobs, without ticking anything", () => {
+  const jobs = [job({ id: "reception", role_category: "Patient care or reception" }), job({ id: "assistant", role_category: "Optometric assistant or technician" })];
+  assert.deepEqual(ids(jobs, prefs({ profession: "Optometric assistant or technician" })).sort(), ["assistant", "reception"]);
+  assert.deepEqual(ids(jobs, prefs({ profession: "Patient care or reception" })).sort(), ["assistant", "reception"]);
+});
+
+test("an assistant is not shown optician jobs unless they ticked Optician", () => {
+  const jobs = [job({ id: "optician", role_category: "Optician" })];
+  assert.deepEqual(ids(jobs, prefs({ profession: "Optometric assistant or technician" })), []);
+  assert.deepEqual(ids(jobs, prefs({ profession: "Optometric assistant or technician", otherRoles: ["Optician"] })), ["optician"]);
+});
+
+test("saved other roles are checked again: a manager with Optometrist saved is not shown optometrist jobs", () => {
+  const jobs = [job({ id: "od", role_category: "Optometrist" }), job({ id: "mgr", role_category: "Practice or clinic manager" })];
+  assert.deepEqual(ids(jobs, prefs({ profession: "Practice or clinic manager", otherRoles: ["Optometrist"] })), ["mgr"]);
+});
+
+test("saved other roles are checked again: an optometrist with a field role saved is not shown field jobs", () => {
+  const jobs = [job({ id: "rep", role_category: "Sales or territory representative" }), job({ id: "od", role_category: "Optometrist" })];
+  assert.deepEqual(ids(jobs, prefs({ profession: "Optometrist", otherRoles: ["Sales or territory representative"] })), ["od"]);
+});
+
+test("every job the list shows is one the person can apply for", async () => {
+  const { canApplyForRole } = await import("./role-fit.ts");
+  const { CLINIC_ROLES, FIELD_ROLES } = await import("./jobs.ts");
+  const all = [...CLINIC_ROLES, ...FIELD_ROLES];
+  const jobs = all.map((r, i) => job({ id: `j${i}`, role_category: r }));
+  for (const profession of all) {
+    for (const otherRoles of [[], all, ["Optometrist", "Optician"], [...FIELD_ROLES]]) {
+      for (const rec of recommend(prefs({ profession, otherRoles }), jobs, { now: NOW, max: 100 })) {
+        assert.equal(canApplyForRole(profession, otherRoles, rec.job.role_category), true, `${profession} / ${rec.job.role_category}`);
+      }
+      // and the other way: every job they can apply for in that set is listed
+      const listed = new Set(recommend(prefs({ profession, otherRoles }), jobs, { now: NOW, max: 100 }).map((r) => r.job.role_category));
+      for (const r of all) assert.equal(listed.has(r), canApplyForRole(profession, otherRoles, r), `${profession} / ${r} listed`);
+    }
+  }
+});
