@@ -1,6 +1,8 @@
 import Link from "next/link";
 import AccountMenu from "@/components/AccountMenu";
+import Icon from "@/components/Icon";
 import NavLinks from "@/components/NavLinks";
+import { unreadCount } from "@/lib/notifications";
 import { ACCOUNT_MENU } from "@/lib/account-menu";
 import { signOut } from "@/lib/auth-actions";
 import { homeFor, type Role, type Session } from "@/lib/auth";
@@ -38,7 +40,10 @@ const NAV: Record<Role, NavItem[]> = {
 
 // The bar across the top of every signed in page. Pass the page's own address as
 // `current` and its link is highlighted. On a phone the links fold into a Menu button.
-export default function AppBar({ session, current }: { session: Session; current?: string }) {
+export default async function AppBar({ session, current }: { session: Session; current?: string }) {
+  // Candidates and clinics have an inbox, shown as an envelope beside the initials with the number of unread messages.
+  const hasInbox = session.role !== "admin";
+  const unread = hasInbox ? await unreadCount() : 0;
   const here = current ?? homeFor(session.role);
   const links = session.role === "candidate" && findYourFitOn() ? [...NAV.candidate.slice(0, 2), QUIZ, ...NAV.candidate.slice(2)] : NAV[session.role];
   const inMenu = new Set(ACCOUNT_MENU[session.role].map((l) => l.href));
@@ -53,7 +58,15 @@ export default function AppBar({ session, current }: { session: Session; current
         <nav className="app-wide" aria-label="Main">
           <NavLinks links={barLinks} dashboard={homeFor(session.role)} />
         </nav>
-        <AccountMenu session={session} here={here} className="app-wide" />
+        <div className="topbar-right app-wide">
+          {hasInbox && (
+            <Link href="/account/inbox" className="inboxlink" aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"} aria-current={here === "/account/inbox" ? "page" : undefined}>
+              <Icon name="mail" />
+              {unread > 0 && <span className="inboxcount" aria-hidden="true">{unread > 99 ? "99+" : unread}</span>}
+            </Link>
+          )}
+          <AccountMenu session={session} here={here} />
+        </div>
         <details className="site-narrow app-narrow">
           <summary><svg className="menu-icon" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" /></svg><span className="sr">Menu</span></summary>
           <nav aria-label="Main menu">
@@ -62,6 +75,7 @@ export default function AppBar({ session, current }: { session: Session; current
                 {item.label}
               </Link>
             ))}
+            {hasInbox && <Link href="/account/inbox" aria-current={here === "/account/inbox" ? "page" : undefined}>{unread > 0 ? `Inbox (${unread})` : "Inbox"}</Link>}
             <p className="menu-who">{session.fullName || session.email}</p>
             <form action={signOut}><button type="submit" className="menu-signout-narrow">Sign out</button></form>
           </nav>

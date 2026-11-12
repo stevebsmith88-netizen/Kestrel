@@ -149,6 +149,21 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Account settings", href: "/account" }],
       },
       {
+        id: "inbox",
+        title: "What is the inbox, and where do I find it?",
+        keywords: ["inbox", "envelope", "notifications", "messages", "updates", "unread", "bell"],
+        answer: [
+          "The inbox keeps the updates about your account in one place, as well as in your email. A candidate sees when a clinic moves an application to a new step, with the clinic's message if it wrote one. A clinic sees new applicants, and when we approve a job or ask for a change. A shortlist is a clinic's private working list, so it never appears in a candidate's inbox.",
+          "The inbox is for reading only. Nobody replies to anybody in it. To reach us, write to hello@eyecarejobs.ca. The envelope beside your initials shows how many messages you have not read yet.",
+        ],
+        steps: [
+          "Choose the envelope beside your initials at the top of the page. On a phone, open **Menu** and choose **Inbox**.",
+          "Choose **Open** on a message to go to the application or job it is about.",
+          "Choose **Mark all as read** to clear the number on the envelope.",
+        ],
+        links: [{ label: "Inbox", href: "/account/inbox" }],
+      },
+      {
         id: "contact-us",
         title: "How do I contact you?",
         keywords: ["support", "help", "email", "hello", "privacy officer", "reach", "question", "feedback"],
