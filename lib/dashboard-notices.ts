@@ -17,6 +17,7 @@ export const DASHBOARD_NOTICES: Record<string, string> = {
   "job-limit": "You have 10 open jobs already. Close or delete one, then try again.",
   "job-repost-failed": "We couldn't copy that job. Please try again.",
   "job-extended": "Done. Your job is live for another 30 days, with the same wording.",
+  "job-extend-quebec": "That job is in Quebec, and Kestrel can't post jobs in Quebec yet, so it can't be extended. Quebec is planned for a later date.",
   "job-extend-blocked": "That job can't be extended right now. A live job can be extended in its last 7 days, and an ended one within 7 days of ending.",
   "job-extend-failed": "We couldn't extend the job. Please try again, or email us and we'll do it for you.",
   "job-filled": "Thank you. The job is closed and marked as filled, and anyone still waiting has been told.",

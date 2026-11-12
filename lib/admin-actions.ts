@@ -6,7 +6,7 @@ import { requireRole } from "@/lib/auth";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { jobLiveEmail, jobNeedsChangeEmail } from "@/lib/clinic-emails";
-import { expiryFrom, longDate } from "@/lib/jobs";
+import { expiryFrom, isQuebecJob, longDate } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
 import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -40,7 +40,9 @@ export async function approveJob(form: FormData) {
   const now = new Date();
   // A job that was live before (it was edited and sent back) keeps its original 30 days. Otherwise editing
   // would be a way to keep a job live for ever.
-  const { data: before } = await db.from("jobs").select("posted_at, expires_at").eq("id", id).eq("status", "in_review").maybeSingle();
+  const { data: before } = await db.from("jobs").select("posted_at, expires_at, province").eq("id", id).eq("status", "in_review").maybeSingle();
+  // The form refuses Quebec, so a Quebec job here reached the queue another way. It is never made live (the database refuses it too).
+  if (before && isQuebecJob(before)) redirect("/admin/review?notice=quebec");
   const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };
   const { data, error } = await db
     .from("jobs")

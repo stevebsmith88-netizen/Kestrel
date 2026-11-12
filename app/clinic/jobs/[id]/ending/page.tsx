@@ -19,6 +19,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const DAY = 24 * 60 * 60 * 1000;
 
 const NOTICES: Record<string, string> = {
+  "job-extend-quebec": "This job is in Quebec, and Kestrel can't post jobs in Quebec yet, so it can't be extended. Quebec is planned for a later date.",
   "job-extend-blocked": "This job can't be extended right now. A live job can be extended in its last 7 days, and an ended one within 7 days of ending.",
   "job-extend-failed": "We couldn't extend the job. Please try again, or email us and we'll do it for you.",
 };

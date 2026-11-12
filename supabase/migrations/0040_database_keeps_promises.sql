@@ -8,3 +8,13 @@
 -- Before this is run the website already saves names through the server, so nothing changes for anyone on the day it is run.
 revoke update on public.profiles from authenticated;
 revoke update (first_name, last_name, full_name) on public.profiles from authenticated;
+
+-- ---------------------------------------------------------------- P1-28: no Quebec job in review or live
+-- Kestrel is in English for now, so the website refuses a job in Quebec (Steve, 6th November 2026). A job sent straight to the database API
+-- skipped that. This rule refuses a Quebec job that is in review or live. Drafts, and jobs that are rejected, closed or expired, are left
+-- alone, so a Quebec job that somehow exists already can still be closed or run out. "not valid" means rows already in the table are not
+-- checked today (the check at the end of the combined file counts them, and it should say 0).
+alter table public.jobs drop constraint if exists jobs_not_quebec_once_sent;
+alter table public.jobs add constraint jobs_not_quebec_once_sent check (
+  status not in ('in_review', 'live') or province is null or lower(btrim(province)) not in ('quebec', 'québec', 'qc')
+) not valid;

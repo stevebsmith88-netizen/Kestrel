@@ -10,7 +10,7 @@ import { getMyEmployer } from "@/lib/clinic";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { cleanClinic, validateClinic, type JobFormState } from "@/lib/jobs";
+import { cleanClinic, isQuebecJob, validateClinic, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
@@ -220,7 +220,8 @@ async function doExtend(form: FormData) {
   const employer = await getMyEmployer(session.userId);
   const admin = supabaseAdmin();
   if (!id || !employer || !admin) return "job-extend-failed";
-  const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count").eq("id", id).eq("employer_id", employer.id).maybeSingle();
+  const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count, province").eq("id", id).eq("employer_id", employer.id).maybeSingle();
+  if (job && isQuebecJob(job)) return "job-extend-quebec";
   if (!job || !canExtend(job)) return "job-extend-blocked";
   const until = extendedUntil(job).toISOString();
   const { error } = await admin

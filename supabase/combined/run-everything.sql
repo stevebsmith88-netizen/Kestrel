@@ -2345,6 +2345,16 @@ alter table public.profiles add column if not exists name_changed_at timestamptz
 revoke update on public.profiles from authenticated;
 revoke update (first_name, last_name, full_name) on public.profiles from authenticated;
 
+-- ---------------------------------------------------------------- P1-28: no Quebec job in review or live
+-- Kestrel is in English for now, so the website refuses a job in Quebec (Steve, 6th November 2026). A job sent straight to the database API
+-- skipped that. This rule refuses a Quebec job that is in review or live. Drafts, and jobs that are rejected, closed or expired, are left
+-- alone, so a Quebec job that somehow exists already can still be closed or run out. "not valid" means rows already in the table are not
+-- checked today (the check at the end of the combined file counts them, and it should say 0).
+alter table public.jobs drop constraint if exists jobs_not_quebec_once_sent;
+alter table public.jobs add constraint jobs_not_quebec_once_sent check (
+  status not in ('in_review', 'live') or province is null or lower(btrim(province)) not in ('quebec', 'québec', 'qc')
+) not valid;
+
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
@@ -2417,6 +2427,8 @@ from (
     ('column: when a name was last changed', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'name_changed_at')),
     ('rule: applications can be hired', exists (select 1 from pg_constraint where conname = 'applications_status_check' and pg_get_constraintdef(oid) like '%hired%')),
     ('permission removed: signed in people cannot change their own name directly (0040)', not has_column_privilege('authenticated', 'public.profiles', 'first_name', 'UPDATE') and not has_column_privilege('authenticated', 'public.profiles', 'full_name', 'UPDATE')),
+    ('rule: no Quebec job in review or live (0040)', exists (select 1 from pg_constraint where conname = 'jobs_not_quebec_once_sent')),
+    ('Quebec jobs already in review or live (should be 0 problems)', not exists (select 1 from public.jobs where status in ('in_review', 'live') and lower(btrim(province)) in ('quebec', 'québec', 'qc'))),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;
