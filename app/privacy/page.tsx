@@ -10,7 +10,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "5th November 2026";
+const UPDATED = "12th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -55,6 +55,18 @@ export default function Privacy() {
               cover letters and applications you send. If you choose <strong>Fill in from my resume</strong>, our own server reads
               the text of your resume once to suggest answers for your profile. It does this with fixed rules, not AI, it does not
               keep the text, and it does not send it to any other service. Nothing from it is saved unless you tick it and save.
+            </li>
+            <li>
+              <strong>Also for candidates, private to you:</strong> your home town and province, how far you would travel, the provinces and
+              types of work you would consider, other roles you would consider, the lowest pay you would accept and whether that is by the hour or the year, whether you
+              prefer an independent or a corporate practice, the practice software you know, your answer to &quot;where are you in eye care&quot; if you give one,
+              and the jobs you mark &quot;Not interested&quot;. We use these only to build your <strong>Recommended for you</strong> list.
+              Clinics never see your preferences, your lowest pay, your career stage answer or your town. A clinic sees only what is
+              listed on the apply page when you send an application. You can change your preferences in your profile, you can ask us to remove anything else by email, and all of it is in the copy of your information you can download.
+            </li>
+            <li>
+              <strong>Your inbox:</strong> the messages Kestrel sends to you inside your account, such as an update on an application,
+              and whether you have read them. <strong>Your name:</strong> we keep the date you last changed your name, because a change starts a 30 day hold before the next one.
             </li>
             <li>
               <strong>If you are a clinic:</strong> your clinic&apos;s name, location, website and description, the job posts you
