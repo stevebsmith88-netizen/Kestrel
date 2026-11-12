@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0036), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0037), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -2261,6 +2261,25 @@ alter table public.applications add constraint applications_status_check check (
 alter table public.jobs add column if not exists filled_application_id uuid references public.applications (id) on delete set null;
 
 -- ======================================================================
+-- 0037_candidate_first_step.sql
+-- ======================================================================
+-- 0037: the first step after a candidate signs in for the first time (Steve, 12th November 2026).
+--   * career_stage: an optional, private answer to "where are you in eye care". Plain facts only: working in eye care now, studying or
+--     training for eye care, or not working in eye care yet. It is never shown to a clinic, never used to rank or filter jobs, and never
+--     a gate. Whether a clinic may ever see it is a question for the lawyer (it could hint at protected grounds).
+--   * start_seen_at: when the candidate was shown the first step page (they answered it or chose Skip), so they are only sent there once.
+-- Nothing else changes. Existing profiles are untouched: career_stage stays empty. A candidate who already has a role is never sent to the first
+-- step page. One with no role yet is sent there once. Until this SQL has been run the site simply skips the page. Safe to run more than once.
+
+alter table public.candidate_profiles
+  add column if not exists career_stage  text check (career_stage is null or career_stage in ('working', 'studying', 'not_yet')),
+  add column if not exists start_seen_at timestamptz;
+
+-- The candidate saves these through their own sign in, so they need permission on the new columns, as for the other profile columns.
+grant insert (career_stage, start_seen_at) on public.candidate_profiles to authenticated;
+grant update (career_stage, start_seen_at) on public.candidate_profiles to authenticated;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2325,6 +2344,8 @@ from (
     ('column: days a week on a daily rate', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_days_per_week')),
     ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('column: the application a clinic hired for a filled job', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'filled_application_id')),
+    ('columns: candidate first step (career stage, first step seen)', (select count(*) from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name in ('career_stage', 'start_seen_at')) = 2),
+    ('permission: candidates can save their first step answers', has_column_privilege('authenticated', 'public.candidate_profiles', 'career_stage', 'UPDATE')),
     ('rule: applications can be hired', exists (select 1 from pg_constraint where conname = 'applications_status_check' and pg_get_constraintdef(oid) like '%hired%')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)

@@ -47,6 +47,17 @@ export async function getMyCandidateProfile(userId: string): Promise<CandidatePr
   return (data as CandidateProfile | null) ?? null;
 }
 
+// Whether to send a candidate to the first step page: they have no role yet and have not been shown it. If the database has not had migration 0037
+// yet the read fails, and nobody is sent there, so the site keeps working until the SQL has been run.
+export async function needsFirstStep(userId: string, profile: CandidateProfile | null): Promise<boolean> {
+  if (profile?.profession) return false;
+  const db = await supabaseServer();
+  if (!db) return false;
+  const { data, error } = await db.from("candidate_profiles").select("start_seen_at").eq("user_id", userId).maybeSingle();
+  if (error) return false;
+  return !data?.start_seen_at;
+}
+
 export async function getMyApplications(): Promise<Application[]> {
   const db = await supabaseServer();
   if (!db) return [];
