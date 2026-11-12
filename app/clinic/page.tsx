@@ -20,6 +20,7 @@ import { canExtend } from "@/lib/job-ending";
 import { saveJobAsTemplateQuiet } from "@/lib/template-actions";
 import { jobNotices } from "@/lib/clinic-notices";
 import { DASHBOARD_NOTICES, noticeTone } from "@/lib/dashboard-notices";
+import { SHOW_LABELS, filterJobs, newApplicantsHref, parseShow } from "@/lib/dashboard-filter";
 import { daysLeft, employmentLabel, longDate } from "@/lib/jobs";
 import { payBasisOf, payText } from "@/lib/job-pay";
 
@@ -28,9 +29,10 @@ export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jo
 export const dynamic = "force-dynamic";
 
 
-export default async function ClinicHome({ searchParams }: { searchParams: Promise<{ notice?: string; template?: string }> }) {
+export default async function ClinicHome({ searchParams }: { searchParams: Promise<{ notice?: string; template?: string; show?: string }> }) {
   const session = await requireRole("clinic");
-  const { notice, template } = await searchParams;
+  const { notice, template, show: showParam } = await searchParams;
+  const show = parseShow(showParam);
   const employer = await getMyEmployer(session.userId);
   const jobs = employer ? await getMyJobs(employer.id) : [];
   const applicants = employer ? await getApplicantCounts() : {};
@@ -38,6 +40,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const totals = sumNumbers(numbers);
   const unread = Object.values(applicants).reduce((sum, c) => sum + c.fresh, 0);
   const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
+  const shown = filterJobs(jobs, show, applicants);
   const first = session.firstName || "there";
   const count = (s: string) => jobs.filter((j) => j.status === s).length;
   // The green approval messages a clinic has not cleared yet. A message about a change a clinic needs to make is never hidden.
@@ -92,25 +95,30 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               />
               {waiting > 0 && <p className="replynote">{waiting} {waiting === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
               <div className="tiles stats">
-                <section className="card tile"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></section>
-                <section className="card tile"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></section>
-                <section className="card tile"><p className="kicker">In review</p><p className="num">{count("in_review")}</p><p>With our team</p></section>
-                <section className="card tile"><p className="kicker">Drafts</p><p className="num">{count("draft") + count("rejected")}</p><p>Not sent yet</p></section>
-                <section className="card tile"><p className="kicker">Views</p><p className="num">{totals.views30.toLocaleString("en-CA")}</p><p>Last 30 days</p></section>
-                <section className="card tile"><p className="kicker">Apply clicks</p><p className="num">{totals.clicks30.toLocaleString("en-CA")}</p><p>Last 30 days</p></section>
+                <Link href="/clinic?show=live#your-jobs" className="card tile tilelink"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></Link>
+                <Link href={newApplicantsHref(jobs, applicants)} className="card tile tilelink"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></Link>
+                <Link href="/clinic?show=review#your-jobs" className="card tile tilelink"><p className="kicker">In review</p><p className="num">{count("in_review")}</p><p>With our team</p></Link>
+                <Link href="/clinic?show=drafts#your-jobs" className="card tile tilelink"><p className="kicker">Drafts</p><p className="num">{count("draft") + count("rejected")}</p><p>Not sent yet</p></Link>
+                <Link href="/clinic?show=posted#your-jobs" className="card tile tilelink"><p className="kicker">Views</p><p className="num">{totals.views30.toLocaleString("en-CA")}</p><p>Last 30 days</p></Link>
+                <Link href="/clinic?show=posted#your-jobs" className="card tile tilelink"><p className="kicker">Apply clicks</p><p className="num">{totals.clicks30.toLocaleString("en-CA")}</p><p>Last 30 days</p></Link>
               </div>
               <p className="small-note statsnote">Views count each visit to a job page once, and leave out search engines, you and our team. An apply click is someone pressing Apply, which is not the same as a finished application, so the applicant counts stay the ones to trust.</p>
 
-              <div className="listhead">
-                <h2>Your jobs</h2>
-                <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>
+              <div className="listhead" id="your-jobs">
+                <h2>{show ? SHOW_LABELS[show].title : "Your jobs"}</h2>
+                <span className="listactions">
+                  {show && <Link href="/clinic#your-jobs" className="btn sm ghost">Show all jobs</Link>}
+                  <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>
+                </span>
               </div>
 
               {jobs.length === 0 ? (
                 <section className="card"><p>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</p></section>
+              ) : shown.length === 0 && show ? (
+                <section className="card"><p>{SHOW_LABELS[show].empty}</p></section>
               ) : (
                 <div className="joblist">
-                  {jobs.map((j) => (
+                  {shown.map((j) => (
                     <article className="card jobrow stacked" key={j.id}>
                       <div className="jobtop">
                         <div className="jobmain">
