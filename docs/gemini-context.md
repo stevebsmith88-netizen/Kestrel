@@ -1,6 +1,6 @@
 # Kestrel Eye Care Jobs: context for a second opinion
 
-As of 10th November 2026. Safe to paste into another AI assistant: it holds no keys, no personal data and no private contacts. To refresh it, ask Claude in the Kestrel project to "update docs/gemini-context.md", and paste the new version.
+As of 12th November 2026. Safe to paste into another AI assistant: it holds no keys, no personal data and no private contacts. To refresh it, ask Claude in the Kestrel project to "update docs/gemini-context.md", and paste the new version.
 
 ## What Kestrel is
 
@@ -26,7 +26,7 @@ Per 30 day post: $59 for assistants, technicians and reception; $79 for optician
 
 ## What is built
 
-Candidate and clinic accounts (Google or email sign in), clinic profiles, posting a job with an AI ad builder, a review step before a job goes live, search with filters and distance, job pages with Google job data, job alerts by email, Quick Apply with a CV and cover letter, an applicant board for clinics (shortlist, interview, a kind no, one at a time or in bulk), claim your listing, equipment and software tags, a pay benchmark from Government of Canada Job Bank data, a price comparison page, a blog (24 posts scheduled weekly into April 2027), a help centre with search (35 topics), one shared footer, and an admin area. A separate demo site with sample data shows the product.
+Candidate and clinic accounts (Google or email sign in), clinic profiles, posting a job with an AI ad builder, a review step before a job goes live, search with filters and distance, job pages with Google job data, job alerts by email, Quick Apply with a resume and cover letter (a candidate can apply only for roles that fit their profile or ones they add as other roles), an applicant board for clinics (shortlist, interview, hired, a kind no, one at a time or in bulk), a clinic dashboard whose tiles open the jobs they count, one consistent top bar with a My dashboard link for signed in people, job titles tidied from all capitals on save, claim your listing, equipment and software tags, a pay benchmark from Government of Canada Job Bank data, a price comparison page, a blog (24 posts scheduled weekly into April 2027), a help centre with search (35 topics), one shared footer, and an admin area. A separate demo site with sample data shows the product.
 
 ## Not built yet
 
@@ -34,7 +34,7 @@ Stripe checkout and the passes (the main item on the critical path), an in accou
 
 ## Where we are
 
-Done: confirming what was built, quick wins, optometrist pay options, tags, the help centre, and a tidier footer and link style. Next: Stripe checkout, preparing launch supply (a list of clinics, claim emails), a final code audit about 3 weeks before launch. Waiting on Steve: his lawyer's review of the terms and policies, then his disclosure conversation, then roadmap dates.
+Done: confirming what was built, quick wins, optometrist pay options, tags, the help centre, a tidier footer, link and top bar style, the apply rule by role, clickable dashboard tiles, and the move from "CV" to "resume" in everything people read. Next: a profile redesign (under 2 minutes to be ready to apply, perhaps filling it in from an uploaded resume), a "For me" job list, an in account inbox, Stripe checkout, preparing launch supply (a list of clinics, claim emails), a final code audit about 3 weeks before launch. Waiting on Steve: his lawyer's review of the terms and policies, then his disclosure conversation, then roadmap dates.
 
 ## Questions I would like a second opinion on
 
