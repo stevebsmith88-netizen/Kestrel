@@ -10,6 +10,9 @@ import { cleanTags, EQUIPMENT_TAGS, SOFTWARE_TAGS, SPECIALTY_TAGS } from "./job-
 export { HOURS_IN_A_YEAR, parseMoney, payRangeAllowed };
 
 export { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE };
+// Whether a saved job is in Quebec, whatever the capitals or accent. The form only ever saves "Quebec", but approving and extending re-check
+// with this in case a job reached the database another way (audit P1-28). The database holds the same rule (migration 0040).
+export const isQuebecJob = (job: { province?: string | null }) => ["quebec", "qu\u00e9bec", "qc"].includes((job.province ?? "").trim().toLowerCase());
 // Roles that work from clinics. The waitlist uses this list too, so it is kept as it is.
 export const CLINIC_ROLES = ROLES;
 // Roles that usually travel to clinics, for suppliers, manufacturers and labs. To add another role, add it

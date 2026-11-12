@@ -1,3 +1,4 @@
+import { readMyApplicationEvents, readMyApplications } from "@/lib/my-applications";
 import "server-only";
 import { readyToApply } from "./profile-ready.ts";
 export { profileStrength } from "./profile-ready.ts";
@@ -62,8 +63,9 @@ export async function needsFirstStep(userId: string, profile: CandidateProfile |
 export async function getMyApplications(): Promise<Application[]> {
   const db = await supabaseServer();
   if (!db) return [];
-  const { data } = await db.from("applications").select(APPLICATION_COLUMNS).order("created_at", { ascending: false });
-  return ((data ?? []) as Application[]).map(viewForCandidate);
+  // The candidate's own, from the database's masked copy (lib/my-applications.ts), or the table on a database without migration 0040.
+  const { data } = await readMyApplications<Application[]>(db, (source) => source.select(APPLICATION_COLUMNS).order("created_at", { ascending: false }));
+  return (data ?? []).map(viewForCandidate);
 }
 
 type LoadedApplication = { application: Application; history: HistoryEvent[] };
@@ -73,6 +75,12 @@ type LoadedApplication = { application: Application; history: HistoryEvent[] };
 async function loadApplication(id: string, audience: "candidate" | "clinic"): Promise<LoadedApplication | null> {
   const db = await supabaseServer();
   if (!db) return null;
+  if (audience === "candidate") {
+    // Since migration 0040 a candidate cannot read these 2 tables directly, so their copy comes through lib/my-applications.ts.
+    const { data } = await readMyApplications<Application>(db, (source) => source.select(APPLICATION_COLUMNS).eq("id", id).maybeSingle());
+    if (!data) return null;
+    return viewApplication(data, await readMyApplicationEvents(db, id), audience);
+  }
   const { data } = await db.from("applications").select(APPLICATION_COLUMNS).eq("id", id).maybeSingle();
   if (!data) return null;
   const { data: events } = await db.from("application_events").select("status, note, created_at").eq("application_id", id).order("created_at", { ascending: true });

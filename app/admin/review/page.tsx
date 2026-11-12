@@ -15,6 +15,7 @@ export const dynamic = "force-dynamic";
 
 const NOTICES: Record<string, string> = {
   approved: "Approved. The job is live.",
+  quebec: "Not approved. This job is in Quebec, and Kestrel can't post jobs in Quebec yet. Send it back to the clinic with a note.",
   rejected: "Sent back to the clinic with your note.",
   "need-note": "Please tell the clinic what to change before sending a job back.",
   error: "That didn't work. The job may already have been handled. Please refresh and try again.",
