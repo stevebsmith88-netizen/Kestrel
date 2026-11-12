@@ -16,7 +16,7 @@ import { hideRecommendation } from "@/lib/recommendation-actions";
 import { getRecommendations } from "@/lib/recommendations";
 import { supabaseServer } from "@/lib/supabase/server";
 
-export const metadata: Metadata = { title: "Your home | Kestrel Eye Care Jobs", robots: { index: false } };
+export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +38,7 @@ export default async function CandidateHome() {
       <AppBar session={session} current="/candidate" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">Your home</p>
+          <p className="kicker">Your dashboard</p>
           <h1>Welcome, {first}</h1>
           <p className="lede2">Keep your resume and details here, and apply to any job in a few clicks.</p>
 

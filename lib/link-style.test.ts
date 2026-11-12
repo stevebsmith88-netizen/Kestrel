@@ -33,3 +33,12 @@ test("a link that stands alone on its line is a button or a styled navigation li
   }
   assert.deepEqual(found, [], "Give these a button class (btn sm ghost) or style them through their container");
 });
+
+// Steve's rule (12th November 2026): links, titles and menu options highlight on hover with a soft box and a thin ring, like the footer. An
+// underline on hover is not used. Links inside a sentence keep their thin underline all the time, from the base link rule, so they need no hover rule.
+
+test("no style rule underlines a link only on hover", () => {
+  const css = readFileSync("app/globals.css", "utf8");
+  const found = css.split("\n").filter((line) => /:hover[^{]*\{[^}]*text-decoration:\s*underline/.test(line) || /:focus-visible[^{]*\{[^}]*text-decoration:\s*underline/.test(line));
+  assert.deepEqual(found, [], "Use the box highlight, not an underline:\n" + found.join("\n"));
+});

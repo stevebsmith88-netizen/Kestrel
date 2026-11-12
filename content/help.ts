@@ -311,7 +311,7 @@ export const HELP: HelpSection[] = [
           "A clinic can write you a message with an update, and you see it on the application. The clinic's private notes are never shown to you. We also email you when a clinic updates an application, unless you have turned those emails off. The topic [How do I change which emails I get?](/help#email-choices) says how.",
         ],
         steps: [
-          "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead. Your home page also shows the latest few.",
+          "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead. Your dashboard also shows the latest few.",
           "Use the tabs **All**, **In review**, **Interviews**, **Offers** and **Closed** to find one.",
           "Choose **View details** to see where it stands, the clinic's message, the history, and what you sent.",
         ],
@@ -339,7 +339,7 @@ export const HELP: HelpSection[] = [
         title: "What are Recommended for you and Not interested?",
         keywords: ["suggestions", "matches", "hide", "dismiss", "home page", "suggested jobs"],
         answer: [
-          "Your home page shows up to 8 jobs that fit what you told us, each with a line saying why it fits, such as the role, how far away it is, or that its pay reaches your minimum. They come from plain rules applied to your profile, with no AI, and nothing about you is shared with clinics.",
+          "Your dashboard shows up to 8 jobs that fit what you told us, each with a line saying why it fits, such as the role, how far away it is, or that its pay reaches your minimum. They come from plain rules applied to your profile, with no AI, and nothing about you is shared with clinics.",
           "**Not interested** removes a job from your list, for you only. There is no undo, and the job still appears when you search. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
         ],
         steps: [

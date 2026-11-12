@@ -130,7 +130,8 @@ input.other{margin-top:10px}
 .auth-done .help{margin:-8px 0 0}
 .alt{font-size:0.9375rem;color:var(--muted);margin:14px 0 0;text-align:center}
 .alt a:not(.btn){font-weight:600;color:var(--navy);text-decoration:none}
-.alt a:not(.btn):hover{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.2em}
+.alt a:not(.btn){padding:2px 6px;margin:-2px -6px;border-radius:8px}
+.alt a:not(.btn):hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55);text-decoration:none}
 .topbar{background:#fff;border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;gap:24px;padding-top:10px;padding-bottom:10px;flex-wrap:wrap}
 .topbar-logo img{display:block;height:30px;width:auto}
@@ -326,7 +327,8 @@ textarea{resize:vertical;line-height:1.5}
 /* Navigation links (back links, breadcrumbs): bold, no underline, with an arrow and a clear hover. */
 .back a{font-weight:700;color:var(--navy);text-decoration:none;display:inline-flex;align-items:center;gap:8px;min-height:44px}
 .back a::before{content:"\2190" / "";color:var(--chestnut-d);font-weight:700}
-.back a:hover{color:var(--chestnut-d);text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.25em}
+.back a{padding:0 8px;margin-left:-8px;border-radius:8px}
+.back a:hover{color:var(--chestnut-d);background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55);text-decoration:none}
 .stackcards{display:flex;flex-direction:column;gap:20px}
 .stackform{display:flex;flex-direction:column;gap:20px}
 .appgrid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px;align-items:start;margin-top:18px}
@@ -407,7 +409,8 @@ main:focus{outline:none}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .reportlink{margin:0 0 12px;font-size:0.9375rem}
 .reportlink a{display:inline-flex;align-items:center;gap:8px;min-height:44px;color:var(--muted);font-weight:600;text-decoration:none}
-.reportlink a:hover{color:var(--navy);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.25em}
+.reportlink a{padding:0 8px;margin-left:-8px;border-radius:8px}
+.reportlink a:hover{color:var(--navy);background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55);text-decoration:none}
 
 .inlineform{display:grid;gap:10px;max-width:520px}
 
@@ -432,7 +435,8 @@ main:focus{outline:none}
 .postlist{display:grid;gap:16px;margin-top:16px}
 .postlist h2{margin:6px 0 8px}
 .postlist h2 a{text-decoration:none;color:var(--navy)}
-.postlist h2 a:hover{text-decoration:underline}
+.postlist h2 a{display:inline-block;padding:2px 8px;margin:-2px -8px;border-radius:8px}
+.postlist h2 a:hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55);text-decoration:none}
 .blogcta{margin:32px 0}
 
 .templatebox{margin:20px 0 4px;padding:14px;border:1px dashed var(--edge);border-radius:12px;background:var(--paper)}
@@ -515,7 +519,8 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .featured{background:#fff;border:1px solid var(--line);border-radius:14px;padding:30px 32px}
 .featured h3{font:400 clamp(1.5rem,2.6vw,1.9rem)/1.15 "DM Serif Display",Georgia,serif;margin:8px 0 12px}
 .featured h3 a{color:var(--navy);text-decoration:none}
-.featured h3 a:hover{text-decoration:underline}
+.featured h3 a{display:inline-block;padding:2px 8px;margin:-2px -8px;border-radius:8px}
+.featured h3 a:hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55);text-decoration:none}
 .featured .teaser{margin:0 0 12px;color:var(--navy-2)}
 .featured .meta,.striplinks .meta{font-size:0.875rem;color:var(--muted);display:block}
 .featured .readmore{margin:0;font-weight:600}
@@ -523,7 +528,8 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .striplinks li{padding:18px 0;border-top:1px solid var(--line)}
 .striplinks li:first-child{border-top:0;padding-top:4px}
 .striplinks a{display:block;margin-top:4px;font:400 1.3125rem/1.25 "DM Serif Display",Georgia,serif;color:var(--navy);text-decoration:none}
-.striplinks a:hover{text-decoration:underline}
+.striplinks a{padding:2px 8px;margin-left:-8px;border-radius:8px}
+.striplinks a:hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55);text-decoration:none}
 .stripmore{margin:22px 0 0;font-weight:600}
 @media (max-width:820px){.stripgrid{grid-template-columns:1fr;gap:12px}.featured{padding:24px}}
 
