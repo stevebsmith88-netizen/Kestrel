@@ -1,0 +1,207 @@
+<!doctype html><html lang="en-CA"><head><meta charset="utf-8"><title>Legal and setup plan</title><link rel="stylesheet" href="style.css"></head><body>
+
+<p class="kicker">Kestrel Eye Care Jobs</p>
+<h1>Legal and setup plan, on a bootstrap budget</h1>
+<p class="meta">Prepared for Steve Smith on 12th November 2026. This is a plan and a summary of public guidance, not legal or tax advice. Fees and rules change, so check each figure on the official page before relying on it.</p>
+
+<div class="box">
+<strong>In 1 minute.</strong> Most of the legal questions from the review pack can be designed away or answered from free government guidance. Pay for only 2 things: a lawyer's view of your employment agreement (start with the free Law Society referral, using the separate 1 page sheet), and 1 flat fee review of the Terms, Privacy policy and Posting policy before you take any money. Incorporate before paid launch, not before the free launch. Trademark and insurance can wait for revenue, with 2 caveats explained in section 5.
+</div>
+
+<h3>Contents</h3>
+<ol>
+<li>Your 5 decisions, and what changes</li>
+<li>What the official guidance says, and where Kestrel stands</li>
+<li>Drafts ready for you to read</li>
+<li>Paying for advice: the 2 things worth money</li>
+<li>Setting up the business: incorporating, HST, trademark, insurance</li>
+<li>The order, and a rough budget</li>
+<li>Sources</li>
+</ol>
+
+<h2>1. Your 5 decisions, and what changes</h2>
+<table>
+<tr><th style="width:20%">Decision</th><th style="width:44%">What it means</th><th>What changes in Kestrel</th></tr>
+<tr><td><strong>Optometrist pay shows an estimated dollar range</strong></td><td>When a clinic pays by percentage (of production, collections, billings or exam fees), it must also give its own estimate of what the role earns, by the day or the year, as Indeed shows "estimated" pay. The figure is the clinic's own estimate, never Indeed's or any other job board's: Kestrel does not use pay from other boards. Ontario's guidance uses the same pattern for commission roles ("base plus commission, expected earnings $60,000 to $80,000"). This removes the hardest pay question from the lawyer's list.</td><td>A required "Expected earnings" range beside any percentage, shown as for example "28% to 35% of production, expected earnings $800 to $1,000 a day (the clinic's estimate)". Google gets the dollar range. Needs 1 small SQL change, run on both databases. Draft wording in section 3D.</td></tr>
+<tr><td><strong>Remove the career stage question</strong></td><td>"Where are you in eye care" goes, from the first step page and everywhere else. A resume shows it anyway, and it removes a privacy question.</td><td>Removed from the first step page (which then asks only for the role), the privacy policy, the help centre and the data download. Answers already saved (test and demo accounts only) are deleted. The database column is removed later, in a tidy up.</td></tr>
+<tr><td><strong>First week emails only to people who ticked the box</strong></td><td><strong>To your question: no, this is not in the terms, and the emails are not switched on.</strong> They are built but off (the setting <code>ENABLE_ONBOARDING_EMAILS</code> is not set). As built, once switched on they would go to every confirmed account, ticked or not. So a small change is needed first.</td><td>Send only to people who ticked the news box. Add "tips for getting started" to that box's wording (draft in 3B), so the tick covers them. Then you can switch them on in the live Vercel project.</td></tr>
+<tr><td><strong>Quebec jobs stay out</strong></td><td>No change. Quebec residents can still sign up, because many look for work in other provinces.</td><td>Nothing.</td></tr>
+<tr><td><strong>Outreach set aside</strong></td><td>Clinic outreach and publishing found listings stay off while you look into it.</td><td>Nothing. Both switches stay off.</td></tr>
+</table>
+<p>These 3 changes (expected earnings, removing career stage, ticked only welcome emails) fit naturally into the same branch as the simpler sign up work, because the first step page is part of both. I will build them together when we get to step 2.</p>
+
+<h2>2. What the official guidance says, and where Kestrel stands</h2>
+<p class="small">Pulled on 12th November 2026. The Ontario government site could not be opened from Claude's session, so the Ontario rows rely on law firm and HR summaries of it; read the official page (ontario.ca/ESAjobpostings) once yourself.</p>
+
+<h3>Ontario: duties on job boards (from 1st January 2026)</h3>
+<table>
+<tr><th style="width:45%">The rule</th><th style="width:22%">Kestrel today</th><th>To do</th></tr>
+<tr><td>Applies to anyone operating a job posting platform, whatever its size.</td><td>Applies to Kestrel.</td><td></td></tr>
+<tr><td>A way for users to report fraudulent job posts, shown in a conspicuous place.</td><td>"Report this job" on every job page, and an admin queue. <strong>Met.</strong></td><td>Also link it from the footer and help.</td></tr>
+<tr><td>A written policy on how fraudulent posts are handled, posted in at least 1 conspicuous place on the platform.</td><td><strong>Missing.</strong></td><td>Publish the draft in 3A.</td></tr>
+<tr><td>Keep a copy of each version of that policy for 3 years after it stops being in effect.</td><td>Missing.</td><td>Keep each version in the repository with its dates (free, automatic with git).</td></tr>
+</table>
+
+<h3>Ontario: duties on employers who post jobs</h3>
+<table>
+<tr><th style="width:45%">The rule</th><th>Kestrel today</th></tr>
+<tr><td>Applies to employers with 25 or more employees on the day the job is posted. Most independent clinics are smaller, so it does not bind them.</td><td>Kestrel asks every clinic for pay and the 2 answers anyway. That goes beyond the law, which is a fair product choice and a selling point.</td></tr>
+<tr><td>State the expected pay or a range of expected pay. Not required if the pay or the top of the range is over $200,000 a year.</td><td>Required on every post. Percentage pay gets the dollar estimate (decision 1).</td></tr>
+<tr><td>A limit on how wide the range may be.</td><td>Kestrel caps it at $50,000. My search could not confirm the exact figure in the regulation: check it on the official page.</td></tr>
+<tr><td>Say whether AI is used to screen, assess or select applicants.</td><td>Asked on every post.</td></tr>
+<tr><td>Say whether the post is for an existing vacancy.</td><td>Asked on every post.</td></tr>
+<tr><td>No requirement for Canadian experience.</td><td>Refused in any form.</td></tr>
+<tr><td>Tell interviewed applicants the outcome within 45 days; keep copies of postings for 3 years.</td><td>The employer's duty. Kestrel helps (status updates). A later reminder for clinics is possible.</td></tr>
+</table>
+
+<h3>British Columbia: pay on job postings (since 1st November 2023)</h3>
+<p>Applies to all employers, whatever their size, including postings made through job boards and by employers outside BC hiring for BC. A single expected wage or a range is needed; open ended amounts ("$20 an hour and up", "up to $30") are not enough. Bonuses, commission, tips and benefits do not have to be included. The province has not set a maximum width. <strong>Kestrel meets this</strong>, and decision 1 covers percentage pay.</p>
+
+<h3>Privacy (PIPEDA, federal)</h3>
+<ul>
+<li>Have a privacy policy that says what is collected, why, who it is shared with, and how long it is kept. <strong>Kestrel has one; the gap is the retention periods</strong> (draft in 3C).</li>
+<li>Collect only what is needed. Removing the career stage question helps.</li>
+<li>Report a breach that creates a real risk of significant harm to the Privacy Commissioner and to the people affected, and keep a record of every breach, even small ones. Kestrel has a breach plan; add a breach log (a simple dated list, kept for at least 24 months).</li>
+<li>Name someone accountable. Kestrel's policy names a privacy officer and privacy@ (you).</li>
+</ul>
+
+<h3>Anti spam (CASL)</h3>
+<ul>
+<li>Express consent must say what kinds of messages will be sent and who is asking, and that consent can be withdrawn. Hence the clearer tick box wording in 3B.</li>
+<li>Every commercial email names Kestrel, gives a mailing address and contact details, and has an unsubscribe link that keeps working for 60 days. <strong>Kestrel does this</strong>, with the address in the email footer.</li>
+<li>Unsubscribes must be honoured within 10 business days. <strong>Kestrel does it at once.</strong></li>
+<li>Implied consent through a business relationship has time limits (summaries give 2 years after a purchase, 6 months after an enquiry). Only relevant once outreach returns.</li>
+<li>Directors and officers can be personally liable under CASL. A reason to keep the outreach switch off until it is checked.</li>
+</ul>
+
+<h2>3. Drafts ready for you to read</h2>
+<p>Each is written in Kestrel's voice. Change anything; they go live only after you approve them on a preview, and they are what the flat fee reviewer would check.</p>
+
+<h3>3A. Reporting fake or fraudulent jobs (a new page, linked from every job page, the footer and help)</h3>
+<div class="draft">
+<p><strong>Reporting fake or fraudulent jobs</strong></p>
+<p>A person at Kestrel reads every job before it goes live. Even so, if a job looks wrong to you, please tell us. You do not need an account.</p>
+<p><strong>What we treat as fake or fraudulent:</strong> a job that does not exist; a post that asks for money, a deposit, banking details or your social insurance number before a job offer; someone posing as a clinic or using a clinic's name without permission; pay, place or work that is not what is really on offer; and a recruiter or agency posing as the employer.</p>
+<p><strong>How to report:</strong> press "Report this job" on the job's page, or email hello@eyecarejobs.ca with the job's web address and what is wrong. Your email address is optional, and lets us tell you what we did.</p>
+<p><strong>What we do:</strong> we look at every report within 2 business days. While we check, we may hide the job. If it is fake or breaks our posting policy, we take it down, tell the clinic why, and may suspend the account. If you gave your email address, we tell you the outcome. If you have lost money or personal information, please also report it to the Canadian Anti-Fraud Centre and your local police.</p>
+<p><strong>Protect yourself:</strong> a real clinic never asks you to pay to apply, and never needs your banking details or social insurance number before it has made you an offer.</p>
+<p><strong>Our records:</strong> we keep each report and what we did for 2 years, and every version of this policy for 3 years after it is replaced.</p>
+</div>
+
+<h3>3B. Clearer consent wording</h3>
+<table>
+<tr><th style="width:22%">Where</th><th style="width:39%">Today</th><th>Proposed</th></tr>
+<tr><td>Sign up tick box</td><td>Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.</td><td>Yes, email me launch news, tips for getting started, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.</td></tr>
+<tr><td>Waitlist tick box</td><td>As above.</td><td>Yes, email me when Kestrel Eye Care Jobs launches, and with product updates and offers. I can unsubscribe at any time.</td></tr>
+<tr><td>Job alerts page</td><td>(no note)</td><td>You are setting up these emails yourself. We send only the alerts you choose here, and every one has an unsubscribe link.</td></tr>
+</table>
+<p class="small">Keep a link to the contact page beside each box, so the person asking for consent can be reached. The old wording stays on record for anyone who signed up under it.</p>
+
+<h3>3C. How long Kestrel keeps things (for the privacy policy)</h3>
+<table>
+<tr><th style="width:50%">Information</th><th>Proposed period</th></tr>
+<tr><td>Waitlist sign ups never confirmed</td><td>30 days</td></tr>
+<tr><td>Account, profile and resume</td><td>While the account is open; removed within 30 days of deleting the account</td></tr>
+<tr><td>Applications and the resume copy sent with them</td><td>2 years after the job closes, then deleted for both the candidate and the clinic</td></tr>
+<tr><td>"Keep my details for future roles"</td><td>12 months, unless the candidate renews it</td></tr>
+<tr><td>Inbox messages in an account</td><td>12 months (you earlier suggested 3 years; your choice)</td></tr>
+<tr><td>Job posts as published</td><td>3 years after they close (matches the employer's own 3 year duty in Ontario)</td></tr>
+<tr><td>Reports of a job, and claims of a listing</td><td>2 years</td></tr>
+<tr><td>Each version of the fake jobs policy</td><td>3 years after it is replaced (required in Ontario)</td></tr>
+<tr><td>Consent records (what someone agreed to, and when)</td><td>While Kestrel emails them, and 3 years after</td></tr>
+<tr><td>Do not email list</td><td>Kept, so an unsubscribe is honoured in future (address and date only)</td></tr>
+<tr><td>Breach log</td><td>At least 24 months</td></tr>
+</table>
+<p class="small">The open question in the paralegal's notes, applications when a clinic leaves, follows from this: the candidate keeps their own record of the application until the 2 year period ends, even if the clinic deletes its account.</p>
+
+<h3>3D. Expected earnings for percentage pay (post a job form)</h3>
+<div class="draft">
+<p><strong>Expected earnings, in dollars *</strong><br>Required when you give a percentage. Your honest estimate of what this role usually earns, by the day or by the year, for example $800 to $1,000 a day. Candidates see it marked as your estimate.</p>
+</div>
+<p class="small">The same width limits as other pay apply ($200 a day, $50,000 a year).</p>
+
+<h3>3E. The 5 questions for the flat fee review (later, before paid launch)</h3>
+<ol>
+<li>Once a clinic opens an application, who is responsible for the candidate's information, and what must the clinic terms say about how the clinic uses and keeps it?</li>
+<li>The liability clause (today $0 for candidates and for the free launch) and the name of the operator.</li>
+<li>Does the retention schedule in 3C look right?</li>
+<li>Does the fake jobs policy in 3A meet Ontario's rule for job boards?</li>
+<li>Are the consent wordings in 3B valid express consent?</li>
+</ol>
+
+<h2>4. Paying for advice: the 2 things worth money</h2>
+<h3>4.1 Your employment agreement (first, and the one real risk)</h3>
+<ol>
+<li>Go to findlegalhelp.ca (the Law Society of Ontario's Referral Service) and request a referral online. Choose employment law. It is free, and so is the first consultation, of up to 30 minutes.</li>
+<li>Call the lawyer you are given, quote your referral number, and say the Law Society Referral Service sent you.</li>
+<li>Bring your employment agreement and the separate 1 page sheet ("A side business, and my employment agreement").</li>
+<li>Ask for a price before any paid next step, such as a review of your disclosure letter. LSRS gives only 1 referral per issue, so make the 30 minutes count.</li>
+</ol>
+<p>This needs a lawyer: advising on an employment contract is generally outside an Ontario paralegal's licence. Keep it separate from your employer's own benefits (such as an assistance programme), in line with how you keep Kestrel apart.</p>
+
+<h3>4.2 1 flat fee review of the 3 policies, before you take money</h3>
+<p>Claude prepares the Terms, Privacy policy and Posting policy with the 5 questions in 3E written in. Book a flat fee review through an online service such as Goodlawyer, or with the lawyer from 4.1 if they do this work. Until then, running the free launch on your own carefully kept drafts is normal for a business that takes no payments.</p>
+
+<h3>Free help worth knowing</h3>
+<ul>
+<li>The Privacy Commissioner's guides for businesses (priv.gc.ca), the anti spam guidance (crtc.gc.ca and ised-isde.canada.ca), Ontario's job posting guide (ontario.ca/ESAjobpostings), BC's pay transparency pages (gov.bc.ca).</li>
+<li>An accountant's first meeting is often free: use it for section 5.</li>
+</ul>
+
+<h2>5. Setting up the business</h2>
+
+<h3>5.1 Incorporating</h3>
+<p><strong>When:</strong> before paid launch, not before the free launch. While nothing is sold, a corporation mostly adds cost: a yearly corporate tax return (an accountant's fee each year) and an annual return. Once money comes in, it separates the business's debts and contracts from you, and the terms can name a real operator. Do it after your employer has been told.</p>
+<p><strong>Ontario or federal:</strong> Ontario. It is cheaper and simpler for a business run from Ontario. A federal corporation protects the name across Canada, but still has to register in Ontario and file in both places.</p>
+<ol>
+<li><strong>Choose the name route.</strong> Either a numbered company (no name search) that registers "Kestrel Eye Care Jobs" as its business name (about $60 under Ontario's Business Names Act), or a named corporation, which needs a NUANS name search report first (a small fee through a search house).</li>
+<li><strong>File the Articles of Incorporation</strong> online through the Ontario Business Registry: about $300. You are the sole director and shareholder.</li>
+<li><strong>Business Number:</strong> issued by the Canada Revenue Agency as part of incorporating.</li>
+<li><strong>Corporate records</strong> (a "minute book"): the bylaw, a resolution issuing your shares, registers of directors and shareholders, and the Ontario "transparency register" of individuals with significant control (you), kept in the company's records, not filed. Online incorporation services include a template set; or use an inexpensive kit.</li>
+<li><strong>Bank account</strong> in the company's name. Then move Stripe, Vercel, Supabase, Resend, the domain and the other accounts to the company, and sign a short assignment moving the code, logo, skyline artwork and domain from you to the company.</li>
+<li><strong>Update the Terms</strong> to name the company as the operator.</li>
+<li><strong>Every year:</strong> the annual return through the Ontario Business Registry (within 6 months of the year end), and the corporate tax return (T2) with an accountant. Keep records of the development work: software development may qualify for SR&amp;ED tax credits, which the accountant claims.</li>
+</ol>
+
+<h3>5.2 HST</h3>
+<ol>
+<li><strong>The rule:</strong> you must register once your taxable sales pass $30,000 in a single calendar quarter, or over 4 consecutive quarters (a rolling window, not your financial year). Until then you are a "small supplier" and need not charge it. The pack's model reaches that around month 10 of paid sales.</li>
+<li><strong>Consider registering early, voluntarily.</strong> Your customers are clinics, which are businesses and usually registered themselves, so 13% added to their invoice costs them nothing in the end; they claim it back. Registering lets you claim back the HST on Kestrel's own Canadian costs. Ask the accountant.</li>
+<li><strong>How:</strong> register the GST/HST account on your Business Number through the Canada Revenue Agency's Business Registration Online. Choose annual filing if offered.</li>
+<li><strong>Which rate:</strong> for services like job posts, the rate generally follows where the clinic is: 13% in Ontario, 15% in the Atlantic provinces, 5% GST in Alberta and the territories, and GST plus a possible provincial sales tax in BC, Saskatchewan and Manitoba. Ask the accountant whether those provincial taxes apply to online job posts.</li>
+<li><strong>Stripe Tax</strong> works out the rate from the clinic's address once you enter your registration number in Stripe. Prices on Kestrel are already shown "before HST".</li>
+</ol>
+
+<h3>5.3 a) Do you need a trademark?</h3>
+<p><strong>Not now, and not by law.</strong> You looked at this before: the name search found only a "Kestrel Ophthalmics" in the UK, and you set trademarking aside. That still holds. Using the name and logo consistently already gives you some protection in the areas where you trade. "Eye Care Jobs" alone is descriptive and hard to register; the asset is "Kestrel" with the feather logo.</p>
+<p><strong>When to revisit:</strong> before you spend real money on the brand, once there is revenue, or at once if anyone else starts using a similar name in eye care.</p>
+<p><strong>Doing it yourself, when the time comes:</strong> search the free Canadian Trademarks Database; file online with the Canadian Intellectual Property Office <strong>in the company's name</strong> (so it never has to be moved); likely class 35 (job board and advertising services), possibly class 42 (the online platform). 2026 fees: about $491 for the first class and $149 for each extra class. Examination often takes well over a year.</p>
+
+<h3>5.3 b) What is insurance for, at this stage?</h3>
+<p>You are right that you cannot sue yourself. Business insurance is about <strong>other people</strong> making a claim against Kestrel, or against you personally, and about the cost of dealing with an incident even when nobody sues. For a job board, the realistic cases are:</p>
+<ul>
+<li><strong>A data breach.</strong> Kestrel holds resumes, names and phone numbers. If the database or an email provider is breached, there are costs even with no lawsuit: working out what happened, notifying every person affected, and dealing with the Privacy Commissioner. <em>Cyber liability</em> insurance covers this. It is the most relevant cover for Kestrel.</li>
+<li><strong>A claim from a clinic or a candidate.</strong> A clinic says a mistake by Kestrel cost it a hire; a candidate says their details reached a clinic they did not apply to; a clinic objects to how its job was described. <em>Technology errors and omissions</em> (professional liability) cover pays for the defence, which is often the larger cost.</li>
+<li><strong>Personal exposure.</strong> Incorporating protects your personal assets in most cases, but not all: under the anti spam law, for example, directors can be personally liable.</li>
+</ul>
+<p><strong>Timing:</strong> while there are no real users, the risk is very small. Get quotes from a broker when you incorporate, and have cyber cover in place before real resumes arrive in volume, or by paid launch at the latest. Ask specifically for a small technology business, cyber plus technology errors and omissions. Premiums for a business this size are usually modest, but get real quotes rather than relying on an estimate.</p>
+
+<h2>6. The order, and a rough budget</h2>
+<table>
+<tr><th style="width:5%">#</th><th style="width:47%">Step</th><th style="width:16%">Who</th><th>Cost</th></tr>
+<tr><td>1</td><td>Free Law Society referral consultation about your employment agreement (bring the 1 page sheet)</td><td>You</td><td>Free</td></tr>
+<tr><td>2</td><td>Simpler sign up and apply, plus your 3 decisions (expected earnings, no career stage question, ticked only welcome emails)</td><td>Claude, you approve</td><td>Nothing</td></tr>
+<tr><td>3</td><td>Publish the fake jobs policy and the new consent wording; add the retention periods to the privacy policy</td><td>Claude, you approve</td><td>Nothing</td></tr>
+<tr><td>4</td><td>If the consultation advises it: a paid review of your disclosure letter. Then your disclosure conversation</td><td>You</td><td>A few hundred dollars to about $1,000, only if needed</td></tr>
+<tr><td>5</td><td>Supabase Pro with backups, before anyone is invited</td><td>You</td><td>About US$25 a month</td></tr>
+<tr><td>6</td><td>Free launch: Ontario clinics posting their own jobs</td><td>You and Claude</td><td></td></tr>
+<tr><td>7</td><td>Before paid launch: accountant meeting, incorporate in Ontario, bank account, HST registration, insurance quotes</td><td>You</td><td>About $300 to $400 in government fees; accountant and insurance by quote</td></tr>
+<tr><td>8</td><td>Before paid launch: 1 flat fee review of the 3 policies with the 5 questions</td><td>You, Claude prepares</td><td>About $300 to $1,000</td></tr>
+<tr><td>9</td><td>Later, from revenue: trademark, outreach review</td><td>You</td><td>About $491 and up</td></tr>
+</table>
+<p><strong>Rough total before paid launch:</strong> about $600 to $2,500 plus the accountant and insurance, against several thousand dollars for a lawyer to work through the original 45 question pack.</p>
+
+<h2>7. Sources</h2>
+<p class="small">Ontario job board and posting rules: ontario.ca/ESAjobpostings (could not be opened from Claude's session; summaries used: Restaurants Canada, McCarthy Tetrault, Hicks Morley, CareerEdge, DLA Piper, Norton Rose Fulbright). BC: gov.bc.ca "Wage or salary information on job postings" and the Pay Transparency Act fact sheet. Privacy: priv.gc.ca, "What you need to know about mandatory reporting of breaches of security safeguards" and the PIPEDA business guides. Anti spam: crtc.gc.ca/eng/com500/guide.htm (implied consent) and ised-isde.canada.ca (CASL). Law Society Referral Service: findlegalhelp.ca, and CLEO's summary (cleo.on.ca). Incorporation: Ontario Business Registry fee summaries (lawyerinfo.ca, venn.ca); ontario.ca "Companies service standards and fees". Transparency register and annual return: EY and PwC tax alerts. HST: canada.ca (CRA) GST/HST registration, with Milesopedia and Barrett Tax Law summaries. Trademarks: ised-isde.canada.ca CIPO "Fees for trademarks", Heer Law. All read on 12th November 2026.</p>
+
+</body></html>

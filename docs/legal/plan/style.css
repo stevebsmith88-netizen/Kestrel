@@ -1,0 +1,30 @@
+@font-face { font-family: "DM Serif Display"; src: url("../../../node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 400; src: url("../../../node_modules/@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 600; src: url("../../../node_modules/@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2"); }
+@font-face { font-family: "Source Sans 3"; font-weight: 700; src: url("../../../node_modules/@fontsource/source-sans-3/files/source-sans-3-latin-700-normal.woff2"); }
+:root { --navy:#1B2B4B; --chestnut:#A4502C; --cream:#F7F1E6; --line:#E3D9C8; --slate:#5A6672; --paper:#FBF8F2; --mist:#DCE3E6; }
+@page { size: Letter; margin: 16mm 16mm 16mm 16mm; }
+* { box-sizing: border-box; }
+body { font-family: "Source Sans 3", sans-serif; color: var(--navy); font-size: 10.5pt; line-height: 1.42; margin: 0; background: #fff; }
+h1, h2, h3 { font-family: "DM Serif Display", serif; font-weight: 400; color: var(--navy); line-height: 1.15; }
+h1 { font-size: 22pt; margin: 0 0 4pt; }
+h2 { font-size: 15pt; margin: 16pt 0 6pt; padding-top: 4pt; border-top: 1px solid var(--line); }
+h3 { font-size: 12pt; margin: 11pt 0 4pt; }
+.kicker { font-size: 8.5pt; letter-spacing: .14em; text-transform: uppercase; color: var(--chestnut); font-weight: 700; margin: 0 0 4pt; }
+.meta { color: var(--slate); font-size: 9.5pt; margin: 0 0 10pt; }
+p { margin: 0 0 6pt; }
+ul, ol { margin: 0 0 7pt; padding-left: 16pt; }
+li { margin: 0 0 3pt; }
+table { width: 100%; border-collapse: collapse; margin: 4pt 0 9pt; font-size: 9.6pt; }
+th { text-align: left; background: var(--cream); font-weight: 700; }
+th, td { border: 1px solid var(--line); padding: 4pt 6pt; vertical-align: top; }
+.box { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: 8pt 10pt; margin: 6pt 0 10pt; }
+.note { background: #fff; border: 1px solid var(--chestnut); border-radius: 6px; padding: 7pt 10pt; margin: 6pt 0 10pt; }
+.small { font-size: 8.8pt; color: var(--slate); }
+.pb { break-before: page; }
+.avoid { break-inside: avoid; }
+strong { font-weight: 700; }
+a { color: var(--navy); }
+.draft { border: 1px dashed var(--slate); border-radius: 6px; padding: 8pt 10pt; margin: 4pt 0 10pt; }
+h2, h3 { break-after: avoid; }
+tr, li, .draft p { break-inside: avoid; }
