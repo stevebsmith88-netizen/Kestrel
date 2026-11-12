@@ -168,7 +168,7 @@ export const HELP: HelpSection[] = [
         title: "Can I change my name?",
         keywords: ["name", "change name", "typo", "married", "legal name", "rename", "surname", "last name"],
         answer: [
-          "Yes. You can change your name on your account page. Your first change is free. After each change there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again.",
+          "Yes. You can change your name on your account page. After each change, including the first, there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again.",
           "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to hello@eyecarejobs.ca and we will lift the hold for you.",
         ],
         steps: [
