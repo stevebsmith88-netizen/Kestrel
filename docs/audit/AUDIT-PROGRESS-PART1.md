@@ -2,7 +2,9 @@
 
 Branch: `audit/2026-11-part1`. Read only audit: nothing outside `docs/audit/` is changed.
 Audited commit: `3e42a07` (main, 12th November 2026).
-Hourly scheduled task: `trig_01LXua9bgib1T4T8s5pPkqzZ` ("Kestrel part 1 audit, hourly continue"). Disable it when the final report is written.
+Hourly scheduled task: `trig_01LXua9bgib1T4T8s5pPkqzZ` ("Kestrel part 1 audit, hourly continue"). Disabled now that the final report is written.
+
+**The audit is finished.** The report is `docs/audit/AUDIT-2026-11-PART1.md`. Nothing is left to resume.
 
 Working findings are kept in `docs/audit/AUDIT-2026-11-PART1-WORKING.md` and become `docs/audit/AUDIT-2026-11-PART1.md` at the end.
 
@@ -26,5 +28,5 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | I. Docs against reality | done | Privacy, security, help (172 names checked, all match) and lawyer packs compared with the code. 7 findings (I-01 to I-07). Main: lawyer packs predate everything since 5th November, privacy policy lists less than is collected, docs/security.md has 3 wrong statements |
 | J. Tests, dead code and health | done | 425 tests on rule files, 0 on database code. No dead code. 36 settings with no single list. 3 findings (J-01 to J-03) |
 | K. SEO and search visibility | done | Checked on a local production build (the live site could not be reached from this session). 7 findings (K-01 to K-07), speed table for 7 pages, and the 10 ranked moves. Main: home page lost its Organization data, every public page is rebuilt per visit, fonts cause layout shift |
-| Final report written (`AUDIT-2026-11-PART1.md`) | not started | |
-| Scheduled task disabled | not started | |
+| Final report written (`AUDIT-2026-11-PART1.md`) | done | 60 findings (P1-01 to P1-60): 0 Blockers, 3 High, 22 Medium, 29 Low, 6 ideas or decisions |
+| Scheduled task disabled | done | `trig_01LXua9bgib1T4T8s5pPkqzZ` disabled on 12th November 2026 |
