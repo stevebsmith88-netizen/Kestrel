@@ -9,12 +9,13 @@ import { ROLE_CATEGORIES } from "@/lib/jobs";
 import { canHaveFieldRoles } from "@/lib/role-fit";
 
 // The first step after a candidate's first sign in. Every question is optional, and Skip for now saves nothing but the fact that this was shown.
-export default function FirstStepForm() {
+export default function FirstStepForm({ next }: { next?: string }) {
   const { state, pending, submit } = useServerForm(saveFirstStep);
   const e = state.errors ?? {};
   const [profession, setProfession] = useState("");
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
+      {next && <input type="hidden" name="next" value={next} />}
       <Field id="fs-profession" label="What is your role?" error={e.profession} hint="This sets the jobs you see first on Find jobs. You can change it any time.">
         <select id="fs-profession" name="profession" value={profession} onChange={(ev) => setProfession(ev.target.value)}>
           <option value="">Choose one</option>

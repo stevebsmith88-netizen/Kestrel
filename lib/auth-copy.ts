@@ -38,3 +38,10 @@ export function safeNext(value: string | null, fallback = "/dashboard") {
     return fallback;
   }
 }
+
+// A page address with the safe "next" address added, so someone sent through several steps (first step, profile) can still be taken back to the
+// job they came from. An unsafe or missing address is dropped (audit P1-34).
+export function withNext(path: string, next: string | null | undefined) {
+  const safe = safeNext(next ?? null, "");
+  return safe ? `${path}?next=${encodeURIComponent(safe)}` : path;
+}

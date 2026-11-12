@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { CV_MAX_BYTES, activeContent, cleanCoverLetter, detectCv, isClosed, safeFilename } from "@/lib/applications";
-import { NOT_CONNECTED } from "@/lib/auth-copy";
+import { NOT_CONNECTED, withNext } from "@/lib/auth-copy";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import { newApplicationEmail } from "@/lib/clinic-emails";
 import { cleanPrefs } from "@/lib/candidate-prefs";
@@ -127,7 +127,8 @@ export async function saveFirstStep(_prev: JobFormState, form: FormData): Promis
   }
   revalidatePath("/candidate");
   revalidatePath("/candidate/profile");
-  redirect("/candidate/profile");
+  // Someone who came from a job goes on to the profile with the way back to that job still offered (audit P1-34).
+  redirect(withNext("/candidate/profile", String(form.get("next") ?? "")));
 }
 
 export async function uploadCv(_prev: JobFormState, form: FormData): Promise<JobFormState> {

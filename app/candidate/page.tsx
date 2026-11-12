@@ -12,6 +12,7 @@ import { candidateSteps } from "@/lib/checklist";
 import { getMyApplications, getMyCandidateProfile, needsFirstStep, profileReady, profileStrength } from "@/lib/candidate";
 import { employmentLabel, longDate } from "@/lib/jobs";
 import { payChips } from "@/lib/job-pay";
+import { withNext } from "@/lib/auth-copy";
 import { hideRecommendation } from "@/lib/recommendation-actions";
 import { getRecommendations } from "@/lib/recommendations";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -20,11 +21,12 @@ export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jo
 
 export const dynamic = "force-dynamic";
 
-export default async function CandidateHome() {
+export default async function CandidateHome({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const session = await requireRole("candidate");
+  const { next } = await searchParams;
   const [profile, applications] = await Promise.all([getMyCandidateProfile(session.userId), getMyApplications()]);
   // A brand new candidate is shown the first step page once (needsFirstStep in lib/candidate.ts).
-  if (await needsFirstStep(session.userId, profile)) redirect("/candidate/start");
+  if (await needsFirstStep(session.userId, profile)) redirect(withNext("/candidate/start", next));
   const first = session.firstName || "there";
   const strength = profileStrength(profile);
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
