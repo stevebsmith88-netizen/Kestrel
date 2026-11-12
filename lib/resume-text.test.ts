@@ -4,7 +4,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { strToU8, zipSync } from "fflate";
-import { textFromDocx } from "./resume-text.ts";
+import { pagesOpened, resumeText, textFromDocx, textFromPdf } from "./resume-text.ts";
 
 function docx(documentXml: string): Uint8Array {
   return zipSync({ "[Content_Types].xml": strToU8("<Types/>"), "word/document.xml": strToU8(documentXml) });
@@ -95,4 +95,72 @@ test("a Word file whose text unzips to more than 1 MB is refused, quickly", () =
 
 test("a Word file with no document inside gives no text", () => {
   assert.equal(textFromDocx(zipSync({ "hello.txt": strToU8("hello") })), "");
+});
+
+// A small hand written PDF with 1 short line of text on each page, so the tests need no PDF file in the repository.
+function pdfWithPages(count: number, line: (page: number) => string = (n) => `Page ${n} of the test resume, optician in Toronto`): Uint8Array {
+  const objects: string[] = [];
+  const kids = Array.from({ length: count }, (_, i) => `${4 + i * 2} 0 R`).join(" ");
+  objects[1] = "<< /Type /Catalog /Pages 2 0 R >>";
+  objects[2] = `<< /Type /Pages /Count ${count} /Kids [${kids}] >>`;
+  objects[3] = "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>";
+  for (let i = 0; i < count; i++) {
+    const stream = `BT /F1 12 Tf 72 720 Td (${line(i + 1)}) Tj ET`;
+    objects[4 + i * 2] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R >> >> /Contents ${5 + i * 2} 0 R >>`;
+    objects[5 + i * 2] = `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`;
+  }
+  let body = "%PDF-1.4\n";
+  const offsets: number[] = [];
+  for (let n = 1; n < objects.length; n++) {
+    offsets[n] = body.length;
+    body += `${n} 0 obj\n${objects[n]}\nendobj\n`;
+  }
+  const xref = body.length;
+  body += `xref\n0 ${objects.length}\n0000000000 65535 f \n`;
+  for (let n = 1; n < objects.length; n++) body += `${String(offsets[n]).padStart(10, "0")} 00000 n \n`;
+  body += `trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
+  return strToU8(body);
+}
+
+test("an ordinary 2 page PDF resume reads, page by page", async () => {
+  const result = await resumeText(pdfWithPages(2), "resume.pdf");
+  assert.ok(result.ok);
+  assert.match(result.text, /Page 1 of the test resume, optician in Toronto/);
+  assert.match(result.text, /Page 2 of the test resume/);
+});
+
+test("a PDF with 3,000 pages has only its first 12 pages read, and quickly", async () => {
+  const file = pdfWithPages(3000);
+  assert.ok(file.length < 3 * 1024 * 1024, "small enough to pass the upload size check");
+  // Read a small PDF first, so the timing below measures the pages and leaves out the one time cost of starting the PDF library.
+  await resumeText(pdfWithPages(1), "warm-up.pdf");
+  const before = pagesOpened();
+  const start = performance.now();
+  const result = await resumeText(file, "resume.pdf");
+  const ms = performance.now() - start;
+  assert.ok(result.ok);
+  assert.match(result.text, /Page 1 of the test resume/);
+  assert.match(result.text, /Page 12 of the test resume/);
+  assert.doesNotMatch(result.text, /Page 13 of/);
+  assert.equal(pagesOpened() - before, 12, "only 12 pages were opened");
+  assert.ok(ms < 1000, `took ${Math.round(ms)} ms`);
+});
+
+test("reading a PDF stops when the time limit is reached, and keeps what it has", async () => {
+  // A limit of 0 means time is up before the first page: nothing is read and the file is reported as unreadable.
+  await assert.rejects(() => textFromPdf(pdfWithPages(5), 0), /timed out/);
+  const before = pagesOpened();
+  await assert.rejects(() => textFromPdf(pdfWithPages(3000), 0), /timed out/);
+  assert.equal(pagesOpened() - before, 0);
+});
+
+test("no timer is left running after a PDF is read", async () => {
+  await resumeText(pdfWithPages(2), "resume.pdf");
+  const timers = process.getActiveResourcesInfo().filter((kind) => kind === "Timeout").length;
+  assert.equal(timers, 0);
+});
+
+test("a file that is not a PDF or a Word file is refused", async () => {
+  assert.deepEqual(await resumeText(strToU8("plain text that is long enough to count"), "resume.txt"), { ok: false, reason: "unsupported" });
+  assert.deepEqual(await resumeText(new Uint8Array(3 * 1024 * 1024 + 1), "resume.pdf"), { ok: false, reason: "failed" });
 });

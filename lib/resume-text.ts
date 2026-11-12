@@ -1,6 +1,6 @@
 import "server-only";
 import { unzipSync, strFromU8 } from "fflate";
-import { extractText, getDocumentProxy } from "unpdf";
+import { getDocumentProxy } from "unpdf";
 
 // Gets the plain text out of a saved resume, on Kestrel's own server, for "Fill in from my resume". PDF and Word (.docx) only. Nothing is stored
 // and nothing is sent anywhere: the text lives for the length of one request. The limits below are there so a strange file can only waste a little time.
@@ -11,10 +11,6 @@ const MAX_PAGES = 12;
 const SECONDS = 8;
 
 export type TextResult = { ok: true; text: string } | { ok: false; reason: "unsupported" | "empty" | "failed" };
-
-function withTimeout<T>(work: Promise<T>): Promise<T> {
-  return Promise.race([work, new Promise<T>((_, reject) => setTimeout(() => reject(new Error("timed out")), SECONDS * 1000))]);
-}
 
 const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" };
 
@@ -80,10 +76,52 @@ export function textFromDocx(bytes: Uint8Array): string {
   return textFromWordXml(strFromU8(xml));
 }
 
-async function textFromPdf(bytes: Uint8Array): Promise<string> {
-  const pdf = await getDocumentProxy(bytes);
-  const { text } = await extractText(pdf, { mergePages: false });
-  return (Array.isArray(text) ? text.slice(0, MAX_PAGES) : [text]).join("\n").slice(0, MAX_TEXT);
+// Counts the PDF pages opened since the server started. Only the tests read it, to prove that pages past the limit are never opened.
+let opened = 0;
+export function pagesOpened(): number {
+  return opened;
+}
+
+// Reads a PDF 1 page at a time and stops at 12 pages or when the time is up, whichever comes first, so a file with thousands of pages costs
+// no more than a 12 page one. Whatever was read by then is kept. The timer is always cleared and the document is always closed, which also
+// stops any page still being worked on.
+export async function textFromPdf(bytes: Uint8Array, limitMs: number = SECONDS * 1000): Promise<string> {
+  const deadline = Date.now() + limitMs;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeUp = new Promise<"time up">((resolve) => {
+    timer = setTimeout(() => resolve("time up"), Math.max(0, limitMs));
+  });
+  let pdf: Awaited<ReturnType<typeof getDocumentProxy>> | undefined;
+  try {
+    const loading = getDocumentProxy(bytes);
+    const loaded = await Promise.race([loading, timeUp]);
+    if (loaded === "time up") {
+      // The file was still opening when the time ran out. Close it when it does open.
+      loading.then((late) => late.loadingTask.destroy(), () => {}).catch(() => {});
+      throw new Error("timed out");
+    }
+    pdf = loaded;
+    const pages: string[] = [];
+    let length = 0;
+    const last = Math.min(pdf.numPages, MAX_PAGES);
+    for (let n = 1; n <= last && length < MAX_TEXT; n++) {
+      if (Date.now() >= deadline) break;
+      opened++;
+      const doc = pdf;
+      const page = await Promise.race([
+        doc.getPage(n).then((p) => p.getTextContent()).then((content) => content.items.map((item) => ("str" in item ? item.str + (item.hasEOL ? "\n" : "") : "")).join("")),
+        timeUp,
+      ]);
+      if (page === "time up") break;
+      pages.push(page);
+      length += page.length + 1;
+    }
+    if (pages.length === 0 && last > 0) throw new Error("timed out");
+    return pages.join("\n").slice(0, MAX_TEXT);
+  } finally {
+    clearTimeout(timer);
+    if (pdf) await pdf.loadingTask.destroy().catch(() => {});
+  }
 }
 
 export async function resumeText(bytes: Uint8Array, filename: string): Promise<TextResult> {
@@ -91,7 +129,7 @@ export async function resumeText(bytes: Uint8Array, filename: string): Promise<T
   const name = filename.toLowerCase();
   try {
     let text = "";
-    if (name.endsWith(".pdf")) text = await withTimeout(textFromPdf(bytes));
+    if (name.endsWith(".pdf")) text = await textFromPdf(bytes);
     else if (name.endsWith(".docx")) text = textFromDocx(bytes);
     else return { ok: false, reason: "unsupported" };
     return text.trim().length < 20 ? { ok: false, reason: "empty" } : { ok: true, text };
