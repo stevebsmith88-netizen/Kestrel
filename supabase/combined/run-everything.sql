@@ -2384,6 +2384,18 @@ create policy "Anyone can read clinics that have live jobs"
   on public.employers for select to anon
   using (status = 'active' and public.employer_has_live_job(id));
 
+-- ---------------------------------------------------------------- P1-42: no leftover default permissions
+-- Supabase gives visitors and signed in people every permission on a new table unless a migration takes them away. These 4 tables never had
+-- them taken away. Row level security already blocked reading and changing rows, but it does not cover emptying a table (truncate).
+-- Take everything away, then give back only what the website uses, as migration 0038 does for the inbox.
+--   waitlist and onboarding_emails: only the website's server touches them.
+--   candidate_job_hides: a candidate reads, adds and removes their own (the rules from migration 0031 limit it to their own rows).
+--   profiles: a person reads their own row. Every change is made by the website's server (names since P1-16 above).
+revoke all on public.waitlist, public.onboarding_emails, public.candidate_job_hides, public.profiles from anon, authenticated;
+grant select, delete on public.candidate_job_hides to authenticated;
+grant insert (user_id, job_id) on public.candidate_job_hides to authenticated;
+grant select on public.profiles to authenticated;
+
 -- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
@@ -2461,6 +2473,8 @@ from (
     ('rule: percentages and daily rates for optometrist roles only (0040)', exists (select 1 from pg_constraint where conname = 'jobs_optometrist_only_pay')),
     ('jobs for other roles already in review or live with a percentage or daily rate (should be 0 problems)', not exists (select 1 from public.jobs where status in ('in_review', 'live') and role_category is distinct from 'Optometrist' and (pay_period = 'day' or pay_percent_min is not null or pay_percent_max is not null))),
     ('rule: live jobs and their clinics are public through the visitor columns only (0040)', (select count(*) from pg_policies where schemaname = 'public' and policyname in ('Anyone can read live jobs', 'Anyone can read clinics that have live jobs') and roles = '{anon}') = 2),
+    ('permissions: no table lets a visitor or signed in person truncate it, or add triggers or references (0040)', not exists (select 1 from information_schema.role_table_grants where table_schema = 'public' and grantee in ('anon', 'authenticated') and privilege_type in ('TRUNCATE', 'TRIGGER', 'REFERENCES'))),
+    ('permissions: visitors hold nothing on the waitlist, and signed in people can read their own profile (0040)', not has_table_privilege('anon', 'public.waitlist', 'SELECT') and not has_table_privilege('authenticated', 'public.waitlist', 'SELECT') and has_table_privilege('authenticated', 'public.profiles', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;
