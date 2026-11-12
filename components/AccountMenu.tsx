@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { ACCOUNT_MENU, initialsOf } from "@/lib/account-menu";
+import { ACCOUNT_MENU, initialsOf, type BarPerson } from "@/lib/account-menu";
 import { signOut } from "@/lib/auth-actions";
-import type { Session } from "@/lib/auth";
 
 // The initials badge with its menu (profile, account settings, sign out) for a signed in person. Used by the dashboard bar and the public
 // header, so it is the same everywhere. Opens with a click or the keyboard, using the browser's own details box.
-export default function AccountMenu({ session, here, className = "" }: { session: Session; here?: string; className?: string }) {
+export default function AccountMenu({ session, here, className = "" }: { session: BarPerson; here?: string; className?: string }) {
   return (
     <details className={`topbar-who ${className}`.trim()}>
       <summary aria-label={`Account menu for ${session.fullName || session.email}`}>

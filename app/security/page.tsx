@@ -5,6 +5,12 @@ import DraftNotice from "@/components/DraftNotice";
 import SiteHeader from "@/components/SiteHeader";
 import { shareMetadata } from "@/lib/share";
 
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
+
 export const metadata: Metadata = shareMetadata({
   title: "How we protect your data",
   description: "Where Kestrel keeps your information, who can see it, and how resumes and sign in are protected.",

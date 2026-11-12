@@ -17,6 +17,19 @@ http.createServer((req, res) => {
   const url = new URL(req.url, 'http://x');
   const wantsObject = (req.headers.accept || '').includes('pgrst.object');
   res.setHeader('Access-Control-Allow-Origin', '*');
+  // A pretend signed in candidate, so the top bar and the saved pages can be tested with a session (audit P1-10). Any bearer token
+  // containing "fake-signed-in" is accepted. Never deployed.
+  const signedIn = (req.headers.authorization || '').includes(Buffer.from('{"sub":"aaaaaaaa-0000-4000-8000-00000000test"').toString('base64url').slice(0, 20));
+  if (url.pathname === '/auth/v1/user') {
+    if (!signedIn) { res.writeHead(401, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ code: 401, msg: 'no session' })); }
+    res.writeHead(200, { 'content-type': 'application/json' });
+    return res.end(JSON.stringify({ id: 'aaaaaaaa-0000-4000-8000-00000000test', aud: 'authenticated', role: 'authenticated', email: 'testy.mctestface@example.com', app_metadata: { provider: 'email', providers: ['email'] }, user_metadata: {} }));
+  }
+  if (url.pathname === '/rest/v1/profiles' && signedIn) {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    return res.end(JSON.stringify({ role: 'candidate', full_name: 'Testy McTestface', first_name: 'Testy', account_type_confirmed: true, terms_version: '2026-11-12' }));
+  }
+  if (url.pathname === '/rest/v1/notifications' && signedIn) { res.writeHead(200, { 'content-type': 'application/json', 'content-range': '0-2/3' }); return res.end('[]'); }
   if (!url.pathname.startsWith('/rest/v1/jobs')) { res.writeHead(200, { 'content-type': 'application/json' }); return res.end('[]'); }
   let rows = jobs;
   const idEq = url.searchParams.get('id');

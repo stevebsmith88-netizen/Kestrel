@@ -18,6 +18,7 @@ import { IN_TALKS, readStillTalking } from "@/lib/still-talking";
 import { BULK_PROBLEMS, declinedText, historyNote, movedText } from "@/lib/bulk-notices";
 import { notifyAdmin } from "@/lib/notify-admin";
 import type { QuickState } from "@/lib/dashboard-notices";
+import { refreshJobPages } from "@/lib/job-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -229,7 +230,7 @@ export async function fillRole(form: FormData) {
   const { moved: waitingDone } = await closeWaiting(jobId, null, "role_filled");
   const done = waitingDone + inTalks;
   revalidatePath("/clinic");
-  revalidatePath("/jobs");
+  refreshJobPages();
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
   if (fromEnding) redirect(`/clinic?notice=job-filled&sent=${done}`);
   redirect(`/clinic/jobs/${jobId}/applicants?sent=${done}&filled=1`);

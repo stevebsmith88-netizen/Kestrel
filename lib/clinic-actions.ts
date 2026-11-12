@@ -16,6 +16,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { canExtend, extendedUntil } from "@/lib/job-ending";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { refreshJobPages } from "@/lib/job-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const field = (form: FormData, key: string) => form.get(key) ?? "";
@@ -85,6 +86,7 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   }
 
   revalidatePath("/clinic");
+  refreshJobPages(); // the clinic name and about text appear on its saved job pages
   if (!existing) redirect("/clinic?notice=profile-created");
   return { message: "Your clinic profile is saved." };
 }
@@ -153,7 +155,7 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}${savedTemplate ? "&template=1" : templateFailed ? "&template=failed" : ""}`);
 }
 
@@ -199,6 +201,7 @@ async function doClose(form: FormData) {
   const db = await supabaseServer();
   if (id && db) await db.from("jobs").update({ status: "closed" }).eq("id", id).in("status", ["live", "draft", "rejected"]);
   revalidatePath("/clinic");
+  refreshJobPages();
   return "job-closed";
 }
 
@@ -232,8 +235,7 @@ async function doExtend(form: FormData) {
     .in("status", ["live", "expired"]);
   if (error) return "job-extend-failed";
   revalidatePath("/clinic");
-  revalidatePath("/jobs");
-  revalidatePath(`/jobs/${id}`);
+  refreshJobPages();
   return "job-extended";
 }
 

@@ -5,6 +5,12 @@ import type { Role } from "./auth.ts";
 
 export type MenuLink = { href: string; label: string };
 
+// The little the top bar needs to know about a signed in person. On the public pages the browser fetches exactly this from /api/me.
+export type BarPerson = { role: Role; email: string; fullName: string };
+
+// Each kind of account's dashboard. The same as homeFor in lib/auth.ts, kept here so the browser can use it too.
+export const homeOf = (role: Role) => (role === "admin" ? "/admin" : role === "clinic" ? "/clinic" : "/candidate");
+
 export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
   candidate: [
     { href: "/account/inbox", label: "Inbox" },

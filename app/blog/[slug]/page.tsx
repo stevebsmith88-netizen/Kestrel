@@ -4,12 +4,17 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import BlogBody from "@/components/BlogBody";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { readingMinutes } from "@/lib/blog";
 import { longDate } from "@/lib/jobs";
 import { POSTS } from "@/content/posts";
 import { isPublished, visiblePosts } from "@/lib/blog";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -45,7 +50,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
   const more = visiblePosts(POSTS).filter((p) => p.slug !== post.slug && isPublished(p)).slice(0, 2);
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <main id="main" tabIndex={-1} className="legal">
         <article className="wrap legal-wrap">

@@ -12,6 +12,7 @@ import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { notify } from "@/lib/notifications";
 import { jobApproved, jobNeedsChange, jobTakenDown } from "@/lib/notify-text";
+import { refreshJobPages } from "@/lib/job-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -56,7 +57,7 @@ export async function approveJob(form: FormData) {
   }
   await emailClinic(db, id, "live", { wasEdit: Boolean(before?.posted_at) });
   revalidatePath("/admin/review");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect("/admin/review?notice=approved");
 }
 
@@ -113,7 +114,7 @@ export async function takeDownReportedJob(form: FormData) {
   // Any other open reports about the same job are answered by the same step.
   await db.from("job_reports").update({ status: "job_removed", handled_at: new Date().toISOString() }).eq("job_id", report.job_id).eq("status", "open");
   revalidatePath("/admin/reports");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect("/admin/reports?notice=removed");
 }
 

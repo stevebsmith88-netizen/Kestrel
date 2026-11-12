@@ -9,6 +9,9 @@ import SiteHeader from "@/components/SiteHeader";
 import { organizationJson } from "@/lib/organization-data";
 import { shareMetadata } from "@/lib/share";
 
+// Built fresh for every visit, as it was before audit P1-10. Only the pages Steve listed are saved and shared; this one was not on the list.
+export const dynamic = "force-dynamic";
+
 // The header looks up who is signed in, so this page is built for each visit. That also means a scheduled post appears on the
 // home page as soon as its date arrives.
 

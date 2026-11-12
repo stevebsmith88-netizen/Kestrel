@@ -31,7 +31,8 @@ export const viewport: Viewport = { themeColor: "#1B2B4B", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-CA" style={fontVariables}>
+    // suppressHydrationWarning: on saved public pages a line of script adds a class to <html> when a sign in cookie is present (SiteHeader).
+    <html lang="en-CA" style={fontVariables} suppressHydrationWarning>
       <body>
         <a className="skip" href="#main">Skip to main content</a>
         <AttributionCapture />

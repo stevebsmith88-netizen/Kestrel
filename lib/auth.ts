@@ -5,6 +5,7 @@ import type { User } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 import { needsTerms as termsMissing } from "@/lib/terms-check";
+import { homeOf } from "@/lib/account-menu";
 
 export type Role = "candidate" | "clinic" | "admin";
 export type Session = { userId: string; email: string; role: Role; firstName: string; fullName: string; needsAccountType: boolean; needsTerms: boolean; hasPassword: boolean };
@@ -62,7 +63,8 @@ export const getSession = cache(async (): Promise<Session | null> => {
   return { userId: user.id, email: user.email ?? "", role, firstName, fullName, needsAccountType, needsTerms, hasPassword };
 });
 
-export const homeFor = (role: Role) => (role === "admin" ? "/admin" : role === "clinic" ? "/clinic" : "/candidate");
+// Each kind of account's dashboard (lib/account-menu.ts holds it, so the browser can use it too).
+export const homeFor = homeOf;
 
 export async function requireRole(...roles: Role[]) {
   const session = await getSession();

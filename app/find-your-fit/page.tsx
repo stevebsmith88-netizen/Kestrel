@@ -7,6 +7,9 @@ import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { shareMetadata } from "@/lib/share";
 
+// Built fresh for every visit, as it was before audit P1-10. Only the pages Steve listed are saved and shared; this one was not on the list.
+export const dynamic = "force-dynamic";
+
 // While the quiz is switched off the page is a 404, so it must not keep its own title or be offered to Google.
 export async function generateMetadata(): Promise<Metadata> {
   if (!findYourFitOn()) return { title: "Page not found | Kestrel Eye Care Jobs", robots: { index: false } };

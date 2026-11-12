@@ -16,6 +16,7 @@ import {
 import type { JobFormState } from "@/lib/jobs";
 import { COMMON_CAREERS_PATHS, careersLinks, copiedRun, fingerprint, hostOfUrl, mentionsEyeRecommend, refuseAddress, siteKey, startAddress, type PageLink, type ReadPage } from "@/lib/page-reader";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { refreshJobPages } from "@/lib/job-cache";
 
 // The found listings tool (admin only): read one careers page on a clinic's own website, let Claude pull out the facts
 // and write a summary in our own words, then the admin checks every fact, saves a draft and, once seeding is switched on,
@@ -312,7 +313,7 @@ export async function saveFoundListing(_prev: SaveState, form: FormData): Promis
     return { error: /10 open jobs/.test(error?.message ?? "") ? "This clinic already has 10 open jobs on Kestrel." : "We couldn't save that job. Please try again." };
   }
   revalidatePath("/admin/found");
-  if (publish) revalidatePath("/jobs");
+  if (publish) refreshJobPages();
   return {
     saved: { jobId: job.id as string, status: publish ? "live" : "draft" },
     message: publish ? "Published. It comes down by itself after 21 days unless the clinic claims it." : "Saved as a draft. Nothing is public yet.",
@@ -347,7 +348,7 @@ export async function publishFoundListing(form: FormData) {
     redirect("/admin/found?notice=error");
   }
   revalidatePath("/admin/found");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect("/admin/found?notice=published");
 }
 
@@ -372,6 +373,6 @@ export async function takeDownFoundListing(form: FormData) {
     redirect("/admin/found?notice=error");
   }
   revalidatePath("/admin/found");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect("/admin/found?notice=taken-down");
 }

@@ -10,6 +10,7 @@ import { notifyAdmin } from "@/lib/notify-admin";
 import { getLiveJob } from "@/lib/public-jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
+import { refreshJobPages } from "@/lib/job-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const text = (form: FormData, key: string, max = 200) => String(form.get(key) ?? "").trim().slice(0, max);
@@ -147,7 +148,7 @@ export async function approveClaim(form: FormData) {
   });
   await sendEmail({ to: claim.claimant_email, subject: "Your Kestrel listing is approved", ...mail });
   revalidatePath("/admin/claims");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect("/admin/claims?notice=approved");
 }
 

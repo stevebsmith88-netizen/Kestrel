@@ -1,29 +1,31 @@
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
-import { connection } from "next/server";
-import { getSession, type Session } from "@/lib/auth";
+import SessionBar from "@/components/SessionBar";
+import type { Session } from "@/lib/auth";
 import { findYourFitOn } from "@/lib/features";
 import { homeModeNow } from "@/lib/launch";
 import { TAGLINE } from "@/lib/launch-rules";
+import { SIGNED_IN_COOKIE } from "@/lib/session-cookie";
 
 // The menu across the top of the public pages. On a phone it folds into a Menu button.
-// A signed in person sees a way back to their own dashboard instead of "Sign in" and "Join the waitlist".
-// A page that has already looked up the session can pass it in. Every other page leaves it out and the header looks it up itself,
-// so the home page, For clinics and the policy pages never show a signed in person as signed out (the lookup is shared within a
-// request, so passing it in or not costs the same).
+// A page that already knows who is signed in (a page built fresh for each visit, such as Find jobs) passes the session in, and a signed
+// in person gets their account bar (components/AppBar.tsx) drawn on the server.
+// A page that passes nothing is saved once and shown to everyone (audit P1-10), so this header never looks up who is asking and is always
+// drawn signed out. A line of script marks the page when the browser holds a sign in cookie, which hides the Sign in links at once, and
+// components/SessionBar.tsx then draws the same account bar in the browser. Nothing about the person is ever in the saved page.
 // In the new look (pre launch and launch, lib/launch.ts) the wordmark carries the tagline under it. Once launched, the call to action is
 // Create account, not the waitlist.
-export default async function SiteHeader({ logo = true, session: passed, launch, tagline }: { logo?: boolean; session?: Session | null; launch?: boolean; tagline?: boolean }) {
-  // Says plainly that this header depends on who is asking, so the page is never served from a shared copy that shows someone else's state.
-  if (passed === undefined) await connection();
-  const session = passed === undefined ? await getSession() : passed;
-  // A signed in person gets exactly the bar the account pages have (components/AppBar.tsx), so it never moves between pages.
+export default async function SiteHeader({ logo = true, session, launch, tagline }: { logo?: boolean; session?: Session | null; launch?: boolean; tagline?: boolean }) {
+  // A signed in person gets exactly the bar the account pages have, so it never moves between pages.
   if (session) return <AppBar session={session} current="" />;
+  const saved = session === undefined;
   // `launch` and `tagline` let a page that already knows which look it has (the launch and pre launch home pages) say so.
   const mode = launch ? "launch" : tagline ? "prelaunch" : await homeModeNow();
   const launched = mode === "launch";
   const join = launched ? { href: "/sign-up", label: "Create account" } : { href: "/#join", label: "Join the waitlist" };
   return (
+    <>
+    {saved && <script dangerouslySetInnerHTML={{ __html: `try{if(${SIGNED_IN_COOKIE}.test(document.cookie))document.documentElement.classList.add("has-session")}catch(e){}` }} />}
     <header className="site">
       <div className="wrap">
         {logo ? (
@@ -65,5 +67,7 @@ export default async function SiteHeader({ logo = true, session: passed, launch,
         </details>
       </div>
     </header>
+    {saved && <SessionBar quiz={findYourFitOn()} />}
+    </>
   );
 }

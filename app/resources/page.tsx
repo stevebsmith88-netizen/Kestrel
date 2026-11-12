@@ -4,7 +4,6 @@ import AppFooter from "@/components/AppFooter";
 import DirectoryTable from "@/components/DirectoryTable";
 import PayGuide from "@/components/PayGuide";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { DIRECTORY, DIRECTORY_CATEGORIES, DIRECTORY_CHECKED } from "@/lib/directory-data";
 import { findYourFitOn } from "@/lib/features";
 import { JOB_BANK_SOURCE } from "@/lib/pay-benchmark-data";
@@ -12,6 +11,12 @@ import { LICENCE_STATEMENT, LICENCE_URL, plainDate } from "@/lib/pay-benchmark";
 import { payDatasetJsonLd, payGuide, payGuideProvinces } from "@/lib/pay-guide";
 import { listedGroups } from "@/lib/resources";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Eye care resources for Canada",
@@ -27,7 +32,7 @@ export default async function Resources() {
   const groups = listedGroups();
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
       {/* The pay table as a data set, with its Job Bank source, licence and date (audit P1-52). */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payDatasetJsonLd(SITE)).replace(/</g, "\\u003c") }} />
       <main id="main" tabIndex={-1} className="legal resources">

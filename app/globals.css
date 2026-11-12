@@ -859,3 +859,7 @@ fieldset.tagrow .lab { padding: 0; }
 .infotip summary::-webkit-details-marker{display:none}
 .infotip summary:hover,.infotip summary:focus-visible{color:var(--navy);box-shadow:0 0 0 1.5px var(--line)}
 .infotip[open] .infotip-text{display:block;text-align:left;margin-top:6px;padding:10px 12px;background:var(--paper);border:1px solid var(--line);border-radius:8px;font-size:.9375rem;line-height:1.45;color:var(--navy);max-width:34ch}
+/* Saved public pages (audit P1-10): while the browser checks a sign in cookie, the signed out links are hidden, so "Sign in" never flashes
+   up for a signed in person. Once the account bar is drawn (components/SessionBar.tsx), the signed out header goes. */
+html.has-session:not(.session-ready) header.site :is(nav.site-wide,.site-narrow){visibility:hidden}
+html.session-ready header.site{display:none}
