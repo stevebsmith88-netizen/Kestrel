@@ -256,7 +256,7 @@ export const HELP: HelpSection[] = [
         keywords: ["for me", "fit", "sort", "newest", "closest", "best match", "all jobs", "field", "supplier", "other roles", "recommended"],
         answer: [
           "When you are signed in and your profile has a role, **Find jobs** opens on **For me**. It shows only the jobs you can apply for, within the distance and other choices you saved under **What you are looking for**. Jobs you have already applied for, or marked **Not interested**, are left out. There is no AI in it, and nothing about you is shared with clinics.",
-          "Optometrist jobs are shown only to optometrists, and only an optometrist can apply for one. An optometrist is never shown optician jobs. Under **Other roles you would consider** you can add roles that sit close to yours, such as assistant and reception roles. If you are not an optometrist, you can also tick **Open to field and supplier roles**, which lets sales, training, equipment service and account roles appear in your list, and lets you apply for them.",
+          "Optometrist jobs are shown only to optometrists, and only an optometrist can apply for one. An optometrist is never shown optician jobs. Under **Other roles you would consider** you can add roles that sit close to yours, such as assistant and reception roles. If you are not an optometrist, you can also tick **Open to field and supplier roles**, which lets sales, training, equipment service and account roles appear in your list, and lets you apply for them. If you open a job outside your roles from **Show all jobs**, choosing **Quick Apply** takes you to a page that explains why, with an **Update my profile** button.",
         ],
         steps: [
           "Open **Find jobs**. Choose **Show all jobs** to see every job, and **Show jobs for me** to come back.",
@@ -424,7 +424,7 @@ export const HELP: HelpSection[] = [
         ],
         steps: [
           "Choose **Post a job** in the bar at the top of the page.",
-          "Under **The role**, type a job title and choose a role, an employment type, whether the person works on site or in the field, a city and a province or territory. A field based job also asks for the area covered.",
+          "Under **The role**, type a job title and choose a role, an employment type, whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
           "Under **Pay**, fill in the pay range. The next topic explains the options.",
           "Under **Tools and specialties**, tick anything that applies. It is optional, and candidates can search by it.",
           "Under **2 quick questions**, answer **Is this an existing vacancy?** and **Do you use AI to screen or select candidates?**",

@@ -1,15 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource/dm-serif-display/400.css";
-import "@fontsource/source-serif-4/600.css";
-import "@fontsource/poppins/400.css";
-import "@fontsource/source-sans-3/400.css";
-import "@fontsource/source-sans-3/600.css";
-import "@fontsource/source-sans-3/700.css";
+import "./fonts-other-letters";
 import "./globals.css";
 import AttributionCapture from "@/components/AttributionCapture";
 import CloseMenuOnEscape from "@/components/CloseMenuOnEscape";
 import DemoBanner from "@/components/DemoBanner";
 import { demoMode } from "@/lib/demo";
+import { fontVariables } from "./fonts";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -27,13 +23,16 @@ export const metadata: Metadata = {
     locale: "en_CA",
     type: "website",
   },
+  // The share picture is 1200 by 630, so links shared on X and similar sites show it full width (audit P1-52).
+  twitter: { card: "summary_large_image", images: ["/brand/kestrel-share-1200x630.png"] },
 };
 
 export const viewport: Viewport = { themeColor: "#1B2B4B", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-CA">
+    // suppressHydrationWarning: on saved public pages a line of script adds a class to <html> when a sign in cookie is present (SiteHeader).
+    <html lang="en-CA" style={fontVariables} suppressHydrationWarning>
       <body>
         <a className="skip" href="#main">Skip to main content</a>
         <AttributionCapture />

@@ -3,19 +3,22 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import Icon from "@/components/Icon";
+import InfoTip from "@/components/InfoTip";
 import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
-import { getMyCandidateProfile } from "@/lib/candidate";
-import { answerLabel, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { answerLabel, employmentExplainer, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
-import { canApplyForRole, roleMismatchText } from "@/lib/role-fit";
 import { shareMetadata } from "@/lib/share";
 
-export const dynamic = "force-dynamic";
+// Saved and shared for up to 5 minutes (audit P1-10), and cleared at once when the job changes (lib/job-cache.ts). force-static means the
+// page cannot see who is visiting, so it never holds anything about a person. A candidate whose profession does not fit is told on the
+// apply page, which is built fresh for them (and the server refuses the application too).
+export const revalidate = 300;
+export const dynamic = "force-static";
+export const generateStaticParams = () => [];
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -43,14 +46,10 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
   // (audit finding R19, decision (a)). It still shows on Kestrel and in Kestrel's own search.
   const unclaimedFound = job.is_seeded && !clinic?.claimed;
   const jsonLd = clinic && !unclaimedFound ? jobPostingJsonLd(job, clinic, SITE) : null;
-  const session = await getSession();
-  // A candidate whose profile role does not fit this job sees a message instead of the Apply button (lib/role-fit.ts).
-  const me = session?.role === "candidate" ? await getMyCandidateProfile(session.userId) : null;
-  const roleProblem = me?.profession && job.apply_method !== "external" && !canApplyForRole(me.profession, me.pref_other_roles, job.role_category) ? roleMismatchText(me.profession, job.role_category) : null;
 
   return (
     <>
-      <SiteHeader session={session} />
+      <SiteHeader />
       {jsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
       <main id="main" tabIndex={-1} className="jobpage">
         <JobViewBeacon jobId={job.id} />
@@ -88,7 +87,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 <dl className="facts">
                   <div className="wide"><dt>Pay</dt><dd>{payText(job)}</dd></div>
                   {estimateText(job) && <div className="wide"><dt>Yearly estimate</dt><dd>{estimateText(job)}</dd></div>}
-                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}</dd></div>
+                  <div><dt>Type</dt><dd>{employmentLabel(job.employment_type)}{employmentExplainer(job.employment_type) && <InfoTip label={employmentLabel(job.employment_type)} text={employmentExplainer(job.employment_type) as string} />}</dd></div>
                   {TAG_GROUPS.map((g) => {
                     const names = tagsFromRow(job)[g.key];
                     return names.length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{names.join(", ")}</dd></div> : null;
@@ -111,11 +110,6 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   <>
                     <p>Applications are made on the clinic&apos;s own website.</p>
                     <ApplyLink jobId={job.id} href={job.apply_url} external>Apply on the clinic&apos;s website<span className="sr"> (opens in a new tab)</span></ApplyLink>
-                  </>
-                ) : roleProblem ? (
-                  <>
-                    <p>{roleProblem}</p>
-                    <Link href="/candidate/profile" className="btn">Update my profile</Link>
                   </>
                 ) : (
                   <>

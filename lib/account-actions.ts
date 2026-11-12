@@ -6,6 +6,7 @@ import { NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
+import { refreshJobPages } from "@/lib/job-cache";
 
 const CV_BUCKET = "cvs";
 
@@ -65,6 +66,8 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
     console.error("Account deletion failed:", error.message);
     return { error: "We couldn't delete your account. Please try again, or email privacy@eyecarejobs.ca and we will do it for you." };
   }
+  // A clinic's jobs went with it, so saved job pages are cleared (audit P1-10).
+  if (session.role === "clinic") refreshJobPages();
   // A record that it happened, with no names or addresses.
   const { error: logError } = await admin.from("account_deletions").insert({ account_role: session.role, jobs_count: jobsCount, applications_count: applicationsCount });
   if (logError) console.error("Deletion record failed:", logError.code, logError.message);

@@ -7,6 +7,7 @@ import { jobFromForm } from "@/lib/job-form";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
+import { refreshJobPages } from "@/lib/job-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -37,5 +38,6 @@ export async function saveJobForClinic(_prev: JobFormState, form: FormData): Pro
   }
   revalidatePath("/admin/review");
   revalidatePath("/clinic");
+  refreshJobPages();
   redirect(`/admin/post-for-clinic?notice=${submit ? "submitted" : "draft"}`);
 }

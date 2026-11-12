@@ -653,11 +653,12 @@ The Optical Group says it was founded in 1988 to support independent eye care pr
     title: "What every eye care job ad in Canada should include",
     description: "A plain checklist for clinics: the pay range, vacancy and AI questions, fair wording and the details that help the right person say yes.",
     date: "2026-10-30",
+    updated: "2026-11-12",
     body: `A good job ad does 2 things. It helps the right person decide to apply, and it keeps you on the right side of the hiring rules that now apply in several provinces. This is the checklist we use at Kestrel. It is practical guidance, not legal advice, so check which rules apply to your employer.
 
 ## 1. Show a real pay range
 
-Candidates trust an ad more when it says what the job pays, and some provinces now expect it. British Columbia has a pay range rule for postings, and Ontario's rules for postings changed on 1st January 2026. Whether a rule applies to you can depend on the size of your business, so it is worth checking.
+Candidates trust an ad more when it says what the job pays, and some provinces now expect it. British Columbia has a pay range rule for postings, and Ontario's rules for postings changed on 1st January 2026. Whether a rule applies to you can depend on the size of your business, so it is worth checking. If you hire in Ontario, our page on [Ontario job ad rules for eye care clinics](/resources/ontario-job-ads) sets out who those rules cover and what a covered ad must include.
 
 On Kestrel, every post needs a pay range. It can be up to $50,000 wide a year, unless the top of the range is over $200,000. Put your base pay in the range. If there is commission, a car allowance or a bonus on top, say so in a separate line.
 

@@ -21,6 +21,7 @@ import { emailsSentToday } from "@/lib/email-count";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 import { maintenanceApiResponse } from "@/lib/maintenance";
+import { refreshJobPages } from "@/lib/job-cache";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -89,6 +90,8 @@ async function runDaily(request: Request) {
   const { data: expired, error: expireError } = await admin.from("jobs").update({ status: "expired" }).eq("status", "live").lt("expires_at", now.toISOString()).select("id");
   if (expireError) problems.push(`Expiring jobs: ${expireError.message}`);
   summary.expiredJobs = expired?.length ?? 0;
+  // Saved job pages and province and role pages are cleared, so an expired job disappears at once (audit P1-10).
+  if (expired?.length) refreshJobPages();
 
   // 1b. Tell search engines (IndexNow) about jobs that went live or ended in the last day, blog posts dated in that time, and pages whose
   // last updated date is new (lib/page-dates.ts), so Bing

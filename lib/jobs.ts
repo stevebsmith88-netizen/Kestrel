@@ -36,6 +36,12 @@ export function cleanEmploymentTypes(value: string | string[] | undefined): (typ
 export function employmentLabel(type: string | null | undefined): string {
   return type === "Contract" ? "Fixed term" : type ?? "";
 }
+
+// A short explanation shown beside "Fixed term" wherever people choose it or read it, opened with a tap or by hovering (Steve, 12th November 2026).
+export const FIXED_TERM_EXPLAINER = "A job for a set period with an end date, such as maternity cover or a seasonal role. The person is an employee of the clinic for that time, not self employed.";
+export function employmentExplainer(type: string | null | undefined): string | null {
+  return type === "Contract" ? FIXED_TERM_EXPLAINER : null;
+}
 export const PRACTICE_TYPES = [
   { value: "independent", label: "Independent" },
   { value: "corporate", label: "Corporate" },
@@ -331,8 +337,9 @@ const REGION_CODES: Record<string, string> = {
   Quebec: "QC", Saskatchewan: "SK", Yukon: "YT",
 };
 
-// Locum work is temporary and usually done as a contractor, so both are given. Google accepts a list.
-const SCHEMA_EMPLOYMENT: Record<string, string | string[]> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: ["TEMPORARY", "CONTRACTOR"], Contract: "CONTRACTOR" };
+// Locum work is temporary and usually done as a contractor, so both are given. Google accepts a list. Fixed term ("Contract") is an
+// employee for a set period, so it is TEMPORARY; CONTRACTOR means self employed (audit P1-52, Steve agreed 12th November 2026).
+const SCHEMA_EMPLOYMENT: Record<string, string | string[]> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: ["TEMPORARY", "CONTRACTOR"], Contract: "TEMPORARY" };
 
 type PublicJob = PayFields & {
   id: string; title: string; description: string; employment_type: string; province: string; city: string;

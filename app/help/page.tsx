@@ -3,11 +3,16 @@ import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import HelpCentre from "@/components/HelpCentre";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { HELP } from "@/content/help";
-import { HELP_DESCRIPTION, HELP_TITLE } from "@/lib/help";
+import { HELP_DESCRIPTION, HELP_TITLE, helpFaqJsonLd } from "@/lib/help";
 import { signupsOpen } from "@/lib/signup-gate";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({ title: HELP_TITLE, description: HELP_DESCRIPTION, path: "/help" });
 
@@ -16,11 +21,12 @@ export const metadata: Metadata = shareMetadata({ title: HELP_TITLE, description
 const UPDATED = "12th November 2026";
 
 export default async function Help() {
-  const session = await getSession();
   const open = await signupsOpen();
   return (
     <>
-      <SiteHeader session={session} />
+      <SiteHeader />
+      {/* Every topic as a question and answer, built from the same words the page shows (audit P1-52). */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(helpFaqJsonLd(HELP)).replace(/</g, "\\u003c") }} />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">Help centre</p>

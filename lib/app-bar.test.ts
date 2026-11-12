@@ -6,7 +6,7 @@ import { test } from "node:test";
 // The envelope and its unread count must be in view on a phone too, beside the Menu button (P1-38). AppBar needs a signed in page to
 // render, so this checks the markup and the style rules that put it there.
 test("the envelope with its count sits beside the Menu button on a phone", () => {
-  const bar = readFileSync("components/AppBar.tsx", "utf8");
+  const bar = readFileSync("components/AppBarView.tsx", "utf8");
   const narrow = bar.slice(bar.indexOf('className="topbar-narrow"'), bar.indexOf("</details>"));
   assert.ok(narrow.includes("{envelope}"), "the narrow group must hold the envelope");
   assert.ok(narrow.indexOf("{envelope}") < narrow.indexOf("<details"), "the envelope comes before the Menu button");

@@ -8,7 +8,7 @@ import { saveJobForClinic } from "@/lib/admin-job-actions";
 import { saveJob } from "@/lib/clinic-actions";
 import PayBenchmark from "@/components/PayBenchmark";
 import type { OwnPayStat } from "@/lib/pay-benchmark";
-import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
+import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIXED_TERM_EXPLAINER, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { MONEY_PERIODS, OPTOMETRIST_ONLY_PERIODS, OPTOMETRIST_ROLE, PERCENT_OF, WORKING_WEEKS } from "@/lib/job-pay";
 import { TAG_GROUPS } from "@/lib/job-tags";
 
@@ -106,7 +106,7 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
             </optgroup>
           </select>
         </Field>
-        <Field id="jf-type" label="Employment type" required error={e.employmentType}>
+        <Field id="jf-type" label="Employment type" required error={e.employmentType} hint={`Fixed term: ${FIXED_TERM_EXPLAINER}`}>
           <select id="jf-type" name="employmentType" defaultValue={initial.employment_type}>
             <option value="">Choose one</option>
             {EMPLOYMENT_TYPES.map((t) => (

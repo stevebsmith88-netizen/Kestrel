@@ -9,6 +9,7 @@ const jobs = [
   { ...base, id: '55555555-5555-4555-8555-555555555555', title: 'Optometrist, percentage of production', role_category: 'Optometrist', employment_type: 'Part time', province: 'Ontario', city: 'Ottawa', pay_period: null, pay_min: null, pay_max: null, pay_percent_min: 28, pay_percent_max: 35, pay_percent_of: 'production', tags_software: ['Wink'], tags_equipment: ['Humphrey visual field', 'Topographer'], tags_specialties: ['Myopia control and ortho-k', 'Vision therapy'], description: 'Two to three days a week in a friendly clinic, paid a percentage of production.', employers: emp },
   { ...base, id: '66666666-6666-4666-8666-666666666666', title: 'Optometrist, daily minimum with a percentage', role_category: 'Optometrist', province: 'British Columbia', city: 'Kelowna', pay_period: 'day', pay_min: 600, pay_max: 800, pay_is_minimum: true, pay_percent_min: 28, pay_percent_max: 35, pay_percent_of: 'collections', tags_software: ['Visual Eyes', 'Acuitas'], tags_equipment: ['Optos'], tags_specialties: [], pay_extras: 'Continuing education allowance', description: 'A guaranteed daily minimum, or a percentage of collections when that comes to more.', employers: emp },
   { ...base, id: '11111111-1111-4111-8111-111111111111', title: 'Optician', role_category: 'Optician', province: 'British Columbia', city: 'Victoria', pay_period: 'year', pay_min: 62000, pay_max: 74000, description: 'Join a friendly, busy independent clinic in Victoria as our full time optician.\n\nWhat we offer\nA 4 day week, mentoring and extended health benefits.', employers: emp },
+  { ...base, id: '77777777-7777-4777-8777-777777777777', title: 'Optician, maternity cover', role_category: 'Optician', employment_type: 'Contract', province: 'Ontario', city: 'Ottawa', pay_period: 'hour', pay_min: 27, pay_max: 32, description: 'Cover a 12 month maternity leave in a busy independent clinic.', employers: emp },
   { ...base, id: '22222222-2222-4222-8222-222222222222', title: 'Optometric assistant', role_category: 'Optometric assistant or technician', employment_type: 'Part time', province: 'Ontario', city: 'Toronto', pay_period: 'hour', pay_min: 24, pay_max: 28.5, is_seeded: true, apply_method: 'external', apply_url: 'https://example.ca/careers', description: 'Help our team with pre testing and patient flow.', employers: { ...emp, clinic_name: 'Maple Grove Eye Care', practice_type: 'corporate', city: 'Toronto', province: 'Ontario', website: null } },
   { ...base, id: '33333333-3333-4333-8333-333333333333', title: 'Territory representative', role_category: 'Sales or territory representative', work_arrangement: 'field', territory: 'Southern Ontario and Ottawa', pay_extras: 'Plus commission and a company vehicle', province: 'Ontario', city: 'Toronto', pay_period: 'year', pay_min: 62000, pay_max: 78000, description: 'Visit optical practices across Southern Ontario, show our lens range and look after your accounts.', employers: { ...emp, claimed: true, clinic_name: 'Clearview Lens Co', practice_type: 'supplier', city: 'Toronto', province: 'Ontario', website: null } },
 ];
@@ -16,6 +17,19 @@ http.createServer((req, res) => {
   const url = new URL(req.url, 'http://x');
   const wantsObject = (req.headers.accept || '').includes('pgrst.object');
   res.setHeader('Access-Control-Allow-Origin', '*');
+  // A pretend signed in candidate, so the top bar and the saved pages can be tested with a session (audit P1-10). Any bearer token
+  // containing "fake-signed-in" is accepted. Never deployed.
+  const signedIn = (req.headers.authorization || '').includes(Buffer.from('{"sub":"aaaaaaaa-0000-4000-8000-00000000test"').toString('base64url').slice(0, 20));
+  if (url.pathname === '/auth/v1/user') {
+    if (!signedIn) { res.writeHead(401, { 'content-type': 'application/json' }); return res.end(JSON.stringify({ code: 401, msg: 'no session' })); }
+    res.writeHead(200, { 'content-type': 'application/json' });
+    return res.end(JSON.stringify({ id: 'aaaaaaaa-0000-4000-8000-00000000test', aud: 'authenticated', role: 'authenticated', email: 'testy.mctestface@example.com', app_metadata: { provider: 'email', providers: ['email'] }, user_metadata: {} }));
+  }
+  if (url.pathname === '/rest/v1/profiles' && signedIn) {
+    res.writeHead(200, { 'content-type': 'application/json' });
+    return res.end(JSON.stringify({ role: 'candidate', full_name: 'Testy McTestface', first_name: 'Testy', account_type_confirmed: true, terms_version: '2026-11-12' }));
+  }
+  if (url.pathname === '/rest/v1/notifications' && signedIn) { res.writeHead(200, { 'content-type': 'application/json', 'content-range': '0-2/3' }); return res.end('[]'); }
   if (!url.pathname.startsWith('/rest/v1/jobs')) { res.writeHead(200, { 'content-type': 'application/json' }); return res.end('[]'); }
   let rows = jobs;
   const idEq = url.searchParams.get('id');

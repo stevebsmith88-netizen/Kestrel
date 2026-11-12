@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  employmentExplainer,
   answerLabel,
   cleanEmploymentTypes,
   employmentLabel,
@@ -198,6 +199,19 @@ test("structured data text is made safe and carries what the page shows", () => 
     "https://eyecarejobs.ca",
   );
   assert.deepEqual(locum.employmentType, ["TEMPORARY", "CONTRACTOR"]);
+  // Fixed term ("Contract" in the database) is an employee for a set period, so Google is told TEMPORARY, not CONTRACTOR, which means
+  // self employed (audit P1-52 e, Steve agreed 12th November 2026).
+  const fixed = jobPostingJsonLd(
+    { id: "y", title: "Optician, maternity cover", description: "d", employment_type: "Contract", province: "Ontario", city: "Toronto", pay_period: "hour", pay_min: 25, pay_max: 30, apply_method: "kestrel", apply_url: null, posted_at: "2026-11-01T00:00:00Z", expires_at: "2026-12-01T00:00:00Z" },
+    { clinic_name: "C", website: null },
+    "https://eyecarejobs.ca",
+  );
+  assert.equal(fixed.employmentType, "TEMPORARY");
+});
+
+test("Fixed term has a short explanation people can open", () => {
+  assert.match(employmentExplainer("Contract") ?? "", /set period/);
+  assert.equal(employmentExplainer("Full time"), null);
 });
 
 test("employerFlags points out clinics that look unlike a direct employer", () => {
