@@ -29,3 +29,21 @@ alter table public.jobs add constraint jobs_optometrist_only_pay check (
   or coalesce(role_category = 'Optometrist', false)
   or ((pay_period is null or pay_period <> all (array['day'])) and pay_percent_min is null and pay_percent_max is null)
 ) not valid;
+
+-- ---------------------------------------------------------------- P1-41: a sign in gives no wider view of other people's jobs and clinics
+-- Visitors read live jobs and their clinics through a short list of public columns (migrations 0005, 0013, 0034, 0035). Signed in people were
+-- covered by the same 2 "anyone can read" rules but hold table wide read permission (clinics need it for their own jobs), so any signed in
+-- person could read every column of every live job and of every clinic with a live job: the review note, who posted it, who was hired,
+-- and the clinic owner's account id.
+-- From here the 2 "anyone can read" rules are for visitors only. A signed in person reads jobs and clinics through their own sign in only as
+-- the owner or as an admin (those rules are unchanged). The website already shows live jobs to everyone, signed in or not, through the
+-- visitor's key and the public column list (lib/public-jobs.ts), so no page changes.
+drop policy if exists "Anyone can read live jobs" on public.jobs;
+create policy "Anyone can read live jobs"
+  on public.jobs for select to anon
+  using (status = 'live' and expires_at > now());
+
+drop policy if exists "Anyone can read clinics that have live jobs" on public.employers;
+create policy "Anyone can read clinics that have live jobs"
+  on public.employers for select to anon
+  using (status = 'active' and public.employer_has_live_job(id));
