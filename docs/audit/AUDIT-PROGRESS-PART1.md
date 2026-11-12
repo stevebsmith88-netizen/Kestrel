@@ -25,6 +25,6 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | H. Accessibility and mobile | done | 27 pages at 375 px, signed out and signed in, using a local stand in for Supabase. 0 contrast, label or sideways scroll failures. 7 small findings (H-01 to H-07). 3 screenshots in docs/audit/2026-11-part1/ |
 | I. Docs against reality | done | Privacy, security, help (172 names checked, all match) and lawyer packs compared with the code. 7 findings (I-01 to I-07). Main: lawyer packs predate everything since 5th November, privacy policy lists less than is collected, docs/security.md has 3 wrong statements |
 | J. Tests, dead code and health | done | 425 tests on rule files, 0 on database code. No dead code. 36 settings with no single list. 3 findings (J-01 to J-03) |
-| K. SEO and search visibility | not started | |
+| K. SEO and search visibility | done | Checked on a local production build (the live site could not be reached from this session). 7 findings (K-01 to K-07), speed table for 7 pages, and the 10 ranked moves. Main: home page lost its Organization data, every public page is rebuilt per visit, fonts cause layout shift |
 | Final report written (`AUDIT-2026-11-PART1.md`) | not started | |
 | Scheduled task disabled | not started | |

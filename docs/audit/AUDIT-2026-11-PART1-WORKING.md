@@ -317,10 +317,10 @@ Verified as expected:
 
 ## Area J. Tests, dead code and health
 
-- **Tests.** 425 tests in 63 files, all passing in 4 seconds. They cover the rule files well (pay, roles, wording, emails, limits). Every file that talks to the database or handles a request is untested: all 22 action files, `resume-text.ts` (the file with the F-01 and F-02 problems), `notifications.ts`, `onboarding-run.ts`, `public-jobs.ts`, `auth.ts`. There is no test that runs a page. That is a reasonable trade for a 1 person project, but it is why A-09 (the clinic page showing the wrong status) got through.
+- **Tests.** 425 tests in 79 files, all passing in 4 seconds. They cover the rule files well (pay, roles, wording, emails, limits). Every file that talks to the database or handles a request is untested: all 22 action files, `resume-text.ts` (the file with the F-01 and F-02 problems), `notifications.ts`, `onboarding-run.ts`, `public-jobs.ts`, `auth.ts`. There is no test that runs a page. That is a reasonable trade for a 1 person project, but it is why A-09 (the clinic page showing the wrong status) got through.
 - **Gaps in tests for the new code:** no test that the clinic's application page shows Shortlisted, none for the resume file limits, none that "For me" agrees with the apply rule, none for the data download's contents, and the style guard skips `lib` (A-20).
 - **Dead code.** None found: every file in `lib` and `components` is imported somewhere. A stale comment in lib/applicant-actions.ts:44.
-- **Duplication.** The same id pattern is defined in 22 files and the site address constant in 20. Harmless, but a shared file would be tidier. `getApplication` being shared between the candidate and clinic pages is the one duplication that should exist and does not (A-09).
+- **Duplication.** The same id pattern is defined in 27 files and the site address constant in 14. Harmless, but a shared file would be tidier. `getApplication` being shared between the candidate and clinic pages is the one duplication that should exist and does not (A-09).
 - **Packages.** 13 direct, all pinned, 0 audit problems, no install scripts. Small updates waiting for next, supabase-js and the Anthropic SDK.
 - **Settings.** The code reads 36 settings. `.env.example` lists 12 and `docs/security.md` covers the secrets. The 17 on and off switches (`ENABLE_SEEDING`, `ENABLE_OUTREACH`, `ENABLE_ONBOARDING_EMAILS`, `ENABLE_GOOGLE_SIGNIN`, `ENABLE_COMPARE`, `ENABLE_FIND_YOUR_FIT`, `ENABLE_HOME_BLOG`, `CLINIC_SIGNUP`, `LAUNCH_HOME`, `PRELAUNCH_HOME`, `MAINTENANCE_MODE`, `DEMO_MODE`, `DAILY_EMAIL_BUDGET`, `OUTREACH_DAILY_LIMIT`, `INDEXNOW_KEY`, `AD_BUILDER_MODEL`, `PAGE_READER_MODEL`) are each explained in a different doc, and there is no single page that lists them all with what each should be in the live project and in the demo project. With 2 Vercel projects that is where a mistake will happen.
 - **Demo mode.** When `DEMO_MODE` is yes: a banner on every page, robots.txt blocks everything, every page carries a noindex header, the sitemap is empty, IndexNow is off and no email leaves through Kestrel's sender. Not covered by the switch: Supabase's own sign up and password emails (sent by the demo's Supabase project if email is on there), the ad builder (it would spend real Anthropic credit if the demo has the key), and the bot check (off on the demo by design).
@@ -332,3 +332,100 @@ Verified as expected:
 **J-02 The files that touch the database have no tests.** Medium. Confirmed. Fix, in order of value: a test for the clinic application page loader (A-09), tests for the resume file limits (F-01, F-02), and 1 scripted walk through of sign up, apply, shortlist and decline against the scratch database. Half a day to 2 days depending on depth.
 
 **J-03 Small updates are waiting.** Low. next 16.4.3 to 16.4.6, @supabase/supabase-js 2.118.0 to 2.119.0. Do with the next change.
+
+## Area K. SEO and search visibility (overview)
+
+Reach: I could not open https://eyecarejobs.ca from this session (the session's network rules do not allow that address), so every check below was made on the same code built and run here in production mode with sample jobs. Real server response times, what Google has indexed and the Search Console data are for Steve to check. Speed was measured with the browser here set to behave like a mid range phone on slow 4G (150 ms delay, 1.6 Mbit, processor slowed 4 times). It is a Lighthouse style measurement, not Lighthouse itself, and the server was on the same machine, so the numbers leave out real server time.
+
+### K1. Technical
+
+Verified as expected:
+- `robots.txt` allows the public site, blocks the account, admin and sign in areas, and names the sitemap. It does not block AI crawlers. On the demo it blocks everything, and every demo page carries a noindex header.
+- The sitemap lists the home page, the 13 fixed public pages, each live job, each published blog post, and only the province and role pages that have live jobs. Jobs carry the date they went live. It is rebuilt hourly and keeps the last good copy if the database cannot be read.
+- Every public page has 1 title, a description, a canonical address pointing at itself, Open Graph tags with a 1200 by 630 image, `lang="en-CA"` and 1 main heading.
+- Filtered, sorted, "view" and later pages of `/jobs` are noindex and follow, with the canonical on `/jobs`. Province and role pages with 0 jobs are noindex and follow. An unknown address, a job that has ended, an unknown blog post and `/eye-care-jobs/quebec` all return a real 404 with noindex.
+- JobPosting data on the job page is valid and matches the visible page: title, description (with the area covered and extra pay lines the page shows), date posted, valid through, employment type, hiring organisation, town, province code and country, base salary with the right unit, direct apply, address and identifier. A percentage only job gets no salary figure and the pay sentence goes in the description. A job that has ended returns 404, so its data goes at once. A found listing that is not claimed gets no job data.
+- Blog posts carry Article data with dates. Province and role pages carry breadcrumbs.
+- Scheduled blog posts: in production mode the 20 future posts return 404, are missing from the blog page and the sitemap, and appear on their date without a new deployment. On previews they show with a "Scheduled" note.
+- The IndexNow key page answers only when a valid key is set.
+
+Findings:
+
+**K-01 The home page has lost its Organization and WebSite data.** Medium. Confirmed. The data that tells Google and AI assistants who Kestrel is (name, logo, description, LinkedIn link) sits inside the old `ComingSoon` component (app/page.tsx:36 to :56). The pre launch layout that has been live since 8th November (`PreLaunchHome`) and the launch layout (`LaunchHome`) do not output it. The home page here returned 0 structured data blocks. Fix: move the block into `app/page.tsx` itself so every version of the home page carries it. 10 minutes.
+
+**K-02 Every public page is rebuilt for every visitor and can never be cached.** Medium to High for the search goal. Confirmed. See K2.
+
+**K-03 Web fonts arrive late and push the page around.** Medium. Confirmed. Layout shift measured 0.21 on a job page and 0.14 on Compare (Google's "good" line is 0.1). The cause is the 5 font files arriving 1.1 to 1.6 seconds in with nothing preloaded, so text is drawn in a fallback font and then reflows. Fix: load the same self hosted files through Next's font loader, which preloads them and sizes the fallback to match. 2 hours.
+
+**K-04 Only the home page, job pages, blog posts and landing pages carry structured data.** Low to Medium. Confirmed. `/help` (35 questions and answers), `/resources` (the pay table, a dated and quotable data set), `/compare` and `/clinics` have none. FAQ and data set markup will not win rich results on Google for a site like this, but it is the form AI assistants and Bing read most easily. Fix: FAQPage on `/help`, a Dataset block with the source and date on the pay table. 2 to 3 hours.
+
+**K-05 Small tag problems.** Low. Confirmed. (a) The description for province pages lowercases the place: "10 live jobs: eye care jobs in ontario". (b) `twitter:card` is "summary" although a large image is supplied, so shares show a small thumbnail. (c) Every page, including every job, shares the same picture. (d) The title of `/clinics` is "For clinics", which says nothing to a searcher. "Post eye care jobs in Canada" would. (e) "Fixed term" jobs are sent to Google as CONTRACTOR. TEMPORARY is closer for an employee on a fixed term. (f) Job data has no street address or postal code (Google lists these as recommended, and shows a warning without them) and no logo for the clinic.
+
+**K-06 Three pages chase the same search.** Low. Likely. `/resources/ontario-job-ads`, the blog post "What every eye care job ad in Canada should include" and `/posting-policy` all answer "what must a job ad include in Ontario". Pick 1 as the main page and have the other 2 link to it.
+
+**K-07 The sitemap stops at 1,000 jobs.** Low today. See E-01.
+
+### K2. Rendering and speed
+
+**What I found.** The build marks every route except `robots.txt`, `sitemap.xml` and the icon as "rendered on demand", and every public page answers with `Cache-Control: private, no-cache, no-store`. Two things cause it. `components/SiteHeader.tsx` calls `connection()` and then reads the sign in session so that a signed in person sees their own top bar on public pages, and 51 pages also set `force-dynamic`. So the blog, Resources, Compare, For clinics, Help and the policy pages, whose content only changes when the code changes, are built again on every request.
+
+**What it does.**
+- Each visit and each crawl by Google, Bing or an AI crawler runs a server function. For a signed out visitor that function reads the launch switch from the database, and `/jobs` adds the search and the filter counts. A signed in visitor adds 2 round trips for the session and 1 for the unread count on every page.
+- Nothing can be served from Vercel's edge cache, so the time to first byte is the function's start up time plus the database round trips, every time. A cold start is typically several hundred milliseconds. Crawlers see that delay on every page.
+- Cost: every page view counts against Vercel's function allowance. Small now, but it scales with crawl traffic, which is what the SEO plan is trying to grow.
+
+**Measured here** (phone settings above, server time not included):
+
+| Page | First paint | Largest paint | Layout shift | Blocking time | Requests | Total size | Script | Fonts |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Home | 0.66 s | 0.66 s | 0.045 | 145 ms | 22 | 326 KB | 154 KB | 81 KB |
+| Find jobs | 0.65 s | 0.65 s | 0.037 | 220 ms | 19 | 257 KB | 146 KB | 81 KB |
+| A job page | 0.60 s | 0.60 s | **0.210** | 150 ms | 20 | 256 KB | 146 KB | 81 KB |
+| A blog post | 0.63 s | 0.63 s | 0.041 | 152 ms | 20 | 258 KB | 146 KB | 81 KB |
+| Resources | 0.64 s | 0.64 s | 0.037 | 218 ms | 19 | 290 KB | 146 KB | 81 KB |
+| Compare | 0.69 s | 0.69 s | **0.143** | 215 ms | 19 | 258 KB | 146 KB | 81 KB |
+| For clinics | 0.68 s | 0.68 s | 0.018 | 214 ms | 19 | 256 KB | 146 KB | 81 KB |
+
+The pages are light and paint fast. The biggest causes of what is left: (1) the server work on every request, which these numbers do not show, (2) the font swap, (3) 146 KB of script on pages that are almost all text.
+
+**A cheaper design.**
+1. Pages that only change with the code (blog, Resources, Compare, For clinics, Help, the policy pages, the province and role pages): build them once and refresh hourly. Draw the header in its signed out form, and let a few lines of script in the browser swap "Sign in" for "My dashboard" when a sign in cookie is present. No private data is in the cached page, so nothing can leak between people. The hourly refresh also keeps scheduled blog posts appearing on their date.
+2. Job pages: cache for 5 to 10 minutes and clear the cache when a job is approved, edited, closed or extended (the code already calls `revalidatePath` at those moments). Move the "this role is not your role" message to the apply page, where the person is signed in anyway.
+3. `/jobs` with no filters for signed out visitors: cache for 5 minutes.
+Effort: 1 to 2 days, with a preview for Steve. Risk: a signed in person briefly seeing the signed out header before the script runs.
+
+### K3. Content
+
+- **Blog.** 24 posts: 4 live, 20 scheduled weekly to 9th April 2027. Each has 1 clear subject and its own title and description. They are short, 380 to 630 words, with 1 to 5 links to other Kestrel pages. For "how to" searches the pages that rank are usually 2 to 3 times that length with specifics. The writing rules already ask for numbers, places and stories only Steve can supply, and that is what would lift these.
+- **Hub and cluster plan.** The plan (Phase 3 of the intake plan) describes pillar hubs. No hub page exists yet. The posts link to each other, but there is no page such as "Working in eye care in Canada" that gathers the career posts, or "Hiring for an eye care clinic" for the clinic posts.
+- **Province and role pages.** 12 provinces and territories by 10 roles, plus 12 province pages. Sensibly kept out of Google while they have 0 jobs. The side effect: until jobs exist, Kestrel has no page Google can index for "optician jobs in Ontario", which is the search that matters most.
+- **Pay guide.** It lives inside `/resources` behind a drop down, as 1 address for every province and role. Nobody searching "optician salary Ontario" can land on a page about exactly that. Today those searches are answered by Job Bank, Payscale, Salary.com and Indeed.
+- **Thin or duplicate.** K-06 above. `/contact` and `/security` are short but have a clear purpose.
+- **What others rank for that Kestrel has no page for** (from 3 searches run on 12th November 2026, results list only, nothing copied): Job Bank holds most of the first page for "[role] jobs in [place]" with a page per role per town, and for wages with a page per role per region. Indeed has a page per job title. The Canadian Association of Optometrists runs classifieds at opto.ca. Kestrel did not appear for its own name in the index I searched. Gaps: town level pages (Toronto, Ottawa, Calgary, Vancouver), pay pages per role and province, locum optometrist pages, and public clinic profile pages.
+
+### K4. Google for Jobs and AI assistants
+
+**Google for Jobs.** What is needed: a public page per job, valid JobPosting data that matches the page, removal when the job ends, and a way for Google to find new jobs fast. Kestrel has the first 3. Missing or unverified: (a) Google Search Console is not recorded as set up anywhere in the repository (Bing is), and the sitemap needs submitting there. (b) Google's Indexing API, which is allowed for job postings and gets a new job seen in minutes instead of days. IndexNow, which is built, only reaches Bing. (c) The recommended street address and clinic logo. (d) Unclaimed found listings carry no job data by decision, so the launch stock will not appear in Google for Jobs until clinics claim or post.
+
+**AI assistants.** Cheap ways to be named:
+1. Put the Organization data back on the home page (K-01) and add `sameAs` links as profiles are created.
+2. A plain "About Kestrel" facts page. There is none. One page with what Kestrel is, who it is for, where it operates, what it costs, when it opened and how to reach it, written as short factual sentences. Assistants quote pages like this.
+3. Mark up `/help` as questions and answers, and the pay table as a dated data set with its source (K-04).
+4. One page per pay question (see opportunities), each with the figure, the source and the date in the first 2 sentences.
+5. Keep the name, the one line description and the logo identical on LinkedIn, Bing Places and any directory.
+6. Compared with `docs/marketing/ai-visibility-baseline.md`: the 10 prompts are well chosen, but the log table in the file is empty, so the baseline has not been recorded in the repository. Prompts 3 and 8 are the ones Kestrel can win first, and they need the pay pages and 1 clear job ad rules page (K-06).
+
+### K5. The 10 best SEO moves, ranked
+
+| # | Move | Effort | Expected effect | What Steve must supply |
+| --- | --- | --- | --- | --- |
+| 1 | Put Organization and WebSite data back on the home page, fix the lowercase province, the share card and the `/clinics` title (K-01, K-05) | 1 hour | Small but immediate. Fixes how Kestrel is identified everywhere | Nothing |
+| 2 | Set up Google Search Console, submit the sitemap, and check what is indexed | 30 minutes (Steve) | Needed to see anything else working | His Google account for Kestrel |
+| 3 | Cache the public pages and fix the font shift (K-02, K-03) | 2 days | Faster pages for every visitor and crawler, lower running cost, passes Core Web Vitals on job pages | A look at the preview |
+| 4 | Pay pages: 1 page per role and province from the Job Bank figures already in the code (about 55, optometrists left out as decided), each with the source and date | 1 to 2 days | High. These are real searches with weak, generic competitors, and the pages are quotable by AI assistants | Approval of the wording, and the yearly refresh |
+| 5 | An "About Kestrel" facts page, and question and answer markup on `/help` | Half a day | Medium for AI assistants, small for Google | The facts: opening date, who runs it, what he is comfortable saying |
+| 6 | Let province and role pages be indexed before they have jobs, by giving each real content (typical pay, the regulator, what the role needs in that province, a job alert sign up) | 2 days | High once live, because these are the main job searches. Risk of thin pages if rushed | A decision that it is worth doing before launch |
+| 7 | Google's Indexing API for new and ended jobs | Half a day | Medium to High at launch: jobs show in Google for Jobs within minutes | A Google Cloud service account |
+| 8 | 2 hub pages that gather the blog posts (careers, hiring), and lengthen the 6 strongest posts with specifics | 2 days, mostly Steve's stories | Medium, builds over months | Numbers, places and stories from his own knowledge |
+| 9 | Town pages for the 10 largest cities once each has jobs | 1 day | Medium, later | Nothing |
+| 10 | Links from others: associations, schools of opticianry, trade publications | Ongoing, Steve | High over time, and the one thing code cannot do | Waits for the disclosure conversation, as already decided |
