@@ -4,7 +4,28 @@ Reviewed: `main` at `a67323d` (fix phases A to G merged). Branch for this review
 
 Reach: the code and history, tests, builds and 3 throwaway databases here, and the demo site (demo.eyecarejobs.ca). The live site (eyecarejobs.ca) is refused by this session's network settings, so nothing here was checked on the live site itself.
 
-<!-- SUMMARY -->
+## 1. For Steve (one page)
+
+**Is the audit closed?** Yes, the code side of it. Of the 60 findings, 48 are fixed (36 re-tested today and passing, including all 3 High findings), 4 were partly fixed by your choice, 4 ideas were decided and built, and 4 remain: P1-20 (what happens to applications when an account is deleted), P1-25 (a ceiling at 1,000 jobs, for later), P1-58 (an idea) and P1-59 (waiting for your sample resumes). Main is healthy: 600 of 600 tests, a clean build, 0 vulnerable packages, no secrets in the history, and 117 of 117 database access tests on both kinds of test database. Nothing a fix changed broke something that used to work.
+
+**What is not closed** is the legal and launch side, and the lawyer's reply has made that sharper. The lawyer's first point is P1-20, the oldest open item in the project (October's R5).
+
+**The 5 biggest risks now**
+1. **A clinic deleting its account deletes every candidate's application to it**, and candidates lose them from their tracker. The lawyer wants this fixed before real applications. (X-01)
+2. **There is no published policy for fake job reports.** The report button and admin queue exist; the policy the lawyer says Ontario requires does not. (X-02)
+3. **9 sentences in the published policies and the sign up box are not true of the product today**, including the tick box that bundles job alerts with offers, which the lawyer asked to clean up now because it is live. (Section 6C)
+4. **Gate A is not passed:** the meeting is not held, the disclosure not given, the company not formed. Outreach and found listings must stay off, as the lawyer also advised.
+5. **The demo walk was only partly possible:** the candidate side is good, but the clinic's applicant screens (shortlist, decline, role filled) were not seen in a browser, because no job could be approved. On a phone, Find jobs shows 1.5 screens of filters before the first job, and the ad builder can add "internationally trained applicants are welcome" without being asked. (D-01, D-02)
+
+**The 5 things to do next**
+1. Read `LAWYER-QUESTIONS-2026-11-12.md`, change anything, forward it and book the meeting. It turns each of the lawyer's points into "here is my plan, please correct it", lists what is still open, and is written so you can send it unchanged.
+2. Once the lawyer agrees the plan: Claude keeps applications when a clinic or job is deleted, and publishes a retention schedule.
+3. Claude drafts the fake job policy page and fixes the sign up and waitlist wording and the 9 policy sentences.
+4. Supabase Pro with backups, and a restore test, before anyone is invited.
+5. Approve 1 audit job on the demo in a later session, so the clinic side can be walked in full.
+
+**A coaching note:** the fix phases were done well and the evidence is real: the tests went from 425 to 600 and the database now keeps its own promises. The pattern to watch has moved from code to paperwork. The policies, the lawyer pack and `NEXT-STEPS-PHASES.md` all trail the product. A good habit from here: each change that touches what people are told ends with "does a policy page or the lawyer list need a line?"
+
 
 ## 2. Health check (Part 1)
 
@@ -230,3 +251,115 @@ Banner on every page checked; `x-robots-tag: noindex, nofollow`, the robots meta
 | D-08 | Low | Demo not reset; guide's numbers (18 jobs, 9 provinces) out of date; no small town jobs | Run reset and seed; add 2 small town clinics to the seed |
 | D-09 | Low | PDF resumes show a "DOC" badge | Show PDF for PDFs |
 | D-10 | Idea | Applying and posting take 3 to 4 seconds | Watch after the move to Vercel Pro |
+
+## 6. Legal readiness (Part 5)
+
+**This is preparation for the lawyer, not legal advice.** The send ready questions are in **`docs/audit/LAWYER-QUESTIONS-2026-11-12.md`**: written to the lawyer in your voice, with no internal jargon, and your employer not named (as in the packs). Read it, change anything, then forward it. It has not been sent.
+
+### 6A. The lawyer's reply, and what is still open
+
+You confirmed the feedback you pasted is from the lawyer. It answers the direction on 6 points, and the questions file turns each into "here is what I plan to do, please correct it":
+
+| Lawyer's point | Pack question it answers | What it means for Kestrel |
+| --- | --- | --- |
+| Sort out what happens to a resume after applying: what the clinic may do, how long each side keeps it, what happens on deletion. Fix the clinic deletion problem before people use it | 15, 24, 25, 45 | X-01 (P1-20, R5) becomes a pre launch build item, with the terms and privacy wording |
+| Make reporting fake jobs more visible and publish a short policy; Ontario requires this of the job board | 36 (partly) | X-02: a policy page and links. The reporting tool already exists |
+| Confirm who operates the site | 12 | Waits on incorporation (Gate A) |
+| Have the liability clause looked at; the cap is $0 for candidates and the free launch | 13 | Clause to redraft at the meeting |
+| Clean up the waitlist wording now, since it is live | 30 | The tick box bundles "job alerts" with news and offers, but alerts are sent without the tick (confirmed in the walk). Small change, then the lawyer's wording |
+| Start with Ontario clinics posting their own jobs; leave cold outreach, reposting from clinic websites and paid plans for later | 31, 32, 16, 19 | Confirms keeping `ENABLE_OUTREACH`, `ENABLE_SEEDING` and payments off at the free launch |
+| Spend the meeting on clinic terms and applicant information | | The questions file puts these first |
+
+**Not covered by the reply, and still open:** your employment and the disclosure (pack 1 to 6, still the gate for outreach and found listings), the company (7 to 11), where data is processed (22), Quebec residents who sign up (27), the privacy officer and breach plan (28, 29), the career stage answer (42), the first week emails (43), the optometrist percentage and daily rate pay (44), the posting rules as built (34), the marketing wording (35), the indemnity and changes clauses (14, 18, 20). New from this review: the ad builder adding "internationally trained applicants are welcome" unasked (D-02), Kestrel's position on a clinic's AI screening answer, and whether the buying groups blog post and the directory listing are a concern before the disclosure. The questions file groups them as you asked: privacy, anti spam, pay transparency, human rights wording, the platform's position, terms and retention, and the separation from your employer.
+
+One thing to notice: the reply says "have the lawyer look at the liability clause", which reads as if someone else will look at it. Worth checking at the meeting whether that means a colleague in their firm.
+
+### 6B. The lawyer packs (`docs/legal/`)
+
+**Described correctly:** the business, the stack, the resume reader (no AI, no outside service), the inbox, career stage, Recommended for you and its preferences, the found listings tools, the comparison page, view and click counts, and the posting rules including the optometrist pay options.
+
+**Changed since they were built (Phase C, 12th November):** the name hold is now in use (the pack says its database update "has not been run yet"); the shortlist is now private at the database level; only optometrists can apply for optometrist jobs; the 30 a day apply limit; Quebec refused by the database; the sign up ticket; one click unsubscribe and bounce suppression (pack question 33 is now partly answered by what was built); role filled messages to Interview and Offer; the clinic message label. **Wrong in the pack:** the prices in Part 1 ($39, $49, $59 then $79), and questions 21 and 23 describe things fixed since.
+
+**Missing:** the lawyer's own reply and what you plan to do with it; the fake job policy; the waitlist wording change.
+
+**Verdict:** do not rebuild the full packs before the meeting. The lawyer has read them and replied. Send the questions file instead: its section 3 lists what changed and section 4 lists the policy sentences that are wrong. Rebuild the packs once, after the meeting, with the agreed decisions, so the appendices (the policies as published) match what the lawyer approved.
+
+### 6C. Sentences on /privacy, /terms, /posting-policy and /security that are not true today
+
+Checked against what the demo did in Part 4.
+
+| Page | Sentence | What is true |
+| --- | --- | --- |
+| Terms | "See our contact page for our mailing address." | The contact page shows no address (removed from the website on 5th November, by your choice) |
+| Terms | "Last updated 30th October 2026" | Wording changed on 12th November (resume, not CV). Small, but the recorded terms version is still "2026-10-30 draft" |
+| Terms | Silent on deletion | A clinic deleting its account deletes every application it received, and candidates lose them from their tracker (the delete box says so to the clinic) |
+| Posting policy | "A pay range for the job, as a yearly salary or an hourly rate." | Optometrist jobs may also use a daily rate or a percentage only |
+| Posting policy | "(full time, part time, locum or contract)" | Every screen says Fixed term (X-07) |
+| Posting policy | Fake or scam posts mentioned only as a reason to suspend an account | No process or policy for reports is described (X-02) |
+| Privacy | "How long we keep it" | Does not say what happens to a candidate's applications when a clinic leaves, nor mention the "keep my details for future roles" tick |
+| Privacy | "...for example when we launch accounts, job posting and payments" | Accounts and posting exist |
+| Sign up and waitlist box | "launch news, job alerts, product updates and offers" | Job alerts are sent to anyone who sets one up, ticked or not |
+| Security | Nothing untrue found | "Enforced by the database itself, on every table" is now true (117 access tests) |
+
+## 7. Next steps (Part 6)
+
+### Where Kestrel stands against the gates
+
+| Gate | Needs | Today |
+| --- | --- | --- |
+| **A** (lawyer, disclosure, company) | Lawyer meeting held and advice taken; disclosure given and acknowledged; company incorporated with a Business Number and bank account | **Not passed.** First written reply received; meeting not held; disclosure not given; no company |
+| **B** (policies published, every flow tested) | Terms, Posting policy and Security without the draft notice; every flow tested on a phone | **Not passed.** 3 pages still draft. The candidate journey and the clinic up to submit pass on the demo. The clinic's applicant steps were not walked in a browser |
+| **C** (50 live roles in 5 or more provinces) | Jobs live on eyecarejobs.ca | **Not passed.** The live site is pre launch. The demo has 28 sample jobs in 7 provinces |
+
+### Before the free launch
+
+1. Lawyer meeting, then the agreed changes: applications kept after a clinic leaves (X-01), a published retention schedule and the purge, the fake job policy (X-02), the waitlist and sign up wording, the operator and liability clauses, the 9 inaccurate sentences above. Then remove the draft notices.
+2. Your disclosure conversation, before anything public is promoted (it also gates outreach and found listings, which stay off at launch as the lawyer suggests).
+3. Supabase Pro with daily backups and 1 restore test; a paid Resend plan; Vercel Pro (Hobby is non commercial); move the repo to the Kestrel organisation.
+4. Check that previews no longer use the live database (R9).
+5. A full phone walk of the clinic applicant steps on the demo (approve 1 audit job so the session can finish 4B and 4C).
+6. The demo walk fixes worth having first: D-01 (jobs first on a phone), D-02 (ad builder line), X-03 (career stage in the profile).
+
+### Before paid launch
+
+Stripe in test mode with the free launch coupon. A $0 total must not ask for a card (`payment_method_collection: if_required`), and the comparison page's "no credit card during the free launch" must stay true. Then receipts, HST through Stripe Tax, the fee terms and auto renewal wording from the lawyer, live keys after the bank account.
+
+### Switches at launch, in both Vercel projects unless noted
+
+| Setting | Live project | Demo project |
+| --- | --- | --- |
+| Sign up gate (in the database, not Vercel) | `update public.signup_gate set open = true;` | Already open |
+| `CLINIC_SIGNUP` | `yes` when clinic sign up opens to all (or keep invitation codes for the Ontario first wave) | `yes` |
+| `ENABLE_GOOGLE_SIGNIN` | `yes` | Leave unset |
+| `LAUNCH_HOME` | Unset or `yes` once the gate opens | As now |
+| `ENABLE_ONBOARDING_EMAILS` | Only after the lawyer answers the first week question | Leave unset |
+| `ENABLE_SEEDING`, `ENABLE_OUTREACH` | **Stay off** (lawyer's advice and the disclosure) | Leave unset |
+| Supabase CAPTCHA | Stays off (the database ticket does the job) | Off |
+
+### The next 10 actions, ranked
+
+| # | Action | Who | Effort | Unblocks |
+| --- | --- | --- | --- | --- |
+| 1 | Read and forward `LAWYER-QUESTIONS-2026-11-12.md`; book the meeting | You | 30 minutes | Gate A, Gate B |
+| 2 | Keep applications when a clinic or job is deleted, so candidates keep their history (X-01) | Claude, after the lawyer agrees the plan | 1 day plus SQL on both databases | The lawyer's first point |
+| 3 | Fake job policy page, linked from every job page, the footer and help (X-02) | Claude drafts, lawyer approves | Half a day | The lawyer's second point |
+| 4 | Fix the waitlist and sign up tick box wording, and the 9 inaccurate policy sentences | Claude, lawyer's wording | 2 hours | Gate B |
+| 5 | Supabase Pro with backups, then 1 restore test | You | 1 hour | Inviting anyone |
+| 6 | Your disclosure conversation | You | | Gate A, any promotion |
+| 7 | Phone friendly Find jobs (results first, filters behind a button) (D-01) | Claude | Half a day | Candidates arriving from Google |
+| 8 | Ad builder: no unasked "internationally trained" line, name Kestrel (D-02, D-06) | Claude | 30 minutes | Clinic trust |
+| 9 | Approve 1 audit job on the demo so a session can finish the clinic and both sides walk (4B, 4C); reset and reseed the demo first | You, then Claude | 20 minutes of yours | Gate B |
+| 10 | Refresh `NEXT-STEPS-PHASES.md` with real statuses (X-06), and the small fixes X-03, D-03, D-04, D-05, X-07 in 1 branch | Claude | Half a day | A true picture |
+
+## 8. Could not verify
+
+| What | Why | Needs |
+| --- | --- | --- |
+| Anything on the live site (eyecarejobs.ca) | Refused by this session's network settings | Add `eyecarejobs.ca` to the environment's allowed hosts |
+| Which databases have migrations 0037 to 0042, and on what dates | I cannot see either database | You to confirm (CLAUDE.md says both, 12th November) |
+| Whether you ran the permissions check query from the fixes log (P1-42) on both databases | As above | You |
+| The clinic's applicant steps and the candidate's view of them (4B, 4C) | No live job of my own without admin approval | Approve 1 audit job in a later session |
+| Previews using the live database (R9), Supabase backups (R1), Resend plan (R7), Vercel plan (R36) | Settings outside the code | You |
+| Google's view of the structured data and fonts (P1-52, P1-12 on the live site) | Needs Search Console and the live site | Your Search Console steps in `STEVE-NEXT-STEPS.md` |
+| Email delivery and its content | The demo sends no email | A test on the live site after launch settings |
+| The October items marked "looks done" | Not re-tested 1 by 1 | A refreshed `NEXT-STEPS-PHASES.md` (X-06) |
