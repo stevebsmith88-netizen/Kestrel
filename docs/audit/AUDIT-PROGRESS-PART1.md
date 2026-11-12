@@ -23,8 +23,8 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | F. Resume reader | done | Tested with made up and hostile files. 7 findings (F-01 to F-07). Confirmed: a crafted Word file runs the reader for minutes (F-01), and the page and time limits do not limit the work (F-02). No resume text is logged or stored |
 | G. Email and CASL | done | 17 send sites, 1 sender function. Address, unsubscribe, demo block and off by default all verified. 8 findings (G-01 to G-08). Main: first week emails would reach unconfirmed addresses, and 2 places promise a cover letter drafting feature that does not exist |
 | H. Accessibility and mobile | done | 27 pages at 375 px, signed out and signed in, using a local stand in for Supabase. 0 contrast, label or sideways scroll failures. 7 small findings (H-01 to H-07). 3 screenshots in docs/audit/2026-11-part1/ |
-| I. Docs against reality | not started | |
-| J. Tests, dead code and health | not started | |
+| I. Docs against reality | done | Privacy, security, help (172 names checked, all match) and lawyer packs compared with the code. 7 findings (I-01 to I-07). Main: lawyer packs predate everything since 5th November, privacy policy lists less than is collected, docs/security.md has 3 wrong statements |
+| J. Tests, dead code and health | done | 425 tests on rule files, 0 on database code. No dead code. 36 settings with no single list. 3 findings (J-01 to J-03) |
 | K. SEO and search visibility | not started | |
 | Final report written (`AUDIT-2026-11-PART1.md`) | not started | |
 | Scheduled task disabled | not started | |
