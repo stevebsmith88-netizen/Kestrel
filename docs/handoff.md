@@ -44,14 +44,17 @@ Docs that describe each area: `docs/accounts-setup.md`, `clinics-and-jobs.md`, `
 
 ## How to build, test and what was and was not verified
 
-Commands: `npm run typecheck`, `npm test` (Node's test runner, about 56 tests in `lib/*.test.ts`), `npm run build`. The build needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` set, to any value.
+Commands: `npm run typecheck`, `npm test` (Node's test runner, about 600 tests in `lib/*.test.ts`, none of which need a database), `npm run build`, and `npm run test:db` (the 2 database checks below, which need Linux with Postgres 16 and the `postgres` user, as in the cloud session; they only ever talk to a throwaway server in `/tmp`, never the live or demo database). The build needs `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` set, to any value.
 
 Test tools that live in the repo (development only, never deployed):
 - `bash scripts/dev/scratch-db.sh` builds a throwaway Postgres 16, applies every migration twice and prints the check table. After that, row level security can be tested with `psql`, as `set role authenticated; select set_config('request.jwt.claim.sub', '<uuid>', false);`.
+- `npm run test:db` runs both of these, one after the other (about 10 seconds). Run it after any change to a migration, a permission or a policy, and before handing Steve SQL.
+  - `bash scripts/dev/rls-tests.sh supabase` is the access tests (`scripts/dev/rls-tests.sql`): who can read and change what, as a visitor, as each kind of signed in person and as the website's server.
+  - `bash scripts/dev/walkthrough.sh` is the scripted walk through (`scripts/dev/walkthrough.sql`, audit P1-19): sign up (ticket rules), a clinic sets up and a job is approved, a candidate applies, the clinic views, shortlists and declines, and then both accounts are deleted. It does what the website does, in the same order, as each person, and checks at every step what the database allows and what the candidate is and is not shown (a shortlist is always seen as Viewed). To add a step, copy a `select w.check(...)` line: `w.be('ann')` switches to a person (`server` is the website's key, `owner` the database owner), and `w.attempt('sql')` tries a change and undoes it, answering `refused` or `N rows`.
 - `node scripts/dev/fake-postgrest.js` serves 3 sample jobs on port 54399, so public pages can be rendered and screenshotted (build with `NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54399`). Playwright is installed globally in the cloud session (`NODE_PATH=$(npm root -g)`).
 - Careful: do not run `pkill -f` with a pattern that appears in your own command, because it kills your own shell.
 
-**Tested against a real database:** all migrations, row level security rules for every table, the triggers and limits.
+**Tested against a real database:** all migrations, row level security rules for every table, the triggers and limits, and the life of an application from sign up to account deletion (`npm run test:db`). **Tested with a stand in database, in `npm test`:** the loaders behind the application pages (`lib/application-loaders.test.ts`) and the contents of the data download (`lib/data-export.test.ts`).
 **Tested only with stand ins or not at all, so verify with Steve:** anything that talks to the live Supabase API (Storage for CVs, PostgREST embeds on some pages), Resend email delivery, the Anthropic ad builder, signed in pages (sessions need real Supabase), and Stripe (not built). This cloud session cannot reach the live site, Vercel, Cloudflare or Google. Steve has confirmed by hand: sign up and sign in, Google sign in, the Supabase email templates including change email, the Turnstile check, alert and admin emails, and the uptime monitor. Ask him what else he has actually clicked through (`docs/test-accounts.md` lists the full walk through).
 
 ## Accounts and settings (names only, never values)
