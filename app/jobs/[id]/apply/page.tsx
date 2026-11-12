@@ -33,7 +33,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
     body = (
       <section className="card setup">
         <h2>Sign in to apply</h2>
-        <p>Create a free account, save your CV once, and apply to any job in a few clicks.</p>
+        <p>Create a free account, save your resume once, and apply to any job in a few clicks.</p>
         <div className="formbtns">
           <Link href={`/sign-in?next=${next}`} className="btn">Sign in</Link>
           <Link href={`/sign-up?next=${next}`} className="btn ghost">Create a free account</Link>
@@ -55,7 +55,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
       body = (
         <section className="card setup">
           <h2>One thing first</h2>
-          <p>Save your CV and choose your role, and then you can apply in a few clicks.</p>
+          <p>Save your resume and choose your role, and then you can apply in a few clicks.</p>
           <Link href={`/candidate/profile?next=${next}`} className="btn">Complete my profile</Link>
         </section>
       );
@@ -76,7 +76,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
               <div><dt>Name</dt><dd>{session.fullName || session.email}</dd></div>
               <div><dt>Email</dt><dd>{session.email}</dd></div>
               <div><dt>Role</dt><dd>{profile?.profession}</dd></div>
-              <div><dt>CV</dt><dd>{profile?.cv_filename}</dd></div>
+              <div><dt>Resume</dt><dd>{profile?.cv_filename}</dd></div>
             </dl>
             <p className="help"><Link href="/candidate/profile" className="btn sm ghost">Change these in my profile</Link></p>
           </section>

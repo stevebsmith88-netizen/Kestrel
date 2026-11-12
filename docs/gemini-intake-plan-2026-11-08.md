@@ -693,3 +693,5 @@ Notes for whoever builds it:
 - Make the whole tile the link (a real link, not a click handler), so it works with the keyboard and a screen reader, and give it the same box highlight on hover as the other links. A tile with a count of 0 can still link, to an empty state that says what to do next.
 - Keep the wording in `content/help.ts` in step if a help topic describes the tiles.
 - Use the quiet, no jump patterns already in place so filtering does not scroll the page.
+
+**Done 12th November 2026:** every visible use of CV was changed to resume, including the privacy, terms and security pages (Steve confirmed the lawyer will not mind), emails, the help centre, the menu label (now "Profile and resume") and the blog post, which is now `eye-care-resume`. `lib/resume-wording.test.ts` guards it. The lawyer pack PDF (`docs/legal/Kestrel-lawyer-review-pack.pdf`) still says CV and should be regenerated before it is sent. The sample job image on the pre launch home page (`public/home/sample-job.png`) should be checked for the old wording.

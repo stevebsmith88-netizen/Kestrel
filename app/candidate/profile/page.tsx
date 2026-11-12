@@ -9,7 +9,7 @@ import { safeNext } from "@/lib/auth-copy";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
 
-export const metadata: Metadata = { title: "My profile and CV | Kestrel Eye Care Jobs", robots: { index: false } };
+export const metadata: Metadata = { title: "My profile and resume | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
@@ -25,19 +25,19 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">My profile</p>
-          <h1>Your profile and CV</h1>
-          <p className="lede2">Save your CV once, then apply to any job in a few clicks. Your profile is private. A clinic sees only what you send with an application.</p>
-          {notice === "cv-deleted" && <p className="notice" role="status">Your CV is deleted.</p>}
+          <h1>Your profile and resume</h1>
+          <p className="lede2">Save your resume once, then apply to any job in a few clicks. Your profile is private. A clinic sees only what you send with an application.</p>
+          {notice === "cv-deleted" && <p className="notice" role="status">Your resume is deleted.</p>}
           {back && (
             <section className="card setup" role="status">
               {profileReady(profile) ? (
                 <>
                   <h2>You are ready to apply</h2>
-                  <p>Your CV and role are saved. Carry on with the job you were looking at.</p>
+                  <p>Your resume and role are saved. Carry on with the job you were looking at.</p>
                   <Link href={back} className="btn">Back to the job</Link>
                 </>
               ) : (
-                <p>Save your CV and choose your role below, and we will take you back to the job you were applying for.</p>
+                <p>Save your resume and choose your role below, and we will take you back to the job you were applying for.</p>
               )}
             </section>
           )}

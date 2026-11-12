@@ -21,7 +21,7 @@ export async function GET() {
 
   const data: Record<string, unknown> = {
     exportedAt: new Date().toISOString(),
-    note: "This is the personal information Kestrel Eye Care Jobs holds about your account. Your CV file can be downloaded from your profile page.",
+    note: "This is the personal information Kestrel Eye Care Jobs holds about your account. Your resume file can be downloaded from your profile page.",
     account: { email: session.email, ...(profile.data ?? {}) },
     jobAlerts: alerts.data ?? [],
   };

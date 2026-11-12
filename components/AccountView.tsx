@@ -49,7 +49,7 @@ export default function AccountView({ role, email, first, last, hasClinic, hasPa
 
             <section className="card" aria-labelledby="ac-download">
               <h2 id="ac-download">Download your information</h2>
-              <p className="help">Get a copy of the information we hold about you as a file. It includes your account, {role === "clinic" ? "clinic profile and job posts" : "profile, applications and job alerts"}. Your CV file can be downloaded from your profile page.</p>
+              <p className="help">Get a copy of the information we hold about you as a file. It includes your account, {role === "clinic" ? "clinic profile and job posts" : "profile, applications and job alerts"}. Your resume file can be downloaded from your profile page.</p>
               <a href="/account/export" className="btn ghost" download>Download my information</a>
             </section>
 

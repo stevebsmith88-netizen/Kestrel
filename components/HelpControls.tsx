@@ -124,7 +124,7 @@ export default function HelpControls() {
             type="search"
             autoComplete="off"
             value={query}
-            placeholder="For example: password, CV, withdraw"
+            placeholder="For example: password, resume, withdraw"
             onChange={(e) => { setQuery(e.target.value); applyFilter(e.target.value); }}
             onKeyDown={(e) => { if (e.key === "Escape" && query) { e.preventDefault(); clearSearch(); } }}
           />

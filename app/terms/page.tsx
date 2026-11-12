@@ -47,7 +47,7 @@ export default async function Terms() {
 
           <h2>If you are a candidate</h2>
           <ul>
-            <li>When you apply, the clinic that posted the job can see your application, including your cover letter, your CV and the details you chose to give. Only apply to jobs you are interested in.</li>
+            <li>When you apply, the clinic that posted the job can see your application, including your cover letter, your resume and the details you chose to give. Only apply to jobs you are interested in.</li>
             <li>Make sure what you tell clinics is true, including your qualifications and registration.</li>
             <li>Clinic contact details are not shown on job posts. Please use Kestrel to apply, and do not try to collect clinic or staff contact details from the site.</li>
             <li>We may email you about your applications and, if you have agreed, about jobs and Kestrel news. You can unsubscribe at any time.</li>
@@ -88,7 +88,7 @@ export default async function Terms() {
 
           <h2>Content you provide</h2>
           <p>
-            You keep ownership of what you give us, such as job ads, clinic descriptions, CVs and cover letters. You give Kestrel permission to store it, display
+            You keep ownership of what you give us, such as job ads, clinic descriptions, resumes and cover letters. You give Kestrel permission to store it, display
             it on the site, and share it as needed to run Kestrel, for example showing a job post to visitors or sending your application to the clinic you applied to.
             You promise you have the right to give us this content. We may remove content that breaks these terms.
           </p>

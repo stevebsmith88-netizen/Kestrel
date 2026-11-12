@@ -131,7 +131,7 @@ export function wordCount(text: string) {
 }
 
 // What a person's file looks like on the inside tells us what it really is, whatever it
-// is called. Returns the kind of CV file, or null if it is not one we accept.
+// is called. Returns the kind of resume file, or null if it is not one we accept.
 export function detectCv(bytes: Uint8Array, filename: string): { ext: "pdf" | "docx" | "doc"; contentType: string } | null {
   const name = filename.toLowerCase();
   const startsWith = (...sig: number[]) => sig.every((b, i) => bytes[i] === b);
@@ -148,7 +148,7 @@ export const CV_MAX_BYTES = 3 * 1024 * 1024;
 const ascii = (bytes: Uint8Array) => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString("latin1");
 const utf16 = (text: string) => Buffer.from(text, "utf16le").toString("latin1");
 
-// Looks inside a CV for the things malicious files usually rely on: macros, scripts, launch actions and embedded
+// Looks inside a resume for the things malicious files usually rely on: macros, scripts, launch actions and embedded
 // programs. Returns what it found, or null. This is a safety net, not an antivirus. It cannot see inside compressed
 // parts of a file, so a real virus scan is still planned (see docs/cv-scanning.md).
 export function activeContent(bytes: Uint8Array, ext: "pdf" | "docx" | "doc"): string | null {

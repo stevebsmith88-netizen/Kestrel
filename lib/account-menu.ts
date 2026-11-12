@@ -8,7 +8,7 @@ export type MenuLink = { href: string; label: string };
 export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
   candidate: [
     { href: "/candidate/applications", label: "My applications" },
-    { href: "/candidate/profile", label: "Profile and CV" },
+    { href: "/candidate/profile", label: "Profile and resume" },
     { href: "/account", label: "Account settings" },
   ],
   clinic: [

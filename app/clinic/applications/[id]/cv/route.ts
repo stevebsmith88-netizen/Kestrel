@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// Lets a clinic open the CV sent with an application to one of its own jobs. The database
+// Lets a clinic open the resume sent with an application to one of its own jobs. The database
 // decides whether this application is theirs; the link works for one minute.
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

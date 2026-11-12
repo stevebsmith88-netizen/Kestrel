@@ -67,7 +67,7 @@ export async function getApplication(id: string): Promise<{ application: Applica
   return { application: forCandidate(data as Application), history: candidateHistory(events ?? []) };
 }
 
-// A profile is ready to apply with once it has a CV and the basics.
+// A profile is ready to apply with once it has a resume and the basics.
 export function profileReady(p: CandidateProfile | null) {
   return Boolean(p?.cv_path && p.profession);
 }

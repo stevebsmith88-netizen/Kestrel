@@ -17,7 +17,7 @@ export const HELP: HelpSection[] = [
         keywords: ["about", "overview", "who are you", "job board", "optometry", "opticians"],
         answer: [
           "Kestrel is a job board for eye care across Canada. Optometrists, opticians, optometric assistants and technicians, practice managers and patient care teams look for work here, and independent and corporate practices post side by side. Suppliers and manufacturers that hire directly can post field based roles too, such as sales, training and service.",
-          "Every job shows its pay, and a person on our team reads every post before it goes live. Candidates can apply through Kestrel with a saved CV, or on the clinic's own website when the clinic prefers that.",
+          "Every job shows its pay, and a person on our team reads every post before it goes live. Candidates can apply through Kestrel with a saved resume, or on the clinic's own website when the clinic prefers that.",
         ],
         links: [{ label: "Find jobs", href: "/jobs" }],
       },
@@ -82,7 +82,7 @@ export const HELP: HelpSection[] = [
         title: "Where is my information kept?",
         keywords: ["privacy", "storage", "servers", "canada", "hosting", "security", "data residency"],
         answer: [
-          "Your details, CV and applications are stored in a database and a private file store hosted in Canada. Our website hosting, email, security check and AI providers are based in the United States and may handle requests, and the emails we send you, on servers outside Canada. While your information is there, it may be subject to the laws of that country.",
+          "Your details, resume and applications are stored in a database and a private file store hosted in Canada. Our website hosting, email, security check and AI providers are based in the United States and may handle requests, and the emails we send you, on servers outside Canada. While your information is there, it may be subject to the laws of that country.",
           "The [privacy policy](/privacy) has the full list of providers and how long we keep things, and [How we protect your data](/security) explains the safeguards.",
         ],
         links: [{ label: "Privacy policy", href: "/privacy" }, { label: "How we protect your data", href: "/security" }],
@@ -92,7 +92,7 @@ export const HELP: HelpSection[] = [
         title: "Who can see my details?",
         keywords: ["privacy", "visible", "employer sees", "profile private", "share", "cv visible", "hidden"],
         answer: [
-          "**If you are looking for a job:** your profile and CV are private. A clinic sees only what you send with an application: your cover letter, your CV, and your name, email address, role, licences, experience and availability, plus your phone number if you added one, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your CV can be opened only through a link that works for 1 minute.",
+          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number if you added one, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
           "**If you are a clinic:** your job posts are public, but the email address that applicant alerts go to is never shown on a post, and neither is the answer about how many people work for you. Candidates apply through Kestrel, so recruiters cannot harvest your address.",
           "We do not sell personal information. Our team can see account details when it needs to run the site, and a small number of service providers handle information only to provide their service to us.",
         ],
@@ -163,8 +163,8 @@ export const HELP: HelpSection[] = [
         title: "How do I download my information or delete my account?",
         keywords: ["close account", "remove account", "erase", "export", "my data", "copy of my data", "privacy request", "cancel account"],
         answer: [
-          "You can do both yourself, any time you are signed in. The download is a file with the account details we hold about you. For a candidate it also covers your profile, job alerts, applications and saved letters, and for a clinic it covers your clinic profile, jobs and templates. Your CV file is downloaded separately, with the **Download** button on your profile page.",
-          "Deleting is permanent. It removes your profile, your CV and your applications. A clinic that already received your application may have kept its own copy of what you sent. Write to privacy@eyecarejobs.ca and we will ask that clinic to remove it. If you are a clinic, deleting your account also removes your jobs and the applications they received.",
+          "You can do both yourself, any time you are signed in. The download is a file with the account details we hold about you. For a candidate it also covers your profile, job alerts, applications and saved letters, and for a clinic it covers your clinic profile, jobs and templates. Your resume file is downloaded separately, with the **Download** button on your profile page.",
+          "Deleting is permanent. It removes your profile, your resume and your applications. A clinic that already received your application may have kept its own copy of what you sent. Write to privacy@eyecarejobs.ca and we will ask that clinic to remove it. If you are a clinic, deleting your account also removes your jobs and the applications they received.",
         ],
         steps: [
           "Open the menu under your initials at the top of the page. On a phone, open **Menu** instead.",
@@ -203,20 +203,20 @@ export const HELP: HelpSection[] = [
       },
       {
         id: "profile-and-cv",
-        title: "How do I build my profile and add a CV?",
-        keywords: ["resume", "upload", "curriculum vitae", "word", "pdf", "licence", "license", "registration", "edit profile"],
+        title: "How do I build my profile and add a resume?",
+        keywords: ["resume", "cv", "upload", "curriculum vitae", "word", "pdf", "licence", "license", "registration", "edit profile"],
         answer: [
-          "To apply through Kestrel you need 2 things: your role and a saved CV. Everything else on the profile is optional, and your profile is private. A CV can be a PDF or a Word file, up to 3 MB, and it is stored privately in Canada.",
-          "You can replace or delete your CV at any time. Replacing it does not change applications you have already sent, because a clinic keeps what you sent that day.",
+          "To apply through Kestrel you need 2 things: your role and a saved resume. Everything else on the profile is optional, and your profile is private. A resume can be a PDF or a Word file, up to 3 MB, and it is stored privately in Canada.",
+          "You can replace or delete your resume at any time. Replacing it does not change applications you have already sent, because a clinic keeps what you sent that day.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page and choose **Profile and CV**. On a phone, open **Menu** instead.",
-          "In the **Your CV** box, choose your file and press **Upload**. Once a CV is saved you can use **Download** or **Delete** next to its name, and the box offers **Replace your CV**.",
+          "Open the menu under your initials at the top of the page and choose **Profile and resume**. On a phone, open **Menu** instead.",
+          "In the **Your resume** box, choose your file and press **Upload**. Once a resume is saved you can use **Download** or **Delete** next to its name, and the box offers **Replace your resume**.",
           "Below that, choose **Your role** and tick every province or territory where you are licensed or registered. Add your years of experience and when you are available. Your phone number is optional, and it is shared only with a clinic you apply to.",
           "Press **Save my details**.",
           "If you like, fill in **What you are looking for** on the same page. It shapes your recommended jobs (see [What are Recommended for you and Not interested?](/help#recommended-for-you)).",
         ],
-        links: [{ label: "Profile and CV", href: "/candidate/profile" }],
+        links: [{ label: "Profile and resume", href: "/candidate/profile" }],
       },
       {
         id: "search-and-filter-jobs",
@@ -238,17 +238,17 @@ export const HELP: HelpSection[] = [
       {
         id: "how-to-apply",
         title: "How do I apply, on Kestrel or on the clinic's own site?",
-        keywords: ["apply", "application", "cover letter", "quick apply", "submit", "cover note", "saved letters", "resume"],
+        keywords: ["apply", "application", "cover letter", "quick apply", "submit", "cover note", "saved letters", "resume", "cv"],
         answer: [
           "The **Apply** box on a job page tells you which kind it is. Some clinics take applications through Kestrel, and others send you to their own careers page.",
-          "When you apply through Kestrel, the clinic sees your cover note, your CV and your details: your name, email address, phone number if you added one, role, where you are licensed, years of experience and when you are available. You can follow the application under My applications. When a clinic uses its own site, the box says **Apply on the clinic's website** and opens that site in a new tab. Kestrel cannot see what happens there, so that application does not appear in My applications.",
+          "When you apply through Kestrel, the clinic sees your cover note, your resume and your details: your name, email address, phone number if you added one, role, where you are licensed, years of experience and when you are available. You can follow the application under My applications. When a clinic uses its own site, the box says **Apply on the clinic's website** and opens that site in a new tab. Kestrel cannot see what happens there, so that application does not appear in My applications.",
           "You can apply to a job once. A cover note is optional, but we recommend one, because clinics tend to read the personal ones first.",
         ],
         steps: [
           "Open the job. On a phone, the small **Apply** button near the top jumps down to the Apply box.",
           "Choose **Quick Apply**. If you are not signed in, sign in or create a free account first.",
-          "The first time, **Complete my profile** takes you to save your CV and choose your role. Then you come back to the job.",
-          "Check your name, email, role and CV under **Your details**.",
+          "The first time, **Complete my profile** takes you to save your resume and choose your role. Then you come back to the job.",
+          "Check your name, email, role and resume under **Your details**.",
           "Write a cover note, or choose one of your saved letters and press **Use it**. **Save as a draft** keeps it if you want to come back later.",
           "Tick the box agreeing that the clinic can see your application. The box about keeping your details for future roles is optional.",
           "Press **Send my application**. If the note is empty, we ask once: choose **Write a short note** or **Send without a note**.",
@@ -333,8 +333,8 @@ export const HELP: HelpSection[] = [
         title: "Is my profile private until I apply?",
         keywords: ["privacy", "visible", "hidden", "confidential", "who sees"],
         answer: [
-          "Yes. Clinics cannot search for you or browse candidate profiles. A clinic sees you only through an application you send to it, and only what you sent with it: your cover note, your CV, and your name, email address, role, licences, experience and availability as they were the day you applied, plus your phone number if you added one. What you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics.",
-          "Your CV is stored privately, and a clinic can open it only through a link that works for 1 minute. The topic [Who can see my details?](/help#who-can-see-your-details) has the full picture, and the privacy policy has the rest.",
+          "Yes. Clinics cannot search for you or browse candidate profiles. A clinic sees you only through an application you send to it, and only what you sent with it: your cover note, your resume, and your name, email address, role, licences, experience and availability as they were the day you applied, plus your phone number if you added one. What you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics.",
+          "Your resume is stored privately, and a clinic can open it only through a link that works for 1 minute. The topic [Who can see my details?](/help#who-can-see-your-details) has the full picture, and the privacy policy has the rest.",
         ],
         links: [{ label: "Privacy policy", href: "/privacy" }],
       },
@@ -437,14 +437,14 @@ export const HELP: HelpSection[] = [
         title: "How do I read and manage applicants, one at a time?",
         keywords: ["applicants", "candidates", "resume", "cv download", "notes", "interview", "offer", "reject", "decline", "reply", "response", "shortlist"],
         answer: [
-          "We email you about new applicants as often as you chose under Email choices, and the email has no personal details in it. The applicants are always on your dashboard, newest first. Opening an application marks it **Viewed**, so the candidate can see it has been read. Then you can read the cover letter and details, download the CV, and move the application along.",
+          "We email you about new applicants as often as you chose under Email choices, and the email has no personal details in it. The applicants are always on your dashboard, newest first. Opening an application marks it **Viewed**, so the candidate can see it has been read. Then you can read the cover letter and details, download the resume, and move the application along.",
           "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. **Kept for future roles** is only offered if the candidate agreed to that when they applied.", "**Shortlisting** is your own working list. No message goes with it and the candidate is not emailed, whether you shortlist one person or tick several. A candidate is never shown that they are shortlisted: they see Viewed until you invite them to interview, make an offer or close the application. You see Shortlisted everywhere.", "We encourage clinics to reply to candidates within 5 days, even with a short no, and the applicants page reminds you how many are waiting. If an application has gone 2 weeks unopened, we send you a reminder email, which you can turn off under Email choices. If a job ends and people are still waiting a week later, we close their applications for you so they are never left hanging, and they see **No update from the clinic**.",
           "Your private notes on an application are for you. The candidate never sees them. Kestrel does not use AI to rank applicants, so the list shows everyone in the order they applied.",
         ],
         steps: [
           "On your dashboard, press **Applicants** next to the job. It appears once someone has applied, and the number in brackets is how many have applied and how many are new.",
           "Use the tabs **All**, **In review**, **Interviews**, **Offers** and **Closed** to narrow the list.",
-          "Choose **Open** on an application to read their cover letter and details. Use **Download their CV** to open the CV.",
+          "Choose **Open** on an application to read their cover letter and details. Use **Download their resume** to open the resume.",
           "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to add them to your working list. There is no message to write, and the button then reads **Save**.",
           "Check the message and edit it if you like. Shortlisting has no message.",
           "Press **Save and tell the candidate**, or **Save** for a shortlist.",
@@ -493,7 +493,7 @@ export const HELP: HelpSection[] = [
         title: "How do I claim a listing you found?",
         keywords: ["found listing", "ownership", "take over", "verify", "unclaimed"],
         answer: [
-          "If we found one of your jobs on your own careers page and listed it, you can claim it. Claiming makes your clinic the owner of the listing: applications arrive in your dashboard with the CV and cover letter, you can close the job whenever you like, and you can post new ones. It is free during the launch. It must be claimed with a clinic account, and a person who already has a clinic profile cannot take over another clinic's listing. Write to hello@eyecarejobs.ca and we will help.",
+          "If we found one of your jobs on your own careers page and listed it, you can claim it. Claiming makes your clinic the owner of the listing: applications arrive in your dashboard with the resume and cover letter, you can close the job whenever you like, and you can post new ones. It is free during the launch. It must be claimed with a clinic account, and a person who already has a clinic profile cannot take over another clinic's listing. Write to hello@eyecarejobs.ca and we will help.",
           "We check every claim, usually within 1 business day, and email you when it is approved or if we cannot approve it. The link in the verification email works for 2 days, and only for the account that made the claim.",
         ],
         steps: [

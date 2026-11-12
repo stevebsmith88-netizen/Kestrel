@@ -70,7 +70,7 @@ export default async function ApplicationDetail({ params, searchParams }: { para
           <section className="card">
             <h2>What you sent</h2>
             <dl className="facts">
-              <div><dt>CV</dt><dd>{a.cv_filename ?? "Not available"}</dd></div>
+              <div><dt>Resume</dt><dd>{a.cv_filename ?? "Not available"}</dd></div>
               <div><dt>Applied</dt><dd>{longDate(a.created_at)}</dd></div>
               <div><dt>Keep my details for future roles</dt><dd>{a.keep_details ? "Yes" : "No"}</dd></div>
             </dl>

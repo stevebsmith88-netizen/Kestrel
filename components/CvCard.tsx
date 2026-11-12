@@ -7,10 +7,10 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
   const { state, pending, submit } = useServerForm(uploadCv);
   return (
     <section className="card" aria-labelledby="cv-h">
-      <h2 id="cv-h">Your CV</h2>
+      <h2 id="cv-h">Your resume</h2>
       {filename ? (
         <div className="file">
-          <span className="ft" aria-hidden="true">CV</span>
+          <span className="ft" aria-hidden="true">DOC</span>
           <div className="filemain">
             <strong>{filename}</strong>
             {uploadedOn && <div className="meta">Uploaded {uploadedOn}</div>}
@@ -19,11 +19,11 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
           <form action={deleteCv}><button type="submit" className="linkbtn">Delete</button></form>
         </div>
       ) : (
-        <p className="help">No CV saved yet. Upload one and you can apply to any job in a few clicks.</p>
+        <p className="help">No resume saved yet. Upload one and you can apply to any job in a few clicks.</p>
       )}
 
       <form onSubmit={submit} noValidate className="uploadform">
-        <label className="lab" htmlFor="cv-file">{filename ? "Replace your CV" : "Upload your CV"}</label>
+        <label className="lab" htmlFor="cv-file">{filename ? "Replace your resume" : "Upload your resume"}</label>
         <input id="cv-file" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
         <p className="help">PDF or Word, up to 3 MB.</p>
         {state.error && <p className="err form-err" role="alert">{state.error}</p>}

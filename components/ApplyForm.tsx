@@ -36,7 +36,7 @@ export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt 
       <input type="hidden" name="jobId" value={jobId} />
       <section className="card" aria-labelledby="cl-h">
         <h2 id="cl-h">Add a cover note (optional)</h2>
-        <p className="help"><strong>We recommend adding one.</strong> Clinics tend to read the personal ones first. A few honest lines about why {clinicName} and what you would bring. Your CV says what you have done. Your letter says who you are.</p>
+        <p className="help"><strong>We recommend adding one.</strong> Clinics tend to read the personal ones first. A few honest lines about why {clinicName} and what you would bring. Your resume says what you have done. Your letter says who you are.</p>
         <p className="chips"><span className="chip">Why this clinic</span><span className="chip">What you would bring</span><span className="chip">When you could start</span></p>
         {letters.length > 0 && (
           <div className="letterpick">
@@ -94,7 +94,7 @@ export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt 
       <section className="card">
         <label className="consent">
           <input name="agree" type="checkbox" />
-          <span>I agree that {clinicName} can see this application, my CV and my details. Kestrel keeps them private from everyone else.</span>
+          <span>I agree that {clinicName} can see this application, my resume and my details. Kestrel keeps them private from everyone else.</span>
         </label>
         {state.errors?.agree && <p className="err" role="alert">{state.errors.agree}</p>}
         <label className="consent">

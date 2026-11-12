@@ -20,7 +20,7 @@ const EXPERIENCE = ["Under 1 year", "1 to 4 years", "5 to 9 years", "10 or more 
 
 const text = (form: FormData, key: string, max = 200) => String(form.get(key) ?? "").trim().slice(0, max);
 
-// CVs live in a private bucket that nobody can read directly. It is made the first time it is needed.
+// Resumes live in a private bucket that nobody can read directly. It is made the first time it is needed.
 async function ensureBucket(admin: NonNullable<ReturnType<typeof supabaseAdmin>>) {
   const { data } = await admin.storage.getBucket(CV_BUCKET);
   if (data) return true;
@@ -30,7 +30,7 @@ async function ensureBucket(admin: NonNullable<ReturnType<typeof supabaseAdmin>>
     allowedMimeTypes: ["application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
   });
   if (error && !/already exists/i.test(error.message)) {
-    console.error("Could not create the CV bucket:", error.message);
+    console.error("Could not create the resume bucket:", error.message);
     return false;
   }
   return true;
@@ -93,8 +93,8 @@ export async function uploadCv(_prev: JobFormState, form: FormData): Promise<Job
   const bytes = new Uint8Array(await file.arrayBuffer());
   const kind = detectCv(bytes, file.name);
   if (!kind) return { error: "We can only accept a PDF or a Word document (.docx or .doc)." };
-  // Macros, scripts and embedded programs are how most harmful files work, and a CV never needs them.
-  if (activeContent(bytes, kind.ext)) return { error: "This file contains macros, scripts or embedded files, which we cannot accept. Please save your CV as a plain PDF and upload that." };
+  // Macros, scripts and embedded programs are how most harmful files work, and a resume never needs them.
+  if (activeContent(bytes, kind.ext)) return { error: "This file contains macros, scripts or embedded files, which we cannot accept. Please save your resume as a plain PDF and upload that." };
 
   const admin = supabaseAdmin();
   if (!admin || !(await ensureBucket(admin))) return { error: NOT_CONNECTED };
@@ -102,8 +102,8 @@ export async function uploadCv(_prev: JobFormState, form: FormData): Promise<Job
   const path = `${session.userId}/${randomUUID()}.${kind.ext}`;
   const { error: uploadError } = await admin.storage.from(CV_BUCKET).upload(path, bytes, { contentType: kind.contentType });
   if (uploadError) {
-    console.error("CV upload failed:", uploadError.message);
-    return { error: "We couldn't save your CV. Please try again." };
+    console.error("Resume upload failed:", uploadError.message);
+    return { error: "We couldn't save your resume. Please try again." };
   }
 
   const { data: old } = await admin.from("candidate_profiles").select("cv_path").eq("user_id", session.userId).maybeSingle();
@@ -111,13 +111,13 @@ export async function uploadCv(_prev: JobFormState, form: FormData): Promise<Job
     .from("candidate_profiles")
     .upsert({ user_id: session.userId, cv_path: path, cv_filename: safeFilename(file.name), cv_uploaded_at: new Date().toISOString() }, { onConflict: "user_id" });
   if (saveError) {
-    console.error("CV save failed:", saveError.code, saveError.message);
+    console.error("Resume save failed:", saveError.code, saveError.message);
     await admin.storage.from(CV_BUCKET).remove([path]);
-    return { error: "We couldn't save your CV. Please try again." };
+    return { error: "We couldn't save your resume. Please try again." };
   }
   if (old?.cv_path) await admin.storage.from(CV_BUCKET).remove([old.cv_path]);
   revalidatePath("/candidate/profile");
-  return { message: "Your CV is saved." };
+  return { message: "Your resume is saved." };
 }
 
 export async function deleteCv() {
@@ -133,7 +133,7 @@ export async function deleteCv() {
 }
 
 // Sends an application. This runs on the server and checks everything itself, so nobody can
-// apply to a job that is not live, apply twice, or send someone else's CV.
+// apply to a job that is not live, apply twice, or send someone else's resume.
 export async function applyToJob(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("candidate");
   const jobId = String(form.get("jobId") ?? "");
@@ -155,7 +155,7 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   if (job.apply_method !== "kestrel") return { error: "This job takes applications on the clinic's own website." };
 
   const { data: profile } = await admin.from("candidate_profiles").select("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename").eq("user_id", session.userId).maybeSingle();
-  if (!profile?.cv_path || !profile.profession) return { error: "Please finish your profile and save your CV first." };
+  if (!profile?.cv_path || !profile.profession) return { error: "Please finish your profile and save your resume first." };
   // The role on the profile has to fit the job (lib/role-fit.ts). The job page and the apply page say so first, and this stops it from the server too.
   if (!canApplyForRole(profile.profession, profile.pref_other_roles, job.role_category)) return { error: roleMismatchText(profile.profession, job.role_category) };
 
@@ -187,14 +187,14 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
     return { error: "We couldn't send your application. Please try again." };
   }
 
-  // Keep a copy of the CV with the application, so it still opens if the candidate replaces theirs later.
+  // Keep a copy of the resume with the application, so it still opens if the candidate replaces theirs later.
   const ext = profile.cv_path.split(".").pop() ?? "pdf";
   const copyPath = `applications/${created.id}/cv.${ext}`;
   const { error: copyError } = await admin.storage.from(CV_BUCKET).copy(profile.cv_path, copyPath);
   if (copyError) {
-    console.error("CV copy failed:", copyError.message);
+    console.error("Resume copy failed:", copyError.message);
     await admin.from("applications").delete().eq("id", created.id);
-    return { error: "We couldn't attach your CV. Please try again." };
+    return { error: "We couldn't attach your resume. Please try again." };
   }
   await admin.from("applications").update({ cv_path: copyPath, cv_filename: profile.cv_filename }).eq("id", created.id);
   // The draft is no longer needed. If asked, the letter is kept as a template for next time (up to 5).
