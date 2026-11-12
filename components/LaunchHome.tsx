@@ -117,8 +117,8 @@ export default async function LaunchHome() {
 
         <section className="lh-account" aria-labelledby="lh-account-h">
           <div className="wrap">
-            <h2 id="lh-account-h">Keep your CV in one place</h2>
-            <p>Save your CV once and apply in a few clicks. Set job alerts, follow every application, and see jobs picked for your role.</p>
+            <h2 id="lh-account-h">Keep your resume in one place</h2>
+            <p>Save your resume once and apply in a few clicks. Set job alerts, follow every application, and see jobs picked for your role.</p>
             <p><Link href="/sign-up" className="btn">Create a free account</Link></p>
             <p className="help">Already have an account? <Link href="/sign-in">Sign in</Link></p>
           </div>

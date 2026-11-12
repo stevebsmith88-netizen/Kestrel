@@ -67,7 +67,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
                 <h2>What claiming gives you</h2>
                 <ul className="plainlist">
                   <li>Your clinic as the owner of the listing, instead of &quot;not yet claimed&quot;</li>
-                  <li>Applications arrive in your dashboard, with the applicant&apos;s CV and cover letter</li>
+                  <li>Applications arrive in your dashboard, with the applicant&apos;s resume and cover letter</li>
                   <li>You can close the job whenever you like, and post new ones</li>
                   <li>Your contact details stay private, because applicants write to you through Kestrel</li>
                 </ul>

@@ -14,7 +14,7 @@ const NAV: Record<Role, NavItem[]> = {
     { href: "/candidate", label: "My dashboard" },
     { href: "/jobs", label: "Find jobs" },
     { href: "/candidate/applications", label: "My applications" },
-    { href: "/candidate/profile", label: "Profile and CV" },
+    { href: "/candidate/profile", label: "Profile and resume" },
     { href: "/candidate/alerts", label: "Job alerts" },
     { href: "/account", label: "Account settings" },
   ],

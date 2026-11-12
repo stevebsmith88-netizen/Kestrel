@@ -43,7 +43,7 @@ export default function FitQuiz({ signedInAs }: { signedInAs: "candidate" | "oth
           {signedInAs === "candidate" ? (
             <p>Set up a job alert and we will email you when a matching job is posted. <Link href="/candidate/alerts">Set up an alert</Link></p>
           ) : signedInAs === null ? (
-            <p>Create a free account, save your CV once and set up job alerts. <Link href="/sign-up">Create an account</Link></p>
+            <p>Create a free account, save your resume once and set up job alerts. <Link href="/sign-up">Create an account</Link></p>
           ) : (
             <p>Job alerts are for candidate accounts.</p>
           )}

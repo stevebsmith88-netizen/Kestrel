@@ -51,7 +51,7 @@ export default function Privacy() {
             </li>
             <li>
               <strong>If you are a candidate:</strong> the details you add to your profile (your role, where you are licensed,
-              your experience, when you are available, and a phone number if you choose to give one), the CV you upload, and the
+              your experience, when you are available, and a phone number if you choose to give one), the resume you upload, and the
               cover letters and applications you send.
             </li>
             <li>
@@ -111,7 +111,7 @@ export default function Privacy() {
             your information only to provide their service to us:
           </p>
           <ul>
-            <li>Supabase, which hosts our database and stored CVs in Canada.</li>
+            <li>Supabase, which hosts our database and stored resumes in Canada.</li>
             <li>Vercel, which hosts our website.</li>
             <li>Resend, which sends our emails, such as sign up confirmations and application updates.</li>
             <li>Google, if you choose to sign in with it. Google is told when you sign in to Kestrel, and handles your sign in under its own privacy policy.</li>
@@ -120,7 +120,7 @@ export default function Privacy() {
           </ul>
           <p>
             <strong>Clinics.</strong> When you apply to a job, the clinic that posted it can see your application: your cover letter,
-            your CV and the details you chose to give, as they were when you applied. It cannot see your profile otherwise, and
+            your resume and the details you chose to give, as they were when you applied. It cannot see your profile otherwise, and
             clinics never see applications that were sent to other clinics.
           </p>
           <p>
@@ -137,23 +137,23 @@ export default function Privacy() {
 
           <h2>Where your information is kept</h2>
           <p>
-            Your details, CV and applications are stored in a database and a private file store hosted in Canada. Our website
+            Your details, resume and applications are stored in a database and a private file store hosted in Canada. Our website
             hosting provider, our email provider, our AI provider and our security check provider are based in the United States and may handle requests, and the emails we
             send you, on servers outside Canada. While your information is there, it may be subject to the laws of that country.
           </p>
 
           <h2>How long we keep it</h2>
           <p>
-            We keep your waitlist details while you are on the list, and your account, profile and CV while your account is open.
-            You can replace or delete your CV in your profile at any time. If you ask us to delete your account, we will delete
-            your profile, your CV and your applications, apart from a minimal record that we received and carried out your
+            We keep your waitlist details while you are on the list, and your account, profile and resume while your account is open.
+            You can replace or delete your resume in your profile at any time. If you ask us to delete your account, we will delete
+            your profile, your resume and your applications, apart from a minimal record that we received and carried out your
             request, and the suppression record described above. A clinic that has already received your application may have
             kept its own copy of what you sent it, and you can ask us to ask that clinic to remove it.
           </p>
 
           <h2>How we protect it</h2>
           <p>
-            We limit who can see your details, store them in a database with restricted access, keep CVs in a private store that
+            We limit who can see your details, store them in a database with restricted access, keep resumes in a private store that
             can only be opened through a link that works for 1 minute, use encrypted connections (HTTPS), and keep our access
             keys out of the website&apos;s public code. No system is perfectly secure. The page <Link href="/security">How we protect your data</Link> says more. If a breach
             creates a real risk of significant harm to you, we will tell you and the Office of the Privacy Commissioner of

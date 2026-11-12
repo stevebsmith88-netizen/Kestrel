@@ -10,7 +10,7 @@ import { supabaseServer } from "@/lib/supabase/server";
 const CV_BUCKET = "cvs";
 
 // Lets a candidate or a clinic delete their own account and everything attached to it:
-// profile, CV files, applications, and for a clinic its profile, jobs and the
+// profile, resume files, applications, and for a clinic its profile, jobs and the
 // applications they received. It asks for the password again, and for the word DELETE.
 // Admin accounts cannot be deleted this way.
 export async function deleteAccount(_prev: JobFormState, form: FormData): Promise<JobFormState> {

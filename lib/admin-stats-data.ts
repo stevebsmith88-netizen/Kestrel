@@ -102,7 +102,7 @@ export async function loadStats(period: Period) {
     ],
     candidateFunnel: [
       { label: "Candidate accounts", count: candidates.length },
-      { label: "Profile ready to apply (role and CV)", count: ready },
+      { label: "Profile ready to apply (role and resume)", count: ready },
       { label: "Sent an application", count: applicants.size },
     ],
     investor: investorNumbers(jobs, applications.length),

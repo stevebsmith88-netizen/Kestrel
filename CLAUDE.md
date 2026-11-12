@@ -72,6 +72,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 ## Writing style for anything users read
 
 - No em dashes, and no hyphens used as punctuation. Use commas, full stops or "to".
+- Say "resume", never "CV" (Steve, 11th November 2026). Code names (`cv_path`, `CvCard`, the `/cv` routes) stay as they are. `lib/resume-wording.test.ts` fails if the capital word CV appears in the code. The help search keeps a lowercase "cv" keyword so people who type it still find topics.
 - Numerals throughout (3, not three). Ordinal dates (1st January 2027).
 - British spelling with Canadian conventions (centre, organisation, colour).
 - Warm, plain, industry fluent, like a colleague who knows clinics. No recruiter clichés, no generic AI phrasing.

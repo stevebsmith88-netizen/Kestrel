@@ -65,7 +65,7 @@ export default function HomeBelowHero() {
                 When Kestrel opens, you hear from us first. Clinics post a job with its pay range, a person reads every post before it goes live, and candidates see the pay on each job.
               </p>
               <p>
-                While you wait, see <Link href="/resources#pay">typical pay by province</Link> or read the <Link href="/blog">blog</Link> for help with interviews, CVs and job ads.
+                While you wait, see <Link href="/resources#pay">typical pay by province</Link> or read the <Link href="/blog">blog</Link> for help with interviews, resumes and job ads.
               </p>
             </div>
           </div>

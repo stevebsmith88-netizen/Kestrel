@@ -66,11 +66,11 @@ Thank them, confirm the date it starts and the new amount in writing, and keep d
 [See eye care jobs across Canada](/jobs)`,
   },
   {
-    slug: "eye-care-cv",
-    title: "How to write a CV for an eye care job",
-    description: "A clear one or two page CV is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
+    slug: "eye-care-resume",
+    title: "How to write a resume for an eye care job",
+    description: "A clear one or two page resume is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
     date: "2027-03-26",
-    body: `A CV for an eye care job does not need to be fancy. The person reading it is often a busy owner or practice manager with a pile to get through. A clean, honest one or two pages that shows what you have done gets read.
+    body: `A resume for an eye care job does not need to be fancy. The person reading it is often a busy owner or practice manager with a pile to get through. A clean, honest one or two pages that shows what you have done gets read.
 
 ## What to put at the top
 
@@ -94,7 +94,7 @@ Use a plain font, clear headings and consistent dates. Save it as a PDF and name
 
 ## Pair it with a cover letter
 
-A short letter says why you want this clinic, which a CV cannot do. Our guide to [writing a cover letter](/blog/cover-letter-optical-job) shows a simple shape.
+A short letter says why you want this clinic, which a resume cannot do. Our guide to [writing a cover letter](/blog/cover-letter-optical-job) shows a simple shape.
 
 [Browse eye care jobs across Canada](/jobs)`,
   },
@@ -247,7 +247,7 @@ Candidates trust a clinic that is open about what the job pays, and in several p
 
 ## Make it easy to apply
 
-If it takes 20 minutes to apply, the best people will not finish. Keep the form short, accept a CV and a short cover letter, and say what happens next and when. Reply to everyone, including the people you will not interview, and do it quickly. A candidate who hears back in 2 days feels very different from one who hears nothing.
+If it takes 20 minutes to apply, the best people will not finish. Keep the form short, accept a resume and a short cover letter, and say what happens next and when. Reply to everyone, including the people you will not interview, and do it quickly. A candidate who hears back in 2 days feels very different from one who hears nothing.
 
 ## Talk about training and the team
 
@@ -288,7 +288,7 @@ Ask what a good first 3 months would look like, who you would learn from and wha
 
 ## The small things
 
-Arrive 10 minutes early, dress as you would for work in a clinical setting, bring a copy of your CV, and switch your phone off. Afterwards, send a short thank you the same day. Clinics remember the person who followed up well.
+Arrive 10 minutes early, dress as you would for work in a clinical setting, bring a copy of your resume, and switch your phone off. Afterwards, send a short thank you the same day. Clinics remember the person who followed up well.
 
 [Browse eye care jobs across Canada](/jobs)`,
   },
@@ -301,7 +301,7 @@ Arrive 10 minutes early, dress as you would for work in a clinical setting, brin
 
 ## Before the call
 
-Find a quiet place and use headphones if the signal is poor. Have your CV and the job ad in front of you, with the pay range and the hours circled. Write down a 30 second introduction: who you are, what you do now and why this role. Keep a short list of your own questions as well. If the call comes when you are at work, it is fine to ask to book a time instead.
+Find a quiet place and use headphones if the signal is poor. Have your resume and the job ad in front of you, with the pay range and the hours circled. Write down a 30 second introduction: who you are, what you do now and why this role. Keep a short list of your own questions as well. If the call comes when you are at work, it is fine to ask to book a time instead.
 
 ## What you will probably be asked
 
@@ -514,7 +514,7 @@ The work has a rhythm that suits some people very well. You meet patients, many 
 
 ## Why it matters to the person hiring
 
-If you hire for an entry role, you are often hiring someone who will learn the rest on the job. That means attitude, reliability and how someone treats patients are worth as much as a CV.
+If you hire for an entry role, you are often hiring someone who will learn the rest on the job. That means attitude, reliability and how someone treats patients are worth as much as a resume.
 
 ## If you are thinking about it
 
@@ -607,7 +607,7 @@ In several provinces a job ad now has to show the pay, so you should not have to
 
 ## Getting started, and where it leads
 
-Many clinics are happy to train a keen, reliable person on the job, and some prefer it. Others ask for a course or certificate in optometric assistant work. Ask the clinics you apply to what they prefer, and do not be put off if you have no eye care experience yet: customer service, retail, health care and reception work all count. A short [cover letter](/blog/cover-letter-optical-job) that says why you want to work in eye care often matters as much as a long CV.
+Many clinics are happy to train a keen, reliable person on the job, and some prefer it. Others ask for a course or certificate in optometric assistant work. Ask the clinics you apply to what they prefer, and do not be put off if you have no eye care experience yet: customer service, retail, health care and reception work all count. A short [cover letter](/blog/cover-letter-optical-job) that says why you want to work in eye care often matters as much as a long resume.
 
 From there, some assistants become lead assistants or clinic managers, and many study to become opticians. Others join a supplier as a trainer or account manager, which our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs) describes.
 
@@ -701,7 +701,7 @@ Post your job on Kestrel and our ad builder will help you turn a few lines into 
     title: "How to write a cover letter for an optical or optometry job",
     description: "A short, honest way to write a cover letter for an optician, optometric assistant or optometry role, with what to say in each part.",
     date: "2026-10-30",
-    body: `Your CV says what you have done. Your cover letter says who you are. For most eye care jobs a short, honest letter helps more than a perfect one, because the person reading it is usually a busy owner or practice manager who wants to know if you would fit in their team.
+    body: `Your resume says what you have done. Your cover letter says who you are. For most eye care jobs a short, honest letter helps more than a perfect one, because the person reading it is usually a busy owner or practice manager who wants to know if you would fit in their team.
 
 Here is a simple way to write one in about 10 minutes.
 

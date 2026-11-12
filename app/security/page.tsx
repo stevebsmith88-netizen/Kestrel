@@ -7,7 +7,7 @@ import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
   title: "How we protect your data",
-  description: "Where Kestrel keeps your information, who can see it, and how CVs and sign in are protected.",
+  description: "Where Kestrel keeps your information, who can see it, and how resumes and sign in are protected.",
   path: "/security",
 });
 
@@ -27,13 +27,13 @@ export default function Security() {
           {DRAFT && <DraftNotice />}
 
           <p>
-            Kestrel holds names, contact details, CVs and cover letters, so protecting them is part of the job. This page says what we do today, in plain terms.
+            Kestrel holds names, contact details, resumes and cover letters, so protecting them is part of the job. This page says what we do today, in plain terms.
             It does not promise more than we do. For what we collect and why, read the <Link href="/privacy">privacy policy</Link>.
           </p>
 
           <h2>Where your information is kept</h2>
           <p>
-            Your details, CV and applications are stored in a database and a private file store hosted in Canada. Our website host, email provider, bot check and AI
+            Your details, resume and applications are stored in a database and a private file store hosted in Canada. Our website host, email provider, bot check and AI
             provider are based in the United States, and the privacy policy lists each one and what it handles.
           </p>
 
@@ -47,9 +47,9 @@ export default function Security() {
             someone else&apos;s information.
           </p>
 
-          <h2>CVs</h2>
+          <h2>Resumes</h2>
           <p>
-            CVs are kept in a private store. Nobody can open one by guessing a web address: a clinic or a candidate opens it through a link that works for 1 minute.
+            Resumes are kept in a private store. Nobody can open one by guessing a web address: a clinic or a candidate opens it through a link that works for 1 minute.
             Files that contain macros, scripts or embedded files are refused when they are uploaded.
           </p>
 

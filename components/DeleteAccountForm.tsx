@@ -11,7 +11,7 @@ export default function DeleteAccountForm({ role, hasPassword = true, email = ""
     <form onSubmit={submit} noValidate className="dangerzone">
       <h2>Delete my account</h2>
       <p>
-        This permanently deletes your account{role === "candidate" ? ", your profile, your saved CV and every application you have sent" : ", your clinic profile, your jobs, and every application you have received"}. It can&apos;t be undone.
+        This permanently deletes your account{role === "candidate" ? ", your profile, your saved resume and every application you have sent" : ", your clinic profile, your jobs, and every application you have received"}. It can&apos;t be undone.
       </p>
       {hasPassword ? (
         <Field id="da-password" label="Your password" required error={e.password}>

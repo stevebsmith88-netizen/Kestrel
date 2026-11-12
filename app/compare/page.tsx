@@ -65,7 +65,7 @@ export default async function Compare() {
               <li>A person reads every post before it goes live, and agencies cannot post, so candidates see jobs from the clinics themselves.</li>
               <li>A pay guide shows how your range compares with what is typical for the role and province, and an ad builder drafts the listing for you.</li>
               <li>No credit card is needed to post during the free launch.</li>
-              <li>Applications arrive on one board, with the CV and cover letter, and you update each candidate&apos;s status as you go.</li>
+              <li>Applications arrive on one board, with the resume and cover letter, and you update each candidate&apos;s status as you go.</li>
               <li>Candidates get job alerts and a &quot;Recommended for you&quot; list that shows why each job fits.</li>
             </ul>
           </section>

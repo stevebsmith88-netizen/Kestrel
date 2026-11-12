@@ -58,7 +58,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
           <p className="back"><Link href="/clinic">Back to your dashboard</Link></p>
           <p className="kicker">Applicants</p>
           <h1>{job.title}</h1>
-          <p className="lede2">{rows.length} {rows.length === 1 ? "applicant" : "applicants"}. Open an application to read their cover letter and CV, and to let them know where they stand.</p>
+          <p className="lede2">{rows.length} {rows.length === 1 ? "applicant" : "applicants"}. Open an application to read their cover letter and resume, and to let them know where they stand.</p>
 
           {Number.isFinite(sentCount) && (
             <p className="ok-msg" role="status">{filled ? "Marked as filled. " : ""}{declinedText(sentCount)}</p>

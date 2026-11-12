@@ -55,3 +55,17 @@ Save as `docs/audit/AUDIT-REPORT-<date>.md`, using `docs/audit/REPORT-TEMPLATE.m
 ## After the report
 
 Steve reads the one page summary and picks. Blockers and High findings become branches, each with a preview, in order. The audit session writes nothing to `main` itself.
+
+## Note for the next audit run: "cv" in code names is deliberate (Steve, 12th November 2026)
+
+Everything people read now says "resume", but the code still says "cv" in places nobody sees. An audit should not report these as wording mistakes, and should not rename them without a plan:
+
+- **Database:** the `cv_path` and `cv_filename` columns on `candidate_profiles` and `applications`, and the private storage bucket that holds the files (check the exact name in `lib/candidate-actions.ts`).
+- **Routes:** `/candidate/cv` and `/clinic/applications/[id]/cv`, which hand out the 1 minute link to a file.
+- **Code:** `components/CvCard.tsx`, `detectCv` and the other `Cv` names in `lib/applications.ts`, the `cv-h` and `cv-file` element ids, and test names that say CV.
+- **Help search:** a lowercase "cv" keyword stays on purpose, so people who type it still find the topic.
+
+What an audit should check instead:
+- `lib/resume-wording.test.ts` passes. It fails if the capital word CV appears in `app`, `components`, `content` or `lib`.
+- Nothing in the public pages, emails or error messages says CV. Look at the places the test cannot read: images in `public/` (the sample job screenshot on the pre launch home page), the lawyer pack PDF, and anything stored in the database, such as email templates or found listing text.
+- Renaming the columns would need a migration run on both databases and a matching change to every query, route and policy that names them. It is optional and low value, so leave it unless there is another reason to touch those tables.

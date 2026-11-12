@@ -119,7 +119,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 ) : (
                   <>
-                    <p>Use your saved CV and, if you like, a short cover note. It takes about a minute, and you can follow your application as the employer reviews it.</p>
+                    <p>Use your saved resume and, if you like, a short cover note. It takes about a minute, and you can follow your application as the employer reviews it.</p>
                     <p className="help">Your profile stays private. The clinic sees only what you send with this application.</p>
                     <ApplyLink jobId={job.id} href={`/jobs/${job.id}/apply`}>Quick Apply</ApplyLink>
                   </>

@@ -37,7 +37,7 @@ export default async function CandidateHome() {
         <div className="wrap">
           <p className="kicker">Your home</p>
           <h1>Welcome, {first}</h1>
-          <p className="lede2">Keep your CV and details here, and apply to any job in a few clicks.</p>
+          <p className="lede2">Keep your resume and details here, and apply to any job in a few clicks.</p>
 
           <GettingStarted
             title="Your first application"
@@ -49,7 +49,7 @@ export default async function CandidateHome() {
               <p className="kicker">Your profile</p>
               <h2>{profileReady(profile) ? "Ready to apply" : "Finish your profile"}</h2>
               <div className="meter" role="img" aria-label={`Profile ${strength} percent complete`}><i style={{ width: `${strength}%` }} /></div>
-              <p>{profileReady(profile) ? "Your CV and details are saved." : "Add your role and save your CV, and you can apply to any job in a few clicks."}</p>
+              <p>{profileReady(profile) ? "Your resume and details are saved." : "Add your role and save your resume, and you can apply to any job in a few clicks."}</p>
               <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
               <p className="help"><Link href="/candidate/letters" className="btn sm ghost">My saved cover letters</Link></p>
             </section>

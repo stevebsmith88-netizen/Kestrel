@@ -29,7 +29,7 @@ export default function Clinics() {
             Clinics often say the big job sites bring a flood of applications from people who click Apply on everything. On Kestrel, candidates choose a role, a province and the kind of practice they want before they see your post, so the people who apply have picked you for a reason.
           </p>
           <p>
-            Independent practices and corporate groups post side by side, with the same tools. Whether you are hiring one optician or filling roles at several locations, you see every applicant with their CV and cover letter. Your contact details stay private.
+            Independent practices and corporate groups post side by side, with the same tools. Whether you are hiring one optician or filling roles at several locations, you see every applicant with their resume and cover letter. Your contact details stay private.
           </p>
           <p>
             Every post shows its pay range and answers 2 questions: is this an existing vacancy, and is AI used to screen applicants? The form asks for them on every post, wherever the clinic is, and a post cannot go live without them. Ontario&apos;s rules apply to employers with 25 or more employees, and British Columbia has its own pay range rule. <Link href="/resources/ontario-job-ads">Read what the Ontario rules ask of a clinic</Link>.

@@ -66,7 +66,7 @@ export function newApplicationEmail({ title, applicationId }: { title: string; a
     subject: `New application for ${title}`,
     ...emailLayout({
       heading: "A new application",
-      paragraphs: [`Someone has applied for ${title}. Open it to read their cover note and CV.`, RESPONSE_NOTE, "The Kestrel team"],
+      paragraphs: [`Someone has applied for ${title}. Open it to read their cover note and resume.`, RESPONSE_NOTE, "The Kestrel team"],
       buttonText: "Open the application",
       buttonUrl: `${SITE}/clinic/applications/${applicationId}`,
     }),
