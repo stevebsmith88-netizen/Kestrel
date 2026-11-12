@@ -323,7 +323,7 @@ export const HELP: HelpSection[] = [
         title: "How do I set up job alerts?",
         keywords: ["alert", "notifications", "email me", "subscribe", "new jobs", "daily", "weekly", "monthly"],
         answer: [
-          "A job alert emails you when a new job is posted that matches what you choose. You can have up to 5 alerts. You get one email with everything new, never one email per job, and every email has an unsubscribe link.",
+          "A job alert emails you when a new job is posted that matches what you choose. You can have up to 5 alerts. You get one email with everything new, never one email per job, and every email has an unsubscribe link. Unsubscribing stops your job alert emails as well as news, but keeps your alerts, and the Job alerts page tells you so. To get them again, tick the news and job alerts box under **Email choices** on your account page.",
           "Alerts match on role, province or territory and type of employer. They do not use distance. If you turn off news and job alert emails under Account settings, your alerts are kept but no emails are sent until you turn them back on.",
         ],
         steps: [

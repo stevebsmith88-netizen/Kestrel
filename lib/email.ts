@@ -3,6 +3,7 @@ import "server-only";
 import { SITE_URL } from "./email-layout.ts";
 import { demoMode } from "@/lib/demo";
 import { emailGate } from "./email-gate.ts";
+import { unsubscribeHeaders } from "./unsubscribe-headers.ts";
 import { suppressionReasons } from "@/lib/suppression";
 
 export { SITE_URL, emailLayout } from "./email-layout.ts";
@@ -43,7 +44,7 @@ export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, re
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, reply_to: replyTo ?? REPLY_TO(), ...(unsubscribeUrl ? { headers: { "List-Unsubscribe": `<${unsubscribeUrl}>` } } : {}) }),
+      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, reply_to: replyTo ?? REPLY_TO(), ...(unsubscribeUrl ? { headers: unsubscribeHeaders(unsubscribeUrl, SITE_URL) } : {}) }),
     });
     if (!res.ok) {
       console.error("Email failed:", res.status, (await res.text()).slice(0, 200));
