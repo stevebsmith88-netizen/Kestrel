@@ -97,3 +97,44 @@ What to check, in each Vercel project (live and demo), no change needed unless i
 - **The lawyer pack's Part 1 still gives the old prices** ($39, $49 and $59 introductory, then $79 a single post). `lib/pricing.ts` and CLAUDE.md say $59, $79 and $99 by role band, and 2 passes. Not in this phase's list.
 - **Lawyer pack questions 21 and 23 describe things since fixed**: question 21 says the privacy policy still has the consent box sentence (fixed today) and question 23 says the download leaves out items (more are included today). The appendix carries the current privacy policy, so the lawyer will see the new wording, but the questions read as out of date.
 - **The help page's "last updated" date was still 9th November** although Phase B changed help topics. It now says 12th November, with the sitemap to match.
+
+## Phase D: make the database keep the promises (12th November 2026). Built on a branch, P1-15 waiting for Steve's choice
+
+Branch `claude/kestrel-audit-fixes-phase-d-2mhi3o` (the session was set up on this branch, so it was used instead of `claude/audit-fix-d`). 1 migration, `0040_database_keeps_promises.sql`, added to `supabase/combined/run-everything.sql` with its rows in the final check. **Not run on the live or demo database.** No settings changed. Before the push: `npm run typecheck`, `npm test` and `npm run build` all pass.
+
+**The access tests are now kept.** `bash scripts/dev/rls-tests.sh` builds 2 throwaway databases (one that copies Supabase's habit of granting every permission on new tables, one plain), runs the combined file twice on each, seeds 2 candidates (Ann, Bo), 2 clinics (C, D) and an admin, and runs the tests in `scripts/dev/rls-tests.sql`. Each test tries 1 thing as 1 person and is undone straight away. Before any fix, on the Supabase like database: 64 of 87 passed, and the 23 failures were exactly the findings below. Now: 86 of 88 pass on both, and the 2 that fail are P1-15, which is waiting.
+
+| Finding | Status | Commit | How it was checked |
+| --- | --- | --- | --- |
+| P1-15 Candidate can read "shortlisted" from the database | needs a decision | none yet | The 2 access tests for it fail today, as they should (Ann reads `shortlisted`, and the history row). Question for Steve: which design, of the 3 set out in the session summary. Recommended: the database hands a candidate their own applications with a shortlist already shown as Viewed, and their direct read of the 2 tables is removed. |
+| P1-16 Name hold can be skipped | fixed | `73fdbdd` | Before: as Ann with her hold on, an update of her own name columns succeeded, and the same for Bo (2 access test failures). After: both refused, the server can still save a name, and Ann can still read her profile. Migration 0040 removes the update permission on `first_name`, `last_name` and `full_name`. |
+| P1-33 Name saved with no hold if the key is missing or the hold write fails | fixed | `73fdbdd` | New `lib/name-change.ts`, 9 tests in `lib/name-change.test.ts` (the last one failed first): no server key means refused; the name and the hold date go in 1 write, so one cannot be saved without the other; nothing is written during a hold; before migration 0039 the name saves with no hold as today. `updateName` now only calls this. `chooseAccountType` (Google sign in) was read: it already saves names with the server key, so it is unchanged. The comment about capital letters now matches the code: "smith" to "Smith" counts as a change (question for Steve below). P1-56 was already decided (every change starts the hold) and the code and account page already say so. A stale comment in migration 0039 was corrected. |
+| P1-28 Quebec job accepted through the database API | fixed (P1-57 needs a decision) | `cd16b24` | Before: 3 access test failures (insert in review, a draft moved to Quebec and sent, the server making one live). After: all refused by the new rule `jobs_not_quebec_once_sent`, and a Quebec job that somehow exists can still be closed. `approveJob` and `doExtend` now stop on a Quebec job with a plain message; `lib/database-rules.test.ts` failed first, then passes. The final check counts Quebec jobs already in review or live (0 on the test database). Existing rows are not touched. |
+| P1-44 Percentage or daily rate accepted for an optician | fixed | `065d194` | Before: 2 access test failures. After: both refused by the new rule `jobs_optometrist_only_pay` for a job in review or live, optometrist jobs with a daily rate or a percentage still pass, and an optician draft can still be saved. A test keeps the rule in step with `OPTOMETRIST_ONLY_PERIODS`. |
+| P1-41 Signed in people read every column of live jobs and their clinics | fixed | `9580bd6` | Before: 5 access test failures (Bo read `review_note`, `posted_by_admin_id`, `filled_application_id` and `employers.owner_id`; clinic C read clinic D's private columns). After: all blocked. The 2 "anyone can read" rules are now for visitors only. Clinic C still reads every column of its own 2 jobs and its own clinic, the admin reads all 3 jobs and both clinics, and a visitor still sees the 2 live jobs. No page changed: every use of the jobs and employers tables in the code was checked (80 in 26 files). Public pages use the visitor client, admin pages and candidate actions use the server key, and the 4 files that use a person's own sign in read only that clinic's own records. `lib/public-columns.test.ts` now checks clinic columns, the 2 rules, and that list of 4 files. |
+| P1-42 Default permissions left on 4 tables | fixed | `f5711f5` | Before, on the Supabase like database: 9 access test failures, including `truncate waitlist` succeeding as a visitor. After: everything revoked on `waitlist`, `onboarding_emails`, `candidate_job_hides` and `profiles`, then granted back: a candidate reads, adds and removes their own hidden jobs, and a person reads their own profile. Steve's check query is in the session summary and below. |
+| P1-43 Final check misses objects | fixed | `7c94559` | Before: on a test database with a table dropped, a trigger dropped, a policy dropped and row level security off on the waitlist, the old check read 64 OK. After: the same database shows 4 rows MISSING. The check now has 80 rows. |
+
+### The check query for the live and demo databases (finding B-06)
+
+Run before and after the SQL, in the Supabase SQL editor. It only reads.
+
+```sql
+select table_name, grantee, string_agg(privilege_type, ', ') from information_schema.role_table_grants where table_schema = 'public' and grantee in ('anon', 'authenticated') group by 1, 2 order by 1, 2;
+```
+
+After the SQL, no row should contain TRUNCATE, TRIGGER or REFERENCES; `waitlist` and `onboarding_emails` should not appear at all; `profiles` should show `authenticated` with SELECT only; `candidate_job_hides` should show `authenticated` with DELETE, SELECT.
+
+### Questions for Steve
+
+- **P1-15:** which design for keeping the shortlist private (see the session summary).
+- **P1-57:** a field based job based outside Quebec whose area covered includes Quebec: allow or refuse? Today it is allowed, because only the province the job is based in is checked, by the form and now by the database.
+- **Capital letters in a name:** today "smith" to "Smith" counts as a name change and starts the 30 day hold. Keep that, or let a change of capitals alone through without a hold?
+
+### Noticed, not fixed
+
+- **A clinic could open another clinic's live job in its own edit and copy pages** (`getJob` in `lib/clinic.ts` and the copy action in `lib/clinic-actions.ts` read by job id and relied on the database to return only the clinic's own). Until migration 0040 the database also returned any live job. The P1-41 change closes it once the SQL is run. Not changed in code, because it is outside this phase's list.
+- **The final check still says "private CV storage"** (the row for the resume bucket). It is in SQL, which the wording test does not read. Left as it is because renaming it is not in this phase.
+- **`jobs.province` has no list of allowed values in the database**, so the Quebec rule matches "Quebec", "Québec" and "QC" in any capitals. The form only ever saves "Quebec".
+- **The `profiles` rule "People can update their own profile" is still there** but no longer has any permission behind it, so it does nothing. Harmless, and left in place so the migration only takes things away from permissions.
+- **Older docs still tell Steve to run earlier versions of the combined file** (`docs/launch-checklist.md` says migrations 0001 to 0021, `docs/google-signin.md` up to 0021). The file itself is current.
