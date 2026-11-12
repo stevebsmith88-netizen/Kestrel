@@ -60,6 +60,7 @@ Seven things change, set out in the next section. The 3 that matter most:
 | 6. After graduation | Associate, locum, residency or your own practice | New post E | r/OptometrySchool, then r/optometry | Post E is live |
 | 7. Build in public | The honest founder story | No blog post needed | r/SideProject, r/Entrepreneur | Stage 4 |
 | 8. Resource drops | Eye care in Canada by the numbers: how many optometrists, opticians and practices, and how much hiring | New post F, built from the home page numbers (`lib/eye-care-numbers.ts`) | r/optometry, then an optician community | Post F is live, and every figure re checked against its source |
+| 2. Working in eye care in Canada | What to watch in 2027: outlooks, pay rules, AI disclosure, demand | New blog item 21 (proposed for 18th December 2026) | r/optometry as a discussion post in early January | Post live and Gate A cleared |
 | 8. Resource drops | Typical pay by province from Job Bank | `/resources#pay` (live) | r/optometry, an optician community | Stage 3 |
 | 8. Resource drops | Ontario's job posting rules for clinics | `/resources/ontario-job-ads` | r/optometry (clinic owners) | When the page loses its draft banner |
 | 8. Resource drops | How to become an optician, by province | Blog list item 1 (not written yet) | Optician students | When written and checked against each college |
