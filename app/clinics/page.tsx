@@ -6,7 +6,7 @@ import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, passBreakEven, perD
 import { shareMetadata } from "@/lib/share";
 
 export const metadata: Metadata = shareMetadata({
-  title: "For clinics",
+  title: "Post eye care jobs in Canada",
   description: "Post jobs and reach eye care professionals across Canada. Join the waitlist to be first invited to post.",
   path: "/clinics",
 });
