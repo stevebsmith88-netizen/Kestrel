@@ -55,3 +55,11 @@ When a clinic marks a job as filled and says it found the person through Kestrel
 - is remembered on the job as `jobs.filled_application_id`, so Kestrel can count hires made through the site. Nothing shows that count yet. A tile in Admin is the natural next step.
 
 Hired cannot be chosen from the one application status form, and a hired application cannot be moved on. One hire per job: a clinic filling 2 roles from one advert is a question for the time of posting (a number of openings), not for this step. Run migration 0036 on both databases before merging the code that uses it.
+
+## First step page (12th November 2026)
+
+A brand new candidate (no role yet, and not shown it before) is sent from their dashboard to `/candidate/start` once. It has 3 optional questions and a **Skip for now** button: their role, the **Open to field and supplier roles** tick (not for optometrists), and **Where are you in eye care** (working in eye care now, studying or training, or not working in eye care yet). Saving or skipping both go on to the profile page, where the "To apply you need" list shows what is left.
+
+- **Needs migration 0037** (`career_stage`, `start_seen_at`) on both databases. Until it has been run, the site skips the page and saves what it can, so nothing breaks.
+- **The stage is private.** It is never shown to a clinic, never ranks or filters jobs, and never blocks anything. Whether a clinic may ever see it is for the lawyer, because answers about a person's situation could hint at protected grounds. It cannot be edited on the profile page yet.
+- Code: `lib/career-stage.ts` (the 3 answers), `saveFirstStep` in `lib/candidate-actions.ts`, `needsFirstStep` in `lib/candidate.ts`, `components/FirstStepForm.tsx`.

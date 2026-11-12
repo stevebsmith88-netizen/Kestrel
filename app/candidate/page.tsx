@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import Icon from "@/components/Icon";
@@ -8,7 +9,7 @@ import GettingStarted from "@/components/GettingStarted";
 import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
 import { candidateSteps } from "@/lib/checklist";
-import { getMyApplications, getMyCandidateProfile, profileReady, profileStrength } from "@/lib/candidate";
+import { getMyApplications, getMyCandidateProfile, needsFirstStep, profileReady, profileStrength } from "@/lib/candidate";
 import { employmentLabel, longDate } from "@/lib/jobs";
 import { payChips } from "@/lib/job-pay";
 import { hideRecommendation } from "@/lib/recommendation-actions";
@@ -22,6 +23,8 @@ export const dynamic = "force-dynamic";
 export default async function CandidateHome() {
   const session = await requireRole("candidate");
   const [profile, applications] = await Promise.all([getMyCandidateProfile(session.userId), getMyApplications()]);
+  // A brand new candidate is shown the first step page once (needsFirstStep in lib/candidate.ts).
+  if (await needsFirstStep(session.userId, profile)) redirect("/candidate/start");
   const first = session.firstName || "there";
   const strength = profileStrength(profile);
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;

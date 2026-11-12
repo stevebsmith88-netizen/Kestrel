@@ -54,6 +54,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
           heading: "Post your first job",
           paragraphs: [
             hello,
+            "Thanks for registering with Kestrel. If you would like a hand with your first advert, reply to this email and we will help, or post it for you.",
             "Write a few lines about the role and the ad builder gives you a draft to edit. Put the pay range in: candidates on Kestrel see the pay on every job, and a post cannot go live without it.",
             "A person reads each post before it goes live, usually within 1 business day.",
           ],
@@ -65,7 +66,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
           heading: "One step before your first post",
           paragraphs: [
             hello,
-            "Your Kestrel account is ready. The next step is your clinic profile: the clinic's name, where it is and where to send applicant alerts. It takes about 2 minutes.",
+            "Thanks for registering with Kestrel. Your account is ready. The next step is your clinic profile: the clinic's name, where it is and where to send applicant alerts. It takes about 2 minutes.",
             "After that you can post your first job. Every post needs a pay range and 2 yes or no answers, and the form walks you through them.",
           ],
           buttonText: "Create my clinic profile",
@@ -145,9 +146,9 @@ function candidateEmail(day: number, f: CandidateFacts, name: string): Built {
           buttonPath: "/candidate",
         }
       : {
-          subject: "Finish your Kestrel profile in 5 minutes",
-          heading: "Save your resume once, apply in a few clicks",
-          paragraphs: [hello, "Add your role, your town and your resume, and you can apply to any job in a few clicks. Your profile stays private: a clinic sees only what you send when you apply."],
+          subject: "Thanks for registering with Kestrel",
+          heading: "Finish your profile when you have a few minutes",
+          paragraphs: [hello, "Thanks for registering with Kestrel. Come back and add your role, your town and your resume, and you can apply to any job in a few clicks. Your profile stays private: a clinic sees only what you send when you apply.", "Or have a look at the jobs that are available now. Every job shows its pay."],
           buttonText: "Complete my profile",
           buttonPath: "/candidate/profile",
         };

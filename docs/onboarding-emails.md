@@ -13,6 +13,8 @@ At most 3 emails per account, on day 1, day 3 and day 7 after the account is ope
 
 The aim behind each is the agreed definitions in `docs/definitions.md`: a clinic's first application received, a candidate's first application sent.
 
+**Wording (12th November 2026):** the first email to a clinic with no post yet, and to a candidate whose profile is not ready, both start with "Thanks for registering with Kestrel". The clinic one offers help with the first advert (reply and we will help, or post it for you), and the candidate one says to come back to finish the profile or look at the jobs available. Replies go to Kestrel's own address.
+
 ## How it works
 
 - `lib/onboarding-emails.ts`: the rules and the wording, tested in `lib/onboarding-emails.test.ts`.
