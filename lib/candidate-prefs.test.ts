@@ -51,3 +51,11 @@ test("a saved profile turns into the rules' input, and a missing profile into an
   assert.deepEqual(p.extraProvinces, ["Alberta"]);
   assert.equal(p.practice, null);
 });
+
+test("the field roles tick adds every field role for an optician, and not for an optometrist", async () => {
+  const { FIELD_ROLES } = await import("./jobs.ts");
+  const optician = cleanPrefs({ openToField: true, otherRoles: ["Optometrist", "Patient care or reception"] }, "Optician");
+  assert.deepEqual(optician.row.pref_other_roles, ["Patient care or reception", ...FIELD_ROLES]);
+  assert.deepEqual(cleanPrefs({ openToField: false, otherRoles: [...FIELD_ROLES] }, "Optician").row.pref_other_roles, []);
+  assert.deepEqual(cleanPrefs({ openToField: true }, "Optometrist").row.pref_other_roles, []);
+});

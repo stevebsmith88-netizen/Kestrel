@@ -1,7 +1,8 @@
 // What a candidate says they are looking for: checking the profile form's answers, and turning a saved profile into the rules' input.
 // Kept free of app imports so it can be tested on its own (lib/candidate-prefs.test.ts).
 
-import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, parseMoney } from "./jobs.ts";
+import { EMPLOYMENT_TYPES, FIELD_ROLES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, parseMoney } from "./jobs.ts";
+import { canHaveFieldRoles, neverTogether } from "./role-fit.ts";
 import { SOFTWARE_TAGS, cleanTags } from "./job-tags.ts";
 import { RADIUS_OPTIONS, findPlace } from "./places.ts";
 import type { Prefs } from "./recommend.ts";
@@ -13,6 +14,7 @@ export type PrefsAnswers = {
   extraProvinces?: string[];
   employmentTypes?: string[];
   otherRoles?: string[];
+  openToField?: boolean; // the single tick that adds every field and supplier role
   minPay?: string;
   payPeriod?: string;
   practice?: string;
@@ -66,7 +68,10 @@ export function cleanPrefs(raw: PrefsAnswers, profession: string): { row: PrefsR
   }
 
   const practice = raw.practice === "independent" || raw.practice === "corporate" ? raw.practice : null;
-  const otherRoles = only(raw.otherRoles, ROLE_CATEGORIES).filter((r) => r !== profession);
+  const fieldNames = FIELD_ROLES as readonly string[];
+  // Field and supplier roles come only from the tick, and never for an optometrist. An optician and an optometrist never see each other's jobs.
+  const chosen = only(raw.otherRoles, ROLE_CATEGORIES).filter((r) => r !== profession && !neverTogether(profession, r) && !fieldNames.includes(r));
+  const otherRoles = raw.openToField && canHaveFieldRoles(profession) ? [...chosen, ...FIELD_ROLES] : chosen;
 
   return {
     errors,

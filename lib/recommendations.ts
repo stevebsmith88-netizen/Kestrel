@@ -25,3 +25,18 @@ export async function getRecommendations(profile: CandidateProfile | null, appli
   const recs = recommend(prefs, jobs, { hidden, applied: new Set(appliedJobIds) });
   return { recs, needsRole: false, needsWhere: !hasWhere(prefs) && prefs.licensedProvinces.length === 0 };
 }
+
+// The "For me" view on Find jobs: every job in the list that fits the candidate, best first. Same rules as above, with no limit on how many.
+// Jobs they hid and jobs they have already applied to are left out. Returns null when no role is chosen yet, so the page shows every job.
+export async function rankForMe(profile: CandidateProfile | null, jobs: readonly JobSummary[]): Promise<Recommendation<JobSummary>[] | null> {
+  const prefs = prefsFromProfile(profile);
+  if (!prefs.profession) return null;
+  const db = await supabaseServer();
+  const [hiddenRows, appliedRows] = await Promise.all([
+    db ? db.from("candidate_job_hides").select("job_id") : Promise.resolve({ data: [] as { job_id: string }[] }),
+    db ? db.from("applications").select("job_id") : Promise.resolve({ data: [] as { job_id: string }[] }),
+  ]);
+  const hidden = new Set((hiddenRows.data ?? []).map((r) => r.job_id));
+  const applied = new Set((appliedRows.data ?? []).map((r) => r.job_id));
+  return recommend(prefs, jobs, { hidden, applied, max: Number.POSITIVE_INFINITY });
+}

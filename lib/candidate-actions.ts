@@ -57,6 +57,7 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
       extraProvinces: form.getAll("extraProvinces").map(String),
       employmentTypes: form.getAll("employmentTypes").map(String),
       otherRoles: form.getAll("otherRoles").map(String),
+      openToField: form.get("openToField") === "on",
       minPay: text(form, "minPay", 20),
       payPeriod: text(form, "payPeriod", 10),
       practice: text(form, "practice", 12),
