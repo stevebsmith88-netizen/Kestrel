@@ -14,6 +14,9 @@ import { longDate } from "@/lib/jobs";
 export const metadata: Metadata = { title: "My profile and resume | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
+// The longest any action on this page may run (saving the profile, uploading a resume, Read my resume). A backstop behind the resume
+// reader's own limits in lib/resume-text.ts: if something still runs away, the server stops it at 30 seconds.
+export const maxDuration = 30;
 
 export default async function CandidateProfilePage({ searchParams }: { searchParams: Promise<{ notice?: string; next?: string }> }) {
   const session = await requireRole("candidate");

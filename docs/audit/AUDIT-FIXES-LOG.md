@@ -2,7 +2,7 @@
 
 Findings are in `docs/audit/AUDIT-2026-11-PART1.md`, with the evidence in `docs/audit/AUDIT-2026-11-PART1-WORKING.md`. One row per finding. Status is one of: fixed, will not fix (with the reason), needs a decision (with the question for Steve).
 
-## Phase A: the resume reader (12th November 2026)
+## Phase A: the resume reader (12th November 2026). Completed and merged to `main` on 12th November 2026
 
 Branch `claude/focused-goldberg-2g7e6r` (the session could not push to `claude/audit-fix-a`, and Steve agreed to this branch). No SQL. No settings changed.
 
@@ -14,9 +14,12 @@ Branch `claude/focused-goldberg-2g7e6r` (the session could not push to `claude/a
 | P1-48 (second half) No cap on resume reads per hour | will not fix for now | none | A cap needs a new table. After P1-01 and P1-04 a read is cheap (a few thousandths of a second for a Word file, about a tenth of a second for the worst PDF), so pressing the button often no longer costs much. Look again if the logs ever show it being hammered. |
 | P1-53 Public wording promised limits that were not real | fixed | `ccac157` | Read each statement against the code. `/security` now says "with a limit on size for both, and on pages and time for a PDF", because a Word file has a size limit only (it needs no other). `docs/cv-scanning.md` and `docs/candidates-and-applications.md` give the new figures. The 1 sentence in `docs/security.md` that said resumes are never opened by our servers is corrected. The rest of `docs/security.md` is Phase C. |
 
+### Added at Steve's request
+
+- **A 30 second time limit for the actions on the profile page** (Steve, 12th November 2026). `app/candidate/profile/page.tsx` sets `export const maxDuration = 30;`, which Next.js applies to every server action used on that page: saving the profile, uploading a resume and Read my resume. It is a backstop behind the reader's own limits. Checked by the build, which accepts the setting. It only takes effect on Vercel, so it cannot be tested here.
+
 ### Noticed, not fixed
 
-- **A time limit for the Read my resume action.** Next.js lets a page set `export const maxDuration = 30;` and that becomes the limit for every server action used on that page (Next.js docs, `maxDuration`: "set the maxDuration at the page level to change the default timeout of all Server Actions used on the page"). The page is `app/candidate/profile/page.tsx`. It is a 1 line code change, not a Vercel setting, but it would also apply to saving the profile and uploading a resume from that page, so it is left for Steve to decide. Without it, Vercel's own default for the project applies.
 - **Reading a Word file that is over the 1 MB text limit** now gives "We could not read this file. You can fill in your profile by hand below." Before, an over limit file gave the "may be a scan" message, which was wrong for it. Mentioned because it is a small change in what a person sees.
 - **Text like `&amp;lt;` in a Word file** used to be decoded twice (to "<"). It is now decoded once (to "&lt;"), which is the correct reading. It does not occur in an ordinary resume.
 - **`docs/security.md` still says "CVs"** in several places. Left for Phase C with the rest of that file.
