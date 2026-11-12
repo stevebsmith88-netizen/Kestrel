@@ -135,7 +135,7 @@ export default function Privacy() {
             <li>Resend, which sends our emails, such as sign up confirmations and application updates.</li>
             <li>Google, if you choose to sign in with it. Google is told when you sign in to Kestrel, and handles your sign in under its own privacy policy.</li>
             <li>Cloudflare, whose Turnstile security check on our forms tells real people from robots. It looks at signals from your browser, such as how it behaves, and does not need you to solve a puzzle in most cases.</li>
-            <li>Anthropic, whose AI helps clinics write job ads. It sees only the job details a clinic types in, never candidate information.</li>
+            <li>Anthropic, whose AI helps clinics write job ads. It sees what a clinic types in, up to 8 of that clinic&apos;s earlier ads, and text from the clinic&apos;s own public website if the clinic gave one. Our admin tools also send it the text of a clinic&apos;s public careers page and web searches about clinics that are hiring. It never receives candidate information.</li>
           </ul>
           <p>
             <strong>Clinics.</strong> When you apply to a job, the clinic that posted it can see your application: your cover letter,

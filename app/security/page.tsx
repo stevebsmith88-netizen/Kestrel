@@ -70,7 +70,7 @@ export default function Security() {
 
           <h2>Payments and AI</h2>
           <p>
-            When payments start, card details will go to Stripe and Kestrel will not store card numbers. The ad builder sees only the job details a clinic types in, never anything about candidates.
+            When payments start, card details will go to Stripe and Kestrel will not store card numbers. The ad builder, which uses Anthropic, sees what a clinic types in, up to 8 of that clinic&apos;s earlier ads and text from the clinic&apos;s own public website. Our admin tools also send it public careers pages and web searches about clinics. It never receives anything about candidates.
             Kestrel does not use AI to rank applicants for clinics.
           </p>
 
