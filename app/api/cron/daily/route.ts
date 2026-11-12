@@ -7,6 +7,8 @@ import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { notify } from "@/lib/notifications";
+import { applicationNoUpdate } from "@/lib/notify-text";
 import { submitToIndexNow } from "@/lib/indexnow";
 import { recentlyChangedPages } from "@/lib/page-dates";
 import { runOnboarding } from "@/lib/onboarding-run";
@@ -144,6 +146,8 @@ async function runDaily(request: Request) {
       await admin.from("applications").update({ status: "no_update", status_changed_at: stamp, updated_at: stamp }).eq("id", app.id);
       await admin.from("application_events").insert({ application_id: app.id, status: "no_update" });
       summary.closedOutApplications += 1;
+      // The inbox message goes whether or not the email does, as it does when a clinic moves an application (lib/applicant-actions.ts).
+      await notify(admin, app.candidate_id, applicationNoUpdate({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS.no_update, applicationId: app.id }));
       if (sendIt && email) {
         const mail = emailLayout({
           heading: "An update on your application",

@@ -18,6 +18,16 @@ export function applicationMoved(args: { jobTitle: string; clinicName: string; s
   };
 }
 
+// The job closed (or ended) while the application was still waiting, and the clinic gave no decision. Matches the email the same moment sends.
+export function applicationNoUpdate(args: { jobTitle: string; clinicName: string; label: string; applicationId: string }): NotifyMessage {
+  return {
+    kind: "application",
+    title: cut(`${args.jobTitle}: ${args.label}`, 150),
+    body: cut(`The job at ${args.clinicName} has closed, and the clinic did not send a decision. Thank you for applying.`, 480),
+    href: `/candidate/applications/${args.applicationId}`,
+  };
+}
+
 export function newApplicant(args: { jobTitle: string; applicationId: string }): NotifyMessage {
   return { kind: "applicant", title: cut(`New application for ${args.jobTitle}`, 150), body: "Open it to read the cover letter and resume, and to let the candidate know where they stand.", href: `/clinic/applications/${args.applicationId}` };
 }

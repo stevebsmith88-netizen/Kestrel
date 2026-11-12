@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { applicationMoved, jobApproved, jobNeedsChange, newApplicant } from "./notify-text.ts";
+import { applicationMoved, applicationNoUpdate, jobApproved, jobNeedsChange, newApplicant } from "./notify-text.ts";
 
 test("a candidate is told about a visible step, with the clinic's message if there is one", () => {
   const m = applicationMoved({ jobTitle: "Optician", clinicName: "Riverside", status: "interview", label: "Interview", message: "We would like to meet you.", applicationId: "a1" });
@@ -33,4 +33,21 @@ test("long titles and messages are cut to fit, and no message uses a long dash",
   assert.ok((m?.title.length ?? 999) <= 160 && (m?.body?.length ?? 999) <= 500);
   const all = [m, newApplicant({ jobTitle: "T", applicationId: "a" }), jobNeedsChange({ jobTitle: "T", jobId: "j", note: "" })].map((x) => `${x?.title} ${x?.body}`).join(" ");
   assert.ok(!/[—–]/.test(all));
+});
+
+test("a candidate is told in the inbox when a job closes with no decision (P1-35)", () => {
+  const m = applicationNoUpdate({ jobTitle: "Optician", clinicName: "Harbourside Optical", label: "No update from the clinic", applicationId: "a1" });
+  assert.equal(m.kind, "application");
+  assert.equal(m.title, "Optician: No update from the clinic");
+  assert.match(m.body ?? "", /Harbourside Optical/);
+  assert.match(m.body ?? "", /did not send a decision/);
+  assert.equal(m.href, "/candidate/applications/a1");
+  assert.doesNotMatch(JSON.stringify(m), /[–—]/);
+});
+
+test("the daily job sends that inbox message when it closes an application", async () => {
+  const { readFileSync } = await import("node:fs");
+  const cron = readFileSync("app/api/cron/daily/route.ts", "utf8");
+  assert.match(cron, /applicationNoUpdate\(/);
+  assert.ok(cron.indexOf("applicationNoUpdate(") > cron.indexOf('status: "no_update", status_changed_at'), "after the application is closed");
 });
