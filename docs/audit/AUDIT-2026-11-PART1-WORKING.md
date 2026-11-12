@@ -255,3 +255,37 @@ Verified as expected:
 - Supabase's own emails (confirm your address, reset password, change email): their wording, sender and footer live in the Supabase dashboard, for the live project and the demo project. The demo banner says no email is sent, but a sign up or password reset on the demo would be sent by the demo's Supabase project if email is switched on there.
 - That SPF, DKIM and DMARC records for mail.eyecarejobs.ca are in place, the Resend plan, and that the webhook secret is set.
 - What `ENABLE_ONBOARDING_EMAILS`, `ENABLE_OUTREACH` and `DAILY_EMAIL_BUDGET` are set to in each Vercel project.
+
+## Area H. Accessibility and mobile
+
+How it was tested: the site was built and run here against a small stand in for Supabase that I wrote for the audit (sample data, kept outside the repository), so signed in pages could be opened as a candidate, a brand new candidate and a clinic. A browser at 375 pixels wide opened 27 pages (11 public, 11 as a candidate, 5 as a clinic). On each page my own script measured text contrast against its background, tap sizes, names for screen readers on every link, button and field, sideways scrolling, heading order, image descriptions and duplicate ids. I then opened the phone menu, pressed Tab through the desktop top bar, and looked at screenshots. This is not a full screen reader test, and I did not test at 200 percent text size.
+
+Verified as expected, on all 27 pages:
+- 0 contrast failures against WCAG AA (4.5 to 1 for text, 3 to 1 for large text).
+- 0 pages scroll sideways at 375 pixels.
+- 0 links, buttons or fields without a name. The envelope reads "Inbox, 3 unread", the initials menu reads "Account menu for Jordan Sample".
+- Every page has 1 main heading, a skip link, a main landmark, a language and a title. 0 images without a description. 0 duplicate ids.
+- Tap sizes: every button and menu row is 44 pixels or taller. The envelope is 44 by 44. The phone menu rows are 51 pixels.
+- Keyboard: Tab goes skip link, logo, My dashboard, Find jobs, Job alerts, Inbox, account menu, then the page, in reading order. Every stop shows a 3 pixel navy focus ring. The phone menu closes on Escape and on a tap outside, and marks the current page.
+- The first step page groups its 3 choices in a labelled group ("Where are you in eye care?") and has both Save and continue and Skip for now. A brand new candidate is sent there once from the dashboard with no loop.
+- The profile's closed sections ("More about you", "What you are looking for") are real open and close controls with 44 pixel headers. The 6 clinic dashboard tiles are single links, each the full width of the phone. For me shows "Showing jobs that fit your profile" with a Show all jobs button, and Sort by has a label for screen readers.
+
+### Findings
+
+**H-01 On a phone the top bar gives no sign of unread messages.** Low to Medium. Confirmed. Screenshots: `docs/audit/2026-11-part1/phone-top-bar-no-envelope.png` and `phone-menu-inbox-count.png`. At 375 pixels the envelope is hidden and the count only appears as "Inbox (3)" inside the menu. A candidate on a phone who has turned off emails would not know a clinic wrote to them unless they open the menu. Fix: keep the envelope beside the menu button on phones, or put a small dot on the menu button with "Menu, 3 unread" for screen readers. 30 minutes.
+
+**H-02 The home page's sample job picture says "Use your saved CV".** Low. Confirmed. `public/home/sample-job.png`. The wording test reads code, not pictures, as the audit plan warned. Fix: retake the picture from the current job page. 10 minutes.
+
+**H-03 The tagline under the logo is 9 to 10 pixels.** Low. Confirmed on every page ("Canada-wide eye care job board"). It passes contrast and it is part of the brand lockup, but text that small is hard to read on a phone. Steve's call, since the lockup is his. It could be hidden from the phone header and kept in the footer.
+
+**H-04 Heading levels skip on 3 pages.** Low. Confirmed. My applications, the inbox and the applicants list go from the page heading straight to third level headings. Screen reader users who move by heading see a gap. Fix: make the item titles second level. 10 minutes.
+
+**H-05 The 3 radio rows on the first step page are 24 pixels tall.** Low. Confirmed. Screenshot `phone-first-step.png`. That meets the newer minimum (24) but they sit tight together, and the rest of the site uses 44. Fix: a little more row height. 5 minutes.
+
+**H-06 "Now live" notices stack up on the clinic dashboard.** Low. Likely. Each approved job gets its own green box with See your job and Dismiss. A clinic with 5 jobs approved together gets 5 boxes before the dashboard starts on a phone. My sample clinic had many live jobs, which exaggerates it. Fix: fold more than 2 into 1 box with "Dismiss all". 30 minutes.
+
+**H-07 Opening a message does not clear its count.** See A-18.
+
+### Not tested
+
+A real screen reader (VoiceOver or NVDA), 200 percent text, reduced motion, and real phones. The last full pass of those was 6th November 2026 (`docs/audit/ACCESSIBILITY-PASS-2026-11-06.md`), before the top bar, inbox and first step page were added.
