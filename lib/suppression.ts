@@ -28,6 +28,19 @@ export async function isSuppressed(address: string) {
   return (data?.length ?? 0) > 0;
 }
 
+// Every reason the list holds for this address or its domain (empty if none), or null if the list could not be read.
+// Used by lib/email.ts, which decides with lib/email-gate.ts whether to send (P1-23).
+export async function suppressionReasons(address: string): Promise<string[] | null> {
+  const db = supabaseAdmin();
+  if (!db) return [];
+  const { data, error } = await db.from("email_suppressions").select("reason").in("address", suppressionKeys(address)).limit(10);
+  if (error) {
+    console.error("Do not email check failed:", error.code, error.message);
+    return null;
+  }
+  return (data ?? []).map((row) => String(row.reason));
+}
+
 // Adds an address (or a whole domain, written @clinic.ca). Adding it twice does no harm.
 export async function suppress(address: string, reason: SuppressionReason, source?: string) {
   const db = supabaseAdmin();
