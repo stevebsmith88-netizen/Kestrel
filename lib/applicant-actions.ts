@@ -4,7 +4,8 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
-import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
+import { SITE_URL, sendEmail } from "@/lib/email";
+import { applicationUpdateEmail } from "@/lib/clinic-message";
 import { candidateRecipient } from "@/lib/recipient";
 import { notify } from "@/lib/notifications";
 import { applicationMoved } from "@/lib/notify-text";
@@ -26,12 +27,8 @@ async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>
   await notify(admin, app.candidate_id, applicationMoved({ jobTitle: app.job_title, clinicName: app.clinic_name, status: to, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id }));
   const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
   if (email && wants) {
-    const mail = emailLayout({
-      heading: "An update on your application",
-      paragraphs: [`Your application for ${app.job_title} at ${app.clinic_name} is now: ${APP_LABELS[to as keyof typeof APP_LABELS]}.`, ...(message ? [message] : [])],
-      buttonText: "See your application",
-      buttonUrl: `${SITE_URL}/candidate/applications/${app.id}`,
-    });
+    // The clinic's words go as plain text, with a line saying the clinic wrote them (P1-47).
+    const mail = applicationUpdateEmail({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id, site: SITE_URL });
     await sendEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail });
   }
 }
