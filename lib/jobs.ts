@@ -132,17 +132,19 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
 // Wording that is not allowed in a post: any requirement of Canadian experience. This covers Ontario's rules from 1st January 2026.
-// It looks for three shapes, and is a safety net, because the admin reads every post as well:
+// It looks for four shapes, and is a safety net, because the admin reads every post as well:
 //  1. a place word near "experience": "Canadian experience", "Canadian clinical experience", "Canadian-experience preferred",
 //     "Cdn experience", "North American experience", "local work history". Only job words may sit between the two,
 //     so "We are a Canadian clinic offering experience with lenses" is allowed.
 //  2. experience then "in" a place: "experience in Canada", "experience gained in Canada", "experience in a Canadian clinic".
 //  3. "worked in Canada", "practising in Canada". Not when it is about a licence ("licensed to practise in Canada").
 const PLACE = "(?:canad\\w*|cdn|north\\s+americ\\w*|local)";
-const EXPERIENCE = "(?:experienc\\w*|work\\s+history|employment\\s+history)";
+const EXPERIENCE = "(?:experienc\\w*|exp(?!\\w)\\.?|work\\s+history(?!\\w)|employment\\s+history(?!\\w))";
 const JOB_WORDS = new Set("clinical clinic optometry optometric optical optician opticians dispensing retail eye care eyecare vision work working job professional industry relevant related prior previous practice practising practicing field employment health healthcare".split(" "));
-const NEAR_PLACE = new RegExp(`\\b${PLACE}\\b((?:[\\s-]+[\\w']+){0,3}?)[\\s-]+${EXPERIENCE}\\b`, "gi");
-const EXPERIENCE_IN = new RegExp(`\\bexperienc\\w*(?:\\s+[\\w']+){0,3}?\\s+(?:in|within|across|throughout|from)\\s+(?:a\\s+|the\\s+)?(?:canad\\w*|north\\s+americ\\w*)\\b`, "i");
+const NEAR_PLACE = new RegExp(`\\b${PLACE}\\b((?:[\\s-]+[\\w']+){0,3}?)[\\s-]+${EXPERIENCE}`, "gi");
+const EXPERIENCE_IN = new RegExp(`\\bexperienc\\w*(?:\\s+[\\w']+){0,3}?\\s+(?:in|within|across|throughout|from|at)\\s+(?:a\\s+|the\\s+)?(?:canad\\w*|north\\s+americ\\w*)\\b`, "i");
+// 4. the place put after the word, in brackets: "experience (Canadian) required".
+const EXPERIENCE_THEN_PLACE = new RegExp(`\\b${EXPERIENCE}\\s*[(\\[]\\s*${PLACE}\\s*[)\\]]`, "i");
 const WORKED_IN = /\b(?:work(?:ed|ing)?|practi[sc](?:e|ed|ing)|employed)\s+(?:[\w']+\s+){0,2}?(?:in|within)\s+(?:a\s+|the\s+)?canad\w*\b/gi;
 const ABOUT_A_LICENCE = /licen[cs]|regist|eligib|entitled|authori[sz]ed|permitted/i;
 
@@ -160,7 +162,7 @@ function firstAccepted(pattern: RegExp, text: string, accept: (match: RegExpExec
 export function mentionsCanadianExperience(text: string) {
   const onlyJobWords = (m: RegExpExecArray) => m[1].split(/[\s-]+/).filter(Boolean).every((w) => JOB_WORDS.has(w.toLowerCase()));
   const notAboutALicence = (m: RegExpExecArray) => !ABOUT_A_LICENCE.test(text.slice(Math.max(0, m.index - 30), m.index));
-  return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
+  return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || EXPERIENCE_THEN_PLACE.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
 }
 
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {

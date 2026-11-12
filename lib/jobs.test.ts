@@ -268,3 +268,22 @@ test("the 2 required answers show Not stated by the clinic when a found listing'
   assert.equal(answerLabel(false), "No");
   assert.equal(answerLabel(null), "Not stated by the clinic");
 });
+
+// Audit P1-27: abbreviations and a few more word orders.
+test("Canadian experience is blocked when abbreviated or reordered", () => {
+  const blocked = [
+    "Canadian exp required", "Cdn exp.", "cdn exp", "Canadian exp. an asset", "previous experience at a Canadian practice",
+    "experience at a Canadian clinic", "Experience at the Canadian practice level required", "experience (Canadian) required", "Experience [Canadian] preferred",
+    "experience (Cdn) an asset", "2+ years Canadian exp.", "Must have Canadian exp",
+  ];
+  for (const text of blocked) assert.equal(mentionsCanadianExperience(text), true, text);
+});
+
+test("the new shapes do not block ordinary sentences", () => {
+  const allowed = [
+    "We are a Canadian clinic offering experience with lenses", "Must be licensed to practise in Canada", "Our exp. team is friendly and Canadian owned",
+    "Canadian owned clinic, expanding", "Experience at our clinic is a plus", "experience with Canadian brands of frames is not needed", "Expect a Canadian winter",
+    "Experience (preferably with lenses) required", "Trained at the clinic. Canadian Association of Optometrists member",
+  ];
+  for (const text of allowed) assert.equal(mentionsCanadianExperience(text), false, text);
+});
