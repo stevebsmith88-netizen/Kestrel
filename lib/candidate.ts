@@ -1,8 +1,7 @@
-import { readMyApplicationEvents, readMyApplications } from "@/lib/my-applications";
 import "server-only";
 import { readyToApply } from "./profile-ready.ts";
 export { profileStrength } from "./profile-ready.ts";
-import { viewApplication, viewForCandidate, type HistoryEvent } from "./application-view.ts";
+import { loadApplicationWith, loadMyApplications, type Application } from "./application-loaders.ts";
 import type { PrefsRow } from "@/lib/candidate-prefs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -17,25 +16,7 @@ export type CandidateProfile = PrefsRow & {
   cv_uploaded_at: string | null;
 };
 
-export type Application = {
-  id: string;
-  job_id: string;
-  status: string;
-  cover_letter: string | null;
-  keep_details: boolean;
-  job_title: string;
-  clinic_name: string;
-  job_location: string;
-  cv_filename: string | null;
-  clinic_message: string | null;
-  viewed_at: string | null;
-  status_changed_at: string;
-  created_at: string;
-  applicant: { name?: string; email?: string; phone?: string | null; profession?: string | null; licensed_provinces?: string[]; years_experience?: string | null; available_from?: string | null };
-};
-
-export const APPLICATION_COLUMNS =
-  "id, job_id, status, cover_letter, keep_details, job_title, clinic_name, job_location, cv_filename, clinic_message, viewed_at, status_changed_at, created_at, applicant";
+export { APPLICATION_COLUMNS, type Application } from "./application-loaders.ts";
 
 // The signed in candidate's own profile (row level security means only their own).
 export async function getMyCandidateProfile(userId: string): Promise<CandidateProfile | null> {
@@ -62,30 +43,14 @@ export async function needsFirstStep(userId: string, profile: CandidateProfile |
 
 export async function getMyApplications(): Promise<Application[]> {
   const db = await supabaseServer();
-  if (!db) return [];
-  // The candidate's own, from the database's masked copy (lib/my-applications.ts), or the table on a database without migration 0040.
-  const { data } = await readMyApplications<Application[]>(db, (source) => source.select(APPLICATION_COLUMNS).order("created_at", { ascending: false }));
-  return (data ?? []).map(viewForCandidate);
+  return db ? loadMyApplications(db) : [];
 }
 
-type LoadedApplication = { application: Application; history: HistoryEvent[] };
-
-// One application and its history, as the given reader should see it. The database only returns it if the reader may see it
-// (the candidate's own, or one to a job of the clinic's own). The rules for what each reader sees are in lib/application-view.ts.
-async function loadApplication(id: string, audience: "candidate" | "clinic"): Promise<LoadedApplication | null> {
+// One application and its history, as the given reader should see it (lib/application-loaders.ts).
+const loadApplication = async (id: string, audience: "candidate" | "clinic") => {
   const db = await supabaseServer();
-  if (!db) return null;
-  if (audience === "candidate") {
-    // Since migration 0040 a candidate cannot read these 2 tables directly, so their copy comes through lib/my-applications.ts.
-    const { data } = await readMyApplications<Application>(db, (source) => source.select(APPLICATION_COLUMNS).eq("id", id).maybeSingle());
-    if (!data) return null;
-    return viewApplication(data, await readMyApplicationEvents(db, id), audience);
-  }
-  const { data } = await db.from("applications").select(APPLICATION_COLUMNS).eq("id", id).maybeSingle();
-  if (!data) return null;
-  const { data: events } = await db.from("application_events").select("status, note, created_at").eq("application_id", id).order("created_at", { ascending: true });
-  return viewApplication(data as Application, events ?? [], audience);
-}
+  return db ? loadApplicationWith(db, id, audience) : null;
+};
 
 // For the candidate's pages: "Shortlisted" is shown as "Viewed".
 export const getApplication = (id: string) => loadApplication(id, "candidate");

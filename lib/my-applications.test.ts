@@ -52,15 +52,20 @@ test("the history does the same", async () => {
 test("no candidate page reads the applications tables with the person's own sign in except through these helpers", () => {
   // The clinic's pages read applications to their own jobs directly, which the database still allows. A candidate's direct read returns
   // nothing since migration 0040, so a new candidate page that did it would show an empty list.
-  for (const file of ["lib/candidate.ts", "lib/recommendations.ts", "app/jobs/[id]/apply/page.tsx"]) {
+  for (const file of ["lib/application-loaders.ts", "lib/recommendations.ts", "app/jobs/[id]/apply/page.tsx"]) {
     const source = readFileSync(file, "utf8");
     assert.match(source, /readMyApplications/, `${file} must read a candidate's applications with readMyApplications`);
     const direct = [...source.matchAll(/\.from\("(applications|application_events)"\)/g)];
-    const allowed = file === "lib/candidate.ts" ? 2 : 0; // the clinic's branch of loadApplication
+    const allowed = file === "lib/application-loaders.ts" ? 2 : 0; // the clinic's branch of loadApplication
     assert.equal(direct.length, allowed, `${file} reads the applications tables directly ${direct.length} times, expected ${allowed}`);
   }
   // Whatever the source, the candidate's copy still goes through the mask in lib/application-view.ts.
+  const loaders = readFileSync("lib/application-loaders.ts", "utf8");
+  assert.match(loaders, /\.map\(viewForCandidate\)/);
+  assert.match(loaders, /viewApplication\(/);
+  // lib/candidate.ts only hands the signed in connection to those loaders and reads the 2 tables nowhere itself.
   const candidate = readFileSync("lib/candidate.ts", "utf8");
-  assert.match(candidate, /\.map\(viewForCandidate\)/);
-  assert.match(candidate, /viewApplication\(/);
+  assert.equal([...candidate.matchAll(/\.from\("(applications|application_events)"\)/g)].length, 0);
+  assert.match(candidate, /loadApplicationWith\(/);
+  assert.match(candidate, /loadMyApplications\(/);
 });
