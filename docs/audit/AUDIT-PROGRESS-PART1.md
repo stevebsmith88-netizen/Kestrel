@@ -19,7 +19,7 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | B. Database (migrations, combined file, row level security tests) | done | Real tests on Postgres 16. Combined file equals the 39 migrations and is safe to re-run. 9 findings (B-01 to B-09). Confirmed: name hold bypass, raw shortlist status readable, anon keeps default permissions on 3 tables |
 | C. Safe before the SQL (0037 to 0039) | done | Likely safe, by code reading of all 14 places. Could not run the site against a pre 0037 database (not allowed to download Supabase's API program) |
 | D. Server actions and routes | done | 73 actions and 13 routes checked. All guarded. 7 findings (D-01 to D-07). Biggest: D-01 direct sign up to Supabase skips the bot check, invite code and terms tick once the gate opens |
-| E. Find jobs, For me and Sort | not started | |
+| E. Find jobs, For me and Sort | done | Sorting is fast (5 ms for 5,000 jobs). 5 findings (E-01 to E-05). Main one: everything quietly stops at 1,000 live jobs |
 | F. Resume reader | not started | |
 | G. Email and CASL | not started | |
 | H. Accessibility and mobile | not started | |

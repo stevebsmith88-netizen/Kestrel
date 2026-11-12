@@ -161,3 +161,25 @@ Counted: 73 exported server actions in 22 files, and 13 route handlers. Every ac
 **D-06 The view and apply click counter can be inflated.** Low. Known and documented (docs/clinics-and-jobs.md). `/api/job-event` takes no sign in, and the same site check relies on a header a script can set. Each call is a database write, so it is also a small cost risk. Leave as is, or add a per address limit at Vercel's firewall when on Pro.
 
 **D-07 Small points.** (a) `getSession` makes 2 round trips (Supabase auth, then the profile) on every page that shows the top bar, plus 1 more for the unread count: see K. (b) `/account/export` hands the full download to anyone with a signed in screen, with no password prompt. (c) `fillRole`, `markHired` and the bulk actions ignore database errors on some writes (for example the history row), so a failure there is silent. (d) Sign up says "There is already an account with that email", which confirms an address is registered. Common, and Supabase limits attempts, but worth knowing.
+
+## Area E. Find jobs, For me and Sort
+
+How it works (app/jobs/page.tsx, lib/public-jobs.ts, lib/job-sort.ts, lib/recommend.ts): the plain list (signed out, or "Show all jobs" sorted by Newest) asks the database for 1 page of 20. The "For me" view, the Closest sort and any search by town ask for the newest 1,000 matching jobs in 1 request, then filter, order and cut the page in the website's own memory.
+
+Verified as expected:
+- View and sort values are cleaned. A sort that cannot be used falls back (probe: "best" when signed out gives Newest, "near" with no place gives the default, junk gives Newest). Filters accept only known values, and the keyword has the characters that could bend the database query removed.
+- Any page with a filter, a sort, a view or a page number above 1 is marked noindex and follow, and points its canonical address at `/jobs` (app/jobs/page.tsx:22).
+- For me leaves out jobs the person hid or already applied to, read with their own sign in. Hides are private to the person (tested in area B).
+- Speed of the in memory step, timed here with made up jobs: 1,000 jobs take 3 ms for For me, 4 ms for Closest and under 1 ms for Newest. 5,000 jobs take 5 ms, 14 ms and 2 ms. The sorting is not a cost. The cost is fetching the list: 1,000 jobs is about 285 KB of data from the database on every For me or Closest page view.
+
+### Findings
+
+**E-01 Everything quietly stops at 1,000 live jobs.** Low today, Medium when Kestrel is busy. Confirmed. For me, Closest, town searches and Recommended only ever see the newest 1,000 live jobs (`RADIUS_SEARCH_LIMIT`, lib/public-jobs.ts:15, and `listLiveJobsForMatching`). The filter counts and the landing page counts ask for 2,000 rows, but Supabase hands back at most 1,000 rows per request unless the project setting is raised, so those counts would freeze at 1,000 as well (lib/public-jobs.ts:119 and :182). The sitemap lists at most 1,000 jobs (:167). With 5,000 live jobs, 4,000 would be missing from For me, from town searches and from the sitemap, with no error and no message. The whole of Canadian eye care is unlikely to have 1,000 live posts on Kestrel for a long time, so this is a "know the ceiling" finding. Fix when live jobs pass about 500: do the distance filter in the database (a small table of places with coordinates), count with a database query, and split the sitemap. 1 to 2 days.
+
+**E-02 Each For me or Closest page view moves the whole list.** Low. Confirmed. Up to 1,000 rows and 20 columns are fetched to show 20 cards, plus the filter count query (every live job's role and province), the person's profile, hides and applications. About 6 database round trips per page view. Fine at launch size. Fix with E-01.
+
+**E-03 For me and "can apply" do not match.** Covered in A-05 and A-06: the list is narrower than the apply rule for assistants and reception, and it trusts the saved "other roles".
+
+**E-04 Paging past the end shows an empty list.** Low. Confirmed by reading. `page` is capped at 500 but not at the real last page, so `/jobs?page=400` shows the count and no jobs, with no message. Fix: clamp to the last page. 10 minutes.
+
+**E-05 "Show all jobs" brings hidden and already applied jobs back with no mark.** Idea. In the "all" view a job the person hid or applied to looks like any other. A small "Applied" label on the card would save people opening it.
