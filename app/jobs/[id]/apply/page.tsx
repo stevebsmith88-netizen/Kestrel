@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import ApplyForm from "@/components/ApplyForm";
 import SiteHeader from "@/components/SiteHeader";
+import { applicantSnapshot, sentDetails } from "@/lib/application-details";
 import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
 import { missingSentence } from "@/lib/profile-ready";
@@ -72,12 +73,11 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
       body = (
         <>
           <section className="card">
-            <h2>Your details</h2>
+            <h2>What the clinic receives</h2>
             <dl className="facts">
-              <div><dt>Name</dt><dd>{session.fullName || session.email}</dd></div>
-              <div><dt>Email</dt><dd>{session.email}</dd></div>
-              <div><dt>Role</dt><dd>{profile?.profession}</dd></div>
-              <div><dt>Resume</dt><dd>{profile?.cv_filename}</dd></div>
+              {sentDetails(applicantSnapshot({ name: session.fullName || session.email, email: session.email }, profile ?? {}), profile?.cv_filename, longDate).map((d) => (
+                <div key={d.label}><dt>{d.label}</dt><dd>{d.value}</dd></div>
+              ))}
             </dl>
             <p className="help"><Link href="/candidate/profile" className="btn sm ghost">Change these in my profile</Link></p>
           </section>

@@ -295,7 +295,7 @@ export const HELP: HelpSection[] = [
           "Open the job. On a phone, the small **Apply** button near the top jumps down to the Apply box.",
           "Choose **Quick Apply**. If you are not signed in, sign in or create a free account first.",
           "The first time, **Complete my profile** takes you to save your resume and choose your role. Then you come back to the job.",
-          "Check your name, email, role and resume under **Your details**.",
+          "Check the 8 details under **What the clinic receives**: your name, email, phone, role, where you are registered, years of experience, when you are available and your resume. Anything you have not filled in says **Not given**. Press **Change these in my profile** to update them.",
           "Write a cover note, or choose one of your saved letters and press **Use it**. **Save as a draft** keeps it if you want to come back later.",
           "Tick the box agreeing that the clinic can see your application. The box about keeping your details for future roles is optional.",
           "Press **Send my application**. If the note is empty, we ask once: choose **Write a short note** or **Send without a note**.",
