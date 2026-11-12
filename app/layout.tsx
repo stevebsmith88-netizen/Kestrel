@@ -1,15 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource/dm-serif-display/400.css";
-import "@fontsource/source-serif-4/600.css";
-import "@fontsource/poppins/400.css";
-import "@fontsource/source-sans-3/400.css";
-import "@fontsource/source-sans-3/600.css";
-import "@fontsource/source-sans-3/700.css";
+import "./fonts-other-letters";
 import "./globals.css";
 import AttributionCapture from "@/components/AttributionCapture";
 import CloseMenuOnEscape from "@/components/CloseMenuOnEscape";
 import DemoBanner from "@/components/DemoBanner";
 import { demoMode } from "@/lib/demo";
+import { fontVariables } from "./fonts";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -33,7 +29,7 @@ export const viewport: Viewport = { themeColor: "#1B2B4B", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-CA">
+    <html lang="en-CA" style={fontVariables}>
       <body>
         <a className="skip" href="#main">Skip to main content</a>
         <AttributionCapture />
