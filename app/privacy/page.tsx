@@ -110,9 +110,14 @@ export default function Privacy() {
 
           <h2>Your consent and unsubscribing</h2>
           <p>
-            We only email you if you ticked the consent box. You can withdraw your consent at any time by emailing{" "}
+            <strong>News and offers.</strong> We send launch news, product updates and offers only if you ticked the consent box. You can withdraw your consent at any time by emailing{" "}
             <a href={`mailto:${EMAIL}`}>{EMAIL}</a> or replying to any email from us. We will act on your request within 10
             business days. Every marketing email we send will include an unsubscribe link.
+          </p>
+          <p>
+            <strong>Emails about your account or an application.</strong> These are sent whether or not you ticked the consent box, because you need them to use Kestrel.
+            They include the link to confirm your email address, a password reset, an update on an application you sent, and a new applicant for a clinic. The job alerts you set up yourself keep coming until you delete the alert or unsubscribe.
+            Kestrel also has a short series of welcome emails for new accounts. It is switched off today, and nobody is sent it.
           </p>
           <p>
             If you unsubscribe, we keep your email address and the date on a suppression list so that we do not email you again
