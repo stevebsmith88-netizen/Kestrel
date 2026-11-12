@@ -168,7 +168,7 @@ export const HELP: HelpSection[] = [
         title: "Can I change my name?",
         keywords: ["name", "change name", "typo", "married", "legal name", "rename", "surname", "last name"],
         answer: [
-          "Yes. You can change your name on your account page. Your first change is free. After each change there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again.",
+          "Yes. You can change your name on your account page. After each change, including the first, there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again.",
           "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to hello@eyecarejobs.ca and we will lift the hold for you.",
         ],
         steps: [
@@ -192,7 +192,7 @@ export const HELP: HelpSection[] = [
         title: "How do I download my information or delete my account?",
         keywords: ["close account", "remove account", "erase", "export", "my data", "copy of my data", "privacy request", "cancel account"],
         answer: [
-          "You can do both yourself, any time you are signed in. The download is a file with the account details we hold about you. For a candidate it also covers your profile, job alerts, applications and saved letters, and for a clinic it covers your clinic profile, jobs and templates. Your resume file is downloaded separately, with the **Download** button on your profile page.",
+          "You can do both yourself, any time you are signed in. The download is a file with the account details we hold about you. For a candidate it also covers your profile, the private preferences behind Recommended for you (including the lowest pay you would accept), your answer to where you are in eye care, the jobs you marked Not interested, your job alerts, applications, inbox messages and saved letters, and for a clinic it covers your clinic profile, jobs and templates. Your resume file is downloaded separately, with the **Download** button on your profile page.",
           "Deleting is permanent. It removes your profile, your resume and your applications. A clinic that already received your application may have kept its own copy of what you sent. Write to privacy@eyecarejobs.ca and we will ask that clinic to remove it. If you are a clinic, deleting your account also removes your jobs and the applications they received.",
         ],
         steps: [

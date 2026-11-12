@@ -1,4 +1,4 @@
-// Changing your name (Steve, 12th November 2026): the first change is free, and each change starts a 30 day hold before the next one. A person who
+// Changing your name (Steve, 12th November 2026): every change, including the first, starts a 30 day hold before the next one. A person who
 // needs an earlier change (a typo, a legal name change) writes to hello@ and Kestrel unlocks it by hand. The point is that a clinic does not see
 // the same applicant arrive under different names across its jobs. Changing a name to what it already is does not count. Kestrel's server sets
 // name_changed_at, and nobody can set it themselves. Kept free of app imports so it can be tested on its own (lib/name-hold.test.ts).

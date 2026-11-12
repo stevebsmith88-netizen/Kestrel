@@ -10,7 +10,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "5th November 2026";
+const UPDATED = "12th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -57,6 +57,18 @@ export default function Privacy() {
               keep the text, and it does not send it to any other service. Nothing from it is saved unless you tick it and save.
             </li>
             <li>
+              <strong>Also for candidates, private to you:</strong> your home town and province, how far you would travel, the provinces and
+              types of work you would consider, other roles you would consider, the lowest pay you would accept and whether that is by the hour or the year, whether you
+              prefer an independent or a corporate practice, the practice software you know, your answer to &quot;where are you in eye care&quot; if you give one,
+              and the jobs you mark &quot;Not interested&quot;. We use these only to build your <strong>Recommended for you</strong> list.
+              Clinics never see your preferences, your lowest pay, your career stage answer or your town. A clinic sees only what is
+              listed on the apply page when you send an application. You can change your preferences in your profile, you can ask us to remove anything else by email, and all of it is in the copy of your information you can download.
+            </li>
+            <li>
+              <strong>Your inbox:</strong> the messages Kestrel sends to you inside your account, such as an update on an application,
+              and whether you have read them. <strong>Your name:</strong> we keep the date you last changed your name, because a change starts a 30 day hold before the next one.
+            </li>
+            <li>
               <strong>If you are a clinic:</strong> your clinic&apos;s name, location, website and description, the job posts you
               write, and the private email address where you want to receive alerts.
             </li>
@@ -98,9 +110,14 @@ export default function Privacy() {
 
           <h2>Your consent and unsubscribing</h2>
           <p>
-            We only email you if you ticked the consent box. You can withdraw your consent at any time by emailing{" "}
+            <strong>News and offers.</strong> We send launch news, product updates and offers only if you ticked the consent box. You can withdraw your consent at any time by emailing{" "}
             <a href={`mailto:${EMAIL}`}>{EMAIL}</a> or replying to any email from us. We will act on your request within 10
             business days. Every marketing email we send will include an unsubscribe link.
+          </p>
+          <p>
+            <strong>Emails about your account or an application.</strong> These are sent whether or not you ticked the consent box, because you need them to use Kestrel.
+            They include the link to confirm your email address, a password reset, an update on an application you sent, and a new applicant for a clinic. The job alerts you set up yourself keep coming until you delete the alert or unsubscribe.
+            Kestrel also has a short series of welcome emails for new accounts. It is switched off today, and nobody is sent it.
           </p>
           <p>
             If you unsubscribe, we keep your email address and the date on a suppression list so that we do not email you again
@@ -118,7 +135,7 @@ export default function Privacy() {
             <li>Resend, which sends our emails, such as sign up confirmations and application updates.</li>
             <li>Google, if you choose to sign in with it. Google is told when you sign in to Kestrel, and handles your sign in under its own privacy policy.</li>
             <li>Cloudflare, whose Turnstile security check on our forms tells real people from robots. It looks at signals from your browser, such as how it behaves, and does not need you to solve a puzzle in most cases.</li>
-            <li>Anthropic, whose AI helps clinics write job ads. It sees only the job details a clinic types in, never candidate information.</li>
+            <li>Anthropic, whose AI helps clinics write job ads. It sees what a clinic types in, up to 8 of that clinic&apos;s earlier ads, and text from the clinic&apos;s own public website if the clinic gave one. Our admin tools also send it the text of a clinic&apos;s public careers page and web searches about clinics that are hiring. It never receives candidate information.</li>
           </ul>
           <p>
             <strong>Clinics.</strong> When you apply to a job, the clinic that posted it can see your application: your cover letter,

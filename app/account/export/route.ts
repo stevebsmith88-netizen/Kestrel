@@ -1,5 +1,6 @@
 import { candidateHistory, candidateStatus } from "@/lib/applications";
 import { getSession } from "@/lib/auth";
+import { candidateExtras, type ExportDb } from "@/lib/data-export";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +42,12 @@ export async function GET() {
     const appIds = (apps.data ?? []).map((a) => a.id);
     const events = appIds.length ? await db.from("application_events").select("application_id, status, note, created_at").in("application_id", appIds).order("created_at") : { data: [] };
     data.candidateProfile = cp.data ?? null;
+    // What the candidate chose for "Recommended for you", the career stage answer, hidden jobs and the name change date. All private to them.
+    const extras = await candidateExtras(db as unknown as ExportDb, id);
+    data.preferences = extras.preferences;
+    data.careerStage = extras.careerStage;
+    data.jobsMarkedNotInterested = extras.jobsMarkedNotInterested;
+    (data.account as Record<string, unknown>).name_last_changed_at = extras.nameLastChangedAt;
     // A shortlist is the clinic's own working list, so the download shows it as Viewed, like the candidate's own pages do.
     data.applications = (apps.data ?? []).map(({ id: appId, ...a }) => ({
       ...a,

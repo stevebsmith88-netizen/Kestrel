@@ -58,7 +58,7 @@ Hired cannot be chosen from the one application status form, and a hired applica
 
 ## First step page (12th November 2026)
 
-A brand new candidate (no role yet, and not shown it before) is sent from their dashboard to `/candidate/start` once. It has 3 optional questions and a **Skip for now** button: their role, the **Open to field and supplier roles** tick (not for optometrists), and **Where are you in eye care** (working in eye care now, studying or training, or not working in eye care yet). Saving or skipping both go on to the profile page, where the "To apply you need" list shows what is left.
+A brand new candidate (no role yet, and not shown it before) is sent from their dashboard to `/candidate/start` once. It has 2 or 3 optional questions and a **Skip for now** button: their role, the **Open to field and supplier roles** tick (shown only for some roles, and not for optometrists), and **Where are you in eye care** (working in eye care now, studying or training, or not working in eye care yet). Saving or skipping both go on to the profile page, where the "To apply you need" list shows what is left.
 
 - **Needs migration 0037** (`career_stage`, `start_seen_at`) on both databases. Until it has been run, the site skips the page and saves what it can, so nothing breaks.
 - **The stage is private.** It is never shown to a clinic, never ranks or filters jobs, and never blocks anything. Whether a clinic may ever see it is for the lawyer, because answers about a person's situation could hint at protected grounds. It cannot be edited on the profile page yet.

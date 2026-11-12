@@ -73,9 +73,9 @@ BRIEF = f"""
   <h1>Kestrel Eye Care Jobs</h1>
   <p style="font-size:16pt;margin-bottom:18pt;">Legal review pack</p>
   <p>For a fixed fee review meeting. Everything that needs a lawyer's eyes is in this one document: what the business is, the questions in order of priority, and the documents themselves.</p>
-  <p class="meta">Prepared on 31st October 2026 by Steve Smith, founder, from an audit of the website and its code carried out on 30th October 2026.<br>
+  <p class="meta">Prepared on 31st October 2026 by Steve Smith, founder, from an audit of the website and its code carried out on 30th October 2026. Updated on 12th November 2026 with a page on what has changed since 5th November 2026 and 4 new questions (Part H), from a second audit.<br>
   The legal references in this pack are an AI assistant's reading and were not checked by a lawyer. Where it is unsure, it says so. Please verify them.</p>
-  <div class="box"><strong>How to use this pack.</strong> Part 1 is the plain summary. Parts A to G are the 41 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email. The two background sections after Part G describe what the site collects and what has already been decided. The appendices are the policies exactly as they are published today, the breach plan, the consent wordings and the email list.</div>
+  <div class="box"><strong>How to use this pack.</strong> Part 1 is the plain summary. The page after it lists what has changed since 5th November 2026. Parts A to H are the 45 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to H can follow by email. The two background sections after Part H describe what the site collects and what has already been decided. The appendices are the policies exactly as they are published today, the breach plan, the consent wordings and the email list.</div>
 </div>
 
 <h2 class="pb">Part 1. The business in one page</h2>
@@ -88,7 +88,7 @@ BRIEF = f"""
 <h3>Who handles what</h3>
 <table>
 <tr><th>Provider</th><th>What it does for Kestrel</th><th>Personal information it handles</th><th>Where</th></tr>
-<tr><td>Supabase</td><td>Database, sign in, stored CVs</td><td>Accounts, profiles, applications, CVs, waitlist</td><td>Canada (Canada Central)</td></tr>
+<tr><td>Supabase</td><td>Database, sign in, stored resumes</td><td>Accounts, profiles, applications, resumes, waitlist</td><td>Canada (Canada Central)</td></tr>
 <tr><td>Vercel</td><td>Hosts the website and runs the server code</td><td>Everything that passes through a page or form</td><td>Server functions run in Montreal (set on 31st October 2026). The content delivery network is global</td></tr>
 <tr><td>Resend</td><td>Sends email (sign up confirmations, alerts, application updates)</td><td>Recipient email address, message content</td><td>United States. Resend states that account data and logs are stored in the US whatever sending region is chosen</td></tr>
 <tr><td>Anthropic</td><td>AI that drafts job ads for clinics</td><td>Only the job details a clinic types in; never candidate information</td><td>United States</td></tr>
@@ -97,6 +97,23 @@ BRIEF = f"""
 <tr><td>Namecheap</td><td>Domain registration</td><td>Registrant details (mine)</td><td>n/a</td></tr>
 </table>
 <p class="small">I have accepted each provider's data processing terms. Stripe will be added at paid launch.</p>
+
+<h2 class="pb">What has changed since 5th November 2026</h2>
+<p>Everything below is built. Nothing has launched: there are still no real users, no payments and no outreach to clinics. Items marked "switched off" exist in the code but are off in the live settings, so nobody is affected by them today. The questions that come out of this page are in Part H (questions 42 to 45).</p>
+<table>
+<tr><th>What</th><th>In plain English</th><th>Status</th></tr>
+<tr><td>Resume reading on Kestrel's own server</td><td>A candidate can press "Fill in from my resume". Kestrel's own server reads the text of that one PDF or Word file with fixed rules, to suggest answers for the profile. No AI and no other service is involved, the text is not kept, and nothing is saved unless the candidate ticks it and saves. It reads PDF and Word files only, up to 3 MB, with limits on pages and time. It runs on Vercel's servers. Those run in Montreal (set on 31st October 2026 and confirmed in the Vercel dashboard on 12th November 2026), so the resume is read in Canada.</td><td>Live for accounts</td></tr>
+<tr><td>The inbox</td><td>Messages from Kestrel to a signed in person inside their account (for example an update on an application), with a read and unread mark. They are kept until the account is deleted. How long they should be kept has not been decided.</td><td>Live for accounts</td></tr>
+<tr><td>"Where are you in eye care"</td><td>An optional answer on a candidate's first step page: working in eye care now, studying or training, or not working in eye care yet. It is private to the candidate and is not part of an application.</td><td>Live for accounts</td></tr>
+<tr><td>A 30 day hold on changing a name</td><td>After a person changes their name on the account page, they cannot change it again for 30 days unless they write to us. The date of the last change is stored. The aim is that a clinic does not see the same applicant arrive under different names. An application keeps the name used when it was sent.</td><td>Built; needs one database update that has not been run yet</td></tr>
+<tr><td>First week emails</td><td>Up to 3 welcome emails for new accounts, on days 1, 3 and 7, with tips on getting started.</td><td>Built, switched off. Nobody is sent them</td></tr>
+<tr><td>Pay as a percentage, a guaranteed minimum, or a daily rate</td><td>For optometrist jobs only, a clinic may give pay as a percentage range (up to 10 percentage points wide) of production, collections, billings or exam fees, instead of or as well as dollars. Any dollar figure may be marked as a guaranteed minimum, and optometrist jobs may use a daily rate up to $200 wide. A line with a percentage only and no dollar figure is accepted. "Negotiable" on its own is never accepted.</td><td>Built; applies to every new post</td></tr>
+<tr><td>Job view and Apply click counts</td><td>Kestrel counts, for each job and each day, how many times the page was viewed and how many times Apply was pressed, so clinics can see how a post is doing. There are no cookies and the counts do not record who the visitor is.</td><td>Live</td></tr>
+<tr><td>Recommended for you, and the private preferences behind it</td><td>A rules based list on a candidate's home page (no AI). It uses private choices the candidate makes: home town and province, how far they would travel, provinces, types of work and other roles they would consider, the lowest pay they would accept, a preference for an independent or a corporate practice, and jobs they mark "Not interested". Clinics never see any of these. They are included in the candidate's data download.</td><td>Live for accounts</td></tr>
+<tr><td>The found listings reader and the province search</td><td>Two admin only tools. The reader uses Anthropic's AI to read one page of a clinic's own public careers website and turn it into a draft listing. It refuses job boards and colleges, and obeys the site's robots rules. The province search uses AI web search to find clinics that appear to be hiring, and saves the clinic's published contact email and where it was found. Both send public pages and search text to Anthropic, and never any candidate information. Nothing they find is published, and nobody is contacted from them.</td><td>Built, with publishing and outreach switched off</td></tr>
+<tr><td>The price comparison page</td><td>A public page at /compare that names competing job boards (Jobs4ECPs, OJobs, Eluta, Indeed, LinkedIn and ZipRecruiter) with their published prices, read by hand from their public pages and dated. It also says Kestrel needs no credit card to post during the free launch.</td><td>Live since 6th November 2026</td></tr>
+</table>
+<p class="small">Also changed, with no new legal question: the privacy policy and security page now list what the profile holds, say plainly what the AI provider is sent, and separate news and offers emails (which need the tick) from emails about an account or an application. The data download now includes the private preferences, the career stage answer, the jobs marked not interested and the date of the last name change.</p>
 
 <h2 class="pb">Part A. My employment and the disclosure to my employer</h2>
 <div class="box"><strong>Why this comes first.</strong> I plan to launch only after my employer has been told and has acknowledged it. I would like your advice on the agreement before I make that disclosure.</div>
@@ -143,9 +160,9 @@ BRIEF = f"""
 
 <h2>Part D. Privacy and personal information</h2>
 <ol>
-{q(22,"Where data is processed. The database and CVs are in Canada. The website's server functions now run in Montreal, but the content delivery network, Resend, Anthropic, Cloudflare and Google may process data elsewhere. How should the policy describe this, and are the providers' standard terms enough?")}
+{q(22,"Where data is processed. The database and resumes are in Canada. The website's server functions now run in Montreal, but the content delivery network, Resend, Anthropic, Cloudflare and Google may process data elsewhere. How should the policy describe this, and are the providers' standard terms enough?")}
 {q(23,"Access requests. \"Download my information\" gives a candidate their profile, applications, letters and alerts. It does not include a clinic's private notes about them, their waitlist entry or their email choices (the last two are being added). Must Kestrel hand over a clinic's notes, or can it refer the candidate to the clinic that wrote them?")}
-{q(24,"Retention. Today everything is kept indefinitely. My proposal, for you to correct: unconfirmed waitlist sign ups 30 days; applications and their CV copies 2 years after the job ends; \"let the clinic keep my details for future roles\" 12 months unless renewed; job reports and listing claims 2 years; job posts 3 years. Ontario now requires employers with 25 or more employees to keep public job postings for 3 years: is that the clinic's duty only, or does Kestrel need to keep postings too?")}
+{q(24,"Retention. Today everything is kept indefinitely. My proposal, for you to correct: unconfirmed waitlist sign ups 30 days; applications and their resume copies 2 years after the job ends; \"let the clinic keep my details for future roles\" 12 months unless renewed; job reports and listing claims 2 years; job posts 3 years. Ontario now requires employers with 25 or more employees to keep public job postings for 3 years: is that the clinic's duty only, or does Kestrel need to keep postings too?")}
 {q(25,"Deleting accounts. At the moment, if a clinic deletes its account, its jobs and every application it received are deleted, and disappear from candidates' trackers; deleting a candidate removes their applications from clinics. I want to keep a candidate's own copy (title, clinic name, location, status) after a clinic leaves, and tell affected people. What should happen to each side, and for how long?")}
 {q(26,"The privacy policy promises \"a minimal record that we received and carried out your request\" when someone deletes an account. Kestrel now records only the role and the number of jobs and applications, with no names or emails. Is that enough?")}
 {q(27,"Quebec. Quebec can be selected everywhere, but there is no French and no Law 25 work. Option (a): keep Quebec out for now, showing \"Quebec coming later\". Option (b): do the work first (French terms and privacy policy, a privacy impact assessment for US services, an incident register). Which do you recommend, and what wording should (a) use?")}
@@ -177,6 +194,15 @@ BRIEF = f"""
 {q(41,"Anything else a new Canadian online marketplace for regulated health professionals should have in place before launch that I have not asked about?")}
 </ol>
 
+<h2>Part H. New questions since 5th November 2026</h2>
+<p>These come from the page "What has changed since 5th November 2026". Question 45 repeats the retention question from Part D (question 24) because the inbox and the new profile information add to it.</p>
+<ol>
+{q(42,"The career stage answer (\"working in eye care now\", \"studying or training\", \"not working in eye care yet\") is private to the candidate today and is never sent with an application. May a clinic ever be shown it, for example as part of an application, if the candidate agrees? Or is it better never shown, because it could reveal something about a candidate's circumstances?")}
+{q(43,"First week emails. Kestrel has up to 3 welcome emails for new accounts (days 1, 3 and 7), switched off. Is a new account an existing business relationship under CASL, so they can go to a person who made an account but did not tick the marketing box, or do they need the consent tick? They are tips on getting started and contain no offers. If the answer is that they need the tick, they will only go to people who ticked.")}
+{q(44,"Pay shown as a percentage only. For optometrist jobs a clinic can post, for example, 28% to 35% of production with no dollar figure. Does that meet Ontario's requirement to state a pay range, and British Columbia's? If not, should a dollar figure (for example a guaranteed minimum) be required alongside a percentage?")}
+{q(45,"Retention, now including the inbox. This is the retention question from the October audit (question 24), still open, with 2 additions: inbox messages are kept until the account is deleted, and a candidate's private preferences, hidden jobs, career stage answer and last name change date are kept for as long as the account is open. What periods do you recommend for each, and for messages in particular? I have thought of about 12 months and of 3 years, and have not decided.")}
+</ol>
+
 <h2>Documents to bring</h2>
 <ul>
 <li>My employment agreement, and any employee handbook or policy on outside activities.</li>
@@ -189,8 +215,8 @@ BRIEF = f"""
 <table>
 <tr><th>Who</th><th>What is collected</th><th>Why</th><th>Who sees it</th></tr>
 <tr><td>Anyone on the waitlist</td><td>Name, email, province, role, clinic name (clinics), the consent wording and time</td><td>Launch news once Kestrel opens</td><td>Admin only</td></tr>
-<tr><td>Candidate account</td><td>Name, email, password (or Google sign in), profession, licensed provinces, years of experience, availability, phone, a CV, job alerts</td><td>Apply to jobs and follow applications; job alerts</td><td>The candidate. A clinic sees an application only after the candidate sends it, as it was when sent</td></tr>
-<tr><td>Application</td><td>Cover letter, CV copy, details sent, a copy of the job title and clinic name, status history</td><td>Apply</td><td>The clinic that received it; the candidate</td></tr>
+<tr><td>Candidate account</td><td>Name, email, password (or Google sign in), profession, licensed provinces, years of experience, availability, phone, a resume, job alerts</td><td>Apply to jobs and follow applications; job alerts</td><td>The candidate. A clinic sees an application only after the candidate sends it, as it was when sent</td></tr>
+<tr><td>Application</td><td>Cover letter, resume copy, details sent, a copy of the job title and clinic name, status history</td><td>Apply</td><td>The clinic that received it; the candidate</td></tr>
 <tr><td>Clinic account</td><td>Name, email, clinic profile, contact for alerts, confirmation of hiring directly (not an agency), jobs, templates, private notes about applicants</td><td>Post jobs and manage applicants</td><td>The clinic; admin for review</td></tr>
 <tr><td>Reports and claims</td><td>Who reported or claimed a listing, their email, the reason</td><td>Safety and claiming listings</td><td>Admin only</td></tr>
 <tr><td>Everyone</td><td>Terms version agreed and date; do not email list; a log of account deletions with no personal details</td><td>Records</td><td>Admin only</td></tr>
@@ -219,7 +245,7 @@ rest_questions, rest_bring = rest[:bring_i], rest[bring_i:]
 
 if PACK == "business":
     cover = cover.replace("Legal review pack</p>", "Legal review pack: business, privacy and technology</p>", 1)
-    cover = cover.replace("Parts A to G are the 41 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to G can follow by email.", "Parts B to G are questions 7 to 41, in the order I would like to cover them. If time is short, Parts B and C come first and the rest can follow by email. Questions 1 to 6 are about employment and are being handled separately.", 1)
+    cover = cover.replace("Parts A to H are the 45 questions, numbered, in the order I would like to cover them. If time is short, Parts A and B come first because they decide the launch date, and C to H can follow by email.", "Parts B to H are questions 7 to 45, in the order I would like to cover them. If time is short, Parts B and C come first and the rest can follow by email. Part H holds the 4 newest questions, about what has been built since 5th November 2026. Questions 1 to 6 are about employment and are being handled separately.", 1)
     part1 = part1.replace("I work full time for another organisation (see Part A). I am not a developer", "I am building Kestrel alongside other work. I am not a developer", 1)
     part1 = part1.replace("only after the matters in Part A are settled", "only after the company, policy and other legal matters in this pack are settled", 1)
     bring = '<h2>Documents to bring</h2><ul><li>This pack (the policies are in the appendices, exactly as published).</li><li>A name search result, once done.</li></ul>'
@@ -242,7 +268,7 @@ EMAILS = """
 <tr><td>Waitlist form and account sign up (optional box)</td><td>"Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time."</td></tr>
 <tr><td>Email sign up (required box)</td><td>"I agree to the terms of use and the privacy policy."</td></tr>
 <tr><td>Google sign in, first visit (required box)</td><td>"I agree to the privacy policy and the terms of use."</td></tr>
-<tr><td>Apply form (required)</td><td>"I agree that [clinic] can see this application, my CV and my details. Kestrel keeps them private from everyone else."</td></tr>
+<tr><td>Apply form (required)</td><td>"I agree that [clinic] can see this application, my resume and my details. Kestrel keeps them private from everyone else."</td></tr>
 <tr><td>Apply form (optional)</td><td>"Optional: if this role is filled, let [clinic] keep my details for future roles. I can ask them to delete them at any time."</td></tr>
 </table>
 <h3>E2. The first email to a clinic whose job Kestrel has listed (switched off)</h3>

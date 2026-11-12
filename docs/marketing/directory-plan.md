@@ -1,6 +1,6 @@
 # Eye care industry directory: plan
 
-Idea from Steve, 9th November 2026. A reference directory of suppliers and anything that touches the optical world in Canada, built from a document Steve parsed from **public sources only** (company websites, public directories and listings, with no Eye Recommend lists or internal material). Not built. It starts after launch and the Stripe work, and the first step is working through Steve's document together.
+Idea from Steve, 9th November 2026. A reference directory of suppliers and anything that touches the optical world in Canada, built from a document Steve parsed from **public sources only** (company websites, public directories and listings, with no Eye Recommend lists or internal material). Built and live on `/resources` since 9th November 2026 (`lib/directory-data.ts`), after working through Steve's document together under the verification rule below.
 
 ## Status: going ahead under a verification rule (9th November 2026)
 
