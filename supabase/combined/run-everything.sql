@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0039), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0040), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -2332,6 +2332,20 @@ grant update (read_at) on public.notifications to authenticated;
 alter table public.profiles add column if not exists name_changed_at timestamptz;
 
 -- ======================================================================
+-- 0040_database_keeps_promises.sql
+-- ======================================================================
+-- 0040: the database keeps the promises the website makes (audit part 1, Phase D, 12th November 2026).
+-- Each part below closes 1 finding from docs/audit/AUDIT-2026-11-PART1.md. Nobody's data is changed or removed.
+-- Safe to run more than once. The access tests for every part are in scripts/dev/rls-tests.sql.
+
+-- ---------------------------------------------------------------- P1-16: the name hold cannot be skipped
+-- Signed in people could change their own first_name, last_name and full_name directly, which skipped the 30 day hold (migration 0039).
+-- The website now saves a name with the server's key, after checking the hold (lib/name-change.ts), so the permission is taken away.
+-- Before this is run the website already saves names through the server, so nothing changes for anyone on the day it is run.
+revoke update on public.profiles from authenticated;
+revoke update (first_name, last_name, full_name) on public.profiles from authenticated;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -2402,6 +2416,7 @@ from (
     ('permission: people can mark their own notifications read', has_column_privilege('authenticated', 'public.notifications', 'read_at', 'UPDATE')),
     ('column: when a name was last changed', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'profiles' and column_name = 'name_changed_at')),
     ('rule: applications can be hired', exists (select 1 from pg_constraint where conname = 'applications_status_check' and pg_get_constraintdef(oid) like '%hired%')),
+    ('permission removed: signed in people cannot change their own name directly (0040)', not has_column_privilege('authenticated', 'public.profiles', 'first_name', 'UPDATE') and not has_column_privilege('authenticated', 'public.profiles', 'full_name', 'UPDATE')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

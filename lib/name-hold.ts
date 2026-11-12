@@ -13,7 +13,8 @@ export function nameLockedUntil(changedAt: string | Date | null | undefined, now
   return Number.isNaN(until.getTime()) || until.getTime() <= now.getTime() ? null : until;
 }
 
-// Whether the name is actually different. Capital letters and extra spaces do not count as a change.
+// Whether the name is actually different. Extra spaces do not count as a change. A change of capital letters does ("smith" to "Smith"),
+// because it changes what a clinic sees.
 export function nameDiffers(current: { first: string; last: string }, next: { first: string; last: string }): boolean {
   const norm = (s: string) => s.replace(/\s+/g, " ").trim();
   return norm(current.first) !== norm(next.first) || norm(current.last) !== norm(next.last);

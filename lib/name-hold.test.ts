@@ -22,7 +22,8 @@ test("a bad date never locks anyone out", () => {
   assert.equal(nameLockedUntil("not a date", now), null);
 });
 
-test("only a real change counts, not capitals or spaces", () => {
+test("only a real change counts: extra spaces do not, a change of capital letters does", () => {
+  assert.equal(nameDiffers({ first: "jane", last: "smith" }, { first: "Jane", last: "Smith" }), true);
   assert.equal(nameDiffers({ first: "Jane", last: "Smith" }, { first: "Jane", last: "Smith" }), false);
   assert.equal(nameDiffers({ first: "Jane", last: "Smith" }, { first: " Jane ", last: "Smith" }), false);
   assert.equal(nameDiffers({ first: "Jane", last: "Smith" }, { first: "Jane", last: "Doe" }), true);
