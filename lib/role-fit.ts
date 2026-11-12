@@ -1,14 +1,19 @@
-// Whether a candidate may apply for a job, by role (Steve, November 2026). A candidate can apply when the job's role is their own role, a role
+// Whether a candidate may apply for a job, by role (Steve, November 2026). Only an optometrist can apply for an optometrist job. Otherwise
+// a candidate can apply when the job's role is their own role, a role
 // that counts as the same kind of work, or one they added under "Other roles you would consider". Anything else shows a plain message with
 // a way to fix the profile, and the server refuses the application too. Contact lens fitters are not a separate role yet (they sit inside
 // Optician), so that pairing is not here. Kept free of imports from the app so it can be tested on its own (lib/role-fit.test.ts).
 
 import { CLINIC_ROLES, FIELD_ROLES } from "./jobs.ts";
 
-// Roles that are never offered to each other, even as "other roles you would consider" (Steve, November 2026): an optician is not shown
-// optometrist jobs, and an optometrist is not shown optician jobs.
-export const NEVER_TOGETHER: readonly (readonly string[])[] = [["Optometrist", "Optician"]];
-export const neverTogether = (a: string, b: string) => NEVER_TOGETHER.some((pair) => pair.includes(a) && pair.includes(b));
+// Roles a person is never offered, even as "other roles you would consider". The first is the person's own role, the second the job's.
+//   * An optometrist is not shown optician jobs (Steve, November 2026).
+//   * Only an optometrist is shown, or can apply for, an optometrist job (Steve, 12th November 2026, audit P1-55). It is a regulated
+//     profession, so nobody else can add it under other roles.
+export const OPTOMETRIST = "Optometrist";
+export const NEVER_TOGETHER: readonly (readonly string[])[] = [[OPTOMETRIST, "Optician"]];
+export const neverTogether = (profession: string, jobRole: string) =>
+  (jobRole === OPTOMETRIST && profession !== OPTOMETRIST) || NEVER_TOGETHER.some((pair) => pair.includes(profession) && pair.includes(jobRole));
 
 // Optometrists are not offered field and supplier roles (Steve, November 2026).
 export const canHaveFieldRoles = (profession: string | null | undefined) => Boolean(profession) && profession !== "Optometrist";
@@ -16,7 +21,7 @@ export const openToField = (otherRoles: readonly string[] | null | undefined) =>
 
 // The clinic roles a candidate can add under "Other roles you would consider". Field and supplier roles are added with the single tick.
 export const otherRolesOffered = (profession: string | null | undefined): string[] =>
-  profession ? CLINIC_ROLES.filter((r) => r !== profession && !neverTogether(profession, r)) : [...CLINIC_ROLES];
+  CLINIC_ROLES.filter((r) => r !== profession && !neverTogether(profession ?? "", r));
 
 // Roles that are flexible with each other: the unregulated front of house and chairside roles.
 export const COMPATIBLE_ROLES: readonly (readonly string[])[] = [["Optometric assistant or technician", "Patient care or reception"]];

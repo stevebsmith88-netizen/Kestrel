@@ -8,6 +8,7 @@
 // same list.
 
 import { employmentLabel } from "./jobs.ts";
+import { neverTogether } from "./role-fit.ts";
 import { HOURS_IN_A_YEAR, yearlyPay, type PayFields } from "./job-pay.ts";
 import { distanceKm, findPlace, nearbyKeys, placeKey } from "./places.ts";
 
@@ -53,7 +54,8 @@ export function recommend<J extends MatchJob>(
 ): Recommendation<J>[] {
   if (!prefs.profession) return [];
   const now = (opts.now ?? new Date()).getTime();
-  const roles = [prefs.profession, ...prefs.otherRoles];
+  // Other roles saved before a rule changed are checked again here, so nobody is shown a job they cannot apply for (lib/role-fit.ts).
+  const roles = [prefs.profession, ...prefs.otherRoles.filter((r) => !neverTogether(prefs.profession ?? "", r))];
   const home = prefs.homeCity && prefs.homeProvince ? findPlace(prefs.homeCity, prefs.homeProvince) : null;
   const near = home ? nearbyKeys(home, prefs.radiusKm) : null;
   // With no place and no provinces chosen, the provinces they are registered in stand in, so an optician in Ontario is not shown Alberta jobs.

@@ -135,3 +135,10 @@ test("a job that uses the candidate's practice software ranks higher, with the r
   assert.ok(out[0].reasons.includes("Uses Wink, which you use"));
   assert.ok(!recommend(prefs(), [job({ id: "wink", tags_software: ["Wink"] })], { now: NOW })[0].reasons.some((r) => /which you use/.test(r)));
 });
+
+// Audit P1-55 (Steve, 12th November 2026): only optometrists are shown optometrist jobs, even on a profile saved before the rule.
+test("an optometrist job is never recommended to someone who is not an optometrist", () => {
+  const jobs = [job({ id: "od", role_category: "Optometrist" }), job({ id: "pm", role_category: "Practice or clinic manager" })];
+  const recs = recommend(prefs({ profession: "Practice or clinic manager", otherRoles: ["Optometrist"] }), jobs, { now: NOW });
+  assert.deepEqual(recs.map((r) => r.job.id), ["pm"]);
+});

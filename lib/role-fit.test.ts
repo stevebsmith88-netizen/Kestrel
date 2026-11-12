@@ -60,3 +60,20 @@ test("the message points to the right fix", () => {
   assert.ok(roleMismatchText("Optician", "Trainer or clinical educator").includes("Open to field and supplier roles"));
   assert.ok(roleMismatchText("Optician", "Patient care or reception").includes("Other roles you would consider"));
 });
+
+// Audit P1-55, decided by Steve on 12th November 2026: only optometrists can apply for optometrist roles.
+test("only an optometrist can apply for an optometrist job, whatever is under other roles", () => {
+  for (const profession of ["Practice or clinic manager", "Optometric assistant or technician", "Patient care or reception", "Vision therapist", "Sales or territory representative", "Optician"]) {
+    assert.equal(canApplyForRole(profession, ["Optometrist"], "Optometrist"), false, `${profession} must not be able to apply for an optometrist job`);
+    assert.ok(!otherRolesOffered(profession).includes("Optometrist"), `${profession} must not be offered Optometrist under other roles`);
+    const m = roleMismatchText(profession, "Optometrist");
+    assert.ok(m.includes("This role is for an optometrist."));
+    assert.ok(!m.includes("Other roles"), "the message must not suggest adding it under other roles");
+  }
+  assert.equal(canApplyForRole("Optometrist", [], "Optometrist"), true);
+  // An optometrist can still add and apply for other clinic roles, apart from optician.
+  assert.equal(canApplyForRole("Optometrist", ["Practice or clinic manager"], "Practice or clinic manager"), true);
+  assert.ok(otherRolesOffered("Optometrist").includes("Practice or clinic manager"));
+  // With no role chosen yet, Optometrist is not offered as an "other" role either.
+  assert.ok(!otherRolesOffered(null).includes("Optometrist"));
+});
