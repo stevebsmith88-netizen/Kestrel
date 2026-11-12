@@ -695,3 +695,35 @@ Notes for whoever builds it:
 - Use the quiet, no jump patterns already in place so filtering does not scroll the page.
 
 **Done 12th November 2026:** every visible use of CV was changed to resume, including the privacy, terms and security pages (Steve confirmed the lawyer will not mind), emails, the help centre, the menu label (now "Profile and resume") and the blog post, which is now `eye-care-resume`. `lib/resume-wording.test.ts` guards it. The lawyer pack PDF (`docs/legal/Kestrel-lawyer-review-pack.pdf`) still says CV and should be regenerated before it is sent. The sample job image on the pre launch home page (`public/home/sample-job.png`) should be checked for the old wording.
+
+## Triage of the Gemini "catch up" summary (Steve, 12th November 2026)
+
+Steve wrote a summary in Gemini while his Claude usage was maxed. Most of it describes an older version of the plan. What was kept, what needs a decision, and what was dropped, so nobody repeats it.
+
+**Already built, nothing to do:** the independent or corporate filter, pay in the shapes optometrists use (daily rate, percentage of billings and others), the ad builder, Google for Jobs structured data, the pillar and cluster blog plan (hub pages are in their own chat), CASL and private resumes, the demo site being kept out of search (`robots.ts` and `layout.tsx` already switch indexing off when `DEMO_MODE` is `yes`, so the staging to production check is covered), and an empty state on search with suggestions.
+
+**Usable, for Steve to schedule (not started):**
+- **Student associations as a way to reach candidates**, for example optometry and optician programs. Steve to pick which ones. Public contacts only, and nothing from Eye Recommend.
+- **A salary guide as a sign up reason.** Build it on the pay guide that already uses Job Bank figures (`docs/pay-benchmark.md`), with source and date, never pay from Indeed, LinkedIn or Jobs4ECPs. Optional gate: an email address with a CASL consent line.
+- **The 63 clinics check.** 63 recurring clinics at $199 a month is $150,444 a year before Stripe fees and HST. Our passes cover up to 5 live posts, not unlimited, so a mix of passes and single posts is the more honest target. Revisit with the roadmap dates.
+- **Audit areas to carry into the final audit** (about 3 weeks before launch): the 6 areas listed in the summary map to `docs/audit/AUDIT-PLAN.md`. Add Stripe webhooks to it once checkout exists, and a check that every empty state says what to do next.
+
+**The phase after launch: supply building with virtual assistants (Steve's clarification, 12th November 2026).** Shadow posting, cold outreach and a VA who finds hiring clinics and phones them were always meant for the phase after the free launch, not for launch. Parked, not dropped. The limits that already apply, so the plan is built inside them:
+- **Finding clinics that are hiring.** A VA (or Steve) may read Indeed by hand to learn which clinics are hiring and who to contact (the 8th November 2026 exception). Nothing is copied from it and no Indeed link or text appears on Kestrel. No tool, scraper or script collects from Indeed, LinkedIn, Jobs4ECPs or the college registers, and a VA must not be given one.
+- **Shadow posting, reworked.** The idea becomes: the VA notes the clinic, then the listing is made only from the clinic's own careers page (the found listings tool at `/admin/found`) or from facts entered by hand in Kestrel's own words, with a link to the clinic's own application page. It expires after 21 days, is labelled "not yet claimed", and the clinic gets a Claim your listing email. A listing copied or summarised from Indeed is not allowed.
+- **Cold email.** Built (4 email sequence) and switched off. It stays off until Steve confirms his disclosure conversation, and it follows CASL: published business addresses only, about the recipient's role, with a working unsubscribe.
+- **Cold phone calls.** Not covered by the current rules, so it needs its own written script and rules before a VA calls anyone: who may be called (published business numbers only), what is said, no call about anything but the clinic's hiring, a record of every do not call request, and no Eye Recommend clinics or contacts. Check Canada's telemarketing rules for business calls with the lawyer first.
+- **What a VA can touch.** Give them the least access that does the job: a login with a role that can save leads and found listings, with no access to candidate data, applications or settings. This is part of Steve's open VA question. Keep their name out of the repository.
+- **Order of work:** the disclosure conversation first, then the lawyer's check of the call and email scripts, then a small trial of 10 to 20 clinics, then widen.
+
+**Needs Steve's decision:**
+- **The funding pitch** (a $50k SAFE to optical industry veterans). Not a code task. It touches the separation from Eye Recommend (check who is on the list) and securities rules for raising money in Canada, so it wants the lawyer first.
+- **The AI culture match score** stays later. Today's "Find your fit" quiz uses plain rules. If a match score is built, it must never rank applicants for clinics.
+
+**Dropped, and why:**
+- **Wix as the backend and the Wix CMS schemas.** The site is Next.js on Vercel with Supabase. Wix never went live.
+- **Hiding optometrist wage data from everyone except verified optometrists.** Decided against: every post shows its pay publicly, and no pay sits behind a login.
+- **Old prices ($39 to $79 posts, an unlimited pass at $149 to $199).** The ladder is $59, $79 and $99, with the Clinic pass at $199 and Plus at $349 for up to 5 live posts each (`lib/pricing.ts`).
+- **"Free first posts for waitlist clinics only".** The plan is a free launch of 30 to 60 days for everyone, with no card needed.
+- **Native app now.** Parked until the web platform pays for it.
+- **The file "Kestrel Eye Care Jobs".** Not in the repository. The business plan is the "Kestrel Eye Care Jobs: Business Proposal and Launch Plan v7" document linked in `CLAUDE.md`.
