@@ -4,6 +4,8 @@ import { APP_LABELS } from "@/lib/applications";
 import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } from "@/lib/clinic-emails";
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
+import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
+import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { submitToIndexNow } from "@/lib/indexnow";
 import { recentlyChangedPages } from "@/lib/page-dates";
@@ -253,11 +255,11 @@ async function runDaily(request: Request) {
     }
     const { data: profile } = await admin.from("profiles").select("unsubscribed_at").eq("id", userId).maybeSingle();
     if (!profile || profile.unsubscribed_at) continue;
-    const found = new Map<string, { title: string; clinic: string; place: string }>();
+    const found = new Map<string, AlertJob>();
     for (const alert of mine) {
       let query = admin
         .from("jobs")
-        .select("id, title, province, city, employers!inner(clinic_name, practice_type)")
+        .select(`id, title, province, city, ${ALERT_PAY_COLUMNS}, employers!inner(clinic_name, practice_type)`)
         .eq("status", "live")
         .gt("expires_at", now.toISOString())
         .gt("posted_at", alert.last_sent_at)
@@ -267,8 +269,8 @@ async function runDaily(request: Request) {
       if (alert.province) query = query.eq("province", alert.province);
       if (alert.practice_type) query = query.eq("employers.practice_type", alert.practice_type);
       const { data: jobs } = await query;
-      for (const job of (jobs ?? []) as unknown as { id: string; title: string; province: string; city: string; employers: { clinic_name: string } | null }[]) {
-        found.set(job.id, { title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
+      for (const job of (jobs ?? []) as unknown as (PayFields & { id: string; title: string; province: string; city: string; employers: { clinic_name: string } | null })[]) {
+        found.set(job.id, { ...job, title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
       }
     }
     if (found.size === 0) continue;
@@ -292,7 +294,7 @@ async function runDaily(request: Request) {
     const mail = emailLayout({
       heading: found.size === 1 ? "A new job matches your alert" : `${found.size} new jobs match your alerts`,
       paragraphs: ["Here is what has been posted since we last emailed you."],
-      items: [...found].slice(0, 15).map(([id, j]) => ({ text: `${j.title}, ${j.clinic}, ${j.place}`, url: `${SITE_URL}/jobs/${id}` })),
+      items: [...found].slice(0, 15).map(([id, j]) => ({ text: alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
       buttonText: "See all jobs",
       buttonUrl: `${SITE_URL}/jobs`,
       unsubscribeUrl,
