@@ -1,4 +1,5 @@
 import "server-only";
+import { readyToApply } from "./profile-ready.ts";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { deliverEmail, type SendResult } from "@/lib/email";
 import { dueStep, onboardingEmail, type Facts } from "@/lib/onboarding-emails";
@@ -44,7 +45,7 @@ export async function runOnboarding(admin: SupabaseClient, ctx: { now: Date; bud
   sentRows.forEach((r) => sentBy.set(r.user_id, (sentBy.get(r.user_id) ?? new Set()).add(r.step)));
 
   const [cvProfiles, alerts, candApps, employers] = await Promise.all([
-    readIn<{ user_id: string; cv_path: string | null; profession: string | null }>(admin, "candidate_profiles", "user_id, cv_path, profession", "user_id", candidateIds),
+    readIn<{ user_id: string; cv_path: string | null; profession: string | null; home_city: string | null; home_province: string | null }>(admin, "candidate_profiles", "user_id, cv_path, profession, home_city, home_province", "user_id", candidateIds),
     readIn<{ user_id: string }>(admin, "job_alerts", "user_id", "user_id", candidateIds),
     readIn<{ candidate_id: string }>(admin, "applications", "candidate_id", "candidate_id", candidateIds),
     readIn<{ id: string; owner_id: string }>(admin, "employers", "id, owner_id", "owner_id", clinicIds),
@@ -67,7 +68,7 @@ export async function runOnboarding(admin: SupabaseClient, ctx: { now: Date; bud
       return { role: "clinic", hasProfile: Boolean(emp), hasSubmitted: mine.some((j) => j.status !== "draft"), hasLive: mine.some((j) => j.posted_at), applications: emp ? appsFor.get(emp) ?? 0 : 0 };
     }
     const cv = cvProfiles.find((c) => c.user_id === p.id);
-    return { role: "candidate", profileReady: Boolean(cv?.cv_path && cv?.profession), hasAlert: alerts.some((a) => a.user_id === p.id), applications: candApps.filter((a) => a.candidate_id === p.id).length };
+    return { role: "candidate", profileReady: readyToApply(cv ?? null), hasAlert: alerts.some((a) => a.user_id === p.id), applications: candApps.filter((a) => a.candidate_id === p.id).length };
   };
 
   for (const p of profiles) {

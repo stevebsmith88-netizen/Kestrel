@@ -1,4 +1,5 @@
 import "server-only";
+import { readyToApply } from "./profile-ready.ts";
 import { candidateHistory, candidateStatus } from "@/lib/applications";
 import type { PrefsRow } from "@/lib/candidate-prefs";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -69,7 +70,7 @@ export async function getApplication(id: string): Promise<{ application: Applica
 
 // A profile is ready to apply with once it has a resume and the basics.
 export function profileReady(p: CandidateProfile | null) {
-  return Boolean(p?.cv_path && p.profession);
+  return readyToApply(p);
 }
 
 export function profileStrength(p: CandidateProfile | null) {

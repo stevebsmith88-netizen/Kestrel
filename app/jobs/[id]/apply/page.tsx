@@ -6,6 +6,7 @@ import ApplyForm from "@/components/ApplyForm";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
+import { missingSentence } from "@/lib/profile-ready";
 import { longDate } from "@/lib/jobs";
 import { payText } from "@/lib/job-pay";
 import { canApplyForRole, roleMismatchText } from "@/lib/role-fit";
@@ -55,7 +56,7 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
       body = (
         <section className="card setup">
           <h2>One thing first</h2>
-          <p>Save your resume and choose your role, and then you can apply in a few clicks.</p>
+          <p>Add {missingSentence(profile)} to your profile, and then you can apply in a few clicks.</p>
           <Link href={`/candidate/profile?next=${next}`} className="btn">Complete my profile</Link>
         </section>
       );

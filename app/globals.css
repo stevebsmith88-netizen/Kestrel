@@ -804,3 +804,18 @@ fieldset.tagrow .lab { padding: 0; }
 .viewbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:14px 0 4px}
 .viewbar p{margin:0 auto 0 0;color:var(--navy-2);font-weight:600}
 .fieldtick{margin-top:12px;align-items:flex-start}
+.applycheck{margin:0 0 20px}
+.applycheck h2{margin:0 0 8px}
+.applyneeds{list-style:none;margin:0;padding:0}
+.applyneeds li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-weight:600}
+.applyneeds li:first-child{border-top:0}
+.card .applyneeds li::before{content:none}
+.applyneeds .state{font-weight:400;color:var(--muted)}
+.applyneeds .done .state{color:#1E6B3A;font-weight:600}
+.applyneeds .todo .state{color:var(--chestnut-d);font-weight:600}
+.moreopts{margin:22px 0 0;border-top:1px solid var(--line);padding-top:14px}
+.moreopts>summary{cursor:pointer;font:400 1.375rem/1.3 "DM Serif Display",Georgia,serif;color:var(--navy);list-style:none;min-height:44px;display:flex;align-items:center}
+.moreopts>summary::-webkit-details-marker{display:none}
+.moreopts>summary::before{content:"+";display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;margin-right:10px;border:1.5px solid var(--navy);border-radius:6px;font:700 1rem/1 "Source Sans 3",sans-serif}
+.moreopts[open]>summary::before{content:"\2212"}
+.moreopts>.help{margin:4px 0 14px}
