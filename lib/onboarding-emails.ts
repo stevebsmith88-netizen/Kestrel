@@ -141,7 +141,7 @@ function candidateEmail(day: number, f: CandidateFacts, name: string): Built {
       ? {
           subject: "Jobs that fit you on Kestrel",
           heading: "Your profile is ready",
-          paragraphs: [hello, "Your home page now suggests jobs from what you told us, with the reasons shown. Every job lists its pay, so you can see what a job pays before you spend time on it."],
+          paragraphs: [hello, "Your dashboard now suggests jobs from what you told us, with the reasons shown. Every job lists its pay, so you can see what a job pays before you spend time on it."],
           buttonText: "See jobs for me",
           buttonPath: "/candidate",
         }

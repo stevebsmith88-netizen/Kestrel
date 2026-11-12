@@ -19,7 +19,7 @@ export default function AccountView({ role, email, first, last, nameLockedUntil,
   const home = role === "clinic" ? "/clinic" : "/candidate";
   return (
         <div className="wrap narrow">
-          <p className="back"><Link href={home}>Back to my home</Link></p>
+          <p className="back"><Link href={home}>Back to my dashboard</Link></p>
           <p className="kicker">My account</p>
           <h1>Your account</h1>
           {emailNotice === "confirmed" && <p className="notice" role="status">Thank you, that is confirmed. If we asked you to confirm from both your old and new address, make sure you have opened both emails.</p>}
