@@ -526,7 +526,7 @@ export const HELP: HelpSection[] = [
         title: "What do views and apply clicks mean on my dashboard?",
         keywords: ["analytics", "statistics", "stats", "traffic", "visitors", "clicks", "numbers", "performance"],
         answer: [
-          "A **view** is counted each time a job page is opened in a browser tab. An **apply click** is counted when someone presses the Apply button on the job page. The tiles at the top of your dashboard show the last 30 days across all your jobs, and each job shows its own total underneath, or \"No views yet\".",
+          "A **view** is counted each time a job page is opened in a browser tab. An **apply click** is counted when someone presses the Apply button on the job page. The tiles at the top of your dashboard show the last 30 days across all your jobs. Choose any tile to see the jobs behind it, and choose **Show all jobs** to go back. Each job shows its own total underneath, or \"No views yet\".",
           "Visits from search engines and link previews are left out, and so are your own visits and our team's. Nothing about the visitor is stored. The counts are guidance, not exact numbers: someone who opens the job in several tabs or on several devices is counted more than once. An apply click is not an application, because a person may press the button and not finish. The number of applicants is the figure to trust.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
