@@ -11,7 +11,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/security",
 });
 
-const UPDATED = "7th November 2026";
+const UPDATED = "12th November 2026";
 // Set to false once a lawyer has read the page, as on the Terms page.
 const DRAFT = true;
 const EMAIL = "privacy@eyecarejobs.ca";
