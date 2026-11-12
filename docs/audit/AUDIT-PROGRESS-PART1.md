@@ -15,7 +15,7 @@ Read this file, then carry on from the first area that is not "done". Add findin
 | Area | Status | Notes |
 | --- | --- | --- |
 | 0. First checks (typecheck, test, build, npm audit, secret scan) | done | All pass. 425 tests, 0 npm audit problems, no secrets in 441 commits on 77 branches. Details in the working file |
-| A. Decisions versus code (11 items) | not started | |
+| A. Decisions versus code (11 items) | done | 21 findings (A-01 to A-21) in the working file. Biggest: A-09 clinic page shows a shortlisted person as Viewed, A-13 data download incomplete, A-19 people at Interview never told, A-02 pay rule wider than CLAUDE.md. A-10 and A-14 to be confirmed by the database tests in B |
 | B. Database (migrations, combined file, row level security tests) | not started | |
 | C. Safe before the SQL (0037 to 0039) | not started | |
 | D. Server actions and routes | not started | |
