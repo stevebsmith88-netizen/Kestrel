@@ -7,8 +7,11 @@ import { waitlistConfirmUrl } from "@/lib/waitlist-confirm";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { CONSENT_TEXT, validate } from "@/lib/waitlist";
 import { joinAction } from "@/lib/waitlist-join";
+import { maintenanceApiResponse } from "@/lib/maintenance";
 
 export async function POST(req: Request) {
+  const stopped = maintenanceApiResponse();
+  if (stopped) return stopped;
   let body: unknown;
   try {
     body = await req.json();

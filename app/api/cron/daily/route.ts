@@ -19,6 +19,7 @@ import { candidateRecipient } from "@/lib/recipient";
 import { dailyBudget, makeBudget } from "@/lib/send-budget";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
+import { maintenanceApiResponse } from "@/lib/maintenance";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -42,6 +43,8 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 // Only one run can go at a time, it sends no more than the day's email budget, and it records when it last finished well,
 // so the health check (and the uptime monitor) can notice a missed day.
 export async function GET(request: Request) {
+  const stopped = maintenanceApiResponse();
+  if (stopped) return stopped;
   try {
     return await runDaily(request);
   } catch (error) {
