@@ -337,7 +337,7 @@ textarea{resize:vertical;line-height:1.5}
 @media (max-width:960px){.appgrid{grid-template-columns:1fr}}
 .listhead.tight{margin:0 0 6px}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
-.tab{display:inline-flex;align-items:center;border:1.5px solid #CDD5DA;background:#fff;border-radius:999px;padding:8px 16px;min-height:44px;font:600 0.9375rem/1 var(--f-sans),sans-serif;color:var(--navy-2);text-decoration:none}
+.tab{display:inline-flex;align-items:center;border:1.5px solid #CDD5DA;background:#fff;border-radius:8px;padding:8px 16px;min-height:44px;font:600 0.9375rem/1 var(--f-sans),sans-serif;color:var(--navy-2);text-decoration:none}
 .tab.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 .a-applied{background:#DCE3E6;color:#1B2B4B}
 .a-viewed{background:#EFE3CE;color:#5E4320}
@@ -592,7 +592,7 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .paylist li{padding-left:0}
 .landlinks{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:10px 0 22px}
 /* Province and role lists are chips, not a run of underlined links. Each is a 44px tap target, with the count in a lighter weight. */
-.landlinks a{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 16px;border:1.5px solid #CDD5DA;background:#fff;border-radius:999px;color:var(--navy);font-weight:600;text-decoration:none}
+.landlinks a{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:8px 16px;border:1.5px solid #CDD5DA;background:#fff;border-radius:8px;color:var(--navy);font-weight:600;text-decoration:none}
 .landlinks a:hover{background:#EEF1F3;border-color:var(--navy-2)}
 .landlinks .count{font-weight:400;color:var(--muted)}
 .lh-all{margin:6px 0 0}
@@ -894,7 +894,7 @@ html.session-ready header.site{display:none}
   .sf-panel.open .sf-panelfoot{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:61;background:#fff;border-top:1px solid var(--line);padding:12px 18px;gap:12px;align-items:center}
   .sf-panelfoot .btn{flex:1;justify-content:center}
   .sf-tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:-8px 0 14px;padding:0;align-items:center}
-  .sf-tag{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;min-height:40px;font-size:.92rem;color:var(--navy);text-decoration:none}
+  .sf-tag{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:40px;font-size:.92rem;color:var(--navy);text-decoration:none}
   .sf-tag span{font-weight:700;color:var(--slate)}
   .sf-clear{font-size:.92rem;color:var(--navy);text-underline-offset:3px}
 }
