@@ -50,6 +50,13 @@ Left out on purpose: the buying group blog post, to keep the account clear of an
 - Cream rows: Cream background, Navy headline in DM Serif Display, Chestnut for the small label.
 - Navy rows: Navy background, Cream headline, Wing Buff for the small label.
 - Each post has 1 stock photo set inside a Canva frame, a headline of no more than 8 words, and the Kestrel wordmark image. Wherever a post names Kestrel, use the wordmark image, never the name typed as text (Steve, 13th November 2026). Navy wordmark on Cream rows, reversed wordmark on Navy rows; both are uploaded to the Kestrel Canva.
-- Mocks (13th November 2026): "IG 01 Cream: Meet Kestrel" and "IG 04 Navy: Optometric assistant jobs" in the Kestrel Canva.
+- **Vary the layout, keep the colour (Steve, 13th November 2026).** Only the row colour repeats. Each post uses 1 of these layouts, and no 2 posts next to each other (across or up and down) share one:
+  - A, framed photo on top: photo inset with a margin, wordmark, headline and line below, centred.
+  - B, split: photo fills the left half, top to bottom; label, headline, line and wordmark down the right.
+  - C, text first: wordmark top left, headline and a short list, photo as a strip across the bottom.
+  - D, headline on top: label, headline and line centred at the top, framed photo below, wordmark at the bottom.
+  - E, photo across the top: full width photo on the top half, text left aligned below.
+- **The first 6 (in the Kestrel Canva, all named "IG 0x"):** row 1, Cream: IG 01 (A) on the right, IG 02 (B) in the middle, IG 03 (C) on the left. Row 2, Navy: IG 05 (D) on the right, IG 04 (A) in the middle, IG 06 (E) on the left. So the posting order is 01, 02, 03, then 05, 04, 06.
+- Headlines use the serif from the first mock, labels and lines the sans. Start new posts by copying the IG post with the layout you want, then swap the photo and the words.
 - Photos: real clinic moments (frame fitting, pre testing, a lab bench, a front desk), Canadian looking where possible, no staged handshakes, no one wearing a white coat to look like a doctor when they are not.
 - Never redraw or change the logo or the skyline.
