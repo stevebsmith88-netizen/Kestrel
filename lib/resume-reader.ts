@@ -102,7 +102,13 @@ const ROLE_PATTERNS: RolePattern[] = [
 ];
 
 const HEADER_WORDS = /^(?:(?:work|professional|relevant|clinical|related)\s+)?(experience|employment|employment history|work history|career history|education|training|certifications?|certificates?|courses|qualifications|skills|references|awards|volunteer(?:ing)?(?: experience)?|summary|profile|objective|interests|languages|licen[cs]es?(?: and certifications?)?|registrations?)\s*:?$/i;
-const isHeader = (line: string) => line.length <= 40 && HEADER_WORDS.test(line);
+// Headings can be numbered ("① PROFILE", "4. Experience", "02 Skills"), so the number is set aside first (Steve's samples, 13th November 2026).
+const headerText = (line: string) => line.replace(/^(?:[\u2460-\u2473\u2776-\u277F\u2780-\u2793]|\(?\d{1,2}[.)]?)\s+/, "").trim();
+const isHeader = (line: string) => line.length <= 40 && HEADER_WORDS.test(headerText(line));
+// Side column headings: on a 2 column resume their text can come out in the middle of the job history, so they do not end it.
+const SIDE_HEADINGS = /^(skills|languages|interests)\s*:?$/i;
+const nextSection = (line: string, current: "experience" | "education" | "references" | "other") =>
+  current === "experience" && SIDE_HEADINGS.test(headerText(line)) ? current : sectionOf(headerText(line));
 const sectionOf = (line: string): "experience" | "education" | "references" | "other" => {
   const w = line.toLowerCase();
   if (/experience|employment|work history|career history/.test(w) && !/volunteer/.test(w)) return "experience";
@@ -116,7 +122,7 @@ function findRole(all: string[]): Found<string> | undefined {
   const scores = new Map<string, { score: number; hits: number; sample: string }>();
   let section: ReturnType<typeof sectionOf> = "other";
   all.forEach((line, i) => {
-    if (isHeader(line)) section = sectionOf(line);
+    if (isHeader(line)) section = nextSection(line, section);
     if (section === "references") return;
     const recency = 1 + (1 - i / Math.max(all.length, 1));
     for (const { role, patterns } of ROLE_PATTERNS) {
@@ -146,15 +152,30 @@ const END = `(?:${POINT}|(present|current|now|ongoing|today|to date))`;
 const RANGE = new RegExp(`${POINT}\\s*(?:-|–|—|to|until|through)\\s*${END}`, "gi");
 const EYE = /optic|optom|ophthalm|\beye\b|vision|lens|\becp\b|spectacle|glasses|frames|dispens|\bclinic\b|refract/i;
 
-export function monthsOfWork(all: string[], now: Date): { months: number; counted: number } {
+// When 2 jobs sit side by side, the second one's end year can drop onto the next line ("September 2013 — September" then "2015").
+// A line ending in a dash or "to", with or without a month, is joined to a next line that starts with a year or "present".
+const OPEN_END = new RegExp(`(?:-|\\u2013|\\u2014|\\bto)\\s*(?:(?:${MONTHS})\\.?)?\\s*$`, "i");
+const CLOSES = /^(?:(?:19|20)\d{2}|present|current|now|today)\b/i;
+function joinSplitDates(all: string[]): string[] {
+  const out: string[] = [];
+  for (const line of all) {
+    const last = out[out.length - 1];
+    if (last !== undefined && OPEN_END.test(last) && CLOSES.test(line)) out[out.length - 1] = `${last} ${line}`;
+    else out.push(line);
+  }
+  return out;
+}
+
+export function monthsOfWork(input: string[], now: Date): { months: number; counted: number } {
+  const all = joinSplitDates(input);
   const nowIndex = now.getFullYear() * 12 + now.getMonth();
-  const hasExperienceSection = all.some((l) => isHeader(l) && sectionOf(l) === "experience");
+  const hasExperienceSection = all.some((l) => isHeader(l) && sectionOf(headerText(l)) === "experience");
   type Span = { from: number; to: number; eye: boolean };
   const spans: Span[] = [];
   let section: ReturnType<typeof sectionOf> = "other";
   all.forEach((line, i) => {
     if (isHeader(line)) {
-      section = sectionOf(line);
+      section = nextSection(line, section);
       return;
     }
     if (section === "education" || section === "references") return;
