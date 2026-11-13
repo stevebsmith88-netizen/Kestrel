@@ -24,7 +24,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/resources",
 });
 
-const UPDATED = "9th November 2026";
+const UPDATED = "13th November 2026";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export default async function Resources() {
@@ -45,7 +45,7 @@ export default async function Resources() {
           </p>
 
           <h2 id="pay">What eye care roles typically pay</h2>
-          <p>Choose a province to see the median and the middle half of pay for each role. The figures come from Job Bank, the Government of Canada&apos;s labour market service.</p>
+          <p>Choose a province to see the median and the middle half of pay for each role. The figures come from Job Bank, the Government of Canada&apos;s labour market service. For where each role is paid most and least, see <Link href="/resources/eye-care-pay-summary">eye care pay in Canada: the 2026 summary</Link>.</p>
           <PayGuide provinces={provinces} rows={payGuide()} initial={provinces.includes("Ontario") ? "Ontario" : provinces[0]} />
           <p className="help">
             The median is the middle figure: half of workers earn more and half earn less. The middle half of pay runs from the first quartile to the third.

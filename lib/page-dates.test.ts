@@ -19,15 +19,17 @@ test("the sitemap dates match the 'last updated' line on each page", () => {
   assert.equal(PAGE_DATES.security, shown("app/security/page.tsx"));
   assert.equal(PAGE_DATES.resources, shown("app/resources/page.tsx"));
   assert.equal(PAGE_DATES.ontarioJobAds, shown("app/resources/ontario-job-ads/page.tsx"));
+  assert.equal(PAGE_DATES.paySummary, shown("app/resources/eye-care-pay-summary/page.tsx"));
   assert.equal(PAGE_DATES.compare, shown("lib/compare-prices.ts"));
   assert.equal(PAGE_DATES.help, shown("app/help/page.tsx"));
 });
 
 test("a page changed in the last 3 days is sent to search engines, and an old one is not", () => {
-  const now = new Date("2026-11-09T09:00:00Z");
+  const now = new Date("2026-11-14T09:00:00Z");
   const urls = recentlyChangedPages("https://eyecarejobs.ca", now);
-  assert.ok(urls.includes("https://eyecarejobs.ca/resources/ontario-job-ads"));
+  assert.ok(urls.includes("https://eyecarejobs.ca/resources/eye-care-pay-summary"));
+  assert.ok(!urls.includes("https://eyecarejobs.ca/resources/ontario-job-ads"));
   assert.ok(urls.includes("https://eyecarejobs.ca/resources"));
-  assert.ok(!urls.includes("https://eyecarejobs.ca/terms"));
+  assert.ok(!urls.includes("https://eyecarejobs.ca/compare"));
   assert.deepEqual(recentlyChangedPages("https://eyecarejobs.ca", new Date("2027-03-01T09:00:00Z")), []);
 });
