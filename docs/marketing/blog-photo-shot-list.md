@@ -6,7 +6,7 @@ Written 13th November 2026. Steve wants real photos in the blog posts, not the I
 
 1. In Canva, create a design at a custom size of **1600 x 900 px** and name it **Kestrel blog photos**. Put it in the "Kestrel Instagram: new style" folder.
 2. Make **1 page per post, in the order below** (page 1 is the first row). Leave a page blank if nothing suits; that post simply gets no photo.
-3. On each page, search Photos with the words given (or your own), drag the photo in and stretch it to fill the page. **No text, no logo, no frames**: the page puts the title above it.
+3. On each page, search Photos with the words given (or your own), drag the photo in and make it as large as you like. **No text, no logo, no frames**: the page puts the title above it. White left round the edges is fine: Claude trims any plain white border off on export, then crops to the banner shape, so keep the person or the main subject near the middle.
 4. Prefer real looking clinics, a mix of ages and backgrounds, and nobody looking straight into the camera with a stock smile. Avoid American flags, US money and anything that shouts "not Canada".
 5. Tell Claude it is ready. Claude exports each page, writes alt text that says what is in the photo, adds them to the posts, and sends a preview before anything goes live.
 
