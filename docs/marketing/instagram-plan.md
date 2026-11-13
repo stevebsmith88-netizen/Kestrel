@@ -4,7 +4,7 @@ Plan written 13th November 2026. Nothing here has been posted. Designs are made 
 
 ## How the grid works
 
-- **Rows, not a checkerboard (Steve, 13th November 2026).** Each row of 3 is 1 colour: a Cream row (#F7F1E6) then a Navy row (#1B2B4B), alternating.
+- **Rows, not a checkerboard (Steve, 13th November 2026).** Each row of 3 is 1 colour, in a repeating set of 3: Cream (#F7F1E6), then Navy (#1B2B4B), then Chestnut (#A4502C) (Steve, 13th November 2026).
 - **Always post in 3s.** Instagram puts the newest post top left, so a row only stays whole if all 3 go out together. Post a row on Monday, Wednesday and Friday of the same week, then nothing until the next row.
 - **Order inside a row:** the post shown on the right of the row goes out first, the left one last.
 - **1 post, 1 image.** No carousels (Steve, 13th November 2026).
@@ -61,3 +61,12 @@ Left out on purpose: the buying group blog post, to keep the account clear of an
 - Headlines use the serif from the first mock, lines the sans. Start new posts by copying the IG post with the layout you want, then swap the photo and the words.
 - Photos: real clinic moments (frame fitting, pre testing, a lab bench, a front desk), Canadian looking where possible, no staged handshakes, no one wearing a white coat to look like a doctor when they are not.
 - Never redraw or change the logo or the skyline.
+
+## Accents (Steve, 13th November 2026)
+
+To keep the posts on brand but less plain:
+- Framed photos sit on a solid block offset by 26 pixels down and right: Chestnut on Cream rows, Wing Buff on Navy rows, Navy on Chestnut rows.
+- A short rule (90 by 8 pixels) above a left aligned headline, in the row's accent colour.
+- On the split layout, a thin accent seam where the photo meets the text.
+- Steve's skyline artwork (uploaded to Canva, used as is, never redrawn) along the bottom of about 1 post per row.
+- Post 01 is "Hello, we're" followed by the wordmark image.
