@@ -501,7 +501,7 @@ Kestrel's ad builder turns a few lines about the role into a draft. You edit eve
     slug: "how-people-fall-into-optics",
     title: "How most people fall into optics as a career",
     description: "Few people plan a career in eye care. Here are the common ways people start, what they find when they arrive and why many of them stay.",
-    date: "2026-12-04",
+    date: "2026-11-13",
     body: `Ask a group of opticians, assistants and clinic managers how they got started, and the answer is rarely "I always wanted to work in eye care." It is more often "I needed a job and a friend knew a clinic," or "I was at the front desk and got curious." Eye care is a career many people fall into, and then find they like.
 
 ## The usual doors
