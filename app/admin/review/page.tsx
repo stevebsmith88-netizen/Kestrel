@@ -1,3 +1,4 @@
+import { withExpected } from "@/lib/expected-columns";
 import type { Metadata } from "next";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
@@ -36,7 +37,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   const { data } = db
     ? await db
         .from("jobs")
-        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
+        .select(await withExpected("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)"))
         .eq("status", "in_review")
         .order("created_at", { ascending: true })
     : { data: null };

@@ -18,7 +18,7 @@ export const metadata: Metadata = shareMetadata({ title: HELP_TITLE, description
 
 // The date a person last checked these answers against the site. Change it, and PAGE_DATES.help in lib/page-dates.ts, when the help changes
 // (lib/page-dates.test.ts checks that they agree).
-const UPDATED = "12th November 2026";
+const UPDATED = "13th November 2026";
 
 export default async function Help() {
   const open = await signupsOpen();

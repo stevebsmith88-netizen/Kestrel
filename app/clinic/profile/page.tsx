@@ -24,7 +24,7 @@ export default async function ClinicProfile({ searchParams }: { searchParams: Pr
             <p className="note" role="status"><strong>You must set up your clinic before posting a job.</strong> It takes about 2 minutes. When you save it, you can post your first job straight away.</p>
           )}
           <p className="lede2">This is what candidates see on your job posts, apart from your alert email, which stays private.</p>
-          <ClinicProfileForm initial={employer} />
+          <ClinicProfileForm initial={employer} signUpEmail={session.email} />
         </div>
       </main>
       <AppFooter />

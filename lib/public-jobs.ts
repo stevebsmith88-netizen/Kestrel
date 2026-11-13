@@ -1,6 +1,7 @@
 import { clampPage, pageOrLast } from "./paging.ts";
 import "server-only";
 import { supabasePublic } from "@/lib/supabase/public";
+import { withExpected } from "@/lib/expected-columns";
 import { cleanEmploymentTypes, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 import { cleanTagFilters, type TagFilters } from "@/lib/job-tags";
 import type { PayFields } from "@/lib/job-pay";
@@ -68,6 +69,7 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.city && !place) return { jobs: [], total: 0, place: null, placeNotFound: true };
 
   const nowIso = new Date().toISOString();
+  const summaryColumns = await withExpected(SUMMARY_COLUMNS);
   const build = (columns: string, head = false) => {
   let query = db.from("jobs").select(columns, { count: "exact", head }).eq("status", "live").gt("expires_at", nowIso);
   if (filters.province) query = query.eq("province", filters.province);
@@ -82,7 +84,7 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
   return query.order("posted_at", { ascending: false });
   };
-  const query = build(SUMMARY_COLUMNS);
+  const query = build(summaryColumns);
 
   if (!place) {
     if (opts.everything) {
@@ -98,7 +100,7 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
       page,
       PAGE_SIZE,
       async (p) => {
-        const { data, count, error } = await build(SUMMARY_COLUMNS).range((p - 1) * PAGE_SIZE, p * PAGE_SIZE - 1);
+        const { data, count, error } = await build(summaryColumns).range((p - 1) * PAGE_SIZE, p * PAGE_SIZE - 1);
         if (error && error.code !== "PGRST103") console.error("Job search failed:", error.code, error.message);
         return { rows: (data ?? []) as unknown as JobSummary[], count: count ?? null, error: Boolean(error) };
       },
@@ -123,7 +125,7 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
 export async function listLiveJobsForMatching(limit = 1000): Promise<JobSummary[]> {
   const db = supabasePublic();
   if (!db) return [];
-  const { data, error } = await db.from("jobs").select(SUMMARY_COLUMNS).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(limit);
+  const { data, error } = await db.from("jobs").select(await withExpected(SUMMARY_COLUMNS)).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(limit);
   if (error) {
     console.error("Listing live jobs for recommendations failed:", error.code, error.message);
     return [];
@@ -169,7 +171,7 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   if (!db) return null;
   const { data, error } = await db
     .from("jobs")
-    .select("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)")
+    .select(await withExpected("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)"))
     .eq("id", id)
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString())

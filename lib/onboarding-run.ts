@@ -28,6 +28,8 @@ export async function runOnboarding(admin: SupabaseClient, ctx: { now: Date; bud
     .select("id, role, first_name, created_at")
     .in("role", ["candidate", "clinic"])
     .is("unsubscribed_at", null)
+    // Only people who ticked the news box at sign up, whose wording names these tips (Steve, 12th November 2026).
+    .eq("marketing_consent", true)
     .gte("created_at", new Date(ctx.now.getTime() - 12 * DAY).toISOString())
     .limit(500);
   if (error) {

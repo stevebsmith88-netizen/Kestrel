@@ -863,3 +863,16 @@ fieldset.tagrow .lab { padding: 0; }
    up for a signed in person. Once the account bar is drawn (components/SessionBar.tsx), the signed out header goes. */
 html.has-session:not(.session-ready) header.site :is(nav.site-wide,.site-narrow){visibility:hidden}
 html.session-ready header.site{display:none}
+
+/* Apply page (13th November 2026): what the clinic receives, and the saved letter tools, each folded under 1 line. */
+.sentdetails > summary, .lettertools > summary { cursor: pointer; list-style: none; line-height: 1.5; padding: 6px 0; }
+.sentdetails > summary::-webkit-details-marker, .lettertools > summary::-webkit-details-marker { display: none; }
+.sentdetails .linkish, .lettertools > summary { color: var(--navy); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.sentdetails[open] .linkish { display: none; }
+.sentdetails .facts { margin-top: 12px; }
+.lettertools { margin-top: 12px; }
+.lettertools > summary { font-weight: 600; font-size: .95rem; }
+.lettertools[open] > summary { margin-bottom: 10px; }
+/* Expected earnings beside a percentage only (post a job form, 13th November 2026). */
+.expectedpay { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 4px; margin: 4px 0 16px; }
+.expectedpay > .lab { margin: 0 0 4px; }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import QuickActionForm from "@/components/QuickActionForm";
@@ -34,6 +35,8 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const { notice, template, show: showParam } = await searchParams;
   const show = parseShow(showParam);
   const employer = await getMyEmployer(session.userId);
+  // A clinic with no profile yet goes straight to setting it up (Steve, 13th November 2026): the dashboard has nothing to show until then.
+  if (!employer) redirect("/clinic/profile");
   const jobs = employer ? await getMyJobs(employer.id) : [];
   const applicants = employer ? await getApplicantCounts() : {};
   const numbers = employer ? await getMyJobNumbers() : {};

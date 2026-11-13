@@ -33,6 +33,9 @@ export type JobFormValues = {
   pay_percent_min: string;
   pay_percent_max: string;
   pay_percent_of: string;
+  pay_expected_min?: string; // the clinic's expected earnings, with a percentage only (migration 0043)
+  pay_expected_max?: string;
+  pay_expected_period?: string;
   pay_is_minimum: string; // "yes" when the dollar amounts are a guaranteed minimum
   pay_days: string; // days a week, for a daily rate
   tags_software: string[];
@@ -54,6 +57,17 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const ad = useServerForm(buildAd);
   const form = useRef<HTMLFormElement>(null);
   const [description, setDescription] = useState(initial.description);
+  // The job title starts as the role the clinic picks (Steve, 13th November 2026), unless a title has been typed. It stays editable.
+  const titleRef = useRef<HTMLInputElement>(null);
+  const autoTitle = useRef("");
+  const pickRole = (next: string) => {
+    setRole(next);
+    const el = titleRef.current;
+    if (el && (!el.value.trim() || el.value === autoTitle.current)) {
+      el.value = next;
+      autoTitle.current = next;
+    }
+  };
   // When the ad builder returns a draft, it goes into the ad box for the clinic to edit.
   useEffect(() => {
     if (ad.state.ad) setDescription(ad.state.ad);
@@ -92,11 +106,11 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
 
       <h2 className="formh">The role</h2>
       <Field id="jf-title" label="Job title" required error={e.title}>
-        <input id="jf-title" name="title" type="text" defaultValue={initial.title} placeholder="For example: Optician, full time" />
+        <input ref={titleRef} id="jf-title" name="title" type="text" defaultValue={initial.title} placeholder="For example: Optician, full time" />
       </Field>
       <div className="pair">
         <Field id="jf-role" label="Role" required error={e.roleCategory}>
-          <select id="jf-role" name="roleCategory" value={role} onChange={(ev) => setRole(ev.target.value)}>
+          <select id="jf-role" name="roleCategory" value={role} onChange={(ev) => pickRole(ev.target.value)}>
             <option value="">Choose one</option>
             <optgroup label="Clinic roles">
               {CLINIC_ROLES.map((r) => <option key={r} value={r}>{r}</option>)}
@@ -186,6 +200,26 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
                 {PERCENT_OF.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
               </select>
             </Field>
+          )}
+          {hasPercent && !hasMoney && (
+            <div className="expectedpay">
+              <p className="lab">Expected earnings, in dollars <span className="req" aria-hidden="true">*</span></p>
+              <p className="help">Needed when you give only a percentage: your honest estimate of what this role usually earns. Candidates see it marked as your estimate, for example &quot;expected earnings $800 to $1,000 a day&quot;.</p>
+              <Field id="jf-eper" label="Per" error={e.payExpectedPeriod}>
+                <select id="jf-eper" name="payExpectedPeriod" defaultValue={initial.pay_expected_period || "day"}>
+                  <option value="day">A day</option>
+                  <option value="year">A year</option>
+                </select>
+              </Field>
+              <div className="pair">
+                <Field id="jf-emin" label="Lowest" error={e.payExpectedMin}>
+                  <input id="jf-emin" name="payExpectedMin" type="text" inputMode="decimal" defaultValue={initial.pay_expected_min ?? ""} placeholder="800" />
+                </Field>
+                <Field id="jf-emax" label="Highest" error={e.payExpectedMax}>
+                  <input id="jf-emax" name="payExpectedMax" type="text" inputMode="decimal" defaultValue={initial.pay_expected_max ?? ""} placeholder="1,000" />
+                </Field>
+              </div>
+            </div>
           )}
         </>
       )}

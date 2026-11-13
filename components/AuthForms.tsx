@@ -136,7 +136,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
     <>
       <h1>Create your account</h1>
       <p className="auth-intro">
-        Free to join. Candidates can save a resume and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and job alerts.
+        Free to join. Candidates can save a resume and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and tips for getting started.
       </p>
       <p className="help">Looking for a job? Your profile and resume stay private until you apply. A clinic sees only what you send with an application.</p>
       {google && <GoogleButton next={`/welcome?type=${defaultType}${next ? `&next=${encodeURIComponent(next)}` : ""}`} note="Next, you will choose whether you are looking for a job or hiring." />}

@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { jobFromForm } from "./job-form.ts";
 
-const migrations = ["0005_clinics_and_jobs", "0013_field_roles", "0034_pay_basis_tags_headcount", "0035_pay_both_parts"].map((n) => readFileSync(new URL(`../supabase/migrations/${n}.sql`, import.meta.url), "utf8")).join("\n");
+const migrations = ["0005_clinics_and_jobs", "0013_field_roles", "0034_pay_basis_tags_headcount", "0035_pay_both_parts", "0043_expected_earnings_no_career_stage"].map((n) => readFileSync(new URL(`../supabase/migrations/${n}.sql`, import.meta.url), "utf8")).join("\n");
 
 // The column names listed in every `grant <verb> (a, b, c) on public.jobs to <role>` statement.
 function granted(verb: string, role: string, table = "jobs") {
@@ -48,7 +48,7 @@ test("templates can save the new pay and tag columns", () => {
 
 test("the combined file holds migrations 0034 and 0035 word for word", () => {
   const combined = readFileSync(new URL("../supabase/combined/run-everything.sql", import.meta.url), "utf8");
-  for (const name of ["0034_pay_basis_tags_headcount", "0035_pay_both_parts"]) {
+  for (const name of ["0034_pay_basis_tags_headcount", "0035_pay_both_parts", "0043_expected_earnings_no_career_stage"]) {
     assert.ok(combined.includes(readFileSync(new URL(`../supabase/migrations/${name}.sql`, import.meta.url), "utf8")), name);
   }
   assert.ok(combined.indexOf("0034_pay_basis_tags_headcount.sql") < combined.indexOf("0035_pay_both_parts.sql"));

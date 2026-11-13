@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useServerForm } from "@/components/useServerForm";
 import { applyToJob } from "@/lib/candidate-actions";
 import { saveApplicationDraft } from "@/lib/letter-actions";
@@ -10,85 +10,67 @@ import { wordCount } from "@/lib/applications";
 
 export type LetterTemplate = { id: string; name: string; body: string };
 
+// The apply form, kept short so Send sits near the top on a phone (Steve, 13th November 2026, from docs/audit/CLICK-COUNT-2026-11-12.md).
+// There is no second question when there is no note: the encouragement to write one stays on the page. Saved letters, drafts and
+// "keep this letter" are folded under 1 line.
 export default function ApplyForm({ jobId, clinicName, draft = "", draftSavedAt = "", letters = [] }: { jobId: string; clinicName: string; draft?: string; draftSavedAt?: string; letters?: LetterTemplate[] }) {
   const { state, pending, submit } = useServerForm(applyToJob);
   const saver = useServerForm(saveApplicationDraft);
   const [letter, setLetter] = useState(draft);
   const [saveLetter, setSaveLetter] = useState(false);
   const [chosen, setChosen] = useState("");
-  const [nudge, setNudge] = useState(false);
-  const skipNudge = useRef(false);
-  const form = useRef<HTMLFormElement>(null);
   const words = wordCount(letter);
 
-  // The first time someone sends without a letter, we ask once whether they want to add one.
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    if (!letter.trim() && !skipNudge.current) {
-      e.preventDefault();
-      setNudge(true);
-      return;
-    }
-    submit(e);
-  };
-
   return (
-    <form ref={form} onSubmit={onSubmit} noValidate className="stackform">
+    <form onSubmit={submit} noValidate className="stackform">
       <input type="hidden" name="jobId" value={jobId} />
       <section className="card" aria-labelledby="cl-h">
         <h2 id="cl-h">Add a cover note (optional)</h2>
-        <p className="help"><strong>We recommend adding one.</strong> Clinics tend to read the personal ones first. A few honest lines about why {clinicName} and what you would bring. Your resume says what you have done. Your letter says who you are.</p>
-        <p className="chips"><span className="chip">Why this clinic</span><span className="chip">What you would bring</span><span className="chip">When you could start</span></p>
-        {letters.length > 0 && (
-          <div className="letterpick">
-            <label className="lab" htmlFor="af-pick">Start from one of your saved letters</label>
-            <div className="pickrow">
-              <select id="af-pick" value={chosen} onChange={(ev) => setChosen(ev.target.value)}>
-                <option value="">Choose a letter</option>
-                {letters.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
-              </select>
-              <button type="button" className="btn sm ghost" disabled={!chosen} onClick={() => { const l = letters.find((x) => x.id === chosen); if (l) setLetter(l.body); }}>Use it</button>
-            </div>
-            <p className="help">Change it so it speaks to {clinicName}. Clinics can tell when a letter has been sent to 20 places.</p>
-          </div>
-        )}
+        <p className="help"><strong>We recommend adding one.</strong> Clinics tend to read the personal ones first: a few honest lines about why {clinicName} and what you would bring.</p>
         <label className="lab" htmlFor="af-letter">Your cover note</label>
-        <textarea id="af-letter" name="coverLetter" rows={11} value={letter} onChange={(e) => setLetter(e.target.value)} placeholder={`Dear ${clinicName} team,\n\nI am writing because...`} />
+        <textarea id="af-letter" name="coverLetter" rows={6} value={letter} onChange={(e) => setLetter(e.target.value)} placeholder={`Dear ${clinicName} team,\n\nI am writing because...`} />
         <div className="letterfoot">
           <span className="help">About 100 to 200 words works well. Write it fresh for each job.</span>
           <span className="help">{words} {words === 1 ? "word" : "words"}</span>
         </div>
-        <div className="draftrow">
-          <button
-            type="button"
-            className="btn sm ghost"
-            disabled={saver.pending}
-            onClick={() => { const data = new FormData(); data.set("jobId", jobId); data.set("coverLetter", letter); saver.send(data); }}
-          >
-            {saver.pending ? "Saving" : "Save as a draft"}
-          </button>
-          <span className="help" aria-live="polite">
-            {saver.state.message ?? saver.state.error ?? (draftSavedAt ? `Draft last saved ${draftSavedAt}.` : "Not ready? Save it and come back later.")}
-          </span>
-        </div>
-        <label className="consent">
-          <input type="checkbox" name="saveLetter" value="yes" checked={saveLetter} onChange={(ev) => setSaveLetter(ev.target.checked)} />
-          <span>Keep this letter to start future applications from. You can keep up to 5. <Link href="/candidate/letters" target="_blank">My saved letters<span className="sr"> (opens in a new tab)</span></Link></span>
-        </label>
-        {saveLetter && (
-          <Field id="af-lname" label="Name for this letter" hint="For example: Optician, independent clinic.">
-            <input id="af-lname" name="letterName" type="text" maxLength={80} />
-          </Field>
-        )}
-        {nudge && (
-          <div className="note nudge" role="alert">
-            <strong>Add a short note before you send?</strong>
-            <p>Clinics read the personal ones first. It only takes a couple of minutes.</p>
-            <div className="formbtns">
-              <button type="button" className="btn sm" onClick={() => { setNudge(false); document.getElementById("af-letter")?.focus(); }}>Write a short note</button>
-              <button type="button" className="btn sm ghost" onClick={() => { skipNudge.current = true; form.current?.requestSubmit(); }}>Send without a note</button>
+        <details className="lettertools" open={Boolean(draftSavedAt)}>
+          <summary>Saved letters and drafts</summary>
+          {letters.length > 0 && (
+            <div className="letterpick">
+              <label className="lab" htmlFor="af-pick">Start from one of your saved letters</label>
+              <div className="pickrow">
+                <select id="af-pick" value={chosen} onChange={(ev) => setChosen(ev.target.value)}>
+                  <option value="">Choose a letter</option>
+                  {letters.map((l) => <option key={l.id} value={l.id}>{l.name}</option>)}
+                </select>
+                <button type="button" className="btn sm ghost" disabled={!chosen} onClick={() => { const l = letters.find((x) => x.id === chosen); if (l) setLetter(l.body); }}>Use it</button>
+              </div>
+              <p className="help">Change it so it speaks to {clinicName}. Clinics can tell when a letter has been sent to 20 places.</p>
             </div>
+          )}
+          <div className="draftrow">
+            <button
+              type="button"
+              className="btn sm ghost"
+              disabled={saver.pending}
+              onClick={() => { const data = new FormData(); data.set("jobId", jobId); data.set("coverLetter", letter); saver.send(data); }}
+            >
+              {saver.pending ? "Saving" : "Save as a draft"}
+            </button>
+            <span className="help" aria-live="polite">
+              {saver.state.message ?? saver.state.error ?? (draftSavedAt ? `Draft last saved ${draftSavedAt}.` : "Not ready? Save it and come back later.")}
+            </span>
           </div>
-        )}
+          <label className="consent">
+            <input type="checkbox" name="saveLetter" value="yes" checked={saveLetter} onChange={(ev) => setSaveLetter(ev.target.checked)} />
+            <span>Keep this letter to start future applications from. You can keep up to 5. <Link href="/candidate/letters" target="_blank">My saved letters<span className="sr"> (opens in a new tab)</span></Link></span>
+          </label>
+          {saveLetter && (
+            <Field id="af-lname" label="Name for this letter" hint="For example: Optician, independent clinic.">
+              <input id="af-lname" name="letterName" type="text" maxLength={80} />
+            </Field>
+          )}
+        </details>
       </section>
 
       <section className="card">

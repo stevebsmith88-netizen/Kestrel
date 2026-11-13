@@ -93,6 +93,9 @@ export type JobInput = {
   payPercentMin: string;
   payPercentMax: string;
   payPercentOf: string;
+  payExpectedMin: string; // the clinic's expected earnings, with a percentage only (migration 0043)
+  payExpectedMax: string;
+  payExpectedPeriod: string; // day or year
   tagsSoftware: string[];
   tagsEquipment: string[];
   tagsSpecialties: string[];
@@ -186,6 +189,9 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     payPercentMin: clean(raw.payPercentMin, 20),
     payPercentMax: clean(raw.payPercentMax, 20),
     payPercentOf: clean(raw.payPercentOf, 12),
+    payExpectedMin: clean(raw.payExpectedMin, 20),
+    payExpectedMax: clean(raw.payExpectedMax, 20),
+    payExpectedPeriod: ["day", "year"].includes(clean(raw.payExpectedPeriod, 4)) ? clean(raw.payExpectedPeriod, 4) : "",
     payIsMinimum: clean(raw.payIsMinimum, 3) === "yes" ? "yes" : "",
     payDays: clean(raw.payDays, 2),
     tagsSoftware: cleanTags(raw.tagsSoftware, SOFTWARE_TAGS),

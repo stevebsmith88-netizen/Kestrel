@@ -1,3 +1,4 @@
+import { withExpected } from "@/lib/expected-columns";
 import "server-only";
 import { HIREABLE } from "@/lib/applications";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -31,6 +32,9 @@ export type MyJob = {
   pay_percent_min: number | null;
   pay_percent_max: number | null;
   pay_percent_of: string | null;
+  pay_expected_min?: number | null; // migration 0043
+  pay_expected_max?: number | null;
+  pay_expected_period?: string | null;
   tags_software: string[] | null;
   tags_equipment: string[] | null;
   tags_specialties: string[] | null;
@@ -69,8 +73,8 @@ export async function getMyEmployer(userId: string): Promise<Employer | null> {
 export async function getMyJobs(employerId: string): Promise<MyJob[]> {
   const db = await supabaseServer();
   if (!db) return [];
-  const { data } = await db.from("jobs").select(JOB_COLUMNS).eq("employer_id", employerId).order("created_at", { ascending: false });
-  return (data ?? []) as MyJob[];
+  const { data } = await db.from("jobs").select(await withExpected(JOB_COLUMNS)).eq("employer_id", employerId).order("created_at", { ascending: false });
+  return (data ?? []) as unknown as MyJob[];
 }
 
 // How many people applied to each of this clinic's jobs, and how many are still unread.
@@ -102,8 +106,8 @@ export async function getHireCandidates(jobId: string): Promise<HireCandidate[]>
 export async function getMyJob(id: string): Promise<MyJob | null> {
   const db = await supabaseServer();
   if (!db) return null;
-  const { data } = await db.from("jobs").select(JOB_COLUMNS).eq("id", id).maybeSingle();
-  return (data as MyJob | null) ?? null;
+  const { data } = await db.from("jobs").select(await withExpected(JOB_COLUMNS)).eq("id", id).maybeSingle();
+  return (data as unknown as MyJob | null) ?? null;
 }
 
 // A saved starting point for a job post. The two questions every post must answer (existing vacancy and AI

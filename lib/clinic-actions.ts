@@ -9,6 +9,7 @@ import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss
 import { getMyEmployer } from "@/lib/clinic";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
+import { fitExpected, withExpected } from "@/lib/expected-columns";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { cleanClinic, isQuebecJob, validateClinic, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
@@ -38,8 +39,8 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     directHire: form.get("directHire") === "yes",
     employeeBand: field(form, "employeeBand"),
   });
-  const existingForBand = await getMyEmployer(session.userId);
-  const errors = validateClinic(clinic, { requireBand: !existingForBand });
+  // The staff count is optional (Steve, 13th November 2026): it is for Kestrel only and changes no rule, so it should not slow a clinic down.
+  const errors = validateClinic(clinic);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
@@ -87,7 +88,8 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
 
   revalidatePath("/clinic");
   refreshJobPages(); // the clinic name and about text appear on its saved job pages
-  if (!existing) redirect("/clinic?notice=profile-created");
+  // A new clinic goes straight on to its first post (Steve, 13th November 2026), with no stop on the empty dashboard.
+  if (!existing) redirect("/clinic/jobs/new?notice=profile-created");
   return { message: "Your clinic profile is saved." };
 }
 
@@ -128,13 +130,13 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     if (wasLive && !submit) return { error: "A live job can't be saved as a draft. Send your changes for review, or close the job." };
   }
   if (id) {
-    const { data, error } = await db.from("jobs").update(row).eq("id", id).select("id");
+    const { data, error } = await db.from("jobs").update(await fitExpected(row)).eq("id", id).select("id");
     if (error || !data?.length) {
       console.error("Job update failed:", error?.code, error?.message);
       return { error: "We couldn't save this job. It may already be in review or live." };
     }
   } else {
-    const { error } = await db.from("jobs").insert({ ...row, employer_id: employer.id });
+    const { error } = await db.from("jobs").insert(await fitExpected({ ...row, employer_id: employer.id }));
     if (error) {
       console.error("Job create failed:", error.code, error.message);
       return { error: "We couldn't save this job. Please check the form and try again." };
@@ -301,13 +303,13 @@ export async function repostJob(form: FormData) {
   if (!id || !db || !employer) redirect("/clinic");
   const { data: old } = await db
     .from("jobs")
-    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
+    .select(await withExpected("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras"))
     .eq("id", id)
     .eq("employer_id", employer.id)
     .in("status", ["closed", "expired", "live"])
     .maybeSingle();
   if (!old) redirect("/clinic");
-  const { data: copy, error } = await db.from("jobs").insert({ ...old, employer_id: employer.id, status: "draft" }).select("id").single();
+  const { data: copy, error } = await db.from("jobs").insert({ ...(old as unknown as Record<string, unknown>), employer_id: employer.id, status: "draft" }).select("id").single();
   if (error || !copy) {
     console.error("Repost failed:", error?.code, error?.message);
     redirect(`/clinic?notice=${/10 open jobs/.test(error?.message ?? "") ? "job-limit" : "job-repost-failed"}`);

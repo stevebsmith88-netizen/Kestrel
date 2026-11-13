@@ -13,7 +13,6 @@ import { newApplicationEmail } from "@/lib/clinic-emails";
 import { cleanPrefs } from "@/lib/candidate-prefs";
 import { FIELD_ROLES, PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { missingSentence, readyToApply } from "@/lib/profile-ready";
-import { cleanStage } from "@/lib/career-stage";
 import { notify } from "@/lib/notifications";
 import { newApplicant } from "@/lib/notify-text";
 import { canApplyForRole, canHaveFieldRoles, roleMismatchText } from "@/lib/role-fit";
@@ -91,7 +90,7 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
   return { message: "Your profile is saved." };
 }
 
-// The first step page after a candidate's first sign in: an optional role, the field and supplier tick, and where they are in eye care.
+// The first step page after a candidate's first sign in: an optional role and the field and supplier tick.
 // Skip saves nothing except that the page was shown. If migration 0037 has not been run yet, the new columns are left out so the answers
 // that can be saved still are, and nobody is sent back to this page.
 export async function saveFirstStep(_prev: JobFormState, form: FormData): Promise<JobFormState> {
@@ -99,7 +98,6 @@ export async function saveFirstStep(_prev: JobFormState, form: FormData): Promis
   const skip = form.get("skip") === "1";
   const profession = skip ? "" : text(form, "profession", 80);
   if (profession && !(ROLE_CATEGORIES as readonly string[]).includes(profession)) return { errors: { profession: "Choose the role that fits you best." }, error: "Please check the highlighted answer." };
-  const stage = skip ? null : cleanStage(text(form, "careerStage", 12));
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
@@ -112,12 +110,11 @@ export async function saveFirstStep(_prev: JobFormState, form: FormData): Promis
     base.pref_other_roles = form.get("openToField") === "on" && canHaveFieldRoles(profession) ? [...kept, ...FIELD_ROLES] : kept;
   }
   const extra: Record<string, unknown> = { start_seen_at: new Date().toISOString() };
-  if (stage) extra.career_stage = stage;
 
   const write = (row: Record<string, unknown>) =>
     existing ? db.from("candidate_profiles").update(row).eq("user_id", session.userId) : db.from("candidate_profiles").insert({ ...row, user_id: session.userId });
   let { error } = await write({ ...base, ...extra });
-  if (error && /career_stage|start_seen_at/.test(error.message)) {
+  if (error && /start_seen_at/.test(error.message)) {
     // The database has not been updated yet. Save what can be saved.
     ({ error } = Object.keys(base).length ? await write(base) : { error: null });
   }

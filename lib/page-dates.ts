@@ -2,14 +2,14 @@
 // field to decide when to look at a page again, so it must be true: change the date here when the page's own "Last updated" line changes.
 // lib/page-dates.test.ts checks that they agree.
 export const PAGE_DATES = {
-  privacy: "2026-11-12",
+  privacy: "2026-11-13",
   terms: "2026-10-30",
   postingPolicy: "2026-11-12",
   security: "2026-11-12",
   resources: "2026-11-09",
   ontarioJobAds: "2026-11-08",
   compare: "2026-11-06",
-  help: "2026-11-12",
+  help: "2026-11-13",
 } as const;
 
 // The address of each page above, so the daily job can tell search engines about a page the day it changes.

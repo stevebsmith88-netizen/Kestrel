@@ -8,7 +8,7 @@ export const ACCOUNT_TYPES = [
 ] as const;
 
 export const MARKETING_CONSENT_TEXT =
-  "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
+  "Yes, email me launch news, tips for getting started, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
 
 // Saved with each account as the record of which terms were agreed to. Change it when the terms change
 // in a way people need to agree to again (for example when the lawyer's version replaces the draft).

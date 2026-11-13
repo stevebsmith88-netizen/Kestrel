@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { jobFromForm } from "@/lib/job-form";
+import { fitExpected } from "@/lib/expected-columns";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
@@ -28,7 +29,7 @@ export async function saveJobForClinic(_prev: JobFormState, form: FormData): Pro
   const { data: employer } = await db.from("employers").select("id").eq("id", employerId).maybeSingle();
   if (!employer) return { error: "That clinic could not be found." };
 
-  const base = { ...row, employer_id: employerId };
+  const base = await fitExpected({ ...row, employer_id: employerId });
   let { error } = await db.from("jobs").insert({ ...base, posted_by_admin_id: session.userId, posted_by_admin_at: new Date().toISOString() });
   // If migration 0026 has not been run yet, post it anyway without the record of who did it.
   if (error && /posted_by_admin/.test(error.message)) ({ error } = await db.from("jobs").insert(base));

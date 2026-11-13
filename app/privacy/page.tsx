@@ -16,7 +16,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "12th November 2026";
+const UPDATED = "13th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -65,9 +65,9 @@ export default function Privacy() {
             <li>
               <strong>Also for candidates, private to you:</strong> your home town and province, how far you would travel, the provinces and
               types of work you would consider, other roles you would consider, the lowest pay you would accept and whether that is by the hour or the year, whether you
-              prefer an independent or a corporate practice, the practice software you know, your answer to &quot;where are you in eye care&quot; if you give one,
+              prefer an independent or a corporate practice, the practice software you know,
               and the jobs you mark &quot;Not interested&quot;. We use these only to build your <strong>Recommended for you</strong> list.
-              Clinics never see your preferences, your lowest pay, your career stage answer or your town. A clinic sees only what is
+              Clinics never see your preferences, your lowest pay or your town. A clinic sees only what is
               listed on the apply page when you send an application. You can change your preferences in your profile, you can ask us to remove anything else by email, and all of it is in the copy of your information you can download.
             </li>
             <li>
@@ -123,7 +123,7 @@ export default function Privacy() {
           <p>
             <strong>Emails about your account or an application.</strong> These are sent whether or not you ticked the consent box, because you need them to use Kestrel.
             They include the link to confirm your email address, a password reset, an update on an application you sent, and a new applicant for a clinic. The job alerts you set up yourself keep coming until you delete the alert or unsubscribe.
-            Kestrel also has a short series of welcome emails for new accounts. It is switched off today, and nobody is sent it.
+            Kestrel also has a short series of tips for getting started, for new accounts. They go only to people who ticked the consent box, and they are switched off today, so nobody is sent them.
           </p>
           <p>
             If you unsubscribe, we keep your email address and the date on a suppression list so that we do not email you again

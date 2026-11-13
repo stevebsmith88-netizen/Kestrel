@@ -34,6 +34,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
           <h1>Post a job</h1>
           <p className="lede2">About 5 minutes. You can save a draft and come back to it from your dashboard.</p>
           {notice === "template-deleted" && <p className="notice" role="status">Template deleted.</p>}
+          {notice === "profile-created" && <p className="notice" role="status">Your clinic profile is saved. Now your first job: a person reads it before it goes live, usually within 1 business day.</p>}
 
           {start ? (
             <p className="note">

@@ -8,7 +8,8 @@ import { EMPLOYEE_BANDS, PRACTICE_TYPES, PROVINCES } from "@/lib/jobs";
 
 type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; employee_band: string | null; direct_hire_confirmed_at: string | null };
 
-export default function ClinicProfileForm({ initial }: { initial: Initial | null }) {
+// A new clinic's alert address starts as the email it signed up with, so it is not typed twice (it can be changed).
+export default function ClinicProfileForm({ initial, signUpEmail = "" }: { initial: Initial | null; signUpEmail?: string }) {
   const { state, pending, submit } = useServerForm(saveClinic);
   const e = state.errors ?? {};
   return (
@@ -31,7 +32,7 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
           </select>
         </Field>
       </div>
-      <Field id="cp-band" label="How many people work at your clinic or company?" required={!initial} error={e.employeeBand} hint="Private. Only the Kestrel team sees this, and it does not change what you can post.">
+      <Field id="cp-band" label="How many people work at your clinic or company? (optional)" error={e.employeeBand} hint="Private. Only the Kestrel team sees this, and it does not change what you can post.">
         <select id="cp-band" name="employeeBand" defaultValue={initial?.employee_band ?? ""}>
           <option value="">Choose one</option>
           {EMPLOYEE_BANDS.map((b) => (
@@ -46,7 +47,7 @@ export default function ClinicProfileForm({ initial }: { initial: Initial | null
         <textarea id="cp-about" name="about" rows={5} defaultValue={initial?.about ?? ""} />
       </Field>
       <Field id="cp-email" label="Send new applicant alerts to" required error={e.notifyEmail} hint="Private. We never show this address on a job post. Applicants contact you through Kestrel.">
-        <input id="cp-email" name="notifyEmail" type="email" autoComplete="email" defaultValue={initial?.notify_email ?? ""} />
+        <input id="cp-email" name="notifyEmail" type="email" autoComplete="email" defaultValue={initial?.notify_email ?? signUpEmail} />
       </Field>
 
       <div className={`row ${e.directHire ? "invalid" : ""}`}>

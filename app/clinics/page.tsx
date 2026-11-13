@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { launchLayoutOn } from "@/lib/launch";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, passBreakEven, perDay, perPassPost } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
 
@@ -19,7 +20,9 @@ export const metadata: Metadata = shareMetadata({
 
 const OPTICIAN_BAND = ROLE_BANDS[1];
 
-export default function Clinics() {
+export default async function Clinics() {
+  // Before launch the call to action is the waitlist; once sign up opens, a clinic account with "hiring for a clinic" already chosen.
+  const launched = await launchLayoutOn();
   const pickAt = passBreakEven(OPTICIAN_BAND.price);
   return (
     <>
@@ -77,8 +80,14 @@ export default function Clinics() {
             </div>
             <p className="small-note">Prices in Canadian dollars, before HST. Near the end of its 30 days, any post can be extended for another 30.</p>
           </section>
-          <p>Waitlist clinics will be the first invited to post.</p>
-          <Link href="/#join" className="btn">Join the waitlist</Link>
+          {launched ? (
+            <Link href="/sign-up?type=clinic" className="btn">Create your clinic account</Link>
+          ) : (
+            <>
+              <p>Waitlist clinics will be the first invited to post.</p>
+              <Link href="/#join" className="btn">Join the waitlist</Link>
+            </>
+          )}
           <p className="small-note">Already have an account? <Link href="/sign-in">Sign in</Link></p>
         </div>
       </main>

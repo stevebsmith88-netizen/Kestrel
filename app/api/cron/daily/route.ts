@@ -5,6 +5,7 @@ import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } fro
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
+import { withExpected } from "@/lib/expected-columns";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { notify } from "@/lib/notifications";
@@ -271,7 +272,7 @@ async function runDaily(request: Request) {
     for (const alert of mine) {
       let query = admin
         .from("jobs")
-        .select(`id, title, province, city, ${ALERT_PAY_COLUMNS}, employers!inner(clinic_name, practice_type)`)
+        .select(await withExpected(`id, title, province, city, ${ALERT_PAY_COLUMNS}, employers!inner(clinic_name, practice_type)`))
         .eq("status", "live")
         .gt("expires_at", now.toISOString())
         .gt("posted_at", alert.last_sent_at)
