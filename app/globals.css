@@ -910,3 +910,23 @@ body.sf-locked{overflow:hidden}
 .reportpolicy a{color:var(--muted)}
 .reportpolicy a:hover{color:var(--navy)}
 .a-clinic_left{background:#ECEEF0;color:#4A5560}
+/* The Instagram link page (/links): 1 narrow column, big buttons first, then the newest guides as tappable rows. */
+.linkpage{background:var(--cream);padding:48px 16px 0}
+.lp-wrap{max-width:520px;margin:0 auto;text-align:center}
+.lp-brand{display:inline-block}
+.lp-brand img{display:block;width:240px;height:auto}
+.lp-tag{margin:14px 0 0;font:400 .6875rem/1.5 var(--f-tag),var(--f-sans),sans-serif;letter-spacing:.28em;text-transform:uppercase;color:var(--slate)}
+.lp-intro{margin:18px auto 0;max-width:30em;color:var(--navy-2)}
+.lp-actions{display:flex;flex-direction:column;gap:12px;margin:28px 0 0}
+.lp-actions .btn{display:block;text-align:center}
+.lp-head{font:400 1.75rem/1.2 var(--f-display),Georgia,serif;color:var(--navy);margin:44px 0 14px;text-align:left}
+.lp-list{list-style:none;margin:0;padding:0;text-align:left;border-top:1px solid var(--line)}
+.lp-list li{border-bottom:1px solid var(--line)}
+.lp-list a{display:flex;flex-direction:column;gap:2px;padding:14px 12px;margin:0 -12px;border-radius:8px;text-decoration:none;color:var(--navy)}
+.lp-list a:hover{background:rgba(27,43,75,.06);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.45)}
+.lp-list a:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+.lp-title{font-weight:600;line-height:1.35}
+.lp-date{font-size:.875rem;color:var(--slate)}
+.lp-follow{margin:28px 0 0;color:var(--slate)}
+.lp-skyline{margin-top:36px;pointer-events:none}
+.lp-skyline img{display:block;width:100%;height:auto}

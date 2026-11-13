@@ -24,6 +24,7 @@ const SAVED_PAGES = [
   "app/terms/page.tsx",
   "app/posting-policy/page.tsx",
   "app/contact/page.tsx",
+  "app/links/page.tsx",
   "app/eye-care-jobs/page.tsx",
   "app/eye-care-jobs/[province]/page.tsx",
   "app/eye-care-jobs/[province]/[role]/page.tsx",

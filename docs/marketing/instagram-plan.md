@@ -12,7 +12,8 @@ Plan written 13th November 2026. Nothing here has been posted. Designs are made 
 - **Never pin a post.** Pinning moves it to the top and breaks the rows.
 - **Captions:** the Kestrel voice (no emoji, numerals, no em dashes), end with "Full guide: link in bio", then at most 5 hashtags.
 - **Footer:** the website footer shows a LinkedIn icon now and an Instagram icon once `INSTAGRAM_URL` in `lib/social.ts` is filled in.
-- **Link in bio:** point it at https://eyecarejobs.ca/blog, or the waitlist before launch.
+- **Link in bio:** https://eyecarejobs.ca/links?utm_source=instagram&utm_medium=social&utm_campaign=bio (Steve, 13th November 2026). The page (`app/links/page.tsx`) shows Join the waitlist (Find jobs and Post a job once launched), Read all the guides, and the 6 newest published guides, which update themselves. It is kept out of Google and the sitemap.
+- **Old note, link in bio:** point it at https://eyecarejobs.ca/blog, or the waitlist before launch.
 
 ## Rhythm
 
