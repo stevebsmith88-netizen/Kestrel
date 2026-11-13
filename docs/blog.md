@@ -8,6 +8,13 @@ What each page gets for search engines: its own title, description and address, 
 
 Writing text: a blank line between paragraphs, `## ` for a heading, `- ` for a bullet list, `**bold**`, and `[text](/jobs)` for links (an address on the site, or one starting with https://).
 
+Since 13th November 2026 (Steve asked for posts that look less plain), 3 more blocks, each with a blank line before and after:
+
+- **Pull quote:** lines starting `> `. It shows in large chestnut serif type between big Wing Buff quote marks. Use a short, strong line from the post itself (screen readers skip it, since it repeats the text). To quote someone else, end with a line `> source: Their name`, and it is read out with the name. **Every post needs at least 1** (the tests check), placed mid post, not next to the line it repeats.
+- **Table:** lines starting `|`, with the header row first and a `| --- | --- |` divider second. Use one when the reader would compare across rows: pay by province, roles side by side, a short checklist. Keep cells short so it reads on a phone.
+- **Image:** a line `![Alt text](/images/blog/name.png)`, optionally followed by a caption line. The file goes in `public/images/blog` and must be listed in `lib/blog-images.ts` with its size. **Alt text is required** and says what is on the image, words included (the tests check). An image after the first paragraph sits beside the text on a computer and above it on a phone. Each guide's Instagram card is used this way, so the blog and the grid match, and the first image is also given to search engines as the post's picture.
+
+
 ## The home page section
 
 The "From the blog" section on the home page (one feature and two links) is built but switched **off**. To show it, set `ENABLE_HOME_BLOG` to `yes` in the Vercel project (live, demo or both) and redeploy. The blog itself at `/blog`, its posts and the sitemap are not affected either way.

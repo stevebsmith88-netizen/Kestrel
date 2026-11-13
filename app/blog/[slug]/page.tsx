@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import BlogBody from "@/components/BlogBody";
 import SiteHeader from "@/components/SiteHeader";
-import { readingMinutes } from "@/lib/blog";
+import { firstImage, readingMinutes } from "@/lib/blog";
 import { longDate } from "@/lib/jobs";
 import { POSTS } from "@/content/posts";
 import { isPublished, visiblePosts } from "@/lib/blog";
@@ -39,7 +39,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     "@type": "Article",
     headline: post.title,
     description: post.description,
-    image: [`${SITE}/brand/kestrel-share-1200x630.png`],
+    image: [...(firstImage(post.body) ? [`${SITE}${firstImage(post.body)}`] : []), `${SITE}/brand/kestrel-share-1200x630.png`],
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
     author: { "@type": "Organization", name: "Kestrel Eye Care Jobs", url: SITE },

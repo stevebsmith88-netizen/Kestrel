@@ -2,7 +2,9 @@
 
 Revised 13th November 2026 (evening): 3 new posts for the new blog posts and the pay summary page, and the 2 held posts slotted in. The first 9 are posted.
 
-**Where everything is:** Canva folder "Kestrel Instagram: new style", design **"Kestrel Instagram: posting order"**. Its pages are the posts in the order they go out. 3 pages are still to add, because this session could not upload to Canva: drag `g11-optician-pay.png`, `g12-ai-chatbots.png` and `g13-pay-summary.png` (in `design/social-and-merch/instagram-guides`) into the design so they sit at pages 12, 14 and 16. After that, **page number = post number** for every post below. The 3 original designs stay as they were, as a backup.
+**Where everything is:** Canva folder "Kestrel Instagram: new style", design **"Kestrel Instagram: posting order"**. Its pages are the posts in the order they go out. 3 pages are still to add, because this session could not upload to Canva: drag `g11-optician-pay.png`, `g12-ai-chatbots.png` and `g13-pay-summary.png` (in `design/social-and-merch/instagram-guides`) into the design so they sit at pages 12, 14 and 16. After that, **page number = post number** for every post below.
+
+**2 pages to swap (Steve, 13th November 2026: they did not match the grid):** post 10 is now pale blue, and Things heard No. 3 is now a flat navy card without the landscape picture. Replace page 10 with `g02-job-ad-checklist.png` and page 21 with `t03-just-look-at-the-house.png` (same folder). The old versions in the original Canva designs are no longer used. The 3 original designs stay as they were, as a backup.
 
 **Grid rule:** posts rotate through 4 colour families (navy, chestnut, cream or paper, and the light ones: pale blue or buff), so no 2 posts of the same family ever sit side by side or one above the other. Checked for the whole order below: no post matches the one before it, or the one 3 before it. Every guide post goes out after its blog post is live.
 
@@ -172,7 +174,7 @@ Hello, we're Kestrel. A Canada-wide eye care job board. Every job shows its pay.
 
 | Post | Date | What | Colour |
 | --- | --- | --- | --- |
-| 10 | Mon 23rd November | Guide: 4 things every job ad | Buff |
+| 10 | Mon 23rd November | Guide: 4 things every job ad (**redrawn in pale blue**) | Pale blue |
 | 11 | Mon 30th November | Things heard No. 4 | Cream |
 | 12 | Thu 3rd December | **New:** Optician pay | Chestnut |
 | 13 | Mon 7th December | Photo: Every job shows its pay | Navy |
@@ -183,13 +185,13 @@ Hello, we're Kestrel. A Canada-wide eye care job board. Every job shows its pay.
 | 18 | Mon 4th January | Guide: Who does what | Chestnut |
 | 19 | Mon 11th January | Things heard No. 7 | Navy |
 | 20 | Mon 18th January | Guide: 4 tips for a resume | Chestnut |
-| 21 | Thu 21st January | Things heard No. 3 (was on hold) | Navy |
+| 21 | Thu 21st January | Things heard No. 3 (was on hold, **redrawn as a flat navy card**) | Navy |
 | 22 | Mon 25th January | Guide: Hire for attitude | Cream |
 | 23 | Thu 28th January | Guide: Eye care jobs on the road (was on hold) | Soft navy |
 | 24 | Mon 1st February | Things heard: Your turn | Buff |
 | 25 | Mon 8th February | Guide: How to attract | Navy |
 
-### 10. Guide: 4 things every job ad
+### 10. Guide: 4 things every job ad (pale blue version)
 **When:** Monday 23rd November, 8:00 am · **Canva:** Posting order, page 10 · **Location:** Ontario
 
 Caption:
@@ -384,7 +386,7 @@ Alt text:
 Kestrel guide: 4 tips for an eye care resume. 1, your registration status, if the job needs it. 2, 2 or 3 lines on who you are. 3, the tests, lenses and systems you know. 4, leave off your photo and date of birth.
 ```
 
-### 21. Things heard in clinic No. 3 (was on hold)
+### 21. Things heard in clinic No. 3 (flat navy version)
 **When:** Thursday 21st January, 8:00 am · **Canva:** Posting order, page 21 · **Location:** Canada
 
 Caption:
@@ -395,7 +397,7 @@ If you know, you know. What did your first autorefractor show you, a house, a ba
 ```
 Alt text:
 ```text
-Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A drawing of a road leading to a red house.
+Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A line drawing of a road leading to a house, on navy.
 ```
 
 ### 22. Guide: Hire for attitude
