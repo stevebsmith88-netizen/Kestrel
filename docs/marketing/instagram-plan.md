@@ -74,4 +74,4 @@ To keep the posts on brand but less plain:
 
 ## Blog schedule (Steve, 13th November 2026)
 
-The guides behind the first 9 Instagram posts go out weekly first, every Friday from 13th November 2026 to 1st January 2027, in an order where no guide links to one that is not out yet. After that the blog goes out every 2 weeks, on Fridays, matching the Instagram rhythm of 1 row every 2 weeks: 15th January 2027 to 4th June 2027 for the 11 guides already written. Dates live in `content/posts.ts`. When adding a guide, check its links only point to guides already out on its date.
+The full list is in docs/blog.md. Weekly on Fridays to 18th December 2026 (starting a career in optics stays on 18th December), no posts on 25th December or 1st January, a "new year, new job" run on 8th, 15th and 22nd January 2027, then every 2 weeks to 11th June 2027. Instagram: the navy row (05, 04, 06) goes out the week of 11th January 2027, as 06's guide is out on 15th January; the chestnut row (07, 08, 09) the week of 18th January, as 09's guide is out on 22nd January. A guide must never link to one that is not out yet on its date.
