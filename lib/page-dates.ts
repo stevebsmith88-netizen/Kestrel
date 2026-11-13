@@ -3,8 +3,9 @@
 // lib/page-dates.test.ts checks that they agree.
 export const PAGE_DATES = {
   privacy: "2026-11-13",
-  terms: "2026-10-30",
-  postingPolicy: "2026-11-12",
+  terms: "2026-11-13",
+  postingPolicy: "2026-11-13",
+  fakeJobs: "2026-11-13",
   security: "2026-11-12",
   resources: "2026-11-09",
   ontarioJobAds: "2026-11-08",
@@ -17,6 +18,7 @@ const PAGE_PATHS: Record<keyof typeof PAGE_DATES, string> = {
   privacy: "/privacy",
   terms: "/terms",
   postingPolicy: "/posting-policy",
+  fakeJobs: "/fake-jobs",
   security: "/security",
   resources: "/resources",
   ontarioJobAds: "/resources/ontario-job-ads",

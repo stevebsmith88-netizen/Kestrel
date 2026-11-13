@@ -120,6 +120,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                 )}
               </section>
               <p className="reportlink"><Link href={`/jobs/${job.id}/report`}><Icon name="warning" />Report this job</Link></p>
+              <p className="help reportpolicy"><Link href="/fake-jobs">How we handle reports of fake jobs</Link></p>
             </aside>
           </div>
         </div>

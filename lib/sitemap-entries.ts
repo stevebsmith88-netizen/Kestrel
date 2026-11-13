@@ -39,6 +39,7 @@ export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/security`, lastModified: PAGE_DATES.security, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE}/terms`, lastModified: PAGE_DATES.terms, changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE}/posting-policy`, lastModified: PAGE_DATES.postingPolicy, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE}/fake-jobs`, lastModified: PAGE_DATES.fakeJobs, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE}/contact`, changeFrequency: "yearly", priority: 0.3 },
     ...jobs.map((j) => ({ url: `${SITE}/jobs/${j.id}`, lastModified: j.posted_at, changeFrequency: "weekly" as const, priority: 0.8 })),
   ];

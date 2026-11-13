@@ -23,7 +23,7 @@ export default async function ReportJob({ params }: { params: Promise<{ id: stri
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
           <p className="kicker">{job.title}</p>
           <h1>Report this job</h1>
-          <p className="lede2">{job.employers?.clinic_name} · {job.city}, {job.province}. Thank you for helping keep Kestrel honest. A person reads every report.</p>
+          <p className="lede2">{job.employers?.clinic_name} · {job.city}, {job.province}. Thank you for helping keep Kestrel honest. A person reads every report within 2 business days. <Link href="/fake-jobs">How we handle reports</Link>.</p>
           <ReportForm jobId={job.id} />
         </div>
       </main>

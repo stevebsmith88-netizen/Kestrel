@@ -120,9 +120,10 @@ export const HELP: HelpSection[] = [
       {
         id: "report-a-job",
         title: "How do I report a job?",
-        keywords: ["scam", "fake", "spam", "flag", "complaint", "recruiter", "agency", "discriminatory", "wrong", "filled"],
+        keywords: ["scam", "fake", "fraud", "fraudulent", "spam", "flag", "complaint", "recruiter", "agency", "discriminatory", "wrong", "filled", "policy"],
         answer: [
-          "If a job looks like a scam, comes from a recruiter or agency, uses discriminatory wording, has pay or details that look wrong, or has already been filled, tell us. A person reads every report.",
+          "If a job looks like a scam, comes from a recruiter or agency, uses discriminatory wording, has pay or details that look wrong, or has already been filled, tell us. A person reads every report within 2 business days, and may hide the job while we check.",
+          "Our policy on fake and fraudulent jobs says what we treat as fraudulent and what we do about a report.",
         ],
         steps: [
           "Open the job.",
@@ -131,6 +132,7 @@ export const HELP: HelpSection[] = [
           "Add your email address only if you would like us to write back.",
           "Press **Send report**.",
         ],
+        links: [{ label: "Reporting fake jobs", href: "/fake-jobs" }],
       },
       {
         id: "email-choices",

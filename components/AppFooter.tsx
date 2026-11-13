@@ -56,6 +56,7 @@ export default function AppFooter() {
               <li><Link href="/privacy">Privacy</Link></li>
               <li><Link href="/terms">Terms</Link></li>
               <li><Link href="/posting-policy">Posting policy</Link></li>
+              <li><Link href="/fake-jobs">Report a fake job</Link></li>
             </ul>
             <p className="sf-copy">&copy; {new Date().getFullYear()} Kestrel Eye Care Jobs</p>
           </div>

@@ -17,7 +17,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/terms",
 });
 
-const UPDATED = "30th October 2026";
+const UPDATED = "13th November 2026";
 const DRAFT = true;
 
 export default async function Terms() {
@@ -100,7 +100,7 @@ export default async function Terms() {
 
           <h2>Reporting problems</h2>
           <p>
-            Anyone can report a job using the &quot;Report this job&quot; link on its page. We may take down a post while we look into a report. We may suspend or close an
+            Anyone can report a job using the &quot;Report this job&quot; link on its page. Our <Link href="/fake-jobs">policy on fake and fraudulent jobs</Link> says how we deal with reports. We may take down a post while we look into a report. We may suspend or close an
             account that breaks these terms, and we will usually tell you why.
           </p>
 
@@ -120,7 +120,9 @@ export default async function Terms() {
 
           <h2>Ending your account</h2>
           <p>
-            You can delete your account at any time from your account page. We may suspend or end access if these terms are broken, or if we must by law. Sections that
+            You can delete your account at any time from your account page. Deleting it removes your profile and the applications linked to it, as
+            our <Link href="/privacy">privacy policy</Link> explains, and a clinic&apos;s account takes its jobs and the applications it received with it.
+            We may suspend or end access if these terms are broken, or if we must by law. Sections that
             by their nature should continue, such as those about payment and responsibility, continue after an account ends.
           </p>
 
@@ -132,7 +134,7 @@ export default async function Terms() {
           <h2>Law and contact</h2>
           <p>
             These terms are governed by the laws of Ontario and the federal laws of Canada that apply there. Disputes go to the courts of Ontario. Questions about these
-            terms can go to <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>. See our <Link href="/contact">contact page</Link> for our mailing address.
+            terms can go to <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>. Our mailing address is in the footer of every email we send.
           </p>
         </div>
       </main>

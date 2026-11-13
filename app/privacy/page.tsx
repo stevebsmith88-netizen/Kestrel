@@ -105,8 +105,8 @@ export default function Privacy() {
           <h2>Why we collect it</h2>
           <ul>
             <li>
-              To add you to our waitlist and email you about Kestrel Eye Care Jobs, including launch news, job alerts, product
-              updates and offers.
+              To add you to our waitlist and email you about Kestrel Eye Care Jobs: launch news, product updates and offers, and,
+              for accounts, tips for getting started. Job alerts are separate: they are emails you set up yourself.
             </li>
             <li>To run your account, let candidates apply to jobs, and let clinics review the applications they receive.</li>
             <li>To keep a record of your consent, as Canadian law requires.</li>
@@ -168,12 +168,23 @@ export default function Privacy() {
           </p>
 
           <h2>How long we keep it</h2>
+          <ul>
+            <li><strong>Waitlist sign ups never confirmed:</strong> deleted after 30 days. A confirmed sign up is kept while you are on the list.</li>
+            <li><strong>Your account, profile and resume:</strong> kept while your account is open. You can replace or delete your resume in your profile at any time.</li>
+            <li><strong>Messages in your Kestrel inbox:</strong> deleted after 12 months.</li>
+            <li><strong>Applications, and the copy of your resume sent with each:</strong> kept for 2 years after the job closes, then deleted.</li>
+            <li><strong>&quot;Keep my details for future roles&quot;:</strong> if you tick this when you apply, the clinic may keep your application to consider you for later roles for 12 months. You can ask the clinic, or us, to remove it at any time.</li>
+            <li><strong>Job posts as published:</strong> kept for 3 years after they close.</li>
+            <li><strong>Reports about a job, and claims of a listing:</strong> deleted after 2 years.</li>
+          </ul>
           <p>
-            We keep your waitlist details while you are on the list, and your account, profile and resume while your account is open.
-            You can replace or delete your resume in your profile at any time. If you ask us to delete your account, we will delete
-            your profile, your resume and your applications, apart from a minimal record that we received and carried out your
-            request, and the suppression record described above. A clinic that has already received your application may have
-            kept its own copy of what you sent it, and you can ask us to ask that clinic to remove it.
+            If you delete your account, we delete your profile, your resume and your applications, apart from a minimal record that we received
+            and carried out your request, and the suppression record described above. A clinic that has already received your application may
+            have kept its own copy of what you sent it, and you can ask us to ask that clinic to remove it.
+          </p>
+          <p>
+            Today, if a clinic deletes its account, its jobs and the applications it received are deleted with it, and they disappear from the
+            candidates&apos; lists of applications too. We are changing this so that you keep your own record of an application you sent.
           </p>
 
           <h2>How we protect it</h2>
@@ -195,7 +206,7 @@ export default function Privacy() {
 
           <h2>Changes to this policy</h2>
           <p>
-            We will update this page as Kestrel grows, for example when we launch accounts, job posting and payments. The date at
+            We will update this page as Kestrel grows, for example when we start taking payments. The date at
             the top shows the latest version. If a change affects how we use your information in a way you have not agreed to,
             we will ask for your consent first.
           </p>

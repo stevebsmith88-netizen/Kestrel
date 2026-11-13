@@ -6,6 +6,7 @@ import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/emai
 import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
 import { withExpected } from "@/lib/expected-columns";
+import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { notify } from "@/lib/notifications";
@@ -405,6 +406,17 @@ async function runDaily(request: Request) {
   // Tidy the sign in guard's counts. Anything older than a day has long since run out. A problem here is logged, not alerted.
   const { error: attemptsError } = await admin.from("sign_in_attempts").delete().lt("window_started_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
   if (attemptsError) console.error("Clearing old sign in attempts:", attemptsError.code, attemptsError.message);
+
+  // Delete what has passed its retention period (lib/retention.ts, and "How long we keep it" in the privacy policy). Reports and claims still
+  // waiting for a decision are kept. A problem here is logged, not alerted, and is tried again the next day.
+  const cut = retentionCutoffs(now);
+  const retention = await Promise.all([
+    admin.from("waitlist").delete().is("confirmed_at", null).lt("created_at", cut.unconfirmedWaitlist),
+    admin.from("notifications").delete().lt("created_at", cut.inboxMessages),
+    admin.from("job_reports").delete().neq("status", "open").lt("created_at", cut.reportsAndClaims),
+    admin.from("listing_claims").delete().neq("status", "pending_review").lt("created_at", cut.reportsAndClaims),
+  ]);
+  for (const r of retention) if (r.error) console.error("Retention clean up:", r.error.code, r.error.message);
 
   // Record the run, so a missed or failing day shows up in the health check.
   const finished = new Date().toISOString();

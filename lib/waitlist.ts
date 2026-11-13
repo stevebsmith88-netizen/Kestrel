@@ -40,7 +40,9 @@ export const QUEBEC_JOIN_NOTE = "Kestrel is in English for now and can't post jo
 // Keep this wording identical to what people see. It is saved with every
 // sign up as the record of what they agreed to (CASL express consent).
 export const CONSENT_TEXT =
-  "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
+  "Yes, email me when Kestrel Eye Care Jobs launches, and with product updates and offers. I can unsubscribe at any time.";
+// Until 13th November 2026 the wording was "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can
+// unsubscribe at any time." Sign ups from before then keep that wording in their own record (consent_text).
 
 export const THANK_YOU =
   "Thanks. We have sent you an email. Press the button in it to confirm your address and finish joining the list. It can take a few minutes, and it may land in your spam folder.";
