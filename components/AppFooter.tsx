@@ -2,6 +2,8 @@ import Link from "next/link";
 import { comparePageOn } from "@/lib/compare-prices";
 import { findYourFitOn } from "@/lib/features";
 import { TAGLINE } from "@/lib/launch-rules";
+import { socialPages } from "@/lib/social";
+import Icon from "@/components/Icon";
 
 // The one footer for every page. The wordmark is the existing reversed brand file. The street address is not shown here: CASL needs it
 // in emails only. Find your fit and Compare prices appear only while those pages are switched on, so a link never leads to a 404.
@@ -39,6 +41,15 @@ export default function AppFooter() {
                 <img src="/brand/kestrel-wordmark-reversed.svg" alt="Kestrel Eye Care Jobs" width={150} height={44} />
               </Link>
               <p>{TAGLINE}</p>
+              <ul className="sf-social" aria-label="Kestrel on social media">
+                {socialPages().map((p) => (
+                  <li key={p.name}>
+                    <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Kestrel Eye Care Jobs on ${p.name} (opens in a new tab)`}>
+                      <Icon name={p.name === "LinkedIn" ? "linkedin" : "instagram"} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
             {columns.map((c) => (
               <div className="sf-col" key={c.id}>

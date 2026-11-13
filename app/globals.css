@@ -82,6 +82,11 @@ input.other{margin-top:10px}
 .sf-brand a{min-height:0;display:inline-block;padding:0;margin-left:0}
 /* The wordmark is a plain home link, as in the header: no box on hover. Keyboard focus still shows the ring. */
 .sitefoot .sf-brand a:hover{background:none;box-shadow:none}
+/* Social icons under the tagline: square tap targets with the footer's hover box, since they are links you can press. */
+.sf-social{list-style:none;margin:12px 0 0 -10px;padding:0;display:flex;gap:4px}
+.sitefoot .sf-brand .sf-social a{display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;padding:0;margin:0;border-radius:8px;color:#C9D1DA}
+.sitefoot .sf-brand .sf-social a:hover{color:#fff;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.75)}
+.sf-social .icon{width:22px;height:22px}
 .sf-bottom{margin-top:30px;border-top:1px solid #34456A;padding:6px 0 26px;display:flex;justify-content:space-between;align-items:center;gap:6px 24px;flex-wrap:wrap}
 .sf-legal{display:flex;flex-wrap:wrap;gap:0 22px}
 .sitefoot .sf-legal a{font-weight:400;color:#C9D1DA;font-size:.875rem}

@@ -46,6 +46,20 @@ const PATHS = {
       <path d="M20 20v-4h-4" />
     </>
   ),
+  instagram: (
+    <>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M17.3 6.7v.1" />
+    </>
+  ),
+  linkedin: (
+    <>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+      <path d="M8 10.5V16.5M8 7.6v.1" />
+      <path d="M11.5 16.5v-6M11.5 13a2.5 2.5 0 0 1 5 0v3.5" />
+    </>
+  ),
 } as const;
 
 export type IconName = keyof typeof PATHS;

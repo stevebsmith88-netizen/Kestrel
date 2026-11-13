@@ -11,6 +11,7 @@ Plan written 13th November 2026. Nothing here has been posted. Designs are made 
 - **Size:** 1080 x 1350 (portrait). Keep the headline in the middle, since the grid crops towards 3:4.
 - **Never pin a post.** Pinning moves it to the top and breaks the rows.
 - **Captions:** the Kestrel voice (no emoji, numerals, no em dashes), end with "Full guide: link in bio", then at most 5 hashtags.
+- **Footer:** the website footer shows a LinkedIn icon now and an Instagram icon once `INSTAGRAM_URL` in `lib/social.ts` is filled in.
 - **Link in bio:** point it at https://eyecarejobs.ca/blog, or the waitlist before launch.
 
 ## Rhythm
@@ -48,6 +49,7 @@ Left out on purpose: the buying group blog post, to keep the account clear of an
 
 - Cream rows: Cream background, Navy headline in DM Serif Display, Chestnut for the small label.
 - Navy rows: Navy background, Cream headline, Wing Buff for the small label.
-- Each post has 1 stock photo set inside a Canva frame, a headline of no more than 8 words, the Kestrel wordmark small at the bottom, and nothing else.
+- Each post has 1 stock photo set inside a Canva frame, a headline of no more than 8 words, and the Kestrel wordmark image. Wherever a post names Kestrel, use the wordmark image, never the name typed as text (Steve, 13th November 2026). Navy wordmark on Cream rows, reversed wordmark on Navy rows; both are uploaded to the Kestrel Canva.
+- Mocks (13th November 2026): "IG 01 Cream: Meet Kestrel" and "IG 04 Navy: Optometric assistant jobs" in the Kestrel Canva.
 - Photos: real clinic moments (frame fitting, pre testing, a lab bench, a front desk), Canadian looking where possible, no staged handshakes, no one wearing a white coat to look like a doctor when they are not.
 - Never redraw or change the logo or the skyline.
