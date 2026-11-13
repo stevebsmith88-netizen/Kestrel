@@ -20,7 +20,7 @@ We are opening soon. Join the waitlist through the link in bio, and follow along
 
 #EyeCareJobs #Optometry #Opticians #OptometricAssistant #CanadaJobs
 
-**Alt text:** A woman trying on a pair of dark frames in front of a mirror in an optical shop.
+**Alt text:** Text reads: Hello, we're Kestrel. A Canada-wide eye care job board. Every job shows its pay. eyecarejobs.ca. Photo of a woman trying on dark frames in a shop mirror, above a drawing of mountains, forest and a city skyline.
 
 ---
 
@@ -36,7 +36,7 @@ Full guide: link in bio.
 
 #Optics #Opticians #EyeCareCareers #CareerChange #EyeCare
 
-**Alt text:** Close up of hands fitting a new temple onto a pair of glasses.
+**Alt text:** Text reads: How most people fall into optics. Few people plan a career in eye care. Most find it by chance, and many stay for good. Photo of hands fitting a new arm onto a pair of glasses.
 
 ---
 
@@ -55,7 +55,7 @@ Full checklist: link in bio.
 
 #EyeCareJobs #Hiring #Optometry #OntarioJobs #ClinicOwner
 
-**Alt text:** A young woman trying on glasses beside a wall of frames in an optical shop.
+**Alt text:** Text reads: 4 things every job ad in Canada should include. 1, the pay range. 2, is it an existing vacancy? 3, do you use AI to screen applicants? 4, no "Canadian experience" requirement. Photo of a young woman trying on glasses beside a frame wall.
 
 ---
 
@@ -71,7 +71,7 @@ Our full list of questions: link in bio.
 
 #Opticians #Optician #JobInterview #EyeCareJobs #Optics
 
-**Alt text:** 2 women talking in armchairs in a bright, quiet office.
+**Alt text:** Text reads: Questions to ask before you say yes. The patients, the lab, the hours, the pay, the training and the team. Photo of 2 women talking in armchairs in a bright office.
 
 ---
 
@@ -85,7 +85,7 @@ Full guide: link in bio.
 
 #OptometricAssistant #EyeCareJobs #Optometry #HealthcareJobs #CanadaJobs
 
-**Alt text:** A patient resting his chin on an eye test instrument while a clinician looks through it.
+**Alt text:** Text reads: Optometric assistant jobs: the work and the pay. What the job involves day to day, how pay varies across Canada, and how to start or move up. Photo of a patient at an eye test instrument, above a drawing of mountains and a city skyline.
 
 ---
 
@@ -99,7 +99,7 @@ Full guide: link in bio.
 
 #EyeCareJobs #Hiring #ClinicOwner #Optometry #Opticians
 
-**Alt text:** An optician fitting a new pair of tortoiseshell glasses on a young woman.
+**Alt text:** Text reads: Hire for attitude, train for skills. Many good eye care staff start out in retail, hospitality or other health jobs. Photo of an optician fitting tortoiseshell glasses on a young woman.
 
 ---
 
@@ -113,7 +113,7 @@ Many of these roles need no university degree. Full guide: link in bio.
 
 #EyeCareCareers #Optometry #Opticians #OptometricAssistant #EyeCareJobs
 
-**Alt text:** A smiling eye care professional in a white coat standing beside a phoropter.
+**Alt text:** Text reads: Who does what in an eye care clinic. There are more roles than most people expect, and many need no university degree. Photo of a smiling eye care professional beside a phoropter, above a drawing of mountains and a city skyline.
 
 ---
 
@@ -127,7 +127,7 @@ Full guide: link in bio.
 
 #EyeCareJobs #Resume #Opticians #OptometricAssistant #JobSearch
 
-**Alt text:** A candidate handing a resume across a desk to an interviewer.
+**Alt text:** Text reads: 4 tips for an eye care resume. 1, your registration status, if the job needs it. 2, a short summary of who you are. 3, specifics: the tests, lenses and systems. 4, leave off your photo and date of birth. Photo of a resume being handed across a desk.
 
 ---
 
@@ -141,7 +141,7 @@ Full guide: link in bio.
 
 #EyeCareJobs #Hiring #ClinicOwner #Optometry #PracticeManagement
 
-**Alt text:** An optometrist fitting a trial frame on a smiling patient.
+**Alt text:** Text reads: How to attract the right people to your clinic. Show the pay, describe the real job and reply to everyone. Photo of an optometrist fitting a trial frame on a patient.
 
 ---
 
