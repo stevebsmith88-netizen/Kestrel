@@ -7,7 +7,7 @@ import { AppStatusBadge, Steps } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
 import { APP_EXPLAINERS, APP_LABELS, isClosed, type AppStatus } from "@/lib/applications";
 import { getApplication } from "@/lib/candidate";
-import { withdrawApplication } from "@/lib/candidate-actions";
+import WithdrawForm from "@/components/WithdrawForm";
 import { longDate } from "@/lib/jobs";
 
 export const metadata: Metadata = { title: "Your application | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -81,10 +81,7 @@ export default async function ApplicationDetail({ params, searchParams }: { para
             <section className="card">
               <h2>Need to step back?</h2>
               <p className="help">Withdrawing tells the clinic you are no longer interested. You cannot apply to this job a second time, but you can apply to other jobs, now or later.</p>
-              <form action={withdrawApplication}>
-                <input type="hidden" name="id" value={a.id} />
-                <button type="submit" className="btn ghost">Withdraw my application</button>
-              </form>
+              <WithdrawForm id={a.id} clinicName={a.clinic_name} />
             </section>
           )}
         </div>

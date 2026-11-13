@@ -9,12 +9,12 @@ import { requireRole } from "@/lib/auth";
 import { CV_MAX_BYTES, activeContent, cleanCoverLetter, detectCv, isClosed, safeFilename } from "@/lib/applications";
 import { NOT_CONNECTED, withNext } from "@/lib/auth-copy";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
-import { newApplicationEmail } from "@/lib/clinic-emails";
+import { newApplicationEmail, withdrawnEmail } from "@/lib/clinic-emails";
 import { cleanPrefs } from "@/lib/candidate-prefs";
 import { FIELD_ROLES, PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { missingSentence, readyToApply } from "@/lib/profile-ready";
 import { notify } from "@/lib/notifications";
-import { newApplicant } from "@/lib/notify-text";
+import { applicantWithdrew, newApplicant } from "@/lib/notify-text";
 import { canApplyForRole, canHaveFieldRoles, roleMismatchText } from "@/lib/role-fit";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -272,10 +272,22 @@ export async function withdrawApplication(form: FormData) {
   const id = String(form.get("id") ?? "");
   const admin = supabaseAdmin();
   if (UUID.test(id) && admin) {
-    const { data } = await admin.from("applications").select("status").eq("id", id).eq("candidate_id", session.userId).maybeSingle();
-    if (data && !isClosed(data.status)) {
+    const { data } = await admin.from("applications").select("status, job_id, job_title").eq("id", id).eq("candidate_id", session.userId).maybeSingle();
+    if (data && data.job_id && !isClosed(data.status)) {
       await admin.from("applications").update({ status: "withdrawn", status_changed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", id);
       await admin.from("application_events").insert({ application_id: id, status: "withdrawn" });
+      // Tell the clinic (Steve, 13th November 2026): always in its inbox; by email when it gets an email for each application, or always
+      // when the person was at interview or offer, where a clinic may be about to spend time on them.
+      const { data: job } = await admin.from("jobs").select("employer_id").eq("id", data.job_id).maybeSingle();
+      if (job?.employer_id) {
+        const { data: owner } = await admin.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+        await notify(admin, owner?.owner_id, applicantWithdrew({ jobTitle: data.job_title, applicationId: id }));
+        const { data: contact } = await admin.from("employer_contacts").select("*").eq("employer_id", job.employer_id).maybeSingle();
+        const late = data.status === "interview" || data.status === "offer";
+        if (contact?.notify_email && contact.notify_new_applications !== false && (late || (contact.notify_frequency ?? "each") === "each")) {
+          await sendEmail({ to: contact.notify_email, ...withdrawnEmail({ title: data.job_title, applicationId: id }) });
+        }
+      }
     }
   }
   revalidatePath("/candidate/applications");

@@ -73,6 +73,19 @@ export function newApplicationEmail({ title, applicationId }: { title: string; a
   };
 }
 
+// Sent when a candidate withdraws (Steve, 13th November 2026), naming the job, not the person, like a new application email.
+export function withdrawnEmail({ title, applicationId }: { title: string; applicationId: string }) {
+  return {
+    subject: `An applicant withdrew from ${title}`,
+    ...emailLayout({
+      heading: "An application was withdrawn",
+      paragraphs: [`Someone who applied for ${title} has withdrawn their application, so they are no longer interested in this job. There is nothing you need to do.`, "The Kestrel team"],
+      buttonText: "Open the application",
+      buttonUrl: `${SITE}/clinic/applications/${applicationId}`,
+    }),
+  };
+}
+
 export function applicantDigestEmail({ jobs }: { jobs: { title: string; count: number }[] }) {
   const total = jobs.reduce((n, j) => n + j.count, 0);
   return {

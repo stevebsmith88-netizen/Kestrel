@@ -369,13 +369,14 @@ export const HELP: HelpSection[] = [
         title: "How do I withdraw an application?",
         keywords: ["cancel", "retract", "take back", "remove application", "undo apply", "pull out"],
         answer: [
-          "You can withdraw at any step until the application is closed, including after an interview or an offer. The clinic sees the application as **Withdrawn**. We do not ask you to confirm, so the change happens as soon as you press the button.",
+          "You can withdraw at any step until the application is closed, including after an interview or an offer. The clinic sees the application as **Withdrawn**, and we let it know in its inbox, and by email if it gets emails for each application or you were at interview or offer. We ask you to confirm first.",
           "You can apply to a job only once, so a withdrawn application cannot be sent again for the same job. You can still apply to other jobs, now or later. If you change your mind about this one, contact the clinic directly.",
         ],
         steps: [
           "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead.",
           "Choose **View details** on the application.",
           "Scroll to **Need to step back?** and press **Withdraw my application**.",
+          "Check the message and press **Yes, withdraw it**, or **Keep my application** if you pressed it by mistake.",
         ],
         links: [{ label: "My applications", href: "/candidate/applications" }],
       },

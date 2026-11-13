@@ -41,3 +41,13 @@ test("the in play check counts sent, viewed, shortlisted, interview and offer on
   assert.match(read("lib/account-settings-actions.ts"), /inPlay/);
   assert.match(read("content/help.ts"), /your name cannot change until it closes/);
 });
+
+test("withdrawing asks once, and the clinic is told without the candidate's name (Steve, 13th November 2026)", () => {
+  const form = read("components/WithdrawForm.tsx");
+  assert.match(form, /Yes, withdraw it/);
+  assert.match(form, /Keep my application/);
+  const action = read("lib/candidate-actions.ts");
+  assert.match(action, /applicantWithdrew\(/);
+  assert.match(action, /withdrawnEmail\(/);
+  assert.doesNotMatch(read("lib/clinic-emails.ts").slice(read("lib/clinic-emails.ts").indexOf("export function withdrawnEmail")).split("export function")[1], /applicant\.name|\.name\b/);
+});

@@ -35,6 +35,11 @@ export function newApplicant(args: { jobTitle: string; applicationId: string }):
   return { kind: "applicant", title: cut(`New application for ${args.jobTitle}`, 150), body: "Open it to read the cover letter and resume, and to let the candidate know where they stand.", href: `/clinic/applications/${args.applicationId}` };
 }
 
+// A candidate withdrew (Steve, 13th November 2026). Like a new application, it names the job, not the person.
+export function applicantWithdrew(args: { jobTitle: string; applicationId: string }): NotifyMessage {
+  return { kind: "applicant", title: cut(`An applicant withdrew from ${args.jobTitle}`, 150), body: "They are no longer interested in this job. There is nothing you need to do.", href: `/clinic/applications/${args.applicationId}` };
+}
+
 export function jobApproved(args: { jobTitle: string; jobId: string; wasEdit: boolean }): NotifyMessage {
   return {
     kind: "job",
