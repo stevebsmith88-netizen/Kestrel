@@ -3,8 +3,8 @@
 export type SocialPage = { name: "LinkedIn" | "Instagram"; url: string };
 
 export const LINKEDIN_URL = "https://www.linkedin.com/company/kestrel-eye-care-jobs/";
-// Fill in once the Instagram account is created, for example "https://www.instagram.com/<handle>/".
-export const INSTAGRAM_URL: string | null = null;
+// The Instagram account (Steve, 13th November 2026).
+export const INSTAGRAM_URL: string | null = "https://www.instagram.com/kestreleye26/";
 
 export function socialPages(): SocialPage[] {
   const pages: SocialPage[] = [{ name: "LinkedIn", url: LINKEDIN_URL }];
