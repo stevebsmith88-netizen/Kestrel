@@ -8,6 +8,7 @@ import { longDate } from "@/lib/jobs";
 import { addToOutreach, stopOutreach } from "@/lib/outreach-actions";
 import { LAST_STEP } from "@/lib/outreach-sequence";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadOutreach } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Outreach | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -28,15 +29,10 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
   const session = await requireRole("admin");
   const { notice, count } = await searchParams;
   const db = supabaseAdmin();
-  const [{ data: leadRows, error: leadError }, { data: contactRows, error: contactError }] = db
-    ? await Promise.all([
-        db.from("clinic_leads").select("id, clinic_name, city, province, contact_email, email_source_url").not("contact_email", "is", null).neq("status", "skipped").order("found_at", { ascending: false }).limit(300),
-        db.from("outreach_contacts").select("id, email, clinic_name, steps_sent, status, stop_reason, next_due_at, last_sent_at").order("approved_at", { ascending: false }).limit(500),
-      ])
-    : [{ data: null, error: null }, { data: null, error: null }];
-  const contacts = (contactRows ?? []) as Contact[];
-  const inSequence = new Set(contacts.map((c) => c.email.toLowerCase()));
-  const ready = (leadRows ?? []).filter((l) => !inSequence.has(String(l.contact_email).toLowerCase()));
+  const loaded = await loadOutreach(db);
+  const { leadError, contactError } = loaded;
+  const contacts = loaded.contacts as unknown as Contact[];
+  const ready = loaded.ready as unknown as { id: string; clinic_name: string; city: string | null; province: string; contact_email: string; email_source_url: string | null }[];
   const active = contacts.filter((c) => c.status === "active");
   const done = contacts.filter((c) => c.status !== "active");
   const on = outreachOn();

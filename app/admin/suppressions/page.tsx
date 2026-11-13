@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth";
 import { addSuppression, removeSuppression } from "@/lib/admin-actions";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadSuppressions } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Do not email | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -28,9 +29,7 @@ const REASONS: Record<string, string> = {
 export default async function Suppressions({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("admin");
   const { notice } = await searchParams;
-  const db = supabaseAdmin();
-  const { data } = db ? await db.from("email_suppressions").select("id, address, reason, source, created_at").order("created_at", { ascending: false }).limit(500) : { data: null };
-  const rows = data ?? [];
+  const rows = (await loadSuppressions(supabaseAdmin())) as unknown as { id: string; address: string; reason: string; source: string | null; created_at: string }[];
   return (
     <>
       <AppBar session={session} current="/admin/suppressions" />

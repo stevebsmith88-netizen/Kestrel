@@ -5,6 +5,7 @@ import { requireRole } from "@/lib/auth";
 import { sourceLabel, type Attribution } from "@/lib/attribution";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadWaitlist } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Waitlist | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -15,13 +16,9 @@ type Row = { id: string; created_at: string; audience: string; first_name: strin
 export default async function Waitlist() {
   const session = await requireRole("admin");
   const db = supabaseAdmin();
-  const base = "id, created_at, audience, first_name, last_name, email, clinic_name, role, province, unsubscribed_at, confirmed_at, confirmation_sent_at";
-  const load = (columns: string) => db!.from("waitlist").select(columns, { count: "exact" }).order("created_at", { ascending: false }).limit(500);
-  let result = db ? await load(`${base}, utm_source, utm_medium, utm_campaign, referrer_host, landing_path`) : null;
-  // Before migration 0032 is run, the list still shows, without the source column.
-  if (db && result?.error) result = await load(base);
-  const rows = (result?.data ?? []) as unknown as Row[];
-  const count = result?.count ?? null;
+  const loaded = await loadWaitlist(db);
+  const rows = loaded.rows as unknown as Row[];
+  const count = loaded.count;
   const bySource = new Map<string, number>();
   for (const r of rows) bySource.set(sourceLabel(r), (bySource.get(sourceLabel(r)) ?? 0) + 1);
   const sources = [...bySource.entries()].sort((a, b) => b[1] - a[1]);

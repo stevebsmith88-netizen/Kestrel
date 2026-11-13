@@ -7,6 +7,7 @@ import { approveClaim, rejectClaim } from "@/lib/claim-actions";
 import { hostOf } from "@/lib/claims";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadClaims } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Claims | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -29,16 +30,9 @@ type Claim = {
 export default async function Claims({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("admin");
   const { notice } = await searchParams;
-  const db = supabaseAdmin();
-  const { data } = db
-    ? await db.from("listing_claims").select("id, claimant_name, claimant_email, role_at_clinic, method, note, verified_at, created_at, employers(id, clinic_name, website, city, province)").eq("status", "pending_review").order("created_at", { ascending: true })
-    : { data: null };
-  const claims = (data ?? []) as unknown as Claim[];
-  const jobIds: Record<string, string> = {};
-  if (db && claims.length) {
-    const { data: jobs } = await db.from("jobs").select("id, employer_id").in("employer_id", claims.map((c) => c.employers?.id).filter(Boolean) as string[]).eq("status", "live");
-    (jobs ?? []).forEach((j) => { jobIds[j.employer_id] = j.id; });
-  }
+  const loaded = await loadClaims(supabaseAdmin());
+  const claims = loaded.claims as unknown as Claim[];
+  const jobIds = loaded.liveJobByEmployer;
   return (
     <>
       <AppBar session={session} current="/admin/claims" />

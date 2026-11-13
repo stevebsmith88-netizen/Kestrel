@@ -270,7 +270,14 @@ No SQL. No settings. `npm test` 626 tests, all passing; typecheck and build clea
 | --- | --- | --- |
 | X-05 Home page built for every visitor | fixed | Saved and shared like the content pages (`force-static`, rebuilt at most every 5 minutes). A job change clears it at once (`refreshJobPages` now clears `/` too). The launch switch and scheduled posts show within 5 minutes. `lib/page-cache.test.ts` now checks it |
 | X-09 No way to bring back a job marked Not interested | fixed | "Jobs you marked not interested" under Recommended for you on the candidate home, with Show it again. The database already allowed it (migration 0031). Help topic updated |
-| X-16 Applicants list and admin pages untested | partly fixed | The applicants list (`lib/applicant-list.ts`) and the review queue (`lib/review-queue.ts`) are moved out of their pages and tested (8 tests). Still in page code, untested: the other 7 admin pages (outreach, waitlist, post for a clinic x2, claims, reports, found, suppressions) |
+| X-16 Applicants list and admin pages untested | fixed | The applicants list (`lib/applicant-list.ts`) and the review queue (`lib/review-queue.ts`) first, then the other 7 admin pages later the same day (`lib/admin-loaders.ts`: outreach, waitlist, post for a clinic x2, claims, reports, found listings, suppressions). 17 tests with stand in databases, including the waitlist and page reads fallbacks for a database without the newer SQL |
 | X-17 "private CV storage" in the SQL check | fixed | Now "private resume storage" in `supabase/verify.sql`, the combined file and the scratch scripts. The label only, so nothing needs running again |
 | D-08 No small town jobs on the demo | fixed | 2 sample clinics in Wingham, Ontario and Drumheller, Alberta, with a job each. Seed tested twice on a scratch database: 13 sample clinics, 27 live jobs in 7 provinces. `docs/demo-site.md` updated. Steve runs `reset.sql` then `seed.sql` on the demo |
 | Home page wording (Steve) | done | Shorter line under the headline, "Be the first to know when jobs go live." under the buttons, and the 20 years line moved to the waitlist section |
+
+### Third batch, the same day
+
+| Item | Status | What changed |
+| --- | --- | --- |
+| P1-59 Resume reader samples | first batch done | Steve's 5 sample templates (13th November 2026) are tests, with names and contact details changed. They showed 3 gaps, now fixed in `lib/resume-reader.ts`: numbered headings ("① PROFILE", "4. Experience"), a side column "Skills" heading read out in the middle of the job history (it no longer cuts off the jobs after it), and a date split over 2 lines when 2 jobs sit side by side. All 5 give the right phone number, the right years, no invented role or town, and never use a date of birth. More samples welcome, especially eye care resumes and Canadian addresses |
+| Weekly search check | done | `docs/marketing/weekly-search-check.md`: Search Console and Bing each week, ChatGPT, Gemini and Copilot once a month (the ones that need no sign in), what good looks like, and a log |

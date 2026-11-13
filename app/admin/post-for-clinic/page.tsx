@@ -4,6 +4,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadClinicsForPosting } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Post for a clinic | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -20,13 +21,8 @@ export default async function PostForClinic({ searchParams }: { searchParams: Pr
   const session = await requireRole("admin");
   const { q = "", notice } = await searchParams;
   const search = q.trim().slice(0, 80);
-  const db = supabaseAdmin();
-  // Only clinics that have an account (an owner) can have a job posted for them.
-  const pattern = search ? `%${search.replace(/[%,()]/g, " ")}%` : "%";
-  const { data } = db
-    ? await db.from("employers").select("id, clinic_name, city, province, claimed").not("owner_id", "is", null).ilike("clinic_name", pattern).order("clinic_name").limit(50)
-    : { data: null };
-  const clinics = (data ?? []) as Clinic[];
+  // Only clinics that have an account (an owner) can have a job posted for them (lib/admin-loaders.ts).
+  const clinics = (await loadClinicsForPosting(supabaseAdmin(), q)) as unknown as Clinic[];
   return (
     <>
       <AppBar session={session} current="/admin/post-for-clinic" />

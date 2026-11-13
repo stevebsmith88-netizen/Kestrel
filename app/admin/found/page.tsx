@@ -12,6 +12,7 @@ import { setupChecks } from "@/lib/setup-check";
 import { READS_PER_DAY, readingFresh } from "@/lib/found-listings";
 import { answerLabel, daysLeft, employmentLabel, formatPay, longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadFound } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Found listings | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -39,28 +40,13 @@ type FoundRow = {
 export default async function FoundListings({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("admin");
   const { notice } = await searchParams;
-  const db = supabaseAdmin();
   const publishOn = seedingOn();
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const { data: leadRows } = db ? await db.from("clinic_leads").select("id, clinic_name, province, city, job_title, website, contact_email, email_source_url, status, found_at").order("found_at", { ascending: false }).limit(100) : { data: null };
-  const leads = (leadRows ?? []) as { id: string; clinic_name: string; province: string; city: string | null; job_title: string | null; website: string; contact_email: string | null; email_source_url: string | null; status: string; found_at: string }[];
-  const [{ data }, reads] = db
-    ? await Promise.all([
-        db.from("jobs")
-          .select("id, title, status, city, province, employment_type, pay_min, pay_max, pay_period, source_url, apply_url, found_at, posted_at, expires_at, updated_at, is_existing_vacancy, uses_ai_screening, description, employers(clinic_name, claimed, website)")
-          .eq("is_seeded", true)
-          .order("created_at", { ascending: false })
-          .limit(200),
-        db.from("page_reads").select("id", { count: "exact", head: true }).eq("read_by", session.userId).not("url", "like", "search:%").gte("read_at", since),
-      ])
-    : [{ data: null }, { count: null, error: null }];
-  const jobs = (data ?? []) as unknown as FoundRow[];
-  const now = Date.now();
-  const isLive = (j: FoundRow) => j.status === "live" && j.expires_at !== null && new Date(j.expires_at).getTime() > now;
-  const drafts = jobs.filter((j) => j.status === "draft");
-  const live = jobs.filter(isLive);
-  const ended = jobs.filter((j) => j.status !== "draft" && !isLive(j)).slice(0, 20);
-  const needsMigration = Boolean(reads.error);
+  const found = await loadFound(supabaseAdmin(), session.userId);
+  const leads = found.leads as unknown as { id: string; clinic_name: string; province: string; city: string | null; job_title: string | null; website: string; contact_email: string | null; email_source_url: string | null; status: string; found_at: string }[];
+  const drafts = found.drafts as unknown as FoundRow[];
+  const live = found.live as unknown as FoundRow[];
+  const ended = found.ended as unknown as FoundRow[];
+  const needsMigration = found.needsMigration;
 
   return (
     <>
@@ -82,7 +68,7 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
 
           <SetupCheck checks={setupChecks(process.env)} />
           <FoundListingReader publishOn={publishOn} />
-          {!needsMigration && <p className="help">Pages read in the last 24 hours: {reads.count ?? 0} of {READS_PER_DAY}.</p>}
+          {!needsMigration && <p className="help">Pages read in the last 24 hours: {found.readsToday} of {READS_PER_DAY}.</p>}
 
           <h2>Saved leads ({leads.length})</h2>
           {leads.length === 0 ? <section className="card"><p>No leads saved yet. Search a province above and save the clinics worth following up. A lead is a note, not a listing: nothing is published from it and nobody is contacted.</p></section> : (
