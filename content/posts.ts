@@ -4,6 +4,41 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "optician-pay-canada",
+    title: "Optician pay in Canada: what opticians earn in each province",
+    description: "Typical hourly pay for opticians in each province from Job Bank, what it comes to over a year, and what moves an offer up or down.",
+    date: "2026-11-17",
+    body: `If you are weighing up an optician job, or deciding what to offer one, the first question is what is normal where you are. The most reliable public answer comes from Job Bank, the Government of Canada's labour market service, which publishes typical hourly pay for opticians in most provinces. The figures below are from its wage dataset revised on 19th November 2025, covering surveys from 2023 and 2024.
+
+A median is the middle figure: half of the opticians surveyed earned more, half earned less. Where Job Bank also gives a low and a high figure, those mark the middle half of pay, so about a quarter earned less than the low figure and a quarter more than the high one.
+
+## Pay by province
+
+In **British Columbia** the median is $30.82 an hour, with the middle half between $23 and $32. **Saskatchewan** comes next at $30.10, then **Manitoba** at $29.69 and **Newfoundland and Labrador** at $29.59. **New Brunswick** sits at $28.50, **Nova Scotia** at $28.07 and **Alberta** at $28.00, where the middle half runs from $25 to $39.40, the widest spread of the 3 provinces where Job Bank gives one.
+
+**Ontario** stands out at the other end, with a median of $24.04 and a middle half from $23 to $33.65. Job Bank does not say why Ontario is lower, and the top of its range is well above the median, so treat the median as a starting point for a conversation, not a ceiling.
+
+Job Bank does not publish a figure for Prince Edward Island or the territories, because too few opticians were surveyed there.
+
+## What that comes to over a year
+
+At 37.5 hours a week, every week of the year, the medians work out at roughly $60,100 in British Columbia, $58,700 in Saskatchewan, $57,900 in Manitoba, $57,700 in Newfoundland and Labrador, $55,600 in New Brunswick, $54,700 in Nova Scotia, $54,600 in Alberta and $46,900 in Ontario. These are our own sums from the hourly figures, before tax and without benefits or bonuses, and real hours vary a great deal: many opticians work 4 longer days, or part time.
+
+## What moves pay up or down
+
+The province matters less than the role in front of you. Contact lens fitting, edging and lab work, frame buying, managing the dispensary and training newer staff all tend to push pay up, as does a clinic in a place where opticians are hard to find. A first job after licensing, a short week or a role that is mostly sales usually sits lower. Commission, an eyewear allowance, paid continuing education and health benefits all count too, so compare the whole offer, not only the hourly rate.
+
+## Using these figures
+
+If you are an optician, these numbers tell you whether an offer is in the usual range for your province, and give you something solid to point to if it is not. If you are hiring, they tell you where your range sits before you post, and what candidates will compare it with.
+
+Several provinces now require pay to be shown on a job ad, and our [job ad checklist](/blog/eye-care-job-ad-checklist) explains what to include. You can compare all the eye care roles, province by province, in our [pay guide](/resources#pay), which uses the same Job Bank figures.
+
+Every job on Kestrel shows its pay range, so you can see what clinics near you are offering right now.
+
+[See optician jobs across Canada](/jobs)`,
+  },
+  {
     slug: "hiring-seasonal-workers",
     title: "Hiring seasonal workers: the pros and cons for an eye care clinic",
     description: "Seasonal and short term staff can cover busy weeks and holidays. Here is when it works, what it costs and how to make a short stay run smoothly.",

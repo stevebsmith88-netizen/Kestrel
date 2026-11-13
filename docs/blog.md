@@ -18,9 +18,27 @@ A post is shown from the start of its `date` (Toronto time). Give a new post a f
 
 On previews, scheduled posts are visible and marked "Scheduled for ...", so Steve can read and approve a post before it goes out. On the live site (Vercel's Production environment) they stay hidden.
 
-Posts are now spaced about 1 a week, on Fridays (Steve asked for a faster pace to build search traffic before launch). The test needs at least 7 days between posts. Never link to a post that is dated later than the one doing the linking (the tests check this). Do not change the date of a post that is already out.
+Posts are now spaced about 1 a week, on Fridays (Steve asked for a faster pace to build search traffic before launch). Since 13th November 2026 there is also a Tuesday slot for search focused posts (Steve: "happy to saturate over the coming weeks"), so the test needs at least 3 days between posts. Never link to a post that is dated later than the one doing the linking (the tests check this). Do not change the date of a post that is already out.
 
 Schedule so far (revised 13th November 2026 to match Instagram, Steve): 3 posts published on 30th October 2026, 1 on 6th November (choosing a buying group), 2 on 13th November (optometric assistant jobs, and how people fall into optics, brought forward because Instagram post 02 links to it), then weekly on Fridays: 20th November (the roles in eye care), 27th November (optician interview questions), 4th December (STAR questions), 11th December (writing an assistant job ad), 18th December (starting a career in optics). A "new year, new job" run in January: 8th January 2027 (writing a resume), 15th January (hire for attitude), 22nd January (attracting the right candidates). Then every 2 weeks: 5th February (phone screenings), 19th February (standing out in an interview), 5th March (independent or corporate), 19th March (moving to Canada), 2nd April (asking for a raise), 16th April (optical lab technician), 30th April (why people leave), 14th May (onboarding), 28th May (reference checks), 11th June (hiring seasonal workers). A post never links to one that is not out yet on its date. No posts on 25th December or 1st January. The 13th November post has no pay figures until the Job Bank wage reports can be checked. None of the posts uses a personal story or an unchecked statistic.
+
+## Tuesday search posts (from 17th November 2026)
+
+Aimed at the searches that bring people who have never heard of Kestrel: pay by role and province, and how to get into each role. Facts from public sources only (Job Bank, the provincial colleges, the schools), each checked at the time of writing and dated in the post. Steve reads each one on the preview before it goes out. Proposed order, which Steve can change:
+
+| Date | Post | Status and what it needs |
+| --- | --- | --- |
+| Tue 17th November 2026 | Optician pay in Canada: what opticians earn in each province (`optician-pay-canada`) | Written. Job Bank figures revised 19th November 2025 (`lib/pay-benchmark-data.ts`), no Quebec |
+| Tue 24th November | Optometrist pay in Canada, and how percentage pay works | Job Bank's optometrist figures are from the 2021 census and include part time and self employed work, so they need careful framing. Explains percentage of billings and why Kestrel asks for expected earnings in dollars |
+| Tue 1st December | How to become an optician in Canada, province by province | Research each provincial college's current rules and the national exam, with links. Check before publishing |
+| Tue 8th December | Optometric assistant courses and certification in Canada | Research the colleges that offer courses. Note that many clinics train on the job |
+| Tue 15th December | Locum optometrist work in Canada: how it works | Public facts only; Steve's view on day rates welcome |
+| (22nd and 29th December) | No posts over the holidays | |
+| Tue 5th January 2027 | Moving from clinic work to a lens rep or supplier role | Links to the field based jobs post |
+| Tue 12th January | How to become an optometrist in Canada | The schools and the national board exam, from their own sites |
+| Tue 19th January | Why should I pay for a job advert? (idea 14 below) | Needs Steve's 3 inputs listed below before it can be written |
+
+The Fridays left open by the fortnightly run (29th January, 12th and 26th February, 12th and 26th March, 9th and 23rd April, 7th and 21st May, 4th June) are free for more.
 
 ## What to write next (about 1 post a fortnight)
 
