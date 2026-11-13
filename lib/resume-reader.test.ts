@@ -262,3 +262,55 @@ test("a Canadian address in capitals is still found, and a trailing country is i
   const r = readResume(`SAM DOYLE\n77 MAIN STREET, KELOWNA, BC V1Y 1A1, CANADA · sam@example.com · (250) 555-0106\nOptician`, NOW);
   assert.deepEqual(r.home?.value, { city: "Kelowna", province: "British Columbia" });
 });
+
+// ---- Steve's second batch (13th November 2026): 5 real optician resumes, run here and not kept. These copy their layouts with made up details ----
+
+test("a heading that joins 2 sections with AND still starts the education section, so school years are not counted as work", () => {
+  const text = `Name: Sample Person
+PROFESSIONAL EXPERIENCE
+Licensed optician in Sample Optical Dec 2025-May2026
+Managing Optician in Sample Store Sep 2024 –Aug 2025
+                           Education AND ACCOMPLISHMENT:
+Graduated optician program, Seneca College March 2009 –Oct 2012
+Master Degree of Chemical Engineering 2004 -2008`;
+  const r = readResume(text, NOW).yearsExperience;
+  assert.match(r?.why ?? "", /2 jobs/);
+  assert.equal(r?.value, "1 to 4 years");
+});
+
+test("an address written province first, with a label and a unit, still gives the town", () => {
+  const r = readResume(`Name:                  Sample Person
+Address:             10 Sample way, unit 1210, Ontario. Toronto, M2N7L4
+Cell Phone:          416 555 0107
+Licensed optician`, NOW);
+  assert.deepEqual(r.home?.value, { city: "Toronto", province: "Ontario" });
+});
+
+test("the years in words never contradict the band", () => {
+  // 9 years and 7 months of work
+  const r = readResume(`Experience\nRegistered Optician, Sample Eye Care\nMarch 2017 - October 2026`, NOW).yearsExperience;
+  assert.equal(r?.value, "5 to 9 years");
+  assert.match(r?.why ?? "", /about 9 years/);
+});
+
+test("a layout with no address suggests no town, and a licence line with no province suggests no province", () => {
+  const r = readResume(`SAMPLE PERSON\nPhone: 647 555 0108\nEmail: sample@example.com\nSummary\nFinished the opticianry diploma\nExperience\nLicenced Optician\nSample Optical 2019 - 2023`, NOW);
+  assert.equal(r.profession?.value, "Optician");
+  assert.equal(r.home, undefined);
+  assert.equal(r.licensedProvinces, undefined);
+});
+
+test("a month touching its year is read, and a word ending in a month's letters is not", () => {
+  assert.equal(monthsOfWork(["Optician, Sample Optical Dec 2025-May2026"], NOW).months, 5);
+  assert.equal(monthsOfWork(["Optician, Sample Optical June 2020-July2024"], NOW).months, 49);
+  // "Grammar 2019 - 2020" has no month: the range is the whole of 2019 to the end of 2020
+  assert.equal(monthsOfWork(["Grammar 2019 - 2020"], NOW).months, 23);
+});
+
+test("a university's name is not read as the province of registration, and a new bullet is not read as the rest of the line", () => {
+  const text = `SAMPLE PERSON\nOptician\nEDUCATION\n• Registered Optician, Seneca College, Toronto, Canada\n• Sales & Marketing Management, University of British Columbia, Vancouver, Canada`;
+  assert.equal(readResume(text, NOW).licensedProvinces, undefined);
+  const wrapped = readResume(`Optician\nRegistered with the College of\nOpticians of Ontario`, NOW);
+  assert.deepEqual(wrapped.licensedProvinces?.value, ["Ontario"]);
+  assert.equal(readResume(`Optician\nLicensed optician, graduate of the University of Alberta`, NOW).licensedProvinces, undefined);
+});

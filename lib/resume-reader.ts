@@ -80,6 +80,17 @@ function findHome(all: string[]): Found<{ city: string; province: string }> | un
       if (place) return { value: { city: place.name, province: place.province }, why: `The address near the top of your resume: ${city}, ${province}` };
     }
   }
+  // Addresses written another way round, such as "unit 1210, Ontario. Toronto, M2N 7L4": on a line near the top that names a province,
+  // try each piece without digits as a town in that province.
+  for (const line of all.slice(0, 20)) {
+    const named = provincesOnLine(line);
+    if (named.length !== 1) continue;
+    for (const piece of line.split(/[,|•·.;:]/).map((p) => p.trim()).filter(Boolean)) {
+      if (/\d/.test(piece) || piece.length < 3 || piece.length > 40 || provinceIn(piece)) continue;
+      const place = findPlace(piece, named[0]);
+      if (place) return { value: { city: place.name, province: place.province }, why: `The address near the top of your resume: ${piece}, ${named[0]}` };
+    }
+  }
   return undefined;
 }
 
@@ -104,11 +115,14 @@ const ROLE_PATTERNS: RolePattern[] = [
 const HEADER_WORDS = /^(?:(?:work|professional|relevant|clinical|related)\s+)?(experience|employment|employment history|work history|career history|education|training|certifications?|certificates?|courses|qualifications|skills|references|awards|volunteer(?:ing)?(?: experience)?|summary|profile|objective|interests|languages|licen[cs]es?(?: and certifications?)?|registrations?)\s*:?$/i;
 // Headings can be numbered ("① PROFILE", "4. Experience", "02 Skills"), so the number is set aside first (Steve's samples, 13th November 2026).
 const headerText = (line: string) => line.replace(/^(?:[\u2460-\u2473\u2776-\u277F\u2780-\u2793]|\(?\d{1,2}[.)]?)\s+/, "").trim();
-const isHeader = (line: string) => line.length <= 40 && HEADER_WORDS.test(headerText(line));
+// A heading can join 2 sections with "and" or "&" ("Education AND ACCOMPLISHMENT:", "Skills & Qualifications"): the first part decides
+// the section (Steve's second batch of samples, 13th November 2026).
+const firstPart = (line: string) => headerText(line).replace(/\s*:\s*$/, "").split(/\s+(?:and|&)\s+/i)[0];
+const isHeader = (line: string) => line.length <= 40 && (HEADER_WORDS.test(headerText(line)) || HEADER_WORDS.test(firstPart(line)));
 // Side column headings: on a 2 column resume their text can come out in the middle of the job history, so they do not end it.
 const SIDE_HEADINGS = /^(skills|languages|interests)\s*:?$/i;
 const nextSection = (line: string, current: "experience" | "education" | "references" | "other") =>
-  current === "experience" && SIDE_HEADINGS.test(headerText(line)) ? current : sectionOf(headerText(line));
+  current === "experience" && SIDE_HEADINGS.test(firstPart(line)) ? current : sectionOf(firstPart(line));
 const sectionOf = (line: string): "experience" | "education" | "references" | "other" => {
   const w = line.toLowerCase();
   if (/experience|employment|work history|career history/.test(w) && !/volunteer/.test(w)) return "experience";
@@ -147,7 +161,8 @@ function findRole(all: string[]): Found<string> | undefined {
 // ---- years of experience ----
 const MONTHS = "jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?";
 const monthIndex = (name: string) => ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"].indexOf(name.slice(0, 3).toLowerCase());
-const POINT = `(?:(?:(${MONTHS})\\.?,?\\s+)?((?:19|20)\\d{2})|(\\d{1,2})[/.](20\\d{2}|19\\d{2}))`;
+// The month may touch the year ("May2026"), but must start a word, so "Grammar 2019" is not read as March.
+const POINT = `(?:(?:(?<![a-z])(${MONTHS})\\.?,?\\s*)?((?:19|20)\\d{2})|(\\d{1,2})[/.](20\\d{2}|19\\d{2}))`;
 const END = `(?:${POINT}|(present|current|now|ongoing|today|to date))`;
 const RANGE = new RegExp(`${POINT}\\s*(?:-|–|—|to|until|through)\\s*${END}`, "gi");
 const EYE = /optic|optom|ophthalm|\beye\b|vision|lens|\becp\b|spectacle|glasses|frames|dispens|\bclinic\b|refract/i;
@@ -169,7 +184,7 @@ function joinSplitDates(all: string[]): string[] {
 export function monthsOfWork(input: string[], now: Date): { months: number; counted: number } {
   const all = joinSplitDates(input);
   const nowIndex = now.getFullYear() * 12 + now.getMonth();
-  const hasExperienceSection = all.some((l) => isHeader(l) && sectionOf(headerText(l)) === "experience");
+  const hasExperienceSection = all.some((l) => isHeader(l) && sectionOf(firstPart(l)) === "experience");
   type Span = { from: number; to: number; eye: boolean };
   const spans: Span[] = [];
   let section: ReturnType<typeof sectionOf> = "other";
@@ -221,7 +236,9 @@ function findYears(all: string[], now: Date): Found<string> | undefined {
   const { months, counted } = monthsOfWork(all, now);
   if (months < 3 || counted === 0) return undefined;
   const years = months / 12;
-  const rounded = years < 1 ? "less than 1 year" : `about ${Math.round(years)} year${Math.round(years) === 1 ? "" : "s"}`;
+  // The rounded number never contradicts the band: 9 years and 7 months reads "about 9 years" beside "5 to 9 years", not "about 10".
+  const whole = yearsBand(Math.round(years) * 12) === yearsBand(months) ? Math.round(years) : Math.floor(years);
+  const rounded = years < 1 ? "less than 1 year" : `about ${whole} year${whole === 1 ? "" : "s"}`;
   return { value: yearsBand(months), why: `Added up from the dates of ${counted} job${counted === 1 ? "" : "s"} on your resume: ${rounded}. Please check it` };
 }
 
@@ -229,10 +246,14 @@ function findYears(all: string[], now: Date): Found<string> | undefined {
 function findRegistered(all: string[]): Found<string[]> | undefined {
   const keyword = /\b(registered|licen[cs]ed|licen[cs]ure|registration|member of|college of (?:optometrists|opticians))\b/i;
   const found = new Set<string>();
+  // A province in a university's name ("University of British Columbia") says where someone studied, not where they are registered.
+  const places = (line: string) => provincesOnLine(line.replace(/\buniversity of (?:the )?[a-z ]+/gi, " "));
   all.forEach((line, i) => {
     if (!keyword.test(line)) return;
-    for (const p of provincesOnLine(line)) found.add(p);
-    if (!provincesOnLine(line).length) for (const p of provincesOnLine(all[i + 1] ?? "")) found.add(p);
+    for (const p of places(line)) found.add(p);
+    // The province can be on the next line ("Registered with the College of" / "Opticians of Ontario"), but not when that line is a new item.
+    const next = all[i + 1] ?? "";
+    if (!places(line).length && !/^[•●▪◦‣*-]|^\d+[.)]\s/.test(next)) for (const p of places(next)) found.add(p);
   });
   return found.size ? { value: [...found], why: "Provinces named next to the words registered or licensed on your resume. This is what you tell us, and Kestrel does not check it" } : undefined;
 }

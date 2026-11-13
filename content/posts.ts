@@ -18,7 +18,9 @@ In **British Columbia** the median is $30.82 an hour, with the middle half betwe
 
 **Ontario** stands out at the other end, with a median of $24.04 and a middle half from $23 to $33.65. Job Bank does not say why Ontario is lower, and the top of its range is well above the median, so treat the median as a starting point for a conversation, not a ceiling.
 
-Job Bank does not publish a figure for Prince Edward Island or the territories, because too few opticians were surveyed there.
+Job Bank does not publish a figure for Prince Edward Island or the territories, and for the smaller provinces it gives a median only, with no low or high. It does not say how many people each figure is based on, so read the smaller provinces' numbers as a rough guide.
+
+British Columbia needs a note of its own. Glasses there can be sold without a registered optician, though the title optician is still protected and fitting contact lenses still needs a regulated professional. Job Bank groups people by the work they do, not by whether they are registered, so the British Columbia figure may cover a wider mix of dispensing staff than in provinces where dispensing is restricted.
 
 ## What that comes to over a year
 
