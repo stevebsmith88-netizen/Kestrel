@@ -876,3 +876,26 @@ html.session-ready header.site{display:none}
 /* Expected earnings beside a percentage only (post a job form, 13th November 2026). */
 .expectedpay { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 4px; margin: 4px 0 16px; }
 .expectedpay > .lab { margin: 0 0 4px; }
+
+/* Find jobs on a phone (13th November 2026): filters behind a button, results on the first screen. Wider screens are unchanged:
+   the panel takes no room of its own and its button, header and footer are hidden. */
+.sf-panel{display:contents}
+.sf-mobilebar,.sf-panelhead,.sf-panelfoot,.sf-tags{display:none}
+@media (max-width:720px){
+  .sf-panel{display:none}
+  .sf-mobilebar{display:block;margin-top:12px}
+  .sf-filterbtn{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--navy);border-radius:10px;background:#fff;color:var(--navy);font:600 1rem/1 var(--f-sans),sans-serif;padding:12px 16px;min-height:46px;cursor:pointer}
+  .sf-filterbtn:hover{background:rgba(27,43,75,.06)}
+  .sf-count{background:var(--chestnut);color:#fff;border-radius:999px;font-size:.8rem;padding:3px 8px;line-height:1.2}
+  .sf-panel.open{display:block;position:fixed;inset:0;z-index:60;background:var(--paper);overflow:auto;padding:0 18px 96px}
+  .sf-panel.open .sf-panelhead{display:flex;position:sticky;top:0;z-index:2;background:var(--paper);justify-content:space-between;align-items:center;padding:14px 0 10px;border-bottom:1px solid var(--line);margin-bottom:6px}
+  .sf-panelhead h2{margin:0;font:400 1.5rem/1.2 var(--f-display),Georgia,serif}
+  .sf-panelhead h2:focus{outline:none}
+  .sf-panel.open .sf-panelfoot{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:61;background:#fff;border-top:1px solid var(--line);padding:12px 18px;gap:12px;align-items:center}
+  .sf-panelfoot .btn{flex:1;justify-content:center}
+  .sf-tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:-8px 0 14px;padding:0;align-items:center}
+  .sf-tag{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 12px;min-height:40px;font-size:.92rem;color:var(--navy);text-decoration:none}
+  .sf-tag span{font-weight:700;color:var(--slate)}
+  .sf-clear{font-size:.92rem;color:var(--navy);text-underline-offset:3px}
+}
+body.sf-locked{overflow:hidden}

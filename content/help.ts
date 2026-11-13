@@ -270,17 +270,18 @@ export const HELP: HelpSection[] = [
       {
         id: "search-and-filter-jobs",
         title: "How do I search and filter jobs, including by distance?",
-        keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "city"],
+        keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "filters", "phone", "city"],
         answer: [
           "You do not need an account to search. Every job shows its pay, and you can narrow the list as much or as little as you like.",
           "Distance works from a town or city. Kestrel knows towns of about 1,000 people or more, so if a place is not found, check the spelling or try the nearest larger town. You can choose within 10, 25 or 50 km, and 25 km is the usual choice. Field based jobs, such as sales and service roles that travel to clinics, are always included alongside the jobs near you.",
         ],
         steps: [
           "Choose **Find jobs** in the bar at the top of the page.",
-          "Type a role or keyword, or choose a role, a province or territory, a type of employer (independent or corporate), and whether the person works on site or in the field.",
+          "Type a role or keyword. On a phone, press **Filters** to see the other choices; on a computer they are shown under the search box.",
+          "Choose a role, a province or territory, a type of employer (independent or corporate), and whether the person works on site or in the field.",
           "To search by distance, type a city or town, then choose **Within 10 km**, **Within 25 km** or **Within 50 km**.",
           "Tick the types of work you want, such as full time or part time. Open **Software, equipment and specialties** to narrow by what the job uses.",
-          "Press **Search**. The number of jobs found appears above the list.",
+          "Press **Search**, or **Show jobs** on a phone. The number of jobs found appears above the list. On a phone, each filter in use shows as a tag above the list: press it to remove that filter.",
         ],
         links: [{ label: "Find jobs", href: "/jobs" }],
       },

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import JobCard from "@/components/JobCard";
+import MobileFilters from "@/components/MobileFilters";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile } from "@/lib/candidate";
@@ -51,6 +52,24 @@ function pageHref(filters: JobFilters, page: number, extra: { view?: string; sor
   return qs ? `/jobs?${qs}` : "/jobs";
 }
 
+// The filters in use, each with a link that removes it, for the tags shown under the Filters button on a phone.
+function activeFilters(filters: JobFilters, extra: { view?: string; sort?: string }): { label: string; href: string }[] {
+  const without = (change: Partial<JobFilters>) => pageHref({ ...filters, ...change }, 1, extra);
+  const out: { label: string; href: string }[] = [];
+  if (filters.role) out.push({ label: filters.role, href: without({ role: undefined }) });
+  if (filters.province) out.push({ label: filters.province, href: without({ province: undefined }) });
+  if (filters.city) out.push({ label: `Within ${filters.radius ?? 25} km of ${filters.city}`, href: without({ city: undefined, radius: undefined }) });
+  if (filters.practice) out.push({ label: `${PRACTICE_TYPES.find((p) => p.value === filters.practice)?.label ?? filters.practice} only`, href: without({ practice: undefined }) });
+  if (filters.arrangement) out.push({ label: filters.arrangement === "field" ? "Field based only" : "On site only", href: without({ arrangement: undefined }) });
+  for (const t of filters.type ?? []) out.push({ label: employmentLabel(t), href: without({ type: (filters.type ?? []).filter((x) => x !== t) }) });
+  if (filters.tags) {
+    for (const key of ["software", "equipment", "specialties"] as const) {
+      for (const tag of filters.tags[key]) out.push({ label: tag, href: without({ tags: { ...filters.tags, [key]: filters.tags[key].filter((x) => x !== tag) } }) });
+    }
+  }
+  return out;
+}
+
 export default async function Jobs({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
   const one = (k: string) => {
@@ -90,6 +109,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const page = shown;
   const suggestions = filtered && jobs.length === 0 && !placeNotFound ? emptySearchSuggestions(filters) : [];
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const inUse = activeFilters(filters, keep);
 
   return (
     <>
@@ -105,6 +125,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               <input id="s-q" name="q" type="text" placeholder="Role or keyword" defaultValue={filters.q} />
               <button type="submit" className="btn">Search</button>
             </div>
+            <MobileFilters count={inUse.length}>
             <div className="sf-filters">
               <label className="sr" htmlFor="s-role">Role</label>
               <select id="s-role" name="role" defaultValue={filters.role}>
@@ -168,7 +189,14 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               })}
               <p className="help">Within a group, a job matches if it has any ticked item. If you tick items in more than one group, the job must match each of those groups.</p>
             </details>
+            </MobileFilters>
           </form>
+          {inUse.length > 0 && (
+            <ul className="sf-tags" aria-label="Filters in use">
+              {inUse.map((f) => <li key={f.label}><Link href={f.href} className="sf-tag" aria-label={`Remove ${f.label}`}>{f.label} <span aria-hidden="true">&times;</span></Link></li>)}
+              {inUse.length > 1 && <li><Link href={pageHref({ q: filters.q } as JobFilters, 1, keep)} className="sf-clear">Clear all</Link></li>}
+            </ul>
+          )}
 
           {canMe && (
             <div className="viewbar">
