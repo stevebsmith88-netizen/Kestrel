@@ -1,16 +1,16 @@
 # Instagram master schedule
 
-Final order, 13th November 2026. Everything is in the Canva folder "Kestrel Instagram: new style" (3 designs: Things heard in clinic, Kestrel guides, Kestrel photo posts). Download each design once: Share, Download, PNG, All pages.
+Revised 13th November 2026 (evening): 3 new posts for the new blog posts and the pay summary page, and the 2 held posts slotted in. The first 9 are posted.
 
-**Grid rule:** posts rotate through 4 colour families (navy, chestnut, cream or paper, and the light ones: pale blue or buff), so no 2 posts of the same family ever sit side by side or one above the other, however many are added. Every guide post goes out after its blog post is live.
+**Where everything is:** Canva folder "Kestrel Instagram: new style", design **"Kestrel Instagram: posting order"**. Its pages are the posts in the order they go out. 3 pages are still to add, because this session could not upload to Canva: drag `g11-optician-pay.png`, `g12-ai-chatbots.png` and `g13-pay-summary.png` (in `design/social-and-merch/instagram-guides`) into the design so they sit at pages 12, 14 and 16. After that, **page number = post number** for every post below. The 3 original designs stay as they were, as a backup.
 
-Held for later: Things heard No. 3 and Eye care jobs on the road (both navy; they go in when the next batch adds more chestnut and light posts). Not used: the buying group guide.
+**Grid rule:** posts rotate through 4 colour families (navy, chestnut, cream or paper, and the light ones: pale blue or buff), so no 2 posts of the same family ever sit side by side or one above the other. Checked for the whole order below: no post matches the one before it, or the one 3 before it. Every guide post goes out after its blog post is live.
 
-## Today: the first 9, posted in this order
+**What changed:** nothing already scheduled moves. The Monday posts keep their dates. The 5 additions go on **Thursdays** (3rd, 10th and 17th December, then 21st and 28th January). Not used: the buying group guide.
 
-Remove the 3 old posts first. Post 1 ends up bottom right, post 9 (Hello) top left. A few minutes apart is fine.
+## Posted on 13th November 2026: posts 1 to 9
 
-How the grid will look:
+How the grid looks:
 
 | | | |
 |---|---|---|
@@ -19,7 +19,7 @@ How the grid will look:
 | Optometric assistant jobs (navy) | Give them 2 weeks (pale blue) | Cover letters (paper) |
 
 ### 1. Guide: Cover letters
-**When:** Today · **Find it in Canva:** Kestrel guides, page 10 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 1 · **Location:** Canada
 
 Caption:
 ```text
@@ -39,7 +39,7 @@ Kestrel guide: Cover letters that get read. Why this clinic. What you would brin
 ```
 
 ### 2. Things heard in clinic No. 5
-**When:** Today · **Find it in Canva:** Things heard in clinic, page 5 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 2 · **Location:** Canada
 
 Caption:
 ```text
@@ -53,7 +53,7 @@ Things heard in clinic, No. 5: New progressives? Give them 2 weeks. Underneath: 
 ```
 
 ### 3. Guide: Optometric assistant jobs
-**When:** Today · **Find it in Canva:** Kestrel guides, page 1 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 3 · **Location:** Canada
 
 Caption:
 ```text
@@ -71,7 +71,7 @@ Kestrel guide: Optometric assistant jobs. The work and pay. What the job involve
 ```
 
 ### 4. Things heard in clinic No. 2
-**When:** Today · **Find it in Canva:** Things heard in clinic, page 2 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 4 · **Location:** Canada
 
 Caption:
 ```text
@@ -85,7 +85,7 @@ Things heard in clinic, No. 2: Sorry about the puff. Underneath: Said all day. M
 ```
 
 ### 5. Things heard in clinic No. 6
-**When:** Today · **Find it in Canva:** Things heard in clinic, page 6 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 5 · **Location:** Canada
 
 Caption:
 ```text
@@ -99,7 +99,7 @@ Things heard in clinic, No. 6: Is it blurry, or is it double? The answer underne
 ```
 
 ### 6. Guide: How most people fall into optics
-**When:** Today · **Find it in Canva:** Kestrel guides, page 8 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 6 · **Location:** Canada
 
 Caption:
 ```text
@@ -119,7 +119,7 @@ Kestrel guide: How most people fall into optics. Few people plan a career in eye
 ```
 
 ### 7. Things heard in clinic No. 1
-**When:** Today · **Find it in Canva:** Things heard in clinic, page 1 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 7 · **Location:** Canada
 
 Caption:
 ```text
@@ -133,7 +133,7 @@ Things heard in clinic, No. 1: Better 1... or 2? Underneath: Both. Neither. Can 
 ```
 
 ### 8. Photo: Built for eye care
-**When:** Today · **Find it in Canva:** Kestrel photo posts, page 2 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 8 · **Location:** Canada
 
 Caption:
 ```text
@@ -149,7 +149,7 @@ Text reads: Built for eye care. Only eye care. Optometrists, opticians, assistan
 ```
 
 ### 9. Hello, we're Kestrel
-**When:** Today · **Find it in Canva:** Kestrel guides, page 7 · **Location:** Canada
+**When:** Today · **Canva:** Posting order, page 9 · **Location:** Canada
 
 Caption:
 ```text
@@ -168,10 +168,29 @@ Alt text:
 Hello, we're Kestrel. A Canada-wide eye care job board. Every job shows its pay. eyecarejobs.ca.
 ```
 
-## Then schedule these 11, 1 a week at 8:00 am Toronto
+## Then schedule these 16 at 8:00 am Toronto
+
+| Post | Date | What | Colour |
+| --- | --- | --- | --- |
+| 10 | Mon 23rd November | Guide: 4 things every job ad | Buff |
+| 11 | Mon 30th November | Things heard No. 4 | Cream |
+| 12 | Thu 3rd December | **New:** Optician pay | Chestnut |
+| 13 | Mon 7th December | Photo: Every job shows its pay | Navy |
+| 14 | Thu 10th December | **New:** We asked the AI chatbots | Pale blue |
+| 15 | Mon 14th December | Photo: Opening soon | Cream |
+| 16 | Thu 17th December | **New:** Pay summary | Deep chestnut |
+| 17 | Mon 21st December | Guide: Questions to ask | Soft navy |
+| 18 | Mon 4th January | Guide: Who does what | Chestnut |
+| 19 | Mon 11th January | Things heard No. 7 | Navy |
+| 20 | Mon 18th January | Guide: 4 tips for a resume | Chestnut |
+| 21 | Thu 21st January | Things heard No. 3 (was on hold) | Navy |
+| 22 | Mon 25th January | Guide: Hire for attitude | Cream |
+| 23 | Thu 28th January | Guide: Eye care jobs on the road (was on hold) | Soft navy |
+| 24 | Mon 1st February | Things heard: Your turn | Buff |
+| 25 | Mon 8th February | Guide: How to attract | Navy |
 
 ### 10. Guide: 4 things every job ad
-**When:** Monday 23rd November, 8:00 am · **Find it in Canva:** Kestrel guides, page 9 · **Location:** Ontario
+**When:** Monday 23rd November, 8:00 am · **Canva:** Posting order, page 10 · **Location:** Ontario
 
 Caption:
 ```text
@@ -194,7 +213,7 @@ Kestrel guide: 4 things every job ad in Canada should include. 1, the pay range.
 ```
 
 ### 11. Things heard in clinic No. 4
-**When:** Monday 30th November, 8:00 am · **Find it in Canva:** Things heard in clinic, page 4 · **Location:** Canada
+**When:** Monday 30th November, 8:00 am · **Canva:** Posting order, page 11 · **Location:** Canada
 
 Caption:
 ```text
@@ -207,8 +226,26 @@ Alt text:
 Things heard in clinic, No. 4: Did you bring your old glasses? Underneath: They're in the car. They're always in the car. A line drawing of glasses, on cream.
 ```
 
-### 12. Photo: Every job shows its pay
-**When:** Monday 7th December, 8:00 am · **Find it in Canva:** Kestrel photo posts, page 1 · **Location:** Canada
+### 12. Guide: Optician pay in Canada (new)
+**When:** Thursday 3rd December, 8:00 am · **Canva:** Posting order, page 12 (upload `g11-optician-pay.png`) · **Location:** Canada
+
+Caption:
+```text
+How much do opticians earn in Canada? It depends a lot on where you are.
+
+Job Bank's typical hourly pay for opticians runs from $24.04 in Ontario to $30.82 in British Columbia, with 6 provinces between $28.00 and $30.10. Commission, an eyewear allowance and benefits all count too, so compare the whole offer.
+
+Every province, and what moves pay up or down: link in bio.
+
+#Opticians #OpticianPay #EyeCareJobs #Optics #CanadaJobs
+```
+Alt text:
+```text
+Kestrel guide: Typical optician pay, by province. Highest, British Columbia at $30.82 an hour. 6 provinces between $28.00 and $30.10. Lowest, Ontario at $24.04 an hour.
+```
+
+### 13. Photo: Every job shows its pay
+**When:** Monday 7th December, 8:00 am · **Canva:** Posting order, page 13 · **Location:** Canada
 
 Caption:
 ```text
@@ -223,8 +260,28 @@ Alt text:
 Text reads: Every job shows its pay. No guessing and no "competitive salary". The range is on every post. eyecarejobs.ca. Photo of an optician fitting tortoiseshell glasses on a young woman.
 ```
 
-### 13. Photo: Opening soon
-**When:** Monday 14th December, 8:00 am · **Find it in Canva:** Kestrel photo posts, page 3 · **Location:** Canada
+### 14. Blog: We asked the AI chatbots (new)
+**When:** Thursday 10th December, 8:00 am · **Canva:** Posting order, page 14 (upload `g12-ai-chatbots.png`) · **Location:** Canada
+
+Caption:
+```text
+We asked ChatGPT, Gemini and Copilot where to find eye care jobs in Canada.
+
+Kestrel was named in 0 of 21 answers. In fairness, we had not opened yet. One chatbot even used our own web address as its example of something that does not exist.
+
+What they got right, what they got wrong, and how to use AI well in your own job search: link in bio.
+
+Have you asked a chatbot for job advice? Tell us how it went.
+
+#EyeCareJobs #JobSearch #AI #Optometry #Opticians
+```
+Alt text:
+```text
+Kestrel blog: We asked the AI chatbots about eye care jobs. We were named in 0 of 21 answers. What they got right, and what they got wrong.
+```
+
+### 15. Photo: Opening soon
+**When:** Monday 14th December, 8:00 am · **Canva:** Posting order, page 15 · **Location:** Canada
 
 Caption:
 ```text
@@ -239,8 +296,26 @@ Alt text:
 Text reads: Opening soon. Join the waitlist. Link in bio. Be first to see eye care jobs across Canada. eyecarejobs.ca. Photo of an optometrist fitting a trial frame on a patient.
 ```
 
-### 14. Guide: Questions to ask
-**When:** Monday 21st December, 8:00 am · **Find it in Canva:** Kestrel guides, page 2 · **Location:** Canada
+### 16. Pay summary (new)
+**When:** Thursday 17th December, 8:00 am · **Canva:** Posting order, page 16 (upload `g13-pay-summary.png`) · **Location:** Canada
+
+Caption:
+```text
+Where is eye care paid most in Canada?
+
+In Job Bank's latest figures, British Columbia has the highest typical pay for opticians, optometric assistants and patient care teams. For practice and clinic managers it is Newfoundland and Labrador. The gap between the top and bottom province is 25% to 31%, depending on the role.
+
+Our 2026 eye care pay summary has every role: link in bio.
+
+#EyeCareJobs #PayTransparency #Opticians #OptometricAssistant #CanadaJobs
+```
+Alt text:
+```text
+Kestrel pay summary: 3 of 4 eye care roles pay most in British Columbia. Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.
+```
+
+### 17. Guide: Questions to ask
+**When:** Monday 21st December, 8:00 am · **Canva:** Posting order, page 17 · **Location:** Canada
 
 Caption:
 ```text
@@ -259,8 +334,8 @@ Alt text:
 Kestrel guide: Questions to ask before you say yes. The patients, the lab, the hours, the pay, the training and the team.
 ```
 
-### 15. Guide: Who does what
-**When:** Monday 4th January, 8:00 am · **Find it in Canva:** Kestrel guides, page 4 · **Location:** Canada
+### 18. Guide: Who does what
+**When:** Monday 4th January, 8:00 am · **Canva:** Posting order, page 18 · **Location:** Canada
 
 Caption:
 ```text
@@ -277,8 +352,8 @@ Alt text:
 Kestrel guide: Who does what in an eye care clinic? More roles than most people expect, and many need no university degree.
 ```
 
-### 16. Things heard in clinic No. 7
-**When:** Monday 11th January, 8:00 am · **Find it in Canva:** Things heard in clinic, page 7 · **Location:** Canada
+### 19. Things heard in clinic No. 7
+**When:** Monday 11th January, 8:00 am · **Canva:** Posting order, page 19 · **Location:** Canada
 
 Caption:
 ```text
@@ -291,8 +366,8 @@ Alt text:
 Things heard in clinic, No. 7: The dog ate them. Again. Underneath: Same dog. Same frames. Third pair. A drawing of chewed glasses.
 ```
 
-### 17. Guide: 4 tips
-**When:** Monday 18th January, 8:00 am · **Find it in Canva:** Kestrel guides, page 5 · **Location:** Canada
+### 20. Guide: 4 tips
+**When:** Monday 18th January, 8:00 am · **Canva:** Posting order, page 20 · **Location:** Canada
 
 Caption:
 ```text
@@ -309,8 +384,22 @@ Alt text:
 Kestrel guide: 4 tips for an eye care resume. 1, your registration status, if the job needs it. 2, 2 or 3 lines on who you are. 3, the tests, lenses and systems you know. 4, leave off your photo and date of birth.
 ```
 
-### 18. Guide: Hire for attitude
-**When:** Monday 25th January, 8:00 am · **Find it in Canva:** Kestrel guides, page 3 · **Location:** Canada
+### 21. Things heard in clinic No. 3 (was on hold)
+**When:** Thursday 21st January, 8:00 am · **Canva:** Posting order, page 21 · **Location:** Canada
+
+Caption:
+```text
+If you know, you know. What did your first autorefractor show you, a house, a balloon or a barn?
+
+#optometry #optician #optometrist #eyecare #opticianlife #optometrylife #eyecarecanada #optometricassistant
+```
+Alt text:
+```text
+Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A drawing of a road leading to a red house.
+```
+
+### 22. Guide: Hire for attitude
+**When:** Monday 25th January, 8:00 am · **Canva:** Posting order, page 22 · **Location:** Canada
 
 Caption:
 ```text
@@ -327,8 +416,28 @@ Alt text:
 Kestrel guide: Hire for attitude. Train for skills. Many good eye care staff start out in retail, hospitality or other health jobs.
 ```
 
-### 19. Things heard in clinic: Your turn
-**When:** Monday 1st February, 8:00 am · **Find it in Canva:** Things heard in clinic, page 8 · **Location:** Canada
+### 23. Guide: Eye care jobs on the road (was on hold)
+**When:** Thursday 28th January, 8:00 am · **Canva:** Posting order, page 23 · **Location:** Canada
+
+Caption:
+```text
+Not every eye care job is in a clinic.
+
+Lens and frame companies, labs and equipment makers hire sales reps, clinical trainers, field technicians and account managers, and many of them started in a clinic.
+
+Before you say yes to a field role, ask how big the territory is, how much of the pay is base, and whether a vehicle comes with it.
+
+Full guide: link in bio.
+
+#EyeCareJobs #Optometry #Opticians #FieldSales #CanadaJobs
+```
+Alt text:
+```text
+Kestrel guide: Eye care jobs on the road. Lens reps, clinical trainers, field technicians and account managers. What they do, and how to find the role.
+```
+
+### 24. Things heard in clinic: Your turn
+**When:** Monday 1st February, 8:00 am · **Canva:** Posting order, page 24 · **Location:** Canada
 
 Caption:
 ```text
@@ -341,8 +450,8 @@ Alt text:
 Things heard in clinic, your turn: Finish the sentence. The thing I say most in clinic is, followed by a blank line. Underneath: Tell us in the comments.
 ```
 
-### 20. Guide: How to attract
-**When:** Monday 8th February, 8:00 am · **Find it in Canva:** Kestrel guides, page 6 · **Location:** Canada
+### 25. Guide: How to attract
+**When:** Monday 8th February, 8:00 am · **Canva:** Posting order, page 25 · **Location:** Canada
 
 Caption:
 ```text
@@ -358,3 +467,4 @@ Alt text:
 ```text
 Kestrel guide: How to attract the right people to your clinic. Show the pay. Describe the real week. Reply to everyone.
 ```
+
