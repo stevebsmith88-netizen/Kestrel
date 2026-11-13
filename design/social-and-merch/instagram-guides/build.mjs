@@ -64,6 +64,17 @@ const POSTS = [
   { file: "g09-attract-the-right-people", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", icon: "door",
     head: "How to attract the right people", head2: "to your clinic.", sub: "Show the pay. Describe the real week. Reply to everyone.",
     alt: "Kestrel guide: How to attract the right people to your clinic. Show the pay. Describe the real week. Reply to everyone." },
+  // Added 13th November 2026 for the new blog posts and the pay summary page (docs/marketing/instagram-master-schedule.md, Thursday posts).
+  { file: "g11-optician-pay", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay guide",
+    head: "Typical optician pay, by province.", size: 96, marks: true,
+    list: ["Highest: British Columbia, $30.82 an hour", "6 provinces between $28.00 and $30.10", "Lowest: Ontario, $24.04 an hour"],
+    alt: "Kestrel guide: Typical optician pay, by province. Highest, British Columbia at $30.82 an hour. 6 provinces between $28.00 and $30.10. Lowest, Ontario at $24.04 an hour." },
+  { file: "g12-ai-chatbots", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "On the blog", icon: "question", size: 100,
+    head: "We asked the AI chatbots", head2: "about eye care jobs.", sub: "We were named in 0 of 21 answers. What they got right, and what they got wrong.",
+    alt: "Kestrel blog: We asked the AI chatbots about eye care jobs. We were named in 0 of 21 answers. What they got right, and what they got wrong." },
+  { file: "g13-pay-summary", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay summary", icon: "pin", size: 92,
+    head: "3 of 4 eye care roles", head2: "pay most in British Columbia.", sub: "Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.",
+    alt: "Kestrel pay summary: 3 of 4 eye care roles pay most in British Columbia. Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures." },
 ];
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&apos;").replace(/"/g, "&quot;");
@@ -71,7 +82,7 @@ const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, 
 function html(p) {
   const size = p.size ?? (p.list ? 120 : 104);
   const middle = p.list
-    ? `<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px">${p.list.map((t, i) => `<li style="display:flex;gap:28px;align-items:baseline;font-family:Poppins;font-size:38px;line-height:1.3;color:${p.fg}"><span style="font-family:'DM Serif Display';font-size:48px;color:${p.accent};min-width:36px">${i + 1}</span>${esc(t)}</li>`).join("")}</ol>`
+    ? `<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px">${p.list.map((t, i) => `<li style="display:flex;gap:28px;align-items:baseline;font-family:Poppins;font-size:38px;line-height:1.3;color:${p.fg}"><span style="font-family:'DM Serif Display';font-size:48px;color:${p.accent};min-width:36px">${p.marks ? "&#9679;" : i + 1}</span>${esc(t)}</li>`).join("")}</ol>`
     : `<p style="margin:0;font-family:Poppins;font-size:36px;line-height:1.35;color:${p.line}">${esc(p.sub)}</p>`;
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${esc(p.head)}</title><style>
 @font-face{font-family:'DM Serif Display';src:url(${font("dm-serif-display/files/dm-serif-display-latin-400-normal.woff2")})}
