@@ -27,8 +27,6 @@ Kestrel was named in 0 of 21 answers. That was the expected result for a site th
 | Gemini | 4 | 0 |
 | Perplexity and Claude | Wanted a sign in, so not counted | Not counted |
 
-![Kestrel blog: We asked the AI chatbots about eye care jobs. We were named in 0 of 21 answers. What they got right, and what they got wrong.](/images/blog/ai-chatbots.png)
-
 The best moment came from Copilot. Asked whether any new eye care job boards had appeared in Canada, it said there was a gap in the market for one board covering the whole eye care team, and that there was "not yet a Canadian equivalent of a comprehensive EyeCareJobs.ca". It used our own web address as its example of a thing that did not exist. We have taken it as encouragement.
 
 ## What they got right
@@ -85,8 +83,6 @@ A median is the middle figure: half of the opticians surveyed earned more, half 
 | Nova Scotia | $28.07 | Not published | About $54,700 |
 | Alberta | $28.00 | $25 to $39.40 | About $54,600 |
 | Ontario | $24.04 | $23 to $33.65 | About $46,900 |
-
-![Kestrel guide: Typical optician pay, by province. Highest, British Columbia at $30.82 an hour. 6 provinces between $28.00 and $30.10. Lowest, Ontario at $24.04 an hour.](/images/blog/optician-pay.png)
 
 **British Columbia** has the highest median, and 6 provinces sit within about $2 of each other. **Alberta** has the widest spread of the 3 provinces where Job Bank gives one, with the middle half running from $25 to $39.40.
 
@@ -188,8 +184,6 @@ Thank them, confirm the date it starts and the new amount in writing, and keep d
     description: "A clear 1 or 2 page resume is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
     date: "2027-01-08",
     body: `A resume for an eye care job does not need to be fancy. The person reading it is often a busy owner or practice manager with a pile to get through. A clean, honest one or two pages that shows what you have done gets read.
-
-![Kestrel guide: 4 tips for an eye care resume. 1, your registration status, if the job needs it. 2, 2 or 3 lines on who you are. 3, the tests, lenses and systems you know. 4, leave off your photo and date of birth.](/images/blog/resume-tips.png)
 
 ## What to put at the top
 
@@ -296,8 +290,6 @@ A one page checklist, a buddy and 3 short check ins will do more than a long man
     date: "2027-01-15",
     body: `A clinic can teach someone to run a pre-test. It is much harder to teach someone to be patient with a nervous patient, to turn up on time or to care about getting a fit right. That is the thinking behind hiring for attitude and training for skills. It does not suit every role, but it suits more of them than many clinics assume.
 
-![Kestrel guide: Hire for attitude. Train for skills. Many good eye care staff start out in retail, hospitality or other health jobs.](/images/blog/hire-for-attitude.png)
-
 ## Where it works well
 
 Reception and patient care, optometric assistant and technician roles, optical sales support and many lab tasks can all be learned on the job. Retail, hospitality, health care and customer service experience carry over well: people who have managed a busy shift, calmed an upset customer or kept records straight already have much of what you need. Our post on [how people fall into optics](/blog/how-people-fall-into-optics) describes how many of your current team probably started.
@@ -367,8 +359,6 @@ Short "stay conversations" help: what do you enjoy, what would you change, what 
     description: "Good candidates choose clinics as much as clinics choose them. Here is what makes the right people apply, and what makes them look elsewhere.",
     date: "2027-01-22",
     body: `Most clinics hire in a hurry, when someone leaves or the schedule is stretched. That is when the ad is written fastest and the right candidate is easiest to miss. A small amount of care at the start brings better applicants and fewer weeks with an empty chair.
-
-![Kestrel guide: How to attract the right people to your clinic. Show the pay. Describe the real week. Reply to everyone.](/images/blog/attract-the-right-people.png)
 
 ## Say what the job really is
 
@@ -672,8 +662,6 @@ Kestrel's ad builder turns a few lines about the role into a draft. You edit eve
     date: "2026-11-13",
     body: `Ask a group of opticians, assistants and clinic managers how they got started, and the answer is rarely "I always wanted to work in eye care." It is more often "I needed a job and a friend knew a clinic," or "I was at the front desk and got curious." Eye care is a career many people fall into, and then find they like.
 
-![Kestrel guide: How most people fall into optics. Few people plan a career in eye care. Most find it by chance, and many stay for good.](/images/blog/fall-into-optics.png)
-
 ## The usual doors
 
 A common start is the front desk or a part time job in an optical store, often while studying or between other plans. Some people grow up around a clinic because a parent or relative owns one. Others arrive from retail, hospitality or another part of health care, looking for work that has more purpose than the one they left. A few start as students taking a summer job and never leave.
@@ -700,8 +688,6 @@ You do not need a plan to start. A clear, warm [cover letter](/blog/cover-letter
     description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
     date: "2026-11-27",
     body: `An interview works both ways. The clinic is deciding whether you are right for the job, and you are deciding whether you want to spend your days there. A few good questions tell you more than the job ad ever will.
-
-![Kestrel guide: Questions to ask before you say yes. The patients, the lab, the hours, the pay, the training and the team.](/images/blog/questions-before-you-say-yes.png)
 
 ## About the clinic and the day
 
@@ -737,8 +723,6 @@ Have 3 short stories ready: a time you helped a difficult fit, a time you worked
     description: "A plain guide to the jobs inside an eye care clinic and around it, from optometrists and opticians to managers, lab technicians and supplier teams.",
     date: "2026-11-20",
     body: `If you have only ever been on the patient side of an eye exam, the clinic can look like a small number of jobs. There are more than most people expect, and many of them need no university degree. Here is who does what.
-
-![Kestrel guide: Who does what in an eye care clinic? More roles than most people expect, and many need no university degree.](/images/blog/who-does-what.png)
 
 ## The clinical side
 
@@ -779,8 +763,6 @@ People move between these roles more than you might think. An assistant may stud
     description: "What an optometric assistant does day to day, how pay varies across Canada, and how to start or move up in an eye care clinic.",
     date: "2026-11-13",
     body: `An optometric assistant is the person who keeps an eye exam running smoothly. You are the first friendly face a patient meets after reception, and the person who gets them ready for the optometrist. It is one of the most common ways into eye care, and a good fit for someone who likes people, routine and working out how instruments behave.
-
-![Kestrel guide: Optometric assistant jobs. The work and pay. What the job involves day to day, how pay varies across Canada, and how to start or move up.](/images/blog/optometric-assistant-jobs.png)
 
 ## What the work involves
 
@@ -851,8 +833,6 @@ The Optical Group says it was founded in 1988 to support independent eye care pr
     updated: "2026-11-12",
     body: `A good job ad does 2 things. It helps the right person decide to apply, and it keeps you on the right side of the hiring rules that now apply in several provinces. This is the checklist we use at Kestrel. It is practical guidance, not legal advice, so check which rules apply to your employer.
 
-![Kestrel guide: 4 things every job ad in Canada should include. 1, the pay range. 2, is it an existing vacancy? 3, do you use AI to screen applicants? 4, no "Canadian experience" requirement.](/images/blog/job-ad-checklist.png)
-
 ## 1. Show a real pay range
 
 Candidates trust an ad more when it says what the job pays, and some provinces now expect it. British Columbia has a pay range rule for postings, and Ontario's rules for postings changed on 1st January 2026. Whether a rule applies to you can depend on the size of your business, so it is worth checking. If you hire in Ontario, our page on [Ontario job ad rules for eye care clinics](/resources/ontario-job-ads) sets out who those rules cover and what a covered ad must include.
@@ -902,8 +882,6 @@ Post your job on Kestrel and our ad builder will help you turn a few lines into 
     description: "A short, honest way to write a cover letter for an optician, optometric assistant or optometry role, with what to say in each part.",
     date: "2026-10-30",
     body: `Your resume says what you have done. Your cover letter says who you are. For most eye care jobs a short, honest letter helps more than a perfect one, because the person reading it is usually a busy owner or practice manager who wants to know if you would fit in their team.
-
-![Kestrel guide: Cover letters that get read. Why this clinic. What you would bring. When you could start. That is the whole letter.](/images/blog/cover-letter.png)
 
 Here is a simple way to write one in about 10 minutes.
 
@@ -957,8 +935,6 @@ When you apply through Kestrel, you can attach a cover letter to each applicatio
     description: "What sales reps, clinical trainers, field technicians and account managers do in eye care, and how to write or find these roles.",
     date: "2026-10-30",
     body: `Not every eye care job is inside a clinic. Lens labs, frame companies, contact lens makers, equipment suppliers and software companies all hire people who spend their week travelling to practices. Kestrel lists these roles alongside clinic jobs, so a clinic hiring an optician and a supplier hiring a territory representative can both be found in one place.
-
-![Kestrel guide: Eye care jobs on the road. Lens reps, clinical trainers, field technicians and account managers. What they do, and how to find the role.](/images/blog/field-based-jobs.png)
 
 ## The common field based roles
 

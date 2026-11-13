@@ -113,5 +113,6 @@ test("every post has a pull quote, and every image it uses is listed and exists"
       if (b.type === "table") for (const row of b.rows) assert.equal(row.length, b.head.length, `${post.slug} has a table row with the wrong number of cells`);
     }
   }
-  assert.equal(firstImage(POSTS.find((p) => p.slug === "cover-letter-optical-job")!.body), "/images/blog/cover-letter.png");
+  assert.equal(firstImage("Text.\n\n![A photo of an optician](/images/blog/x.png)"), "/images/blog/x.png");
+  assert.equal(firstImage("No pictures here."), undefined);
 });
