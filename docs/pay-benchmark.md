@@ -63,6 +63,10 @@ Job Bank publishes a new file each November or December. Download it, run `scrip
 
 `lib/pay-benchmark.ts` (rules and wording), `lib/pay-benchmark-data.ts` (generated figures), `lib/pay-benchmark-server.ts` (Kestrel's own posted pay, totals only), `lib/pay-starting-ranges.ts`, `components/PayBenchmark.tsx`, and tests in `lib/pay-benchmark.test.ts`. No new database change, key or service.
 
+## The yearly summary page (13th November 2026)
+
+`/resources/eye-care-pay-summary` (`lib/pay-summary.ts`) works out, from the same figures as the pay table, where each public role is paid most and least and the gap between them. Its numbers update by themselves when the data file is rebuilt. At each yearly refresh, also change `UPDATED` in `app/resources/eye-care-pay-summary/page.tsx` and `paySummary` in `lib/page-dates.ts`, and read the "short version" paragraph again in case the story has changed (for example a different province on top).
+
 ## Check before the next refresh: "low" and "high" on Job Bank's own page (8th November 2026)
 
 ChatGPT and Copilot both quote Job Bank's page for Alberta opticians as $17.36 low, $28.00 median and $39.40 high. Kestrel's table, built from the open data file, shows Q1 $25.00, median $28.00 and Q3 $39.40 and calls the range "the middle half of pay". The median and the top figure agree. The bottom does not, and the public wording depends on what Job Bank's "low" and "high" mean.

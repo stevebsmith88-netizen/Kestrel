@@ -7,8 +7,9 @@ export const PAGE_DATES = {
   postingPolicy: "2026-11-13",
   fakeJobs: "2026-11-13",
   security: "2026-11-12",
-  resources: "2026-11-09",
+  resources: "2026-11-13",
   ontarioJobAds: "2026-11-08",
+  paySummary: "2026-11-13",
   compare: "2026-11-06",
   help: "2026-11-13",
 } as const;
@@ -22,6 +23,7 @@ const PAGE_PATHS: Record<keyof typeof PAGE_DATES, string> = {
   security: "/security",
   resources: "/resources",
   ontarioJobAds: "/resources/ontario-job-ads",
+  paySummary: "/resources/eye-care-pay-summary",
   compare: "/compare",
   help: "/help",
 };

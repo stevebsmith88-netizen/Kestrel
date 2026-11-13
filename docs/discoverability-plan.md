@@ -43,3 +43,15 @@ Built 6th November 2026 on branch `claude/amazing-keller-c7k18u` (waiting for St
 - Buying groups blog post: published 6th November 2026.
 
 - Optometrist wages are left off the public pay table on /resources (Steve, 6th November 2026). Set by `LEFT_OUT_ROLES` in `lib/pay-guide.ts`. The post a job form still compares optometrist pay, and the price comparison page has no wage figures.
+
+## AI assistants: what was added on 13th November 2026
+
+Steve compared advice from ChatGPT, Perplexity, Copilot, Claude and Grok on how to be recommended by them. Almost all of it was already built (crawlable pages, sitemap, Search Console and Bing, JobPosting data, role and province pages, the pay table, the blog, the monthly prompt check). The gaps, now closed or planned:
+
+- **AI crawlers named in robots.txt** (`lib/crawlers.ts`, `app/robots.ts`). Search crawlers (OAI-SearchBot, PerplexityBot, Claude-SearchBot and the user fetchers) and training crawlers (GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot) are all allowed to the public pages, with the same private paths closed as for everyone else. Training crawlers are allowed because being in what the models learn helps them know the Kestrel name. Steve can block any of them later with a group of its own.
+- **`/llms.txt`** (`lib/llms-text.ts`, `app/llms.txt/route.ts`): a plain summary of Kestrel and its useful pages, with published blog posts listed automatically. Unproven, so treated as cheap insurance.
+- **A yearly pay summary** at `/resources/eye-care-pay-summary` (`lib/pay-summary.ts`): something dated and quotable for assistants and trade magazines, built from the Job Bank figures. A Kestrel hiring report from its own posts waits until there are enough posts to count (the same 10 posts from 3 clinics rule as the pay benchmark).
+- **Licensing guides by province**: planned in `docs/blog-drafts/licensing-guides-plan.md`, waiting for Steve's approval and for the regulator pages to be checked.
+- **A light hearted blog post** on asking the chatbots about eye care jobs (24th November 2026), from Steve's own visibility log.
+- **Extra diagnostic prompts** in `docs/marketing/ai-visibility-baseline.md`, and Grok and Perplexity added to the monthly check.
+- **Parked until after launch:** a public job feed, and a Claude connector (MCP) listed in Anthropic's directory. Both need real job volume to be worth it.

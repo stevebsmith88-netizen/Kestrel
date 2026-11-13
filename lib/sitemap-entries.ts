@@ -30,6 +30,7 @@ export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
     ...landing,
     { url: `${SITE}/clinics`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE}/resources/ontario-job-ads`, lastModified: PAGE_DATES.ontarioJobAds, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE}/resources/eye-care-pay-summary`, lastModified: PAGE_DATES.paySummary, changeFrequency: "yearly", priority: 0.6 },
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${SITE}/resources`, lastModified: PAGE_DATES.resources, changeFrequency: "monthly", priority: 0.6 },
     ...(comparePageOn() ? [{ url: `${SITE}/compare`, lastModified: PAGE_DATES.compare, changeFrequency: "monthly" as const, priority: 0.5 }] : []),

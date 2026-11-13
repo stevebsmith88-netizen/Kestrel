@@ -4,6 +4,56 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "ai-job-search-eye-care-canada",
+    title: "We asked the AI chatbots where to find eye care jobs in Canada",
+    description: "ChatGPT, Gemini, Copilot and friends are now part of the job hunt. What they told us about eye care jobs, and how to use them well.",
+    date: "2026-11-24",
+    body: `There was a time when looking for a new job meant the Saturday paper and a red pen. Then it meant job boards, then job alerts, then scrolling through jobs on your phone at a red light (please do not). Now a growing number of people start somewhere else entirely: they open ChatGPT, Gemini, Copilot, Claude, Perplexity or Grok and type "where can I find optician jobs near me?"
+
+It is happening in Canada too. In a 2025 [Harris Poll for Express Employment Professionals](https://www.expresspros.ca/newsroom/news-releases/news-releases/2025/04/canadian-job-seekers-want-to-interact-with-humans-during-hiring-process-not-ai), 51% of women and 40% of men looking for work in Canada said they had never used AI in their job search. Turn that round, and about half of the women and 6 in 10 of the men had tried it. Most of them, we suspect, asked it to fix a resume. A growing share are asking it where the jobs are.
+
+So we did what any self respecting new job board would do. We asked the chatbots about ourselves.
+
+## The experiment
+
+In early November 2026, we put a fixed set of questions, up to 10 each, to ChatGPT, Gemini and Copilot, each in a fresh chat, signed out wherever we could. Questions like "Is there a job board just for eye care jobs in Canada?" and "Where should an independent optometry clinic post a job ad?" Perplexity let us ask 2 before it wanted us to sign in, and Claude wanted a sign in from the start, so they sat this round out.
+
+Kestrel was named in 0 of 21 answers. That was the expected result for a site that had not opened yet, and we are choosing to call it a baseline.
+
+The best moment came from Copilot. Asked whether any new eye care job boards had appeared in Canada, it said there was a gap in the market for one board covering the whole eye care team, and that there was "not yet a Canadian equivalent of a comprehensive EyeCareJobs.ca". It used our own web address as its example of a thing that did not exist. We have taken it as encouragement.
+
+## What they got right
+
+Quite a lot, to be fair. Asked what an optician earns in Alberta, ChatGPT and Copilot both quoted the same Job Bank median, $28.00 an hour, which matches the figure in our own [pay guide](/resources#pay). Asked about Ontario's new job ad rules, they correctly said the rules apply to employers with 25 or more employees, and listed the pay range, the existing vacancy question, AI screening and the ban on asking for Canadian experience. Copilot showed its sources, and they were the right ones: the Ontario government's own guide and a few law firm explainers.
+
+They also knew the eye care world better than we expected. The national and provincial optometry associations came up again and again, along with the opticianry programs at the colleges, the optometry schools and the regulators. A couple of answers suggested Facebook groups, which is honest, if not a hiring strategy we would build a clinic around.
+
+## What they got wrong, or could not know
+
+Each assistant gave a different list of job boards, because each one reads different parts of the web. Ask 3 of them the same question and you get 3 answers, all delivered with the same calm confidence.
+
+One answer about Ontario's rules slipped in an Alberta example. Several pointed to general job boards and classified lists, where old ads can linger long after the job has gone. And none of them can tell you the thing you most want to know: is this job still open, today, and what does it actually pay? A chatbot summarises what it has read. It cannot ring the clinic.
+
+## How to use AI in an eye care job search
+
+AI is genuinely useful for the slow parts of a job hunt, as long as you check its homework. A few things we would suggest:
+
+- Tell it your role, your province and whether you are licensed there. "Licensed optician in Halifax looking for full time work" gets a far better answer than "eye care jobs".
+- Ask for its sources, then open them. If an answer points to a job, find the same job on the clinic's own website or on a board that shows when it was posted.
+- Check pay against something solid. Job Bank publishes typical pay for opticians, optometric assistants and other roles by province, and our [optician pay guide](/blog/optician-pay-canada) explains what the figures mean.
+- Use it to practise. Paste in a job ad and ask it for the interview questions you are likely to get. Ask it to play a tough practice manager. It will not mind.
+- Let it tidy your writing, then put yourself back in. A cover letter that reads like everyone else's does you no favours, and clinics notice. Our [cover letter guide](/blog/cover-letter-optical-job) has what to keep in your own words.
+- Watch for anything too good to be true. A job that asks for money, banking details or a chat on a messaging app before an interview is a warning sign, whoever found it for you. Our [fake jobs policy](/fake-jobs) explains how to report one on Kestrel.
+
+## Where Kestrel fits
+
+We built Kestrel so that the answer to "where are the eye care jobs in Canada?" is easy to find and easy to trust, for people and for the chatbots reading on their behalf. Every job shows its pay, says whether it is a real vacancy and whether AI screens the applicants, and comes down after 30 days. Each one has its own page that search engines and assistants can read.
+
+We will ask the same 10 questions again every month and keep a note of who gets named. If the chatbots start mentioning us, we will let you know. If they keep mixing up Alberta and Ontario, we will let you know that too.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "optician-pay-canada",
     title: "Optician pay in Canada: what opticians earn in each province",
     description: "Typical hourly pay for opticians in each province from Job Bank, what it comes to over a year, and what moves an offer up or down.",
