@@ -25,6 +25,7 @@ const ICON = {
   door: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M30 42 V4 H60 V42" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 4 L48 8 V42 L30 42" fill="${a}" fill-opacity=".35" stroke="${a}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="44" cy="25" r="1.8" fill="${c}"/><path d="M20 42 H70" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
   path: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M4 40 C24 40 18 22 40 22 S56 4 80 4" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/><circle cx="82" cy="4" r="3.5" fill="${a}"/><circle cx="4" cy="40" r="3.5" fill="${c}"/></svg>`,
   pin: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M2 40 H88" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6"/><path d="M45 34 C35 22 33 18 33 13 a12 12 0 0 1 24 0 C57 18 55 22 45 34 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="45" cy="13" r="4" fill="${a}"/></svg>`,
+  road: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M2 30 H88" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M40 30 L26 44 M50 30 L64 44" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M45 34 V36 M45 39 V42" stroke="${a}" stroke-width="2" stroke-linecap="round"/><path d="M38 28 V18 L45 11 L52 18 V28" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 19 L45 9 L54 19" fill="none" stroke="${a}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="43" y="21" width="4" height="7" fill="${a}"/></svg>`,
   pen: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M8 38 C20 30 26 40 36 32 S52 30 58 34" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/><path d="M60 30 L82 8 L86 12 L64 34 L58 36 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
 };
 
@@ -37,7 +38,8 @@ const POSTS = [
   { file: "g01-how-people-fall-into-optics", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", icon: "path", size: 120,
     head: "How most people", head2: "fall into optics.", sub: "Few people plan a career in eye care. Most find it by chance, and many stay for good.",
     alt: "Kestrel guide: How most people fall into optics. Few people plan a career in eye care. Most find it by chance, and many stay for good." },
-  { file: "g02-job-ad-checklist", bg: C.buff, fg: C.navy, label: C.navy, accent: C.chestnutD, line: C.navy, k: "kestrel-k-mark.svg", tr: "Checklist",
+  // Pale blue since 13th November 2026 (was buff), to match the other light posts.
+  { file: "g02-job-ad-checklist", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "Checklist",
     head: "4 things every job ad in Canada should include.", size: 96, list: ["The pay range", "Is it an existing vacancy?", "Do you use AI to screen applicants?", "No \"Canadian experience\" requirement"],
     alt: "Kestrel guide: 4 things every job ad in Canada should include. 1, the pay range. 2, is it an existing vacancy? 3, do you use AI to screen applicants? 4, no \"Canadian experience\" requirement." },
   { file: "g03-cover-letter", bg: C.paper, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", icon: "pen", size: 120,
@@ -75,6 +77,10 @@ const POSTS = [
   { file: "g13-pay-summary", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay summary", icon: "pin", size: 92,
     head: "3 of 4 eye care roles", head2: "pay most in British Columbia.", sub: "Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.",
     alt: "Kestrel pay summary: 3 of 4 eye care roles pay most in British Columbia. Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures." },
+  // Things heard No. 3 redrawn as a flat navy card (Steve, 13th November 2026: the landscape picture stood out from the grid).
+  { file: "t03-just-look-at-the-house", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.buff, k: "kestrel-k-mark-reversed.svg", tl: "THINGS HEARD IN CLINIC", tr: "No. 3", icon: "road", size: 120,
+    head: "Just look at", head2: "the house.", sub: "It will go blurry. That's fine.",
+    alt: "Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A line drawing of a road leading to a house, on navy." },
 ];
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&apos;").replace(/"/g, "&quot;");

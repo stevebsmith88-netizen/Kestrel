@@ -1,7 +1,9 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { excerpt, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
+import { existsSync } from "node:fs";
+import { BLOG_IMAGES } from "./blog-images.ts";
+import { excerpt, firstImage, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
 import { POSTS } from "../content/posts.ts";
 
 test("text becomes headings, lists and paragraphs", () => {
@@ -83,4 +85,33 @@ test("an excerpt is plain text, ends cleanly, and is never longer than asked", (
   }
   assert.equal(excerpt("Short **bold** and a [link](/jobs).\n\nSecond."), "Short bold and a link.");
   assert.equal(excerpt("## Only a heading"), "");
+});
+
+test("pull quotes, tables and images become their own blocks", () => {
+  const blocks = parseBlocks("> A line worth repeating.\n\n> Said by someone.\n> source: A clinic owner\n\n| Role | Pay |\n| --- | --- |\n| Optician | $30 |\n\n![A card](/images/blog/cover-letter.png)\nA caption.");
+  assert.deepEqual(blocks, [
+    { type: "quote", text: "A line worth repeating." },
+    { type: "quote", text: "Said by someone.", source: "A clinic owner" },
+    { type: "table", head: ["Role", "Pay"], rows: [["Optician", "$30"]] },
+    { type: "figure", src: "/images/blog/cover-letter.png", alt: "A card", caption: "A caption." },
+  ]);
+  // an image from anywhere else stays plain text, never an image
+  assert.equal(parseBlocks("![x](https://example.com/a.png)")[0].type, "p");
+});
+
+test("every post has a pull quote, and every image it uses is listed and exists", () => {
+  for (const post of POSTS) {
+    const blocks = parseBlocks(post.body);
+    assert.ok(blocks.some((b) => b.type === "quote"), `${post.slug} has no pull quote (Steve, 13th November 2026: every post gets at least 1)`);
+    for (const b of blocks) {
+      if (b.type === "figure") {
+        assert.ok(BLOG_IMAGES[b.src], `${post.slug} uses ${b.src}, which is not in lib/blog-images.ts`);
+        assert.ok(existsSync(`public${b.src}`), `${b.src} is missing from public`);
+        // Steve, 13th November 2026: every blog image needs alt text that says what is on it
+        assert.ok(b.alt.trim().length >= 20, `${post.slug} has an image with no useful alt text`);
+      }
+      if (b.type === "table") for (const row of b.rows) assert.equal(row.length, b.head.length, `${post.slug} has a table row with the wrong number of cells`);
+    }
+  }
+  assert.equal(firstImage(POSTS.find((p) => p.slug === "cover-letter-optical-job")!.body), "/images/blog/cover-letter.png");
 });
