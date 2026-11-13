@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { cleanName, fullName, validateEmailChange, validateName } from "@/lib/account";
 import { longDate } from "@/lib/jobs";
 import { changeName, type NameDb } from "@/lib/name-change";
+import { IN_PLAY_NAME_TEXT } from "@/lib/name-hold";
+import { hasApplicationInPlay } from "@/lib/live-applications";
 import { requireRole } from "@/lib/auth";
 import { MARKETING_CONSENT_TEXT, NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
@@ -25,10 +27,13 @@ export async function updateName(_prev: JobFormState, form: FormData): Promise<J
   const errors = validateName(first, last);
   if (Object.keys(errors).length) return { errors, error: errors.firstName };
 
-  const result = await changeName(supabaseAdmin() as unknown as NameDb | null, session.userId, { first, last }, session.firstName ?? "");
+  const admin = supabaseAdmin();
+  const inPlay = session.role === "candidate" ? await hasApplicationInPlay(admin as unknown as Parameters<typeof hasApplicationInPlay>[0], session.userId) : false;
+  const result = await changeName(admin as unknown as NameDb | null, session.userId, { first, last }, session.firstName ?? "", new Date(), { inPlay });
   if (result.outcome === "no-server") return { error: "We can't change names just now. Please try again shortly, or write to hello@eyecarejobs.ca." };
   if (result.outcome === "unchanged") return { message: "Your name is saved." };
   if (result.outcome === "locked") return { error: `You changed your name recently. You can change it again on ${longDate(result.until)}. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca and we will lift the hold.` };
+  if (result.outcome === "in-play") return { error: IN_PLAY_NAME_TEXT };
   if (result.outcome === "failed") {
     console.error("Name change failed:", result.reason);
     return { error: "We couldn't save your name. Please try again." };

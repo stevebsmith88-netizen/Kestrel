@@ -1,3 +1,4 @@
+import { hasApplicationInPlay } from "@/lib/live-applications";
 import type { Metadata } from "next";
 import { cleanFrequency } from "@/lib/clinic-emails";
 import AppBar from "@/components/AppBar";
@@ -26,6 +27,8 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   // When the name can next be changed (lib/name-hold.ts). A missing column means no hold yet, so a database without migration 0039 still works.
   const { data: held, error: heldError } = admin ? await admin.from("profiles").select("name_changed_at").eq("id", session.userId).maybeSingle() : { data: null, error: null };
   const lockedUntil = !heldError && held?.name_changed_at ? nameLockedUntil(held.name_changed_at) : null;
+  // A candidate with an application still in play cannot change their name (lib/live-applications.ts).
+  const nameInPlay = session.role === "candidate" && !lockedUntil ? await hasApplicationInPlay(admin as unknown as Parameters<typeof hasApplicationInPlay>[0], session.userId) : false;
   const first = profile?.first_name || session.firstName;
   const last = profile?.last_name ?? "";
   return (
@@ -38,6 +41,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           first={first}
           last={last}
           nameLockedUntil={lockedUntil ? longDate(lockedUntil) : null}
+          nameInPlay={nameInPlay}
           hasClinic={Boolean(employer)}
           hasPassword={session.hasPassword}
           emailNotice={emailNotice}

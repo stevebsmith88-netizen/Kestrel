@@ -171,7 +171,8 @@ export const HELP: HelpSection[] = [
         keywords: ["name", "change name", "typo", "married", "legal name", "rename", "surname", "last name"],
         answer: [
           "Yes. You can change your name on your account page. After each change, including the first, there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again. Fixing capital letters alone, for example smith to Smith, does not start the wait.",
-          "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to hello@eyecarejobs.ca and we will lift the hold for you.",
+          "If you are a candidate with an application in progress (sent, viewed, at interview or at offer, on a job the clinic still has), your name cannot change until it closes, because the clinic needs to recognise the person it is talking to. Fixing capital letters is always fine.",
+          "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to hello@eyecarejobs.ca and we will help.",
         ],
         steps: [
           "Open the menu under your initials at the top of the page and choose **Account settings**. On a phone, open **Menu** instead.",

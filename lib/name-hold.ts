@@ -25,3 +25,9 @@ export function onlyCapitalsDiffer(current: { first: string; last: string }, nex
   const norm = (s: string) => s.replace(/\s+/g, " ").trim();
   return !nameDiffers(current, next) && (norm(current.first) !== norm(next.first) || norm(current.last) !== norm(next.last));
 }
+
+// While a candidate has an application still in play (sent, viewed, shortlisted, interview or offer, on a job the clinic still has), their
+// name cannot change, so a clinic always recognises who it is talking to (Steve, 13th November 2026; lib/live-applications.ts). Fixing
+// capital letters alone is still allowed.
+export const IN_PLAY_NAME_TEXT =
+  "You have an application in progress, so your name can't change until it closes. Clinics need to recognise the person they are talking to. You can still fix capital letters. If you need a change sooner, for example a legal name change, write to hello@eyecarejobs.ca.";

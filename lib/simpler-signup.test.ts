@@ -33,3 +33,11 @@ test("a new clinic goes from its profile straight to its first post, and is neve
   assert.match(read("app/clinic/profile/page.tsx"), /signUpEmail=\{session\.email\}/);
   assert.match(read("app/clinics/page.tsx"), /\/sign-up\?type=clinic/);
 });
+
+test("the in play check counts sent, viewed, shortlisted, interview and offer on a job the clinic still has", () => {
+  const live = read("lib/live-applications.ts");
+  assert.match(live, /\.in\("status", HIREABLE\)/);
+  assert.match(live, /\.not\("job_id", "is", null\)/);
+  assert.match(read("lib/account-settings-actions.ts"), /inPlay/);
+  assert.match(read("content/help.ts"), /your name cannot change until it closes/);
+});

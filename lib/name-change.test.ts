@@ -88,6 +88,17 @@ test("a failed write is reported and leaves no half change", async () => {
 test("the account page's action saves names through the server key only", () => {
   const source = readFileSync("lib/account-settings-actions.ts", "utf8");
   const action = source.slice(source.indexOf("export async function updateName"), source.indexOf("export async function requestEmailChange"));
-  assert.match(action, /changeName\(supabaseAdmin\(\)/, "updateName must hand the server client to changeName");
+  assert.match(action, /const admin = supabaseAdmin\(\);/, "updateName must use the server client");
+  assert.match(action, /changeName\(admin as unknown as NameDb/, "updateName must hand the server client to changeName");
   assert.doesNotMatch(action, /db\.from\("profiles"\)\.update/, "updateName must not write the name with the person's own sign in");
+});
+
+test("no real change of name while an application is still in play, but capitals can be fixed (Steve, 13th November 2026)", async () => {
+  const a = fakeDb({ first_name: "Jane", last_name: "Smith", name_changed_at: null });
+  assert.deepEqual(await changeName(a.db, "u1", { first: "Jane", last: "Doe" }, "", now, { inPlay: true }), { outcome: "in-play" });
+  assert.equal(a.writes.length, 0, "nothing is saved");
+  const b = fakeDb({ first_name: "jane", last_name: "smith", name_changed_at: null });
+  assert.deepEqual(await changeName(b.db, "u1", { first: "Jane", last: "Smith" }, "", now, { inPlay: true }), { outcome: "saved", held: false });
+  const c = fakeDb({ first_name: "Jane", last_name: "Smith", name_changed_at: null });
+  assert.equal((await changeName(c.db, "u1", { first: "Jane", last: "Doe" }, "", now, { inPlay: false })).outcome, "saved", "with nothing in play the change goes through");
 });

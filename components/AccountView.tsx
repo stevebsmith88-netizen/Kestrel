@@ -9,6 +9,7 @@ export type AccountViewProps = {
   email: string;
   first: string;
   nameLockedUntil?: string | null;
+  nameInPlay?: boolean; // the candidate has an application still in play, so the name cannot change
   last: string;
   hasClinic: boolean;
   hasPassword: boolean;
@@ -18,7 +19,7 @@ export type AccountViewProps = {
 };
 
 // What the Account page shows: the person's details, their email choices, and the download and delete options.
-export default function AccountView({ role, email, first, last, nameLockedUntil, hasClinic, hasPassword, prefs, emailNotice, downloadProblem }: AccountViewProps) {
+export default function AccountView({ role, email, first, last, nameLockedUntil, nameInPlay = false, hasClinic, hasPassword, prefs, emailNotice, downloadProblem }: AccountViewProps) {
   const home = role === "clinic" ? "/clinic" : "/candidate";
   return (
         <div className="wrap narrow">
@@ -34,7 +35,7 @@ export default function AccountView({ role, email, first, last, nameLockedUntil,
                 <div><dt>Sign in email</dt><dd>{email}</dd></div>
               </dl>
               <h3 className="subh">Your name</h3>
-              <NameForm first={first} last={last} lockedUntil={nameLockedUntil ?? null} />
+              <NameForm first={first} last={last} lockedUntil={nameLockedUntil ?? null} inPlay={nameInPlay} />
               <h3 className="subh">Your email address</h3>
               <EmailForm current={email} hasPassword={hasPassword} />
             </section>

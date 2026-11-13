@@ -18,12 +18,13 @@ export type NameChange =
   | { outcome: "unchanged" }
   | { outcome: "saved"; held: boolean }
   | { outcome: "locked"; until: Date }
+  | { outcome: "in-play" } // the candidate has an application still in play (Steve, 13th November 2026)
   | { outcome: "no-server" }
   | { outcome: "failed"; reason: string };
 
 const missingColumn = (e: { code?: string; message: string } | null) => Boolean(e && (e.code === "42703" || e.code === "PGRST204" || /name_changed_at/.test(e.message)));
 
-export async function changeName(admin: NameDb | null, userId: string, next: { first: string; last: string }, fallbackFirst = "", now: Date = new Date()): Promise<NameChange> {
+export async function changeName(admin: NameDb | null, userId: string, next: { first: string; last: string }, fallbackFirst = "", now: Date = new Date(), opts: { inPlay?: boolean } = {}): Promise<NameChange> {
   if (!admin) return { outcome: "no-server" };
   const current = await admin.from("profiles").select("first_name, last_name").eq("id", userId).maybeSingle();
   if (current.error) return { outcome: "failed", reason: current.error.message };
@@ -36,6 +37,8 @@ export async function changeName(admin: NameDb | null, userId: string, next: { f
     return tidied.error ? { outcome: "failed", reason: tidied.error.message } : { outcome: "saved", held: false };
   }
   if (!nameDiffers(was, next)) return { outcome: "unchanged" };
+  // No real change of name while an application is still in play, so the clinic always knows who it is talking to. Capitals are fine (above).
+  if (opts.inPlay) return { outcome: "in-play" };
 
   // Read on its own, because the column is missing until migration 0039 is run.
   const held = await admin.from("profiles").select("name_changed_at").eq("id", userId).maybeSingle();

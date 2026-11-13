@@ -1,5 +1,6 @@
 "use client";
 
+import { IN_PLAY_NAME_TEXT } from "@/lib/name-hold";
 import { FREQUENCIES, RESPONSE_NOTE, type Frequency } from "@/lib/clinic-emails";
 import Link from "next/link";
 import { Field } from "@/components/Field";
@@ -7,7 +8,7 @@ import { useServerForm } from "@/components/useServerForm";
 import { requestEmailChange, savePreferences, updateName } from "@/lib/account-settings-actions";
 import { MARKETING_CONSENT_TEXT } from "@/lib/auth-copy";
 
-export function NameForm({ first, last, lockedUntil = null }: { first: string; last: string; lockedUntil?: string | null }) {
+export function NameForm({ first, last, lockedUntil = null, inPlay = false }: { first: string; last: string; lockedUntil?: string | null; inPlay?: boolean }) {
   const { state, pending, submit } = useServerForm(updateName);
   const e = state.errors ?? {};
   return (
@@ -20,6 +21,7 @@ export function NameForm({ first, last, lockedUntil = null }: { first: string; l
           <input id="ac-last" name="lastName" type="text" autoComplete="family-name" defaultValue={last} disabled={Boolean(lockedUntil)} />
         </Field>
       </div>
+      {inPlay && !lockedUntil && <p className="help">{IN_PLAY_NAME_TEXT}</p>}
       {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca.</p>}
       {state.error && !state.errors?.firstName && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
