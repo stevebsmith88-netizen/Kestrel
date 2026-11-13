@@ -15,17 +15,18 @@ export function NameForm({ first, last, lockedUntil = null, inPlay = false }: { 
     <form onSubmit={submit} noValidate className="stackform">
       <div className="pair">
         <Field id="ac-first" label="First name" required error={e.firstName}>
-          <input id="ac-first" name="firstName" type="text" autoComplete="given-name" defaultValue={first} disabled={Boolean(lockedUntil)} />
+          <input id="ac-first" name="firstName" type="text" autoComplete="given-name" defaultValue={first} />
         </Field>
         <Field id="ac-last" label="Last name" error={e.lastName}>
-          <input id="ac-last" name="lastName" type="text" autoComplete="family-name" defaultValue={last} disabled={Boolean(lockedUntil)} />
+          <input id="ac-last" name="lastName" type="text" autoComplete="family-name" defaultValue={last} />
         </Field>
       </div>
       {inPlay && !lockedUntil && <p className="help">{IN_PLAY_NAME_TEXT}</p>}
-      {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca.</p>}
+      {/* The boxes stay open during a hold, because fixing capital letters ("smith" to "Smith") is always allowed (review item X-11). */}
+      {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. Until then you can still fix capital letters. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca.</p>}
       {state.error && !state.errors?.firstName && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
-      {!lockedUntil && <div><button type="submit" className="btn sm" disabled={pending}>{pending ? "Saving" : "Save my name"}</button></div>}
+      <div><button type="submit" className="btn sm" disabled={pending}>{pending ? "Saving" : "Save my name"}</button></div>
     </form>
   );
 }

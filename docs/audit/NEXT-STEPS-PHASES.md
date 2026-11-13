@@ -1,6 +1,22 @@
 # Audit next steps, in phases
 
-Proposal from the audit of 30th October 2026. Steve chooses; nothing here is started. Finding numbers (R1 to R60) refer to the risk register in `AUDIT-REPORT-2026-10-30.md`. Each phase has a gate: do not start the next phase until the gate is met.
+Proposal from the audit of 30th October 2026. Steve chooses.
+
+## Where each phase stands (13th November 2026)
+
+Added for review item X-06: this file used to say "nothing here is started", which read as if all 60 October findings were open. The phases below are kept as written in October, for the record. The evidence behind each line is in `POST-AUDIT-2026-11-12.md` section 3 and `AUDIT-FIXES-LOG.md`. The November audit (P1-01 to P1-60) has its own plan and log and is not repeated here.
+
+| Phase | Status | Still open |
+| --- | --- | --- |
+| 0. Steve's settings hour | Partly done (`PHASE-0-RESULTS.md`) | Steve: Supabase Pro and daily backups with 1 restore test (R1), a paid Resend plan (R7), previews off the live database (R9), Vercel Pro (R36) and moving Vercel ownership (R14) |
+| 1. Safe to invite (1A, 1B, 1C) | **Done.** Merged 31st October 2026 (migrations 0018 to 0020) | Nothing |
+| 2. Legal and Gate B | Partly done. Built: the retention periods and daily clean up (R30, 13th November), the data download (R29), the Quebec decision (R31), applications kept when a clinic leaves (R5, migration 0044), the fake jobs policy, sign in guarding (R22), the maintenance switch (R45), the accessibility pass on public pages (R37) | Lawyer meeting (Kestrel has no lawyer yet); privacy officer and breach plan blanks (R28, R57); the draft notices on Terms, Posting policy and Security (R2); the virus scanner choice (R23) |
+| 3. Free launch and evidence | Mostly built: job views and apply clicks (R17), the Gate C tile (R41), the careers page reader and found listings tool (R16, R19), the claim loop (R40), For clinics (R42), filter canonicals (R39) | Gate C (50 live roles in 5 provinces) is not passed. Publishing found listings stays off until Steve's disclosure conversation |
+| 4. Paid launch | Prices and passes decided (R46, `lib/pricing.ts`). Sponsored posts designed only | Stripe and checkout (held until Steve says go), the revenue model net of fees (R43), skill and internationally trained tags (R58) |
+| 5. Tidy and simplify | Not started | Docs tidy (R44), cost estimate (R59), low items (R48, R51 to R53, R60) |
+| Search and posting ideas (31st October) | 1: Fixed term rename and tick boxes on Find jobs built. 2: city and radius search built (pull request 33). 3 and 4: decided against. 5: pay benchmark built | Nothing |
+
+ Finding numbers (R1 to R60) refer to the risk register in `AUDIT-REPORT-2026-10-30.md`. Each phase has a gate: do not start the next phase until the gate is met.
 
 Rules for every phase: work on a branch, run `npm run typecheck && npm test && npm run build`, push, Steve checks the preview, Steve says merge. Database changes are a new numbered migration, added to the combined file and tested twice on a scratch database. Clinic outreach and seeding stay off until Steve confirms the disclosure conversation has happened.
 
@@ -61,9 +77,9 @@ Gate C: 50 live roles across 5 or more provinces, job pages indexed, free to pai
 - Drop 4 unneeded settings and the duplicate code, update the cost estimate (R59).
 - Low items and ideas (R48, R51 to R53, R60).
 
-## Search and posting ideas agreed 31st October 2026 (to schedule, Steve to confirm timing)
+## Search and posting ideas agreed 31st October 2026
 
-Steve's decisions so far. Nothing here is built.
+Steve's decisions as written on 31st October. What has been built since is in the status table at the top.
 
 1. **Employment type as tick boxes, more than one at a time.** Full time, Part time, Fixed term, Locum. "Contract" is renamed "Fixed term" and means a role with an end, such as maternity cover or seasonal work. No database change if done in code only. If a database check constraint lists the old value, a small migration renames existing "Contract" jobs (run on both databases).
 2. **City and radius filter.** After a province is chosen, the city list shows only places with live jobs, with a count beside each (for example "Calgary (6)"), then a radius of 10, 25, 50 or 100 km. Needs a table of Canadian places with map positions (open data, check the licence), clinics choosing a place from that list when posting, matching of existing free text cities, and a distance query in Postgres. Straight line distance, not drive time. Needs a migration on both databases. Open questions: should remote and field roles always show whatever the radius, and how small a town should the list include (suggest about 1,000 people).

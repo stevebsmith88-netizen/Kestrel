@@ -239,4 +239,25 @@ Branch `claude/kestrel-audit-fixes-phase-g-h67oku` (the session was set up on th
 - **A shortlist made straight from the applicants list, before the application is ever opened, shows the candidate "Viewed" at the time of the shortlist** (history and the masked copy). The candidate is told it has been viewed, which is true (the clinic did act on it), so this was left alone, but it does give a time that matches the shortlist. Only matters if Steve wants to hide even that.
 - **The applicants list (`app/clinic/jobs/[id]/applicants/page.tsx`) and the admin pages still read the database inside the page code** and have no tests. The loaders for the single application page and the candidate's list are covered; those pages are the next place to extract and test if more is wanted.
 - **`npm run test:db` needs Linux with Postgres 16 and the `postgres` user**, like the older scratch scripts. It cannot run on Steve's own computer, only in the cloud session.
-- **From Phase F, still open:** the posting policy still lists the types as "full time, part time, locum or contract", and `lib/onboarding-emails.test.ts` fails when `NEXT_PUBLIC_SITE_URL` is set to another address.
+- **From Phase F, still open:** the posting policy still lists the types as "full time, part time, locum or contract", and `lib/onboarding-emails.test.ts` fails when `NEXT_PUBLIC_SITE_URL` is set to another address. (Both closed by 13th November 2026: see the last section.)
+
+## Small fixes from the post audit review (13th November 2026). On a branch, waiting for Steve's check on the preview
+
+Branch `claude/loving-faraday-3j5smt`. No SQL. No settings changed. Steve asked for all of these on 13th November 2026. Before the push: `npm run typecheck` (0 errors), `npm test` (618 tests, all passing) and `npm run build` (clean).
+
+| Item | Status | What changed |
+| --- | --- | --- |
+| D-03 Old resume suggestions stay after a new upload | fixed | "Fill in from my resume" starts afresh whenever a new resume is saved (keyed by the upload time), so no suggestions from the old file and the button is back |
+| D-04 Checklist ticks "Say what you are looking for" too early | fixed | Done only once a preference from that part of the profile is saved: other provinces, types of work, pay needed, practice type or other roles (`lookingForSaved` in `lib/checklist.ts`, tested). The role and town from the first step page and the 25 km default no longer count |
+| D-05 Quebec offered as a job alert province | fixed | Taken off the alert form, and the server refuses it with the usual Quebec wording |
+| D-07 "Existing vacancy" not explained on the job page | fixed | A small "i" note beside it, and beside "Uses AI to screen candidates", in the help centre's words |
+| D-09 PDF resumes show a DOC badge | fixed | PDF for a PDF, DOC for a Word file (`lib/file-badge.ts`, tested) |
+| X-04 Interview and Offer left open for ever when a job runs out | fixed | The daily job now also closes Interview and Offer, 14 days after the job ended (7 for the others), as "No update from the clinic", with kinder words that suggest contacting the clinic directly. A job the clinic marked as filled is left alone, so "Don't close this one yet" still holds. Tested |
+| X-06 The October phased plan read as all open | fixed | `NEXT-STEPS-PHASES.md` has a status table per phase at the top |
+| X-07 Posting policy says "contract" | already fixed | The page already says "fixed term" |
+| X-10 No "written by the clinic" line on the candidate's application page | fixed | The page now says "This message was written by [clinic]", as the email and inbox do |
+| X-11 Name boxes greyed out during a name hold | fixed | The boxes and Save button stay usable, with "Until then you can still fix capital letters". The server already allowed it and still refuses anything more |
+| X-13 Onboarding email test fails with another site address | fixed | The test expects whichever address is set. Passes with none and with the demo address |
+| X-14 Old docs point to an old SQL file | fixed | `docs/launch-checklist.md` and `docs/google-signin.md` point to the current combined file |
+| X-20 Help page layout shift on a phone | fixed | The search box's space is held before the script runs. Layout shift measured at 0 on a phone and a desktop (was 0.079) |
+| P1-58 No "Applied" mark on job cards | fixed | A signed in candidate sees an "Applied" badge on Find jobs cards for jobs they have applied to |

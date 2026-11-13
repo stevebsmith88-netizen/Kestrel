@@ -8,7 +8,7 @@ import { AppStatusBadge } from "@/components/AppStatus";
 import GettingStarted from "@/components/GettingStarted";
 import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
-import { candidateSteps } from "@/lib/checklist";
+import { candidateSteps, lookingForSaved } from "@/lib/checklist";
 import { getMyApplications, getMyCandidateProfile, needsFirstStep, profileReady, profileStrength } from "@/lib/candidate";
 import { employmentLabel, longDate } from "@/lib/jobs";
 import { payChips } from "@/lib/job-pay";
@@ -45,7 +45,7 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
 
           <GettingStarted
             title="Your first application"
-            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: !needsRole && !needsWhere, hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
+            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: lookingForSaved(profile), hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
           />
 
           <div className="tiles">

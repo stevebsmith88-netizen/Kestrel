@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireRole } from "@/lib/auth";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
-import { ALERT_FREQUENCIES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
+import { ALERT_FREQUENCIES, PRACTICE_TYPES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -17,6 +17,7 @@ export async function createAlert(_prev: JobFormState, form: FormData): Promise<
   const frequency = text(form, "frequency") || "weekly";
   if (role && !(ROLE_CATEGORIES as readonly string[]).includes(role)) return { error: "Choose one of the roles in the list." };
   if (province && !(PROVINCES as readonly string[]).includes(province)) return { error: "Choose one of the provinces in the list." };
+  if (province === QUEBEC) return { error: QUEBEC_JOB_MESSAGE };
   if (practice && !PRACTICE_TYPES.some((p) => p.value === practice)) return { error: "Choose a type of employer, or leave it as any." };
 
   if (!ALERT_FREQUENCIES.some((f) => f.value === frequency)) return { error: "Choose how often you would like to hear from us." };

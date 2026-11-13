@@ -56,7 +56,8 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
           </section>
           <div className="stackcards">
             <CvCard filename={profile?.cv_filename ?? null} uploadedOn={profile?.cv_uploaded_at ? longDate(profile.cv_uploaded_at) : null} />
-            {profile?.cv_path && <ResumeReader />}
+            {/* Keyed by the upload time, so a new resume starts the reader afresh instead of showing the old file's suggestions (D-03). */}
+            {profile?.cv_path && <ResumeReader key={`${profile.cv_path}|${profile.cv_uploaded_at ?? ""}`} />}
             <CandidateProfileForm key={JSON.stringify(profile)} initial={profile} />
           </div>
         </div>

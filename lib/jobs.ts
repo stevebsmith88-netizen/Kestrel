@@ -42,6 +42,9 @@ export const FIXED_TERM_EXPLAINER = "A job for a set period with an end date, su
 export function employmentExplainer(type: string | null | undefined): string | null {
   return type === "Contract" ? FIXED_TERM_EXPLAINER : null;
 }
+// Short notes beside the 2 quick questions on a job page, matching the help centre topics (review item D-07).
+export const EXISTING_VACANCY_EXPLAINER = "Yes means the clinic has a real opening to fill now. No means it is building a pool of candidates for the future, so this may not lead to a hire straight away.";
+export const AI_SCREENING_EXPLAINER = "Yes means the clinic uses software with artificial intelligence to sort, rank or choose among applicants. The answer is about the clinic's own tools: Kestrel does not rank applicants with AI.";
 export const PRACTICE_TYPES = [
   { value: "independent", label: "Independent" },
   { value: "corporate", label: "Corporate" },

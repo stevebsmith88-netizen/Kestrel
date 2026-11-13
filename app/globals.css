@@ -771,6 +771,7 @@ fieldset.tagrow .lab { padding: 0; }
 
 /* Help centre (/help): 3 section boxes, each holding topic boxes. Plain details elements, so they work without JavaScript. */
 .help-controls{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px}
+.help-reserve{min-height:192px}
 .help-section{background:#fff;border:1px solid var(--line);border-radius:14px;margin:0 0 14px;scroll-margin-top:16px}
 .help-section>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:60px;padding:14px 20px}
 .help-section>summary::-webkit-details-marker,.help-topic>summary::-webkit-details-marker{display:none}

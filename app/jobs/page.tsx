@@ -5,7 +5,7 @@ import JobCard from "@/components/JobCard";
 import MobileFilters from "@/components/MobileFilters";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { getMyCandidateProfile } from "@/lib/candidate";
+import { getMyApplications, getMyCandidateProfile } from "@/lib/candidate";
 import { orderJobs, parseSort, sortChoice, type Sort } from "@/lib/job-sort";
 import { rankForMe } from "@/lib/recommendations";
 import { emptySearchSuggestions } from "@/lib/empty-search";
@@ -80,7 +80,9 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const session = await getSession();
   // A signed in candidate with a role on their profile sees "For me" first: only jobs they can apply for, within the distance and other
   // choices on their profile (lib/recommend.ts). A switch shows every job. The sort drop down is in lib/job-sort.ts.
-  const profile = session?.role === "candidate" ? await getMyCandidateProfile(session.userId) : null;
+  const [profile, mine] = session?.role === "candidate" ? await Promise.all([getMyCandidateProfile(session.userId), getMyApplications()]) : [null, []];
+  // The jobs this candidate has applied to, marked "Applied" on their cards (audit P1-58).
+  const appliedTo = new Set(mine.map((a) => a.job_id).filter((id): id is string => Boolean(id)));
   const canMe = Boolean(profile?.profession);
   const view: "me" | "all" = canMe && one("view") !== "all" ? "me" : "all";
   const home = profile?.home_city && profile.home_province ? findPlace(profile.home_city, profile.home_province) : null;
@@ -258,7 +260,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             <>
               <p className="resultcount" role="status">{total} {total === 1 ? "job" : "jobs"}{view === "me" ? " for you" : ""}{place ? ` within ${filters.radius ?? 25} km of ${placeLabel(place)}, and field based jobs` : ""}</p>
               <div className="joblist">
-                {jobs.map((j) => <JobCard key={j.id} job={j} />)}
+                {jobs.map((j) => <JobCard key={j.id} job={j} applied={appliedTo.has(j.id)} />)}
               </div>
               {pages > 1 && (
                 <nav className="pager" aria-label="Pages of jobs">

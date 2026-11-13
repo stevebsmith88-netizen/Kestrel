@@ -7,7 +7,7 @@ import InfoTip from "@/components/InfoTip";
 import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
-import { answerLabel, employmentExplainer, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { AI_SCREENING_EXPLAINER, answerLabel, employmentExplainer, EXISTING_VACANCY_EXPLAINER, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
@@ -95,8 +95,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
                   <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
                   {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
-                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}</dd></div>
-                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}</dd></div>
+                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}<InfoTip label="Existing vacancy" text={EXISTING_VACANCY_EXPLAINER} /></dd></div>
+                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}<InfoTip label="Uses AI to screen candidates" text={AI_SCREENING_EXPLAINER} /></dd></div>
                   <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>
                   <div><dt>Closes</dt><dd>{longDate(job.expires_at)}</dd></div>
                 </dl>

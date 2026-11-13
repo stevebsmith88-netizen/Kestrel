@@ -10,7 +10,7 @@ import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { notify } from "@/lib/notifications";
-import { applicationNoUpdate } from "@/lib/notify-text";
+import { applicationNoUpdate, closedAfterTalksText } from "@/lib/notify-text";
 import { submitToIndexNow } from "@/lib/indexnow";
 import { recentlyChangedPages } from "@/lib/page-dates";
 import { runOnboarding } from "@/lib/onboarding-run";
@@ -35,8 +35,8 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 // Runs once a day (see vercel.json). It:
 //  1. marks live jobs that have passed their 30 days as expired,
 //  2. tells clinics when a job closes in 3 days, asking whether it is filled (and how) or offering 30 more days,
-//  3. closes out applications still waiting on a job that ended a week ago, so candidates
-//     are never left waiting,
+//  3. closes out applications still waiting on a job that ended a week ago, and those at Interview or Offer on a job that
+//     ran out 14 days ago without being marked filled, so candidates are never left waiting,
 //  4. reminds clinics about applications they have not opened for 14 days,
 //     and sends the summary email to clinics who chose one every 2 to 3 days or weekly,
 //  5. emails candidates one digest of new jobs that match their job alerts,
@@ -139,10 +139,19 @@ async function runDaily(request: Request) {
     }
   }
 
-  // 3. Applications still waiting on a job that ended a week or more ago.
-  const { data: ended } = await admin.from("jobs").select("id").in("status", ["expired", "closed"]).lt("updated_at", new Date(now.getTime() - 7 * DAY).toISOString());
+  // 3. Applications still waiting on a job that ended a week or more ago. Then (review item X-04) people at Interview or Offer on a job
+  // that ended 14 days or more ago, so nobody is left at Interview for ever. Those get kinder words. A job the clinic marked as filled is
+  // left out of the second group: the clinic chose then who to close, and "Don't close this one yet" is its call to keep.
+  const closeOutGroups = [
+    { statuses: ["applied", "viewed", "shortlisted"], days: 7, afterTalks: false, onlyUnfilled: false },
+    { statuses: ["interview", "offer"], days: 14, afterTalks: true, onlyUnfilled: true },
+  ] as const;
+  for (const group of closeOutGroups) {
+  let endedQuery = admin.from("jobs").select("id").in("status", ["expired", "closed"]).lt("updated_at", new Date(now.getTime() - group.days * DAY).toISOString());
+  if (group.onlyUnfilled) endedQuery = endedQuery.is("filled_at", null);
+  const { data: ended } = await endedQuery;
   for (const ids of chunks((ended ?? []).map((j) => j.id))) {
-    const { data: waiting } = await admin.from("applications").select("id, applicant, job_title, clinic_name, candidate_id").in("job_id", ids).in("status", ["applied", "viewed", "shortlisted"]);
+    const { data: waiting } = await admin.from("applications").select("id, applicant, job_title, clinic_name, candidate_id").in("job_id", ids).in("status", [...group.statuses]);
     for (const app of waiting ?? []) {
       if (outOfTime()) break;
       const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
@@ -157,17 +166,20 @@ async function runDaily(request: Request) {
       await admin.from("application_events").insert({ application_id: app.id, status: "no_update" });
       summary.closedOutApplications += 1;
       // The inbox message goes whether or not the email does, as it does when a clinic moves an application (lib/applicant-actions.ts).
-      await notify(admin, app.candidate_id, applicationNoUpdate({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS.no_update, applicationId: app.id }));
+      await notify(admin, app.candidate_id, applicationNoUpdate({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS.no_update, applicationId: app.id, afterTalks: group.afterTalks }));
       if (sendIt && email) {
         const mail = emailLayout({
           heading: "An update on your application",
-          paragraphs: [`The job you applied for, ${app.job_title} at ${app.clinic_name}, has closed, and the clinic did not send a decision. Your application is now marked: ${APP_LABELS.no_update}.`, "Thank you for applying. We would love to help you find the next one."],
+          paragraphs: group.afterTalks
+            ? [`Your application for ${app.job_title} is now marked: ${APP_LABELS.no_update}.`, closedAfterTalksText(app.clinic_name), "We would love to help you find the next one."]
+            : [`The job you applied for, ${app.job_title} at ${app.clinic_name}, has closed, and the clinic did not send a decision. Your application is now marked: ${APP_LABELS.no_update}.`, "Thank you for applying. We would love to help you find the next one."],
           buttonText: "Find more jobs",
           buttonUrl: `${SITE_URL}/jobs`,
         });
         note(await deliverEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail }));
       }
     }
+  }
   }
 
   // 4. Reminders for applications unopened for 14 days, one email per clinic.

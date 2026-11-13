@@ -2,6 +2,7 @@
 
 import { useServerForm } from "@/components/useServerForm";
 import { deleteCv, uploadCv } from "@/lib/candidate-actions";
+import { fileBadge } from "@/lib/file-badge";
 
 export default function CvCard({ filename, uploadedOn }: { filename: string | null; uploadedOn: string | null }) {
   const { state, pending, submit } = useServerForm(uploadCv);
@@ -10,7 +11,7 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
       <h2 id="cv-h">Your resume</h2>
       {filename ? (
         <div className="file">
-          <span className="ft" aria-hidden="true">DOC</span>
+          <span className="ft" aria-hidden="true">{fileBadge(filename)}</span>
           <div className="filemain">
             <strong>{filename}</strong>
             {uploadedOn && <div className="meta">Uploaded {uploadedOn}</div>}

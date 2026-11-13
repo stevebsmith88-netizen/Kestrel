@@ -22,11 +22,13 @@ export function applicationMoved(args: { jobTitle: string; clinicName: string; s
 }
 
 // The job closed (or ended) while the application was still waiting, and the clinic gave no decision. Matches the email the same moment sends.
-export function applicationNoUpdate(args: { jobTitle: string; clinicName: string; label: string; applicationId: string }): NotifyMessage {
+// `afterTalks` is for someone who was at Interview or Offer when the job simply ran out (review item X-04): kinder wording, since they had
+// met the clinic, and a nudge to ask the clinic directly in case a decision was made and not recorded.
+export function applicationNoUpdate(args: { jobTitle: string; clinicName: string; label: string; applicationId: string; afterTalks?: boolean }): NotifyMessage {
   return {
     kind: "application",
     title: cut(`${args.jobTitle}: ${args.label}`, 150),
-    body: cut(`The job at ${args.clinicName} has closed, and the clinic did not send a decision. Thank you for applying.`, 480),
+    body: cut(args.afterTalks ? closedAfterTalksText(args.clinicName) : `The job at ${args.clinicName} has closed, and the clinic did not send a decision. Thank you for applying.`, 480),
     href: `/candidate/applications/${args.applicationId}`,
   };
 }
@@ -60,4 +62,9 @@ export function jobTakenDown(args: { jobTitle: string }): NotifyMessage {
 // Where Open takes the person: the message's own address if it is a page on this site, otherwise back to the inbox.
 export function inboxTarget(href: string | null | undefined): string {
   return typeof href === "string" && href.startsWith("/") && !href.startsWith("//") ? href : "/account/inbox";
+}
+
+// The words for someone at Interview or Offer on a job that ran out with no decision recorded (X-04). Used in the inbox and the email.
+export function closedAfterTalksText(clinicName: string): string {
+  return `The job at ${clinicName} has closed, and the clinic did not record a final decision on Kestrel after your conversations with them. If you are still waiting to hear, it is fine to contact the clinic directly. Thank you for the time you put in.`;
 }

@@ -4,6 +4,8 @@ import { test } from "node:test";
 import { readFileSync } from "node:fs";
 import { dueStep, onboardingAddress, onboardingEmail, type Facts } from "./onboarding-emails.ts";
 
+// The emails link to whichever address the site runs at, so the test expects the same one (review item X-13).
+const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca").replace(/\/$/, "");
 const created = new Date("2026-12-01T12:00:00Z");
 const at = (days: number) => new Date(created.getTime() + days * 24 * 60 * 60 * 1000);
 const none = new Set<string>();
@@ -53,7 +55,7 @@ test("every email names the person, links into the site and carries an unsubscri
       assert.match(mail.html, /Hello Sam/);
       assert.match(mail.html, /https:\/\/x\.test\/unsub/);
       assert.match(mail.html, /6013 Yonge Street/);
-      assert.match(mail.html, /href="https:\/\/eyecarejobs\.ca\//);
+      assert.ok(mail.html.includes(`href="${SITE}/`), "links into the site");
       assert.ok(!/—/.test(mail.html + mail.text), "no em dashes");
     }
   }

@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { applicationMoved, applicationNoUpdate, inboxTarget, jobApproved, jobNeedsChange, newApplicant } from "./notify-text.ts";
+import { applicationMoved, applicationNoUpdate, closedAfterTalksText, inboxTarget, jobApproved, jobNeedsChange, newApplicant } from "./notify-text.ts";
 
 test("a candidate is told about a visible step, with the clinic's message if there is one", () => {
   const m = applicationMoved({ jobTitle: "Optician", clinicName: "Riverside", status: "interview", label: "Interview", message: "We would like to meet you.", applicationId: "a1" });
@@ -43,6 +43,21 @@ test("a candidate is told in the inbox when a job closes with no decision (P1-35
   assert.match(m.body ?? "", /did not send a decision/);
   assert.equal(m.href, "/candidate/applications/a1");
   assert.doesNotMatch(JSON.stringify(m), /[–—]/);
+});
+
+test("someone at Interview or Offer on a job that ran out gets the kinder wording (X-04)", () => {
+  const m = applicationNoUpdate({ jobTitle: "Optician", clinicName: "Harbourside Optical", label: "No update from the clinic", applicationId: "a1", afterTalks: true });
+  assert.equal(m.body, closedAfterTalksText("Harbourside Optical"));
+  assert.match(m.body ?? "", /contact the clinic directly/);
+  assert.doesNotMatch(JSON.stringify(m), /[–—]/);
+});
+
+test("the daily job closes Interview and Offer too, later, and leaves jobs the clinic marked filled (X-04)", async () => {
+  const { readFileSync } = await import("node:fs");
+  const cron = readFileSync("app/api/cron/daily/route.ts", "utf8");
+  assert.match(cron, /\["interview", "offer"\]/);
+  assert.match(cron, /is\("filled_at", null\)/);
+  assert.match(cron, /afterTalks: true/);
 });
 
 test("the daily job sends that inbox message when it closes an application", async () => {

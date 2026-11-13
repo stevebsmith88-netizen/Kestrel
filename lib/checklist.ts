@@ -25,3 +25,15 @@ export function candidateSteps(f: { profileReady: boolean; lookingFor: boolean; 
 // The first step still to do, so the list can point at it.
 export const nextStep = (steps: Step[]) => steps.find((s) => !s.done) ?? null;
 export const allDone = (steps: Step[]) => steps.every((s) => s.done);
+
+// "Say what you are looking for" counts as done only once a preference from that part of the profile is saved: other
+// provinces, types of work, the pay needed, a practice type or other roles. The role and town from the first step page
+// do not count, and nor does the distance, which starts at 25 km for everyone (review item D-04).
+export function lookingForSaved(p: {
+  pref_provinces?: string[] | null; pref_employment_types?: string[] | null; pref_other_roles?: string[] | null;
+  pref_min_pay?: number | string | null; pref_practice?: string | null;
+} | null): boolean {
+  if (!p) return false;
+  const any = (a?: string[] | null) => (a ?? []).length > 0;
+  return any(p.pref_provinces) || any(p.pref_employment_types) || any(p.pref_other_roles) || (p.pref_min_pay != null && String(p.pref_min_pay) !== "") || !!p.pref_practice;
+}
