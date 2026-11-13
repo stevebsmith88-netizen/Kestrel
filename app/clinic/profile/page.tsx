@@ -18,7 +18,6 @@ export default async function ClinicProfile({ searchParams }: { searchParams: Pr
       <AppBar session={session} current="/clinic/profile" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Clinic profile</p>
           <h1>{employer ? "Your clinic" : "Set up your clinic"}</h1>
           {!employer && from === "post" && (
             <p className="note" role="status"><strong>You must set up your clinic before posting a job.</strong> It takes about 2 minutes. When you save it, you can post your first job straight away.</p>

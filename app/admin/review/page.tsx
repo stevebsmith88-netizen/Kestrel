@@ -64,7 +64,6 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
       <AppBar session={session} current="/admin/review" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Review queue</h1>
           <p className="lede2">Check each post before it goes live. Approving it starts its 30 days.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}

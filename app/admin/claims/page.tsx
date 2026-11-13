@@ -44,7 +44,6 @@ export default async function Claims({ searchParams }: { searchParams: Promise<{
       <AppBar session={session} current="/admin/claims" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Listing claims</h1>
           <p className="lede2">Claims waiting for your decision. Approving one makes that clinic account the owner of the clinic profile and its listings.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}

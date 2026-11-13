@@ -899,3 +899,8 @@ html.session-ready header.site{display:none}
   .sf-clear{font-size:.92rem;color:var(--navy);text-underline-offset:3px}
 }
 body.sf-locked{overflow:hidden}
+/* Report this job, with the fake jobs policy just under it (13th November 2026). */
+.reportbox .reportlink{margin:0}
+.reportpolicy{margin:0 0 12px;font-size:.875rem}
+.reportpolicy a{color:var(--muted)}
+.reportpolicy a:hover{color:var(--navy)}

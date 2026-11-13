@@ -94,7 +94,6 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
 
           {!employer ? (
             <section className="card setup">
-              <p className="kicker">First step</p>
               <h2>Set up your clinic profile</h2>
               <p>Tell us about your clinic, and where to send applicant alerts. It takes about 2 minutes, and then you can post your first job.</p>
               <Link href="/clinic/profile" className="btn">Create my clinic profile</Link>

@@ -40,7 +40,6 @@ export default async function Reports({ searchParams }: { searchParams: Promise<
       <AppBar session={session} current="/admin/reports" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Reported jobs</h1>
           <p className="lede2">Open reports from candidates and visitors. Taking a job down tells the clinic and closes every open report about that job.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}

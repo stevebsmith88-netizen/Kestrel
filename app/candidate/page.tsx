@@ -40,7 +40,6 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
       <AppBar session={session} current="/candidate" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">Your dashboard</p>
           <h1>Welcome, {first}</h1>
           <p className="lede2">Keep your resume and details here, and apply to any job in a few clicks.</p>
 

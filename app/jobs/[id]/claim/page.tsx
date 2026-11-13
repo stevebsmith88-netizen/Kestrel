@@ -49,7 +49,6 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
-          <p className="kicker">For clinics</p>
           <h1>Is this your clinic? Claim your listing</h1>
           <p className="lede2">We found this job on your own website. Claim it to take control of the listing, for free during our launch.</p>
 

@@ -36,7 +36,6 @@ export default async function Suppressions({ searchParams }: { searchParams: Pro
       <AppBar session={session} current="/admin/suppressions" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Do not email list</h1>
           <p className="lede2">Addresses here never receive marketing or outreach email from Kestrel, including about jobs posted later. People are added automatically when they unsubscribe. Emails about an account or an application, such as a new applicant, are not marketing and still go out.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}

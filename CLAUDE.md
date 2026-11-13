@@ -91,6 +91,8 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
   - In blog posts, prefer paragraphs. Few headings, and no run of bullets that each start with a bold phrase.
   - Prefer specifics only Steve or a real clinic can supply (a number, a place, a story) over smooth general advice. Ask him for them.
   - No left border gradient accent cards, no indigo and violet palette, and no big empty vertical gaps added just to pass a mobile check.
+  - Small brown headings above a heading (`.kicker`) only where they say something the heading does not: the clinic's name, the job a page is about, who a home page section is for, or the label on a number tile. Never one that repeats the page or section name (Steve, 13th November 2026; 26 such were removed).
+  - Shapes (Steve, 13th November 2026): everything you can press has the buttons' squared corners (8px), and capsules are only for information you cannot press (job facts, status badges, the "Opening soon" tag). `lib/design-rules.test.ts` checks it.
 
 ## Product rules already decided
 

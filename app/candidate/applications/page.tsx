@@ -28,7 +28,6 @@ export default async function MyApplications({ searchParams }: { searchParams: P
       <AppBar session={session} current="/candidate/applications" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">My applications</p>
           <h1>Where each application stands</h1>
           <p className="lede2">Clinics update the status as they review your application. Their private notes are never shown to you.</p>
 

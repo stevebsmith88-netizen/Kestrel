@@ -20,7 +20,6 @@ export default async function Inbox() {
       <AppBar session={session} current="/account/inbox" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Inbox</p>
           <h1>Your inbox</h1>
           <p className="lede2">Updates about your account, kept here as well as in your email. This is for reading only: to reach us, write to hello@eyecarejobs.ca.</p>
           {items.length === 0 ? (

@@ -30,7 +30,6 @@ export default async function Waitlist() {
       <AppBar session={session} current="/admin/waitlist" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">Admin</p>
           <h1>Waitlist</h1>
           <p className="lede2">
             {count ?? rows.length} {(count ?? rows.length) === 1 ? "person" : "people"} on the list. <a href="/admin/waitlist.csv">Download the ready to email list</a> (confirmed, not unsubscribed, with each person's unsubscribe link) or <a href="/admin/waitlist.csv?all=1">everyone, with a status column</a>

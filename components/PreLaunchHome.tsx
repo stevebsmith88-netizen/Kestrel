@@ -33,7 +33,7 @@ export default function PreLaunchHome() {
             <p className="lh-shotslede">Search by role, province, type of employer and distance, then see the pay before you open a job. These are sample screens with sample clinics and jobs. Real jobs take their place when Kestrel opens.</p>
             <div className="lh-shotgrid">
               <figure>
-                <Image src="/home/sample-search.png" alt="The Kestrel job search page, with a search box, filters for role, province, employer type, city and distance, and the first jobs listed with their pay." width={2160} height={1540} sizes="(max-width: 860px) 100vw, 620px" />
+                <Image src="/home/sample-search.png" alt="The Kestrel job search page, with a search box, filters for role, province, employer type, city and distance, and the first jobs listed with their pay." width={2160} height={1792} sizes="(max-width: 860px) 100vw, 620px" />
                 <figcaption>Search and filter. Every job card shows its pay.</figcaption>
               </figure>
               <figure>

@@ -32,7 +32,6 @@ export default async function PostForClinic({ searchParams }: { searchParams: Pr
       <AppBar session={session} current="/admin/post-for-clinic" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Post a job for a clinic</h1>
           <p className="lede2">For when a clinic is having trouble with the form. The job belongs to the clinic, follows the same rules as any post, and goes to the review queue for you to approve. This is separate from Found listings.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}

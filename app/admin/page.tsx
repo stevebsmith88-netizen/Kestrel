@@ -20,7 +20,6 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
       <AppBar session={session} current="/admin" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">Admin</p>
           <h1>Overview</h1>
           <p className="lede2">How Kestrel is doing. Only your account can open this page.</p>
           <p className="help">More tools: <Link href="/admin/found">Found listings</Link>, for jobs from a clinic&apos;s own careers page, and <Link href="/admin/post-for-clinic">Post for a clinic</Link>, for when a clinic is having trouble with the form, and <Link href="/admin/outreach">Outreach</Link>, for the clinic email sequence.</p>

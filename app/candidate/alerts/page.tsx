@@ -31,7 +31,6 @@ export default async function Alerts() {
       <AppBar session={session} current="/candidate/alerts" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Job alerts</p>
           <h1>Hear about new jobs first</h1>
           <p className="lede2">Tell us what you are looking for and we will email you when a matching job is posted. You choose how often, daily, weekly or monthly, and every email has an unsubscribe link. These are emails you set up yourself, so they do not depend on the news box you may have ticked at sign up.</p>
           {paused && (

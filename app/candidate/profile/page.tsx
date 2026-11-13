@@ -29,7 +29,6 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
       <AppBar session={session} current="/candidate/profile" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">My profile</p>
           <h1>Your profile and resume</h1>
           <p className="lede2">Save your resume once, then apply to any job in a few clicks. Your profile is private. A clinic sees only what you send with an application.</p>
           {notice === "cv-deleted" && <p className="notice" role="status">Your resume is deleted.</p>}

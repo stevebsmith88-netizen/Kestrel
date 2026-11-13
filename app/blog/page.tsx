@@ -27,7 +27,6 @@ export default async function Blog() {
       <SiteHeader />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">The Kestrel blog</p>
           <h1>Eye care hiring and career advice</h1>
           <p className="lede2">Plain advice for Canadian clinics and eye care professionals, from the team building Kestrel.</p>
           <div className="postlist">

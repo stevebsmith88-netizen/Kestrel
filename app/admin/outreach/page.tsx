@@ -52,7 +52,6 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
       <AppBar session={session} current="/admin/outreach" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">Admin</p>
           <h1>Clinic outreach</h1>
           <p className="lede2">
             {LAST_STEP} emails over about 5 weeks (day 1, 8, 18 and 32), each from a different angle, to an address the clinic published for business enquiries. The sequence stops by itself when a clinic unsubscribes, joins the waitlist, opens an account or claims a listing. If they reply, stop it here.
