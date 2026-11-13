@@ -4,7 +4,7 @@ import { getDocumentProxy } from "unpdf";
 
 // Gets the plain text out of a saved resume, on Kestrel's own server, for "Fill in from my resume". PDF and Word (.docx) only. Nothing is stored
 // and nothing is sent anywhere: the text lives for the length of one request. The limits below are there so a strange file can only waste a little time.
-const MAX_BYTES = 3 * 1024 * 1024;
+const MAX_BYTES = 4 * 1024 * 1024; // the same as the upload limit (CV_MAX_BYTES in lib/applications.ts)
 const MAX_TEXT = 200_000;
 const MAX_XML = 1024 * 1024;
 const MAX_PAGES = 12;

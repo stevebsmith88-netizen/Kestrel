@@ -26,7 +26,7 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
       <form onSubmit={submit} noValidate className="uploadform">
         <label className="lab" htmlFor="cv-file">{filename ? "Replace your resume" : "Upload your resume"}</label>
         <input id="cv-file" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-        <p className="help">PDF or Word, up to 3 MB.</p>
+        <p className="help">PDF or Word, up to 4 MB.</p>
         {state.error && <p className="err form-err" role="alert">{state.error}</p>}
         {state.message && <p className="ok-msg" role="status">{state.message}</p>}
         <button type="submit" className="btn sm" disabled={pending}>{pending ? "Uploading" : "Upload"}</button>

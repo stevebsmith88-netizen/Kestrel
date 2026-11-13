@@ -150,7 +150,9 @@ export function detectCv(bytes: Uint8Array, filename: string): { ext: "pdf" | "d
   return null;
 }
 
-export const CV_MAX_BYTES = 3 * 1024 * 1024;
+// 4 MB (Steve, 13th November 2026, raised from 3 MB after a real 3.7 MB resume with a photo was turned away). Vercel refuses any
+// upload over about 4.5 MB on every plan, so this cannot go much higher while resumes go through the website.
+export const CV_MAX_BYTES = 4 * 1024 * 1024;
 
 const ascii = (bytes: Uint8Array) => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString("latin1");
 const utf16 = (text: string) => Buffer.from(text, "utf16le").toString("latin1");

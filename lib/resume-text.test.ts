@@ -131,7 +131,7 @@ test("an ordinary 2 page PDF resume reads, page by page", async () => {
 
 test("a PDF with 3,000 pages has only its first 12 pages read, and quickly", async () => {
   const file = pdfWithPages(3000);
-  assert.ok(file.length < 3 * 1024 * 1024, "small enough to pass the upload size check");
+  assert.ok(file.length < 4 * 1024 * 1024, "small enough to pass the upload size check");
   // Read a small PDF first, so the timing below measures the pages and leaves out the one time cost of starting the PDF library.
   await resumeText(pdfWithPages(1), "warm-up.pdf");
   const before = pagesOpened();
@@ -162,5 +162,5 @@ test("no timer is left running after a PDF is read", async () => {
 
 test("a file that is not a PDF or a Word file is refused", async () => {
   assert.deepEqual(await resumeText(strToU8("plain text that is long enough to count"), "resume.txt"), { ok: false, reason: "unsupported" });
-  assert.deepEqual(await resumeText(new Uint8Array(3 * 1024 * 1024 + 1), "resume.pdf"), { ok: false, reason: "failed" });
+  assert.deepEqual(await resumeText(new Uint8Array(4 * 1024 * 1024 + 1), "resume.pdf"), { ok: false, reason: "failed" });
 });

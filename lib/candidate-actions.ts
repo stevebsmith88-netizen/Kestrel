@@ -28,7 +28,15 @@ const text = (form: FormData, key: string, max = 200) => String(form.get(key) ??
 // Resumes live in a private bucket that nobody can read directly. It is made the first time it is needed.
 async function ensureBucket(admin: NonNullable<ReturnType<typeof supabaseAdmin>>) {
   const { data } = await admin.storage.getBucket(CV_BUCKET);
-  if (data) return true;
+  if (data) {
+    // A store made when the limit was 3 MB is brought up to today's limit, so neither database needs changing by hand.
+    const limit = Number((data as { file_size_limit?: number | null }).file_size_limit ?? 0);
+    if (limit && limit < CV_MAX_BYTES) {
+      const { error } = await admin.storage.updateBucket(CV_BUCKET, { public: false, fileSizeLimit: CV_MAX_BYTES, allowedMimeTypes: data.allowed_mime_types ?? undefined });
+      if (error) console.error("Could not raise the resume store's size limit:", error.message);
+    }
+    return true;
+  }
   const { error } = await admin.storage.createBucket(CV_BUCKET, {
     public: false,
     fileSizeLimit: CV_MAX_BYTES,
@@ -132,7 +140,7 @@ export async function uploadCv(_prev: JobFormState, form: FormData): Promise<Job
   const session = await requireRole("candidate");
   const file = form.get("cv");
   if (!(file instanceof File) || file.size === 0) return { error: "Choose a file to upload." };
-  if (file.size > CV_MAX_BYTES) return { error: "That file is too big. Please use a file under 3 MB." };
+  if (file.size > CV_MAX_BYTES) return { error: "That file is too big. Please use a file under 4 MB, for example by saving it again without the photo." };
 
   const bytes = new Uint8Array(await file.arrayBuffer());
   const kind = detectCv(bytes, file.name);

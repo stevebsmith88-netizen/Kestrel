@@ -238,7 +238,7 @@ export const HELP: HelpSection[] = [
         title: "How do I build my profile and add a resume?",
         keywords: ["resume", "cv", "upload", "curriculum vitae", "word", "pdf", "licence", "license", "registration", "edit profile"],
         answer: [
-          "To apply through Kestrel you need 3 things: your role, a saved resume, and your town and province. Everything else on the profile is optional, and your profile is private. A resume can be a PDF or a Word file, up to 3 MB, and it is stored privately in Canada.",
+          "To apply through Kestrel you need 3 things: your role, a saved resume, and your town and province. Everything else on the profile is optional, and your profile is private. A resume can be a PDF or a Word file, up to 4 MB, and it is stored privately in Canada.",
           "You can replace or delete your resume at any time. Replacing it does not change applications you have already sent, because a clinic keeps what you sent that day.",
         ],
         steps: [
