@@ -735,6 +735,7 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
   .lh-hero{padding-top:32px}
 }
 .lh-hero .pill{display:inline-block;margin:0 0 16px}
+.lh-ctanote{margin:12px 0 0;color:var(--slate);font-size:0.9375rem;position:relative;z-index:2}
 .lh-ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:22px 0 0;position:relative;z-index:2}
 .menu-icon{display:block}
 .auth-tag{display:block;margin:-14px 0 24px;font:400 .5625rem/1.2 var(--f-tag),var(--f-sans),sans-serif;letter-spacing:.24em;text-transform:uppercase;color:var(--navy)}

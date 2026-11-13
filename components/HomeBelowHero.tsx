@@ -49,7 +49,7 @@ export default function HomeBelowHero() {
           <div className="wrap grid">
             <div className="intro">
               <h2>Be first through the door</h2>
-              <p>Whether you&apos;re hiring or looking, join the waitlist and we&apos;ll let you know the moment Kestrel opens.</p>
+              <p>Kestrel is built by someone with over 20 years in eye care. Whether you&apos;re hiring or looking, join the waitlist and we&apos;ll let you know the moment Kestrel opens.</p>
             </div>
             <div className="panel">
               <WaitlistForm />
