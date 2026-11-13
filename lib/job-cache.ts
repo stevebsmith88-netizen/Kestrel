@@ -8,6 +8,7 @@ import { revalidatePath } from "next/cache";
 // lib/job-cache.test.ts checks that every place that changes a job or a clinic calls it.
 export function refreshJobPages() {
   try {
+    revalidatePath("/"); // the home page lists the latest jobs once Kestrel has launched (X-05)
     revalidatePath("/jobs");
     revalidatePath("/jobs/[id]", "page");
     revalidatePath("/eye-care-jobs", "layout");

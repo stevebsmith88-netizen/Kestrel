@@ -832,6 +832,11 @@ fieldset.tagrow .lab { padding: 0; }
 .moreopts{margin:22px 0 0;border-top:1px solid var(--line);padding-top:14px}
 .moreopts>summary{cursor:pointer;font:400 1.375rem/1.3 var(--f-display),Georgia,serif;color:var(--navy);list-style:none;min-height:44px;display:flex;align-items:center}
 .moreopts>summary::-webkit-details-marker{display:none}
+.hiddenjobs>summary{font:600 1rem/1.4 var(--f-sans),system-ui,sans-serif;color:var(--navy-2)}
+.hiddenlist{list-style:none;margin:8px 0 0;padding:0}
+.hiddenlist li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.hiddenlist li:first-child{border-top:0}
+.hiddenlist .meta{display:block;color:var(--slate);font-size:0.9375rem}
 .moreopts>summary::before{content:"+";display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;margin-right:10px;border:1.5px solid var(--navy);border-radius:6px;font:700 1rem/1 var(--f-sans),sans-serif}
 .moreopts[open]>summary::before{content:"\2212"}
 .moreopts>.help{margin:4px 0 14px}

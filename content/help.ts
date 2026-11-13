@@ -342,15 +342,16 @@ export const HELP: HelpSection[] = [
       {
         id: "recommended-for-you",
         title: "What are Recommended for you and Not interested?",
-        keywords: ["suggestions", "matches", "hide", "dismiss", "home page", "suggested jobs"],
+        keywords: ["suggestions", "matches", "hide", "dismiss", "home page", "suggested jobs", "undo", "hidden", "bring back"],
         answer: [
           "Your dashboard shows up to 8 jobs that fit what you told us, each with a line saying why it fits, such as the role, how far away it is, or that its pay reaches your minimum. They come from plain rules applied to your profile, with no AI, and nothing about you is shared with clinics.",
-          "**Not interested** removes a job from your list, for you only. There is no undo, and the job still appears when you search. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
+          "**Not interested** removes a job from your list, for you only. The job still appears when you search. Changed your mind? Under the list, open **Jobs you marked not interested** and press **Show it again**. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
         ],
         steps: [
           "Open your dashboard by choosing **My dashboard** in the bar at the top.",
           "Read the **Recommended for you** list and the line under each job that starts **Why this fits**.",
           "Press **Not interested** on any job you do not want to see again in the list.",
+          "To bring one back, open **Jobs you marked not interested** under the list and press **Show it again**.",
           "To change what we suggest, choose **Edit what you are looking for**, update your details on the profile page and press **Save my details**.",
         ],
         links: [{ label: "What you are looking for", href: "/candidate/profile#looking-for" }],

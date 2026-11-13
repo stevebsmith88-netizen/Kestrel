@@ -29,7 +29,10 @@ insert into public.employers (owner_id, clinic_name, practice_type, website, pro
   (null, 'Capital Optometry (sample)', 'independent', null, 'Ontario', 'Ottawa', 'An independent practice a short walk from Parliament Hill, seeing patients of all ages.', true),
   (null, 'Clearview Lens Co (sample)', 'supplier', null, 'Ontario', 'Mississauga', 'A Canadian lens manufacturer supplying independent and corporate practices from coast to coast.', true),
   (null, 'Lakeshore Optical (sample)', 'independent', null, 'Ontario', 'Hamilton', null, false),
-  (null, 'Riverbend Eye Clinic (sample)', 'independent', null, 'Saskatchewan', 'Saskatoon', null, false);
+  (null, 'Riverbend Eye Clinic (sample)', 'independent', null, 'Saskatchewan', 'Saskatoon', null, false),
+  -- 2 small town clinics, so the distance search and town list are tried outside the cities (review item D-08).
+  (null, 'Maitland Valley Eye Care (sample)', 'independent', null, 'Ontario', 'Wingham', 'A 1 optometrist clinic on the main street, seeing families from Wingham and the farms around it.', true),
+  (null, 'Badlands Optometry (sample)', 'independent', null, 'Alberta', 'Drumheller', 'An independent clinic serving Drumheller and the valley, with 2 optometrists and a small, close team.', true);
 
 -- Each row: clinic, title, role, type, pay period, min, max, existing vacancy, description, how to apply, field area, extra pay, days since posted
 with sample(clinic, title, role, etype, period, pmin, pmax, vacancy, descr, how, territory, extras, days_ago, seeded) as (values
@@ -68,7 +71,11 @@ with sample(clinic, title, role, etype, period, pmin, pmax, vacancy, descr, how,
   ('Lakeshore Optical (sample)', 'Optician', 'Optician', 'Full time', 'year', 56000, 68000, true,
    'An optician role listed from the clinic''s own careers page. Fit and dispense glasses in a friendly independent store. Apply on the clinic''s website.', 'external', null, null, 4, true),
   ('Riverbend Eye Clinic (sample)', 'Optometric assistant', 'Optometric assistant or technician', 'Part time', 'hour', 20, 24, true,
-   'A part time optometric assistant listed from the clinic''s own careers page. Pre-testing and patient support in a small clinic. Apply on the clinic''s website.', 'external', null, null, 6, true)
+   'A part time optometric assistant listed from the clinic''s own careers page. Pre-testing and patient support in a small clinic. Apply on the clinic''s website.', 'external', null, null, 6, true),
+  ('Maitland Valley Eye Care (sample)', 'Optometric assistant', 'Optometric assistant or technician', 'Full time', 'hour', 20, 24, true,
+   'Our small team needs a full time optometric assistant. You will greet patients, run pre-testing and help with frame choices. No eye care experience needed: we train you, and we close at 5 every day.', 'kestrel', null, null, 3, false),
+  ('Badlands Optometry (sample)', 'Optician', 'Optician', 'Full time', 'year', 54000, 64000, true,
+   'A full time licensed optician for a busy small town clinic. You will dispense and adjust glasses, fit contact lenses and look after our frame boards. Moving costs help is available for the right person.', 'kestrel', null, null, 8, false)
 )
 insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening,
                          description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, is_seeded, source_url, found_at, posted_at, expires_at)

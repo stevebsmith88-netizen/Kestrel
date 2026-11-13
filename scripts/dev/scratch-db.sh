@@ -17,5 +17,5 @@ $P -d postgres -c "drop database if exists kestrel" -c "create database kestrel"
 $P -d kestrel -f "$ROOT/scripts/dev/auth-stub.sql"
 for pass in 1 2; do
   $P -d kestrel -f "$ROOT/supabase/combined/run-everything.sql" -t -A 2>&1 | grep -v NOTICE | awk -F'|' 'NF==2{print $2}' | sort | uniq -c | tr '\n' ' '
-  echo "<- migrations, run $pass (every row should be OK, apart from one NOT YET for CV storage)"
+  echo "<- migrations, run $pass (every row should be OK, apart from one NOT YET for resume storage)"
 done

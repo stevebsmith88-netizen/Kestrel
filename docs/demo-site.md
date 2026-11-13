@@ -2,7 +2,7 @@
 
 A separate, fully working copy of Kestrel, with its own database and sample data, so Steve can show people around before launch. The live site (eyecarejobs.ca) is never touched.
 
-**What visitors get:** a home page, the blog, job search across 18 sample jobs in 9 provinces, job pages, sign up (instant, no email), a candidate profile and applications, a clinic dashboard with an applicants board, posting a job, the AI ad writer (if you give it a key), and an admin review queue.
+**What visitors get:** a home page, the blog, job search across 27 sample jobs in 7 provinces, job pages, sign up (instant, no email), a candidate profile and applications, a clinic dashboard with an applicants board, posting a job, the AI ad writer (if you give it a key), and an admin review queue.
 
 **What keeps it safe:**
 - It has its own Supabase database in the Canada region. No real data, and none of the live data, is in it.
@@ -21,7 +21,7 @@ A separate, fully working copy of Kestrel, with its own database and sample data
 2. **SQL Editor**, new query. Paste the whole of `supabase/combined/run-everything.sql` and run it. The check table at the end should be all OK (one "NOT YET" for the CV storage is normal).
 3. **Authentication, Sign In / Providers, Email:** turn **off** "Confirm email". This is demo only. It lets visitors sign up without an email arriving. Keep the minimum password length at 10.
 4. **Authentication, URL Configuration:** set the Site URL to `https://demo.eyecarejobs.ca`, and add `https://demo.eyecarejobs.ca/**` as a Redirect URL.
-5. **SQL Editor**, new query. Paste the whole of `supabase/demo/seed.sql` and run it. This adds 11 sample clinics and 18 jobs and opens sign up on the demo database. (The part for your 2 demo accounts is skipped for now.)
+5. **SQL Editor**, new query. Paste the whole of `supabase/demo/seed.sql` and run it. This adds 13 sample clinics (2 of them in small towns, Wingham and Drumheller) and 27 live jobs across 7 provinces, and opens sign up on the demo database. (The part for your 2 demo accounts is skipped for now.)
 
 ### B. Vercel: a second project
 

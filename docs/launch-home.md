@@ -1,6 +1,6 @@
 # The launch home page
 
-Built 7th November 2026 (marketing audit and Steve's request). Before launch the site shows the coming soon page. The moment sign up opens, the home page and header change to the launch layout by themselves.
+Built 7th November 2026 (marketing audit and Steve's request). Before launch the site shows the coming soon page. When sign up opens, the home page and header change to the launch layout by themselves, within 5 minutes: since 13th November 2026 the home page is saved and shared like the content pages (review item X-05), and rebuilt at most every 5 minutes.
 
 ## Three looks
 

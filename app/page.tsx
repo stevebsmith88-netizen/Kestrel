@@ -9,11 +9,12 @@ import SiteHeader from "@/components/SiteHeader";
 import { organizationJson } from "@/lib/organization-data";
 import { shareMetadata } from "@/lib/share";
 
-// Built fresh for every visit, as it was before audit P1-10. Only the pages Steve listed are saved and shared; this one was not on the list.
-export const dynamic = "force-dynamic";
-
-// The header looks up who is signed in, so this page is built for each visit. That also means a scheduled post appears on the
-// home page as soon as its date arrives.
+// Saved once and shown to everyone, then built again at most every 5 minutes, like the content pages (review item X-05, Steve agreed
+// 13th November 2026). It is the most visited page, so a ready copy makes the first screen appear much sooner. force-static means it
+// can never see who is visiting: the header's account bar is drawn in the browser (components/SessionBar.tsx). The launch switch and a
+// scheduled blog post show within 5 minutes, and a job change clears it at once (refreshJobPages in lib/job-cache.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 // Before launch the page keeps the site's default "Coming soon" title. After launch (lib/launch.ts) it gets its own.
 export async function generateMetadata(): Promise<Metadata> {

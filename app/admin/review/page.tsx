@@ -6,9 +6,10 @@ import { requireRole } from "@/lib/auth";
 import { approveJob, rejectJob } from "@/lib/admin-actions";
 import { changedFields } from "@/lib/job-diff";
 import { answerLabel, employeeBandLabel, employerFlags, employmentLabel, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
-import { payText, type PayFields } from "@/lib/job-pay";
+import { payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { REVIEW_COLUMNS, loadReviewQueue } from "@/lib/review-queue";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -22,42 +23,11 @@ const NOTICES: Record<string, string> = {
   error: "That didn't work. The job may already have been handled. Please refresh and try again.",
 };
 
-type QueueJob = PayFields & {
-  tags_software: string[] | null; tags_equipment: string[] | null; tags_specialties: string[] | null;
-  id: string; title: string; role_category: string; employment_type: string; province: string; city: string;
-  is_existing_vacancy: boolean | null; uses_ai_screening: boolean | null;
-  description: string; work_arrangement: string | null; territory: string | null; pay_extras: string | null; apply_method: string; apply_url: string | null; created_at: string; employer_id: string; posted_at: string | null; expires_at: string | null;
-  employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; direct_hire_confirmed_at: string | null } | null;
-};
-
 export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("admin");
   const { notice } = await searchParams;
   const db = supabaseAdmin();
-  const { data } = db
-    ? await db
-        .from("jobs")
-        .select(await withExpected("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)"))
-        .eq("status", "in_review")
-        .order("created_at", { ascending: true })
-    : { data: null };
-  const jobs = (data ?? []) as unknown as QueueJob[];
-  const notifyEmails = new Map<string, string>();
-  const bands = new Map<string, string | null>();
-  if (db && jobs.length) {
-    const { data: contacts } = await db.from("employer_contacts").select("employer_id, notify_email, employee_band").in("employer_id", [...new Set(jobs.map((j) => j.employer_id))]);
-    (contacts ?? []).forEach((c) => {
-      notifyEmails.set(c.employer_id, c.notify_email);
-      bands.set(c.employer_id, c.employee_band);
-    });
-  }
-
-  // For edited live jobs, the wording candidates were seeing (the most recent copy kept for each job).
-  const liveWording = new Map<string, Record<string, unknown>>();
-  if (db && jobs.some((j) => j.posted_at)) {
-    const { data: versions } = await db.from("job_versions").select("job_id, snapshot").in("job_id", jobs.map((j) => j.id)).order("saved_at", { ascending: false });
-    (versions ?? []).forEach((v) => !liveWording.has(v.job_id) && liveWording.set(v.job_id, v.snapshot as Record<string, unknown>));
-  }
+  const { jobs, notifyEmails, bands, liveWording } = await loadReviewQueue(db, await withExpected(REVIEW_COLUMNS));
 
   return (
     <>

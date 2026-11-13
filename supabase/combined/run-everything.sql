@@ -2664,7 +2664,7 @@ create trigger jobs_keep_applications before delete on public.jobs for each row 
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
-select thing, case when present then 'OK' when thing = 'private CV storage' then 'NOT YET (normal: it is created when the first CV is uploaded)' else 'MISSING' end as status
+select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
     ('table: waitlist', to_regclass('public.waitlist') is not null),
@@ -2723,7 +2723,7 @@ from (
     ('column: candidate software skills', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'software_skills')),
     ('permission: candidates can save their job preferences', has_column_privilege('authenticated', 'public.candidate_profiles', 'home_city', 'UPDATE')),
     ('column: days a week on a daily rate', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_days_per_week')),
-    ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('private resume storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('column: the application a clinic hired for a filled job', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'filled_application_id')),
     ('column: candidate first step seen', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'start_seen_at')),
     ('career stage answers cleared and no longer writable (0043)', not has_column_privilege('authenticated', 'public.candidate_profiles', 'career_stage', 'UPDATE') and not exists (select 1 from public.candidate_profiles where career_stage is not null)),

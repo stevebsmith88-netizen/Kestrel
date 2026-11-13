@@ -12,6 +12,7 @@ import { test } from "node:test";
 const read = (path: string) => (existsSync(path) ? readFileSync(path, "utf8") : "");
 
 const SAVED_PAGES = [
+  "app/page.tsx",
   "app/blog/page.tsx",
   "app/blog/[slug]/page.tsx",
   "app/resources/page.tsx",
@@ -59,7 +60,7 @@ test("the signed in bar on a saved page is drawn in the browser, from an answer 
 });
 
 test("pages that were not on the list stay built fresh for every visit", () => {
-  for (const page of ["app/page.tsx", "app/goodbye/page.tsx", "app/find-your-fit/page.tsx", "app/forgot-password/page.tsx", "app/jobs/page.tsx", "app/jobs/[id]/apply/page.tsx"]) {
+  for (const page of ["app/goodbye/page.tsx", "app/find-your-fit/page.tsx", "app/forgot-password/page.tsx", "app/jobs/page.tsx", "app/jobs/[id]/apply/page.tsx"]) {
     assert.match(read(page), /export const dynamic = "force-dynamic";/, `${page} should stay force-dynamic`);
   }
 });
@@ -78,5 +79,6 @@ test("every change to a job or a clinic clears the saved job pages", () => {
   for (const f of writers) assert.match(read(f), /refreshJobPages\(\)/, `${f} changes jobs or clinics but never calls refreshJobPages()`);
   const helper = read("lib/job-cache.ts");
   assert.match(helper, /revalidatePath\("\/jobs\/\[id\]", "page"\)/);
+  assert.match(helper, /revalidatePath\("\/"\)/, "the home page shows the latest jobs, so a job change clears it too");
   assert.match(helper, /revalidatePath\("\/eye-care-jobs", "layout"\)/);
 });

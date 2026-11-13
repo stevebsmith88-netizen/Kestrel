@@ -261,3 +261,16 @@ Branch `claude/loving-faraday-3j5smt`. No SQL. No settings changed. Steve asked 
 | X-14 Old docs point to an old SQL file | fixed | `docs/launch-checklist.md` and `docs/google-signin.md` point to the current combined file |
 | X-20 Help page layout shift on a phone | fixed | The search box's space is held before the script runs. Layout shift measured at 0 on a phone and a desktop (was 0.079) |
 | P1-58 No "Applied" mark on job cards | fixed | A signed in candidate sees an "Applied" badge on Find jobs cards for jobs they have applied to |
+
+### Second batch, the same day (Steve: "do the other stuff")
+
+No SQL. No settings. `npm test` 626 tests, all passing; typecheck and build clean.
+
+| Item | Status | What changed |
+| --- | --- | --- |
+| X-05 Home page built for every visitor | fixed | Saved and shared like the content pages (`force-static`, rebuilt at most every 5 minutes). A job change clears it at once (`refreshJobPages` now clears `/` too). The launch switch and scheduled posts show within 5 minutes. `lib/page-cache.test.ts` now checks it |
+| X-09 No way to bring back a job marked Not interested | fixed | "Jobs you marked not interested" under Recommended for you on the candidate home, with Show it again. The database already allowed it (migration 0031). Help topic updated |
+| X-16 Applicants list and admin pages untested | partly fixed | The applicants list (`lib/applicant-list.ts`) and the review queue (`lib/review-queue.ts`) are moved out of their pages and tested (8 tests). Still in page code, untested: the other 7 admin pages (outreach, waitlist, post for a clinic x2, claims, reports, found, suppressions) |
+| X-17 "private CV storage" in the SQL check | fixed | Now "private resume storage" in `supabase/verify.sql`, the combined file and the scratch scripts. The label only, so nothing needs running again |
+| D-08 No small town jobs on the demo | fixed | 2 sample clinics in Wingham, Ontario and Drumheller, Alberta, with a job each. Seed tested twice on a scratch database: 13 sample clinics, 27 live jobs in 7 provinces. `docs/demo-site.md` updated. Steve runs `reset.sql` then `seed.sql` on the demo |
+| Home page wording (Steve) | done | Shorter line under the headline, "Be the first to know when jobs go live." under the buttons, and the 20 years line moved to the waitlist section |

@@ -8,13 +8,13 @@ import FilledViaFields from "@/components/FilledViaFields";
 import ToastHost from "@/components/ToastHost";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
-import { GROUP_LABELS, HIREABLE, groupOf, type Group } from "@/lib/applications";
+import { GROUP_LABELS } from "@/lib/applications";
+import { FILTERS, WAITING, loadApplicants } from "@/lib/applicant-list";
 import { declineSelected, declineSelectedQuiet, fillRole, interviewSelectedQuiet, shortlistSelectedQuiet } from "@/lib/applicant-actions";
 import { BULK_PROBLEMS, declinedText } from "@/lib/bulk-notices";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getMyJob } from "@/lib/clinic";
 import { FILL_SOURCES } from "@/lib/job-ending";
-import { IN_TALKS } from "@/lib/still-talking";
 import { longDate } from "@/lib/jobs";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -23,10 +23,6 @@ export const metadata: Metadata = { title: "Applicants | Kestrel Eye Care Jobs",
 export const dynamic = "force-dynamic";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const WAITING = ["applied", "viewed", "shortlisted"];
-const FILTERS: (Group | "all")[] = ["all", "review", "interview", "offer", "closed"];
-
-type Row = { id: string; status: string; clinic_name?: string; created_at: string; cover_letter: string | null; applicant: { name?: string; profession?: string | null; years_experience?: string | null; licensed_provinces?: string[] } };
 
 
 export default async function Applicants({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ filter?: string; sent?: string; filled?: string; bulkerror?: string }> }) {
@@ -36,23 +32,8 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   if (!UUID.test(id)) notFound();
   const job = await getMyJob(id);
   if (!job) notFound();
-  const db = await supabaseServer();
-  const { data } = db
-    ? await db.from("applications").select("id, status, created_at, cover_letter, applicant, clinic_name").eq("job_id", id).order("created_at", { ascending: false })
-    : { data: null };
-  const rows = (data ?? []) as Row[];
-  const active: Group | "all" = (FILTERS as string[]).includes(filter ?? "") ? (filter as Group | "all") : "all";
-  const count = (f: Group | "all") => (f === "all" ? rows.length : rows.filter((r) => groupOf(r.status) === f).length);
-  const waiting = rows.filter((r) => WAITING.includes(r.status));
-  // The people the clinic could name as the one it hired, for the "role filled" form.
-  const hireCandidates = rows.filter((r) => (HIREABLE as readonly string[]).includes(r.status)).map((r) => ({ id: r.id, status: r.status, name: r.applicant?.name?.trim() || "Applicant" }));
-  // The people at Interview or Offer, listed on the "role filled" form with a message each (P1-13).
-  const talking = rows.filter((r) => (IN_TALKS as readonly string[]).includes(r.status)).map((r) => ({ id: r.id, status: r.status, name: r.applicant?.name?.trim() || "Applicant" }));
-  const clinicName = rows[0]?.clinic_name ?? "";
+  const { rows, active, shown, count, waiting, hireCandidates, talking, clinicName, anyTick } = await loadApplicants(await supabaseServer(), id, filter);
   const sentCount = Number.parseInt(sent ?? "", 10);
-  const shown = active === "all" ? rows : rows.filter((r) => groupOf(r.status) === active);
-  // When any row has a tick box, every row gets the tick box column, so the names line up down the page.
-  const anyTick = shown.some((r) => WAITING.includes(r.status));
 
   return (
     <>
