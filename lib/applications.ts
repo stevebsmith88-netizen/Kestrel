@@ -4,7 +4,9 @@
 
 export type AppStatus =
   | "applied" | "viewed" | "shortlisted" | "interview" | "offer" | "hired"
-  | "not_selected" | "role_filled" | "kept" | "no_update" | "withdrawn";
+  | "not_selected" | "role_filled" | "kept" | "no_update" | "withdrawn"
+  // Shown to the candidate only, when the clinic deleted the job or its account (migration 0044). Never stored as a status.
+  | "clinic_left";
 
 export const APP_LABELS: Record<AppStatus, string> = {
   applied: "Applied",
@@ -18,6 +20,7 @@ export const APP_LABELS: Record<AppStatus, string> = {
   kept: "Kept for future roles",
   no_update: "No update from the clinic",
   withdrawn: "Withdrawn",
+  clinic_left: "Closed: the clinic left Kestrel",
 };
 
 // What a candidate sees as the one line of explanation under a status.
@@ -33,12 +36,13 @@ export const APP_EXPLAINERS: Record<AppStatus, string> = {
   kept: "The clinic will keep your details for future openings.",
   no_update: "The job closed without a decision.",
   withdrawn: "You withdrew this application.",
+  clinic_left: "The clinic has left Kestrel and can no longer see this application. We have kept your copy here.",
 };
 
 export const STEPS = ["applied", "viewed", "shortlisted", "interview", "offer", "hired"] as const;
 // A candidate is never shown Shortlisted (see candidateStatus), so their progress bar has 5 steps. A clinic sees all 6.
 export const CANDIDATE_STEPS = STEPS.filter((s) => s !== "shortlisted");
-export const CLOSED: readonly AppStatus[] = ["not_selected", "role_filled", "kept", "no_update", "withdrawn"];
+export const CLOSED: readonly AppStatus[] = ["not_selected", "role_filled", "kept", "no_update", "withdrawn", "clinic_left"];
 export const CLINIC_MOVES: readonly AppStatus[] = ["shortlisted", "interview", "offer", "not_selected", "role_filled", "kept"];
 // Who a clinic can name as the person it hired: anyone still in the running (not closed out, not withdrawn).
 export const HIREABLE: readonly AppStatus[] = ["applied", "viewed", "shortlisted", "interview", "offer"];

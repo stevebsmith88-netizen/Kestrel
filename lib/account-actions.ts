@@ -11,8 +11,8 @@ import { refreshJobPages } from "@/lib/job-cache";
 const CV_BUCKET = "cvs";
 
 // Lets a candidate or a clinic delete their own account and everything attached to it:
-// profile, resume files, applications, and for a clinic its profile, jobs and the
-// applications they received. It asks for the password again, and for the word DELETE.
+// profile, resume files, applications, and for a clinic its profile and jobs (the
+// candidates keep their own record of applications they sent, migration 0044). It asks for the password again, and for the word DELETE.
 // Admin accounts cannot be deleted this way.
 export async function deleteAccount(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("candidate", "clinic");
@@ -55,6 +55,9 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
         const { data: apps } = await admin.from("applications").select("cv_path").in("job_id", jobIds);
         (apps ?? []).forEach((a) => a.cv_path && paths.push(a.cv_path));
         applicationsCount = apps?.length ?? 0;
+        // The copy of each resume sent to this clinic is deleted with it. Candidates keep their own record of the application (migration
+        // 0044), so it no longer points at the removed copy; the file name stays for their record.
+        await admin.from("applications").update({ cv_path: null }).in("job_id", jobIds);
       }
     }
   }

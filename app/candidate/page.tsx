@@ -31,7 +31,7 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
   const strength = profileStrength(profile);
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
   const latest = applications.slice(0, 3);
-  const { recs, needsRole, needsWhere } = await getRecommendations(profile, applications.map((a) => a.job_id));
+  const { recs, needsRole, needsWhere } = await getRecommendations(profile, applications.map((a) => a.job_id).filter((id): id is string => id !== null));
   const db = await supabaseServer();
   const { count: alertCount } = db ? await db.from("job_alerts").select("id", { count: "exact", head: true }) : { count: 0 };
 

@@ -121,7 +121,7 @@ export default async function Terms() {
           <h2>Ending your account</h2>
           <p>
             You can delete your account at any time from your account page. Deleting it removes your profile and the applications linked to it, as
-            our <Link href="/privacy">privacy policy</Link> explains, and a clinic&apos;s account takes its jobs and the applications it received with it.
+            our <Link href="/privacy">privacy policy</Link> explains, and a clinic&apos;s account takes its jobs with it. Candidates keep their own record of applications they sent to a clinic that leaves.
             We may suspend or end access if these terms are broken, or if we must by law. Sections that
             by their nature should continue, such as those about payment and responsibility, continue after an account ends.
           </p>

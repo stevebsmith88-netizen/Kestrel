@@ -29,3 +29,11 @@ test("other statuses are the same for both readers", () => {
   assert.deepEqual(viewForCandidate(interview), interview);
   assert.deepEqual(viewApplication(interview, events, "clinic").application, interview);
 });
+
+test("an open application whose clinic left shows as closed because the clinic left (migration 0044)", () => {
+  const kept = viewForCandidate({ status: "viewed", clinic_message: null, job_id: null });
+  assert.equal(kept.status, "clinic_left");
+  assert.equal(viewForCandidate({ status: "shortlisted", clinic_message: "x", job_id: null }).status, "clinic_left", "a shortlist is never shown, even here");
+  assert.equal(viewForCandidate({ status: "not_selected", clinic_message: "Thank you", job_id: null }).status, "not_selected", "a decision already made stays");
+  assert.equal(viewForCandidate({ status: "applied", clinic_message: null, job_id: "j1" }).status, "applied", "a job still there changes nothing");
+});

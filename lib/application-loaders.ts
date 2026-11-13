@@ -8,7 +8,7 @@ import { viewApplication, viewForCandidate, type HistoryEvent } from "./applicat
 
 export type Application = {
   id: string;
-  job_id: string;
+  job_id: string | null; // null once the clinic has deleted the job or its account (migration 0044)
   status: string;
   cover_letter: string | null;
   keep_details: boolean;

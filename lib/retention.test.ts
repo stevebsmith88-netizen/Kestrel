@@ -8,6 +8,7 @@ test("the retention periods are the ones Steve chose and the privacy policy stat
   assert.equal(RETENTION_DAYS.unconfirmedWaitlist, 30);
   assert.equal(RETENTION_DAYS.inboxMessages, 365);
   assert.equal(RETENTION_DAYS.reportsAndClaims, 730);
+  assert.equal(RETENTION_DAYS.applicationsAfterClinicLeft, 730);
   const privacy = readFileSync("app/privacy/page.tsx", "utf8");
   for (const words of ["30 days", "12 months", "2 years"]) assert.ok(privacy.includes(words), `the privacy policy should mention ${words}`);
 });
@@ -22,5 +23,7 @@ test("cutoffs count back from now", () => {
 test("the daily job deletes on these periods", () => {
   const cron = readFileSync("app/api/cron/daily/route.ts", "utf8");
   assert.match(cron, /retentionCutoffs\(/);
+  assert.match(cron, /from\("applications"\)\.delete\(\)\.in\("id"/, "kept applications are deleted 2 years after the clinic left");
+  assert.match(cron, /applicationsAfterClinicLeft/);
   for (const table of ["waitlist", "notifications", "job_reports", "listing_claims"]) assert.ok(cron.includes(`from("${table}").delete()`), `the daily job should clear old ${table}`);
 });

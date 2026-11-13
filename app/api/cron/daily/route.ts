@@ -417,6 +417,16 @@ async function runDaily(request: Request) {
     admin.from("listing_claims").delete().neq("status", "pending_review").lt("created_at", cut.reportsAndClaims),
   ]);
   for (const r of retention) if (r.error) console.error("Retention clean up:", r.error.code, r.error.message);
+  // Applications kept for the candidate after the clinic left (migration 0044), 2 years on, with the copy of the resume sent with each.
+  // On a database without 0044 the column is missing, and this is only logged.
+  const { data: oldKept, error: keptError } = await admin.from("applications").select("id, cv_path").is("job_id", null).lt("clinic_left_at", cut.applicationsAfterClinicLeft).limit(500);
+  if (keptError) console.error("Retention clean up (applications):", keptError.code, keptError.message);
+  else if (oldKept?.length) {
+    const files = oldKept.map((a) => a.cv_path).filter((p): p is string => Boolean(p));
+    if (files.length) await admin.storage.from("cvs").remove(files);
+    const { error } = await admin.from("applications").delete().in("id", oldKept.map((a) => a.id));
+    if (error) console.error("Retention clean up (applications):", error.code, error.message);
+  }
 
   // Record the run, so a missed or failing day shows up in the health check.
   const finished = new Date().toISOString();

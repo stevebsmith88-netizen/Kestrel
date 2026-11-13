@@ -183,8 +183,8 @@ export default function Privacy() {
             have kept its own copy of what you sent it, and you can ask us to ask that clinic to remove it.
           </p>
           <p>
-            Today, if a clinic deletes its account, its jobs and the applications it received are deleted with it, and they disappear from the
-            candidates&apos; lists of applications too. We are changing this so that you keep your own record of an application you sent.
+            If a clinic deletes its account or a job, you keep your own record of the application you sent, marked closed, and we tell you
+            in your inbox. The clinic can no longer see it, and its private notes about you are deleted. Your record is deleted 2 years later.
           </p>
 
           <h2>How we protect it</h2>
