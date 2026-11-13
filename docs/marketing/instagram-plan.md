@@ -47,17 +47,17 @@ Left out on purpose: the buying group blog post, to keep the account clear of an
 
 ## Design rules
 
-- Cream rows: Cream background, Navy headline in DM Serif Display, Chestnut for the small label.
-- Navy rows: Navy background, Cream headline, Wing Buff for the small label.
+- Cream rows: Cream background, Navy headline in DM Serif Display, Slate for the line, Chestnut for the web address.
+- Navy rows: Navy background, Cream headline, Mist for the line.
 - Each post has 1 stock photo, a headline and a short line. No small labels above the headline ("For clinics", "For candidates"), and no logo on a post unless the post names Kestrel; when it does, the wordmark image replaces the typed name (Steve, 13th November 2026). Navy wordmark on Cream rows, reversed wordmark on Navy rows; both are uploaded to the Kestrel Canva.
 - **Real stock photos only, never AI generated (Steve, 13th November 2026).** Canva's design generator makes its own AI images, so never take photos from it. Use Pexels (free for commercial use, no credit needed), imported into Canva by the photo's address, and name each upload "Pexels <number> <photographer> <subject>" so its source stays on record. Canva Pro's own stock library is fine too when picking by hand.
 - **Vary the layout, keep the colour (Steve, 13th November 2026).** Only the row colour repeats. Each post uses 1 of these layouts, and no 2 posts next to each other (across or up and down) share one:
-  - A, framed photo on top: photo inset with a margin, wordmark, headline and line below, centred.
+  - A, framed photo on top: photo inset with a margin, headline and line below, centred (plus the wordmark when the post names Kestrel).
   - B, split: photo fills the left half, top to bottom; headline and line down the right.
   - C, text first: headline and a short list, photo as a strip across the bottom.
   - D, headline on top: headline and line centred at the top, framed photo below.
   - E, photo across the top: full width photo on the top half, text left aligned below.
 - **The first 6 (in the Kestrel Canva, all named "IG 0x"):** row 1, Cream: IG 01 (A) on the right, IG 02 (B) in the middle, IG 03 (C) on the left. Row 2, Navy: IG 05 (D) on the right, IG 04 (A) in the middle, IG 06 (E) on the left. So the posting order is 01, 02, 03, then 05, 04, 06.
-- Headlines use the serif from the first mock, labels and lines the sans. Start new posts by copying the IG post with the layout you want, then swap the photo and the words.
+- Headlines use the serif from the first mock, lines the sans. Start new posts by copying the IG post with the layout you want, then swap the photo and the words.
 - Photos: real clinic moments (frame fitting, pre testing, a lab bench, a front desk), Canadian looking where possible, no staged handshakes, no one wearing a white coat to look like a doctor when they are not.
 - Never redraw or change the logo or the skyline.
