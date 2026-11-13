@@ -71,3 +71,7 @@ To keep the posts on brand but less plain:
 - On the split layout, a thin accent seam where the photo meets the text.
 - Steve's skyline artwork (uploaded to Canva, used as is, never redrawn) along the bottom of about 1 post per row.
 - Post 01 is "Hello, we're" followed by the wordmark image.
+
+## Blog schedule (Steve, 13th November 2026)
+
+The guides behind the first 9 Instagram posts go out weekly first, every Friday from 13th November 2026 to 1st January 2027, in an order where no guide links to one that is not out yet. After that the blog goes out every 2 weeks, on Fridays, matching the Instagram rhythm of 1 row every 2 weeks: 15th January 2027 to 4th June 2027 for the 11 guides already written. Dates live in `content/posts.ts`. When adding a guide, check its links only point to guides already out on its date.

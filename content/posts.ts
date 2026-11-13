@@ -7,7 +7,7 @@ export const POSTS: Post[] = [
     slug: "hiring-seasonal-workers",
     title: "Hiring seasonal workers: the pros and cons for an eye care clinic",
     description: "Seasonal and short term staff can cover busy weeks and holidays. Here is when it works, what it costs and how to make a short stay run smoothly.",
-    date: "2027-03-19",
+    date: "2027-06-04",
     body: `Eye care clinics have busy stretches. Many people use up their benefits near the end of the year. Back to school brings children in for exams. Summer means holidays and staff who are away. Some clinics hire seasonal or short term workers to get through those weeks. It can work well, and it can also cost more than it saves. Here is how to decide.
 
 ## What you gain
@@ -36,7 +36,7 @@ A good first week matters even more for a short contract. Use a simple plan like
     slug: "ask-for-a-raise",
     title: "How to ask for a raise in an eye care job",
     description: "Asking for more pay is easier with a plan. Here is how to prepare, when to ask, what to say and what to do if the answer is not yet.",
-    date: "2027-03-12",
+    date: "2027-05-21",
     body: `Asking for a raise is uncomfortable for most people. It helps to treat it as a business conversation with a plan, not a confrontation. Clinics generally expect that good staff will ask at some point, and a well prepared request is easier to say yes to.
 
 ## Know where you stand
@@ -102,7 +102,7 @@ A short letter says why you want this clinic, which a resume cannot do. Our guid
     slug: "reference-checks-eye-care",
     title: "Reference checks: what to ask and why they matter",
     description: "A short reference call can save months of trouble. Here is who to call, what to ask and what to do with the answers.",
-    date: "2027-03-05",
+    date: "2027-05-07",
     body: `When a candidate has done well in 2 interviews, it is tempting to skip the reference check. It only takes 15 minutes, and it is often the most honest part of the process. Here is how to do it well.
 
 ## Ask the candidate first
@@ -139,7 +139,7 @@ Ask the same questions about every candidate you take to this stage, and stick t
     slug: "onboarding-first-30-days",
     title: "Onboarding a new optician or assistant: the first 30 days",
     description: "A simple plan for a new hire's first month in an eye care clinic: before day one, the first week and how to check in at 30 days.",
-    date: "2027-02-26",
+    date: "2027-04-23",
     body: `The first month decides a lot. A new person who feels welcome, knows what to do and is making progress by the end of week 4 is much more likely to stay. You do not need a big programme. You need a simple plan that you actually follow.
 
 ## Before day one
@@ -197,7 +197,7 @@ Say you will train, and say who and how. Many strong candidates, including peopl
     slug: "why-people-leave-jobs",
     title: "Why people leave eye care jobs, and what clinics can do about it",
     description: "Staff turnover costs clinics time and patients' trust. These are the common reasons people leave and practical ways to keep good people.",
-    date: "2027-02-19",
+    date: "2027-04-09",
     body: `Every clinic loses people. Some of it is unavoidable: people move, study or change direction. A lot of it is not. When a good optician or assistant leaves after a few months, there is usually a reason that could have been spotted earlier. Here are the ones clinics most often hear.
 
 ## The job was not what the ad said
@@ -267,7 +267,7 @@ A general job site brings volume. A board built for eye care brings people who a
     slug: "stand-out-in-interview",
     title: "How to stand out in an interview for an eye care job",
     description: "Clinics see many good candidates. These are the small things that make one memorable: preparation, curiosity, care for patients and a clear follow up.",
-    date: "2027-02-12",
+    date: "2027-03-26",
     body: `When a clinic interviews 4 or 5 people for one job, most of them are qualified. The person who gets the offer is often the one who made the clinic feel sure about them. You do not need to be flashy to do that. Here are the things that help.
 
 ## Know the clinic
@@ -296,7 +296,7 @@ Arrive 10 minutes early, dress as you would for work in a clinical setting, brin
     slug: "phone-screening-tips",
     title: "Phone screenings: how to do well in the first call",
     description: "A short phone screen often decides whether you get an interview. Here is how to prepare, what you will be asked and how to follow up.",
-    date: "2027-02-05",
+    date: "2027-03-12",
     body: `The phone screen is the first conversation with a clinic, and it is usually short, around 15 to 20 minutes. It is mainly to check the basics: whether you are registered if the role needs it, whether the hours work, whether the pay is in range and whether you come across as someone patients and colleagues would like. Here is how to do well.
 
 ## Before the call
@@ -350,7 +350,7 @@ Do not blame colleagues, and do not make up a result. Real, small stories land b
     slug: "optical-lab-technician",
     title: "What an optical lab technician does, and how to get started",
     description: "Optical lab technicians turn prescriptions into finished glasses. Here is what the work involves, where it happens and how people start in it.",
-    date: "2027-01-29",
+    date: "2027-02-26",
     body: `When a patient picks out frames and an optician takes the measurements, someone still has to turn the prescription into a finished pair of glasses. That person is the optical lab technician. It is hands-on work for people who like precision, machines and seeing a job through from start to finish.
 
 ## The work
@@ -383,7 +383,7 @@ People move from the bench into lead technician or lab manager roles, into dispe
     slug: "eye-care-moving-to-canada",
     title: "Moving to Canada from another country? Working in eye care",
     description: "What to know if you trained or worked in eye care abroad: which roles need registration, where to start and how to work while you sort it out.",
-    date: "2027-01-22",
+    date: "2027-02-12",
     body: `If you trained or worked in eye care in another country, your skills are in demand here. The way in depends on the role, and the first step is almost always the same: ask the regulator. This post is a general guide, not legal or immigration advice, and rules change, so check each regulator's own website.
 
 ## Regulated roles: start with the regulator
@@ -411,7 +411,7 @@ You do not need to apologise for training abroad. Describe your skills, your reg
     slug: "independent-or-corporate-eye-care",
     title: "Independent practice or corporate group: what is different for staff",
     description: "How working in an independent eye care practice compares with a corporate group, and the questions that help you decide which one suits you.",
-    date: "2027-01-15",
+    date: "2027-01-29",
     body: `Eye care in Canada is a mix of independent practices, owned by an optometrist or optician, and larger groups that run many locations under one name. Both hire all the time, and neither is better. They feel different to work in, and what suits you depends on what you want from the next few years.
 
 Practices vary a lot inside each group, so treat what follows as tendencies, not rules.
@@ -436,7 +436,7 @@ Kestrel lists independent and corporate practices side by side, and you can filt
     slug: "start-a-career-in-optics",
     title: "Thinking of starting a career in optics? Where to begin",
     description: "A practical first step guide for anyone curious about working in eye care in Canada: the roles, the entry points and the questions worth asking early.",
-    date: "2027-01-08",
+    date: "2027-01-15",
     body: `Eye care has a clear ladder in some places and a lot of side doors in others. If you are wondering whether it is for you, you do not need to decide everything today. Here is a sensible way to start.
 
 ## Find out what the jobs are
