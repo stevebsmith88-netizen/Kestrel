@@ -38,8 +38,8 @@ export default function BlogBody({ body }: { body: string }) {
           </div>
         )
         : b.type === "figure" ? (BLOG_IMAGES[b.src] ? (
-          <figure key={i} className="blogfig">
-            <Image src={b.src} alt={b.alt} width={BLOG_IMAGES[b.src].width} height={BLOG_IMAGES[b.src].height} sizes="(max-width: 720px) 80vw, 300px" />
+          <figure key={i} className={BLOG_IMAGES[b.src].width / BLOG_IMAGES[b.src].height >= 1.3 ? "blogfig wide" : "blogfig"}>
+            <Image src={b.src} alt={b.alt} width={BLOG_IMAGES[b.src].width} height={BLOG_IMAGES[b.src].height} sizes={BLOG_IMAGES[b.src].width / BLOG_IMAGES[b.src].height >= 1.3 ? "(max-width: 800px) 100vw, 760px" : "(max-width: 720px) 80vw, 300px"} priority={i === 0} />
             {b.caption && <figcaption>{b.caption}</figcaption>}
           </figure>
         ) : null)
