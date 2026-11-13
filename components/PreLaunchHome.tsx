@@ -37,7 +37,7 @@ export default function PreLaunchHome() {
                 <figcaption>Search and filter. Every job card shows its pay.</figcaption>
               </figure>
               <figure>
-                <Image src="/home/sample-job.png" alt="A Kestrel job page, with the job description, a Quick Apply button, and job facts that include pay, location, whether it is an existing vacancy, and whether AI is used to screen candidates." width={2160} height={1496} sizes="(max-width: 860px) 100vw, 520px" />
+                <Image src="/home/sample-job.png" alt="A Kestrel job page, with the job description, a Quick Apply button, and job facts that include pay, location, whether it is an existing vacancy, and whether AI is used to screen candidates." width={2160} height={1462} sizes="(max-width: 860px) 100vw, 520px" />
                 <figcaption>A job page. Pay, vacancy and AI screening are stated up front.</figcaption>
               </figure>
             </div>
