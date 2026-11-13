@@ -7,7 +7,7 @@ export const BLOG_IMAGES: Record<string, { width: number; height: number }> = {
   "/images/blog/eye-care-job-ad-checklist.jpg": { width: 1344, height: 756 },
   "/images/blog/cover-letter-optical-job.jpg": { width: 1354, height: 762 },
   "/images/blog/field-based-eye-care-jobs.jpg": { width: 1354, height: 762 },
-  "/images/blog/choosing-an-optical-buying-group.jpg": { width: 1354, height: 762 },
+  "/images/blog/choosing-an-optical-buying-group.jpg": { width: 1594, height: 897 },
   "/images/blog/optometric-assistant-jobs-canada.jpg": { width: 1464, height: 824 },
   "/images/blog/how-people-fall-into-optics.jpg": { width: 1354, height: 762 },
   "/images/blog/optician-pay-canada.jpg": { width: 1354, height: 762 },

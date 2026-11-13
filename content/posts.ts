@@ -845,7 +845,7 @@ From there, some assistants become lead assistants or clinic managers, and many 
     title: "How to choose an optical buying group",
     description: "What a buying group does for an independent eye care practice, the questions to ask before you join, and a short look at 3 groups in Canada.",
     date: "2026-11-06",
-    body: `![A basket full of eyeglass frames, some still in plastic bags, with a price list on top.](/images/blog/choosing-an-optical-buying-group.jpg)
+    body: `![A group of colleagues stacking their hands together in the middle of a circle.](/images/blog/choosing-an-optical-buying-group.jpg)
 
 A buying group lets independent practices buy together. One practice ordering frames and lenses has little weight with a supplier, and a few hundred practices ordering together have more. What you get beyond a discount varies a lot from group to group, and so does what you give up.
 
