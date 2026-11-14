@@ -3,7 +3,7 @@
 // Pages that hold accounts, sign in or admin. No crawler reads these.
 export const PRIVATE_PATHS = [
   "/admin", "/candidate", "/clinic/", "/clinic$", "/dashboard", "/account", "/claim", "/welcome", "/goodbye", "/auth", "/unsubscribe",
-  "/launch-preview", "/sign-in", "/sign-up", "/forgot-password", "/reset-password",
+  "/launch-preview", "/join", "/sign-in", "/sign-up", "/forgot-password", "/reset-password",
 ] as const;
 
 // The crawlers AI assistants use, allowed to every public page (decided 13th November 2026, docs/discoverability-plan.md).

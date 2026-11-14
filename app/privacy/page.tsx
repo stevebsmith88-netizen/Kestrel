@@ -16,7 +16,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "13th November 2026";
+const UPDATED = "14th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -146,7 +146,8 @@ export default function Privacy() {
           <p>
             <strong>Clinics.</strong> When you apply to a job, the clinic that posted it can see your application: your cover letter,
             your resume and the details you chose to give, as they were when you applied. It cannot see your profile otherwise, and
-            clinics never see applications that were sent to other clinics.
+            clinics never see applications that were sent to other clinics. &quot;The clinic&quot; means its owner and up to 4 people the owner
+            has invited to its team on Kestrel; the owner chooses who, and can remove them at any time.
           </p>
           <p>
             <strong>Candidates.</strong> Clinic email addresses are never shown on job posts. Candidates apply to a clinic through Kestrel.

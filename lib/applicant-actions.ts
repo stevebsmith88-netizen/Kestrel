@@ -8,7 +8,7 @@ import { SITE_URL, sendEmail } from "@/lib/email";
 import { applicationUpdateEmail } from "@/lib/clinic-message";
 import { candidateRecipient } from "@/lib/recipient";
 import { notify } from "@/lib/notifications";
-import { applicationMoved } from "@/lib/notify-text";
+import { applicationMoved, teamNoteAdded } from "@/lib/notify-text";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -19,6 +19,14 @@ import { BULK_PROBLEMS, declinedText, historyNote, movedText } from "@/lib/bulk-
 import { notifyAdmin } from "@/lib/notify-admin";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { refreshJobPages } from "@/lib/job-cache";
+import { getMyEmployer } from "@/lib/clinic";
+import { appendNote, canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
+
+// Every change to an application is made with the server key, so the database cannot check the person's level here. Only the owner and
+// "view and edit" team members may move applicants; a "view only" member may read them and add notes (migration 0045).
+async function mayMoveApplicants(userId: string) {
+  return canEdit((await getMyEmployer(userId))?.level);
+}
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -99,7 +107,8 @@ const pickedIds = (form: FormData) => form.getAll("ids").map(String).filter((x) 
 
 // Tick some applicants and send each a kind no, using the same wording as sending one at a time.
 export async function declineSelected(form: FormData) {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
+  if (!(await mayMoveApplicants(session.userId))) redirect("/clinic");
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
@@ -115,7 +124,8 @@ export async function declineSelected(form: FormData) {
 const bulkAnswer = (text: string, tone: "ok" | "warn" = "ok"): QuickState => ({ notice: "bulk", text, tone });
 
 export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
+  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
@@ -126,7 +136,8 @@ export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData):
 }
 
 export async function interviewSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
+  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
@@ -139,7 +150,8 @@ export async function interviewSelectedQuiet(_prev: QuickState, form: FormData):
 }
 
 export async function declineSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
+  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
@@ -203,7 +215,8 @@ async function closeInTalks(jobId: string, form: FormData, hiredId: string | nul
 // The role is filled: close the job, let everyone still waiting know, kindly, and record how the clinic filled it
 // if they told us (from the job's ending page). An expired job is not reopened; only the answer is saved.
 export async function fillRole(form: FormData) {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
+  if (!(await mayMoveApplicants(session.userId))) redirect("/clinic");
   const jobId = String(form.get("jobId") ?? "");
   const fromEnding = String(form.get("from") ?? "") === "ending";
   if (!UUID.test(jobId)) redirect("/clinic");
@@ -239,7 +252,8 @@ export async function fillRole(form: FormData) {
 // A clinic moves an application along. The clinic's right to see this application is
 // checked by the database itself (row level security); the change is then made on the server.
 export async function setApplicationStatus(_prev: JobFormState, form: FormData): Promise<JobFormState> {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
+  if (!(await mayMoveApplicants(session.userId))) return { error: VIEW_ONLY_TEXT };
   const id = String(form.get("id") ?? "");
   const to = String(form.get("status") ?? "");
   // Shortlisting is the clinic's own working list: no message goes with it and the candidate is not emailed.
@@ -275,12 +289,33 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
 }
 
 export async function saveApplicantNote(_prev: JobFormState, form: FormData): Promise<JobFormState> {
-  await requireRole("clinic");
+  const session = await requireRole("clinic");
   const id = String(form.get("id") ?? "");
   const note = String(form.get("note") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 3000);
   if (!UUID.test(id)) return { error: "That didn't work. Please refresh and try again." };
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
+  const employer = await getMyEmployer(session.userId);
+  // A "view only" member's note is added under the clinic's note with their name and the date, never replacing it, and the owner is told.
+  if (employer && !canEdit(employer.level)) {
+    if (!note) return { error: "Write your note first." };
+    const { data: app } = await db.from("applications").select("id, job_title").eq("id", id).maybeSingle();
+    if (!app) return { error: "We couldn't find that application." };
+    const { data: existing } = await db.from("application_notes").select("note").eq("application_id", id).maybeSingle();
+    const joined = appendNote(existing?.note ?? "", session.fullName || session.firstName || "A team member", note, new Date());
+    const { error } = await db.from("application_notes").upsert({ application_id: id, note: joined, updated_at: new Date().toISOString() }, { onConflict: "application_id" });
+    if (error) {
+      console.error("Team note save failed:", error.code, error.message);
+      return { error: "We couldn't save your note. Please try again." };
+    }
+    const admin = supabaseAdmin();
+    if (admin) {
+      const { data: owner } = await admin.from("employers").select("owner_id").eq("id", employer.id).maybeSingle();
+      await notify(admin, owner?.owner_id, teamNoteAdded({ author: session.firstName || "A team member", jobTitle: app.job_title, applicationId: id }));
+    }
+    revalidatePath(`/clinic/applications/${id}`);
+    return { message: "Note added and passed to the clinic owner. Only your clinic can see it." };
+  }
   const { error } = await db.from("application_notes").upsert({ application_id: id, note, updated_at: new Date().toISOString() }, { onConflict: "application_id" });
   if (error) {
     console.error("Note save failed:", error.code, error.message);

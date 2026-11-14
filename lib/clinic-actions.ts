@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
-import { getMyEmployer } from "@/lib/clinic";
+import { getMyEditableEmployer, getMyEmployer } from "@/lib/clinic";
+import { canEdit, OWNER_ONLY_TEXT, VIEW_ONLY_TEXT } from "@/lib/team";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
 import { fitExpected, withExpected } from "@/lib/expected-columns";
@@ -50,6 +51,8 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   if (!db) return { error: NOT_CONNECTED };
 
   const existing = await getMyEmployer(session.userId);
+  // A team member can see the profile but only the owner changes it (migration 0045).
+  if (existing && existing.level !== "owner") return { error: OWNER_ONLY_TEXT };
   const row = {
     clinic_name: clinic.clinicName,
     practice_type: clinic.practiceType,
@@ -115,6 +118,7 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   const session = await requireRole("clinic");
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile");
+  if (!canEdit(employer.level)) return { error: VIEW_ONLY_TEXT };
 
   const submit = String(form.get("intent") ?? "") === "submit";
   const { job, row, errors } = jobFromForm(form, submit);
@@ -225,7 +229,8 @@ export async function closeJobQuiet(_prev: QuickState, form: FormData): Promise<
 async function doExtend(form: FormData) {
   const session = await requireRole("clinic");
   const id = idFrom(form);
-  const employer = await getMyEmployer(session.userId);
+  // Changed on the server, so the database cannot check the person's level here: only the owner and "view and edit" members may.
+  const employer = await getMyEditableEmployer(session.userId);
   const admin = supabaseAdmin();
   if (!id || !employer || !admin) return "job-extend-failed";
   const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count, province").eq("id", id).eq("employer_id", employer.id).maybeSingle();
@@ -301,7 +306,7 @@ export async function deleteJobQuiet(_prev: QuickState, form: FormData): Promise
 export async function repostJob(form: FormData) {
   const session = await requireRole("clinic");
   const id = idFrom(form);
-  const employer = await getMyEmployer(session.userId);
+  const employer = await getMyEditableEmployer(session.userId);
   const db = await supabaseServer();
   if (!id || !db || !employer) redirect("/clinic");
   const { data: old } = await db

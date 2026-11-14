@@ -42,6 +42,16 @@ export function applicantWithdrew(args: { jobTitle: string; applicationId: strin
   return { kind: "applicant", title: cut(`An applicant withdrew from ${args.jobTitle}`, 150), body: "They are no longer interested in this job. There is nothing you need to do.", href: `/clinic/applications/${args.applicationId}` };
 }
 
+// A "view only" team member added a note (Steve, 14th November 2026): it goes to the owner to act on. It names the person and the job.
+export function teamNoteAdded(args: { author: string; jobTitle: string; applicationId: string }): NotifyMessage {
+  return { kind: "team_note", title: cut(`${args.author} added a note on an applicant for ${args.jobTitle}`, 150), body: "Open the application to read it and decide what happens next.", href: `/clinic/applications/${args.applicationId}` };
+}
+
+// Someone joined the clinic's team with their invite code.
+export function teamMemberJoined(args: { name: string; level: string }): NotifyMessage {
+  return { kind: "team", title: cut(`${args.name} joined your clinic team`, 150), body: `They can now sign in with the access you chose: ${args.level}.`, href: "/clinic/team" };
+}
+
 export function jobApproved(args: { jobTitle: string; jobId: string; wasEdit: boolean }): NotifyMessage {
   return {
     kind: "job",

@@ -3,6 +3,7 @@ import "server-only";
 import { HIREABLE } from "@/lib/applications";
 import { supabaseServer } from "@/lib/supabase/server";
 import type { JobStatus } from "@/lib/jobs";
+import { canEdit, type ClinicLevel } from "@/lib/team";
 
 export type Employer = {
   id: string;
@@ -15,6 +16,8 @@ export type Employer = {
   notify_email: string;
   employee_band: string | null; // from the private contact table, never shown publicly
   direct_hire_confirmed_at: string | null;
+  // Who the signed in person is to this clinic: its owner, or a team member who can view and edit, or view only (migration 0045).
+  level: ClinicLevel;
 };
 
 export type MyJob = {
@@ -56,18 +59,29 @@ export type MyJob = {
 const JOB_COLUMNS =
   "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
 
-// The signed in clinic's own profile (row level security means it can only be their own).
+// The signed in person's clinic: the one they own, or the one whose team they are on (migration 0045). Row level security means it can
+// only be their own. On a database without the team tables, only owners have a clinic, as before.
+const EMPLOYER_COLUMNS = "id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at";
+
 export async function getMyEmployer(userId: string): Promise<Employer | null> {
   const db = await supabaseServer();
   if (!db) return null;
-  const { data } = await db
-    .from("employers")
-    .select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at")
-    .eq("owner_id", userId)
-    .maybeSingle();
-  if (!data) return null;
-  const { data: contact } = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", data.id).maybeSingle();
-  return { ...data, notify_email: contact?.notify_email ?? "", employee_band: contact?.employee_band ?? null } as Employer;
+  const { data } = await db.from("employers").select(EMPLOYER_COLUMNS).eq("owner_id", userId).maybeSingle();
+  if (data) {
+    const { data: contact } = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", data.id).maybeSingle();
+    return { ...data, notify_email: contact?.notify_email ?? "", employee_band: contact?.employee_band ?? null, level: "owner" } as Employer;
+  }
+  const { data: membership, error } = await db.from("employer_members").select("employer_id, level").eq("user_id", userId).maybeSingle();
+  if (error || !membership) return null;
+  const { data: team } = await db.from("employers").select(EMPLOYER_COLUMNS).eq("id", membership.employer_id).maybeSingle();
+  // The private alert address and the staff count are the owner's; a team member never sees them.
+  return team ? ({ ...team, notify_email: "", employee_band: null, level: membership.level === "edit" ? "edit" : "view" } as Employer) : null;
+}
+
+// For server actions that change jobs or applicants: the signed in person's clinic, only if they may make changes.
+export async function getMyEditableEmployer(userId: string): Promise<Employer | null> {
+  const employer = await getMyEmployer(userId);
+  return employer && canEdit(employer.level) ? employer : null;
 }
 
 export async function getMyJobs(employerId: string): Promise<MyJob[]> {

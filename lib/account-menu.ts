@@ -21,6 +21,7 @@ export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
   clinic: [
     { href: "/account/inbox", label: "Inbox" },
     { href: "/clinic/profile", label: "Clinic profile" },
+    { href: "/clinic/team", label: "Clinic team" },
     { href: "/account", label: "Account settings" },
   ],
   admin: [{ href: "/account", label: "Account settings" }],
