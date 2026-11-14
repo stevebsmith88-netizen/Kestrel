@@ -8,7 +8,9 @@ export const POSTS: Post[] = [
     title: "From the clinic to the road: moving into a supplier role",
     description: "What changes when an optician, assistant or clinic manager becomes a lens rep, trainer or account manager, and how to make the move well.",
     date: "2027-01-05",
-    body: `Every week a rep walks into your clinic with a sample case, a new lens design or a problem to sort out with an order. Plenty of opticians, assistants and managers have watched that and wondered whether they could do the job. Many of the people doing it started exactly where you are.
+    body: `![A person in a wheat field at sunset holds an ear of wheat in 1 hand and a tablet in the other.](/images/blog/clinic-to-lens-rep-supplier-role.jpg)
+
+Every week a rep walks into your clinic with a sample case, a new lens design or a problem to sort out with an order. Plenty of opticians, assistants and managers have watched that and wondered whether they could do the job. Many of the people doing it started exactly where you are.
 
 Lens labs, frame companies, contact lens makers, equipment suppliers and software companies all hire people who know clinics. Our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs) describes the roles themselves. This one is about the move: what changes, what carries over, and how to make it without regretting it.
 
