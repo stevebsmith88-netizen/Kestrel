@@ -9,7 +9,7 @@ import { withExpected } from "@/lib/expected-columns";
 import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { sendDailyDigest } from "@/lib/slack-digest";
+import { sendDailyDigest, sendWaitingReminder } from "@/lib/slack-digest";
 import { sendFoundingReminders } from "@/lib/founding-flow";
 import { notify } from "@/lib/notifications";
 import { applicationNoUpdate, closedAfterTalksText } from "@/lib/notify-text";
@@ -469,6 +469,12 @@ async function runDaily(request: Request) {
     await sendDailyDigest(admin);
   } catch (e) {
     console.error("Slack summary not sent:", e instanceof Error ? e.message : e);
+  }
+  // A reminder when a support request or a reported job has waited more than 1 business day.
+  try {
+    await sendWaitingReminder(admin);
+  } catch (e) {
+    console.error("Slack reminder not sent:", e instanceof Error ? e.message : e);
   }
   return Response.json({ ok: problems.length === 0, ...summary });
 }

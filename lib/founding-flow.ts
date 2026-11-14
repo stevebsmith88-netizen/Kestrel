@@ -46,7 +46,7 @@ export async function claimFoundingPlace(db: SupabaseClient, employerId: string)
       if (who.email) await sendEmail({ to: who.email, ...foundingWelcomeEmail({ clinicName: who.clinicName, number }) });
       await notify(db, who.ownerId, foundingWelcomeMessage({ number }));
       await db.from("founding_clinics").update({ welcome_sent_at: new Date().toISOString() }).eq("employer_id", employerId);
-      await notifySlack("A new Founding clinic", [`Number ${number} of ${FOUNDING_CLINICS.places}: ${who.clinicName}`], { path: "/admin/payments", text: "Open the Founding clinics list" });
+      await notifySlack("A new Founding clinic", [`Number ${number} of ${FOUNDING_CLINICS.places}: ${who.clinicName}`], { path: "/admin/payments", text: "Open the Founding clinics list" }, "jobs");
     }
     return number;
   } catch (e) {

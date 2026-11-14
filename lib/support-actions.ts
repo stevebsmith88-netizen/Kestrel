@@ -8,6 +8,7 @@ import { emailLayout, sendEmail, SITE_URL } from "@/lib/email";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { notify } from "@/lib/notifications";
+import { notifySlack } from "@/lib/notify-slack";
 import { ACCESS_DAYS, ACCESS_TEXT, accessEnds, FEEDBACK_KINDS, HELP_REASONS, kindLabel, reasonLabel, REQUESTS_PER_DAY, SUPPORT_EMAIL } from "@/lib/support";
 
 // Help requests and feedback (Steve, 14th November 2026; migration 0046). Each is saved and emailed to Kestrel's support address, with the
@@ -46,6 +47,8 @@ export async function requestHelp(_prev: JobFormState, form: FormData): Promise<
     console.error("Help request not saved:", error?.code, error?.message);
     return { error: `We couldn't send that just now. Please email ${SUPPORT_EMAIL} instead.` };
   }
+  // The reason and the clinic's name only, never what they wrote.
+  await notifySlack("A help request", [`${employer?.clinic_name ?? "A clinic"}: ${reasonLabel(reason)}`], { path: "/admin/requests", text: "Open support" }, "support");
   await sendEmail({
     to: SUPPORT_EMAIL, replyTo: session.email, subject: `Help request: ${employer?.clinic_name ?? "a clinic"} (${reasonLabel(reason)})`,
     ...emailLayout({
@@ -79,6 +82,7 @@ export async function sendFeedback(_prev: JobFormState, form: FormData): Promise
     console.error("Feedback not saved:", error.code, error.message);
     return { error: `We couldn't send that just now. Please email ${SUPPORT_EMAIL} instead.` };
   }
+  await notifySlack("New feedback", [kindLabel(kind)], { path: "/admin/requests", text: "Open support" }, "support");
   await sendEmail({
     to: SUPPORT_EMAIL, replyTo: session.email, subject: `Feedback: ${kindLabel(kind)}`,
     ...emailLayout({ heading: kindLabel(kind), paragraphs: [`From ${session.fullName || session.email} (${session.email}, ${session.role}).`, message], buttonText: "Open feedback", buttonUrl: `${SITE_URL}/admin/requests` }),
