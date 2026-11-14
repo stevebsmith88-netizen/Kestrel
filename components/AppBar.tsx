@@ -1,4 +1,7 @@
 import AppBarView from "@/components/AppBarView";
+import { loadAdminCounts } from "@/lib/admin-counts";
+import { buildAdminMenu } from "@/lib/admin-menu";
+import { launchLayoutOn } from "@/lib/launch";
 import type { Session } from "@/lib/auth";
 import { findYourFitOn } from "@/lib/features";
 import { unreadCount } from "@/lib/notifications";
@@ -10,5 +13,7 @@ export default async function AppBar({ session, current }: { session: Session; c
   // Candidates and clinics have an inbox, shown as an envelope beside the initials with the number of unread messages.
   const unread = session.role !== "admin" ? await unreadCount() : 0;
   const planLine = session.role === "clinic" ? await planLineFor(session.userId) : null;
-  return <AppBarView session={{ ...session, planLine }} current={current} unread={unread} quiz={findYourFitOn()} />;
+  // An admin sees what is waiting as badges in the menu, and the waitlist hides once sign up has opened (lib/admin-menu.ts).
+  const adminMenu = session.role === "admin" ? buildAdminMenu(await loadAdminCounts(), await launchLayoutOn()) : undefined;
+  return <AppBarView session={{ ...session, planLine }} current={current} unread={unread} quiz={findYourFitOn()} adminMenu={adminMenu} />;
 }

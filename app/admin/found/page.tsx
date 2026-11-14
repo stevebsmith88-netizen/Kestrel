@@ -53,7 +53,7 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
       <AppBar session={session} current="/admin" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="back"><Link href="/admin">Back to the overview</Link></p>
+          <p className="back"><Link href="/admin">Back to the dashboard</Link></p>
           <h1>Found listings</h1>
           <p className="lede2">Jobs from a clinic&apos;s own careers page, for clinics that are not on Kestrel yet. Paste the page, check what the reader found against the page, then save it. A found listing comes down by itself after 21 days unless the clinic claims it.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}

@@ -55,7 +55,7 @@ export default async function AdminJobs({ searchParams }: { searchParams: Promis
       <AppBar session={session} current="/admin" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="back"><Link href="/admin">Back to the overview</Link></p>
+          <p className="back"><Link href="/admin">Back to the dashboard</Link></p>
           <h1>Jobs</h1>
           <p className="lede2">Every job, whatever happened to it. Press a job to see its payment and notes. Jobs waiting for a decision are in the review queue.</p>
           <p><Link href="/admin/review" className="btn sm ghost">Go to the review queue</Link></p>

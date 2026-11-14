@@ -8,7 +8,7 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { accessOpen, kindLabel, reasonLabel } from "@/lib/support";
 import { closeSupportRequest } from "@/lib/support-actions";
 
-export const metadata: Metadata = { title: "Help requests and feedback | Kestrel Eye Care Jobs", robots: { index: false } };
+export const metadata: Metadata = { title: "Support | Admin | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +31,7 @@ export default async function AdminRequests({ searchParams }: { searchParams: Pr
       <AppBar session={session} current="/admin/requests" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <h1>Help requests and feedback</h1>
+          <h1>Support</h1>
           <p className="lede2">Each one was also emailed to support@. Reply by email; mark it done here when it is sorted. Closing a help request ends Kestrel&apos;s access to that clinic&apos;s account.</p>
           <nav className="tabs" aria-label="Show">
             <Link href="/admin/requests" className={`tab ${done ? "" : "on"}`} aria-current={done ? undefined : "page"}>Open</Link>
