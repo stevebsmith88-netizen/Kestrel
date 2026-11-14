@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
-import { approveJob, rejectJob } from "@/lib/admin-actions";
+import ReviewButtons from "@/components/ReviewButtons";
+import { REVIEW_NOTICES, reviewMessage } from "@/lib/review-notices";
 import { changedFields } from "@/lib/job-diff";
 import { answerLabel, employeeBandLabel, employerFlags, employmentLabel, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
 import { payText } from "@/lib/job-pay";
@@ -15,16 +16,6 @@ import { bandMismatchFlag, paymentLine } from "@/lib/checkout-mode";
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
-
-const NOTICES: Record<string, string> = {
-  approved: "Approved. The job is live.",
-  quebec: "Not approved. This job is in Quebec, and Kestrel can't post jobs in Quebec yet. Send it back to the clinic with a note.",
-  rejected: "Sent back to the clinic with your note.",
-  "need-note": "Please tell the clinic what to change before sending a job back.",
-  "payment-failed": "Not published. The clinic's saved card was refused, so nothing was charged. We have asked the clinic to save a new card, and you can approve the job again once they have.",
-  "payment-error": "Not published, and nothing was charged. The card could not be charged because of a problem on our side or in the Stripe set up, so the clinic has not been emailed. Fix the cause, then approve the job again.",
-  error: "That didn't work. The job may already have been handled. Please refresh and try again.",
-};
 
 export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string; why?: string }> }) {
   const session = await requireRole("admin");
@@ -45,7 +36,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
         <div className="wrap narrow">
           <h1>Review queue</h1>
           <p className="lede2">Check each post before it goes live. Approving it starts its 30 days.</p>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{(notice === "payment-failed" || notice === "payment-error") && why ? ` Stripe said: ${why}` : ""}</p>}
+          {notice && REVIEW_NOTICES[notice] && <p className="notice" role="status">{reviewMessage(notice, why)}</p>}
 
           {jobs.length === 0 ? (
             <section className="card"><p>Nothing is waiting. New posts appear here as soon as a clinic submits them.</p></section>
@@ -103,18 +94,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>
                     </dl>
                     <pre className="adtext">{j.description}</pre>
-                    <div className="reviewbtns">
-                      <form action={approveJob}>
-                        <input type="hidden" name="id" value={j.id} />
-                        <button type="submit" className="btn">Approve and publish</button>
-                      </form>
-                      <form action={rejectJob} className="rejectform">
-                        <input type="hidden" name="id" value={j.id} />
-                        <label className="lab" htmlFor={`note-${j.id}`}>Or send it back, and tell the clinic what to change</label>
-                        <textarea id={`note-${j.id}`} name="note" rows={3} />
-                        <button type="submit" className="btn ghost">Send back</button>
-                      </form>
-                    </div>
+                    <ReviewButtons id={j.id} />
                   </article>
                 );
               })}
