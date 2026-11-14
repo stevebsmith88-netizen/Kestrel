@@ -11,12 +11,12 @@ import ReviewButtons from "@/components/ReviewButtons";
 import { loadActivity } from "@/lib/job-activity";
 import { REVIEW_NOTICES, reviewMessage } from "@/lib/review-notices";
 import { changedFields } from "@/lib/job-diff";
-import { answerLabel, employeeBandLabel, employerFlags, employmentLabel, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
+import { answerLabel, employeeBandLabel, employmentLabel, longDate, practiceLabel } from "@/lib/jobs";
 import { payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { supabaseAdmin } from "@/lib/supabase-server";
-import { REVIEW_COLUMNS, loadReviewQueue } from "@/lib/review-queue";
-import { bandMismatchFlag, paymentLine } from "@/lib/checkout-mode";
+import { REVIEW_COLUMNS, loadReviewQueue, queueFlagList } from "@/lib/review-queue";
+import { paymentLine } from "@/lib/checkout-mode";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -60,12 +60,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
           ) : (
             <div className="joblist">
               {jobs.map((j) => {
-                const flags = [
-                  ...(j.posted_at ? [`Changes to a job that was already live since ${longDate(j.posted_at)}.${liveWording.has(j.id) ? " What changed is listed below." : " No copy of the earlier wording was kept for this one."}`] : []),
-                  ...reviewFlags(j),
-                  ...(bandMismatchFlag(j.title, j.role_category) ? [bandMismatchFlag(j.title, j.role_category) as string] : []),
-                  ...employerFlags({ website: j.employers?.website, notifyEmail: notifyEmails.get(j.employer_id), directHireConfirmedAt: j.employers?.direct_hire_confirmed_at }),
-                ];
+                const flags = queueFlagList(j, notifyEmails.get(j.employer_id), liveWording.has(j.id));
                 return (
                   <article className="card review" key={j.id}>
                     <div className="listhead">

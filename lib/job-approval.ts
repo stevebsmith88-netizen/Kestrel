@@ -37,7 +37,8 @@ export async function emailClinic(db: SupabaseClient, jobId: string, kind: "live
 // The result: the key of the message to show (lib/review-notices.ts) and, for a payment problem, a short plain reason.
 export type ApprovalResult = { key: string; why?: string };
 
-export async function approveJobNow(id: string, actor: "admin" | "system"): Promise<ApprovalResult> {
+// `via` says where an admin approval came from, so the job's Activity notes it (for example "from Slack").
+export async function approveJobNow(id: string, actor: "admin" | "system", via?: string): Promise<ApprovalResult> {
   const db = supabaseAdmin();
   if (!UUID.test(id) || !db) return { key: "error" };
   const now = new Date();
@@ -49,7 +50,7 @@ export async function approveJobNow(id: string, actor: "admin" | "system"): Prom
   // The card saved when the clinic sent the job is charged now, for the price of the role. A job with nothing to charge goes straight through.
   // If the card is refused the job stays in the queue, the clinic is asked for a new card, and nothing is published.
   if (before) {
-    if (actor === "admin") await logJobActivity(db, id, "Approved by Kestrel", { actor: "admin" });
+    if (actor === "admin") await logJobActivity(db, id, via ? `Approved by Kestrel, ${via}` : "Approved by Kestrel", { actor: "admin" });
     else await logJobActivity(db, id, "Approved again automatically after the clinic saved a new card");
     const charge = await chargeForJob(id);
     if (!charge.ok) {

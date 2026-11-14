@@ -1,3 +1,4 @@
+import { jobSlackExtras } from "@/lib/slack-approve-buttons";
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/email";
@@ -267,7 +268,8 @@ export async function confirmSinglePost(db: SupabaseClient, job: { id: string; t
 export async function moveToReview(db: SupabaseClient, job: { id: string; title: string }, clinicName: string): Promise<void> {
   await db.from("jobs").update({ status: "in_review" }).eq("id", job.id).eq("status", "draft");
   await notifyAdmin("A job is waiting for review", [job.title, clinicName], "/admin/review");
-  await notifySlack("A job is waiting for review", [job.title, clinicName], { path: "/admin/review", text: "Open the review queue" }, "jobs");
+  const extra = await jobSlackExtras(db, job.id);
+  await notifySlack("A job is waiting for review", [job.title, clinicName, ...extra.lines], { path: "/admin/review", text: "Open the review queue" }, "jobs", extra.buttons);
   refreshJobPages();
 }
 

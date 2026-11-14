@@ -1,5 +1,7 @@
 "use server";
 
+import { approveClaimCore } from "@/lib/claim-approval";
+import { claimSlackExtras } from "@/lib/slack-approve-buttons";
 import { notifySlack } from "@/lib/notify-slack";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -116,46 +118,23 @@ export async function verifyClaim(form: FormData) {
   if (!claim || !valid) redirect("/claim/verify?problem=1");
   await admin.from("listing_claims").update({ status: "pending_review", verified_at: new Date().toISOString(), token_hash: null, token_expires_at: null }).eq("id", claim.id);
   const { data: employer } = await admin.from("employers").select("clinic_name").eq("id", claim.employer_id).maybeSingle();
-  await notifySlack("A claim is waiting for review", [employer?.clinic_name ?? "A clinic"], { path: "/admin/claims", text: "Open the claims" }, "support");
+  const extra = await claimSlackExtras(admin, claim.id);
+  await notifySlack("A claim is waiting for review", [employer?.clinic_name ?? "A clinic", ...extra.lines], { path: "/admin/claims", text: "Open the claims" }, "support", extra.buttons);
   await notifyAdmin("A clinic has confirmed a claim", [`${employer?.clinic_name ?? "A clinic"}`, `${claim.claimant_name} (${claim.role_at_clinic}) confirmed ${claim.claimant_email}.`], "/admin/claims");
   redirect("/claim/verify?done=1");
 }
 
-// Admin: approve a claim. The clinic becomes the owner of the profile and its listing.
+// Admin: approve a claim, from the claims page.
 export async function approveClaim(form: FormData) {
   await requireRole("admin");
   const id = text(form, "id", 60);
   const admin = supabaseAdmin();
   if (!UUID.test(id) || !admin) redirect("/admin/claims?notice=error");
-  const { data: claim } = await admin.from("listing_claims").select("id, user_id, employer_id, claimant_email").eq("id", id).eq("status", "pending_review").maybeSingle();
-  if (!claim) redirect("/admin/claims?notice=error");
-
-  const { data: mine } = await admin.from("employers").select("id").eq("owner_id", claim.user_id).limit(1).maybeSingle();
-  if (mine) redirect("/admin/claims?notice=has-clinic");
-
-  // Only an unclaimed listing can be claimed, even if two claims are approved at once.
-  const { data: taken } = await admin.from("employers").update({ owner_id: claim.user_id, claimed: true }).eq("id", claim.employer_id).eq("claimed", false).select("id, clinic_name");
-  if (!taken?.length) redirect("/admin/claims?notice=taken");
-
-  await admin.from("employer_contacts").upsert({ employer_id: claim.employer_id, notify_email: claim.claimant_email }, { onConflict: "employer_id" });
-  const now = new Date().toISOString();
-  await admin.from("listing_claims").update({ status: "approved", decided_at: now }).eq("id", claim.id);
-  await admin.from("listing_claims").update({ status: "rejected", decided_at: now, decision_note: "Another claim for this listing was approved." }).eq("employer_id", claim.employer_id).in("status", ["pending_email", "pending_review"]);
-
-  const mail = emailLayout({
-    heading: "Your listing is yours",
-    paragraphs: [
-      `Good news. Your claim for ${taken[0].clinic_name} is approved. The listing is now marked as yours, and applications will arrive in your dashboard.`,
-      "Please review your clinic profile first, and add anything the listing is missing, such as your pay range. A job that is already live cannot be edited, so if you would like to change it, close it and post it again with your own wording.",
-    ],
-    buttonText: "Open my clinic profile",
-    buttonUrl: `${SITE_URL}/clinic/profile`,
-  });
-  await sendEmail({ to: claim.claimant_email, subject: "Your Kestrel listing is approved", ...mail });
-  revalidatePath("/admin/claims");
-  refreshJobPages();
+  const result = await approveClaimCore(admin, id);
+  if (!result.ok) redirect(`/admin/claims?notice=${result.reason}`);
   redirect("/admin/claims?notice=approved");
 }
+
 
 export async function rejectClaim(form: FormData) {
   await requireRole("admin");

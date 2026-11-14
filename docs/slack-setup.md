@@ -20,7 +20,17 @@ You do not have to do all 4 at once. A channel without its own address uses the 
 1. In Slack, make the 4 channels (the plus beside Channels, then Create a channel). Make them private if you like. Names as in the table.
 2. Go to api.slack.com/apps and open the Kestrel app you already made (the one with your current webhook).
 3. Choose Incoming Webhooks, then Add New Webhook to Workspace, pick #kestrel-jobs, and Allow. Copy the new address. Repeat for each channel. One app can have many webhooks.
-4. In Vercel, for both projects (live and demo), open Settings, Environment Variables, and add each address under its name from the table, marked Sensitive. Then redeploy without the build cache.
+4. Put each address in Vercel. A "Vercel setting" here means an Environment Variable, which is just a named box the website reads. Do this in the live project, and again in the demo project:
+   1. Go to vercel.com and open the project (**kestrel** is the live site, **kestrel-demo** is the demo).
+   2. Click **Settings** along the top, then **Environment Variables** on the left.
+   3. Click **Add New** (or the box at the top of the list).
+   4. In **Key**, type the name from the table above exactly, for example `SLACK_WEBHOOK_URL_JOBS`.
+   5. In **Value**, paste the webhook address for that channel (it starts `https://hooks.slack.com/services/`).
+   6. Under **Environments**, tick **Production**. You do not need Preview.
+   7. Tick **Sensitive** if it is offered, so the value is hidden afterwards. Click **Save**.
+   8. Repeat for the other channels, 1 key each.
+   9. The website only reads new settings when it is built again. Open **Deployments**, click the 3 dots beside the newest one, choose **Redeploy**, and untick **Use existing Build Cache**, then confirm.
+   The demo can use the same addresses as live, since every message says demo or live.
 5. In Kestrel, open the initials menu, Payments and Stripe, and press Send a test message to each channel. Each message names the channel it is for, so you can see every one land in the right place.
 
 ## Making Slack work for you (no code needed)
@@ -30,9 +40,28 @@ You do not have to do all 4 at once. A channel without its own address uses the 
 - **Phone:** install the Slack app and sign in with the same account, so alerts reach your phone.
 - **Bookmarks and pins:** pin the link to Admin in each channel, so it is 1 tap away.
 
+## Approve buttons (jobs and claims)
+
+Once these are set up, the alert for a job waiting for review, and for a claim confirmed by email, has an **Approve** button. Pressing it asks "Are you sure?", then approves exactly as the review queue does, and replaces the buttons with "Approved by you from Slack at 4:12 pm". A job with anything flagged has no button, only a link to the review queue. The plan is in `docs/plans/slack-approvals.md`. Do this in the **live** project only, because the demo gets no buttons.
+
+1. At api.slack.com/apps, open the Kestrel app. Choose **Interactivity and Shortcuts**, switch it **On**, and in **Request URL** enter `https://eyecarejobs.ca/api/slack/actions`, then **Save Changes**.
+2. Still in the app, choose **Basic Information** and find **Signing Secret**. Click **Show**, copy it. It is a password, so never paste it into a chat.
+3. In Vercel (the **kestrel** project, Settings, Environment Variables), add `SLACK_SIGNING_SECRET` with that value, Production, Sensitive.
+4. Find your own Slack member ID: in Slack click your picture, then **Profile**, then the three dots, then **Copy member ID** (it looks like `U0ABC123`). In Vercel add `SLACK_APPROVER_IDS` with that value, Production. To let a trusted person approve later, add their ID after a comma.
+5. Redeploy as in step 4 above (Deployments, the 3 dots, Redeploy, untick the build cache).
+6. The next job or claim alert will have the button. If it does not, tell Claude what you see.
+
+## A tech channel for Vercel and GitHub (no code)
+
+Slack has its own apps for these, so nothing needs building. Make a channel called #kestrel-tech. Steps can differ slightly from what is written here, so if a screen looks different, tell Claude what you see.
+
+- **Vercel:** in Vercel, open Integrations and add the Slack integration for your team, then in #kestrel-tech use its link command to connect the 2 projects (live and demo). Choose to be told about failed deployments and finished production deployments only. Every pull request makes a preview build, so telling it everything would be very noisy.
+- **GitHub:** in Slack, add the GitHub app, then in #kestrel-tech subscribe the repository (the command is `/github subscribe` followed by `stevebsmith88-netizen/Kestrel`). Keep it to pull requests and failed checks, and turn off the rest, so the channel stays quiet.
+- Muting #kestrel-tech overnight is fine. Nothing there needs an answer from you.
+
 ## Where Slack can go next
 
 - A shared channel for a virtual assistant with only counts and links, once their access is designed (next tasks, item 6).
 - Reminders and a weekly summary of the numbers.
 - Vercel and GitHub notifications into a tech channel, using Slack's own apps with no code.
-- Later, approving or sending back a job from the alert itself, which needs a Slack app with buttons and is a separate piece of work.
+- Approving a job or a claim from the alert itself, with a button. The plan is in `docs/plans/slack-approvals.md`.
