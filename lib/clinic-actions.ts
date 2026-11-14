@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { currentPaymentMode, recordFreeLaunchPost, startCardSetup } from "@/lib/job-payment-flow";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
@@ -149,18 +150,24 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     wasLive = current?.status === "live";
     if (wasLive && !submit) return { error: "A live job can't be saved as a draft. Send your changes for review, or close the job." };
   }
+  // After the free launch (or when checkout is being tried), a job sent for review first saves a card with Stripe, which charges nothing.
+  // So it is kept as a draft until the card is saved, and only then goes into the review queue (lib/job-payment-flow.ts).
+  const cardMode = submit && !wasLive && currentPaymentMode() === "card";
+  const saveRow = cardMode ? { ...row, status: "draft" as const } : row;
+  let savedId: string | null = id ?? null;
   if (id) {
-    const { data, error } = await db.from("jobs").update(await fitExpected(row)).eq("id", id).select("id");
+    const { data, error } = await db.from("jobs").update(await fitExpected(saveRow)).eq("id", id).select("id");
     if (error || !data?.length) {
       console.error("Job update failed:", error?.code, error?.message);
       return { error: "We couldn't save this job. It may already be in review or live." };
     }
   } else {
-    const { error } = await db.from("jobs").insert(await fitExpected({ ...row, employer_id: employer.id }));
+    const { data: created, error } = await db.from("jobs").insert(await fitExpected({ ...saveRow, employer_id: employer.id })).select("id");
     if (error) {
       console.error("Job create failed:", error.code, error.message);
       return { error: "We couldn't save this job. Please check the form and try again." };
     }
+    savedId = created?.[0]?.id ?? null;
   }
 
   // Optionally keep this post as a template for next time (the two required questions are not kept).
@@ -174,6 +181,21 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       console.error("Template save failed:", templateError.code, templateError.message);
       templateFailed = true;
     } else savedTemplate = true;
+  }
+  if (submit && !wasLive && savedId) {
+    if (cardMode) {
+      const started = await startCardSetup(savedId);
+      if ("url" in started) {
+        revalidatePath("/clinic");
+        redirect(started.url);
+      }
+      if ("error" in started) return { error: started.error };
+      // A card is already saved for this job (it was withdrawn and is being sent again), so it goes straight to review.
+      await db.from("jobs").update({ status: "in_review" }).eq("id", savedId).eq("status", "draft");
+    } else {
+      const admin = supabaseAdmin();
+      if (admin) await recordFreeLaunchPost(admin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name);
+    }
   }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");

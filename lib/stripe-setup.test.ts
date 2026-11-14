@@ -62,3 +62,13 @@ test("errors from Stripe become plain next steps without the key", () => {
   assert.ok(!explainStripeError(500, "oops sk_test_51SECRET").includes("SECRET"));
   assert.match(explainStripeError(null, "fetch failed"), /could not be reached/);
 });
+
+test("the webhook secret is optional but must look right when set", () => {
+  const without = stripeChecks({ STRIPE_SECRET_KEY: SK, NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: PK });
+  assert.equal(find(without, "STRIPE_WEBHOOK_SECRET")!.ok, true);
+  assert.match(find(without, "STRIPE_WEBHOOK_SECRET")!.detail, /Not set yet/);
+  const good = stripeChecks({ STRIPE_WEBHOOK_SECRET: "whsec_abc123DEF" });
+  assert.equal(find(good, "STRIPE_WEBHOOK_SECRET")!.ok, true);
+  assert.ok(!JSON.stringify(good).includes("abc123DEF"), "the secret never appears");
+  for (const bad of [" whsec_abc", "sk_test_abc", "\"whsec_abc\""]) assert.equal(find(stripeChecks({ STRIPE_WEBHOOK_SECRET: bad }), "STRIPE_WEBHOOK_SECRET")!.ok, false, bad);
+});

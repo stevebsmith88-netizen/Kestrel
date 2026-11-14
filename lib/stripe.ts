@@ -43,15 +43,16 @@ export function formEncode(data: Record<string, unknown>, prefix = ""): string[]
 }
 
 // A POST to Stripe (this creates or changes something), returning the JSON or throwing a StripeError with Stripe's own message.
-export async function stripePost<T>(path: string, key: string, data: Record<string, unknown>, timeoutMs = 20_000): Promise<T> {
+// An idempotency key makes a repeated request (a double click, a retry) do its work only once: Stripe returns the first answer.
+export async function stripePost<T>(path: string, key: string, data: Record<string, unknown>, options: { timeoutMs?: number; idempotencyKey?: string } = {}): Promise<T> {
   let response: Response;
   try {
     response = await fetch(`${STRIPE_API}${path}`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/x-www-form-urlencoded" },
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/x-www-form-urlencoded", ...(options.idempotencyKey ? { "Idempotency-Key": options.idempotencyKey } : {}) },
       body: formEncode(data).join("&"),
       cache: "no-store",
-      signal: AbortSignal.timeout(timeoutMs),
+      signal: AbortSignal.timeout(options.timeoutMs ?? 20_000),
     });
   } catch (error) {
     throw new StripeError(null, error instanceof Error ? error.message : String(error));

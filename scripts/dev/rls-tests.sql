@@ -103,6 +103,13 @@ $$;
 
 -- ---------------------------------------------------------------- what already held in the audit (kept so it stays that way)
 
+-- Payments (0048): clinic C has 2, clinic D has 1.
+insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status, stripe_payment_method_id, stripe_payment_intent_id)
+values
+  ((select id from t.things where name = 'job_c_draft'), (select id from t.things where name = 'employer_c'), 'Optician', 'Clinic C', 'opticians', 7900, 'card_saved', 'pm_test_c', null),
+  ((select id from t.things where name = 'job_c_live'), (select id from t.things where name = 'employer_c'), 'Optician', 'Clinic C', 'opticians', 7900, 'charged', 'pm_test_c', 'pi_test_c'),
+  ((select id from t.things where name = 'job_d_live'), (select id from t.things where name = 'employer_d'), 'Optician', 'Clinic D', 'opticians', 7900, 'card_saved', 'pm_test_d', null);
+
 select t.try('held', 'visitor cannot read profiles', 'visitor', 'count', 'select id from public.profiles', 'blocked');
 select t.try('held', 'visitor cannot read candidate profiles', 'visitor', 'count', 'select user_id from public.candidate_profiles', 'blocked');
 select t.try('held', 'visitor cannot read applications', 'visitor', 'count', 'select id from public.applications', 'blocked');
@@ -325,3 +332,24 @@ select t.try('0047', 'a candidate still cannot create a clinic', 'ann', 'write',
 select t.try('0047', 'the 26th location is refused', 'server', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) select '{clinic_d}', 'Location ' || n, 'corporate', 'Alberta', 'Red Deer' from generate_series(1, 25) n$$, 'refused');
 select t.try('0047', '25 locations are fine', 'server', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) select '{clinic_d}', 'Location ' || n, 'corporate', 'Alberta', 'Red Deer' from generate_series(1, 24) n$$, '24 rows');
 select t.try('0047', 'an invitation can cover more locations', 'server', 'value', $$select coalesce(array_length(also_employer_ids, 1), 0)::text from public.employer_invites limit 1$$, '(nothing)');
+
+-- ---------------------------------------------------------------- 0048: job payments (a card saved at submission, charged at approval)
+select t.try('0048', 'the server records a saved card for a job', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status, stripe_payment_method_id) values (null, '{employer_c}', 'Optician', 'Clinic C', 'opticians', 7900, 'card_saved', 'pm_test')$$, '1 rows');
+select t.try('0048', 'the same job cannot have 2 payments in play (no double charge)', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_c_live}', '{employer_c}', 'Optician', 'Clinic C', 'opticians', 7900, 'awaiting_card')$$, 'refused');
+select t.try('0048', 'a failed payment does not block a new card for the same job', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_d_live}', '{employer_d}', 'Optician', 'Clinic D', 'opticians', 7900, 'failed')$$, '1 rows');
+select t.try('0048', 'a price below zero is refused', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_c}', 'Optician', 'Clinic C', 'opticians', -1, 'failed')$$, 'refused');
+select t.try('0048', 'the owner reads the status of their own 2 payments', 'clinic_c', 'count', 'select id, status, amount_cents from public.job_payments', '2 rows');
+select t.try('0048', 'a team member with view and edit reads them too', 'clinic_edith', 'count', 'select id, status from public.job_payments', '2 rows');
+select t.try('0048', 'another clinic reads only its own', 'clinic_d', 'count', 'select id from public.job_payments', '1 rows');
+select t.try('0048', 'the Stripe card is never readable by a clinic', 'clinic_c', 'count', 'select stripe_payment_method_id from public.job_payments', 'refused');
+select t.try('0048', 'the Stripe payment id is never readable by a clinic', 'clinic_c', 'count', 'select stripe_payment_intent_id from public.job_payments', 'refused');
+select t.try('0048', 'a clinic cannot add a payment of its own', 'clinic_c', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_c}', 'Optician', 'Clinic C', 'opticians', 0, 'free_launch')$$, 'refused');
+select t.try('0048', 'a clinic cannot change what it was charged', 'clinic_c', 'write', $$update public.job_payments set amount_cents = 0$$, 'refused');
+select t.try('0048', 'a clinic cannot delete a payment record', 'clinic_c', 'write', $$delete from public.job_payments$$, 'refused');
+select t.try('0048', 'a candidate reads none of them', 'ann', 'count', 'select id from public.job_payments', '0 rows');
+select t.try('0048', 'a visitor cannot read them', 'visitor', 'count', 'select id from public.job_payments', 'refused');
+select t.try('0048', 'which Stripe customer a clinic is stays on the server', 'clinic_c', 'count', 'select * from public.employer_billing', 'refused');
+select t.try('0048', 'a visitor cannot read the billing table', 'visitor', 'count', 'select * from public.employer_billing', 'refused');
+select t.try('0048', 'the server links a clinic to a Stripe customer', 'server', 'write', $$insert into public.employer_billing (employer_id, stripe_customer_id) values ('{employer_c}', 'cus_test')$$, '1 rows');
+select t.try('0048', 'a clinic is 1 Stripe customer only', 'server', 'write', $$insert into public.employer_billing (employer_id, stripe_customer_id) values ('{employer_c}', 'cus_a'), ('{employer_c}', 'cus_b')$$, 'refused');
+select t.try('0048', 'the payment record outlives the job (the link is cleared when a job is deleted)', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.job_payments'::regclass and confrelid = 'public.jobs'::regclass$$, 'n');

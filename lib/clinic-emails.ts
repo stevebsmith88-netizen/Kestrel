@@ -37,6 +37,24 @@ export function jobNeedsChangeEmail({ title, jobId, note }: { title: string; job
   };
 }
 
+// The card a clinic saved was refused when its job was approved. The job waits, and nothing is charged until a new card is saved.
+export function cardRefusedEmail({ title, jobId }: { title: string; jobId: string }) {
+  return {
+    subject: `We could not charge your card for ${title}`,
+    ...emailLayout({
+      heading: "We could not charge your card",
+      paragraphs: [
+        `We checked your ${title} job and it is ready to go live, but your card was refused when we tried to charge it.`,
+        "Please save a new card and we will publish the job straight away. You are not charged until then, and a card is only charged once the job is approved.",
+        "If you need a hand, reply to this email.",
+        "The Kestrel team",
+      ],
+      buttonText: "Save a new card",
+      buttonUrl: `${SITE}/clinic/jobs/${jobId}/pay`,
+    }),
+  };
+}
+
 // The line clinics see wherever they are asked to look at applicants.
 export const RESPONSE_DAYS = 5;
 export const RESPONSE_NOTE = `Candidates are waiting to hear back. A reply within ${RESPONSE_DAYS} days, even a short no, keeps good people from accepting other offers.`;
