@@ -223,6 +223,19 @@ export const HELP: HelpSection[] = [
         ],
         links: [{ label: "Account settings", href: "/account" }],
       },
+      {
+        id: "is-there-an-app",
+        title: "Is there a Kestrel app?",
+        keywords: ["app", "iphone", "android", "phone", "mobile", "download", "home screen", "install", "notifications"],
+        answer: [
+          "Not at the moment. Kestrel works in your phone's browser, and its pages are made to fit a small screen, so you can look for jobs, apply, post a job and move applicants along from your phone.",
+          "Until there is an app, 2 things help most. Add Kestrel to your phone's home screen, so it opens with 1 tap like an app. And choose email alerts, so new jobs and new applicants come to you. See [job alerts](/help#job-alerts) if you are looking for a job, or [email choices](/help#email-choices) if you are a clinic.",
+        ],
+        steps: [
+          "iPhone: open Kestrel in Safari, tap the **Share** button, then choose **Add to Home Screen**.",
+          "Android: open Kestrel in Chrome, tap the menu with 3 dots, then choose **Add to Home screen** or **Install app**.",
+        ],
+      },
     ],
   },
   {
@@ -648,6 +661,22 @@ export const HELP: HelpSection[] = [
           "Visits from search engines and link previews are left out, and so are your own visits and our team's. Nothing about the visitor is stored. The counts are guidance, not exact numbers: someone who opens the job in several tabs or on several devices is counted more than once. An apply click is not an application, because a person may press the button and not finish. The number of applicants is the figure to trust.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
+      },
+      {
+        id: "receipts-and-billing",
+        title: "Where do I find my receipts and invoices?",
+        keywords: ["receipt", "invoice", "payment", "paid", "charge", "bill", "billing", "hst", "tax", "download", "card"],
+        answer: [
+          "Under your initials, open **Billing**. It lists every payment for the location you are working in, with the date, the job, the amount and a link to download the receipt or view the invoice again. Amounts are before HST.",
+          "During the free launch you are not asked for a card and nothing is charged. When fees begin, you save a card when you send a job for review, and you are not charged then. The card is charged only when our team approves the job, and a job we do not approve is never charged. A job that is paid shows a **Paid** tag on your dashboard, with a link to its receipt.",
+          "If your card is refused, the job on your dashboard shows **Card payment error: update card**. Press it to save a different card, and the job goes live as soon as the new card works.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Billing**.",
+          "Find the payment, then press **Download** for the receipt or **View** for the invoice.",
+          "Using several locations? Switch location at the top of the page to see each one's payments.",
+        ],
+        links: [{ label: "Billing", href: "/clinic/billing" }],
       },
     ],
   },

@@ -8,7 +8,13 @@ export default function JobPaymentTag({ jobId, jobStatus, payment, editor }: { j
   if (!payment) return null;
   const pay = `/clinic/jobs/${jobId}/pay`;
   if (payment.status === "charged") {
-    return <p className="meta"><span className="badge b-live">Paid {dollars(payment.amount_cents)}</span> plus HST</p>;
+    return (
+      <p className="meta">
+        <span className="badge b-live">Paid {dollars(payment.amount_cents)}</span> plus HST
+        {payment.invoice_pdf_url && <> · <a href={payment.invoice_pdf_url} className="linkbtn" target="_blank" rel="noopener noreferrer">Download receipt</a></>}
+        {payment.invoice_url && <> · <a href={payment.invoice_url} className="linkbtn" target="_blank" rel="noopener noreferrer">View invoice</a></>}
+      </p>
+    );
   }
   if (payment.status === "failed" && jobStatus === "in_review") {
     return (
