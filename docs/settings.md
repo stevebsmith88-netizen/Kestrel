@@ -26,6 +26,8 @@ Claude cannot see Vercel, so the "should be" columns are what the code and the d
 | `CRON_SECRET` | Protects the daily job, so only Vercel can start it. | a long random string | Not needed | **Yes** |
 | `ANTHROPIC_API_KEY` | The ad builder, the careers page reader and the province search. Without it those buttons are hidden. | the Anthropic key | optional (the same spend limit applies) | **Yes** |
 | `ANTHROPIC_WORKSPACE_ID` | Only needed if the Anthropic key was not made inside a workspace. | Leave unset unless the Setup check on /admin/found asks for it | Leave unset | No |
+| `STRIPE_SECRET_KEY` | Talks to Stripe from the server (checkout, payments). Starts `sk_test_` in test mode, or `rk_test_` for a restricted key. Admin, Payments checks it. | the test secret key until prices are switched on | the test secret key (never a live key) | **Yes** |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe's public key, safe in the browser. Starts `pk_test_` in test mode, and must be the same mode as the secret key. | the test publishable key until prices are switched on | the test publishable key | No |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | The bot check's public key (Cloudflare Turnstile). | the Turnstile site key | Not needed | No |
 | `TURNSTILE_SECRET_KEY` | The bot check's private key. On the live site, forms are refused if it is missing. | the Turnstile secret key | Not needed | **Yes** |
 | `INDEXNOW_KEY` | Tells Bing and others about new job pages straight away. Does nothing until set. | the IndexNow key | Leave unset (the demo is not indexed) | No |
