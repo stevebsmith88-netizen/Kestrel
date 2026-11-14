@@ -2,19 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
-import JobActivity from "@/components/JobActivity";
-import StatusBadge from "@/components/StatusBadge";
+import AdminJobCard, { type AdminJob } from "@/components/AdminJobCard";
 import { requireRole } from "@/lib/auth";
-import { paymentLine } from "@/lib/checkout-mode";
 import { loadActivity } from "@/lib/job-activity";
-import { longDate, type JobStatus } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Jobs | Admin | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
-type Row = { id: string; title: string; status: JobStatus; role_category: string | null; city: string; province: string; posted_at: string | null; expires_at: string | null; updated_at: string; employers: { clinic_name: string } | null };
+type Row = AdminJob;
 type Payment = { job_id: string; status: string; amount_cents: number; band: string; failure_message: string | null };
 
 // Admin, Jobs (Steve, 14th November 2026): the 60 jobs that changed most recently, each with its payment and a closed Activity box showing
@@ -45,26 +42,7 @@ export default async function AdminJobs() {
             <section className="card"><p>No jobs yet beyond drafts.</p></section>
           ) : (
             <div className="joblist">
-              {jobs.map((j) => (
-                <article className="card review" key={j.id}>
-                  <div className="listhead">
-                    <div>
-                      <h2>{j.title}</h2>
-                      <p className="meta">
-                        {j.employers?.clinic_name} · {j.role_category} · {j.city}, {j.province}
-                        {j.posted_at ? ` · live since ${longDate(j.posted_at)}` : ""}
-                        {j.status === "live" && j.expires_at ? ` until ${longDate(j.expires_at)}` : ""}
-                      </p>
-                    </div>
-                    <StatusBadge status={j.status} />
-                  </div>
-                  <dl className="facts">
-                    <div><dt>Payment</dt><dd>{paymentLine(payments.get(j.id), j.role_category)}</dd></div>
-                  </dl>
-                  <JobActivity rows={activity.get(j.id) ?? []} />
-                  {j.status === "live" && <p className="meta"><Link href={`/jobs/${j.id}`}>View the job page</Link></p>}
-                </article>
-              ))}
+              {jobs.map((j) => <AdminJobCard key={j.id} job={j} payment={payments.get(j.id)} activity={activity.get(j.id) ?? []} />)}
             </div>
           )}
         </div>

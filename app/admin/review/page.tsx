@@ -1,8 +1,10 @@
 import { withExpected } from "@/lib/expected-columns";
 import type { Metadata } from "next";
+import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
+import AdminJobCard, { type AdminJob, type AdminPayment } from "@/components/AdminJobCard";
 import JobActivity from "@/components/JobActivity";
 import ReviewButtons from "@/components/ReviewButtons";
 import { loadActivity } from "@/lib/job-activity";
@@ -24,11 +26,18 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   const { notice, why } = await searchParams;
   const db = supabaseAdmin();
   const { jobs, notifyEmails, bands, liveWording } = await loadReviewQueue(db, await withExpected(REVIEW_COLUMNS));
-  const activity = db ? await loadActivity(db, jobs.map((j) => j.id)) : new Map();
+  // Jobs handled in the last 7 days (approved and live, or sent back), so a job does not vanish the moment it is dealt with and its notes can still be read.
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: recentRows } = db
+    ? await db.from("jobs").select("id, title, status, role_category, city, province, posted_at, expires_at, updated_at, employers(clinic_name)").in("status", ["live", "rejected"]).gte("updated_at", weekAgo).order("updated_at", { ascending: false }).limit(25)
+    : { data: null };
+  const recent = (recentRows ?? []) as unknown as AdminJob[];
+  const allIds = [...jobs.map((j) => j.id), ...recent.map((j) => j.id)];
+  const activity = db ? await loadActivity(db, allIds) : new Map();
   // The payment for each job (migration 0048). A database without it just shows no payment line.
-  const payments = new Map<string, { status: string; amount_cents: number; band: string; failure_message: string | null }>();
-  if (db && jobs.length) {
-    const { data: rows } = await db.from("job_payments").select("job_id, status, amount_cents, band, failure_message, created_at").in("job_id", jobs.map((j) => j.id)).order("created_at", { ascending: false });
+  const payments = new Map<string, AdminPayment>();
+  if (db && allIds.length) {
+    const { data: rows } = await db.from("job_payments").select("job_id, status, amount_cents, band, failure_message, created_at").in("job_id", allIds).order("created_at", { ascending: false });
     (rows ?? []).forEach((r) => !payments.has(r.job_id) && payments.set(r.job_id, r));
   }
 
@@ -102,6 +111,16 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                   </article>
                 );
               })}
+            </div>
+          )}
+
+          <h2 className="subhead">Recently handled</h2>
+          <p className="help">Jobs approved or sent back in the last 7 days, newest first, with their payment and Activity. The full list is under <Link href="/admin/jobs">Jobs</Link>.</p>
+          {recent.length === 0 ? (
+            <section className="card"><p>Nothing handled in the last 7 days.</p></section>
+          ) : (
+            <div className="joblist">
+              {recent.map((j) => <AdminJobCard key={j.id} job={j} payment={payments.get(j.id)} activity={activity.get(j.id) ?? []} />)}
             </div>
           )}
         </div>

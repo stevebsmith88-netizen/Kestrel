@@ -1,5 +1,7 @@
 # Stripe: plan and handover (14th November 2026)
 
+Before real money moves, work through `docs/plans/stripe-go-live-checklist.md`.
+
 Steve is setting up Stripe himself today and will carry on in a new chat. Nothing is built yet. **Read this first**, then `CLAUDE.md` (pricing rules), `lib/pricing.ts`, `docs/pass-procedures.md`, `docs/legal/refund-policy-draft.md` and section 5 of `docs/plans/clinic-and-supplier-pages.md` (Sales and HST page).
 
 ## Decisions already made (do not re-open)

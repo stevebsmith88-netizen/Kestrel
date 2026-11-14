@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/email";
 import { refreshJobPages } from "@/lib/job-cache";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { bandForRole, bandInfo, chargeNotice, dollars, jobPriceCents, paymentMode, type PaymentMode } from "@/lib/checkout-mode";
+import { AFTER_SUBMIT_NOTICE, bandForRole, bandInfo, chargeNotice, dollars, jobPriceCents, paymentMode, type PaymentMode } from "@/lib/checkout-mode";
 import { logJobActivity } from "@/lib/job-activity";
 import { plainReason } from "@/lib/payment-reasons";
 import { StripeError, stripeGet, stripeKey, stripePost } from "@/lib/stripe";
@@ -91,7 +91,7 @@ export async function startCardSetup(jobId: string, returnTo: "submit" | "update
       // methods). In setup mode only methods that can be saved and charged later are shown.
       success_url: `${SITE_URL}/clinic/jobs/paid?session_id={CHECKOUT_SESSION_ID}&from=${returnTo}`,
       cancel_url: `${SITE_URL}/clinic/jobs/paid?cancelled=${job.id}`,
-      custom_text: { submit: { message: chargeNotice(cents) } },
+      custom_text: { submit: { message: chargeNotice(cents) }, after_submit: { message: AFTER_SUBMIT_NOTICE } },
       metadata: meta,
       setup_intent_data: { metadata: meta, description: `Card saved for the job post "${job.title}"` },
     }, { idempotencyKey: `kestrel-setup-${payment.id}` });

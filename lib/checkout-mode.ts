@@ -78,3 +78,6 @@ export function paymentLine(row: PaymentRow | null | undefined, role: string | n
       return "Cancelled. Nothing was charged.";
   }
 }
+
+// The second line on Stripe's page, shown once the card is saved, so the clinic knows what happens next.
+export const AFTER_SUBMIT_NOTICE = "Thank you. Your job now goes to our team for a manual review. You are charged only once it is approved.";
