@@ -141,8 +141,8 @@ on conflict (employer_id) do update set employee_band = excluded.employee_band;
 -- Change the 2 addresses below if you used different ones. They are the addresses you signed up with on the demo site.
 do $$
 declare
-  clinic_email    text := 'kestrel+clinic@eyecarejobs.ca';
-  candidate_email text := 'kestrel+candidate@eyecarejobs.ca';
+  clinic_email    text := 'kestrel+democlinic@eyecarejobs.ca';
+  candidate_email text := 'kestrel+democandidate@eyecarejobs.ca';
   clinic_user uuid := (select id from auth.users where email = clinic_email limit 1);
   cand_user   uuid := (select id from auth.users where email = candidate_email limit 1);
   emp uuid;
