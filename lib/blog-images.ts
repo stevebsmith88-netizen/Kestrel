@@ -30,4 +30,5 @@ export const BLOG_IMAGES: Record<string, { width: number; height: number }> = {
   "/images/blog/onboarding-first-30-days.jpg": { width: 1354, height: 762 },
   "/images/blog/reference-checks-eye-care.jpg": { width: 1354, height: 762 },
   "/images/blog/hiring-seasonal-workers.jpg": { width: 1354, height: 762 },
+  "/images/blog/empty-optician-chair-cost.jpg": { width: 1354, height: 762 },
 };

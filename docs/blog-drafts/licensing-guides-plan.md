@@ -63,3 +63,8 @@ No regulator in any province. Sources: the CCOA page (opto.ca/ccoa, checked 9th 
 
 1. Approve the 3 guides and their dates, or change them.
 2. This cloud session could not open most regulator sites (they are outside its network settings). Either open the "To check" links yourself and tell me what you find, or let the session reach them and I will check each one before writing.
+
+## Optometrist guide: extra source (14th November 2026)
+
+The CAO's "Optometry in Canada" 2025 report (see `docs/blog-drafts/women-in-eye-care-research.md`) gives the graduating class (94 Waterloo, 43 Montréal), the internationally trained programs (IOBP and ASOPP), optometrists per 100,000 people by province, and the rural shortage. Useful for the optometrist guide and for the optometrist pay post.
+
