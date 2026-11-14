@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0052), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0053), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3221,6 +3221,53 @@ grant select (founding, price_locked_until) on public.location_passes to authent
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
+-- 0053_job_headline.sql
+-- ======================================================================
+-- 0053: an optional one line headline on a job (Steve, 14th November 2026; plan in CLAUDE.md, next tasks item 12). Safe to run twice.
+--
+-- The job title is set from the role, the type of work, a level and a specialty, so every post reads the same way. The headline is the clinic's own
+-- voice, up to 70 characters, shown under the title on the job card and page and in the review queue. It is never part of the title sent to Google.
+-- The website checks it (lib/jobs.ts: no Canadian experience, no web address, no dollar amount) and the admin review is the backstop.
+
+alter table public.jobs add column if not exists headline text;
+
+alter table public.jobs drop constraint if exists jobs_headline_length;
+alter table public.jobs add constraint jobs_headline_length check (headline is null or char_length(headline) <= 70);
+
+-- Who may read and write it (a column missing from these lists silently fails to save).
+grant select (headline) on public.jobs to anon;
+grant insert (headline) on public.jobs to authenticated;
+grant update (headline) on public.jobs to authenticated;
+
+-- The copy kept when a live job is edited includes it, so the review queue can show what changed.
+create or replace function public.keep_live_version()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if old.status = 'live' and new.status = 'in_review' then
+    insert into public.job_versions (job_id, snapshot)
+    values (old.id, jsonb_build_object(
+      'title', old.title, 'headline', old.headline, 'role_category', old.role_category, 'employment_type', old.employment_type,
+      'province', old.province, 'city', old.city, 'pay_period', old.pay_period, 'pay_min', old.pay_min, 'pay_max', old.pay_max,
+      'pay_is_minimum', old.pay_is_minimum, 'pay_days_per_week', old.pay_days_per_week,
+      'pay_percent_min', old.pay_percent_min, 'pay_percent_max', old.pay_percent_max,
+      'pay_percent_of', old.pay_percent_of,
+      'pay_expected_min', old.pay_expected_min, 'pay_expected_max', old.pay_expected_max, 'pay_expected_period', old.pay_expected_period,
+      'tags_software', old.tags_software, 'tags_equipment', old.tags_equipment,
+      'tags_specialties', old.tags_specialties,
+      'is_existing_vacancy', old.is_existing_vacancy, 'uses_ai_screening', old.uses_ai_screening, 'description', old.description,
+      'apply_method', old.apply_method, 'apply_url', old.apply_url, 'work_arrangement', old.work_arrangement,
+      'territory', old.territory, 'pay_extras', old.pay_extras, 'posted_at', old.posted_at, 'expires_at', old.expires_at));
+  end if;
+  return null;
+end;
+$$;
+
+
+-- ======================================================================
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3325,6 +3372,7 @@ from (
     ('table: founding_clinics (the first 50 clinics, for the server only, 0052)', to_regclass('public.founding_clinics') is not null and not has_table_privilege('anon', 'public.founding_clinics', 'SELECT') and not has_table_privilege('authenticated', 'public.founding_clinics', 'SELECT')),
     ('function: claim_founding_place is for the server only (0052)', exists (select 1 from pg_proc where proname = 'claim_founding_place' and pronamespace = 'public'::regnamespace) and not has_function_privilege('anon', 'public.claim_founding_place(uuid, integer)', 'EXECUTE') and not has_function_privilege('authenticated', 'public.claim_founding_place(uuid, integer)', 'EXECUTE')),
     ('columns: a pass remembers if it is a founding pass and its price lock (0052)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'location_passes' and column_name = 'price_locked_until') and has_column_privilege('authenticated', 'public.location_passes', 'price_locked_until', 'SELECT') and not has_column_privilege('authenticated', 'public.location_passes', 'stripe_schedule_id', 'SELECT')),
+    ('column: an optional headline on a job, readable by visitors (0053)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'headline') and has_column_privilege('anon', 'public.jobs', 'headline', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

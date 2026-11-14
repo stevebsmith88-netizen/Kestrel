@@ -42,6 +42,7 @@ export type JobFormValues = {
   tags_software: string[];
   tags_equipment: string[];
   tags_specialties: string[];
+  headline?: string;
 };
 
 // What the dollar boxes show as examples for each unit.
@@ -143,6 +144,9 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
           <input ref={titleRef} id="jf-title" name="title" type="text" readOnly defaultValue={initial.title} placeholder="Choose a role" />
         </Field>
       </div>
+      <Field id="jf-headline" label="Headline (optional)" error={e.headline} hint="One line in your own words, shown under the title. Up to 70 characters, for example: Join a 4 doctor family practice with a new dispensary.">
+        <input id="jf-headline" name="headline" type="text" maxLength={70} defaultValue={initial.headline ?? ""} />
+      </Field>
       <Choices
         name="workArrangement"
         label="Where does the person work?"

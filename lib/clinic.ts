@@ -39,6 +39,7 @@ export type MyJob = {
   pay_expected_min?: number | null; // migration 0043
   pay_expected_max?: number | null;
   pay_expected_period?: string | null;
+  headline?: string | null;
   tags_software: string[] | null;
   tags_equipment: string[] | null;
   tags_specialties: string[] | null;

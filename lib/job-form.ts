@@ -10,6 +10,7 @@ export function jobFromForm(form: FormData, submit: boolean) {
   const job = cleanJob({
     title: field(form, "title"),
     titleLevel: field(form, "titleLevel"),
+    headline: field(form, "headline"),
     roleCategory: field(form, "roleCategory"),
     employmentType: field(form, "employmentType"),
     province: field(form, "province"),
@@ -40,6 +41,7 @@ export function jobFromForm(form: FormData, submit: boolean) {
   const errors = validateJob(job, submit);
   const row = {
     title: job.title,
+    headline: job.headline || null,
     role_category: job.roleCategory || null,
     employment_type: job.employmentType || null,
     province: job.province || null,
@@ -61,7 +63,7 @@ export function jobFromForm(form: FormData, submit: boolean) {
   return { job, row, errors };
 }
 
-type PayAndTagsRow = PayFields & { tags_software?: string[] | null; tags_equipment?: string[] | null; tags_specialties?: string[] | null };
+type PayAndTagsRow = PayFields & { headline?: string | null; tags_software?: string[] | null; tags_equipment?: string[] | null; tags_specialties?: string[] | null };
 
 // The pay and tag boxes of the job form, filled in from a saved job or template (for editing, reposting or starting from a template).
 export function payAndTagValues(row: PayAndTagsRow | null | undefined) {
@@ -69,6 +71,7 @@ export function payAndTagValues(row: PayAndTagsRow | null | undefined) {
   const text = (v: number | string | null | undefined) => (v === null || v === undefined ? "" : String(v));
   const tags = tagsFromRow(r);
   return {
+    headline: r.headline ?? "",
     pay_period: r.pay_period ?? "year",
     pay_min: text(r.pay_min),
     pay_max: text(r.pay_max),

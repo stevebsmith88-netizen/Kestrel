@@ -23,7 +23,7 @@ function publicJobSelects(source: string): string[][] {
   for (const m of source.matchAll(/const\s+([A-Z_]+)\s*=\s*"([^"]*)"/g)) constants.set(m[1], m[2]);
   const out: string[][] = [];
   // A read wrapped in withExpected (lib/expected-columns.ts) also asks for the 3 expected earnings columns once the database has them.
-  const EXPECTED = ["pay_expected_min", "pay_expected_max", "pay_expected_period"];
+  const EXPECTED = ["pay_expected_min", "pay_expected_max", "pay_expected_period", "headline"];
   for (const m of source.matchAll(/from\("jobs"\)\s*\.select\(\s*(await\s+withExpected\(\s*)?(?:"([^"]*)"|([A-Z_]+)|([a-z][A-Za-z]*))/g)) {
     const text = m[2] ?? constants.get(m[3] ?? "") ?? "";
     out.push([...text.replace(/[a-z_!]+\([^)]*\)/g, "").split(",").map((c) => c.trim()).filter(Boolean), ...(m[1] ? EXPECTED : [])]);

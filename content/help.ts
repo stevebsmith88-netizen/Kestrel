@@ -505,7 +505,7 @@ export const HELP: HelpSection[] = [
         ],
         steps: [
           "Choose **Post a job** in the bar at the top of the page.",
-          "Under **The role**, choose a role and an employment type, and add a level such as Lead or Senior if you like. The job title is set for you from those choices and any specialty you tick, so every post reads the same way and candidates and Google find it. Then say whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
+          "Under **The role**, choose a role and an employment type, and add a level such as Lead or Senior if you like. The job title is set for you from those choices and any specialty you tick, so every post reads the same way and candidates and Google find it. Add a headline if you like, one line of up to 70 characters in your own words that shows under the title. Then say whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
           "Under **Pay**, fill in the pay range. The next topic explains the options.",
           "Under **Tools and specialties**, tick anything that applies. It is optional, and candidates can search by it.",
           "Under **2 quick questions**, answer **Is this an existing vacancy?** and **Do you use AI to screen or select candidates?**",
