@@ -11,6 +11,7 @@ export function refreshJobPages() {
     revalidatePath("/"); // the home page lists the latest jobs once Kestrel has launched (X-05)
     revalidatePath("/jobs");
     revalidatePath("/jobs/[id]", "page");
+    revalidatePath("/clinics/[slug]", "page"); // clinic pages list each clinic's open jobs
     revalidatePath("/eye-care-jobs", "layout");
   } catch (error) {
     // Only possible outside a request (a test or a script). The saved copies then run out by themselves within 5 minutes.

@@ -18,6 +18,9 @@ import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { canExtend, extendedUntil } from "@/lib/job-ending";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { refreshJobPages } from "@/lib/job-cache";
+import { fetchPage } from "@/lib/fetch-page";
+import { startAddress } from "@/lib/page-reader";
+import { siteDetails, type SiteDetails } from "@/lib/site-details";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const field = (form: FormData, key: string) => form.get(key) ?? "";
@@ -316,4 +319,27 @@ export async function repostJob(form: FormData) {
   }
   revalidatePath("/clinic");
   redirect(`/clinic/jobs/${copy.id}`);
+}
+
+// "Fill in from my website" (Steve, 14th November 2026). Reads the home page the clinic typed, safely and politely (lib/fetch-page.ts: public
+// sites only, robots.txt obeyed), and returns the labels it carries for search engines (lib/site-details.ts). No AI, and nothing is saved:
+// the clinic chooses what to use, then saves the form as usual.
+export type WebsiteFill = { found?: SiteDetails; error?: string };
+
+export async function readMyWebsite(typed: string): Promise<WebsiteFill> {
+  await requireRole("clinic");
+  const address = startAddress(String(typed ?? "").slice(0, 300));
+  if (!address) return { error: "Type your website address first." };
+  let home: string;
+  try {
+    const url = new URL(address);
+    home = `${url.origin}/`;
+  } catch {
+    return { error: "That does not look like a web address. Try something like northgateeyecare.ca." };
+  }
+  const result = await fetchPage(home);
+  if (!result.ok) return { error: result.reason.replace("the careers page", "your website") };
+  const found = siteDetails(result.html);
+  if (!Object.keys(found).length) return { error: "Your website does not carry the labels we read (a name, description or address for search engines), so there is nothing to fill in. Type your details below instead." };
+  return { found };
 }

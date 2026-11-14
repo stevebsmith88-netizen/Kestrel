@@ -1,8 +1,11 @@
 # Plan: public clinic pages, several locations, and supplier accounts (14th November 2026)
 
-Steve wants this built before launch (mid to late January 2027). Nothing below is built yet. It needs new database tables, so it comes with SQL to run on both databases.
+Steve wants this built before launch (mid to late January 2027). **Section 1 is built (14th November 2026), with no SQL.** The rest needs new database tables, so it comes with SQL to run on both databases.
 
-## 1. Public clinic pages
+## 1. Public clinic pages (built 14th November 2026)
+
+How it was built: the address comes from the clinic's name and town (`lib/clinic-pages.ts`), so no database change was needed; 2 clinics with the same name and town each get a piece of their id on the end. A clinic has a page once it is active, claimed, not a supplier, not in Quebec, and Kestrel has approved at least 1 of its jobs, so every page belongs to a clinic a person has checked (`lib/public-clinics.ts`, read with the server key and public columns only). Google may index it when it has open jobs or an About of 80 characters or more. Job pages link to it. Renaming a clinic changes its address (the old one stops working); a stored address can come later with the several locations work. The website fill is `lib/site-details.ts`, with the button on the clinic profile.
+
 
 An address for each clinic, such as `/clinics/northgate-eye-care-kelowna`, showing: name, town and province, practice type, a short description in the clinic's own words, benefits, photos (with a pass), and **its open jobs with a count** ("3 open jobs"). Each job page links to it.
 
@@ -35,6 +38,8 @@ Concern: a sales rep posting a job when HR or the office normally does it.
 - **Team members, invited by the owner,** with 2 levels: "Can post and see applicants" or "Can see applicants only". Nobody joins a company without the owner's invitation, even with the right email domain.
 - **Every post goes through the admin review queue** (already built), so a post that looks wrong can be checked with the company first.
 - **The company can ask Kestrel to change the owner** by email from a published company address, and Kestrel checks before moving it.
+
+How a team member joins (Steve's idea, 14th November 2026): **an invite code.** The owner adds a team member's name, work email and level ("Can post and see applicants" or "Can see applicants only") and Kestrel emails them a code and a link. On sign up, a small **"I have an invite code"** link opens a box for it; the link in the email fills it in. The code joins them to that company at the level the owner chose, and skips the clinic or supplier questions. Each code works once, only with the email address it was sent to, and runs out after 14 days. The owner can remove a member at any time. This sits beside the launch invitation code that sign up already asks clinics for while accounts are by invitation.
 
 Team members are a new feature (today 1 person holds 1 employer account). Suggest building it with several locations, since groups need it too.
 

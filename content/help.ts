@@ -405,6 +405,7 @@ export const HELP: HelpSection[] = [
         answer: [
           "You need a clinic account and a clinic profile before you can post. The profile is where candidates learn about you, so a few honest lines about your team help. Some details are private: the email address that applicant alerts go to is never shown on a post, and neither is how many people work for you.",
           "While clinic accounts are by invitation, the sign up form also asks for the invitation code we sent you. You can change your profile later from the menu under your initials.",
+          "Once Kestrel has approved your first job, your clinic gets its own public page listing your open jobs, with your name, town and About text. Every job page links to it.",
         ],
         steps: [
           "Choose **Create account** at the top of the page. On a phone, open **Menu** first.",
@@ -412,6 +413,7 @@ export const HELP: HelpSection[] = [
           "Tick the box to agree to the terms of use and the privacy policy, complete the security check and press **Create my account**.",
           "Open the confirmation email, follow the link, and sign in. You go straight to setting up your clinic profile.",
           "Under **Who are you hiring for?**, choose an independent clinic, a corporate clinic or group, or a supplier or manufacturer. The questions below change to match. Then fill in the name, and your city and province or territory. How many people work for you is optional.",
+          "To save typing, type your website and press **Fill in from my website**. Kestrel reads the name, description and address your website gives search engines, shows you what it found, and fills in only what you tick. Nothing is saved until you save the form.",
           "Add your website and a few lines **About your clinic** (or company) if you like. They are shown on your job posts.",
           "Check the private address that new applicant alerts go to. It starts as the email you signed up with, and you can change it.",
           "Tick the box confirming that you hire directly and are not a recruiter, staffing agency or job broker, and press **Create my clinic profile** (or company profile). You go straight on to posting your first job.",

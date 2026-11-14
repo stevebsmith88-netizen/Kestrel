@@ -321,6 +321,18 @@ textarea{resize:vertical;line-height:1.5}
 .pager{display:flex;justify-content:space-between;align-items:center;margin-top:22px}
 .jobpage{padding:36px 0 80px}
 .jobpage .back{margin:0 0 6px}
+/* Fill in from my website (components/ClinicProfileForm.tsx) */
+.websitefill{margin-top:-6px}
+.fillfound{margin-top:12px;padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--paper);display:flex;flex-direction:column;gap:8px}
+.fillfound p{margin:0;color:var(--navy-2)}
+.fillfound .btn{align-self:flex-start}
+/* Public clinic pages (app/clinics/[slug]) */
+.clinicpage{padding:36px 0 80px}
+.clinicpage .back{margin:0 0 6px}
+.clinicpage .wrap > .card{margin-top:22px}
+.clinicpage h2{font:400 1.5rem/1.2 var(--f-display),Georgia,serif;margin:0 0 10px}
+.clinicjobs{margin-top:28px;display:flex;flex-direction:column;gap:14px}
+.clinicjobs > p{color:var(--navy-2);margin:0}
 .jobhead h1{font:400 clamp(1.875rem,4.6vw,2.625rem)/1.1 var(--f-display),Georgia,serif;margin:0 0 6px}
 .jobgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start;margin-top:22px}
 @media (max-width:900px){.jobgrid{grid-template-columns:1fr}}
