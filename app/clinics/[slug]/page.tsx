@@ -32,5 +32,5 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ClinicPage({ params }: { params: Promise<{ slug: string }> }) {
   const found = await getPublicClinic((await params).slug);
   if (!found) notFound();
-  return <EmployerPage clinic={found.clinic} slug={found.slug} jobs={await listLiveJobsForEmployer(found.clinic.id)} />;
+  return <EmployerPage clinic={found.clinic} slug={found.slug} jobs={await listLiveJobsForEmployer(found.clinic.id)} founding={found.founding} />;
 }

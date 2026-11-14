@@ -88,3 +88,14 @@ export function inboxTarget(href: string | null | undefined): string {
 export function closedAfterTalksText(clinicName: string): string {
   return `The job at ${clinicName} has closed, and the clinic did not record a final decision on Kestrel after your conversations with them. If you are still waiting to hear, it is fine to contact the clinic directly. Thank you for the time you put in.`;
 }
+
+// In account messages for the Founding clinic emails (lib/founding.ts). Short, and the email has the detail.
+export function foundingWelcomeMessage(args: { number: number }): NotifyMessage {
+  return { kind: "account", title: cut(`You are Founding clinic number ${args.number} of 50`, 150), body: "Thank you for being one of our first clinics. Your public clinic page now carries a Founding clinic mark.", href: "/clinic/plans" };
+}
+export function foundingThanksMessage(args: { planName: string }): NotifyMessage {
+  return { kind: "account", title: cut(`Your ${args.planName} is on`, 150), body: "Your founding price is locked. The details are in your email and under Plans.", href: "/clinic/plans" };
+}
+export function foundingReminderMessage(args: { planName: string }): NotifyMessage {
+  return { kind: "account", title: cut(`Your founding price on the ${args.planName} ends in 30 days`, 150), body: "This is your notice. The details are in your email.", href: "/clinic/plans" };
+}

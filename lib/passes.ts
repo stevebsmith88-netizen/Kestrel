@@ -12,14 +12,16 @@ export type PassPlan = {
   name: string;
   monthly: number;
   livePosts: number;
+  yearly: number;
   lookupKey: string; // the Stripe price (lib/stripe-catalog.ts)
+  yearlyLookupKey: string;
   covers: BandKey[];
   blurb: string;
 };
 
 export const PASS_PLANS: PassPlan[] = [
-  { key: "clinic_pass", name: "Clinic pass", monthly: CLINIC_PASS.monthly, livePosts: CLINIC_PASS.livePosts, lookupKey: "clinic_pass_monthly", covers: ["support", "opticians"], blurb: "Up to 5 live posts at a time for assistants, technicians, reception, patient care, opticians and practice leads, with a featured clinic profile." },
-  { key: "clinic_pass_plus", name: "Clinic pass Plus", monthly: CLINIC_PASS_PLUS.monthly, livePosts: CLINIC_PASS_PLUS.livePosts, lookupKey: "clinic_pass_plus_monthly", covers: ["support", "opticians", "optometrists"], blurb: "Up to 5 live posts at a time for every role, optometrists included, with a featured clinic profile." },
+  { key: "clinic_pass", name: "Clinic pass", monthly: CLINIC_PASS.monthly, yearly: CLINIC_PASS.yearly, livePosts: CLINIC_PASS.livePosts, lookupKey: "clinic_pass_monthly", yearlyLookupKey: "clinic_pass_yearly", covers: ["support", "opticians"], blurb: "Up to 5 live posts at a time for assistants, technicians, reception, patient care, opticians and practice leads, with a featured clinic profile." },
+  { key: "clinic_pass_plus", name: "Clinic pass Plus", monthly: CLINIC_PASS_PLUS.monthly, yearly: CLINIC_PASS_PLUS.yearly, livePosts: CLINIC_PASS_PLUS.livePosts, lookupKey: "clinic_pass_plus_monthly", yearlyLookupKey: "clinic_pass_plus_yearly", covers: ["support", "opticians", "optometrists"], blurb: "Up to 5 live posts at a time for every role, optometrists included, with a featured clinic profile." },
 ];
 
 export const planByKey = (key: string | null | undefined) => PASS_PLANS.find((p) => p.key === key) ?? null;

@@ -20,7 +20,7 @@ async function owner() {
 
 export async function choosePlan(form: FormData) {
   const employer = await owner();
-  const result = await startPassCheckout(employer.id, String(form.get("plan") ?? ""));
+  const result = await startPassCheckout(employer.id, String(form.get("plan") ?? ""), form.get("interval") === "year" ? "year" : "month");
   if ("url" in result) redirect(result.url);
   redirect(`/clinic/plans?problem=${result.error}${result.detail ? `&why=${encodeURIComponent(result.detail.slice(0, 200))}` : ""}`);
 }

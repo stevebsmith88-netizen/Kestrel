@@ -5,9 +5,12 @@ import { refreshJobPages } from "@/lib/job-cache";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { jobPriceCents, bandForRole } from "@/lib/checkout-mode";
 import { customerFor, describeFailure } from "@/lib/job-payment-flow";
+import { foundingNumber, sendFoundingThanks } from "@/lib/founding-flow";
+import { foundingOfferOpen, lockEnds, yearlyOffered } from "@/lib/founding";
 import { logJobActivity } from "@/lib/job-activity";
 import { notifySlack } from "@/lib/notify-slack";
 import { passCounts, passDecision, passesOn, planByKey, type PassPlan } from "@/lib/passes";
+import { FOUNDING_CLINICS } from "@/lib/pricing";
 import { StripeError, stripeGet, stripeKey, stripePost } from "@/lib/stripe";
 import { secretKeyMode } from "@/lib/stripe-setup";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -36,18 +39,18 @@ const passStatus = (stripeStatus: string): "active" | "past_due" | "canceled" | 
 
 const paymentMethodOf = (sub: StripeSubscription): string | null => (typeof sub.default_payment_method === "string" ? sub.default_payment_method : sub.default_payment_method?.id ?? null);
 
-export type PassRow = { id: string; employer_id: string; plan: string; status: string; stripe_subscription_id: string | null; stripe_payment_method_id: string | null; current_period_end: string | null; cancel_at_period_end: boolean };
-const PASS_COLUMNS = "id, employer_id, plan, status, stripe_subscription_id, stripe_payment_method_id, current_period_end, cancel_at_period_end";
+export type PassRow = { id: string; employer_id: string; plan: string; status: string; founding: boolean; billing_interval: string; stripe_schedule_id: string | null; stripe_subscription_id: string | null; stripe_payment_method_id: string | null; current_period_end: string | null; cancel_at_period_end: boolean };
+const PASS_COLUMNS = "id, employer_id, plan, status, founding, billing_interval, stripe_schedule_id, stripe_subscription_id, stripe_payment_method_id, current_period_end, cancel_at_period_end";
 
 async function priceId(key: string, lookupKey: string): Promise<string | null> {
   const list = await stripeGet<{ data: { id: string }[] }>(`/prices?lookup_keys[]=${encodeURIComponent(lookupKey)}&active=true&limit=1`, key);
   return list.data[0]?.id ?? null;
 }
 
-export type PassStart = { url: string } | { error: "already" | "not-in-stripe" | "failed"; detail?: string };
+export type PassStart = { url: string } | { error: "already" | "not-in-stripe" | "yearly" | "failed"; detail?: string };
 
 // Sends the owner to Stripe's page to start a pass. Nothing is charged until they press Subscribe there.
-export async function startPassCheckout(employerId: string, planKey: string): Promise<PassStart> {
+export async function startPassCheckout(employerId: string, planKey: string, interval: "month" | "year" = "month"): Promise<PassStart> {
   const key = stripeKey();
   const db = supabaseAdmin();
   const plan = planByKey(planKey);
@@ -55,14 +58,19 @@ export async function startPassCheckout(employerId: string, planKey: string): Pr
   try {
     const { data: live } = await db.from("location_passes").select("id").eq("employer_id", employerId).in("status", ["active", "past_due"]).maybeSingle();
     if (live) return { error: "already" };
-    const price = await priceId(key, plan.lookupKey);
+    // A Founding clinic starting a pass while the launch offer is open keeps its price for 12 months, and may take the yearly option (10 months for
+    // the price of 12). Anyone else pays monthly at the price in force.
+    const number = await foundingNumber(db, employerId);
+    const founding = number !== null && foundingOfferOpen();
+    if (interval === "year" && !yearlyOffered({ founding, offerOpen: foundingOfferOpen() })) return { error: "yearly" };
+    const price = await priceId(key, interval === "year" ? plan.yearlyLookupKey : plan.lookupKey);
     if (!price) return { error: "not-in-stripe" };
     const { data: employer } = await db.from("employers").select("clinic_name").eq("id", employerId).maybeSingle();
     const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", employerId).maybeSingle();
     const customer = await customerFor(db, key, employerId, employer?.clinic_name ?? "Clinic", contact?.notify_email || null);
     // An abandoned earlier attempt is closed, so it never blocks this one.
     await db.from("location_passes").update({ status: "canceled", updated_at: new Date().toISOString() }).eq("employer_id", employerId).eq("status", "incomplete");
-    const { data: row, error } = await db.from("location_passes").insert({ employer_id: employerId, plan: plan.key, status: "incomplete" }).select("id").single();
+    const { data: row, error } = await db.from("location_passes").insert({ employer_id: employerId, plan: plan.key, status: "incomplete", billing_interval: interval, founding }).select("id").single();
     if (error || !row) {
       console.error("Pass row not saved:", error?.code, error?.message);
       return { error: "failed" };
@@ -75,7 +83,7 @@ export async function startPassCheckout(employerId: string, planKey: string): Pr
       line_items: [{ price, quantity: 1 }],
       success_url: `${SITE_URL}/clinic/plans/done?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${SITE_URL}/clinic/plans`,
-      custom_text: { submit: { message: `${plan.name} is $${plan.monthly} a month plus HST and renews by itself until you cancel. Cancel any time under Plans. You keep the pass to the end of the month you paid for.` } },
+      custom_text: { submit: { message: interval === "year" ? `${plan.name} is $${plan.yearly.toLocaleString("en-CA")} a year plus HST, 10 months for the price of 12, and renews each year at the same price until you cancel. Cancel any time under Plans.` : `${plan.name} is $${plan.monthly} a month plus HST and renews by itself until you cancel. Cancel any time under Plans. You keep the pass to the end of the month you paid for.${founding ? " As a Founding clinic your price is kept for 12 months." : ""}` } },
       metadata: meta,
       subscription_data: { metadata: meta },
     }, { idempotencyKey: `kestrel-pass-${row.id}` });
@@ -100,7 +108,7 @@ export async function completePassCheckout(sessionId: string): Promise<PassDone>
     const session = await stripeGet<{ id: string; mode: string; status: string; subscription: StripeSubscription | string | null }>(`/checkout/sessions/${sessionId}?expand[]=subscription`, key);
     const sub = session.subscription && typeof session.subscription === "object" ? session.subscription : null;
     if (session.mode !== "subscription" || session.status !== "complete" || !sub) return { error: "The pass was not started, so nothing has changed." };
-    const { data: row } = await db.from("location_passes").select("id, employer_id, plan, status").eq("stripe_checkout_session_id", session.id).maybeSingle();
+    const { data: row } = await db.from("location_passes").select("id, employer_id, plan, status, founding, billing_interval").eq("stripe_checkout_session_id", session.id).maybeSingle();
     if (!row) return { error: "We could not match that to one of your passes." };
     const plan = planByKey(row.plan);
     const firstTime = row.status === "incomplete";
@@ -112,6 +120,22 @@ export async function completePassCheckout(sessionId: string): Promise<PassDone>
       cancel_at_period_end: Boolean(sub.cancel_at_period_end),
       updated_at: new Date().toISOString(),
     }).eq("id", row.id);
+    if (firstTime && row.founding && plan) {
+      // A Founding clinic's price is locked for 12 months from now, or the yearly price simply stays. The lock is also kept in Stripe as a schedule that
+      // moves the pass to the price in force afterwards; if that cannot be made, the pass still works and Steve is told.
+      const monthly = row.billing_interval !== "year";
+      const lockedUntil = monthly ? lockEnds(new Date()).toISOString() : null;
+      await db.from("location_passes").update({ price_locked_until: lockedUntil }).eq("id", row.id);
+      if (monthly) {
+        try {
+          await lockFoundingPrice(db, key, sub.id, plan, row.id);
+        } catch (e) {
+          console.error("Founding price lock failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
+          await notifySlack("Could not lock a Founding clinic's price in Stripe", [plan.name, secretKeyMode(key) === "test" ? describeFailure(e) : "See the website logs"], { path: "/admin/payments", text: "Open Admin, Payments" });
+        }
+      }
+      await sendFoundingThanks(db, { id: row.id, employer_id: row.employer_id, plan: row.plan, billing_interval: row.billing_interval, price_locked_until: lockedUntil });
+    }
     if (firstTime) {
       const { data: employer } = await db.from("employers").select("clinic_name").eq("id", row.employer_id).maybeSingle();
       await notifySlack("A clinic started a pass", [`${plan?.name ?? "Pass"}: ${employer?.clinic_name ?? "A clinic"}`], { path: "/admin/clinics", text: "Open Admin, Clinics" });
@@ -129,7 +153,7 @@ export async function syncPassFromSubscription(sub: StripeSubscription): Promise
   if (!db || !sub?.id) return;
   const status = passStatus(sub.status);
   const lookup = sub.items?.data?.[0]?.price?.lookup_key;
-  const planFromPrice = lookup === "clinic_pass_plus_monthly" ? "clinic_pass_plus" : lookup === "clinic_pass_monthly" ? "clinic_pass" : null;
+  const planFromPrice = lookup === "clinic_pass_plus_monthly" || lookup === "clinic_pass_plus_yearly" ? "clinic_pass_plus" : lookup === "clinic_pass_monthly" || lookup === "clinic_pass_yearly" ? "clinic_pass" : null;
   const { error } = await db.from("location_passes").update({
     ...(planFromPrice ? { plan: planFromPrice } : {}),
     status,
@@ -140,6 +164,26 @@ export async function syncPassFromSubscription(sub: StripeSubscription): Promise
     updated_at: new Date().toISOString(),
   }).eq("stripe_subscription_id", sub.id);
   if (error) console.error("Pass not updated:", error.code, error.message);
+}
+
+type StripeSchedule = { id: string; phases: { start_date: number; items: { price: string | { id: string } }[] }[] };
+
+// Keeps a Founding clinic's monthly price for 12 months, then moves the pass to the price in force, with a Stripe subscription schedule (phase 1 at the
+// price it started on for 12 months, phase 2 at the price in force). Today those are the same price; when prices change the second phase is updated.
+async function lockFoundingPrice(db: SupabaseClient, key: string, subscriptionId: string, plan: PassPlan, passId: string): Promise<void> {
+  const schedule = await stripePost<StripeSchedule>("/subscription_schedules", key, { from_subscription: subscriptionId }, { idempotencyKey: `kestrel-lock-${passId}` });
+  const first = schedule.phases[0];
+  const current = first.items[0].price;
+  const currentId = typeof current === "string" ? current : current.id;
+  const inForce = (await priceId(key, plan.lookupKey)) ?? currentId;
+  await stripePost(`/subscription_schedules/${schedule.id}`, key, {
+    end_behavior: "release",
+    phases: [
+      { items: [{ price: currentId, quantity: 1 }], start_date: first.start_date, iterations: FOUNDING_CLINICS.lockMonths },
+      { items: [{ price: inForce, quantity: 1 }], iterations: 1 },
+    ],
+  }, { idempotencyKey: `kestrel-lock-phases-${passId}` });
+  await db.from("location_passes").update({ stripe_schedule_id: schedule.id }).eq("id", passId);
 }
 
 // The location's pass if it covers anything right now. A pass whose paid month has run out is checked with Stripe first, in case the renewal
@@ -237,6 +281,16 @@ export async function switchPassPlan(employerId: string, toKey: string): Promise
   if (!pass?.row.stripe_subscription_id) return { ok: false, message: "There is no active pass to change." };
   if (pass.plan.key === to.key) return { ok: true };
   try {
+    if (pass.row.stripe_schedule_id) {
+      // A subscription held by a schedule cannot be changed, so the schedule is released first. The founding lock does not carry over to Plus
+      // (docs/pass-procedures.md).
+      try {
+        await stripePost(`/subscription_schedules/${pass.row.stripe_schedule_id}/release`, key, {});
+      } catch (e) {
+        console.error("Schedule release failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
+      }
+      await db.from("location_passes").update({ stripe_schedule_id: null, price_locked_until: null }).eq("id", pass.row.id);
+    }
     const sub = await stripeGet<StripeSubscription & { items: { data: { id: string }[] } }>(`/subscriptions/${pass.row.stripe_subscription_id}`, key);
     const item = sub.items.data[0]?.id;
     const price = await priceId(key, to.lookupKey);
