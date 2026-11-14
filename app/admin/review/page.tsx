@@ -4,7 +4,8 @@ import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
-import AdminJobCard, { type AdminJob, type AdminPayment } from "@/components/AdminJobCard";
+import { type AdminJob, type AdminPayment } from "@/components/admin-job-types";
+import AdminJobRow from "@/components/AdminJobRow";
 import JobActivity from "@/components/JobActivity";
 import ReviewButtons from "@/components/ReviewButtons";
 import { loadActivity } from "@/lib/job-activity";
@@ -21,6 +22,9 @@ export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs
 
 export const dynamic = "force-dynamic";
 
+// How many recently handled jobs the strip shows. Everything else is on the Jobs page, which can search and page.
+const RECENT_LIMIT = 10;
+
 export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string; why?: string }> }) {
   const session = await requireRole("admin");
   const { notice, why } = await searchParams;
@@ -29,7 +33,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   // Jobs handled in the last 7 days (approved and live, or sent back), so a job does not vanish the moment it is dealt with and its notes can still be read.
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
   const { data: recentRows } = db
-    ? await db.from("jobs").select("id, title, status, role_category, city, province, posted_at, expires_at, updated_at, employers(clinic_name)").in("status", ["live", "rejected"]).gte("updated_at", weekAgo).order("updated_at", { ascending: false }).limit(25)
+    ? await db.from("jobs").select("id, title, status, role_category, city, province, posted_at, expires_at, updated_at, employers(clinic_name)").in("status", ["live", "rejected"]).gte("updated_at", weekAgo).order("updated_at", { ascending: false }).limit(RECENT_LIMIT)
     : { data: null };
   const recent = (recentRows ?? []) as unknown as AdminJob[];
   const allIds = [...jobs.map((j) => j.id), ...recent.map((j) => j.id)];
@@ -47,9 +51,10 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <h1>Review queue</h1>
-          <p className="lede2">Check each post before it goes live. Approving it starts its 30 days.</p>
+          <p className="lede2">Check each post before it goes live. Approving it puts it live and starts its run: 60 days during the free launch, 30 days after.</p>
           {notice && REVIEW_NOTICES[notice] && <p className="notice" role="status">{reviewMessage(notice, why)}</p>}
 
+          {jobs.length > 0 && <p className="waitcount" role="status">{jobs.length} waiting for a decision</p>}
           {jobs.length === 0 ? (
             <section className="card"><p>Nothing is waiting. New posts appear here as soon as a clinic submits them.</p></section>
           ) : (
@@ -105,9 +110,12 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       <div><dt>Payment</dt><dd>{paymentLine(payments.get(j.id), j.role_category)}</dd></div>
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>
                     </dl>
-                    <pre className="adtext">{j.description}</pre>
-                    <JobActivity rows={activity.get(j.id) ?? []} />
                     <ReviewButtons id={j.id} />
+                    <details className="adfold">
+                      <summary>Read the ad</summary>
+                      <pre className="adtext">{j.description}</pre>
+                    </details>
+                    <JobActivity rows={activity.get(j.id) ?? []} />
                   </article>
                 );
               })}
@@ -115,14 +123,15 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
           )}
 
           <h2 className="subhead">Recently handled</h2>
-          <p className="help">Jobs approved or sent back in the last 7 days, newest first, with their payment and Activity. The full list is under <Link href="/admin/jobs">Jobs</Link>.</p>
+          <p className="help">The latest {RECENT_LIMIT} jobs approved or sent back in the last 7 days, newest first. Press one for its payment and notes.</p>
           {recent.length === 0 ? (
             <section className="card"><p>Nothing handled in the last 7 days.</p></section>
           ) : (
             <div className="joblist">
-              {recent.map((j) => <AdminJobCard key={j.id} job={j} payment={payments.get(j.id)} activity={activity.get(j.id) ?? []} />)}
+              {recent.map((j) => <AdminJobRow key={j.id} job={j} payment={payments.get(j.id)} activity={activity.get(j.id) ?? []} />)}
             </div>
           )}
+          <p><Link href="/admin/jobs" className="btn sm ghost">See all jobs</Link></p>
         </div>
       </main>
       <AppFooter />
