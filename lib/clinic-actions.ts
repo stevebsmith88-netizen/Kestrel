@@ -219,7 +219,7 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   }
   if (submit) {
     const slackDb = supabaseAdmin();
-    const extra = slackDb ? await jobSlackExtras(slackDb, savedId) : { lines: [], buttons: [] };
+    const extra = slackDb && savedId ? await jobSlackExtras(slackDb, savedId) : { lines: [], buttons: [] };
     await notifySlack(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [job.title, employer.clinic_name, ...extra.lines], { path: "/admin/review", text: "Open the review queue" }, "jobs", extra.buttons);
   }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
