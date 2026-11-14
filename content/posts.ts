@@ -28,6 +28,14 @@ A guaranteed minimum with a percentage combines the 2: you are paid the minimum,
 
 > A higher percentage of a smaller base can pay less than a lower percentage of a larger one.
 
+## What is typical
+
+From what we see across the industry, day rates for associate optometrists commonly sit somewhere around $500 to $800 a day, and often higher in rural areas, where optometrists are harder to find. Treat that as a rough guide, not a survey: the right figure depends on the province, the town and how full the book is.
+
+Different practices use different models for good reasons. A day rate gives both sides a predictable number, which suits a clinic whose patient numbers vary through the week or the season, and it is a common choice for larger groups. A percentage suits a long established practice with a full book, where an experienced associate can earn more than a typical day rate would pay. Neither model is better in itself. What matters is how busy the chair will be.
+
+If you are hiring, it is worth posting a daily minimum, even one you expect your associate to beat most days. Newer graduates increasingly look for that floor before anything else, because it lets them compare offers that are built in different ways.
+
 ## Turning a percentage into dollars
 
 The only way to compare a percentage with a salary is to turn it into dollars, and that means asking for numbers. Here is the sum, with made up figures to show how it works.
@@ -41,7 +49,7 @@ Say you see about 2 patients an hour for a 7 hour day, so around 14 exams. The C
 | Exam fees billed | $3,150 |
 | Your share at 30% of exam fees | About $945 |
 
-These are not typical rates, only a way to do the sum. Your real answer depends on how full the book is, how many patients do not show, and what the percentage is of.
+These are not typical rates, only a way to do the sum. A full day like this one could beat a typical day rate, and a quiet one would not. Your real answer depends on how full the book is, how many patients do not show, and what the percentage is of.
 
 ## Questions to ask before you sign
 
