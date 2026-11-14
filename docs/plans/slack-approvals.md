@@ -1,6 +1,6 @@
 # Approve from Slack (plan, 14th November 2026)
 
-Status: proposal, waiting for Steve's yes. Nothing is built. Steve marked this a potential priority.
+Status: built 14th November 2026 (Steve said yes to buttons only, no button on a flagged job, and claims as well as jobs). Send back from Slack is the second step, not built. Steve's setup steps are in `docs/slack-setup.md`.
 
 ## What Steve wants
 

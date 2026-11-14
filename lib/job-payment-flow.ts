@@ -1,3 +1,4 @@
+import { jobSlackExtras } from "@/lib/slack-approve-buttons";
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/email";
@@ -151,7 +152,8 @@ export async function completeCardSetup(sessionId: string): Promise<SetupDone> {
         await notifySlack(autoApproved === "approved" ? "A job was approved automatically after the clinic updated its card" : "A clinic updated its card but the job still could not be approved", [payment.job_title], { path: "/admin/jobs", text: "Open Admin, Jobs" }, "jobs");
         await notifyAdmin(autoApproved === "approved" ? "A job was approved automatically after the clinic updated its card" : "A clinic updated its card but the job still could not be approved", [payment.job_title], "/admin/jobs");
       } else {
-        await notifySlack(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title], { path: "/admin/review", text: "Open the review queue" }, "jobs");
+        const extra = moved?.length ? await jobSlackExtras(db, payment.job_id) : { lines: [], buttons: [] };
+        await notifySlack(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title, ...extra.lines], { path: "/admin/review", text: "Open the review queue" }, "jobs", extra.buttons);
         await notifyAdmin(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title], "/admin/review");
       }
     }

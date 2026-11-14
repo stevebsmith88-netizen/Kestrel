@@ -15,6 +15,7 @@ import { canEdit, OWNER_ONLY_TEXT, VIEW_ONLY_TEXT } from "@/lib/team";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
 import { fitExpected, withExpected } from "@/lib/expected-columns";
+import { jobSlackExtras } from "@/lib/slack-approve-buttons";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { cleanClinic, isQuebecJob, validateClinic, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
@@ -216,7 +217,11 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       if (admin) await recordFreeLaunchPost(admin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name);
     }
   }
-  if (submit) await notifySlack(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [job.title, employer.clinic_name], { path: "/admin/review", text: "Open the review queue" }, "jobs");
+  if (submit) {
+    const slackDb = supabaseAdmin();
+    const extra = slackDb ? await jobSlackExtras(slackDb, savedId) : { lines: [], buttons: [] };
+    await notifySlack(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [job.title, employer.clinic_name, ...extra.lines], { path: "/admin/review", text: "Open the review queue" }, "jobs", extra.buttons);
+  }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
   refreshJobPages();
