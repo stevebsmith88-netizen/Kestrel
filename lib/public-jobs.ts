@@ -133,6 +133,19 @@ export async function listLiveJobsForMatching(limit = 1000): Promise<JobSummary[
   return (data ?? []) as unknown as JobSummary[];
 }
 
+// One clinic's live jobs, newest first, for its public clinic page (lib/public-clinics.ts).
+export async function listLiveJobsForEmployer(employerId: string): Promise<JobSummary[]> {
+  if (!UUID.test(employerId)) return [];
+  const db = supabasePublic();
+  if (!db) return [];
+  const { data, error } = await db.from("jobs").select(await withExpected(SUMMARY_COLUMNS)).eq("employer_id", employerId).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(50);
+  if (error) {
+    console.error("Listing a clinic's jobs failed:", error.code, error.message);
+    return [];
+  }
+  return (data ?? []) as unknown as JobSummary[];
+}
+
 // How many live jobs there are for each role and each province, so the filters only offer choices that have jobs.
 export async function getFilterCounts(): Promise<{ total: number; roles: Record<string, number>; provinces: Record<string, number> }> {
   const empty = { total: 0, roles: {}, provinces: {} };
@@ -184,10 +197,10 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
 // publishing one with no jobs in it. With no database set up at all (a local build) it is an empty list.
 // The public (anonymous) database role can read only certain columns of jobs (migrations 0005 and 0013), and updated_at is not one of them,
 // so the sitemap dates a job by when it went live. lib/public-columns.test.ts checks every public read against those grants.
-export async function listLiveJobIds(): Promise<{ id: string; posted_at: string }[]> {
+export async function listLiveJobIds(): Promise<{ id: string; posted_at: string; employer_id: string }[]> {
   const db = supabasePublic();
   if (!db) return [];
-  const { data, error } = await db.from("jobs").select("id, posted_at").eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(1000);
+  const { data, error } = await db.from("jobs").select("id, posted_at, employer_id").eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(1000);
   if (error) {
     // While the site is being built, a failed read must not stop the deployment. After that, throwing keeps the last good copy.
     if (process.env.NEXT_PHASE === "phase-production-build") {

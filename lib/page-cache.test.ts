@@ -30,6 +30,7 @@ const SAVED_PAGES = [
   "app/eye-care-jobs/[province]/page.tsx",
   "app/eye-care-jobs/[province]/[role]/page.tsx",
   "app/jobs/[id]/page.tsx",
+  "app/clinics/[slug]/page.tsx",
 ];
 // Anything that would tell a page who is looking.
 const PERSONAL = [/@\/lib\/auth"/, /@\/lib\/candidate"/, /next\/headers/, /\bcookies\(/, /\bconnection\(/, /getSession/, /requireRole/, /<SiteHeader[^>]*session=/];

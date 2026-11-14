@@ -13,7 +13,8 @@ const ROBOTS_TIMEOUT = 6_000;
 const MAX_BYTES = 3 * 1024 * 1024;
 const MAX_REDIRECTS = 4;
 
-export type FetchResult = { ok: true; url: string; page: ReadPage } | { ok: false; reason: string };
+// `html` is the page as it arrived, for readers that only look at its labels (lib/site-details.ts).
+export type FetchResult = { ok: true; url: string; page: ReadPage; html: string } | { ok: false; reason: string };
 
 async function publicHost(url: URL): Promise<string | null> {
   const refused = refuseAddress(url.toString());
@@ -129,7 +130,7 @@ export async function fetchPage(address: string): Promise<FetchResult> {
       return { ok: false, reason: /pdf/i.test(type) ? "That link is a PDF. Use the web page that lists the job instead." : "That link is not a web page." };
     }
     const html = await readBody(response, MAX_BYTES);
-    return { ok: true, url: url.toString(), page: readHtml(html, url.toString()) };
+    return { ok: true, url: url.toString(), page: readHtml(html, url.toString()), html };
   }
   return { ok: false, reason: "The website redirected us too many times. Open the page in your browser and copy its address." };
 }
