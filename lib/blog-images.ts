@@ -35,4 +35,5 @@ export const BLOG_IMAGES: Record<string, { width: number; height: number }> = {
   "/images/blog/optometric-assistant-certification-canada.jpg": { width: 1354, height: 762 },
   "/images/blog/how-to-become-an-optometrist-canada.jpg": { width: 1354, height: 762 },
   "/images/blog/who-works-in-eye-care-canada.jpg": { width: 1354, height: 762 },
+  "/images/blog/optometrist-pay-canada.jpg": { width: 604, height: 900 },
 };

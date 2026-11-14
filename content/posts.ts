@@ -4,6 +4,65 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "optometrist-pay-canada",
+    title: "Optometrist pay in Canada: salary, day rates and percentage deals",
+    description: "How optometrists are paid in Canada, from salaries and day rates to a percentage of billings, and how to compare offers that are built in different ways.",
+    date: "2026-12-01",
+    body: `Ask 3 associate optometrists how they are paid and you may get 3 different answers. One is on a salary, one is paid by the day, and one takes a share of what they bill, perhaps with a guaranteed minimum underneath. That makes offers hard to compare, and it is the reason this guide is about how pay is built before it is about the numbers.
+
+![A woman rests her chin at a slit lamp during an eye exam, as the optometrist adjusts the instrument.](/images/blog/optometrist-pay-canada.jpg)
+
+## Who is paying, and how
+
+Most new optometrists start as associates. In Ontario, the Canadian Association of Optometrists' 2025 report counted 1,636 associates, independent contractors and employees against 1,080 owners and decision makers. So for most people reading this, the question is what an owner or a group will offer, and in what form.
+
+There are 4 common shapes.
+
+A salary is a fixed amount a year, usually for set days and hours, often with benefits. It is predictable, and it is the easiest to compare with other jobs.
+
+A day rate is a fixed amount for each day worked. It is common for part time and locum work, and for associates who split their week between clinics. A day rate often comes without paid holidays or benefits, so a day rate times 5 is not the same as a salary.
+
+A percentage is a share of what you bring in. The detail that matters is what it is a share of. Production is the value of the work you do. Collections is what the clinic actually receives, after unpaid bills and insurance refusals. Billings is what is invoiced. Exam fees means the fees for your exams only, without any glasses or contact lenses sold. A higher percentage of a smaller base can pay less than a lower percentage of a larger one.
+
+A guaranteed minimum with a percentage combines the 2: you are paid the minimum, or the percentage when that comes to more. It protects you while you build a patient base, which can suit a new associate.
+
+> A higher percentage of a smaller base can pay less than a lower percentage of a larger one.
+
+## Turning a percentage into dollars
+
+The only way to compare a percentage with a salary is to turn it into dollars, and that means asking for numbers. Here is the sum, with made up figures to show how it works.
+
+Say you see about 2 patients an hour for a 7 hour day, so around 14 exams. The Canadian Association of Optometrists puts a comprehensive exam with imaging at $200 to $250, so take $225. That day bills about $3,150 in exam fees. At a made up 30% of exam fees, you would earn about $945 for the day. At 25% of a production figure that also counts the glasses and contact lenses your patients buy, the answer could be higher or lower, depending on how much the clinic sells.
+
+| | Example day |
+| --- | --- |
+| Exams | 14 |
+| Fee per exam | $225 |
+| Exam fees billed | $3,150 |
+| Your share at 30% of exam fees | About $945 |
+
+These are not typical rates, only a way to do the sum. Your real answer depends on how full the book is, how many patients do not show, and what the percentage is of.
+
+## Questions to ask before you sign
+
+- What exactly is the percentage of: production, collections, billings or exam fees?
+- How full has the book been for the last associate in this chair, and how many no shows are usual?
+- Is there a guaranteed minimum, and for how long?
+- Who pays for equipment, continuing education, licence fees and liability insurance?
+- Are you an employee or an independent contractor? It changes your tax, your benefits and who pays into the Canada Pension Plan.
+- What did the last associate earn in their first full year, in dollars?
+
+The last question is a fair one to ask, and the answer tells you more than any percentage.
+
+## How Kestrel shows optometrist pay
+
+Every optometrist job on Kestrel shows its pay, in whatever shape the clinic uses: a salary, a day rate, a percentage, or a guaranteed minimum with a percentage. A percentage never appears on its own. The clinic must also give its own estimate of what the role earns in dollars, by the day or the year, so you can compare offers like for like. The percentage range is limited to 10 points, and a day rate range to $200, so the figures stay meaningful.
+
+If you are hiring, our [job ad checklist](/blog/eye-care-job-ad-checklist) covers the rules several provinces now apply to pay in job ads. If you are weighing up a role on the optical side, our [optician pay guide](/blog/optician-pay-canada) sets out what opticians earn in each province.
+
+[See optometrist jobs across Canada](/jobs)`,
+  },
+  {
     slug: "optometric-assistant-certification-canada",
     title: "Optometric assistant courses and certification in Canada",
     description: "No licence is needed to work as an optometric assistant. What the CCOA program, college certificates and training on the job each offer, and how to choose.",
