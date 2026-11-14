@@ -1,6 +1,6 @@
 # Admin console overhaul (plan, 14th November 2026)
 
-Status: proposal, waiting for Steve's notes and his yes on the grouping. Nothing here is built. The review queue and Jobs page part is already done (14th November 2026, pull request 181).
+Status: step 1 built 14th November 2026 (the menu with count badges, Support rename, the Dashboard with Needs you tiles and a finance tile, no SQL). Still to do: the link sweep page by page, and the clinic and candidate menu tidy (item 18). The review queue and Jobs page part is already done (14th November 2026, pull request 181).
 
 Covers items 5, 9 and 20 of the next tasks in CLAUDE.md, and feeds item 18 (drop down menus for each account type) and item 6 (virtual assistant logins).
 
