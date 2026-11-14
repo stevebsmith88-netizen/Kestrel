@@ -9,6 +9,8 @@ import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { levelLabel } from "@/lib/team";
 import { loadTeam } from "@/lib/team-server";
+import { clinicAccess } from "@/lib/support-server";
+import { reasonLabel } from "@/lib/support";
 
 export const metadata: Metadata = { title: "Clinic | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -29,6 +31,8 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
     admin.from("jobs").select("id, title, status, posted_at, expires_at").eq("employer_id", id).order("created_at", { ascending: false }).limit(50),
     admin.from("admin_actions").select("action, detail, reason, created_at").eq("employer_id", id).order("created_at", { ascending: false }).limit(50),
   ]);
+  // Kestrel sees the team and can change things only while the clinic's owner has an open help request that allows it (migration 0046).
+  const access = await clinicAccess(admin, id);
   const jobIds = (jobs ?? []).map((j) => j.id as string);
   const { data: apps } = jobIds.length ? await admin.from("applications").select("job_id").in("job_id", jobIds) : { data: [] };
   const appCount = (jobId: string) => (apps ?? []).filter((a) => a.job_id === jobId).length;
@@ -40,8 +44,15 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
           <p className="back"><Link href="/admin/clinics">Back to clinics</Link></p>
           <p className="kicker">{clinic.city}, {clinic.province}</p>
           <h1>{clinic.clinic_name}</h1>
-          <p className="lede2">{clinic.status === "active" ? "Active" : "Suspended"} · {clinic.claimed ? "Claimed" : "Not claimed"}. <Link href={`/admin/post-for-clinic/${clinic.id}`}>Post a job for this clinic</Link></p>
+          <p className="lede2">{clinic.status === "active" ? "Active" : "Suspended"} · {clinic.claimed ? "Claimed" : "Not claimed"}. {access && <Link href={`/admin/post-for-clinic/${clinic.id}`}>Post a job for this clinic</Link>}</p>
 
+          {access ? (
+            <div className="notice" role="status"><strong>Access given until {longDate(access.access_until as string)}</strong> for: {reasonLabel(access.reason as string | null)}. &quot;{access.message}&quot;</div>
+          ) : (
+            <div className="notice warn" role="status">This clinic has not given Kestrel access, so its team and settings are hidden and nothing can be changed. Its owner can ask for help, and allow access, from Help and feedback in their account.</div>
+          )}
+
+          {access && (<>
           <h2>Team</h2>
           <ul className="teamlist">
             {people.map((p) => (
@@ -57,6 +68,7 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
               </li>
             ))}
           </ul>
+          </>)}
 
           <h2>Jobs</h2>
           {(jobs ?? []).length === 0 ? <p className="help">No jobs yet.</p> : (
@@ -67,8 +79,7 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
             </ul>
           )}
 
-          <h2>Profile</h2>
-          <AdminProfileForm clinic={clinic} />
+          {access && <><h2>Profile</h2><AdminProfileForm clinic={clinic} /></>}
 
           <h2>Changes Kestrel made</h2>
           {(log ?? []).length === 0 ? <p className="help">None yet.</p> : (

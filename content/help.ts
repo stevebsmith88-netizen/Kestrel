@@ -12,6 +12,21 @@ export const HELP: HelpSection[] = [
     intro: "About Kestrel, the rules every job follows, and what we do with your information.",
     topics: [
       {
+        id: "help-and-feedback",
+        title: "How do I report a problem, suggest a feature or ask for help?",
+        keywords: ["bug", "broken", "not working", "error", "feature", "idea", "suggestion", "feedback", "support", "contact", "help request"],
+        answer: [
+          "Signed in, open the menu under your initials and choose **Help and feedback**. A person at Kestrel reads everything sent there, and we reply by email.",
+          "A clinic can also ask for help with its account there. The owner can tick a box to let our team see and change the clinic's account for up to 7 days, so we can fix things for you. We can then see your profile, your team, open invitations, your job posts and how many people applied, but never applicants' resumes, cover letters or your private notes. Every change we make is recorded, you are told, and you can take the access back at any time on the same page.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Help and feedback**.",
+          "To report a problem or share an idea, choose what it is under **Found a problem, or have an idea?**, write a few lines and press **Send feedback**.",
+          "Clinics: under **Ask Kestrel for help**, choose what it is about, say what is happening, tick the box if you want us to work in your account, and press **Send to Kestrel**.",
+        ],
+        links: [{ label: "Help and feedback", href: "/account/help" }],
+      },
+      {
         id: "what-is-kestrel",
         title: "What is Kestrel Eye Care Jobs?",
         keywords: ["about", "overview", "who are you", "job board", "optometry", "opticians"],

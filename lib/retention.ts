@@ -9,6 +9,7 @@ export const RETENTION_DAYS = {
   inboxMessages: 365, // messages in a person's Kestrel inbox (Steve chose 12 months, 13th November 2026)
   reportsAndClaims: 730, // reports of a job, and claims of a listing: 2 years
   applicationsAfterClinicLeft: 730, // applications kept for the candidate after the clinic left (migration 0044): 2 years
+  supportAndAdminRecords: 730, // help requests, feedback (0046) and Kestrel's record of changes made for a clinic (0045): 2 years
 } as const;
 
 // The moment before which each kind of record is deleted, as an ISO date for the database.
@@ -19,5 +20,6 @@ export function retentionCutoffs(now: Date) {
     inboxMessages: before(RETENTION_DAYS.inboxMessages),
     reportsAndClaims: before(RETENTION_DAYS.reportsAndClaims),
     applicationsAfterClinicLeft: before(RETENTION_DAYS.applicationsAfterClinicLeft),
+    supportAndAdminRecords: before(RETENTION_DAYS.supportAndAdminRecords),
   };
 }

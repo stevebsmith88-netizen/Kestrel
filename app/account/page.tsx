@@ -22,6 +22,8 @@ export default async function Account({ searchParams }: { searchParams: Promise<
 
   const { data: profile } = admin ? await admin.from("profiles").select("first_name, last_name, marketing_consent, unsubscribed_at, notify_application_updates").eq("id", session.userId).maybeSingle() : { data: null };
   const { data: employer } = admin && session.role === "clinic" ? await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle() : { data: null };
+  // An owner with a team cannot delete the clinic out from under them (Steve, 14th November 2026). No team table yet means no team.
+  const { count: teamCount } = admin && employer ? await admin.from("employer_members").select("user_id", { count: "exact", head: true }).eq("employer_id", employer.id) : { count: 0 };
   const { data: contact } = admin && employer ? await admin.from("employer_contacts").select("*").eq("employer_id", employer.id).maybeSingle() : { data: null };
 
   // When the name can next be changed (lib/name-hold.ts). A missing column means no hold yet, so a database without migration 0039 still works.
@@ -43,6 +45,7 @@ export default async function Account({ searchParams }: { searchParams: Promise<
           nameLockedUntil={lockedUntil ? longDate(lockedUntil) : null}
           nameInPlay={nameInPlay}
           hasClinic={Boolean(employer)}
+          teamCount={teamCount ?? 0}
           hasPassword={session.hasPassword}
           emailNotice={emailNotice}
           downloadProblem={isExportProblem(download) ? download : undefined}

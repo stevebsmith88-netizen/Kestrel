@@ -152,6 +152,13 @@ export default function Privacy() {
           <p>
             <strong>Candidates.</strong> Clinic email addresses are never shown on job posts. Candidates apply to a clinic through Kestrel.
           </p>
+          <p>
+            <strong>Kestrel&apos;s team, when a clinic asks for help.</strong> A clinic&apos;s owner can ask us for help from their account and, if they choose, let our
+            team see and change the clinic&apos;s account for up to 7 days, or until the request is closed. During that time we can see the clinic&apos;s
+            profile, its team&apos;s names, email addresses and access, open invitations, its job posts and how many people applied to each. We cannot see
+            applicants&apos; resumes, cover letters or the clinic&apos;s private notes. Every change we make is recorded, and the owner is told. The owner can
+            end our access at any time.
+          </p>
           <p>We may also disclose information when the law requires it.</p>
 
           <h2>If you unsubscribe</h2>
@@ -177,6 +184,7 @@ export default function Privacy() {
             <li><strong>&quot;Keep my details for future roles&quot;:</strong> if you tick this when you apply, the clinic may keep your application to consider you for later roles for 12 months. You can ask the clinic, or us, to remove it at any time.</li>
             <li><strong>Job posts as published:</strong> kept for 3 years after they close.</li>
             <li><strong>Reports about a job, and claims of a listing:</strong> deleted after 2 years.</li>
+            <li><strong>Help requests and feedback you send us, and the record of changes we made to a clinic&apos;s account at its request:</strong> deleted after 2 years.</li>
           </ul>
           <p>
             If you delete your account, we delete your profile, your resume and your applications, apart from a minimal record that we received

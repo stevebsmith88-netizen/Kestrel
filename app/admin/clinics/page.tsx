@@ -44,7 +44,7 @@ export default async function AdminClinics({ searchParams }: { searchParams: Pro
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <h1>Clinics</h1>
-          <p className="lede2">Find a clinic to help with its profile, team or posting. Every change asks why, is recorded, and the owner is told. Applicants&apos; resumes are never shown here.</p>
+          <p className="lede2">Help a clinic with its profile, team or posting. A clinic&apos;s team and settings open only while its owner has asked for help and allowed access (see <Link href="/admin/requests">Help requests</Link>). Every change asks why, is recorded, and the owner is told. Applicants&apos; resumes are never shown here.</p>
           <form method="get" className="panel">
             <label className="lab" htmlFor="ac-q">Clinic name, town or email</label>
             <input id="ac-q" name="q" type="search" defaultValue={search} />
