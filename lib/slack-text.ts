@@ -14,9 +14,12 @@ export function siteLabel(env: Env): string {
 // Slack reads &, < and > as its own markup, so text that comes from a person is escaped.
 export const slackEscape = (text: string) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-// One alert: a bold first line with the site label, then a line for each detail.
-export function formatAlert(label: string, title: string, lines: string[] = []): string {
-  return [`*[${label}] ${slackEscape(title)}*`, ...lines.filter(Boolean).map((l) => slackEscape(l))].join("\n");
+// One alert: a bold first line with the site label, a line for each detail, and optionally a link straight to the page where Steve does the
+// next thing. Slack writes a link as <address|words>, and the words are escaped like any other text.
+export function formatAlert(label: string, title: string, lines: string[] = [], link?: { url: string; text: string }): string {
+  const out = [`*[${label}] ${slackEscape(title)}*`, ...lines.filter(Boolean).map((l) => slackEscape(l))];
+  if (link && /^https:\/\/[^\s|<>]+$/.test(link.url)) out.push(`<${link.url}|${slackEscape(link.text)}>`);
+  return out.join("\n");
 }
 
 // Only a real Slack incoming webhook address is ever used, so a mistyped or swapped setting cannot send alerts to another place.

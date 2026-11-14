@@ -41,3 +41,10 @@ test("the admin check explains a missing or mistyped setting and never shows the
   assert.equal(good.ok, true);
   assert.ok(!JSON.stringify(good).includes("SECRETSECRET"));
 });
+
+test("an alert can end with a link straight to the page to act on, and only a real web address is used", () => {
+  assert.equal(formatAlert("live", "A job is waiting for review", ["Eye Care Co"], { url: "https://eyecarejobs.ca/admin/review", text: "Open the review queue" }), "*[live] A job is waiting for review*\nEye Care Co\n<https://eyecarejobs.ca/admin/review|Open the review queue>");
+  assert.equal(formatAlert("live", "T", [], { url: "javascript:alert(1)", text: "x" }), "*[live] T*");
+  assert.equal(formatAlert("live", "T", [], { url: "https://example.com/a b", text: "x" }), "*[live] T*");
+  assert.equal(formatAlert("live", "T", [], { url: "https://eyecarejobs.ca/x", text: "A & B" }), "*[live] T*\n<https://eyecarejobs.ca/x|A &amp; B>");
+});

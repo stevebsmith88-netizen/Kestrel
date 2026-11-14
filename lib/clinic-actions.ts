@@ -201,7 +201,7 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       if (admin) await recordFreeLaunchPost(admin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name);
     }
   }
-  if (submit) await notifySlack(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [job.title, employer.clinic_name]);
+  if (submit) await notifySlack(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [job.title, employer.clinic_name], { path: "/admin/review", text: "Open the review queue" });
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
   refreshJobPages();
