@@ -3,6 +3,153 @@ import type { Post } from "../lib/blog.ts";
 // Blog posts, newest first. A post is shown from its date (see isPublished in lib/blog.ts), so a future date schedules it. To add one, copy a block below and change it, then check with `npm test`.
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
+  {
+    slug: "optometric-assistant-certification-canada",
+    title: "Optometric assistant courses and certification in Canada",
+    description: "No licence is needed to work as an optometric assistant. What the CCOA program, college certificates and training on the job each offer, and how to choose.",
+    date: "2026-12-15",
+    body: `Unlike opticians and optometrists, optometric assistants do not need a licence in any province. You can be hired with no eye care experience at all, and many clinics prefer to train a reliable, friendly person their own way. So why would anyone take a course? Because it can get you hired faster, give you confidence with the equipment, and show a clinic you mean to stay.
+
+There are 3 routes, and plenty of good assistants have taken each of them.
+
+## Training on the job
+
+This is the most common way in. The clinic teaches you its pre-tests, its equipment, its booking system and its way of looking after patients, usually with a colleague beside you for the first weeks. It costs you nothing and you are paid while you learn. The catch is that the quality depends entirely on the clinic, so ask at the interview who will train you, on which tests, and how long it usually takes. What an assistant may do is also set by the optometrist and the rules in your province, which our guide to [optometric assistant jobs](/blog/optometric-assistant-jobs-canada) explains.
+
+## The CCOA program
+
+The Canadian Certified Optometric Assistant program, or [CCOA](https://opto.ca/ccoa), is run by the Canadian Association of Optometrists. It is online, and it is open only to people employed by a member optometrist of the association, who sponsors you for the length of the program. In practice that means you take it once you have a job, often with the clinic's support.
+
+The full program has 9 modules covering customer service, office organization, technical skills and current practice, plus a workshop. Then comes a final exam: 100 multiple choice questions in 2 hours, taken online, with a pass mark of 65% and 2 rewrites allowed if needed, for a fee. On the self paced option you have up to 24 months to finish. There is also a 6 week introduction called The Basics, and single modules for people who want the learning without the certificate. Certification has to be kept up with continuing education once you have it.
+
+> A certificate will not replace a good clinic, but it tells the next one you took the job seriously.
+
+## A college certificate
+
+A few colleges teach assisting as a program of its own. The Southern Alberta Institute of Technology, for example, offers a Certificate in Ophthalmic and Optometric Assisting, which covers work in optometry clinics and in eye surgeons' clinics, with a practicum. A college route suits someone who wants to train before looking for work, or who is changing careers and wants a structured start. Check the current length, cost and entry requirements with the college itself, and ask a couple of local clinics whether they value it before you enrol.
+
+| Route | Best if you | What you need |
+| --- | --- | --- |
+| Training on the job | Want to earn while you learn | A clinic willing to train you |
+| CCOA | Already work for a member optometrist | Your employer's sponsorship |
+| College certificate | Want to train before applying | Time and tuition, and the entry requirements |
+
+## Which matters most to a clinic
+
+Ask a clinic owner what they look for in an assistant and the answer is rarely a certificate. It is someone who turns up, stays calm with an anxious patient, learns the equipment and asks good questions. Training of any kind helps you show those things, and it helps most when you can say what you can actually do: which pre-tests you run, which imaging you know, and how many patients a day you are used to.
+
+If you are hiring, saying in your ad how you train new assistants, and whether you support the CCOA, is one of the simplest ways to attract good people. Our post on [writing an optometric assistant job ad](/blog/optometric-assistant-job-ad) shows how.
+
+[See optometric assistant jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "how-to-become-an-optometrist-canada",
+    title: "How to become an optometrist in Canada",
+    description: "The 2 schools, the national board exam, the provincial licence and the routes for optometrists trained abroad, with where the jobs are.",
+    date: "2027-01-19",
+    body: `Becoming an optometrist in Canada takes a Doctor of Optometry degree, a national board exam and a licence from the province where you will practise. The steps are the same wherever you start, and the field is small enough to describe in full. This guide was checked against the schools', the exam board's and the regulators' own sources in November 2026, but confirm the details with them before you apply.
+
+## The degree
+
+Canada has 2 schools of optometry. The [University of Waterloo](https://uwaterloo.ca/optometry-vision-science/future-optometry-students) offers the only English language program, a 4 year Doctor of Optometry (OD) degree accredited by the Accreditation Council on Optometric Education. Applications go through the Ontario Universities' Application Centre, followed by the CASPER test and an interview. The École d'Optométrie at the Université de Montréal teaches in French.
+
+Places are limited. According to the Canadian Association of Optometrists' [2025 report on optometry in Canada](https://opto.ca), the most recent graduating classes were 94 at Waterloo and 43 at Montréal. Entry is competitive, so check each school's current prerequisites and deadlines well ahead.
+
+## The national exam
+
+Every province requires the exam set by the [Optometry Examining Board of Canada](https://oebc.ca) (OEBC), whose members are the 10 provincial regulators. It has 2 parts, a written exam and a clinical exam called the OSCE. Students in an accredited OD program can sit the written part within 18 months of their expected graduation and the OSCE within 12 months, so most take them in their final year.
+
+Registration opens for set windows. For the next sitting it runs from 4th January to 12 noon Eastern on 29th January 2027, so if you are in your final year, check the [key dates](https://oebc.ca/taking-the-exam/dates-deadlines-location/) now. Ontario and British Columbia have also stopped accepting the American board exam for new licences, apart from candidates who had registered for it by March 2025, so the OEBC exam is now the route for almost everyone.
+
+> The degree and the exam are national. The licence is not.
+
+## The licence
+
+Once you pass, you apply to the regulator in the province where you will work. Each sets its own requirements on top of the exam, so read the regulator's application page early. In some provinces the regulator is also the provincial association.
+
+| Province | Regulator | Optometrists per 100,000 people |
+| --- | --- | --- |
+| British Columbia | College of Health and Care Professionals of BC | 19.6 |
+| Alberta | Alberta College of Optometrists | 22.2 |
+| Saskatchewan | Saskatchewan Association of Optometrists | 17.7 |
+| Manitoba | Manitoba Association of Optometrists | 14.9 |
+| Ontario | College of Optometrists of Ontario | 21 |
+| New Brunswick | New Brunswick Association of Optometrists | 17.7 |
+| Nova Scotia | Nova Scotia College of Optometrists | 16.7 |
+| Prince Edward Island | Prince Edward Island College of Optometrists | 15.6 |
+| Newfoundland and Labrador | Newfoundland and Labrador College of Optometrists | 11.2 |
+
+The last column comes from the Canadian Association of Optometrists' 2025 report, worked out from 2021 census population figures.
+
+## If you trained outside Canada
+
+There are 2 routes, both starting with an evaluation through the Federation of Optometric Regulatory Authorities of Canada (FORAC). Depending on the result of its evaluating exam, you either challenge the OEBC exam directly, or complete a bridging program first: the International Optometric Bridging Program at Montréal or the Advanced Standing Optometry Preparatory Program at Waterloo, which had 28 students between them in 2025. Then you apply for a provincial licence like everyone else.
+
+## Where the work is
+
+The Canadian Association of Optometrists says Canada has one of the highest numbers of optometrists per person in the world, and in its 2025 report, students described a crowded job market in the big cities. The same report found a shortage of optometrists outside urban centres in every province. If you are open to working outside the big cities, you may find more openings and less competition for them.
+
+Most new graduates start as associates. In Ontario, the report counted 1,636 associates, independent contractors and employees against 1,080 owners. When you weigh up offers, look at how pay is set, whether by salary, a daily rate or a percentage of what you bill, and what a typical week looks like. If you are hiring an optician as well, our guide to [becoming an optician in Canada](/blog/how-to-become-an-optician-canada) covers their route.
+
+[See optometrist jobs across Canada](/jobs)`,
+  },
+  {
+    slug: "who-works-in-eye-care-canada",
+    title: "Who works in eye care in Canada? What the census shows",
+    description: "Most optometrists and opticians in Canada are now women, and the change between generations is striking. The numbers by age and province, and what they mean.",
+    date: "2027-01-29",
+    body: `Walk into an eye clinic in Canada and the team you meet is probably mostly women. That is not a hunch. The 2021 census and a 2025 report from the Canadian Association of Optometrists both show it, and the numbers by age tell a story about where the profession is heading.
+
+The census counted 6,765 optometrists, 59% of them women, and 9,775 opticians, 70% of them women. The association's own count in 2025, which left out British Columbia because it was not reported, puts women at 63% of optometrists: 3,974 women and 2,336 men.
+
+## The shift between generations
+
+The headline is in the age groups. Among optometrists aged 65 and over, about 1 in 7 is a woman. Among those aged 25 to 34, it is more than 2 in 3. Opticians show the same pattern.
+
+| Age | Optometrists who are women | Opticians who are women |
+| --- | --- | --- |
+| 25 to 34 | 69% | 79% |
+| 35 to 44 | 66% | 78% |
+| 45 to 54 | 56% | 71% |
+| 55 to 64 | 50% | 56% |
+| 65 and over | 14% | 33% |
+
+As the older group retires, a growing share of practice owners, senior opticians and clinic leaders will be women. The association's report counted 548 optometrists aged 65 or over, while the largest groups are now in their 30s.
+
+> As the older generation retires, the people running eye care will look different.
+
+## Province by province
+
+The picture changes a lot across the country, especially for opticians.
+
+| Province | Optometrists who are women | Opticians who are women |
+| --- | --- | --- |
+| British Columbia | 48% | 68% |
+| Alberta | 50% | 80% |
+| Saskatchewan | 51% | 91% |
+| Manitoba | 51% | 86% |
+| Ontario | 59% | 60% |
+| New Brunswick | 47% | 81% |
+| Nova Scotia | 55% | 64% |
+
+In Saskatchewan and Manitoba, close to 9 in 10 opticians are women. In Ontario it is closer to 6 in 10. The smaller provinces have too few people in each group for a reliable split, so they are left out here.
+
+## And the men?
+
+Men are a minority in most of the clinic, and a small one in some roles. About 1 in 5 opticians under 45 is a man. Optometric assistants are harder to count, because the census puts them in a wider group of health assistants, but that group is about 78% women too.
+
+For a clinic, the useful question is whether your hiring quietly narrows the field. If your ads, your website and your team photos only ever show 1 kind of person, some good candidates may decide the job is not for them before they read the pay. Describing the work plainly, showing the pay range and saying how you train new people widens the pool for everyone, which our posts on [attracting the right candidates](/blog/attract-right-candidates) and [hiring for attitude](/blog/hire-for-attitude-train-for-skills) go into.
+
+## What it means if you are hiring
+
+A workforce that is mostly younger women, with a wave of older owners retiring, raises practical questions for clinics. How do you handle leave and a return to work? Can you offer part time hours or a 4 day week? Is there a path from optician or associate to partner, or to buying the practice?
+
+If you are earlier in your career, the path into each role is set out in our guides to [becoming an optician](/blog/how-to-become-an-optician-canada) and [becoming an optometrist](/blog/how-to-become-an-optometrist-canada).
+
+A note on the figures: the census numbers are from Statistics Canada's 2021 Census of Population, which rounds counts to the nearest 5 and groups gender as men and women, with the small number of non binary people included in each to protect privacy. The 2025 figures are from the Canadian Association of Optometrists' report "Optometry in Canada". The 2 sources count in different ways, so compare each with itself.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
 
   {
     slug: "empty-optician-chair-cost",
