@@ -11,7 +11,7 @@ export type BarPerson = { role: Role; email: string; fullName: string };
 // Each kind of account's dashboard. The same as homeFor in lib/auth.ts, kept here so the browser can use it too.
 export const homeOf = (role: Role) => (role === "admin" ? "/admin" : role === "clinic" ? "/clinic" : "/candidate");
 
-// Settings for a candidate or clinic is a gear icon beside the initials (Steve, 14th November 2026), so it is not repeated in the menu.
+// Settings for a candidate or clinic is a gear icon beside the name inside the initials menu (Steve, 14th November 2026), so it is not repeated in the menu.
 // The admin menu keeps its line until the Admin console review (next tasks, items 5 and 9).
 export const SETTINGS_HREF = "/account";
 

@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { ACCOUNT_MENU, initialsOf, type BarPerson } from "@/lib/account-menu";
+import Icon from "@/components/Icon";
+import { ACCOUNT_MENU, SETTINGS_HREF, initialsOf, type BarPerson } from "@/lib/account-menu";
 import { signOut } from "@/lib/auth-actions";
 
-// The initials badge with its menu (profile, account settings, sign out) for a signed in person. Used by the dashboard bar and the public
+// The initials badge with its menu (profile, sign out, and a gear for account settings beside the name) for a signed in person. Used by the dashboard bar and the public
 // header, so it is the same everywhere. Opens with a click or the keyboard, using the browser's own details box.
 export default function AccountMenu({ session, here, className = "" }: { session: BarPerson; here?: string; className?: string }) {
   return (
@@ -11,8 +12,17 @@ export default function AccountMenu({ session, here, className = "" }: { session
         <span className="avatar" aria-hidden="true">{initialsOf(session.fullName, session.email)}</span>
       </summary>
       <div className="who-panel">
-        <p>{session.fullName || session.email}</p>
-        {session.fullName && <p className="who-email">{session.email}</p>}
+        <div className="who-id">
+          <div className="who-name">
+            <p>{session.fullName || session.email}</p>
+            {session.role !== "admin" && (
+              <Link href={SETTINGS_HREF} className="who-gear" aria-label="Account settings" aria-current={here === SETTINGS_HREF ? "page" : undefined}>
+                <Icon name="gear" />
+              </Link>
+            )}
+          </div>
+          {session.fullName && <p className="who-email">{session.email}</p>}
+        </div>
         {ACCOUNT_MENU[session.role].map((item) => (
           <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>{item.label}</Link>
         ))}

@@ -153,7 +153,12 @@ input.other{margin-top:10px}
 .who-panel{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:260px;max-width:min(340px,90vw);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(27,43,75,0.12);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .who-panel p{margin:0;font-weight:600;color:var(--navy);overflow-wrap:anywhere}
 .who-panel .who-email{font-weight:400;color:var(--slate);font-size:0.875rem;line-height:1.35;margin-bottom:6px;overflow-wrap:anywhere}
-.who-panel>p:last-of-type{margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.who-panel .who-id{margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.who-panel .who-name{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.who-panel .who-name .who-email{margin:0}
+.who-panel a.who-gear{flex:none;width:44px;min-height:44px;padding:0;margin:-8px -10px -8px 0;justify-content:center}
+.who-panel a.who-gear .icon{width:22px;height:22px}
+.who-panel a.who-gear[aria-current=page]{background:var(--cream)}
 .who-panel a{color:var(--navy);text-decoration:none;font-weight:600;padding:10px 0;min-height:44px;display:flex;align-items:center}
 .who-panel a,.who-panel .linkbtn{padding:10px;margin:0 -10px;border-radius:8px;text-align:left}
 .who-panel .linkbtn{display:flex;width:calc(100% + 20px);color:var(--navy)}

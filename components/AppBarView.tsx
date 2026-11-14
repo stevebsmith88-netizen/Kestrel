@@ -60,12 +60,6 @@ export default function AppBarView({ session, current, unread, quiz }: { session
       {unread > 0 && <span className="inboxcount" aria-hidden="true">{unread > 99 ? "99+" : unread}</span>}
     </Link>
   );
-  // The gear beside the initials opens Account settings. Admins have no gear for now, their menu keeps its own line.
-  const gear = hasInbox && (
-    <Link href={SETTINGS_HREF} className="inboxlink" aria-label="Account settings" aria-current={here === SETTINGS_HREF ? "page" : undefined}>
-      <Icon name="gear" />
-    </Link>
-  );
   return (
     <header className="topbar">
       <div className="wrap">
@@ -78,7 +72,6 @@ export default function AppBarView({ session, current, unread, quiz }: { session
         </nav>
         <div className="topbar-right app-wide">
           {envelope}
-          {gear}
           <AccountMenu session={session} here={here} />
         </div>
         <div className="topbar-narrow">
