@@ -4,6 +4,59 @@ import type { Post } from "../lib/blog.ts";
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
+    slug: "clinic-to-lens-rep-supplier-role",
+    title: "From the clinic to the road: moving into a supplier role",
+    description: "What changes when an optician, assistant or clinic manager becomes a lens rep, trainer or account manager, and how to make the move well.",
+    date: "2027-01-05",
+    body: `![A person in a wheat field at sunset holds an ear of wheat in 1 hand and a tablet in the other.](/images/blog/clinic-to-lens-rep-supplier-role.jpg)
+
+Every week a rep walks into your clinic with a sample case, a new lens design or a problem to sort out with an order. Plenty of opticians, assistants and managers have watched that and wondered whether they could do the job. Many of the people doing it started exactly where you are.
+
+Lens labs, frame companies, contact lens makers, equipment suppliers and software companies all hire people who know clinics. Our guide to [field based eye care jobs](/blog/field-based-eye-care-jobs) describes the roles themselves. This one is about the move: what changes, what carries over, and how to make it without regretting it.
+
+## What carries over
+
+Your customers are clinics, and you already know how a clinic works. You know why a remake is a headache at 4 on a Saturday, why an owner cares about turnaround more than a slightly better price, and what a busy dispensary has time to listen to. That is the hardest thing to teach a rep who has never worked behind the counter, and a big part of why suppliers often look for clinic experience.
+
+Product knowledge carries over too. An optician who can explain why one progressive design suits a patient better than another can explain it to the staff who will sell it. That is the heart of trainer and educator roles, which are often the gentlest step out of the clinic.
+
+## What changes
+
+| | In the clinic | In a supplier role |
+| --- | --- | --- |
+| Your customer | Patients | The clinic team and owner |
+| Where you work | 1 location, a set schedule | A territory, much of it in the car |
+| How you are paid | Wage or salary | Often a base plus a share tied to sales |
+| What a good day looks like | Patients helped, the day ran on time | Accounts looked after, orders up, problems solved |
+| Who is around you | A team, all day | Mostly on your own |
+
+The last row surprises people most. In a clinic the team is there all day. On the road you plan your own week, drive between accounts and report to a manager you may see once a month. Some people love the independence. Others miss the team more than they expected.
+
+> Your clinic experience is what the supplier is hiring. Lead with it.
+
+## Questions to ask before you say yes
+
+Our field based guide covers the basics: the size of the territory, how much of the pay is base, and who pays for the car. A few more are worth asking when you are moving from a clinic.
+
+- How are targets set, and what happened to the last person who missed them?
+- Is there a settling in period before the variable part of the pay counts?
+- How many nights away from home should I expect in a typical month?
+- What training will I get on the products, and on selling?
+- If I want to move back towards education or training later, does the company have those roles?
+
+## How to make the move
+
+Start with the reps who already visit your clinic. Ask them what the job is really like, what they wish they had known, and whether their company is hiring. Most are happy to talk, and a referral from a rep can count for a lot.
+
+When you apply, write your resume for a supplier, not a patient. Show the things a supplier cares about: products you know well, staff you have trained, how you improved something in the dispensary, and any sales or targets you have hit. A short, specific [cover letter](/blog/cover-letter-optical-job) that says why this company and why now helps more than a long list of duties. For the interview, our guide to [STAR questions](/blog/star-interview-method) shows how to turn clinic stories into answers.
+
+If you are not ready to leave the clinic, a trainer or educator role, or a part time project with a supplier, is a way to try the work before committing.
+
+On Kestrel, suppliers post field based roles beside clinic jobs, and you can filter the search to show only those.
+
+[See field based jobs](/jobs?arrangement=field)`,
+  },
+  {
     slug: "optometrist-pay-canada",
     title: "Optometrist pay in Canada: salary, day rates and percentage deals",
     description: "How optometrists are paid in Canada, from salaries and day rates to a percentage of billings, and how to compare offers that are built in different ways.",

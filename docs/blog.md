@@ -41,8 +41,8 @@ Aimed at the searches that bring people who have never heard of Kestrel: pay by 
 | Tue 8th December | How to become an optician in Canada, province by province (`how-to-become-an-optician-canada`) | Written 14th November 2026 from the regulators' own sites and documents (`docs/blog-drafts/licensing-research-opticians.md`). Photo: Canva page 29 |
 | Tue 15th December | Optometric assistant courses and certification in Canada (`optometric-assistant-certification-canada`) | Written 14th November 2026 from the CAO's CCOA pages; SAIT named without length or price (its site could not be read). Photo: Canva page 30 |
 | (22nd and 29th December) | No posts over the holidays | |
-| Tue 5th January 2027 | Locum optometrist work in Canada: how it works | Public facts only; Steve's view on day rates welcome |
-| Tue 12th January | Moving from clinic work to a lens rep or supplier role | Links to the field based jobs post |
+| Tue 5th January 2027 | From the clinic to the road: moving into a supplier role (`clinic-to-lens-rep-supplier-role`) | Written 14th November 2026; moved up from 12th January when the locum post was parked. Builds on the field based jobs post without repeating it. Photo: Canva page 33 (a field, keeping the joke from the field based post) |
+| Tue 12th January | Open | Free slot. **Locum optometrist work** is parked until Steve has found out more (14th November 2026); it can take this slot or a later one |
 | Tue 19th January | How to become an optometrist in Canada (`how-to-become-an-optometrist-canada`) | Written 14th November 2026 from Waterloo, OEBC, the CAO 2025 report and the regulators. Mentions OEBC registration closing 29th January 2027: check the date before it goes out. Photo: Canva page 31 |
 | Tue 26th January | What an empty optician chair costs a clinic (`empty-optician-chair-cost`), idea 14 below | Written 14th November 2026 from Steve's inputs and public sources (`docs/blog-drafts/why-pay-for-a-job-ad.md`). The sums are written out in the post (Steve decided against a calculator, 14th November 2026). Photo: Canva page 28 |
 
