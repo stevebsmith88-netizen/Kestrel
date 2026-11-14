@@ -30,7 +30,12 @@ export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
     { href: "/clinic/locations", label: "Locations" },
     { href: "/account/help", label: "Help and feedback" },
   ],
-  admin: [{ href: "/account", label: "Account settings" }],
+  // The tools used now and then (lib/admin-menu.ts has the list).
+  admin: [
+    { href: "/admin/payments", label: "Payments and Stripe" },
+    { href: "/admin/outreach", label: "Outreach" },
+    { href: "/admin/suppressions", label: "Do not email" },
+  ],
 };
 
 export function initialsOf(fullName: string, email: string): string {

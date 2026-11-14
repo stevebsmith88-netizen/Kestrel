@@ -47,5 +47,5 @@ export async function sendDailyDigest(db: SupabaseClient): Promise<void> {
   const numbers = await gatherDigest(db);
   // notifySlack adds the site label itself, so the text sent here is the body only.
   const body = digestMessage(siteLabel(process.env), numbers).split("\n").slice(1);
-  await notifySlack("Daily summary", body, { path: "/admin", text: "Open the admin overview" });
+  await notifySlack("Daily summary", body, { path: "/admin", text: "Open the admin dashboard" });
 }

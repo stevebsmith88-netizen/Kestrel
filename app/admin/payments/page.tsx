@@ -33,7 +33,7 @@ export default async function AdminPayments() {
       <AppBar session={session} current="/admin" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="back"><Link href="/admin">Back to the overview</Link></p>
+          <p className="back"><Link href="/admin">Back to the dashboard</Link></p>
           <h1>Payments</h1>
           <p className="lede2">Whether Stripe and Slack are connected, the products and prices Stripe holds, and the Founding clinics.</p>
           <StripeSetupCheck checks={stripeChecks(process.env)} />

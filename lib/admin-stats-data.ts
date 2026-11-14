@@ -39,7 +39,7 @@ export async function loadStats(period: Period) {
   if (!db) return null;
   const range = periodRange(period);
 
-  const [profiles, waitlist, employers, jobs, applications, candidateProfiles, inReview, openReports, pendingClaims, contacts] = await Promise.all([
+  const [profiles, waitlist, employers, jobs, applications, candidateProfiles, inReview, openReports, pendingClaims, contacts, openSupport] = await Promise.all([
     fetchAll<{ role: string; created_at: string }>(db, "profiles", "role, created_at"),
     fetchAll<{ created_at: string; confirmed_at: string | null; unsubscribed_at: string | null }>(db, "waitlist", "created_at, confirmed_at, unsubscribed_at"),
     fetchAll<{ id: string; claimed: boolean; owner_id: string | null; created_at: string }>(db, "employers", "id, claimed, owner_id, created_at"),
@@ -50,6 +50,7 @@ export async function loadStats(period: Period) {
     head(db, "job_reports", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "open")),
     head(db, "listing_claims", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "pending_review")),
     fetchAll<{ employer_id: string; employee_band: string | null }>(db, "employer_contacts", "employer_id, employee_band"),
+    head(db, "support_requests", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "open")),
   ]);
 
   const candidates = profiles.filter((p) => p.role === "candidate");
@@ -113,6 +114,7 @@ export async function loadStats(period: Period) {
     jobsInReview: inReview ?? 0,
     openReports: openReports ?? 0,
     pendingClaims: pendingClaims ?? 0,
+    openSupport: openSupport ?? 0,
     claimedShare: percent(employers.filter((e) => e.claimed).length, employers.length),
   };
 }
