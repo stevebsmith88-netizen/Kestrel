@@ -20,7 +20,7 @@ export const DASHBOARD_NOTICES: Record<string, string> = {
   "job-withdrawn": "The job is back in your drafts, so you can change it and send it again.",
   "job-deleted": "The job is deleted.",
   "job-delete-blocked": "That job can't be deleted because it has been live or has applications. Close it instead, so candidates keep their record.",
-  "job-edited": "Your changes are with our team. The job is offline until we approve them, usually within 1 business day. Its 30 days keep running.",
+  "job-edited": "Your changes are with our team. The job is offline until we approve them, usually within 1 business day. Its run keeps going.",
   "template-saved": "Saved as a template. Start a new post from it under Post a job.",
   "template-limit": "You have 20 templates already. Delete one under Post a job, then try again.",
   "template-failed": "We couldn't save that template. Please try again.",

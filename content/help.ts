@@ -535,7 +535,7 @@ export const HELP: HelpSection[] = [
         keywords: ["review", "approval", "approved", "rejected", "sent back", "in review", "how long", "moderation", "publish"],
         answer: [
           "A person on our team reads every post before it goes live, usually within 1 business day. Your dashboard shows the job as **In review**, with the line \"With our team\".",
-          "If it is approved, it goes live for 30 days and we email you. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. If 3 or more jobs are approved at about the same time, they share 1 message with a **Dismiss all** button. Nothing can be published without that check, and you cannot publish a job yourself.",
+          "If it is approved, it goes live and we email you. A job that goes live during the free launch runs for 60 days, and after the free launch a job runs for 30 days. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. If 3 or more jobs are approved at about the same time, they share 1 message with a **Dismiss all** button. Nothing can be published without that check, and you cannot publish a job yourself.",
           "If we send it back, your dashboard shows a note headed **What to change**. Change what the note asks for and send it again. While a job is in review you can press **Take back to edit** to change it yourself first.",
         ],
         steps: [
@@ -551,7 +551,7 @@ export const HELP: HelpSection[] = [
         title: "How do I edit a live job?",
         keywords: ["change", "update", "amend", "edit job", "fix typo", "modify"],
         answer: [
-          "You can change a live job, but the change goes to our team before candidates see it. The job goes offline until we have read the changes, usually within 1 business day, and its original 30 days keep running. Applications you have already received are kept. A live job cannot be saved as a draft, only sent for review or closed.",
+          "You can change a live job, but the change goes to our team before candidates see it. The job goes offline until we have read the changes, usually within 1 business day, and its original run keeps going. Applications you have already received are kept. A live job cannot be saved as a draft, only sent for review or closed.",
           "A draft, or a job we sent back, is edited in the same way and does not go offline, because it is not live.",
         ],
         steps: [

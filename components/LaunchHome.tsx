@@ -90,7 +90,7 @@ export default async function LaunchHome() {
               <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, a person reads it before it goes live, and agencies cannot post.</p>
             </div>
             <div className="lh-offer">
-              <p className="lh-offerhead">Free to post while we launch</p>
+              <p className="lh-offerhead">Free to post while we launch, and first jobs stay up for 60 days</p>
               <p>After that, a 30 day post starts at {dollars(ROLE_BANDS[0].price)}, or the Clinic pass is {dollars(CLINIC_PASS.monthly)} a month for up to {CLINIC_PASS.livePosts} live posts. No charge by the click.</p>
               <p className="lh-offeractions">
                 <Link href="/clinics" className="btn">Post a job</Link>

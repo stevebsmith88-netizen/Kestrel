@@ -51,7 +51,7 @@ export default async function Clinics() {
           </p>
           <section className="pricing" aria-labelledby="pricing-h">
             <h2 id="pricing-h">One price. 30 days.</h2>
-            <p className="pricing-free">Free to post while we launch, for the opening 30 to 60 days.</p>
+            <p className="pricing-free">Free to post while we launch, for the opening 30 to 60 days, and those first jobs stay up for 60 days.</p>
             <p>After launch, a 30 day post costs around the price of a coffee a day. No charge by the click.</p>
             <table className="ladder">
               <caption>Per 30 day post, before HST</caption>

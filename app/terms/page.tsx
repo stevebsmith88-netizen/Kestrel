@@ -84,7 +84,7 @@ export default async function Terms() {
           <ul>
             <li>Prices are shown in Canadian dollars before HST or other taxes. Tax is added at checkout and shown on your receipt.</li>
             <li>Payments are handled by Stripe, a payment company. We do not see or store your full card number.</li>
-            <li>A single job post lasts 30 days from the day it goes live. A monthly clinic pass renews each month until you cancel, and you can cancel at any time. Cancelling stops the next renewal, and your pass stays active until the end of the period you have paid for.</li>
+            <li>A single job post lasts 30 days from the day it goes live, or 60 days if it goes live during the free launch. A monthly clinic pass renews each month until you cancel, and you can cancel at any time. Cancelling stops the next renewal, and your pass stays active until the end of the period you have paid for.</li>
             <li>Once a post has gone live, its fee is not refundable. If we decline a post before it goes live, or a fault on our side stops it from being published, we will refund the fee or let you repost for free. If you think you were charged in error, write to us within 30 days.</li>
             <li>If we remove a post because it breaks these terms or our posting policy, we do not refund its fee.</li>
             <li>We may change our prices. A change applies to your next purchase or renewal, and we will give you notice first.</li>

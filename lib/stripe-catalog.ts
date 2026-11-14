@@ -2,7 +2,7 @@
 // Pure, so it can be tested (lib/stripe-catalog.test.ts). Prices are in Canadian dollars before HST. Stripe cannot change a price
 // once it exists, so a new price is made when a number here changes, and the old one is switched off (see the sync in lib/stripe-catalog-sync.ts).
 
-import { CLINIC_PASS, CLINIC_PASS_PLUS, FREE_LAUNCH_ENDS, POST_DAYS, ROLE_BANDS } from "./pricing.ts";
+import { CLINIC_PASS, CLINIC_PASS_PLUS, FREE_LAUNCH_ENDS, LAUNCH_POST_DAYS, POST_DAYS, ROLE_BANDS } from "./pricing.ts";
 
 export type CatalogPrice = {
   lookupKey: string; // how the site finds this price in Stripe, whatever Stripe's own id is
@@ -73,4 +73,9 @@ export function todayInToronto(now: Date = new Date()): string {
 // Checkout (step 3) asks this: may the free launch coupon be applied today? True on the end date itself.
 export function freeLaunchOpen(now: Date = new Date(), endsOn: string = FREE_LAUNCH_ENDS): boolean {
   return todayInToronto(now) <= endsOn;
+}
+
+// How many days a job runs from the day it goes live: 60 while the free launch is open, 30 after.
+export function postDaysFor(now: Date = new Date(), endsOn: string = FREE_LAUNCH_ENDS): number {
+  return freeLaunchOpen(now, endsOn) ? LAUNCH_POST_DAYS : POST_DAYS;
 }
