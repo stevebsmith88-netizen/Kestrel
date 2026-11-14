@@ -2,6 +2,20 @@
 
 For Steve and Claude when someone upgrades or changes a pass. Not on the website and not in the Terms, because the rules are hard to explain to a clinic. Decided by Steve on 6th November 2026. Stripe is not built yet, so check each step in test mode when it is.
 
+## Founding clinics (decided by Steve, 14th November 2026)
+
+The rule Stripe checkout must follow. The numbers are `FOUNDING_CLINICS` in `lib/pricing.ts`.
+
+- **Who:** the first 50 clinic locations to post a job during the free launch. Each location counts once; a group's locations count separately. Kestrel keeps the list (the date of each location's first approved post decides the order).
+- **What they get, free:** a "Founding clinic" mark on their public clinic page for good, and the founding pass price if they take a pass during the founding period.
+- **The price lock:** the pass price they start on is kept for **12 months from the pass start, or until they cancel, whichever comes first.** Cancelling ends the lock; coming back later is at the price in force then. After 12 months the price in force at that time applies, with at least 30 days notice.
+- **Emails, sent automatically (built with checkout):**
+  1. A welcome when a location becomes a Founding clinic ("You are 1 of our first 50").
+  2. A thank you when they take a pass, saying the price is locked until [date].
+  3. A reminder 30 days before the lock ends, with the new price and the date it starts. This is also the 30 days notice.
+  Every email is a service message about their account, so it goes to the clinic whether or not they ticked the news box, and none of them sells anything else.
+- **Stripe:** each founding pass is a subscription with a schedule: phase 1 at the founding price for 12 months, then phase 2 at the price in force. Cancelling ends the schedule.
+
 ## Monthly clinic moves from the Clinic pass up to Plus
 
 - They pay the Plus monthly price in force at that time ($349 today). The founding lock belongs to the pass they first took, so it does not carry over to Plus.

@@ -90,7 +90,7 @@ Review every price after the first 3 months of real numbers.
 
 **Founding clinics: the first 50.** Any of the first 50 clinic locations to post during the free launch becomes a Founding clinic, free: a permanent "Founding clinic" mark on its clinic page, and the founding pass price locked for 12 months if it takes a pass (already the rule). Scarcity ("1 of the first 50") is the reason to act early. Optional: a $199 founding credit pack (4 post credits for 12 months after paid posting starts, a $316 value) for clinics that want to back Kestrel with money.
 
-**Founding sponsor: at most 3, $10,000 for the first 18 months.** Everything in Presenting partner or Supporter, plus: named on the Founding supporters page for good, a launch week LinkedIn and Instagram thank you post, 2 sponsored articles, and first offer at the regular price when it ends. Only after the disclosure conversation.
+**Founding sponsor: at most 3, $7,500 for 12 months** (revised by Steve, 14th November 2026, from $10,000 for 18 months; straight pro rata would be $6,667). For 12 months: the "Supported by" strip ($4,000 a year on its own), 2 sponsored articles ($3,000), launch week LinkedIn and Instagram thank you posts, and first offer to renew at the regular Supporter price. **For good:** their name stays on the Founding supporters page, because the founding title can only be earned at launch. That is the scarcity: only 3 companies can ever be founding sponsors, while the paid benefits last 12 months. The pitch is association: backing a Canadian board built for eye care, from day 1. Only after the disclosure conversation. Presenting partner on the pay summary is sold separately.
 
 How to take the money before checkout exists: a Stripe Payment Link (a page Stripe hosts, no code on Kestrel's side), or an invoice for clinics and sponsors.
 
@@ -100,6 +100,25 @@ Cautions:
 - **Tax: register for HST now.** A business can only charge HST once registered. Below $30,000 a year registration is voluntary, and registering also lets Kestrel claim back the HST it pays on its own costs. Show prices "plus HST" and put the HST number on every invoice. Tracking for CRA: see `docs/plans/clinic-and-supplier-pages.md`, section 5.
 - **A refund policy** in plain words, before the first sale: draft in `docs/legal/refund-policy-draft.md`.
 - **Consent:** supporters' names shown only with their permission, and updates only to those who ticked the news box (CASL).
+
+## Referrals (Steve's idea, 14th November 2026, to build after paid posting starts)
+
+Suggested shape, with Steve's 25% idea:
+- **Each clinic gets its own referral code,** made automatically when its first job is approved (for example `NORTHGATE-7Q4K`), shown on its dashboard with a link to share.
+- **The new clinic** gets 25% off its first paid post or first month of a pass.
+- **The clinic that referred them** gets 25% off its next post or pass month **once the new clinic's first paid post goes live**. Rewarding only on a real paid post stops fake sign ups.
+- **Limits:** up to 4 rewards a year for each clinic; a clinic cannot refer another location with the same owner or company; the codes do not stack with the founding price.
+- **During the free launch** a discount is worth nothing, so start referrals when prices switch on. During launch, "refer a clinic" can simply be a thank you and a mention.
+- Stripe promotion codes handle the discount itself; Kestrel keeps the record of who referred whom.
+
+## Tracking leads and accounts (14th November 2026)
+
+Kestrel already holds most of a simple sales record in its own database, in Canada: clinic leads from the province search (`clinic_leads`: name, website, province, published email and where it was found), the outreach sequence (`outreach_contacts` and `outreach_sends`: when each email went, which step, and why it stopped: replied, joined, unsubscribed), and every clinic account with its jobs. Missing: suppliers and sponsors, notes from calls and meetings, and a deal stage.
+
+Options:
+- **Salesforce:** linking a website to Salesforce needs its API, which is included only in Enterprise edition and above (about US$175 a user a month, billed yearly), or as an add on. Starter and Pro do not include it. Too much for now, and it would copy personal data to the US.
+- **HubSpot free CRM:** free, includes the API, so Kestrel could send new clinic accounts across automatically later. Data is stored outside Canada.
+- **Recommended: a "Contacts and deals" page in Kestrel's own admin.** It uses what is already stored, adds suppliers and sponsors, notes and a stage (new, contacted, talking, won, lost), and keeps the CASL record and the data in Canada. No cost beyond the build. Revisit a CRM when there is a second salesperson.
 
 ## Rules for sponsored articles
 
