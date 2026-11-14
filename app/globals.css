@@ -1030,14 +1030,15 @@ h2.subhead{font:400 1.6rem/1.2 var(--f-display),Georgia,serif;margin:40px 0 6px}
 
 
 /* Admin job rows that open when pressed, and the search bar on Admin, Jobs (Steve, 14th November 2026). */
-.jobrow{background:#fff;border:1px solid var(--line);border-radius:12px}
-.jobrow>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;cursor:pointer;list-style:none;min-height:44px}
-.jobrow>summary::-webkit-details-marker{display:none}
-.jobrow>summary:hover{background:rgba(27,43,75,.04)}
-.jobrow[open]>summary{border-bottom:1px solid var(--line)}
-.jobrow-main{display:flex;flex-direction:column;gap:2px;min-width:0}
-.jobrow-side{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.jobrow-body{padding:6px 16px 14px}
+.adminrow{background:#fff;border:1px solid var(--line);border-radius:12px}
+.adminrow>summary{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;cursor:pointer;list-style:none;min-height:44px}
+.adminrow>summary::-webkit-details-marker{display:none}
+.adminrow>summary:hover{background:rgba(27,43,75,.04)}
+.adminrow>summary{border-radius:12px}
+.adminrow[open]>summary{border-bottom:1px solid var(--line);border-radius:12px 12px 0 0}
+.adminrow-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+.adminrow-side{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.adminrow-body{padding:6px 16px 14px}
 .jobfilter{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:18px 0}
 .jobfilter .row{margin:0}
 .jobfilter .grow{flex:1 1 220px}

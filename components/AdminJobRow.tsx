@@ -10,18 +10,18 @@ import { longDate } from "@/lib/jobs";
 // The line shows the title, clinic, state and when it last changed. Open it for the payment, the notes and a button to the job page.
 export default function AdminJobRow({ job, payment, activity }: { job: AdminJob; payment: AdminPayment | undefined; activity: ActivityRow[] }) {
   return (
-    <details className="jobrow">
+    <details className="adminrow">
       <summary>
-        <span className="jobrow-main">
+        <span className="adminrow-main">
           <strong>{job.title}</strong>
           <span className="meta">{job.employers?.clinic_name ?? "A clinic"} · {job.city}, {job.province}</span>
         </span>
-        <span className="jobrow-side">
+        <span className="adminrow-side">
           <StatusBadge status={job.status} />
           <span className="meta">{longDate(job.updated_at)}</span>
         </span>
       </summary>
-      <div className="jobrow-body">
+      <div className="adminrow-body">
         <p className="meta">
           {job.role_category}
           {job.posted_at ? ` · live since ${longDate(job.posted_at)}` : ""}
