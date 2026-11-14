@@ -353,3 +353,14 @@ select t.try('0048', 'a visitor cannot read the billing table', 'visitor', 'coun
 select t.try('0048', 'the server links a clinic to a Stripe customer', 'server', 'write', $$insert into public.employer_billing (employer_id, stripe_customer_id) values ('{employer_c}', 'cus_test')$$, '1 rows');
 select t.try('0048', 'a clinic is 1 Stripe customer only', 'server', 'write', $$insert into public.employer_billing (employer_id, stripe_customer_id) values ('{employer_c}', 'cus_a'), ('{employer_c}', 'cus_b')$$, 'refused');
 select t.try('0048', 'the payment record outlives the job (the link is cleared when a job is deleted)', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.job_payments'::regclass and confrelid = 'public.jobs'::regclass$$, 'n');
+
+-- ---------------------------------------------------------------- 0049: the notes log for each job is for the website's server only
+select t.try('0049', 'the server adds a note to a job', 'server', 'write', $$insert into public.job_activity (job_id, actor, text, detail) values ('{job_c_live}', 'admin', 'Approved', 'x')$$, '1 rows');
+select t.try('0049', 'a note must say who made it (system, admin or clinic)', 'server', 'write', $$insert into public.job_activity (job_id, actor, text) values ('{job_c_live}', 'stranger', 'x')$$, 'refused');
+select t.try('0049', 'a note belongs to a real job', 'server', 'write', $$insert into public.job_activity (job_id, actor, text) values ('00000000-0000-0000-0000-000000000000', 'system', 'x')$$, 'refused');
+select t.try('0049', 'a clinic cannot read the notes log with its own sign in', 'clinic_c', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'a candidate cannot read it', 'ann', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'a visitor cannot read it', 'visitor', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'the admin cannot read it with their own sign in either (the server does)', 'admin', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'a clinic cannot write a note', 'clinic_c', 'write', $$insert into public.job_activity (job_id, actor, text) values ('{job_c_live}', 'clinic', 'x')$$, 'refused');
+select t.try('0049', 'the notes go when their job is deleted', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.job_activity'::regclass and confrelid = 'public.jobs'::regclass$$, 'c');

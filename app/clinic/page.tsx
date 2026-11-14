@@ -9,6 +9,8 @@ import ToastHost from "@/components/ToastHost";
 import Icon from "@/components/Icon";
 import GettingStarted from "@/components/GettingStarted";
 import StatusBadge from "@/components/StatusBadge";
+import JobPaymentTag from "@/components/JobPaymentTag";
+import { getMyJobPayments } from "@/lib/clinic-payments";
 import { requireRole } from "@/lib/auth";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
@@ -43,6 +45,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const jobs = employer ? await getMyJobs(employer.id) : [];
   const applicants = employer ? await getApplicantCounts() : {};
   const numbers = employer ? await getMyJobNumbers() : {};
+  const payments = employer ? await getMyJobPayments(jobs.map((j) => j.id)) : {};
   const totals = sumNumbers(numbers);
   const unread = Object.values(applicants).reduce((sum, c) => sum + c.fresh, 0);
   const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
@@ -172,6 +175,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                           {j.posted_at && <p className="meta">{numbersLine(numbers[j.id])}</p>}
                           {j.status === "live" && j.expires_at && <p className="meta">Live until {longDate(j.expires_at)} ({daysLeft(j.expires_at)} days left)</p>}
                           {j.status === "in_review" && <p className="meta">With our team. We usually check posts within 1 business day.</p>}
+                          <JobPaymentTag jobId={j.id} jobStatus={j.status} payment={payments[j.id]} editor={editor} />
                           {j.status === "rejected" && j.review_note && <p className="note"><strong>What to change:</strong> {j.review_note}</p>}
                         </div>
                         <StatusBadge status={j.status} />

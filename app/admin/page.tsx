@@ -22,7 +22,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
         <div className="wrap">
           <h1>Overview</h1>
           <p className="lede2">How Kestrel is doing. Only your account can open this page.</p>
-          <p className="help">More tools: <Link href="/admin/found">Found listings</Link>, for jobs from a clinic&apos;s own careers page, <Link href="/admin/post-for-clinic">Post for a clinic</Link>, for when a clinic is having trouble with the form, <Link href="/admin/outreach">Outreach</Link>, for the clinic email sequence, and <Link href="/admin/payments">Payments</Link>, to check Stripe is connected.</p>
+          <p className="help">More tools: <Link href="/admin/found">Found listings</Link>, for jobs from a clinic&apos;s own careers page, <Link href="/admin/post-for-clinic">Post for a clinic</Link>, for when a clinic is having trouble with the form, <Link href="/admin/outreach">Outreach</Link>, for the clinic email sequence, <Link href="/admin/jobs">Jobs</Link>, for what happened to every job and its payment, and <Link href="/admin/payments">Payments</Link>, to check Stripe is connected.</p>
           {s ? <AdminNumbers s={s} period={period} /> : <section className="card"><p>The numbers are not available because the database is not connected.</p></section>}
         </div>
       </main>

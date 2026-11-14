@@ -8,11 +8,13 @@ export class StripeError extends Error {
   status: number | null;
   type: string | null; // "card_error" when a card was refused, other values for a problem with the request or the account
   code: string | null;
-  constructor(status: number | null, message: string, type: string | null = null, code: string | null = null) {
+  declineCode: string | null; // for a refused card, why the bank said no (insufficient_funds, expired_card, and so on)
+  constructor(status: number | null, message: string, type: string | null = null, code: string | null = null, declineCode: string | null = null) {
     super(message);
     this.status = status;
     this.type = type;
     this.code = code;
+    this.declineCode = declineCode;
   }
 }
 
@@ -28,8 +30,8 @@ export async function stripeGet<T>(path: string, key: string, timeoutMs = 15_000
   } catch (error) {
     throw new StripeError(null, error instanceof Error ? error.message : String(error));
   }
-  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string; type?: string; code?: string } };
-  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText, body.error?.type ?? null, body.error?.code ?? null);
+  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string; type?: string; code?: string; decline_code?: string } };
+  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText, body.error?.type ?? null, body.error?.code ?? null, body.error?.decline_code ?? null);
   return body as T;
 }
 
@@ -61,7 +63,7 @@ export async function stripePost<T>(path: string, key: string, data: Record<stri
   } catch (error) {
     throw new StripeError(null, error instanceof Error ? error.message : String(error));
   }
-  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string; type?: string; code?: string } };
-  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText, body.error?.type ?? null, body.error?.code ?? null);
+  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string; type?: string; code?: string; decline_code?: string } };
+  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText, body.error?.type ?? null, body.error?.code ?? null, body.error?.decline_code ?? null);
   return body as T;
 }

@@ -9,9 +9,9 @@ test("only approving and sending back count as done", () => {
   for (const key of ["quebec", "need-note", "payment-failed", "payment-error", "error"]) assert.equal(reviewSucceeded(key), false, key);
 });
 
-test("a payment problem carries what Stripe said, and nothing else does", () => {
-  assert.match(reviewMessage("payment-error", "Invalid mode: setup"), /Stripe said: Invalid mode: setup/);
-  assert.match(reviewMessage("payment-failed", "Your card was declined."), /Stripe said: Your card was declined\./);
+test("a payment problem carries its short reason, and nothing else does", () => {
+  assert.match(reviewMessage("payment-error", "Invalid mode: setup"), /Reason: Invalid mode: setup/);
+  assert.match(reviewMessage("payment-failed", "Insufficient funds"), /Reason: Insufficient funds/);
   assert.equal(reviewMessage("approved", "ignored"), REVIEW_NOTICES.approved);
   assert.equal(reviewMessage("payment-error"), REVIEW_NOTICES["payment-error"]);
 });

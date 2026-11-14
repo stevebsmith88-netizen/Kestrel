@@ -24,7 +24,10 @@ export default async function CardSaved({ searchParams }: { searchParams: Promis
     // The job must be one of this person's own (their sign in can only read their own clinics' jobs).
     const db = await supabaseServer();
     const { data: mine } = db ? await db.from("jobs").select("id").eq("id", done.jobId).maybeSingle() : { data: null };
-    if (mine) redirect(from === "update" ? "/clinic?notice=card-updated" : "/clinic?notice=job-submitted");
+    if (mine) {
+      const notice = done.autoApproved === "approved" ? "card-updated-live" : done.autoApproved === "refused" ? "card-updated-failed" : from === "update" ? "card-updated" : "job-submitted";
+      redirect(`/clinic?notice=${notice}`);
+    }
   }
   const message = "error" in done ? done.error : "We could not match that payment to one of your jobs.";
   return (

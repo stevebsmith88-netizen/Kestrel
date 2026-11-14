@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { logJobActivity } from "@/lib/job-activity";
 import { currentPaymentMode, recordFreeLaunchPost, startCardSetup } from "@/lib/job-payment-flow";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
@@ -192,6 +193,8 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       if ("error" in started) return { error: started.error };
       // A card is already saved for this job (it was withdrawn and is being sent again), so it goes straight to review.
       await db.from("jobs").update({ status: "in_review" }).eq("id", savedId).eq("status", "draft");
+      const admin = supabaseAdmin();
+      if (admin) await logJobActivity(admin, savedId, "Sent for review again (the card saved earlier is still on file)", { actor: "clinic" });
     } else {
       const admin = supabaseAdmin();
       if (admin) await recordFreeLaunchPost(admin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name);
