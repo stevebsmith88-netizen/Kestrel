@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { logJobActivity } from "@/lib/job-activity";
 import { notifySlack } from "@/lib/notify-slack";
 import { currentPaymentMode, recordFreeLaunchPost, startCardSetup } from "@/lib/job-payment-flow";
+import { applyPassForSubmit } from "@/lib/pass-flow";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
@@ -186,6 +187,18 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   }
   if (submit && !wasLive && savedId) {
     if (cardMode) {
+      // A location with a pass: a job it covers goes straight to review with nothing to charge, and a job it cannot cover (the pass is full, or
+      // the role is not included) is recorded against the card already on the pass. Either way there is no Stripe page (lib/pass-flow.ts).
+      const passAdmin = supabaseAdmin();
+      const pass = passAdmin ? await applyPassForSubmit(passAdmin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name) : ({ kind: "none" } as const);
+      if (pass.kind !== "none") {
+        await db.from("jobs").update({ status: "in_review" }).eq("id", savedId).eq("status", "draft");
+        await notifyAdmin("A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
+        await notifySlack("A job is waiting for review", [job.title, employer.clinic_name], { path: "/admin/review", text: "Open the review queue" });
+        revalidatePath("/clinic");
+        refreshJobPages();
+        redirect(`/clinic?notice=${pass.kind === "covered" ? "job-submitted-pass" : pass.why === "full" ? "job-submitted-pass-full" : "job-submitted-pass-role"}`);
+      }
       const started = await startCardSetup(savedId);
       if ("url" in started) {
         revalidatePath("/clinic");

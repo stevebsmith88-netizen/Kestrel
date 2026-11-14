@@ -1,4 +1,5 @@
 import { completeCardSetup } from "@/lib/job-payment-flow";
+import { completePassCheckout, syncPassFromSubscription } from "@/lib/pass-flow";
 import { verifyStripeSignature } from "@/lib/stripe-webhook";
 
 export const dynamic = "force-dynamic";
@@ -26,6 +27,15 @@ export async function POST(request: Request) {
     const done = await completeCardSetup(object.id);
     // A logical problem (a card that was not saved, a session from another site) is logged and answered with success, so Stripe does not retry for days.
     if ("error" in done) console.error("Stripe webhook: card setup not completed:", done.error);
+  }
+  // A pass: started on Stripe's page, renewed, overdue or cancelled (events checkout.session.completed, customer.subscription.updated and
+  // customer.subscription.deleted). The clinic's own return to the site does the first of these too, so whichever comes first wins.
+  if (event.type === "checkout.session.completed" && object?.mode === "subscription" && object.id) {
+    const done = await completePassCheckout(object.id);
+    if ("error" in done) console.error("Stripe webhook: pass not started:", done.error);
+  }
+  if ((event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") && object) {
+    await syncPassFromSubscription(object as unknown as Parameters<typeof syncPassFromSubscription>[0]);
   }
   return Response.json({ received: true });
 }

@@ -31,7 +31,7 @@ async function loadJob(db: SupabaseClient, jobId: string): Promise<{ job: JobFor
 }
 
 // The Stripe customer for a clinic: made once, then reused for every post.
-async function customerFor(db: SupabaseClient, key: string, employerId: string, clinicName: string, email: string | null): Promise<string> {
+export async function customerFor(db: SupabaseClient, key: string, employerId: string, clinicName: string, email: string | null): Promise<string> {
   const { data: have } = await db.from("employer_billing").select("stripe_customer_id").eq("employer_id", employerId).maybeSingle();
   if (have?.stripe_customer_id) return have.stripe_customer_id;
   const customer = await stripePost<{ id: string }>("/customers", key, { name: clinicName, ...(email ? { email } : {}), metadata: { employer_id: employerId } }, { idempotencyKey: `kestrel-customer-${employerId}` });
@@ -183,7 +183,7 @@ export type ChargeResult = { ok: true; charged: boolean; cents: number } | { ok:
 export async function chargeForJob(jobId: string): Promise<ChargeResult> {
   const db = supabaseAdmin();
   if (!db) return { ok: true, charged: false, cents: 0 };
-  const { data: rows } = await db.from("job_payments").select("id, employer_id, status, stripe_payment_method_id, amount_cents").eq("job_id", jobId).in("status", ["card_saved", "charged", "free_launch", "awaiting_card", "failed"]).order("created_at", { ascending: false });
+  const { data: rows } = await db.from("job_payments").select("id, employer_id, status, stripe_payment_method_id, amount_cents").eq("job_id", jobId).in("status", ["card_saved", "charged", "free_launch", "covered_by_pass", "awaiting_card", "failed"]).order("created_at", { ascending: false });
   const list = rows ?? [];
   const ready = list.find((r) => r.status === "card_saved");
   if (!ready) {
@@ -251,7 +251,7 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
 
 // The job was not approved, so a saved card is never charged. Safe to call for any job.
 export async function cancelPaymentForJob(db: SupabaseClient, jobId: string): Promise<void> {
-  await db.from("job_payments").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("job_id", jobId).in("status", ["awaiting_card", "card_saved", "free_launch", "failed"]);
+  await db.from("job_payments").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("job_id", jobId).in("status", ["awaiting_card", "card_saved", "free_launch", "covered_by_pass", "failed"]);
 }
 
 // A job that goes to review with no card to save (the free launch, or no Stripe key) leaves a record, so the sales page can count free posts.

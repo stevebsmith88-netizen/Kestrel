@@ -10,6 +10,7 @@ import { dollars } from "@/lib/checkout-mode";
 import { getMyClinics, getMyEmployer } from "@/lib/clinic";
 import { getMyPaymentHistory } from "@/lib/clinic-payments";
 import { longDate } from "@/lib/jobs";
+import { passesAvailable } from "@/lib/pass-flow";
 
 export const metadata: Metadata = { title: "Billing | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -61,6 +62,7 @@ export default async function ClinicBilling() {
               <p className="meta">Total paid so far: {dollars(total)} before HST.</p>
             </section>
           )}
+          {passesAvailable() && <p className="help">Looking for a monthly pass? See <Link href="/clinic/plans">Plans</Link>.</p>}
           <p className="help">Questions about a payment? Use <Link href="/account/help">Help and feedback</Link>.</p>
         </div>
       </main>

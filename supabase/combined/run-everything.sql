@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0050), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0051), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3088,6 +3088,57 @@ alter table public.job_payments
 grant select (invoice_number, invoice_url, invoice_pdf_url) on public.job_payments to authenticated;
 
 -- ======================================================================
+-- 0051_location_passes.sql
+-- ======================================================================
+-- 0051: passes (Steve, 14th November 2026; step 4 of docs/plans/stripe-plan.md). Safe to run twice.
+--
+-- A pass belongs to 1 clinic location (migration 0047: 1 pass, 1 location). While it is active, a job for a role it covers goes straight to
+-- review with no card page, and nothing is charged for it at approval. A clinic reads the plan, status and renewal date of its own pass,
+-- never the Stripe ids. Only the website's server writes here (the Stripe webhook and the return page keep it in step with Stripe).
+
+create table if not exists public.location_passes (
+  id                          uuid primary key default gen_random_uuid(),
+  employer_id                 uuid not null references public.employers (id) on delete cascade,
+  plan                        text not null check (plan in ('clinic_pass', 'clinic_pass_plus')),
+  billing_interval            text not null default 'month' check (billing_interval in ('month', 'year')),
+  status                      text not null check (status in ('incomplete', 'active', 'past_due', 'canceled')),
+  stripe_checkout_session_id  text unique,
+  stripe_subscription_id      text unique,
+  stripe_payment_method_id    text,
+  current_period_end          timestamptz,
+  cancel_at_period_end        boolean not null default false,
+  created_at                  timestamptz not null default now(),
+  updated_at                  timestamptz not null default now(),
+  canceled_at                 timestamptz
+);
+
+-- A location has only 1 pass that is live or overdue. An abandoned checkout (incomplete) never blocks a new one.
+create unique index if not exists location_passes_one_live_idx on public.location_passes (employer_id) where status in ('active', 'past_due');
+create index if not exists location_passes_employer_idx on public.location_passes (employer_id, created_at desc);
+
+alter table public.location_passes enable row level security;
+drop policy if exists "Clinics can read their own pass" on public.location_passes;
+create policy "Clinics can read their own pass"
+  on public.location_passes for select
+  to authenticated
+  using (public.can_view_employer(employer_id));
+
+revoke all on public.location_passes from anon, authenticated;
+grant select (id, employer_id, plan, billing_interval, status, current_period_end, cancel_at_period_end, created_at, canceled_at)
+  on public.location_passes to authenticated;
+
+-- A job covered by a pass leaves a payment record too (for the sales page and the Billing page), at no charge.
+alter table public.job_payments drop constraint if exists job_payments_status_check;
+alter table public.job_payments
+  add constraint job_payments_status_check
+  check (status in ('awaiting_card', 'card_saved', 'charged', 'failed', 'cancelled', 'free_launch', 'covered_by_pass'));
+
+drop index if exists public.job_payments_one_active_idx;
+create unique index if not exists job_payments_one_active_idx
+  on public.job_payments (job_id)
+  where status in ('awaiting_card', 'card_saved', 'charged', 'free_launch', 'covered_by_pass');
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -3190,6 +3241,8 @@ from (
     ('table: employer_billing (which Stripe customer a clinic is, for the server only, 0048)', to_regclass('public.employer_billing') is not null and not has_table_privilege('authenticated', 'public.employer_billing', 'SELECT')),
     ('table: job_activity (notes log for each job, for the server only, 0049)', to_regclass('public.job_activity') is not null and not has_table_privilege('authenticated', 'public.job_activity', 'SELECT') and not has_table_privilege('anon', 'public.job_activity', 'SELECT')),
     ('columns: invoice links on job_payments, readable by the clinic, the Stripe invoice id for the server only (0050)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_payments' and column_name = 'invoice_pdf_url') and has_column_privilege('authenticated', 'public.job_payments', 'invoice_pdf_url', 'SELECT') and not has_column_privilege('authenticated', 'public.job_payments', 'stripe_invoice_id', 'SELECT')),
+    ('table: location_passes (a clinic pass for a location, the Stripe ids for the server only, 0051)', to_regclass('public.location_passes') is not null and has_column_privilege('authenticated', 'public.location_passes', 'status', 'SELECT') and not has_column_privilege('authenticated', 'public.location_passes', 'stripe_subscription_id', 'SELECT') and not has_table_privilege('anon', 'public.location_passes', 'SELECT')),
+    ('rule: a job covered by a pass is a payment status (0051)', exists (select 1 from pg_constraint where conname = 'job_payments_status_check' and pg_get_constraintdef(oid) like '%covered_by_pass%')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

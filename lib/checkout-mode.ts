@@ -66,6 +66,8 @@ export function paymentLine(row: PaymentRow | null | undefined, role: string | n
   switch (row.status) {
     case "free_launch":
       return "Free launch post. Nothing to charge.";
+    case "covered_by_pass":
+      return "Covered by the clinic's pass. Nothing to charge.";
     case "awaiting_card":
       return "The clinic has not saved a card yet.";
     case "card_saved":
