@@ -1013,3 +1013,5 @@ body.sf-locked{overflow:hidden}
 .lp-follow{margin:28px 0 0;color:var(--slate)}
 .lp-skyline{margin-top:36px;pointer-events:none}
 .lp-skyline img{display:block;width:100%;height:auto}
+
+.activity{margin-top:12px}.activity summary{cursor:pointer;font-weight:600}.activity ul{list-style:none;margin:8px 0 0;padding:0}.activity li{padding:7px 0;border-top:1px solid var(--line)}.activity .when{color:var(--slate,#5A6672);margin-right:6px}.paynote{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:6px}

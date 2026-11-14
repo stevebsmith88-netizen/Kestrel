@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0048), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0049), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3049,6 +3049,28 @@ alter table public.employer_billing enable row level security;
 revoke all on public.employer_billing from anon, authenticated;
 
 -- ======================================================================
+-- 0049_job_activity.sql
+-- ======================================================================
+-- 0049: a notes log for each job (Steve, 14th November 2026). Safe to run twice.
+--
+-- 1 row for each thing that happens to a job: sent for review, card saved, approved, charged, card refused and why, card updated, went live,
+-- sent back. Kestrel's admin reads it in a drop down under the job. It is for the website's server only: clinics and candidates never read
+-- it with their own sign in, and nothing here holds a card number or a Stripe key. The log goes when its job is deleted.
+
+create table if not exists public.job_activity (
+  id          uuid primary key default gen_random_uuid(),
+  job_id      uuid not null references public.jobs (id) on delete cascade,
+  actor       text not null default 'system' check (actor in ('system', 'admin', 'clinic')),
+  text        text not null,
+  detail      text,
+  created_at  timestamptz not null default now()
+);
+create index if not exists job_activity_job_idx on public.job_activity (job_id, created_at);
+
+alter table public.job_activity enable row level security;
+revoke all on public.job_activity from anon, authenticated;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -3149,6 +3171,7 @@ from (
     ('several locations for 1 owner (0047)', to_regclass('public.employers_owner_idx') is null and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_invites' and column_name = 'also_employer_ids')),
     ('table: job_payments (a card is saved at submission and charged at approval, 0048)', to_regclass('public.job_payments') is not null and not has_table_privilege('anon', 'public.job_payments', 'SELECT') and not has_column_privilege('authenticated', 'public.job_payments', 'stripe_payment_method_id', 'SELECT')),
     ('table: employer_billing (which Stripe customer a clinic is, for the server only, 0048)', to_regclass('public.employer_billing') is not null and not has_table_privilege('authenticated', 'public.employer_billing', 'SELECT')),
+    ('table: job_activity (notes log for each job, for the server only, 0049)', to_regclass('public.job_activity') is not null and not has_table_privilege('authenticated', 'public.job_activity', 'SELECT') and not has_table_privilege('anon', 'public.job_activity', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

@@ -16,5 +16,5 @@ export const reviewSucceeded = (key: string) => key === "approved" || key === "r
 // The line to show for a result: the message, and for the 2 payment problems what Stripe said.
 export function reviewMessage(key: string, why?: string | null): string {
   const base = REVIEW_NOTICES[key] ?? REVIEW_NOTICES.error;
-  return (key === "payment-failed" || key === "payment-error") && why ? `${base} Stripe said: ${why}` : base;
+  return (key === "payment-failed" || key === "payment-error") && why ? `${base} Reason: ${why}` : base;
 }

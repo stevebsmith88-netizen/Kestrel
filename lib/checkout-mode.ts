@@ -56,7 +56,7 @@ export function bandMismatchFlag(title: string, role: string | null | undefined)
 
 type PaymentRow = { status: string; amount_cents: number; band: string; failure_message: string | null };
 
-const dollars = (cents: number) => "$" + (cents / 100).toLocaleString("en-CA", { minimumFractionDigits: cents % 100 ? 2 : 0 });
+export const dollars = (cents: number) => "$" + (cents / 100).toLocaleString("en-CA", { minimumFractionDigits: cents % 100 ? 2 : 0 });
 
 // What the reviewer reads beside a job about its payment. `role` is the role as it stands now, since that sets the price charged on approval.
 export function paymentLine(row: PaymentRow | null | undefined, role: string | null | undefined): string {

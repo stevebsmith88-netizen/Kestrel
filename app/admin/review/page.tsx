@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
+import JobActivity from "@/components/JobActivity";
 import ReviewButtons from "@/components/ReviewButtons";
+import { loadActivity } from "@/lib/job-activity";
 import { REVIEW_NOTICES, reviewMessage } from "@/lib/review-notices";
 import { changedFields } from "@/lib/job-diff";
 import { answerLabel, employeeBandLabel, employerFlags, employmentLabel, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
@@ -22,6 +24,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
   const { notice, why } = await searchParams;
   const db = supabaseAdmin();
   const { jobs, notifyEmails, bands, liveWording } = await loadReviewQueue(db, await withExpected(REVIEW_COLUMNS));
+  const activity = db ? await loadActivity(db, jobs.map((j) => j.id)) : new Map();
   // The payment for each job (migration 0048). A database without it just shows no payment line.
   const payments = new Map<string, { status: string; amount_cents: number; band: string; failure_message: string | null }>();
   if (db && jobs.length) {
@@ -94,6 +97,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>
                     </dl>
                     <pre className="adtext">{j.description}</pre>
+                    <JobActivity rows={activity.get(j.id) ?? []} />
                     <ReviewButtons id={j.id} />
                   </article>
                 );

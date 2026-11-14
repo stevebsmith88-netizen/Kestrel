@@ -8,6 +8,8 @@ export const DASHBOARD_NOTICES: Record<string, string> = {
   "job-submitted": "Your job is with our team. We check every post, usually within 1 business day, and it goes live as soon as it is approved.",
   "payment-card-failed": "Your card was not saved, so the job was not sent. It is in your drafts. Open it and press Send for review when you are ready.",
   "card-updated": "Thank you. Your new card is saved and our team has been told. You are not charged until the job is approved.",
+  "card-updated-live": "Thank you. Your new card worked and your job is live now.",
+  "card-updated-failed": "We saved the card, but it was refused as well. Please try a different card from your job in review.",
   "job-closed": "The job is closed and no longer shown to candidates.",
   "location-added": "Your new location is saved, and you are working in it now. Use the Location picker to switch.",
   "team-joined": "Welcome to the team. You can now see your clinic's jobs and applicants.",

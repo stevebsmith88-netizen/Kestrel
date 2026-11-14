@@ -3,7 +3,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/email";
 import { refreshJobPages } from "@/lib/job-cache";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { bandForRole, chargeNotice, jobPriceCents, paymentMode, type PaymentMode } from "@/lib/checkout-mode";
+import { bandForRole, bandInfo, chargeNotice, dollars, jobPriceCents, paymentMode, type PaymentMode } from "@/lib/checkout-mode";
+import { logJobActivity } from "@/lib/job-activity";
+import { plainReason } from "@/lib/payment-reasons";
 import { StripeError, stripeGet, stripeKey, stripePost } from "@/lib/stripe";
 import { freeLaunchOpen } from "@/lib/stripe-catalog";
 import { secretKeyMode } from "@/lib/stripe-setup";
@@ -94,6 +96,7 @@ export async function startCardSetup(jobId: string, returnTo: "submit" | "update
       setup_intent_data: { metadata: meta, description: `Card saved for the job post "${job.title}"` },
     }, { idempotencyKey: `kestrel-setup-${payment.id}` });
     await db.from("job_payments").update({ stripe_checkout_session_id: session.id, updated_at: new Date().toISOString() }).eq("id", payment.id);
+    await logJobActivity(db, job.id, `Sent the clinic to Stripe to save a card (${dollars(cents)} plus HST when approved)`, { actor: "clinic" });
     return { url: session.url };
   } catch (e) {
     console.error("Card setup failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
@@ -103,7 +106,18 @@ export async function startCardSetup(jobId: string, returnTo: "submit" | "update
   }
 }
 
-export type SetupDone = { jobId: string; employerId: string; title: string; sentForReview: boolean } | { error: string };
+// autoApproved is set only when a card was replaced for a job that had been approved but could not be charged: "approved" (it is live now),
+// "refused" (the new card was refused too) or "error" (something else stopped it).
+export type SetupDone = { jobId: string; employerId: string; title: string; sentForReview: boolean; autoApproved?: "approved" | "refused" | "error" } | { error: string };
+
+// Was this job approved but not charged because the card was refused? True when a payment for it failed and the job has not changed since, so
+// the clinic changed nothing and the job can be approved again by itself once a card works.
+async function refusedAtApproval(db: SupabaseClient, jobId: string): Promise<boolean> {
+  const { data: failed } = await db.from("job_payments").select("updated_at").eq("job_id", jobId).eq("status", "failed").order("updated_at", { ascending: false }).limit(1).maybeSingle();
+  if (!failed) return false;
+  const { data: job } = await db.from("jobs").select("status, updated_at").eq("id", jobId).maybeSingle();
+  return job?.status === "in_review" && new Date(job.updated_at).getTime() <= new Date(failed.updated_at).getTime();
+}
 
 // Stripe has the card. Called by the page Stripe sends the clinic back to, and by the webhook (lib/stripe-webhook.ts): whichever comes first
 // does the work and the other finds it done, so it is safe to call twice. Reads the session from Stripe itself rather than trusting the web address.
@@ -125,10 +139,20 @@ export async function completeCardSetup(sessionId: string): Promise<SetupDone> {
     // A new job goes into the review queue now. A job already in review (the clinic updated a card that was refused) just stays there.
     const { data: moved } = await db.from("jobs").update({ status: "in_review" }).eq("id", payment.job_id).eq("status", "draft").select("id");
     if (moved?.length) refreshJobPages();
+    let autoApproved: "approved" | "refused" | "error" | undefined;
     if (first?.length) {
-      await notifyAdmin(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title], "/admin/review");
+      await logJobActivity(db, payment.job_id, moved?.length ? "Card saved. Sent for review." : "The clinic saved a new card.", { actor: "clinic" });
+      if (!moved?.length && (await refusedAtApproval(db, payment.job_id))) {
+        // Approved before, refused at the charge, nothing changed since: approve it again now that there is a new card (Steve, 14th November 2026).
+        const { approveJobNow } = await import("@/lib/job-approval");
+        const result = await approveJobNow(payment.job_id, "system");
+        autoApproved = result.key === "approved" ? "approved" : result.key === "payment-failed" ? "refused" : "error";
+        await notifyAdmin(autoApproved === "approved" ? "A job was approved automatically after the clinic updated its card" : "A clinic updated its card but the job still could not be approved", [payment.job_title], "/admin/jobs");
+      } else {
+        await notifyAdmin(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title], "/admin/review");
+      }
     }
-    return { jobId: payment.job_id, employerId: payment.employer_id, title: payment.job_title, sentForReview: Boolean(moved?.length) };
+    return { jobId: payment.job_id, employerId: payment.employer_id, title: payment.job_title, sentForReview: Boolean(moved?.length), autoApproved };
   } catch (e) {
     console.error("Card setup check failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
     return { error: "We could not check the payment just now. If your card was saved, your job will still reach our team. Otherwise please try again." };
@@ -174,22 +198,25 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
       description: `Kestrel Eye Care Jobs: ${job.title} (30 day post)`,
       metadata: { payment_id: ready.id, job_id: job.id, employer_id: job.employer_id, clinic: clinicName },
       ...(email ? { receipt_email: email } : {}),
-    }, { idempotencyKey: `kestrel-charge-${ready.id}-${cents}` });
+    }, { idempotencyKey: `kestrel-charge-${ready.id}-${cents}-${Math.floor(Date.now() / 600_000)}` });
     if (intent.status !== "succeeded") {
-      const message = "The card needs the cardholder to confirm it, so it could not be charged without them.";
-      await db.from("job_payments").update({ status: "failed", failure_message: message, stripe_payment_intent_id: intent.id, updated_at: new Date().toISOString() }).eq("id", ready.id);
-      return { ok: false, message, cardRefused: true };
+      const label = "Card needs the cardholder to confirm";
+      await db.from("job_payments").update({ status: "failed", failure_message: label, stripe_payment_intent_id: intent.id, updated_at: new Date().toISOString() }).eq("id", ready.id);
+      await logJobActivity(db, jobId, `Charge failed: ${label}`, { detail: `Stripe status ${intent.status}` });
+      return { ok: false, message: label, cardRefused: true };
     }
     await db.from("job_payments").update({ status: "charged", amount_cents: cents, band, stripe_payment_intent_id: intent.id, failure_message: null, charged_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", ready.id);
+    await logJobActivity(db, jobId, `Charged ${dollars(cents)} plus HST (${bandInfo(band).label} band)`, { detail: `Stripe payment ${intent.id}` });
     return { ok: true, charged: true, cents };
   } catch (e) {
-    const message = (e instanceof StripeError ? e.message : "Stripe could not be reached").replace(/\b(?:sk|rk|pk)_(?:test|live)_[A-Za-z0-9*]+/g, "[key]").slice(0, 200);
-    console.error("Charge failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
     // Only a refusal by the cardholder's bank marks the payment failed and asks the clinic for a new card. Anything else (a mistake in our
-    // request, a Stripe outage) leaves the saved card ready, so approving again just tries again.
-    const cardRefused = e instanceof StripeError && e.type === "card_error";
-    if (cardRefused) await db.from("job_payments").update({ status: "failed", failure_message: message, updated_at: new Date().toISOString() }).eq("id", ready.id);
-    return { ok: false, message, cardRefused };
+    // request, a Stripe outage) leaves the saved card ready, so approving again just tries again. The reason is a short plain label; the
+    // technical wording goes only in the job's notes.
+    const reason = plainReason(e instanceof StripeError ? { status: e.status, type: e.type, code: e.code, declineCode: e.declineCode } : { status: null, type: null, code: null, declineCode: null });
+    console.error("Charge failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
+    if (reason.cardRefused) await db.from("job_payments").update({ status: "failed", failure_message: reason.label, updated_at: new Date().toISOString() }).eq("id", ready.id);
+    await logJobActivity(db, jobId, `Charge failed: ${reason.label}`, { detail: describeFailure(e) });
+    return { ok: false, message: reason.label, cardRefused: reason.cardRefused };
   }
 }
 
@@ -204,6 +231,7 @@ export async function recordFreeLaunchPost(db: SupabaseClient, job: { id: string
     await db.from("job_payments").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("job_id", job.id).in("status", ["awaiting_card"]);
     const { error } = await db.from("job_payments").insert({ job_id: job.id, employer_id: job.employer_id, job_title: job.title, clinic_name: clinicName, band: bandForRole(job.role_category), amount_cents: 0, status: "free_launch" });
     // A job that already has a payment in play (a resubmission) is fine, and a database without migration 0048 is fine too.
+    if (!error) await logJobActivity(db, job.id, "Sent for review (free launch, nothing to charge)", { actor: "clinic" });
     if (error && error.code !== "23505" && error.code !== "42P01" && error.code !== "PGRST205") console.error("Free launch record not saved:", error.code, error.message);
   } catch (e) {
     console.error("Free launch record not saved:", e instanceof Error ? e.message : e);
