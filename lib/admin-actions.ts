@@ -14,6 +14,8 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { notify } from "@/lib/notifications";
 import { cardRefused, jobApproved, jobNeedsChange, jobTakenDown } from "@/lib/notify-text";
 import { refreshJobPages } from "@/lib/job-cache";
+import type { JobFormState } from "@/lib/jobs";
+import { reviewMessage, reviewSucceeded } from "@/lib/review-notices";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -34,17 +36,17 @@ async function emailClinic(db: SupabaseClient, jobId: string, kind: "live" | "ne
   await sendEmail({ to: contact.notify_email, ...mail });
 }
 
-export async function approveJob(form: FormData) {
-  await requireRole("admin");
-  const id = String(form.get("id") ?? "");
+// The work of approving a job. Returns the key of the message to show (lib/review-notices.ts) and, for a payment problem, what Stripe said.
+// The page buttons use the Quiet version below, which shows the result under the job; the plain version sends the browser back to the queue.
+async function doApprove(id: string): Promise<{ key: string; why?: string }> {
   const db = supabaseAdmin();
-  if (!UUID.test(id) || !db) redirect("/admin/review?notice=error");
+  if (!UUID.test(id) || !db) return { key: "error" };
   const now = new Date();
   // A job that was live before (it was edited and sent back) keeps its original 30 days. Otherwise editing
   // would be a way to keep a job live for ever.
   const { data: before } = await db.from("jobs").select("posted_at, expires_at, province").eq("id", id).eq("status", "in_review").maybeSingle();
   // The form refuses Quebec, so a Quebec job here reached the queue another way. It is never made live (the database refuses it too).
-  if (before && isQuebecJob(before)) redirect("/admin/review?notice=quebec");
+  if (before && isQuebecJob(before)) return { key: "quebec" };
   // The card saved when the clinic sent the job is charged now, for the price of the role. A job with nothing to charge goes straight through.
   // If the card is refused the job stays in the queue, the clinic is asked for a new card, and nothing is published.
   if (before) {
@@ -60,7 +62,7 @@ export async function approveJob(form: FormData) {
           if (contact?.notify_email) await sendEmail({ to: contact.notify_email, ...cardRefusedEmail({ title: job.title, jobId: id }) });
         }
       }
-      redirect(`/admin/review?notice=${charge.cardRefused ? "payment-failed" : "payment-error"}&why=${encodeURIComponent(charge.message.slice(0, 200))}`);
+      return { key: charge.cardRefused ? "payment-failed" : "payment-error", why: charge.message.slice(0, 200) };
     }
   }
   const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };
@@ -72,31 +74,55 @@ export async function approveJob(form: FormData) {
     .select("id");
   if (error || !data?.length) {
     console.error("Approve failed:", error?.code, error?.message);
-    redirect("/admin/review?notice=error");
+    return { key: "error" };
   }
   await emailClinic(db, id, "live", { wasEdit: Boolean(before?.posted_at) });
-  revalidatePath("/admin/review");
   refreshJobPages();
-  redirect("/admin/review?notice=approved");
+  return { key: "approved" };
 }
 
-export async function rejectJob(form: FormData) {
-  await requireRole("admin");
-  const id = String(form.get("id") ?? "");
-  const note = String(form.get("note") ?? "").trim().slice(0, 1000);
+async function doReject(id: string, note: string): Promise<{ key: string }> {
   const db = supabaseAdmin();
-  if (!UUID.test(id) || !db) redirect("/admin/review?notice=error");
-  if (!note) redirect("/admin/review?notice=need-note");
+  if (!UUID.test(id) || !db) return { key: "error" };
+  if (!note) return { key: "need-note" };
   const { data, error } = await db.from("jobs").update({ status: "rejected", review_note: note }).eq("id", id).eq("status", "in_review").select("id");
   if (error || !data?.length) {
     console.error("Reject failed:", error?.code, error?.message);
-    redirect("/admin/review?notice=error");
+    return { key: "error" };
   }
   // The job was not approved, so a card saved for it is never charged.
   await cancelPaymentForJob(db, id);
   await emailClinic(db, id, "needs-change", { note });
+  return { key: "rejected" };
+}
+
+const cleanNote = (form: FormData) => String(form.get("note") ?? "").trim().slice(0, 1000);
+const toState = (result: { key: string; why?: string }): JobFormState => (reviewSucceeded(result.key) ? { message: reviewMessage(result.key) } : { error: reviewMessage(result.key, result.why) });
+
+export async function approveJob(form: FormData) {
+  await requireRole("admin");
+  const result = await doApprove(String(form.get("id") ?? ""));
   revalidatePath("/admin/review");
-  redirect("/admin/review?notice=rejected");
+  redirect(`/admin/review?notice=${result.key}${result.why ? `&why=${encodeURIComponent(result.why)}` : ""}`);
+}
+
+export async function rejectJob(form: FormData) {
+  await requireRole("admin");
+  const result = await doReject(String(form.get("id") ?? ""), cleanNote(form));
+  revalidatePath("/admin/review");
+  redirect(`/admin/review?notice=${result.key}`);
+}
+
+// The buttons on the review page. They hand back the result and the page stays where it is, with the message under that job. The queue is
+// not refreshed, so the job stays on screen showing what happened; it is gone the next time the page is opened.
+export async function approveJobQuiet(_prev: JobFormState, form: FormData): Promise<JobFormState> {
+  await requireRole("admin");
+  return toState(await doApprove(String(form.get("id") ?? "")));
+}
+
+export async function rejectJobQuiet(_prev: JobFormState, form: FormData): Promise<JobFormState> {
+  await requireRole("admin");
+  return toState(await doReject(String(form.get("id") ?? ""), cleanNote(form)));
 }
 
 // A report is either answered by taking the job down, or dismissed. Both are recorded.

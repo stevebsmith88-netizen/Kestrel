@@ -42,8 +42,8 @@ test("P1-28: the database refuses a Quebec job that is in review or live", () =>
 });
 
 test("P1-28: approving and extending both re-check the province", () => {
-  const approve = action("lib/admin-actions.ts", "export async function approveJob");
-  assert.ok(approve.indexOf("isQuebecJob(") > 0 && approve.indexOf("isQuebecJob(") < approve.indexOf('status: "live"'), "approveJob must check for Quebec before it makes the job live");
+  const approve = action("lib/admin-actions.ts", "async function doApprove");
+  assert.ok(approve.indexOf("isQuebecJob(") > 0 && approve.indexOf("isQuebecJob(") < approve.indexOf('status: "live"'), "doApprove (behind both approve buttons) must check for Quebec before it makes the job live");
   const extend = action("lib/clinic-actions.ts", "async function doExtend");
   assert.ok(extend.indexOf("isQuebecJob(") > 0 && extend.indexOf("isQuebecJob(") < extend.indexOf('status: "live"'), "doExtend must check for Quebec before it extends the job");
 });
