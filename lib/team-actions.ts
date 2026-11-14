@@ -128,7 +128,7 @@ export async function joinWithCode(_prev: TeamState, form: FormData): Promise<Te
   const admin = supabaseAdmin();
   if (!admin) return { error: NOT_CONNECTED };
   if (session.role !== "clinic") return { error: "This account is set up for looking for work. Ask the clinic to send the invitation to a different email address, such as your work email, and create a clinic account with it." };
-  if (await getMyEmployer(session.userId)) return { error: "Your account already belongs to a clinic on Kestrel. Ask the clinic to send the invite to a different email, or email hello@eyecarejobs.ca." };
+  if (await getMyEmployer(session.userId)) return { error: "Your account already belongs to a clinic on Kestrel. Ask the clinic to send the invite to a different email, or email support@eyecarejobs.ca." };
   const problem = await acceptInvite(admin, String(form.get("code") ?? ""), { id: session.userId, email: session.email, name: session.fullName });
   if (problem) return { error: problem };
   redirect("/clinic?notice=team-joined");

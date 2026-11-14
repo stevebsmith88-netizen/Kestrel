@@ -28,7 +28,7 @@ export async function acceptInvite(admin: Admin, code: string, user: { id: strin
   if (error) {
     console.error("Joining a clinic failed:", error.code, error.message);
     if (/up to 5/.test(error.message)) return "This clinic's team is full (5 people). Ask the owner to remove someone first.";
-    if (/own clinic|another clinic/.test(error.message) || error.code === "23505") return "Your account already belongs to a clinic on Kestrel. Ask the clinic to send the invite to a different email, or email hello@eyecarejobs.ca.";
+    if (/own clinic|another clinic/.test(error.message) || error.code === "23505") return "Your account already belongs to a clinic on Kestrel. Ask the clinic to send the invite to a different email, or email support@eyecarejobs.ca.";
     return "We couldn't add you to the clinic just now. Please try again.";
   }
   await admin.from("employer_invites").update({ accepted_at: new Date().toISOString(), accepted_by: user.id }).eq("id", invite.id).is("accepted_at", null);

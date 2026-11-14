@@ -41,7 +41,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
     open = data?.status ?? null;
   }
 
-  const removeLink = `mailto:hello@eyecarejobs.ca?subject=${encodeURIComponent("Please remove a listing")}&body=${encodeURIComponent(`Please remove this listing: https://eyecarejobs.ca/jobs/${job.id}\n\nMy name and role at the clinic:\n`)}`;
+  const removeLink = `mailto:support@eyecarejobs.ca?subject=${encodeURIComponent("Please remove a listing")}&body=${encodeURIComponent(`Please remove this listing: https://eyecarejobs.ca/jobs/${job.id}\n\nMy name and role at the clinic:\n`)}`;
 
   return (
     <>
@@ -84,7 +84,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
 
             <aside className="stackcards" aria-label="Claim form">
               {claimed ? (
-                <div className="card"><h3>Already claimed</h3><p>This listing now belongs to a clinic account. If that is a mistake, please email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>.</p></div>
+                <div className="card"><h3>Already claimed</h3><p>This listing now belongs to a clinic account. If that is a mistake, please email <a href="mailto:support@eyecarejobs.ca">support@eyecarejobs.ca</a>.</p></div>
               ) : !session ? (
                 <div className="card">
                   <h3>Start your claim</h3>

@@ -33,7 +33,7 @@ export default async function ConfirmWaitlist({ searchParams }: { searchParams: 
   if (problem || !genuine) {
     return (
       <AuthShell title="That link didn't work">
-        <p className="auth-intro">The link may be incomplete. Please fill in the waitlist form again and we will send you a new one, or email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a> and we will help.</p>
+        <p className="auth-intro">The link may be incomplete. Please fill in the waitlist form again and we will send you a new one, or email <a href="mailto:support@eyecarejobs.ca">support@eyecarejobs.ca</a> and we will help.</p>
         <p className="alt"><Link href="/#join" className="btn">Join the waitlist</Link></p>
       </AuthShell>
     );

@@ -10,7 +10,7 @@ import { countSend } from "@/lib/email-count";
 export { SITE_URL, emailLayout } from "./email-layout.ts";
 const FROM = process.env.EMAIL_FROM || "Kestrel Eye Care Jobs <hello@mail.eyecarejobs.ca>";
 // Replies go to a mailbox someone reads. The sending address cannot receive mail.
-const REPLY_TO = () => process.env.EMAIL_REPLY_TO || "hello@eyecarejobs.ca";
+const REPLY_TO = () => process.env.EMAIL_REPLY_TO || "support@eyecarejobs.ca";
 
 export type SendResult = "sent" | "skipped" | "failed";
 

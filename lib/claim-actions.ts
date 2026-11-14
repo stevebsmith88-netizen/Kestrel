@@ -41,13 +41,13 @@ export async function startClaim(_prev: JobFormState, form: FormData): Promise<J
 
   // A clinic account holds one clinic profile.
   const { data: mine } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
-  if (mine) return { error: "Your account already has a clinic profile, so it cannot take over another one. Please email hello@eyecarejobs.ca and we will sort it out together." };
+  if (mine) return { error: "Your account already has a clinic profile, so it cannot take over another one. Please email support@eyecarejobs.ca and we will sort it out together." };
   // A team member belongs to their clinic (migration 0045). On a database without the team table the read fails and nothing is found.
   const { data: member } = await admin.from("employer_members").select("employer_id").eq("user_id", session.userId).maybeSingle();
-  if (member) return { error: "Your account is on another clinic's team, so it cannot claim a listing. Please email hello@eyecarejobs.ca and we will sort it out together." };
+  if (member) return { error: "Your account is on another clinic's team, so it cannot claim a listing. Please email support@eyecarejobs.ca and we will sort it out together." };
 
   const { count } = await admin.from("listing_claims").select("id", { count: "exact", head: true }).eq("user_id", session.userId).gte("created_at", new Date(Date.now() - DAY).toISOString());
-  if ((count ?? 0) >= 5) return { error: "You have made several claims today. Please try again tomorrow, or email hello@eyecarejobs.ca." };
+  if ((count ?? 0) >= 5) return { error: "You have made several claims today. Please try again tomorrow, or email support@eyecarejobs.ca." };
 
   const { data: open } = await admin.from("listing_claims").select("id, status").eq("employer_id", employer.id).eq("user_id", session.userId).in("status", ["pending_email", "pending_review"]).maybeSingle();
   if (open?.status === "pending_review") return { message: "You have already sent a claim for this listing. Our team is looking at it and will email you, usually within 1 business day." };
@@ -166,7 +166,7 @@ export async function rejectClaim(form: FormData) {
   if (!claim?.length) redirect("/admin/claims?notice=error");
   const mail = emailLayout({
     heading: "About your claim",
-    paragraphs: ["Thank you for your claim. We were not able to approve it this time.", note, "If you think we have made a mistake, just reply to this email or write to hello@eyecarejobs.ca and a person will look again."],
+    paragraphs: ["Thank you for your claim. We were not able to approve it this time.", note, "If you think we have made a mistake, just reply to this email or write to support@eyecarejobs.ca and a person will look again."],
   });
   await sendEmail({ to: claim[0].claimant_email, subject: "About your claim on Kestrel", ...mail });
   revalidatePath("/admin/claims");
