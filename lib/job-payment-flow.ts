@@ -186,6 +186,19 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
   const { data: rows } = await db.from("job_payments").select("id, employer_id, status, stripe_payment_method_id, amount_cents").eq("job_id", jobId).in("status", ["card_saved", "charged", "free_launch", "covered_by_pass", "awaiting_card", "failed"]).order("created_at", { ascending: false });
   const list = rows ?? [];
   const ready = list.find((r) => r.status === "card_saved");
+  const covered = list.find((r) => r.status === "covered_by_pass");
+  if (!ready && covered) {
+    // Covered by a pass when it was sent. If the pass has ended since (cancelled, or overdue), the job is charged the single post price to the card
+    // that was on the pass, so a pass ending between sending and approving never gives a post away.
+    const { getActivePass } = await import("@/lib/pass-flow");
+    if (await getActivePass(db, covered.employer_id)) return { ok: true, charged: false, cents: 0 };
+    const { data: last } = await db.from("location_passes").select("stripe_payment_method_id").eq("employer_id", covered.employer_id).not("stripe_payment_method_id", "is", null).order("created_at", { ascending: false }).limit(1).maybeSingle();
+    if (!last?.stripe_payment_method_id) return { ok: false, message: "The pass has ended and there is no card on file for this job.", cardRefused: false };
+    const loaded = await loadJob(db, jobId);
+    await db.from("job_payments").update({ status: "card_saved", stripe_payment_method_id: last.stripe_payment_method_id, amount_cents: jobPriceCents(loaded?.job.role_category), updated_at: new Date().toISOString() }).eq("id", covered.id);
+    await logJobActivity(db, jobId, "The pass has ended since this job was sent, so it is charged at the single post price to the card that was on the pass");
+    return chargeForJob(jobId);
+  }
   if (!ready) {
     if (list.some((r) => r.status === "awaiting_card")) return { ok: false, message: "The clinic has not saved a card for this job yet.", cardRefused: false };
     if (list[0]?.status === "failed") return { ok: false, message: "The card was refused last time and the clinic has not updated it yet.", cardRefused: false };

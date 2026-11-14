@@ -1,6 +1,8 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/email";
+import { refreshJobPages } from "@/lib/job-cache";
+import { notifyAdmin } from "@/lib/notify-admin";
 import { jobPriceCents, bandForRole } from "@/lib/checkout-mode";
 import { customerFor, describeFailure } from "@/lib/job-payment-flow";
 import { logJobActivity } from "@/lib/job-activity";
@@ -19,7 +21,7 @@ type StripeSubscription = {
   status: string;
   cancel_at_period_end?: boolean;
   current_period_end?: number;
-  items?: { data?: { current_period_end?: number }[] };
+  items?: { data?: { current_period_end?: number; price?: { lookup_key?: string | null } }[] };
   default_payment_method?: string | { id?: string } | null;
   metadata?: { employer_id?: string; plan?: string };
 };
@@ -126,7 +128,10 @@ export async function syncPassFromSubscription(sub: StripeSubscription): Promise
   const db = supabaseAdmin();
   if (!db || !sub?.id) return;
   const status = passStatus(sub.status);
+  const lookup = sub.items?.data?.[0]?.price?.lookup_key;
+  const planFromPrice = lookup === "clinic_pass_plus_monthly" ? "clinic_pass_plus" : lookup === "clinic_pass_monthly" ? "clinic_pass" : null;
   const { error } = await db.from("location_passes").update({
+    ...(planFromPrice ? { plan: planFromPrice } : {}),
     status,
     current_period_end: periodEnd(sub),
     cancel_at_period_end: Boolean(sub.cancel_at_period_end),
@@ -157,47 +162,99 @@ export async function getActivePass(db: SupabaseClient, employerId: string): Pro
   return row && plan && passCounts(row.status) ? { row, plan } : null;
 }
 
-// How many jobs the pass covers that are in review or live.
+// How many jobs the pass covers right now. A covered job keeps its slot while it is in review, live, or taken back into the drafts, so posting and
+// withdrawing cannot be used to free a slot. A slot is freed when the job is closed or has run its 30 days, is deleted, or is sent back.
 export async function slotsUsed(db: SupabaseClient, employerId: string): Promise<number> {
   const { data: rows } = await db.from("job_payments").select("job_id").eq("employer_id", employerId).eq("status", "covered_by_pass").not("job_id", "is", null);
   const ids = (rows ?? []).map((r) => r.job_id as string);
   if (!ids.length) return 0;
-  const { count } = await db.from("jobs").select("id", { count: "exact", head: true }).in("id", ids).in("status", ["in_review", "live"]);
+  const { count } = await db.from("jobs").select("id", { count: "exact", head: true }).in("id", ids).in("status", ["in_review", "live", "draft"]);
   return count ?? 0;
 }
 
-export type PassOutcome = { kind: "none" } | { kind: "covered" } | { kind: "card-on-file"; why: "role" | "full" };
+// The pass and how much of it is in use, for the dashboard, the post form and the confirm page.
+export async function passUsage(db: SupabaseClient | null, employerId: string): Promise<{ planName: string; planKey: string; used: number; limit: number } | null> {
+  if (!db) return null;
+  const pass = await getActivePass(db, employerId);
+  if (!pass) return null;
+  return { planName: pass.plan.name, planKey: pass.plan.key, used: await slotsUsed(db, employerId), limit: pass.plan.livePosts };
+}
 
-// At submit, once a card is needed: does the location's pass cover this job? If so it is recorded as covered at no charge. If the pass is full or does
-// not cover the role, the single post price is recorded against the card already on the pass, so the clinic is not sent to Stripe's page. With no
-// pass, or no card on file, nothing changes and the normal card page is used.
+export type PassOutcome = { kind: "none" } | { kind: "covered" } | { kind: "choose"; why: "role" | "full" };
+
+// At submit, once a card would be needed: does the location's pass cover this job? If so it is recorded as covered at no charge. If the pass is full
+// or does not cover the role, nothing is recorded or charged: the clinic is asked first what it wants (a confirm page: pay the single post price
+// to the card on the pass, or switch to Plus). With no pass, nothing changes and the normal card page is used.
 export async function applyPassForSubmit(db: SupabaseClient, job: { id: string; title: string; role_category: string | null; employer_id: string }, clinicName: string): Promise<PassOutcome> {
   const { data: existing } = await db.from("job_payments").select("status").eq("job_id", job.id).in("status", ["covered_by_pass", "card_saved"]).maybeSingle();
   if (existing?.status === "covered_by_pass") return { kind: "covered" };
   if (existing?.status === "card_saved") return { kind: "none" };
   const pass = await getActivePass(db, job.employer_id);
   if (!pass) return { kind: "none" };
+  // The job's own slot does not count against it: a covered job taken back into the drafts and sent again was handled above.
   const decision = passDecision(pass.plan, job.role_category, await slotsUsed(db, job.employer_id));
-  const base = { job_id: job.id, employer_id: job.employer_id, job_title: job.title, clinic_name: clinicName, band: bandForRole(job.role_category) };
+  if (decision.kind !== "covered") return { kind: "choose", why: decision.kind === "full" ? "full" : "role" };
   await db.from("job_payments").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("job_id", job.id).in("status", ["awaiting_card", "free_launch", "failed"]);
-  if (decision.kind === "covered") {
-    const { error } = await db.from("job_payments").insert({ ...base, amount_cents: 0, status: "covered_by_pass" });
-    if (error) {
-      console.error("Pass cover not recorded:", error.code, error.message);
-      return { kind: "none" };
-    }
-    await logJobActivity(db, job.id, `Sent for review, covered by the ${pass.plan.name} (nothing to charge)`, { actor: "clinic" });
-    return { kind: "covered" };
-  }
-  if (!pass.row.stripe_payment_method_id) return { kind: "none" };
-  const cents = jobPriceCents(job.role_category);
-  const { error } = await db.from("job_payments").insert({ ...base, amount_cents: cents, status: "card_saved", stripe_payment_method_id: pass.row.stripe_payment_method_id });
+  const { error } = await db.from("job_payments").insert({ job_id: job.id, employer_id: job.employer_id, job_title: job.title, clinic_name: clinicName, band: bandForRole(job.role_category), amount_cents: 0, status: "covered_by_pass" });
   if (error) {
-    console.error("Card on file not recorded:", error.code, error.message);
+    console.error("Pass cover not recorded:", error.code, error.message);
     return { kind: "none" };
   }
-  await logJobActivity(db, job.id, decision.kind === "full" ? `The ${pass.plan.name} is full, so this post is charged at the single post price to the card on file` : `The ${pass.plan.name} does not cover this role, so this post is charged at the single post price to the card on file`, { actor: "clinic" });
-  return { kind: "card-on-file", why: decision.kind === "full" ? "full" : "role" };
+  await logJobActivity(db, job.id, `Sent for review, covered by the ${pass.plan.name} (nothing to charge)`, { actor: "clinic" });
+  return { kind: "covered" };
+}
+
+// The clinic chose to pay the single post price for a job its pass cannot cover. Recorded against the card already on the pass, and charged when the
+// job is approved like any other post.
+export async function confirmSinglePost(db: SupabaseClient, job: { id: string; title: string; role_category: string | null; employer_id: string }, clinicName: string): Promise<boolean> {
+  const pass = await getActivePass(db, job.employer_id);
+  if (!pass?.row.stripe_payment_method_id) return false;
+  await db.from("job_payments").update({ status: "cancelled", updated_at: new Date().toISOString() }).eq("job_id", job.id).in("status", ["awaiting_card", "free_launch", "failed"]);
+  const { error } = await db.from("job_payments").insert({ job_id: job.id, employer_id: job.employer_id, job_title: job.title, clinic_name: clinicName, band: bandForRole(job.role_category), amount_cents: jobPriceCents(job.role_category), status: "card_saved", stripe_payment_method_id: pass.row.stripe_payment_method_id });
+  if (error) {
+    console.error("Card on file not recorded:", error.code, error.message);
+    return false;
+  }
+  await logJobActivity(db, job.id, `The clinic chose to pay the single post price, charged to the card on the ${pass.plan.name} when approved`, { actor: "clinic" });
+  return true;
+}
+
+// Sends a draft job into the review queue and tells Steve. Used once the payment side of a job is settled.
+export async function moveToReview(db: SupabaseClient, job: { id: string; title: string }, clinicName: string): Promise<void> {
+  await db.from("jobs").update({ status: "in_review" }).eq("id", job.id).eq("status", "draft");
+  await notifyAdmin("A job is waiting for review", [job.title, clinicName], "/admin/review");
+  await notifySlack("A job is waiting for review", [job.title, clinicName], { path: "/admin/review", text: "Open the review queue" });
+  refreshJobPages();
+}
+
+// Moves a location from the Clinic pass to Clinic pass Plus now. Stripe works out the part month and bills the difference at once.
+export async function switchPassPlan(employerId: string, toKey: string): Promise<{ ok: true } | { ok: false; message: string }> {
+  const key = stripeKey();
+  const db = supabaseAdmin();
+  const to = planByKey(toKey);
+  if (!key || !db || !to) return { ok: false, message: "The pass could not be changed just now." };
+  const pass = await getActivePass(db, employerId);
+  if (!pass?.row.stripe_subscription_id) return { ok: false, message: "There is no active pass to change." };
+  if (pass.plan.key === to.key) return { ok: true };
+  try {
+    const sub = await stripeGet<StripeSubscription & { items: { data: { id: string }[] } }>(`/subscriptions/${pass.row.stripe_subscription_id}`, key);
+    const item = sub.items.data[0]?.id;
+    const price = await priceId(key, to.lookupKey);
+    if (!item || !price) return { ok: false, message: "The pass price is not ready in Stripe yet." };
+    const updated = await stripePost<StripeSubscription>(`/subscriptions/${pass.row.stripe_subscription_id}`, key, {
+      items: [{ id: item, price }],
+      proration_behavior: "always_invoice",
+      payment_behavior: "error_if_incomplete",
+      metadata: { employer_id: employerId, plan: to.key },
+    }, { idempotencyKey: `kestrel-switch-${pass.row.id}-${to.key}-${Math.floor(Date.now() / 600_000)}` });
+    await db.from("location_passes").update({ plan: to.key, current_period_end: periodEnd(updated) ?? pass.row.current_period_end, updated_at: new Date().toISOString() }).eq("id", pass.row.id);
+    await notifySlack("A clinic switched pass", [`${pass.plan.name} to ${to.name}`], { path: "/admin/clinics", text: "Open Admin, Clinics" });
+    return { ok: true };
+  } catch (e) {
+    console.error("Pass switch failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
+    const reason = e instanceof StripeError && e.type === "card_error" ? "The card on the pass was refused for the difference, so the pass was not changed." : "The pass could not be changed just now, and nothing has been charged.";
+    return { ok: false, message: secretKeyMode(key) === "test" ? `${reason} (For testing only: ${describeFailure(e)})` : reason };
+  }
 }
 
 // Stripe's own page for changing the card, seeing invoices and cancelling. Needs the customer portal switched on in the Stripe dashboard.
