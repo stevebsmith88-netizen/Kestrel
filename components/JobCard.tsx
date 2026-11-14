@@ -11,6 +11,7 @@ export default function JobCard({ job: j, applied = false }: { job: JobSummary; 
     <article className="card jobcard">
       <div>
         <h2><Link href={`/jobs/${j.id}`}>{j.title}</Link></h2>
+        {j.headline && <p className="headline">{j.headline}</p>}
         <p className="meta">
           {j.employers?.clinic_name} · {j.city}, {j.province}
         </p>

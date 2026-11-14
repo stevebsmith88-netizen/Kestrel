@@ -76,6 +76,7 @@ export const STATUS_LABELS: Record<JobStatus, string> = {
 export type JobInput = {
   title: string;
   titleLevel: string; // a level word added to the suggested title: Lead, Senior or Associate
+  headline: string; // an optional one line from the clinic, up to 70 characters, shown under the title
   roleCategory: string;
   employmentType: string;
   province: string;
@@ -172,6 +173,10 @@ export function mentionsCanadianExperience(text: string) {
   return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || EXPERIENCE_THEN_PLACE.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
 }
 
+// The headline is the clinic's own line under the title (Steve, 14th November 2026).
+export const HEADLINE_MAX = 70;
+const HEADLINE_NOT_ALLOWED = /https?:\/\/|www\.|\S+@\S+|\$\s?\d/i;
+
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {
   const roleCategory = clean(raw.roleCategory, 80);
   const employmentType = clean(raw.employmentType, 30);
@@ -183,6 +188,7 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
   return {
     title: levelsForRole(roleCategory).length ? suggested : tidyTitle(clean(raw.title, 120)),
     titleLevel,
+    headline: clean(raw.headline, HEADLINE_MAX),
     roleCategory,
     employmentType,
     province: clean(raw.province, 40),
@@ -219,6 +225,8 @@ export function validateJob(job: JobInput, submit: boolean) {
   if (job.description && mentionsCanadianExperience(`${job.title} ${job.description}`)) {
     errors.description = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   }
+  if (job.headline && mentionsCanadianExperience(job.headline)) errors.headline = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
+  else if (job.headline && HEADLINE_NOT_ALLOWED.test(job.headline)) errors.headline = "Keep the headline to words about the job and the clinic. Pay, web addresses and email addresses go in their own boxes.";
   if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.province === QUEBEC) errors.province = QUEBEC_JOB_MESSAGE; // refused for drafts too, so a Quebec job never gets as far as review

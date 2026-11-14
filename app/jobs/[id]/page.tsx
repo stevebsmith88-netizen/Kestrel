@@ -59,6 +59,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
           <p className="back"><Link href="/jobs">Back to all jobs</Link></p>
           <header className="jobhead">
             <h1>{job.title}</h1>
+            {job.headline && <p className="headline">{job.headline}</p>}
             <p className="meta">{clinicPage ? <Link href={clinicPage}>{clinic?.clinic_name}</Link> : clinic?.clinic_name} · {job.city}, {job.province}</p>
             <p className="chips">
               <span className="chip">{employmentLabel(job.employment_type)}</span>

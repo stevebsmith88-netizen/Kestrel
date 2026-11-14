@@ -100,6 +100,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                     )}
                     <dl className="facts">
                       <div><dt>Role</dt><dd>{j.role_category}</dd></div>
+                      {j.headline && <div><dt>Headline</dt><dd>{j.headline}</dd></div>}
                       <div><dt>Type</dt><dd>{employmentLabel(j.employment_type)}</dd></div>
                       <div><dt>Pay</dt><dd>{payText(j)}</dd></div>
                       {j.territory && <div><dt>Area covered</dt><dd>{j.territory}</dd></div>}

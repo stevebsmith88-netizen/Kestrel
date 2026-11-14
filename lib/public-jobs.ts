@@ -16,6 +16,7 @@ export type JobFilters = { q?: string; city?: string; radius?: number; province?
 const RADIUS_SEARCH_LIMIT = 1000;
 
 export type JobSummary = PayFields & {
+  headline?: string | null;
   tags_software?: string[] | null;
   tags_equipment?: string[] | null;
   tags_specialties?: string[] | null;
