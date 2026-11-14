@@ -46,6 +46,15 @@ export function stripeChecks(env: Env): StripeCheck[] {
       detail: same ? `Both are ${sMode} keys` : "One is a test key and the other a live key. Copy both from the same mode in Stripe (the Test mode switch at the top of the dashboard).",
     });
   }
+  // The webhook secret is optional: card saving works through the clinic's own return to the site, but without the webhook a clinic who
+  // closes the tab right after saving a card would be missed.
+  const hook = env.STRIPE_WEBHOOK_SECRET;
+  const hookBad = hook ? (hook !== hook.trim() || !/^whsec_[A-Za-z0-9]+$/.test(hook) ? "It does not look like a Stripe webhook signing secret. It should start with whsec_ and have nothing around it." : "") : "";
+  checks.push({
+    label: "STRIPE_WEBHOOK_SECRET (confirms saved cards)",
+    ok: !hookBad,
+    detail: hookBad || (hook ? `Set, ${hook.length} characters` : "Not set yet. Add it once the webhook is made in Stripe (see docs/plans/stripe-plan.md). Saving a card works without it, but a clinic who closes the tab straight after saving would be missed."),
+  });
   // Prices are switched on only when Steve says so (docs/plans/stripe-plan.md), so until then a live key is a mistake.
   const live = sMode === "live" || pMode === "live";
   checks.push({

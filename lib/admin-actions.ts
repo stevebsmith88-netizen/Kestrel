@@ -5,13 +5,14 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { jobLiveEmail, jobNeedsChangeEmail } from "@/lib/clinic-emails";
+import { cardRefusedEmail, jobLiveEmail, jobNeedsChangeEmail } from "@/lib/clinic-emails";
+import { cancelPaymentForJob, chargeForJob } from "@/lib/job-payment-flow";
 import { expiryFrom, isQuebecJob, longDate } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
 import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { notify } from "@/lib/notifications";
-import { jobApproved, jobNeedsChange, jobTakenDown } from "@/lib/notify-text";
+import { cardRefused, jobApproved, jobNeedsChange, jobTakenDown } from "@/lib/notify-text";
 import { refreshJobPages } from "@/lib/job-cache";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -44,6 +45,21 @@ export async function approveJob(form: FormData) {
   const { data: before } = await db.from("jobs").select("posted_at, expires_at, province").eq("id", id).eq("status", "in_review").maybeSingle();
   // The form refuses Quebec, so a Quebec job here reached the queue another way. It is never made live (the database refuses it too).
   if (before && isQuebecJob(before)) redirect("/admin/review?notice=quebec");
+  // The card saved when the clinic sent the job is charged now, for the price of the role. A job with nothing to charge goes straight through.
+  // If the card is refused the job stays in the queue, the clinic is asked for a new card, and nothing is published.
+  if (before) {
+    const charge = await chargeForJob(id);
+    if (!charge.ok) {
+      const { data: job } = await db.from("jobs").select("title, employer_id").eq("id", id).maybeSingle();
+      if (job) {
+        const { data: owner } = await db.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+        await notify(db, owner?.owner_id, cardRefused({ jobTitle: job.title, jobId: id }));
+        const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
+        if (contact?.notify_email) await sendEmail({ to: contact.notify_email, ...cardRefusedEmail({ title: job.title, jobId: id }) });
+      }
+      redirect(`/admin/review?notice=payment-failed&why=${encodeURIComponent(charge.message.slice(0, 200))}`);
+    }
+  }
   const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };
   const { data, error } = await db
     .from("jobs")
@@ -73,6 +89,8 @@ export async function rejectJob(form: FormData) {
     console.error("Reject failed:", error?.code, error?.message);
     redirect("/admin/review?notice=error");
   }
+  // The job was not approved, so a card saved for it is never charged.
+  await cancelPaymentForJob(db, id);
   await emailClinic(db, id, "needs-change", { note });
   revalidatePath("/admin/review");
   redirect("/admin/review?notice=rejected");

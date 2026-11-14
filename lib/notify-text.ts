@@ -69,6 +69,16 @@ export function jobTakenDown(args: { jobTitle: string }): NotifyMessage {
   return { kind: "job", title: cut(`${args.jobTitle} was taken down`, 150), body: "Our team took this job down. Check your email for the reason.", href: "/clinic" };
 }
 
+// The card saved for a job was refused when Kestrel approved it, so the job waits for a new card. The link opens Stripe's card page.
+export function cardRefused(args: { jobTitle: string; jobId: string }): NotifyMessage {
+  return {
+    kind: "job",
+    title: cut(`${args.jobTitle}: we could not charge your card`, 150),
+    body: "Your job is ready to go live, but the card was refused. Save a new card and we will publish it. You are not charged until then.",
+    href: `/clinic/jobs/${args.jobId}/pay`,
+  };
+}
+
 // Where Open takes the person: the message's own address if it is a page on this site, otherwise back to the inbox.
 export function inboxTarget(href: string | null | undefined): string {
   return typeof href === "string" && href.startsWith("/") && !href.startsWith("//") ? href : "/account/inbox";

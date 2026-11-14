@@ -28,6 +28,7 @@ Claude cannot see Vercel, so the "should be" columns are what the code and the d
 | `ANTHROPIC_WORKSPACE_ID` | Only needed if the Anthropic key was not made inside a workspace. | Leave unset unless the Setup check on /admin/found asks for it | Leave unset | No |
 | `STRIPE_SECRET_KEY` | Talks to Stripe from the server (checkout, payments). Starts `sk_test_` in test mode, or `rk_test_` for a restricted key. Admin, Payments checks it. | the test secret key until prices are switched on | the test secret key (never a live key) | **Yes** |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe's public key, safe in the browser. Starts `pk_test_` in test mode, and must be the same mode as the secret key. | the test publishable key until prices are switched on | the test publishable key | No |
+| `STRIPE_WEBHOOK_SECRET` | Proves a message to `/api/stripe/webhook` really came from Stripe (starts `whsec_`). Without it the webhook refuses everything; card saving still works through the clinic's own return to the site. Made in Stripe, Developers, Webhooks, when the endpoint is added. | the signing secret of the live site's webhook endpoint | the signing secret of the demo's webhook endpoint | **Yes** |
 | `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | The bot check's public key (Cloudflare Turnstile). | the Turnstile site key | Not needed | No |
 | `TURNSTILE_SECRET_KEY` | The bot check's private key. On the live site, forms are refused if it is missing. | the Turnstile secret key | Not needed | **Yes** |
 | `INDEXNOW_KEY` | Tells Bing and others about new job pages straight away. Does nothing until set. | the IndexNow key | Leave unset (the demo is not indexed) | No |
@@ -45,6 +46,7 @@ Claude cannot see Vercel, so the "should be" columns are what the code and the d
 | `ENABLE_SEEDING` | `yes` lets found listings be published. Off until your disclosure conversation. | Leave unset | Leave unset | No |
 | `ENABLE_OUTREACH` | `yes` sends clinic outreach emails. Off until your disclosure conversation and the lawyer's check. | Leave unset | Leave unset | No |
 | `OUTREACH_DAILY_LIMIT` | Most outreach emails a day once outreach is on. Default 20. | Leave unset | Leave unset | No |
+| `FORCE_PAID_CHECKOUT` | `yes` asks a clinic to save a card when it sends a job for review, even during the free launch and with a test Stripe key. For trying checkout on the demo site only. | **Leave unset. Never `yes` on live.** | `yes` while testing checkout, then unset | No |
 | `ENABLE_COMPARE` | `no` hides the comparison page at /compare. On unless set to `no`. | Leave unset | Leave unset | No |
 | `ENABLE_FIND_YOUR_FIT` | `yes` shows the Find your fit quiz. | Leave unset until you decide | Leave unset, or `yes` to show it in demos | No |
 | `ENABLE_HOME_BLOG` | `yes` shows "From the blog" on the home page. | Leave unset until you want it | Leave unset | No |

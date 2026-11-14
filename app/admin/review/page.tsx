@@ -10,6 +10,7 @@ import { payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { REVIEW_COLUMNS, loadReviewQueue } from "@/lib/review-queue";
+import { bandMismatchFlag, paymentLine } from "@/lib/checkout-mode";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -20,14 +21,21 @@ const NOTICES: Record<string, string> = {
   quebec: "Not approved. This job is in Quebec, and Kestrel can't post jobs in Quebec yet. Send it back to the clinic with a note.",
   rejected: "Sent back to the clinic with your note.",
   "need-note": "Please tell the clinic what to change before sending a job back.",
+  "payment-failed": "Not published. The clinic's saved card was refused, so nothing was charged. We have asked the clinic to save a new card, and you can approve the job again once they have.",
   error: "That didn't work. The job may already have been handled. Please refresh and try again.",
 };
 
-export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
+export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string; why?: string }> }) {
   const session = await requireRole("admin");
-  const { notice } = await searchParams;
+  const { notice, why } = await searchParams;
   const db = supabaseAdmin();
   const { jobs, notifyEmails, bands, liveWording } = await loadReviewQueue(db, await withExpected(REVIEW_COLUMNS));
+  // The payment for each job (migration 0048). A database without it just shows no payment line.
+  const payments = new Map<string, { status: string; amount_cents: number; band: string; failure_message: string | null }>();
+  if (db && jobs.length) {
+    const { data: rows } = await db.from("job_payments").select("job_id, status, amount_cents, band, failure_message, created_at").in("job_id", jobs.map((j) => j.id)).order("created_at", { ascending: false });
+    (rows ?? []).forEach((r) => !payments.has(r.job_id) && payments.set(r.job_id, r));
+  }
 
   return (
     <>
@@ -36,7 +44,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
         <div className="wrap narrow">
           <h1>Review queue</h1>
           <p className="lede2">Check each post before it goes live. Approving it starts its 30 days.</p>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}
+          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{notice === "payment-failed" && why ? ` Stripe said: ${why}` : ""}</p>}
 
           {jobs.length === 0 ? (
             <section className="card"><p>Nothing is waiting. New posts appear here as soon as a clinic submits them.</p></section>
@@ -46,6 +54,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                 const flags = [
                   ...(j.posted_at ? [`Changes to a job that was already live since ${longDate(j.posted_at)}.${liveWording.has(j.id) ? " What changed is listed below." : " No copy of the earlier wording was kept for this one."}`] : []),
                   ...reviewFlags(j),
+                  ...(bandMismatchFlag(j.title, j.role_category) ? [bandMismatchFlag(j.title, j.role_category) as string] : []),
                   ...employerFlags({ website: j.employers?.website, notifyEmail: notifyEmails.get(j.employer_id), directHireConfirmedAt: j.employers?.direct_hire_confirmed_at }),
                 ];
                 return (
@@ -89,6 +98,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       {TAG_GROUPS.map((g) => (tagsFromRow(j)[g.key].length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{tagsFromRow(j)[g.key].join(", ")}</dd></div> : null))}
                       <div><dt>Existing vacancy</dt><dd>{answerLabel(j.is_existing_vacancy)}</dd></div>
                       <div><dt>Uses AI to screen</dt><dd>{answerLabel(j.uses_ai_screening)}</dd></div>
+                      <div><dt>Payment</dt><dd>{paymentLine(payments.get(j.id), j.role_category)}</dd></div>
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>
                     </dl>
                     <pre className="adtext">{j.description}</pre>
