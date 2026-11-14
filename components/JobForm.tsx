@@ -11,6 +11,7 @@ import type { OwnPayStat } from "@/lib/pay-benchmark";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIXED_TERM_EXPLAINER, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { MONEY_PERIODS, OPTOMETRIST_ONLY_PERIODS, OPTOMETRIST_ROLE, PERCENT_OF, WORKING_WEEKS } from "@/lib/job-pay";
 import { TAG_GROUPS } from "@/lib/job-tags";
+import { suggestTitle } from "@/lib/job-title";
 
 export type JobFormValues = {
   id?: string;
@@ -60,14 +61,20 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   // The job title starts as the role the clinic picks (Steve, 13th November 2026), unless a title has been typed. It stays editable.
   const titleRef = useRef<HTMLInputElement>(null);
   const autoTitle = useRef("");
-  const pickRole = (next: string) => {
-    setRole(next);
+  // The title is suggested from the role, the type of work and a ticked specialty (lib/job-title.ts), and keeps following them until the clinic
+  // changes the title itself. A title already saved is never replaced.
+  const refreshTitle = () => {
+    const f = form.current;
     const el = titleRef.current;
-    if (el && (!el.value.trim() || el.value === autoTitle.current)) {
+    if (!f || !el) return;
+    const data = new FormData(f);
+    const next = suggestTitle({ role: String(data.get("roleCategory") ?? ""), employmentType: String(data.get("employmentType") ?? ""), specialties: data.getAll("tagsSpecialties").map(String) });
+    if (next && (!el.value.trim() || el.value === autoTitle.current)) {
       el.value = next;
       autoTitle.current = next;
     }
   };
+  const pickRole = (next: string) => setRole(next);
   // When the ad builder returns a draft, it goes into the ad box for the clinic to edit.
   useEffect(() => {
     if (ad.state.ad) setDescription(ad.state.ad);
@@ -99,13 +106,13 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const toYear = (v: string) => (period === "day" ? String(Math.round(Number(v.replace(/[$,\s]/g, "")) * daysNumber * WORKING_WEEKS)) : v);
   const e = state.errors ?? {};
   return (
-    <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
+    <form ref={form} onSubmit={submit} onChange={(ev) => ev.target !== titleRef.current && refreshTitle()} noValidate className="panel formpanel">
       <RequiredNote />
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
       {employerId && <input type="hidden" name="employerId" value={employerId} />}
 
       <h2 className="formh">The role</h2>
-      <Field id="jf-title" label="Job title" required error={e.title}>
+      <Field id="jf-title" label="Job title" required error={e.title} hint="We suggest one from your choices below. Change it if you like.">
         <input ref={titleRef} id="jf-title" name="title" type="text" defaultValue={initial.title} placeholder="For example: Optician, full time" />
       </Field>
       <div className="pair">
