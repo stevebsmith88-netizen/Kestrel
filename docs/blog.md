@@ -44,7 +44,7 @@ Aimed at the searches that bring people who have never heard of Kestrel: pay by 
 | Tue 5th January 2027 | Locum optometrist work in Canada: how it works | Public facts only; Steve's view on day rates welcome |
 | Tue 12th January | Moving from clinic work to a lens rep or supplier role | Links to the field based jobs post |
 | Tue 19th January | How to become an optometrist in Canada | Same plan. The schools and the national board exam, from their own sites |
-| Tue 26th January | Why should I pay for a job advert? (idea 14 below) | Needs Steve's 3 inputs listed below before it can be written |
+| Tue 26th January | What an empty optician chair costs a clinic (`empty-optician-chair-cost`), idea 14 below | Written 14th November 2026 from Steve's inputs and public sources (`docs/blog-drafts/why-pay-for-a-job-ad.md`). Goes with the calculator on `/clinics` (`lib/empty-chair.ts`). Needs a photo page in the Canva design |
 
 The Fridays left open by the fortnightly run (29th January, 12th and 26th February, 12th and 26th March, 9th and 23rd April, 7th and 21st May, 4th June) are free for more.
 

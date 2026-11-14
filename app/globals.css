@@ -604,6 +604,15 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .ladder td{text-align:right;color:var(--muted);font-size:0.9375rem;padding-left:12px;white-space:nowrap}
 .ladder td.price,.passbox .price{font:400 1.625rem/1 var(--f-display),Georgia,serif;color:var(--navy)}
 .ladder tbody tr:last-child th,.ladder tbody tr:last-child td{border-bottom:1px solid #D6C9B2}
+.chaircalc{margin:34px 0 30px;padding-top:28px;border-top:1px solid var(--line)}
+.chaircalc h2{font:400 2rem/1.15 var(--f-display),Georgia,serif;margin:0 0 10px}
+.chaircalc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 20px;margin:18px 0 8px}
+.chaircalc-grid .help{margin:6px 0 0;font-size:0.875rem}
+.chaircalc-result{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:20px 22px}
+.chaircalc-result p{margin:0 0 8px;color:var(--navy-2)}
+.chaircalc-total{font:400 1.75rem/1.2 var(--f-display),Georgia,serif;color:var(--navy)}
+.chaircalc-total strong{color:var(--chestnut);font-weight:400}
+@media (max-width:640px){.chaircalc-grid{grid-template-columns:1fr}}
 .passbox{background:var(--navy);color:var(--cream);border-radius:10px;padding:22px 24px;margin:0 0 14px}
 .passbox p{margin:0 0 8px;color:var(--mist)}
 .passbox .passhead{color:var(--cream);font-size:1.125rem}

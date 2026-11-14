@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
+import EmptyChairCalculator from "@/components/EmptyChairCalculator";
 import SiteHeader from "@/components/SiteHeader";
 import { launchLayoutOn } from "@/lib/launch";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, passBreakEven, perDay, perPassPost } from "@/lib/pricing";
@@ -80,6 +81,7 @@ export default async function Clinics() {
             </div>
             <p className="small-note">Prices in Canadian dollars, before HST. Near the end of its 30 days, any post can be extended for another 30.</p>
           </section>
+          <EmptyChairCalculator />
           {launched ? (
             <Link href="/sign-up?type=clinic" className="btn">Create your clinic account</Link>
           ) : (
