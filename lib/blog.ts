@@ -8,11 +8,22 @@
 // - An image: a line "![Alt text](/images/blog/file.png)", optionally followed by a caption line. Only files listed in
 //   lib/blog-images.ts can be used, so every image has its size and exists in /public.
 
+// The topics that group posts on the blog page (Steve, 14th November 2026: the page was getting crowded). Topics, not months, because
+// people search by subject; a post's address never changes when it is grouped.
+export const BLOG_TOPICS = [
+  { id: "careers", label: "Getting into eye care", blurb: "The roles, how to qualify for each, and where a career can lead." },
+  { id: "applying", label: "Applying and interviews", blurb: "Resumes, cover letters, phone screens and interviews." },
+  { id: "pay", label: "Pay", blurb: "What eye care roles pay, how offers are built, and how to ask for more." },
+  { id: "clinics", label: "For clinics", blurb: "Writing job ads, hiring well and keeping good people." },
+] as const;
+export type BlogTopic = (typeof BLOG_TOPICS)[number]["id"];
+
 export type Post = {
   slug: string;
   title: string;
   description: string;
   date: string; // 2026-10-30
+  topic: BlogTopic;
   updated?: string;
   body: string;
 };

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { existsSync } from "node:fs";
 import { BLOG_IMAGES } from "./blog-images.ts";
-import { excerpt, firstImage, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
+import { BLOG_TOPICS, excerpt, firstImage, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
 import { POSTS } from "../content/posts.ts";
 
 test("text becomes headings, lists and paragraphs", () => {
@@ -115,4 +115,10 @@ test("every post has a pull quote, and every image it uses is listed and exists"
   }
   assert.equal(firstImage("Text.\n\n![A photo of an optician](/images/blog/x.png)"), "/images/blog/x.png");
   assert.equal(firstImage("No pictures here."), undefined);
+});
+
+test("every post has a topic from the list, and every topic has posts", () => {
+  const ids = BLOG_TOPICS.map((t) => t.id as string);
+  for (const post of POSTS) assert.ok(ids.includes(post.topic), `${post.slug} has no topic, or an unknown one`);
+  for (const id of ids) assert.ok(POSTS.some((p) => p.topic === id), `the topic ${id} has no posts`);
 });

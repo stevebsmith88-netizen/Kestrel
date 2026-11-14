@@ -460,6 +460,20 @@ main:focus{outline:none}
 
 /* Blog */
 .postlist{display:grid;gap:16px;margin-top:16px}
+.topictiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:26px 0 8px}
+.topictile{display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px 18px;text-decoration:none;color:var(--navy)}
+.topictile:hover{background:#fff;box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55)}
+.topictile-name{font:400 1.25rem/1.2 var(--f-display),Georgia,serif}
+.topictile-count{font-size:0.875rem;color:var(--muted)}
+.bloghead{font:400 1.75rem/1.2 var(--f-display),Georgia,serif;margin:38px 0 6px}
+.topicsection{scroll-margin-top:90px}
+.topicblurb{color:var(--navy-2);margin:0 0 10px}
+.postrows{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.postrows li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;padding:12px 0;border-bottom:1px solid var(--line)}
+.postrows a{color:var(--navy);text-decoration:none;font-weight:600;padding:2px 8px;margin:-2px -8px;border-radius:8px}
+.postrows a:hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55)}
+.postrow-meta{font-size:0.875rem;color:var(--muted)}
+@media (max-width:520px){.topictiles{gap:8px;margin-top:18px}.topictile{padding:12px 14px}.topictile-name{font-size:1.0625rem}}
 .postlist h2{margin:6px 0 8px}
 .postlist h2 a{text-decoration:none;color:var(--navy)}
 .postlist h2 a{display:inline-block;padding:2px 8px;margin:-2px -8px;border-radius:8px}
