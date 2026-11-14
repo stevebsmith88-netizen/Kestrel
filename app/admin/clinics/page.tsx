@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdminSearch from "@/components/AdminSearch";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
@@ -44,12 +45,9 @@ export default async function AdminClinics({ searchParams }: { searchParams: Pro
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <h1>Clinics</h1>
-          <p className="lede2">Help a clinic with its profile, team or posting. A clinic&apos;s team and settings open only while its owner has asked for help and allowed access (see <Link href="/admin/requests">Help requests</Link>). Every change asks why, is recorded, and the owner is told. Applicants&apos; resumes are never shown here.</p>
-          <form method="get" className="panel">
-            <label className="lab" htmlFor="ac-q">Clinic name, town or email</label>
-            <input id="ac-q" name="q" type="search" defaultValue={search} />
-            <button type="submit" className="btn sm">Search</button>
-          </form>
+          <p className="lede2">Help a clinic with its profile, team or posting. A clinic&apos;s team and settings open only while its owner has asked for help and allowed access. Every change asks why, is recorded, and the owner is told. Applicants&apos; resumes are never shown here.</p>
+          <p><Link href="/admin/requests" className="btn sm ghost">Open support requests</Link></p>
+          <AdminSearch id="ac-q" label="Clinic name, town or email" defaultValue={search} clearHref="/admin/clinics" />
           {rows.length === 0 ? (
             <p className="help">{search ? "No clinics found." : "Clinics with an account are listed here."}</p>
           ) : (

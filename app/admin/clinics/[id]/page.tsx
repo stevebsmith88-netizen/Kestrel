@@ -44,7 +44,8 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
           <p className="back"><Link href="/admin/clinics">Back to clinics</Link></p>
           <p className="kicker">{clinic.city}, {clinic.province}</p>
           <h1>{clinic.clinic_name}</h1>
-          <p className="lede2">{clinic.status === "active" ? "Active" : "Suspended"} · {clinic.claimed ? "Claimed" : "Not claimed"}. {access && <Link href={`/admin/post-for-clinic/${clinic.id}`}>Post a job for this clinic</Link>}</p>
+          <p className="lede2">{clinic.status === "active" ? "Active" : "Suspended"} · {clinic.claimed ? "Claimed" : "Not claimed"}.</p>
+          {access && <p><Link href={`/admin/post-for-clinic/${clinic.id}`} className="btn sm ghost">Post a job for this clinic</Link></p>}
 
           {access ? (
             <div className="notice" role="status"><strong>Access given until {longDate(access.access_until as string)}</strong> for: {reasonLabel(access.reason as string | null)}. &quot;{access.message}&quot;</div>

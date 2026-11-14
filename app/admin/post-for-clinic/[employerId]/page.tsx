@@ -30,7 +30,8 @@ export default async function PostForOneClinic({ params }: { params: Promise<{ e
         <div className="wrap narrow">
           <p className="kicker">Posting for {employer.clinic_name}</p>
           <h1>Post a job</h1>
-          <p className="lede2">Fill in the same form the clinic would. <Link href="/admin/post-for-clinic">Choose a different clinic</Link></p>
+          <p className="lede2">Fill in the same form the clinic would.</p>
+          <p><Link href="/admin/post-for-clinic" className="btn sm ghost">Choose a different clinic</Link></p>
           <JobForm
             employerId={employer.id}
             ownPay={ownPay}
