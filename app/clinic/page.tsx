@@ -106,12 +106,13 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               />
               {waiting > 0 && <p className="replynote">{waiting} {waiting === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
               <div className="tiles stats">
-                <Link href="/clinic?show=live#your-jobs" className="card tile tilelink"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></Link>
-                <Link href={newApplicantsHref(jobs, applicants)} className="card tile tilelink"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></Link>
-                <Link href="/clinic?show=review#your-jobs" className="card tile tilelink"><p className="kicker">In review</p><p className="num">{count("in_review")}</p><p>With our team</p></Link>
-                <Link href="/clinic?show=drafts#your-jobs" className="card tile tilelink"><p className="kicker">Drafts</p><p className="num">{count("draft") + count("rejected")}</p><p>Not sent yet</p></Link>
-                <Link href="/clinic?show=posted#your-jobs" className="card tile tilelink"><p className="kicker">Views</p><p className="num">{totals.views30.toLocaleString("en-CA")}</p><p>Last 30 days</p></Link>
-                <Link href="/clinic?show=posted#your-jobs" className="card tile tilelink"><p className="kicker">Apply clicks</p><p className="num">{totals.clicks30.toLocaleString("en-CA")}</p><p>Last 30 days</p></Link>
+                {/* Top row: the 3 tiles you can press, each showing the jobs behind it (prefetched so the jump is instant). Bottom row: numbers to read only (Steve, 14th November 2026). */}
+                <Link href="/clinic?show=live#your-jobs" prefetch className="card tile tilelink"><p className="kicker">Live</p><p className="num">{count("live")}</p><p>Jobs candidates can see</p></Link>
+                <Link href={newApplicantsHref(jobs, applicants)} prefetch className="card tile tilelink"><p className="kicker">New applicants</p><p className="num">{unread}</p><p>Waiting to be opened</p></Link>
+                <Link href="/clinic?show=drafts#your-jobs" prefetch className="card tile tilelink"><p className="kicker">Drafts</p><p className="num">{count("draft") + count("rejected")}</p><p>Not sent yet</p></Link>
+                <div className="card tile"><p className="kicker">In review</p><p className="num">{count("in_review")}</p><p>With our team</p></div>
+                <div className="card tile"><p className="kicker">Views</p><p className="num">{totals.views30.toLocaleString("en-CA")}</p><p>Last 30 days</p></div>
+                <div className="card tile"><p className="kicker">Apply clicks</p><p className="num">{totals.clicks30.toLocaleString("en-CA")}</p><p>Last 30 days</p></div>
               </div>
               <p className="small-note statsnote">Views count each visit to a job page once, and leave out search engines, you and our team. An apply click is someone pressing Apply, which is not the same as a finished application, so the applicant counts stay the ones to trust.</p>
 
