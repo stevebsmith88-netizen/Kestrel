@@ -16,6 +16,11 @@ export const ROLE_BANDS = [
 export const CLINIC_PASS = { monthly: 199, livePosts: 5, yearly: 1990, lockMonths: 12 } as const;
 export const CLINIC_PASS_PLUS = { monthly: 349, livePosts: 5, yearly: 3490, lockMonths: 12 } as const;
 
+// Founding clinics (Steve, 14th November 2026; the full rule is in docs/pass-procedures.md). The first 50 clinic locations to post during the
+// free launch are Founding clinics. A founding clinic that takes a pass during the founding period keeps that pass price for 12 months, or
+// until it cancels, whichever comes first. Then the price in force at that time applies, after 30 days notice. Stripe checkout must follow this.
+export const FOUNDING_CLINICS = { places: 50, lockMonths: 12, noticeDays: 30 } as const;
+
 const money = (n: number, places = 0) => "$" + n.toLocaleString("en-CA", { minimumFractionDigits: places, maximumFractionDigits: places });
 
 export const perDay = (price: number) => money(price / POST_DAYS, 2);

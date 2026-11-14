@@ -41,6 +41,8 @@ Concern: a sales rep posting a job when HR or the office normally does it.
 
 How a team member joins (Steve's idea, 14th November 2026): **an invite code.** The owner adds a team member's name, work email and level ("Can post and see applicants" or "Can see applicants only") and Kestrel emails them a code and a link. On sign up, a small **"I have an invite code"** link opens a box for it; the link in the email fills it in. The code joins them to that company at the level the owner chose, and skips the clinic or supplier questions. Each code works once, only with the email address it was sent to, and runs out after 14 days. The owner can remove a member at any time. This sits beside the launch invitation code that sign up already asks clinics for while accounts are by invitation.
 
+**Where the owner does it (Steve, 14th November 2026):** a **My clinic** area, reached from **My dashboard** and the initials menu, with 3 parts: **Profile** (today's clinic profile), **Locations**, and **Team** (invite someone, see who has access and at what level, remove someone). Kept simple enough for a busy owner: 1 form, 3 boxes (name, email, level) and a Send invite button.
+
 Team members are a new feature (today 1 person holds 1 employer account). Suggest building it with several locations, since groups need it too.
 
 ## 5. Sales and HST for CRA (Steve, 14th November 2026)
