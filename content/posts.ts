@@ -6,9 +6,11 @@ export const POSTS: Post[] = [
   {
     slug: "empty-optician-chair-cost",
     title: "What an empty optician chair costs a clinic",
-    description: "A job ad is the cheap part of hiring. The empty chair is not. A worked example, the sums behind it, and a calculator for your own clinic.",
+    description: "A job ad is the cheap part of hiring. The empty chair is not. A worked example, and the sums to work it out for your own clinic.",
     date: "2027-01-26",
-    body: `Free job listings exist, so why would a clinic pay to post a job? It is a fair question, and sometimes the honest answer is that you should not. A part time role you can fill from a referral, or a job you only want to show your own team, may never need a paid ad.
+    body: `![An empty exam chair in an eye clinic, beside a slit lamp, an eye chart on the wall and a case of trial lenses.](/images/blog/empty-optician-chair-cost.jpg)
+
+Free job listings exist, so why would a clinic pay to post a job? It is a fair question, and sometimes the honest answer is that you should not. A part time role you can fill from a referral, or a job you only want to show your own team, may never need a paid ad.
 
 For most optician and assistant hires, though, the ad is the cheapest part of the whole process. The expensive part is the chair that stays empty while you look, and the evenings spent reading applications from people who were never a fit.
 
@@ -20,7 +22,7 @@ That sale depends on the hand off. A patient walks out of the exam room with a n
 
 ## A worked example
 
-Here is a made up clinic, to show the sum. Your own numbers will differ, and that is the point of the calculator at the end.
+Here is a made up clinic, to show the sum. Your own numbers will differ, and the sums at the end show you how to work out yours.
 
 Say the clinic does about 9 full exams a day, which is around 230 a month. A [University of Waterloo study](https://doi.org/10.1097/OPX.0000000000000863) of 2,656 patients with no symptoms found that 41% needed a change to their glasses prescription. That is about 94 new prescriptions a month. Now suppose that while you are short an optician, just 1 in 10 of those sales walks out the door, at an average of $500 a pair. That is about $4,700 a month in glasses sales gone.
 
@@ -48,9 +50,14 @@ Some job sites charge by the click against a budget you set. The final bill depe
 
 Kestrel charges a flat fee for each 30 day post, with no charge by the click, and posting is free while we launch. The current prices are on our [page for clinics](/clinics), and [our price comparison](/compare) sets out what other boards charge.
 
-## Try it with your own numbers
+## Work it out for your own clinic
 
-The calculator on our [page for clinics](/clinics#empty-chair) starts from the example above. Change any number: your exams a month, your average sale, your own guess at how many sales walk out while you are short. It shows the sum underneath, and nothing you type is saved or sent anywhere.
+You need 4 numbers for the glasses side, and 3 for the exam room. Round figures are fine: you are looking for the size of the problem, not the exact dollar.
+
+- **Glasses sales that walk out:** exams a month, times the share of patients who need new glasses (41% is a fair starting point), times the share of those sales you think you lose while short (1 in 10 is 10%), times your average glasses sale.
+- **Exam time lost:** hours a week your optometrist spends dispensing, times the exams they book an hour, times your exam fee, times 4.3 weeks in a month.
+
+For the example clinic that is 230 × 41% × 10% × $500, or about $4,700, plus 5 × 2 × $200 × 4.3, or about $8,700. Swap in your own numbers, then compare the total with what a job ad costs for a month.
 
 [See how posting works](/clinics)`,
   },
