@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Claim your listing | Kestrel Eye Car
 export const dynamic = "force-dynamic";
 
 const STEPS = [
-  ["Create your clinic account", "Choose \"I'm hiring for a clinic\" and use your work email."],
+  ["Create your clinic account", "Choose \"I'm hiring\" and use your work email."],
   ["Confirm you represent the clinic", "We send a link to an email address at your clinic's own website."],
   ["Check the details", "Fix anything we got wrong, and answer anything your careers page did not say, such as whether it is an existing vacancy."],
   ["We take a quick look", "Our team checks every claim, usually within 1 business day."],
