@@ -12,6 +12,16 @@ test("settings is a gear for candidates and clinics, admins have their tools ins
   assert.ok(ACCOUNT_MENU.clinic.some((l) => l.href === "/clinic/profile"));
 });
 
+test("the menus are short, keep the inbox to the envelope, and group their links", () => {
+  for (const role of ["candidate", "clinic"] as const) {
+    assert.ok(ACCOUNT_MENU[role].length <= 5, `${role} menu has ${ACCOUNT_MENU[role].length} lines`);
+    assert.ok(!ACCOUNT_MENU[role].some((l) => l.href === "/account/inbox"), `${role} menu repeats the inbox`);
+    assert.ok(ACCOUNT_MENU[role].every((l) => typeof l.group === "number"), `${role} links each have a group`);
+    assert.ok(ACCOUNT_MENU[role].some((l) => l.href === "/account/help"));
+  }
+  assert.ok(ACCOUNT_MENU.clinic.some((l) => l.href === "/clinic/plans"));
+});
+
 test("initials come from the first and last name, or the email when there is no name", () => {
   assert.equal(initialsOf("Jordan Lee", "j@x.ca"), "JL");
   assert.equal(initialsOf("Priya Anne Raman", "p@x.ca"), "PR");

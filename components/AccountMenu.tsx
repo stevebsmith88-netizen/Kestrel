@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import Link from "next/link";
 import Icon from "@/components/Icon";
 import { ACCOUNT_MENU, SETTINGS_HREF, initialsOf, type BarPerson } from "@/lib/account-menu";
@@ -23,8 +24,11 @@ export default function AccountMenu({ session, here, className = "" }: { session
           )}
           {session.planLine && <Link href="/clinic/plans" className="who-plan">{session.planLine}</Link>}
         </div>
-        {ACCOUNT_MENU[session.role].map((item) => (
-          <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>{item.label}</Link>
+        {ACCOUNT_MENU[session.role].map((item, i, all) => (
+          <Fragment key={item.href}>
+            {i > 0 && item.group !== all[i - 1].group && <hr className="who-sep" />}
+            <Link href={item.href} aria-current={here === item.href ? "page" : undefined}>{item.label}</Link>
+          </Fragment>
         ))}
         <form action={signOut}>
           <button type="submit" className="linkbtn">Sign out</button>
