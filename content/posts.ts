@@ -3,6 +3,7 @@ import type { Post } from "../lib/blog.ts";
 // Blog posts, newest first. A post is shown from its date (see isPublished in lib/blog.ts), so a future date schedules it. To add one, copy a block below and change it, then check with `npm test`.
 // Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
+
   {
     slug: "empty-optician-chair-cost",
     title: "What an empty optician chair costs a clinic",
@@ -62,6 +63,60 @@ For the example clinic that is 230 × 41% × 10% × $500, or about $4,700, plus 
 [See how posting works](/clinics)`,
   },
   {
+    slug: "how-to-become-an-optician-canada",
+    title: "How to become an optician in Canada, province by province",
+    description: "The 2 routes in, the national exams, and how each province registers new opticians, from Ontario's intern class to Alberta's provisional permit.",
+    date: "2026-12-08",
+    body: `Opticians are regulated in every province, and the details change as soon as you cross a provincial border. The good news is that the core of the process is the same almost everywhere. This guide sets out the shared part first, then what each province adds. It was checked against each regulator's own website or published documents in November 2026, but rules and fees change, so confirm with the regulator in the province where you plan to work before you apply.
+
+## The part that is the same everywhere
+
+There are 2 ways in. Most people graduate from an accredited opticianry program at a Canadian college. If you trained somewhere else, or your program was not accredited, you go through Prior Learning Assessment and Recognition, known as PLAR, which compares what you know with what a new Canadian graduate knows and may assign bridging courses to fill the gaps.
+
+Either way, you then sit the national exams, run by the [National Alliance of Canadian Optician Regulators](https://nacor.ca/national-examinations/) (NACOR) on behalf of the provinces. There are 2 of them: Optical Sciences 1 for eyeglasses and Optical Sciences 2 for contact lenses. They are used in every province except Quebec, which has its own system, and both were updated in March 2025. You can apply for an exam before your school confirms you have graduated, but applications close at a deadline, so do not leave it late.
+
+The accredited programs are offered at Georgian College, Seneca and Collège La Cité in Ontario, NAIT and SAIT in Alberta, Douglas College, Stenberg College and Vancouver Community College in British Columbia, and New Brunswick Community College. Accreditation is now done by [Accreditation Canada](https://www.accreditation.ca), which keeps the current list, so check a program's status there before you enrol. Some programs, NAIT's distance option among them, expect you to be working in a dispensary already, with a licensed supervisor.
+
+> The exam is national, but the licence is provincial.
+
+## What each province adds
+
+| Province | Regulator | How a new graduate starts |
+| --- | --- | --- |
+| British Columbia | College of Health and Care Professionals of BC | Provisional licence while waiting for the exams, then Full |
+| Alberta | College of Opticians of Alberta | Provisional optician, working under supervision |
+| Saskatchewan | Saskatchewan College of Opticians | Student optician, then licensed after the exam |
+| Manitoba | Opticians of Manitoba | Student optician, then Licensed Optician |
+| Ontario | College of Opticians of Ontario | Registered Intern Optician |
+| New Brunswick | Opticians Association of New Brunswick | Apply after passing the exam |
+| Nova Scotia | Nova Scotia College of Dispensing Opticians | Student optician, before you start training |
+| Prince Edward Island | Prince Edward Island Board of Dispensing Opticians | Contact the board |
+| Newfoundland and Labrador | Dispensing Opticians Board of Newfoundland and Labrador | Contact the board |
+
+In **Ontario** you register as a Registered Intern Optician to sit the national exams, within 3 years of finishing an approved program. The intern certificate lasts 3 years or until you pass, and an intern may dispense only under the supervision of a registered optician, optometrist or physician. Applications to the [College of Opticians of Ontario](https://collegeofopticians.ca/applicants/applying-as-an-intern) are online.
+
+In **Alberta** graduates register as a Provisional Optician to be eligible for the exam and to start work, supervised by a licensed optician, optometrist or ophthalmologist. The [College of Opticians of Alberta](https://www.albertaopticians.ca/registrants-applicants-students/applicants/provisional-opticians) asks for a criminal record check and professional liability insurance with the application.
+
+In **British Columbia** there are 2 classes. A Provisional licence lets you practise under an approved supervisor once you are registered for the next sittings of both exams, and a Full licence follows when you pass them. The [College of Health and Care Professionals of BC](https://chcpbc.org/for-professions/opticians) also asks for liability insurance of at least $2 million and 2 notarized pieces of identification, and anyone whose program is not on its recognized list must first have an equivalency determination.
+
+In **Saskatchewan** you register with the college as a student optician, which needs a Canadian high school diploma or an assessed equivalent. After the eyeglass program you sit the national exam, then apply to register. **Manitoba** licenses Licensed Opticians and Contact Lens Licensed Opticians, with a student class for those in training, and expects continuing education once you are licensed. Details are on the [Opticians of Manitoba](https://opticiansofmanitoba.ca/registrants/application-licensure/) website.
+
+In **Nova Scotia** the order is different: you register as a student optician with the [Nova Scotia College of Dispensing Opticians](https://nscdo.org/student-registration) before you are accepted into a training program, and you must already be working in an optical dispensary with a registered optician or optometrist willing to supervise your practical training. You need to be a fully licensed optician before you can register as a student contact lens fitter.
+
+In **New Brunswick** an accredited opticianry diploma is the minimum, and after passing the national exam you request an application package from the Opticians Association of New Brunswick. The province's own guide for opticians trained abroad says applications are usually approved within a day to a week, and puts the full cost for an internationally trained optician at about $2,200 for eyeglasses alone, up to about $5,360 for eyeglasses and contact lenses with every bridging course, as of February 2026.
+
+**Prince Edward Island** and **Newfoundland and Labrador** have small boards without much published online, so contact them directly. Newfoundland and Labrador has regulated opticians since 1982, and its board uses the same national exams and PLAR route as everywhere else.
+
+## Moving from one province to another
+
+If you are already licensed, moving is usually far simpler than starting again. The provinces recognize each other's opticians under the Canadian Free Trade Agreement and mutual recognition agreements, and most regulators have a separate route for opticians from another province. Expect to show your current licence, a letter of good standing from your regulator and proof of insurance, and check whether the new province asks for anything more.
+
+## Where the work is
+
+Opticians work in independent clinics, corporate groups and optical stores in every province. Our [optician pay guide](/blog/optician-pay-canada) sets out what opticians typically earn in each province, and our list of [questions for an optician interview](/blog/optician-interview-questions) helps when the offers start.
+
+[See optician jobs across Canada](/jobs)`,
+  },  {
     slug: "ai-job-search-eye-care-canada",
     title: "We asked the AI chatbots where to find eye care jobs in Canada",
     description: "ChatGPT, Gemini, Copilot and friends are now part of the job hunt. What they told us about eye care jobs, and how to use them well.",
