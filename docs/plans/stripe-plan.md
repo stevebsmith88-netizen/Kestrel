@@ -4,6 +4,7 @@ Steve is setting up Stripe himself today and will carry on in a new chat. Nothin
 
 ## Decisions already made (do not re-open)
 
+- **Length of the free launch (open, Steve 14th November 2026):** Steve is leaning to 3 months from the day sign up opens, instead of 30 to 60 days. Not final: the public pages (`app/clinics/page.tsx`, `content/help.ts`, `lib/outreach-sequence.ts`) still say 30 to 60 days and must change together with `FREE_LAUNCH_ENDS` once he confirms. `FREE_LAUNCH_ENDS` (31st July 2027) is a placeholder until the launch date is known; set it to 3 months after sign up opens.
 - **Free launch, no card.** Posting is free for the first 30 to 60 days. A $0 checkout must never ask for a card: Stripe Checkout with `payment_method_collection: "if_required"` (CLAUDE.md, decided 6th November 2026). Keep the `/compare` wording "during the free launch" true.
 - **Prices before HST**, in `lib/pricing.ts` (the 1 source of truth on the site; Stripe holds its own copies, so they must match):
   - Single 30 day post by role band: $59 support and patient care, $79 opticians and practice leads, $99 optometrists.
