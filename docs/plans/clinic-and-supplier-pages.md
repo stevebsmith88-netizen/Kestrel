@@ -14,21 +14,36 @@ An address for each clinic, such as `/clinics/northgate-eye-care-kelowna`, showi
 
 ## 2. Several locations, 1 owner
 
-An account can hold several locations, each with its own clinic page (so candidates see the right town). A pass or Group pass covers posts at any of them. A group page lists the locations. A location can be moved between accounts only by Kestrel (by email), to avoid disputes.
+An account can hold several locations, each with its own clinic page (so candidates see the right town). A single post or pass covers 1 location; a Group pass (3 or more locations) covers the locations named on it (Steve, 14th November 2026). A group page lists the locations. A location can be moved between accounts only by Kestrel (by email), to avoid disputes.
 
 ## 3. Supplier accounts
 
 Suppliers already have an employer type and can post field based jobs and receive applicants. To add:
 
-- **Supplier sign up:** choose "Supplier or manufacturer" at sign up, with wording for companies, not clinics.
+- **Supplier sign up:** built 14th November 2026. Sign up says "I'm hiring"; the profile then asks "Who are you hiring for?" (an independent clinic, a corporate clinic or group, or a supplier or manufacturer), and the questions below it change to match.
 - **Supplier page:** like a clinic page: what the company makes or does, where it works, and its open jobs.
 - **Premium supplier page:** adds a **Promotions** block for offers aimed at clinics, each clearly labelled as a promotion, with start and end dates, read by a person before it shows (as job posts are), and no pay or hiring claims.
 - **Claiming by email domain:** to claim or edit a supplier page, the person signs in with a work email at the company's own domain (for example someone@supplier.com for supplier.com). Kestrel sends a link to that address to confirm it. Free email services (Gmail, Outlook and so on) cannot claim. A company with several domains asks by email.
 
 **Gate:** selling premium supplier pages and promotions waits for Steve's disclosure conversation, like the other supplier offers. Free supplier pages and jobs can go ahead.
 
+## 4. Who may post for a company (Steve, 14th November 2026)
+
+Concern: a sales rep posting a job when HR or the office normally does it.
+
+- **The first person to claim a company page becomes its owner,** and must tick "I am authorised to post jobs for this company" (HR, the office manager or the owner). Claiming needs a work email at the company's domain.
+- **Team members, invited by the owner,** with 2 levels: "Can post and see applicants" or "Can see applicants only". Nobody joins a company without the owner's invitation, even with the right email domain.
+- **Every post goes through the admin review queue** (already built), so a post that looks wrong can be checked with the company first.
+- **The company can ask Kestrel to change the owner** by email from a published company address, and Kestrel checks before moving it.
+
+Team members are a new feature (today 1 person holds 1 employer account). Suggest building it with several locations, since groups need it too.
+
+## 5. Sales and HST for CRA (Steve, 14th November 2026)
+
+When checkout is built: Stripe Tax works out the tax for each sale by the buyer's province (HST in Ontario and the Atlantic provinces, GST elsewhere; the accountant confirms any provincial sales tax on digital services), at 0.5% of each sale. An **Admin, Sales and HST** page then shows, for any CRA filing period: sales before tax, GST and HST collected by province, refunds, and the total to report, with a CSV download for the accountant. Invoices paid outside Stripe are added by hand on the same page, so nothing is missed.
+
 ## Suggested order
 
 1. Public clinic pages, with the website fill (the most useful for launch).
-2. Several locations (needed by groups at launch).
+2. Several locations and team members (needed by groups at launch).
 3. Supplier sign up and pages, then the domain claim; premium and promotions after the disclosure conversation.

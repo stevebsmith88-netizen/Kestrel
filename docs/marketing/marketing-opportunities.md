@@ -24,7 +24,7 @@ Steve's idea: a single page of the ways businesses and clinics can pay to reach 
 | --- | --- | --- |
 | Single posts and passes | Already priced in `lib/pricing.ts` | Free during launch |
 | Featured job | The job shown at the top of search results for its role and province, marked "Featured" | On the launch features list as "later" |
-| Urgent hiring badge | A small "Hiring now" label for 7 days (see below for how it looks) | Cheap add on |
+| Urgent badge | A small "Urgent" label for 7 days (see below for how it looks) | Cheap add on. Not "Hiring now": every live job is hiring (Steve, 14th November 2026) |
 | Social boost | The job shared on Kestrel's Instagram and LinkedIn | Comes in with paid ads, after launch (Steve, 14th November 2026). Labelled, with the clinic's agreement on the wording |
 | Job alert spotlight | The job placed first in alert emails for its role and province | Comes in with paid ads. Job alerts are used to seed the board first (Steve, 14th November 2026). Still a real, matching job, so it stays a service |
 | Clinic spotlight | A short profile article ("Meet a clinic"), already planned as opt in | Can be free for founding clinics, paid later |
@@ -33,13 +33,21 @@ Steve's idea: a single page of the ways businesses and clinics can pay to reach 
 
 Never sold: candidates' details, resumes or data of any kind; a place in Kestrel's own pay figures; a better spot in "Recommended for you", which stays rules based (`lib/recommend.ts`).
 
-## Several locations, 1 owner (to add to the pass terms)
+## Several locations and corporate groups (decided 14th November 2026)
 
-Today 1 account has 1 clinic profile, and the passes say nothing about locations. Proposed rule: **a pass belongs to the business, not the building.** Its live posts can be for any location the same owner runs, as long as each location has its own clinic page (so candidates see the right town). For 3 or more locations, a **Group pass**: more live posts, every role included, 1 invoice, and a group page linking the locations. Needs the account to hold several locations (see `docs/plans/clinic-and-supplier-pages.md`).
+Steve's rule: **each location signs up on its own, or the group takes a Group pass.** This protects the per post and per pass prices, so a large group cannot run many locations from 1 small pass.
 
-## How the "Hiring now" badge would look
+- A single post, Clinic pass or Clinic pass Plus covers **1 location**: the clinic page it was bought for. Posts are for that location only.
+- A **Group pass** covers 3 or more named locations under 1 owner or company, on 1 invoice, with a group page linking them. It is priced **per location**, a little below buying each location's pass separately, so it never undercuts the core prices (see the pricing section).
+- An owner with 2 locations buys for each location. A Group pass starts at 3.
+- A job posted for a location not on the pass is refused at posting, and the admin review queue checks the address.
+- This applies the same to independents with several clinics and to corporate groups. Big box groups may also post location by location if they prefer.
 
-A small capsule beside the job title, in the job list and on the job page: the words "Hiring now" in Deep Chestnut on a pale chestnut background, the same shape as the status badges already on the site. It is a capsule because it is information, not a button (the shapes rule in CLAUDE.md). It lasts 7 days, and a clinic can only add it to a live job that is genuinely open.
+Needs the account to hold several locations (`docs/plans/clinic-and-supplier-pages.md`). Add to `docs/pass-procedures.md` when checkout is built.
+
+## How the "Urgent" badge would look
+
+A small capsule beside the job title, in the job list and on the job page: the word "Urgent" in Deep Chestnut on a pale chestnut background, the same shape as the status badges already on the site. It is a capsule because it is information, not a button (the shapes rule in CLAUDE.md). It lasts 7 days, and a clinic can only add it to a live job that is genuinely open.
 
 ## A public clinic page (not built yet)
 
@@ -49,49 +57,47 @@ Today a clinic edits its profile privately, but candidates cannot see a page for
 
 Suppliers can already make an employer account and post field based jobs. To add (plan in `docs/plans/clinic-and-supplier-pages.md`): a supplier company page, a **premium supplier page** that can show labelled promotions, and claiming a supplier page by **work email domain** (an @supplier.com address matching the company's website).
 
-## Pricing guidance (a starting point, before HST)
+## Pricing guidance (revised 14th November 2026, before HST)
 
-No one in this niche publishes a media kit, which is normal for a new board. Price from what is already set (posts at $59, $79 and $99), keep founding prices simple, and promise **what they get, never how many people see it** until there are numbers to show.
+No one in this niche publishes a media kit, which is normal for a new board. Clinic prices start from the post prices already set ($59, $79, $99). **Sponsor prices are set as packages, not as single small items**, because a supplier's marketing budget is measured in thousands, and a price that looks too low signals low value. Promise **what they get, never how many people see it**, until there are numbers to show.
 
-| Option | Suggested starting price | Reasoning |
+### Clinics
+
+| Option | Suggested price | Reasoning |
 | --- | --- | --- |
-| Featured job | $29 for the 30 days of a post | About a third of a post price: easy yes, clear upgrade |
-| Hiring now badge | $15 for 7 days | Impulse add on |
+| Featured job | $29 for the 30 days of a post | About a third of a post price: easy yes |
+| Urgent badge | $15 for 7 days | Impulse add on |
 | Social boost, job alert spotlight | $25 each | With paid ads, after launch |
-| Group pass (3 or more locations) | From $599 a month for 15 live posts, all roles | About $40 a post, between the Clinic pass and Plus |
-| Sponsored article | $600 each, at most 4 a year | Writing, editing and a permanent page; raise as traffic grows |
-| Site supporter strip | $200 a month, 6 month minimum, at most 6 supporters | Scarcity keeps it worth having |
-| Featured directory listing | $300 a year | Low cost entry for smaller suppliers |
-| "Presented by" the yearly pay summary | $1,200 a year, 1 sponsor | The most quoted page; exclusive |
-| Premium supplier page | $79 a month or $790 a year | Matches the 10 for 12 yearly offer clinics get |
-| Founding supporter (individual) | $25 | See below |
-| Founding clinic | $199 | See below |
-| Founding sponsor | $1,500 for 12 months | See below |
+| Group pass | Per location a month: $179 (Clinic pass level) or $315 (Plus level), 3 locations minimum, 5 live posts a location | 10% below buying each pass separately |
+
+### Businesses (after the disclosure conversation)
+
+| Package | Suggested price | What it includes |
+| --- | --- | --- |
+| Directory feature | $500 a year | A highlighted directory entry with logo and 1 line |
+| Sponsored article | $1,500 each, at most 4 a year | The article, a permanent page, a labelled LinkedIn and Instagram post, and a mention in the monthly newsletter |
+| Supporter | $4,000 a year, at most 6 | Logo in the "Supported by" strip on the home page and blog, a directory feature, and 2 labelled social posts |
+| Presenting partner | $8,000 a year, 1 only | "Presented by" on the yearly pay summary, supporter strip, 1 sponsored article, and first offer to renew |
+| Premium supplier page | $99 a month or $990 a year | Company page with labelled promotions |
+
+**If every sponsor slot sold:** 6 supporters ($24,000), 1 presenting partner ($8,000), 3 more sponsored articles ($4,500, since the partner has 1 of the 4) and 15 directory features ($7,500) come to **about $44,000 a year**, before premium supplier pages and supplier job posts. **Realistic for year 1:** 1 presenting partner or 2 supporters, 2 articles and a handful of directory features, about **$12,000 to $18,000**. Sponsors pay first for association and goodwill; renewals at higher prices come once there are traffic and application numbers to show.
 
 Review every price after the first 3 months of real numbers.
 
-## Founding supporters (before Stripe is built)
+## Founding supporters (revised 14th November 2026)
 
-Steve's idea (14th November 2026): early backers who pay to support Kestrel and get something back.
+**Individuals:** an optional "Support Kestrel" payment, any amount from $10, with no physical rewards (no stickers: Steve, 14th November 2026). They get their name on the Founding supporters page if they opt in, and a thank you email. Call it a **contribution**, not a donation: Kestrel is a business, so it cannot give charitable receipts, and "donation" would suggest otherwise. Posting stays free for the first 30 to 60 days for everyone.
 
-| Tier | Who | What they get |
-| --- | --- | --- |
-| Founding supporter | Anyone in eye care who wants Kestrel to exist | Name on a "Founding supporters" page (only if they opt in), a sticker pack or mug from the existing merch designs, and launch news first |
-| Founding clinic | Clinics | The founding pass price locked for 12 months (already the rule), a "Founding clinic" mark on their clinic page, and a set of free post credits once paid posting starts |
-| Founding sponsor | Suppliers, after the disclosure conversation | Their logo on the supporters page and the "Supported by" strip for a year |
+**Founding clinics: the first 50.** Any of the first 50 clinic locations to post during the free launch becomes a Founding clinic, free: a permanent "Founding clinic" mark on its clinic page, and the founding pass price locked for 12 months if it takes a pass (already the rule). Scarcity ("1 of the first 50") is the reason to act early. Optional: a $199 founding credit pack (4 post credits for 12 months after paid posting starts, a $316 value) for clinics that want to back Kestrel with money.
 
-What each tier delivers, with a date, so nothing is vague:
+**Founding sponsor: at most 3, $10,000 for the first 18 months.** Everything in Presenting partner or Supporter, plus: named on the Founding supporters page for good, a launch week LinkedIn and Instagram thank you post, 2 sponsored articles, and first offer at the regular price when it ends. Only after the disclosure conversation.
 
-- **Founding supporter ($25):** name on the Founding supporters page within 2 weeks (only if they opt in), a thank you email, launch news first, and a sticker pack posted within 30 days of payment. Digital only (no stickers) keeps it simpler.
-- **Founding clinic ($199):** 4 job post credits to use within 12 months of paid posting starting (a $316 value at $79), a "Founding clinic" mark on its clinic page for good, and the founding pass price if it takes a pass. Credits are a prepaid service, so record them and honour them.
-- **Founding sponsor ($1,500):** logo on the Founding supporters page and in the "Supported by" strip for 12 months from launch, and 1 sponsored article in that year. Only after the disclosure conversation.
-
-How to take the money before checkout exists: a Stripe Payment Link is a single page Stripe hosts, with no code on Kestrel's side, so it does not need the full checkout build. An invoice works for clinics and sponsors.
+How to take the money before checkout exists: a Stripe Payment Link (a page Stripe hosts, no code on Kestrel's side), or an invoice for clinics and sponsors.
 
 Cautions:
 - **It is a purchase, not an investment.** Never promise a share, a return or a say in the business; that would bring in securities rules. Word it as "support Kestrel and get ..." and list exactly what they get.
-- **Deliver what is promised,** with a date. Merch needs ordering and posting.
-- **Tax: register for HST now.** Steve wants HST on everything, and a business can only charge HST once registered. Below $30,000 a year registration is voluntary, and registering also lets Kestrel claim back the HST it pays on its own costs. Show prices "plus HST" and put the HST number on every invoice.
+- **Deliver what is promised,** with a date.
+- **Tax: register for HST now.** A business can only charge HST once registered. Below $30,000 a year registration is voluntary, and registering also lets Kestrel claim back the HST it pays on its own costs. Show prices "plus HST" and put the HST number on every invoice. Tracking for CRA: see `docs/plans/clinic-and-supplier-pages.md`, section 5.
 - **A refund policy** in plain words, before the first sale: draft in `docs/legal/refund-policy-draft.md`.
 - **Consent:** supporters' names shown only with their permission, and updates only to those who ticked the news box (CASL).
 

@@ -52,7 +52,7 @@ On the demo site, open `/sign-up` and create 3 accounts with a password you will
 
 | Use | Address to sign up with | Choose |
 | --- | --- | --- |
-| Clinic | `kestrel+democlinic@eyecarejobs.ca` | I'm hiring for a clinic |
+| Clinic | `kestrel+democlinic@eyecarejobs.ca` | I'm hiring |
 | Candidate | `kestrel+democandidate@eyecarejobs.ca` | I'm looking for a job |
 | Admin | `kestrel+demoadmin@eyecarejobs.ca` | I'm looking for a job, and you promote it below |
 
