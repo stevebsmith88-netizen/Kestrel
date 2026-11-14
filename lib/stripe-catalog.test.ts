@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { CATALOG, LAUNCH_COUPON, freeLaunchOpen, priceState, productIds, stateText } from "./stripe-catalog.ts";
+import { CATALOG, LAUNCH_COUPON, freeLaunchOpen, postDaysFor, priceState, productIds, stateText } from "./stripe-catalog.ts";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS } from "./pricing.ts";
 
 const find = (key: string) => CATALOG.find((c) => c.lookupKey === key)!;
@@ -48,4 +48,10 @@ test("the free launch is open up to and including its last day, by Toronto time"
   assert.equal(freeLaunchOpen(new Date("2027-07-31T20:00:00-04:00"), "2027-07-31"), true);
   assert.equal(freeLaunchOpen(new Date("2027-08-01T00:30:00-04:00"), "2027-07-31"), false);
   assert.equal(freeLaunchOpen(new Date("2026-11-14T12:00:00-05:00"), "2027-07-31"), true);
+});
+
+test("a job going live during the free launch runs 60 days, and 30 after it", () => {
+  assert.equal(postDaysFor(new Date("2026-11-14T12:00:00-05:00"), "2027-07-31"), 60);
+  assert.equal(postDaysFor(new Date("2027-07-31T20:00:00-04:00"), "2027-07-31"), 60);
+  assert.equal(postDaysFor(new Date("2027-08-01T12:00:00-04:00"), "2027-07-31"), 30);
 });

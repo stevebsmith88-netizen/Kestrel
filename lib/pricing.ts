@@ -4,6 +4,9 @@
 
 export const POST_DAYS = 30;
 
+// Jobs that go live during the free launch run for 60 days instead of 30 (Steve, 14th November 2026). Extending is still 30 days.
+export const LAUNCH_POST_DAYS = 60;
+
 export const ROLE_BANDS = [
   { key: "support", label: "Support and patient care", covers: "Optometric assistants, technicians, reception and patient care", price: 59 },
   { key: "opticians", label: "Opticians and practice leads", covers: "Opticians, contact lens fitters and practice managers", price: 79 },

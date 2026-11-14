@@ -3,7 +3,7 @@ import AccountMenu from "@/components/AccountMenu";
 import Icon from "@/components/Icon";
 import NavLinks from "@/components/NavLinks";
 import { signOut } from "@/lib/auth-actions";
-import { ACCOUNT_MENU, homeOf, type BarPerson } from "@/lib/account-menu";
+import { ACCOUNT_MENU, SETTINGS_HREF, homeOf, type BarPerson } from "@/lib/account-menu";
 import type { Role } from "@/lib/auth";
 
 type NavItem = { href: string; label: string };
@@ -52,7 +52,7 @@ export default function AppBarView({ session, current, unread, quiz }: { session
   const here = current ?? homeOf(session.role);
   const links = session.role === "candidate" && quiz ? [...NAV.candidate.slice(0, 2), QUIZ, ...NAV.candidate.slice(2)] : NAV[session.role];
   const inMenu = new Set(ACCOUNT_MENU[session.role].map((l) => l.href));
-  const barLinks = links.filter((l) => !inMenu.has(l.href));
+  const barLinks = links.filter((l) => !inMenu.has(l.href) && l.href !== SETTINGS_HREF);
   // The envelope with its count. It sits beside the initials on a wide screen and beside the Menu button on a phone, so the count is always in view.
   const envelope = hasInbox && (
     <Link href="/account/inbox" className="inboxlink" aria-label={unread > 0 ? `Inbox, ${unread} unread` : "Inbox"} aria-current={here === "/account/inbox" ? "page" : undefined}>

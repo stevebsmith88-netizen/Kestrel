@@ -8,6 +8,7 @@ import { notifySlack } from "@/lib/notify-slack";
 import { refreshJobPages } from "@/lib/job-cache";
 import { cancelPaymentForJob, chargeForJob } from "@/lib/job-payment-flow";
 import { expiryFrom, isQuebecJob, longDate } from "@/lib/jobs";
+import { postDaysFor } from "@/lib/stripe-catalog";
 import { notify } from "@/lib/notifications";
 import { cardRefused, jobApproved, jobNeedsChange } from "@/lib/notify-text";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -40,7 +41,7 @@ export async function approveJobNow(id: string, actor: "admin" | "system"): Prom
   const db = supabaseAdmin();
   if (!UUID.test(id) || !db) return { key: "error" };
   const now = new Date();
-  // A job that was live before (it was edited and sent back) keeps its original 30 days. Otherwise editing
+  // A job that was live before (it was edited and sent back) keeps its original run (30 days, or 60 in the free launch). Otherwise editing
   // would be a way to keep a job live for ever.
   const { data: before } = await db.from("jobs").select("posted_at, expires_at, province").eq("id", id).eq("status", "in_review").maybeSingle();
   // The form refuses Quebec, so a Quebec job here reached the queue another way. It is never made live (the database refuses it too).
@@ -66,7 +67,7 @@ export async function approveJobNow(id: string, actor: "admin" | "system"): Prom
       return { key: charge.cardRefused ? "payment-failed" : "payment-error", why: charge.message.slice(0, 200) };
     }
   }
-  const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };
+  const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now, postDaysFor(now)).toISOString() };
   const { data, error } = await db
     .from("jobs")
     .update({ status: "live", ...dates, review_note: null })

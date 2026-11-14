@@ -11,13 +11,16 @@ export type BarPerson = { role: Role; email: string; fullName: string; planLine?
 // Each kind of account's dashboard. The same as homeFor in lib/auth.ts, kept here so the browser can use it too.
 export const homeOf = (role: Role) => (role === "admin" ? "/admin" : role === "clinic" ? "/clinic" : "/candidate");
 
+// Settings for a candidate or clinic is a gear icon beside the name inside the initials menu (Steve, 14th November 2026), so it is not repeated in the menu.
+// The admin menu keeps its line until the Admin console review (next tasks, items 5 and 9).
+export const SETTINGS_HREF = "/account";
+
 export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
   candidate: [
     { href: "/account/inbox", label: "Inbox" },
     { href: "/candidate/applications", label: "My applications" },
     { href: "/candidate/profile", label: "Profile and resume" },
     { href: "/account/help", label: "Help and feedback" },
-    { href: "/account", label: "Account settings" },
   ],
   clinic: [
     { href: "/account/inbox", label: "Inbox" },
@@ -26,7 +29,6 @@ export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
     { href: "/clinic/team", label: "Clinic team" },
     { href: "/clinic/locations", label: "Locations" },
     { href: "/account/help", label: "Help and feedback" },
-    { href: "/account", label: "Account settings" },
   ],
   admin: [{ href: "/account", label: "Account settings" }],
 };
