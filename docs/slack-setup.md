@@ -30,9 +30,17 @@ You do not have to do all 4 at once. A channel without its own address uses the 
 - **Phone:** install the Slack app and sign in with the same account, so alerts reach your phone.
 - **Bookmarks and pins:** pin the link to Admin in each channel, so it is 1 tap away.
 
+## A tech channel for Vercel and GitHub (no code)
+
+Slack has its own apps for these, so nothing needs building. Make a channel called #kestrel-tech. Steps can differ slightly from what is written here, so if a screen looks different, tell Claude what you see.
+
+- **Vercel:** in Vercel, open Integrations and add the Slack integration for your team, then in #kestrel-tech use its link command to connect the 2 projects (live and demo). Choose to be told about failed deployments and finished production deployments only. Every pull request makes a preview build, so telling it everything would be very noisy.
+- **GitHub:** in Slack, add the GitHub app, then in #kestrel-tech subscribe the repository (the command is `/github subscribe` followed by `stevebsmith88-netizen/Kestrel`). Keep it to pull requests and failed checks, and turn off the rest, so the channel stays quiet.
+- Muting #kestrel-tech overnight is fine. Nothing there needs an answer from you.
+
 ## Where Slack can go next
 
 - A shared channel for a virtual assistant with only counts and links, once their access is designed (next tasks, item 6).
 - Reminders and a weekly summary of the numbers.
 - Vercel and GitHub notifications into a tech channel, using Slack's own apps with no code.
-- Later, approving or sending back a job from the alert itself, which needs a Slack app with buttons and is a separate piece of work.
+- Approving a job or a claim from the alert itself, with a button. The plan is in `docs/plans/slack-approvals.md`.
