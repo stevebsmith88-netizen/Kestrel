@@ -4,6 +4,20 @@ Status: proposal, waiting for Steve's notes and his yes on the grouping. Nothing
 
 Covers items 5, 9 and 20 of the next tasks in CLAUDE.md, and feeds item 18 (drop down menus for each account type) and item 6 (virtual assistant logins).
 
+## Steve's decisions so far (14th November 2026)
+
+- The grouping works, with changes: Overview is renamed Dashboard and holds everything informational, including a finance overview and the top line numbers for each section.
+- Help requests becomes Support.
+- "Needs attention" may not be the right title. Names to choose from: To do (recommended), Action needed, Queue. It carries count badges.
+- Waitlist goes quiet after launch, so it hides once the sign up gate opens.
+- Move as much as sensible under the initials menu, as for clinic and candidate accounts.
+- Replace the many underlined text links built up so far with buttons and clickable tiles, and keep every page simple and obvious.
+- Clean up the clinic drop down as well (item 18), so it is not too deep.
+
+## Where this leads (recommendation, waiting for Steve's yes)
+
+Top bar for an admin, 4 items: Dashboard, To do (with a count), Jobs, People. Under the initials: Payments and Stripe, Outreach (while it is switched off), Do not email, Waitlist (before launch only), Support and Sign out. The Dashboard links to each of those with its top line number.
+
 ## What is there today
 
 13 admin pages: Overview, Review queue, Jobs, Found listings, Post for a clinic, Outreach, Clinics, Claims, Reports, Help requests, Waitlist, Do not email, Payments. Two CSV downloads (numbers, waitlist) and one for found leads.
