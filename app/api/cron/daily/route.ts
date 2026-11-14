@@ -9,6 +9,7 @@ import { withExpected } from "@/lib/expected-columns";
 import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { sendDailyDigest } from "@/lib/slack-digest";
 import { notify } from "@/lib/notifications";
 import { applicationNoUpdate, closedAfterTalksText } from "@/lib/notify-text";
 import { submitToIndexNow } from "@/lib/indexnow";
@@ -456,5 +457,11 @@ async function runDaily(request: Request) {
   if (recordError) problems.push(`Recording the run: ${recordError.message}`);
 
   if (problems.length) await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+  // The morning summary for Slack. Best effort: it never changes the result of the run.
+  try {
+    await sendDailyDigest(admin);
+  } catch (e) {
+    console.error("Slack summary not sent:", e instanceof Error ? e.message : e);
+  }
   return Response.json({ ok: problems.length === 0, ...summary });
 }

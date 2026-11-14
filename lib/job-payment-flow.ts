@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { SITE_URL } from "@/lib/email";
 import { refreshJobPages } from "@/lib/job-cache";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { notifySlack } from "@/lib/notify-slack";
 import { AFTER_SUBMIT_NOTICE, bandForRole, bandInfo, chargeNotice, dollars, jobPriceCents, paymentMode, type PaymentMode } from "@/lib/checkout-mode";
 import { logJobActivity } from "@/lib/job-activity";
 import { plainReason } from "@/lib/payment-reasons";
@@ -147,8 +148,10 @@ export async function completeCardSetup(sessionId: string): Promise<SetupDone> {
         const { approveJobNow } = await import("@/lib/job-approval");
         const result = await approveJobNow(payment.job_id, "system");
         autoApproved = result.key === "approved" ? "approved" : result.key === "payment-failed" ? "refused" : "error";
+        await notifySlack(autoApproved === "approved" ? "A job was approved automatically after the clinic updated its card" : "A clinic updated its card but the job still could not be approved", [payment.job_title]);
         await notifyAdmin(autoApproved === "approved" ? "A job was approved automatically after the clinic updated its card" : "A clinic updated its card but the job still could not be approved", [payment.job_title], "/admin/jobs");
       } else {
+        await notifySlack(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title]);
         await notifyAdmin(moved?.length ? "A job is waiting for review" : "A clinic updated the card for a job in review", [payment.job_title], "/admin/review");
       }
     }
@@ -230,6 +233,7 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
     const { error: linkError } = await db.from("job_payments").update({ stripe_invoice_id: paid.id, invoice_number: paid.number ?? null, invoice_url: paid.hosted_invoice_url ?? null, invoice_pdf_url: paid.invoice_pdf ?? null }).eq("id", ready.id);
     if (linkError) console.error("Invoice links not saved:", linkError.code, linkError.message);
     await logJobActivity(db, jobId, `Charged ${dollars(cents)} plus HST (${bandInfo(band).label} band)${paid.number ? `. Invoice ${paid.number}` : ""}`, { detail: `Stripe invoice ${paid.id}` });
+    await notifySlack("Payment taken", [`${dollars(cents)} before HST`, `${clinicName}: ${job.title}`]);
     return { ok: true, charged: true, cents };
   } catch (e) {
     // Only a refusal by the cardholder's bank marks the payment failed and asks the clinic for a new card. Anything else (a mistake in our
@@ -240,6 +244,7 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
     if (invoiceId) await voidInvoice(key, invoiceId);
     if (reason.cardRefused) await db.from("job_payments").update({ status: "failed", failure_message: reason.label, updated_at: new Date().toISOString() }).eq("id", ready.id);
     await logJobActivity(db, jobId, `Charge failed: ${reason.label}`, { detail: describeFailure(e) });
+    await notifySlack(reason.cardRefused ? "A card was refused" : "A payment could not be taken", [`${clinicName}: ${job.title}`, reason.label]);
     return { ok: false, message: reason.label, cardRefused: reason.cardRefused };
   }
 }

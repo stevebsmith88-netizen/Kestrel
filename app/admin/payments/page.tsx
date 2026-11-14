@@ -4,7 +4,9 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import StripeSetupCheck from "@/components/StripeSetupCheck";
 import { requireRole } from "@/lib/auth";
+import SlackCheck from "@/components/SlackCheck";
 import StripeCatalogPanel from "@/components/StripeCatalogPanel";
+import { slackStatus } from "@/lib/slack-text";
 import { FREE_LAUNCH_ENDS } from "@/lib/pricing";
 import { stripeKey } from "@/lib/stripe";
 import { loadCatalogStatus } from "@/lib/stripe-catalog-sync";
@@ -30,6 +32,7 @@ export default async function AdminPayments() {
           <h1>Payments</h1>
           <p className="lede2">Whether Stripe is connected. Checkout is not built yet, so no clinic is asked to pay and posting stays free.</p>
           <StripeSetupCheck checks={stripeChecks(process.env)} />
+          <SlackCheck {...slackStatus(process.env.SLACK_WEBHOOK_URL)} />
           {catalog && <StripeCatalogPanel rows={catalog.rows} coupon={catalog.coupon} endsOn={FREE_LAUNCH_ENDS} canSync readError={catalog.error} />}
         </div>
       </main>
