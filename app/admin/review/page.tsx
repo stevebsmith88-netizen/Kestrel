@@ -22,6 +22,7 @@ const NOTICES: Record<string, string> = {
   rejected: "Sent back to the clinic with your note.",
   "need-note": "Please tell the clinic what to change before sending a job back.",
   "payment-failed": "Not published. The clinic's saved card was refused, so nothing was charged. We have asked the clinic to save a new card, and you can approve the job again once they have.",
+  "payment-error": "Not published, and nothing was charged. The card could not be charged because of a problem on our side or in the Stripe set up, so the clinic has not been emailed. Fix the cause, then approve the job again.",
   error: "That didn't work. The job may already have been handled. Please refresh and try again.",
 };
 
@@ -44,7 +45,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
         <div className="wrap narrow">
           <h1>Review queue</h1>
           <p className="lede2">Check each post before it goes live. Approving it starts its 30 days.</p>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{notice === "payment-failed" && why ? ` Stripe said: ${why}` : ""}</p>}
+          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}{(notice === "payment-failed" || notice === "payment-error") && why ? ` Stripe said: ${why}` : ""}</p>}
 
           {jobs.length === 0 ? (
             <section className="card"><p>Nothing is waiting. New posts appear here as soon as a clinic submits them.</p></section>

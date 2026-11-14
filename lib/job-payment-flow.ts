@@ -135,7 +135,9 @@ export async function completeCardSetup(sessionId: string): Promise<SetupDone> {
   }
 }
 
-export type ChargeResult = { ok: true; charged: boolean; cents: number } | { ok: false; message: string };
+// cardRefused is true only when the cardholder's bank said no (or needs them to confirm). Any other failure is a problem on our side or in the
+// set up, so the clinic is not told and the saved card stays ready for another try.
+export type ChargeResult = { ok: true; charged: boolean; cents: number } | { ok: false; message: string; cardRefused: boolean };
 
 // Called when Kestrel approves a job. If a card is saved for it, charges the price of the role and returns ok. A job with no payment record
 // (posted before checkout existed, or during the free launch) needs no charge. Never charges twice: the idempotency key repeats the same answer.
@@ -146,17 +148,17 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
   const list = rows ?? [];
   const ready = list.find((r) => r.status === "card_saved");
   if (!ready) {
-    if (list.some((r) => r.status === "awaiting_card")) return { ok: false, message: "The clinic has not saved a card for this job yet." };
-    if (list[0]?.status === "failed") return { ok: false, message: "The card was refused last time and the clinic has not updated it yet." };
+    if (list.some((r) => r.status === "awaiting_card")) return { ok: false, message: "The clinic has not saved a card for this job yet.", cardRefused: false };
+    if (list[0]?.status === "failed") return { ok: false, message: "The card was refused last time and the clinic has not updated it yet.", cardRefused: false };
     return { ok: true, charged: false, cents: 0 };
   }
   const key = stripeKey();
-  if (!key) return { ok: false, message: "Stripe is not set up on this copy of the site, so the saved card cannot be charged." };
+  if (!key) return { ok: false, message: "Stripe is not set up on this copy of the site, so the saved card cannot be charged.", cardRefused: false };
   const loaded = await loadJob(db, jobId);
-  if (!loaded) return { ok: false, message: "We could not find the job." };
+  if (!loaded) return { ok: false, message: "We could not find the job.", cardRefused: false };
   const { job, clinicName, email } = loaded;
   const { data: billing } = await db.from("employer_billing").select("stripe_customer_id").eq("employer_id", ready.employer_id).maybeSingle();
-  if (!billing?.stripe_customer_id || !ready.stripe_payment_method_id) return { ok: false, message: "No saved card was found for this clinic." };
+  if (!billing?.stripe_customer_id || !ready.stripe_payment_method_id) return { ok: false, message: "No saved card was found for this clinic.", cardRefused: false };
 
   // The price follows the role as it stands now, so a role changed in review is charged at the right band.
   const cents = jobPriceCents(job.role_category);
@@ -167,7 +169,6 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
       currency: "cad",
       customer: billing.stripe_customer_id,
       payment_method: ready.stripe_payment_method_id,
-      payment_method_types: ["card"],
       confirm: true,
       off_session: true,
       description: `Kestrel Eye Care Jobs: ${job.title} (30 day post)`,
@@ -177,17 +178,18 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
     if (intent.status !== "succeeded") {
       const message = "The card needs the cardholder to confirm it, so it could not be charged without them.";
       await db.from("job_payments").update({ status: "failed", failure_message: message, stripe_payment_intent_id: intent.id, updated_at: new Date().toISOString() }).eq("id", ready.id);
-      return { ok: false, message };
+      return { ok: false, message, cardRefused: true };
     }
     await db.from("job_payments").update({ status: "charged", amount_cents: cents, band, stripe_payment_intent_id: intent.id, failure_message: null, charged_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", ready.id);
     return { ok: true, charged: true, cents };
   } catch (e) {
     const message = (e instanceof StripeError ? e.message : "Stripe could not be reached").replace(/\b(?:sk|rk|pk)_(?:test|live)_[A-Za-z0-9*]+/g, "[key]").slice(0, 200);
     console.error("Charge failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
-    if (e instanceof StripeError && e.status !== null && e.status < 500) {
-      await db.from("job_payments").update({ status: "failed", failure_message: message, updated_at: new Date().toISOString() }).eq("id", ready.id);
-    }
-    return { ok: false, message };
+    // Only a refusal by the cardholder's bank marks the payment failed and asks the clinic for a new card. Anything else (a mistake in our
+    // request, a Stripe outage) leaves the saved card ready, so approving again just tries again.
+    const cardRefused = e instanceof StripeError && e.type === "card_error";
+    if (cardRefused) await db.from("job_payments").update({ status: "failed", failure_message: message, updated_at: new Date().toISOString() }).eq("id", ready.id);
+    return { ok: false, message, cardRefused };
   }
 }
 
