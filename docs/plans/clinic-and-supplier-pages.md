@@ -24,7 +24,7 @@ An account can hold several locations, each with its own clinic page (so candida
 Suppliers already have an employer type and can post field based jobs and receive applicants. To add:
 
 - **Supplier sign up:** built 14th November 2026. Sign up says "I'm hiring"; the profile then asks "Who are you hiring for?" (an independent clinic, a corporate clinic or group, or a supplier or manufacturer), and the questions below it change to match.
-- **Supplier page:** like a clinic page: what the company makes or does, where it works, and its open jobs.
+- **Supplier page:** built 14th November 2026 at `/companies/<name-town>` (`components/EmployerPage.tsx`, shared with clinic pages), with the same rules as clinic pages. It shows **Company email confirmed** when the owner's account email is at the company's own website (`emailMatchesWebsite` in `lib/claims.ts`, which also refuses free email and website builder addresses). Claiming a found supplier listing already needs an address at its domain (the claim flow).
 - **Premium supplier page:** adds a **Promotions** block for offers aimed at clinics, each clearly labelled as a promotion, with start and end dates, read by a person before it shows (as job posts are), and no pay or hiring claims.
 - **Claiming by email domain:** to claim or edit a supplier page, the person signs in with a work email at the company's own domain (for example someone@supplier.com for supplier.com). Kestrel sends a link to that address to confirm it. Free email services (Gmail, Outlook and so on) cannot claim. A company with several domains asks by email.
 

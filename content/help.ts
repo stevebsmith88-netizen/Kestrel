@@ -420,7 +420,7 @@ export const HELP: HelpSection[] = [
         answer: [
           "You need a clinic account and a clinic profile before you can post. The profile is where candidates learn about you, so a few honest lines about your team help. Some details are private: the email address that applicant alerts go to is never shown on a post, and neither is how many people work for you.",
           "While clinic accounts are by invitation, the sign up form also asks for the invitation code we sent you. You can change your profile later from the menu under your initials.",
-          "Once Kestrel has approved your first job, your clinic gets its own public page listing your open jobs, with your name, town and About text. Every job page links to it.",
+          "Once Kestrel has approved your first job, your clinic gets its own public page listing your open jobs, with your name, town and About text. Every job page links to it. Suppliers and manufacturers get a company page in the same way, which shows **Company email confirmed** when your account uses an email address at your company's own website.",
         ],
         steps: [
           "Choose **Create account** at the top of the page. On a phone, open **Menu** first.",

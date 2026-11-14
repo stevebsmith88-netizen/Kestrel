@@ -11,8 +11,7 @@ import { AI_SCREENING_EXPLAINER, answerLabel, employmentExplainer, EXISTING_VACA
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
-import { clinicHref } from "@/lib/clinic-pages";
-import { clinicSlugFor } from "@/lib/public-clinics";
+import { clinicHrefFor } from "@/lib/public-clinics";
 import { shareMetadata } from "@/lib/share";
 
 // Saved and shared for up to 5 minutes (audit P1-10), and cleared at once when the job changes (lib/job-cache.ts). force-static means the
@@ -43,7 +42,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
   const job = await getLiveJob(id);
   if (!job) notFound();
   const clinic = job.employers;
-  const clinicSlug = await clinicSlugFor(job.employer_id);
+  const clinicPage = await clinicHrefFor(job.employer_id);
   // Structured data is only added while the job is live, and it matches what is on the page. A found listing that the clinic
   // has not claimed gets none: the clinic's own page is the original, and Kestrel cannot know the moment the job is filled
   // (audit finding R19, decision (a)). It still shows on Kestrel and in Kestrel's own search.
@@ -60,7 +59,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
           <p className="back"><Link href="/jobs">Back to all jobs</Link></p>
           <header className="jobhead">
             <h1>{job.title}</h1>
-            <p className="meta">{clinicSlug ? <Link href={clinicHref(clinicSlug)}>{clinic?.clinic_name}</Link> : clinic?.clinic_name} · {job.city}, {job.province}</p>
+            <p className="meta">{clinicPage ? <Link href={clinicPage}>{clinic?.clinic_name}</Link> : clinic?.clinic_name} · {job.city}, {job.province}</p>
             <p className="chips">
               <span className="chip">{employmentLabel(job.employment_type)}</span>
               {payChips(job).map((c) => <span className="chip paychip" key={c}>{c}</span>)}
@@ -84,8 +83,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                     <div className="adbody">{clinic.about}</div>
                   </>
                 )}
-                {clinicSlug && (
-                  <p><Link href={clinicHref(clinicSlug)} className="btn sm ghost">More about {clinic?.clinic_name} and all its jobs</Link></p>
+                {clinicPage && (
+                  <p><Link href={clinicPage} className="btn sm ghost">More about {clinic?.clinic_name} and all its jobs</Link></p>
                 )}
               </section>
               <section className="card jobfacts">

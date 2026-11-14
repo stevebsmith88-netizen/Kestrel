@@ -22,6 +22,7 @@ import { refreshJobPages } from "@/lib/job-cache";
 import { fetchPage } from "@/lib/fetch-page";
 import { startAddress } from "@/lib/page-reader";
 import { siteDetails, type SiteDetails } from "@/lib/site-details";
+import { emailMatchesWebsite, hostOf } from "@/lib/claims";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const field = (form: FormData, key: string) => form.get(key) ?? "";
@@ -103,7 +104,12 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   // A new clinic goes straight on to its first post (Steve, 13th November 2026), with no stop on the empty dashboard.
   if (newLocation) redirect("/clinic?notice=location-added");
   if (!existing) redirect("/clinic/jobs/new?notice=profile-created");
-  return { message: "Your clinic profile is saved." };
+  // Suppliers show "Company email confirmed" on their public page when the account's email is at the company's own website (Steve,
+  // 14th November 2026). Say how to get it when it is missing.
+  if (clinic.practiceType === "supplier" && clinic.website && !emailMatchesWebsite(session.email, clinic.website)) {
+    return { message: `Your company profile is saved. Your public page shows "Company email confirmed" when your account uses an email address at ${hostOf(clinic.website)}. To get it, change your account's email under Account settings.` };
+  }
+  return { message: clinic.practiceType === "supplier" ? "Your company profile is saved." : "Your clinic profile is saved." };
 }
 
 // What a template keeps from a job: everything except the status and the two questions that must be answered fresh.

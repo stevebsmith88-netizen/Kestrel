@@ -46,6 +46,9 @@ export function clinicSlugs(clinics: Pick<PublicClinic, "id" | "clinic_name" | "
 }
 
 export const clinicHref = (slug: string) => `/clinics/${slug}`;
+export const companyHref = (slug: string) => `/companies/${slug}`;
+// Clinics at /clinics, suppliers and manufacturers at /companies (Steve, 14th November 2026).
+export const employerHref = (slug: string, practiceType: string) => (practiceType === "supplier" ? companyHref(slug) : clinicHref(slug));
 
 // Google may index a clinic page when it has open jobs, or a real description. An empty page with no jobs is still there for anyone who
 // has the link, but asks not to be indexed, so thin pages never reach search results.
@@ -60,7 +63,7 @@ export function clinicJsonLd(c: PublicClinic, slug: string, site: string) {
     "@context": "https://schema.org",
     "@type": c.practice_type === "supplier" ? "Organization" : "MedicalBusiness",
     name: c.clinic_name,
-    url: `${site}${clinicHref(slug)}`,
+    url: `${site}${employerHref(slug, c.practice_type)}`,
     ...(c.website ? { sameAs: [c.website] } : {}),
     ...(c.about ? { description: c.about.slice(0, 500) } : {}),
     address: { "@type": "PostalAddress", addressLocality: c.city, addressRegion: c.province, addressCountry: "CA" },
