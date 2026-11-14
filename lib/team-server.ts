@@ -9,13 +9,16 @@ import { codeHash, inviteProblem, isMemberLevel, levelLabel, type MemberLevel } 
 // is asking (the clinic owner, or Kestrel's admin), because nobody changes a team with their own sign in.
 
 type Admin = SupabaseClient;
-export type Invite = { id: string; employer_id: string; name: string; email: string; level: string; expires_at: string; accepted_at: string | null; cancelled_at: string | null; created_at: string };
+export type Invite = { id: string; employer_id: string; name: string; email: string; level: string; expires_at: string; accepted_at: string | null; cancelled_at: string | null; created_at: string; also_employer_ids?: string[] | null };
 const INVITE_COLUMNS = "id, employer_id, name, email, level, expires_at, accepted_at, cancelled_at, created_at";
 
 export async function findInvite(admin: Admin, code: string): Promise<Invite | null> {
+  // also_employer_ids (migration 0047) is read on its own, so a database without it still finds the invitation.
   const { data, error } = await admin.from("employer_invites").select(INVITE_COLUMNS).eq("code_hash", codeHash(code)).maybeSingle();
   if (error) console.error("Invite lookup failed:", error.code, error.message);
-  return (data as Invite | null) ?? null;
+  if (!data) return null;
+  const { data: extra } = await admin.from("employer_invites").select("also_employer_ids").eq("id", (data as Invite).id).maybeSingle();
+  return { ...(data as Invite), also_employer_ids: (extra?.also_employer_ids as string[] | null) ?? [] };
 }
 
 // Adds the person to the clinic at the level the owner chose, marks the invitation used, and tells the owner. Returns why not, or null.
@@ -28,8 +31,14 @@ export async function acceptInvite(admin: Admin, code: string, user: { id: strin
   if (error) {
     console.error("Joining a clinic failed:", error.code, error.message);
     if (/up to 5/.test(error.message)) return "This clinic's team is full (5 people). Ask the owner to remove someone first.";
-    if (/own clinic|another clinic/.test(error.message) || error.code === "23505") return "Your account already belongs to a clinic on Kestrel. Ask the clinic to send the invite to a different email, or email support@eyecarejobs.ca.";
+    if (/owns this clinic/.test(error.message)) return "You own this clinic already, so you do not need to join its team.";
+    if (error.code === "23505") return "You are already on this clinic's team.";
     return "We couldn't add you to the clinic just now. Please try again.";
+  }
+  // The other locations the owner ticked. A location whose team is full is skipped; the owner can invite again there.
+  for (const other of invite.also_employer_ids ?? []) {
+    const { error: more } = await admin.from("employer_members").insert({ employer_id: other, user_id: user.id, level });
+    if (more) console.error("Joining another location failed:", other, more.message);
   }
   await admin.from("employer_invites").update({ accepted_at: new Date().toISOString(), accepted_by: user.id }).eq("id", invite.id).is("accepted_at", null);
   const { data: owner } = await admin.from("employers").select("owner_id").eq("id", invite.employer_id).maybeSingle();
@@ -42,11 +51,15 @@ export type TeamPerson = { userId: string; name: string; email: string; level: "
 // Everyone on a clinic's team, owner first, with names and email addresses (read with the server key: people cannot read each other's
 // accounts with their own sign in).
 export async function loadTeam(admin: Admin, employerId: string): Promise<{ people: TeamPerson[]; invites: Invite[] }> {
-  const [{ data: employer }, { data: members }, { data: invites }] = await Promise.all([
+  const [{ data: employer }, { data: members }, { data: covering, error: coverError }] = await Promise.all([
     admin.from("employers").select("owner_id, created_at").eq("id", employerId).maybeSingle(),
     admin.from("employer_members").select("user_id, level, created_at").eq("employer_id", employerId).order("created_at"),
-    admin.from("employer_invites").select(INVITE_COLUMNS).eq("employer_id", employerId).is("accepted_at", null).is("cancelled_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false }),
+    admin.from("employer_invites").select(INVITE_COLUMNS).or(`employer_id.eq.${employerId},also_employer_ids.cs.{${employerId}}`).is("accepted_at", null).is("cancelled_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false }),
   ]);
+  // On a database without migration 0047 the "covers other locations" column is missing, so read this location's invitations only.
+  const invites = coverError
+    ? (await admin.from("employer_invites").select(INVITE_COLUMNS).eq("employer_id", employerId).is("accepted_at", null).is("cancelled_at", null).gt("expires_at", new Date().toISOString()).order("created_at", { ascending: false })).data
+    : covering;
   const rows: { userId: string; level: TeamPerson["level"]; since: string | null }[] = [
     ...(employer?.owner_id ? [{ userId: employer.owner_id as string, level: "owner" as const, since: employer.created_at as string }] : []),
     ...((members ?? []) as { user_id: string; level: string; created_at: string }[]).map((m) => ({ userId: m.user_id, level: (m.level === "edit" ? "edit" : "view") as MemberLevel, since: m.created_at })),

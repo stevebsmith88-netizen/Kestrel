@@ -37,8 +37,9 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
 
   // A clinic owner with a team hands the clinic over first, so the team does not lose its jobs and applicants (migration 0045).
   if (session.role === "clinic") {
-    const { data: owned } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
-    const { count } = owned ? await admin.from("employer_members").select("user_id", { count: "exact", head: true }).eq("employer_id", owned.id) : { count: 0 };
+    const { data: owned } = await admin.from("employers").select("id").eq("owner_id", session.userId);
+    const ownedIds = (owned ?? []).map((e) => e.id as string);
+    const { count } = ownedIds.length ? await admin.from("employer_members").select("user_id", { count: "exact", head: true }).in("employer_id", ownedIds) : { count: 0 };
     if (count && count > 0) return { error: "Your clinic has other people on its team. Hand the clinic to one of them from Clinic team first, or remove them, then delete your account." };
   }
 
@@ -53,9 +54,11 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
     (apps ?? []).forEach((a) => a.cv_path && paths.push(a.cv_path));
     applicationsCount = apps?.length ?? 0;
   } else {
-    const { data: employer } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
-    if (employer) {
-      const { data: jobs } = await admin.from("jobs").select("id").eq("employer_id", employer.id);
+    // Every location this account owns (migration 0047).
+    const { data: ownedLocations } = await admin.from("employers").select("id").eq("owner_id", session.userId);
+    const locationIds = (ownedLocations ?? []).map((e) => e.id as string);
+    if (locationIds.length) {
+      const { data: jobs } = await admin.from("jobs").select("id").in("employer_id", locationIds);
       const jobIds = (jobs ?? []).map((j) => j.id);
       jobsCount = jobIds.length;
       if (jobIds.length) {

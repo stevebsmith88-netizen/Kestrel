@@ -12,7 +12,9 @@ import StatusBadge from "@/components/StatusBadge";
 import { requireRole } from "@/lib/auth";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
-import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
+import { getApplicantCounts, getMyClinics, getMyEmployer, getMyJobs } from "@/lib/clinic";
+import LocationPicker from "@/components/LocationPicker";
+import { switchLocation } from "@/lib/location-actions";
 import { canEdit, levelLabel, VIEW_ONLY_TEXT } from "@/lib/team";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
 import { getMyJobNumbers } from "@/lib/job-stats-data";
@@ -48,6 +50,12 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const first = session.firstName || "there";
   // A "view only" team member sees the same dashboard without the buttons that change jobs (migration 0045).
   const editor = canEdit(employer.level);
+  // Several locations (migration 0047): a picker, and a summary of every location so nothing is missed in the ones not open now.
+  const clinics = await getMyClinics(session.userId);
+  const others = clinics.length > 1 ? await Promise.all(clinics.map(async (c) => {
+    const theirJobs = c.id === employer.id ? jobs : await getMyJobs(c.id);
+    return { ...c, live: theirJobs.filter((j) => j.status === "live").length, fresh: theirJobs.reduce((n, j) => n + (applicants[j.id]?.fresh ?? 0), 0) };
+  })) : [];
   const count = (s: string) => jobs.filter((j) => j.status === s).length;
   // The green approval messages a clinic has not cleared yet. A message about a change a clinic needs to make is never hidden.
   const notices = visibleNotices(jobNotices(jobs), parseDismissed((await cookies()).get(DISMISS_COOKIE)?.value));
@@ -61,6 +69,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
         <div className="wrap">
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
+          <LocationPicker clinics={clinics} current={employer.id} back="/clinic" />
           {employer.level !== "owner" && <p className="lede2">You are on the {employer.clinic_name} team ({levelLabel(employer.level).toLowerCase()}).{editor ? "" : ` ${VIEW_ONLY_TEXT}`}</p>}
           {notice && DASHBOARD_NOTICES[notice] && <p className={noticeTone(notice) === "warn" ? "notice warn" : "notice"} role="status">{DASHBOARD_NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
@@ -120,6 +129,24 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               </div>
               <p className="small-note statsnote">Views count each visit to a job page once, and leave out search engines, you and our team. An apply click is someone pressing Apply, which is not the same as a finished application, so the applicant counts stay the ones to trust.</p>
 
+              {others.length > 1 && (
+                <details className="card allloc">
+                  <summary>All locations ({others.length})</summary>
+                  <table className="locationsum">
+                    <thead><tr><th scope="col">Location</th><th scope="col">Live jobs</th><th scope="col">New applicants</th><th scope="col"><span className="sr">Open</span></th></tr></thead>
+                    <tbody>
+                      {others.map((c) => (
+                        <tr key={c.id}>
+                          <td>{c.clinic_name}<br /><span className="help">{c.city}</span></td>
+                          <td>{c.live}</td>
+                          <td>{c.fresh}</td>
+                          <td>{c.id === employer.id ? <span className="help">Open now</span> : <form action={switchLocation}><input type="hidden" name="location" value={c.id} /><input type="hidden" name="back" value="/clinic" /><button type="submit" className="btn sm ghost">Open</button></form>}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </details>
+              )}
               <div className="listhead" id="your-jobs">
                 <h2>{show ? SHOW_LABELS[show].title : "Your jobs"}</h2>
                 <span className="listactions">

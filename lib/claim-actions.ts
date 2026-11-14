@@ -40,10 +40,10 @@ export async function startClaim(_prev: JobFormState, form: FormData): Promise<J
   if (!employer || employer.claimed || employer.owner_id) return { error: "This listing has already been claimed." };
 
   // A clinic account holds one clinic profile.
-  const { data: mine } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
+  const { data: mine } = await admin.from("employers").select("id").eq("owner_id", session.userId).limit(1).maybeSingle();
   if (mine) return { error: "Your account already has a clinic profile, so it cannot take over another one. Please email support@eyecarejobs.ca and we will sort it out together." };
   // A team member belongs to their clinic (migration 0045). On a database without the team table the read fails and nothing is found.
-  const { data: member } = await admin.from("employer_members").select("employer_id").eq("user_id", session.userId).maybeSingle();
+  const { data: member } = await admin.from("employer_members").select("employer_id").eq("user_id", session.userId).limit(1).maybeSingle();
   if (member) return { error: "Your account is on another clinic's team, so it cannot claim a listing. Please email support@eyecarejobs.ca and we will sort it out together." };
 
   const { count } = await admin.from("listing_claims").select("id", { count: "exact", head: true }).eq("user_id", session.userId).gte("created_at", new Date(Date.now() - DAY).toISOString());
@@ -128,7 +128,7 @@ export async function approveClaim(form: FormData) {
   const { data: claim } = await admin.from("listing_claims").select("id, user_id, employer_id, claimant_email").eq("id", id).eq("status", "pending_review").maybeSingle();
   if (!claim) redirect("/admin/claims?notice=error");
 
-  const { data: mine } = await admin.from("employers").select("id").eq("owner_id", claim.user_id).maybeSingle();
+  const { data: mine } = await admin.from("employers").select("id").eq("owner_id", claim.user_id).limit(1).maybeSingle();
   if (mine) redirect("/admin/claims?notice=has-clinic");
 
   // Only an unclaimed listing can be claimed, even if two claims are approved at once.

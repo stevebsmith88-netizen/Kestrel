@@ -5,6 +5,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import AccountView from "@/components/AccountView";
 import { requireRole } from "@/lib/auth";
+import { getMyEmployer } from "@/lib/clinic";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { longDate } from "@/lib/jobs";
 import { nameLockedUntil } from "@/lib/name-hold";
@@ -21,9 +22,13 @@ export default async function Account({ searchParams }: { searchParams: Promise<
   const admin = supabaseAdmin();
 
   const { data: profile } = admin ? await admin.from("profiles").select("first_name, last_name, marketing_consent, unsubscribed_at, notify_application_updates").eq("id", session.userId).maybeSingle() : { data: null };
-  const { data: employer } = admin && session.role === "clinic" ? await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle() : { data: null };
+  // The location being worked in (migration 0047): its email choices show here, for its owner.
+  const current = session.role === "clinic" ? await getMyEmployer(session.userId) : null;
+  const employer = current?.level === "owner" ? { id: current.id } : null;
   // An owner with a team cannot delete the clinic out from under them (Steve, 14th November 2026). No team table yet means no team.
-  const { count: teamCount } = admin && employer ? await admin.from("employer_members").select("user_id", { count: "exact", head: true }).eq("employer_id", employer.id) : { count: 0 };
+  const { data: ownedLocations } = admin && session.role === "clinic" ? await admin.from("employers").select("id").eq("owner_id", session.userId) : { data: [] };
+  const ownedIds = (ownedLocations ?? []).map((e) => e.id as string);
+  const { count: teamCount } = admin && ownedIds.length ? await admin.from("employer_members").select("user_id", { count: "exact", head: true }).in("employer_id", ownedIds) : { count: 0 };
   const { data: contact } = admin && employer ? await admin.from("employer_contacts").select("*").eq("employer_id", employer.id).maybeSingle() : { data: null };
 
   // When the name can next be changed (lib/name-hold.ts). A missing column means no hold yet, so a database without migration 0039 still works.

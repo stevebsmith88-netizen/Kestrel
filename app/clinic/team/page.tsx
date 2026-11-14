@@ -5,7 +5,8 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { CancelInvite, InviteForm, LevelForm, MakeOwner, RemoveMember, ResendInvite } from "@/components/TeamForms";
 import { requireRole } from "@/lib/auth";
-import { getMyEmployer } from "@/lib/clinic";
+import { getMyClinics, getMyEmployer } from "@/lib/clinic";
+import LocationPicker from "@/components/LocationPicker";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { levelLabel, TEAM_MAX } from "@/lib/team";
@@ -25,6 +26,8 @@ export default async function ClinicTeam({ searchParams }: { searchParams: Promi
   const admin = supabaseAdmin();
   const { people, invites } = admin ? await loadTeam(admin, employer.id) : { people: [], invites: [] };
   const owner = employer.level === "owner";
+  const clinics = await getMyClinics(session.userId);
+  const ownedLocations = clinics.filter((c) => c.level === "owner");
   const full = people.length + invites.length >= TEAM_MAX;
   return (
     <>
@@ -33,6 +36,7 @@ export default async function ClinicTeam({ searchParams }: { searchParams: Promi
         <div className="wrap narrow">
           <p className="kicker">{employer.clinic_name}</p>
           <h1>Your clinic team</h1>
+          <LocationPicker clinics={clinics} current={employer.id} back="/clinic/team" />
           <p className="lede2">
             {owner
               ? `Up to ${TEAM_MAX} people, including you, can use your clinic's account. Only you can change the profile and the team.`
@@ -80,7 +84,7 @@ export default async function ClinicTeam({ searchParams }: { searchParams: Promi
               ) : (
                 <p className="help">They get an email with a link and a code. New people create an account with it; anyone with a Kestrel clinic account signs in and enters the code.</p>
               )}
-              <InviteForm full={full} />
+              <InviteForm full={full} locations={ownedLocations} current={employer.id} />
             </section>
           )}
           <p className="help">Stuck? <Link href="/account/help">Ask Kestrel for help</Link> and we will sort it out with you.</p>

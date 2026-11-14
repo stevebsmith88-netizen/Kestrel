@@ -1,16 +1,17 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { isEmail, NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
-import { getMyEmployer } from "@/lib/clinic";
+import { getMyClinics, getMyEmployer, LOCATION_COOKIE } from "@/lib/clinic";
 import { sendEmail } from "@/lib/email";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { codeHash, inviteExpiry, isMemberLevel, newInviteCode, OWNER_ONLY_TEXT, TEAM_MAX } from "@/lib/team";
 import { teamInviteEmail } from "@/lib/team-emails";
-import { acceptInvite, placesTaken, transferOwnership } from "@/lib/team-server";
+import { acceptInvite, findInvite, placesTaken, transferOwnership } from "@/lib/team-server";
 
 // The Team page (My clinic, Team). Only the clinic owner changes the team; every change is made with the server key after that check.
 export type TeamState = JobFormState & { code?: string };
@@ -28,11 +29,12 @@ async function ownerOnly() {
 
 // Creates an invitation and emails it. The code is shown to the owner once too, so they can pass it on by hand if the email goes astray
 // (and on the demo site, which never sends email). Only a fingerprint of it is stored.
-async function createInvite(admin: NonNullable<ReturnType<typeof supabaseAdmin>>, args: { employerId: string; clinicName: string; inviterId: string; inviter: string; name: string; email: string; level: string }) {
+async function createInvite(admin: NonNullable<ReturnType<typeof supabaseAdmin>>, args: { employerId: string; clinicName: string; inviterId: string; inviter: string; name: string; email: string; level: string; alsoIds?: string[] }) {
   const code = newInviteCode();
-  const { error } = await admin.from("employer_invites").insert({
-    employer_id: args.employerId, name: args.name, email: args.email, level: args.level, code_hash: codeHash(code), invited_by: args.inviterId, expires_at: inviteExpiry(new Date()).toISOString(),
-  });
+  const row: Record<string, unknown> = { employer_id: args.employerId, name: args.name, email: args.email, level: args.level, code_hash: codeHash(code), invited_by: args.inviterId, expires_at: inviteExpiry(new Date()).toISOString() };
+  // Other locations the invitation covers (migration 0047). On a database without that column, the invitation covers this location only.
+  let { error } = await admin.from("employer_invites").insert(args.alsoIds?.length ? { ...row, also_employer_ids: args.alsoIds } : row);
+  if (error && args.alsoIds?.length) ({ error } = await admin.from("employer_invites").insert(row));
   if (error) {
     console.error("Invite not saved:", error.code, error.message);
     return null;
@@ -56,7 +58,10 @@ export async function inviteTeamMember(_prev: TeamState, form: FormData): Promis
   if (people.some((p) => p.email.toLowerCase() === email)) return { error: "That person is already on your team." };
   if (invites.some((i) => i.email === email)) return { error: "You have already invited that address. Use Send again beside it if they cannot find the email." };
   if (taken >= TEAM_MAX) return { error: `A clinic can have up to ${TEAM_MAX} people, including you, and open invitations count too. Remove someone or cancel an invitation first.` };
-  const code = await createInvite(admin, { employerId: employer.id, clinicName: employer.clinic_name, inviterId: session.userId, inviter: session.fullName || session.firstName || "Your clinic", name, email, level });
+  // The locations ticked (all of the owner's own, by default). The location being worked in is always included.
+  const owned = (await getMyClinics(session.userId)).filter((c) => c.level === "owner").map((c) => c.id);
+  const ticked = form.getAll("locations").map(String).filter((id) => owned.includes(id) && id !== employer.id);
+  const code = await createInvite(admin, { employerId: employer.id, clinicName: employer.clinic_name, inviterId: session.userId, inviter: session.fullName || session.firstName || "Your clinic", name, email, level, alsoIds: ticked });
   if (!code) return { error: "We couldn't send the invitation just now. Please try again." };
   revalidatePath("/clinic/team");
   return { message: `Invitation sent to ${email}.`, code };
@@ -128,8 +133,11 @@ export async function joinWithCode(_prev: TeamState, form: FormData): Promise<Te
   const admin = supabaseAdmin();
   if (!admin) return { error: NOT_CONNECTED };
   if (session.role !== "clinic") return { error: "This account is set up for looking for work. Ask the clinic to send the invitation to a different email address, such as your work email, and create a clinic account with it." };
-  if (await getMyEmployer(session.userId)) return { error: "Your account already belongs to a clinic on Kestrel. Ask the clinic to send the invite to a different email, or email support@eyecarejobs.ca." };
-  const problem = await acceptInvite(admin, String(form.get("code") ?? ""), { id: session.userId, email: session.email, name: session.fullName });
+  const code = String(form.get("code") ?? "");
+  const invite = await findInvite(admin, code);
+  const problem = await acceptInvite(admin, code, { id: session.userId, email: session.email, name: session.fullName });
   if (problem) return { error: problem };
+  // Someone already on another clinic's team, or with their own clinic, starts in the one they just joined (migration 0047).
+  if (invite) (await cookies()).set(LOCATION_COOKIE, invite.employer_id, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 365 * 86_400 });
   redirect("/clinic?notice=team-joined");
 }

@@ -1,6 +1,6 @@
 # Design: team members, several locations, and admin support (14th November 2026)
 
-Approved by Steve on 14th November 2026. **Phase A is built** (migration 0045, with 38 new database access tests); phase B is next. This changes **who can see applicants' resumes**, the most private data Kestrel holds, so the access rules are settled here first and then tested against a real database (`npm run test:db`) before Steve gets the SQL.
+Approved by Steve on 14th November 2026. **Phase A is built** (migration 0045), and **phase B is built** (migration 0047, 14th November 2026). Each location's limit of 5 people stands; the Group pass waits for checkout. This changes **who can see applicants' resumes**, the most private data Kestrel holds, so the access rules are settled here first and then tested against a real database (`npm run test:db`) before Steve gets the SQL.
 
 ## How it works today
 

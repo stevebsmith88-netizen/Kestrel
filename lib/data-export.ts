@@ -96,17 +96,21 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     (data.account as Record<string, unknown>).name_last_changed_at = extras.nameLastChangedAt;
     data.applications = exportApplications(appRows, list<EventRow>(events.data));
   } else {
-    const employerResult = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).maybeSingle();
-    const employer = { data: (employerResult.data ?? null) as ({ id: string } & Record<string, unknown>) | null };
-    const contact = employer.data ? await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.data.id).maybeSingle() : { data: null };
-    const contactRow = contact.data as { notify_email?: string | null; employee_band?: string | null } | null;
-    const jobs = employer.data
-      ? await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.data.id).order("created_at", { ascending: false })
-      : { data: [] };
-    const templates = employer.data ? await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.data.id) : { data: [] };
-    data.jobTemplates = templates.data ?? [];
-    data.clinic = employer.data ? { ...employer.data, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null } : null;
-    data.jobs = jobs.data ?? [];
+    // Every location this account owns (migration 0047). The first is "clinic", as before; any others are under "otherLocations".
+    const owned = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).order("created_at");
+    const locations = (Array.isArray(owned.data) ? owned.data : owned.data ? [owned.data] : []) as ({ id: string } & Record<string, unknown>)[];
+    const one = async (employer: { id: string } & Record<string, unknown>) => {
+      const contact = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.id).maybeSingle();
+      const contactRow = contact.data as { notify_email?: string | null; employee_band?: string | null } | null;
+      const jobs = await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
+      const templates = await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.id);
+      return { clinic: { ...employer, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null }, jobs: (jobs.data ?? []) as unknown[], jobTemplates: (templates.data ?? []) as unknown[] };
+    };
+    const all = await Promise.all(locations.map(one));
+    data.clinic = all[0]?.clinic ?? null;
+    data.jobs = all[0]?.jobs ?? [];
+    data.jobTemplates = all[0]?.jobTemplates ?? [];
+    if (all.length > 1) data.otherLocations = all.slice(1);
   }
   return data;
 }
