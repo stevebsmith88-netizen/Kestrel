@@ -225,7 +225,7 @@ Most new graduates start as associates. In Ontario, the report counted 1,636 ass
     slug: "who-works-in-eye-care-canada",
     title: "Who works in eye care in Canada? What the census shows",
     description: "Most optometrists and opticians in Canada are now women, and the change between generations is striking. The numbers by age and province, and what they mean.",
-    date: "2027-02-16",
+    date: "2027-01-12",
     topic: "careers",
     body: `![In an optical store, a smiling woman holds a pair of glasses while she talks with an optician, as another customer looks at a wall of frames.](/images/blog/who-works-in-eye-care-canada.jpg)
 
@@ -269,13 +269,13 @@ In Saskatchewan and Manitoba, close to 9 in 10 opticians are women. In Ontario i
 
 Men are a minority in most of the clinic, and a small one in some roles. About 1 in 5 opticians under 45 is a man. Optometric assistants are harder to count, because the census puts them in a wider group of health assistants, but that group is about 78% women too.
 
-For a clinic, the useful question is whether your hiring quietly narrows the field. If your ads, your website and your team photos only ever show 1 kind of person, some good candidates may decide the job is not for them before they read the pay. Describing the work plainly, showing the pay range and saying how you train new people widens the pool for everyone, which our posts on [attracting the right candidates](/blog/attract-right-candidates) and [hiring for attitude](/blog/hire-for-attitude-train-for-skills) go into.
+For a clinic, the useful question is whether your hiring quietly narrows the field. If your ads, your website and your team photos only ever show 1 kind of person, some good candidates may decide the job is not for them before they read the pay. Describing the work plainly, showing the pay range and saying how you train new people widens the pool for everyone, and our [job ad checklist](/blog/eye-care-job-ad-checklist) covers what to include.
 
 ## What it means if you are hiring
 
 A workforce that is mostly younger women, with a wave of older owners retiring, raises practical questions for clinics. How do you handle leave and a return to work? Can you offer part time hours or a 4 day week? Is there a path from optician or associate to partner, or to buying the practice?
 
-If you are earlier in your career, the path into each role is set out in our guides to [becoming an optician](/blog/how-to-become-an-optician-canada) and [becoming an optometrist](/blog/how-to-become-an-optometrist-canada).
+If you are earlier in your career, the path into each role is set out in our guide to [becoming an optician](/blog/how-to-become-an-optician-canada).
 
 A note on the figures: the census numbers are from Statistics Canada's 2021 Census of Population, which rounds counts to the nearest 5 and groups gender as men and women, with the small number of non binary people included in each to protect privacy. The 2025 figures are from the Canadian Association of Optometrists' report "Optometry in Canada". The 2 sources count in different ways, so compare each with itself.
 
@@ -286,7 +286,7 @@ A note on the figures: the census numbers are from Statistics Canada's 2021 Cens
     slug: "empty-optician-chair-cost",
     title: "What an empty optician chair costs a clinic",
     description: "A job ad is the cheap part of hiring. The empty chair is not. A worked example, and the sums to work it out for your own clinic.",
-    date: "2027-02-09",
+    date: "2027-01-26",
     topic: "clinics",
     body: `![An empty exam chair in an eye clinic, beside a slit lamp, an eye chart on the wall and a case of trial lenses.](/images/blog/empty-optician-chair-cost.jpg)
 
@@ -517,7 +517,7 @@ Every job on Kestrel shows its pay range, so you can see what clinics near you a
     slug: "hiring-seasonal-workers",
     title: "Hiring seasonal workers: the pros and cons for an eye care clinic",
     description: "Seasonal and short term staff can cover busy weeks and holidays. Here is when it works, what it costs and how to make a short stay run smoothly.",
-    date: "2027-05-25",
+    date: "2027-06-29",
     topic: "clinics",
     body: `![People of different ages waiting in a clinic waiting room.](/images/blog/hiring-seasonal-workers.jpg)
 
@@ -551,7 +551,7 @@ A good first week matters even more for a short contract. Use a simple plan like
     slug: "ask-for-a-raise",
     title: "How to ask for a raise in an eye care job",
     description: "Asking for more pay is easier with a plan. Here is how to prepare, when to ask, what to say and what to do if the answer is not yet.",
-    date: "2027-03-16",
+    date: "2027-04-20",
     topic: "pay",
     body: `![2 women talking across a table in a bright office.](/images/blog/ask-for-a-raise.jpg)
 
@@ -589,7 +589,7 @@ Thank them, confirm the date it starts and the new amount in writing, and keep d
     slug: "eye-care-resume",
     title: "How to write a resume for an eye care job",
     description: "A clear 1 or 2 page resume is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
-    date: "2027-01-12",
+    date: "2027-02-09",
     topic: "applying",
     body: `![A printed resume on a wooden table, beside a pen and a cup of coffee.](/images/blog/eye-care-resume.jpg)
 
@@ -627,7 +627,7 @@ A short letter says why you want this clinic, which a resume cannot do. Our guid
     slug: "reference-checks-eye-care",
     title: "Reference checks: what to ask and why they matter",
     description: "A short reference call can save months of trouble. Here is who to call, what to ask and what to do with the answers.",
-    date: "2027-05-11",
+    date: "2027-06-15",
     topic: "clinics",
     body: `![A man on a phone call, writing notes with a pencil at a bright desk.](/images/blog/reference-checks-eye-care.jpg)
 
@@ -669,7 +669,7 @@ Ask the same questions about every candidate you take to this stage, and stick t
     slug: "onboarding-first-30-days",
     title: "Onboarding a new optician or assistant: the first 30 days",
     description: "A simple plan for a new hire's first month in an eye care clinic: before day one, the first week and how to check in at 30 days.",
-    date: "2027-04-27",
+    date: "2027-06-01",
     topic: "clinics",
     body: `![A smiling new employee shakes hands with a colleague as she arrives at the office.](/images/blog/onboarding-first-30-days.jpg)
 
@@ -703,7 +703,7 @@ A one page checklist, a buddy and 3 short check ins will do more than a long man
     slug: "hire-for-attitude-train-for-skills",
     title: "Hire for attitude, train for skills: hiring from outside eye care",
     description: "Many good eye care staff arrive from retail, hospitality and other health jobs. Here is when hiring for attitude works, and how to train well.",
-    date: "2027-01-26",
+    date: "2027-02-23",
     topic: "clinics",
     body: `![4 colleagues around a meeting table, 2 of them sharing a high five.](/images/blog/hire-for-attitude-train-for-skills.jpg)
 
@@ -737,7 +737,7 @@ Say you will train, and say who and how. Many strong candidates, including peopl
     slug: "why-people-leave-jobs",
     title: "Why people leave eye care jobs, and what clinics can do about it",
     description: "Staff turnover costs clinics time and patients' trust. These are the common reasons people leave and practical ways to keep good people.",
-    date: "2027-04-13",
+    date: "2027-05-18",
     topic: "clinics",
     body: `![A young man sits by a window, looking out, deep in thought.](/images/blog/why-people-leave-jobs.jpg)
 
@@ -779,7 +779,7 @@ Short "stay conversations" help: what do you enjoy, what would you change, what 
     slug: "attract-right-candidates",
     title: "How to attract the right candidates to your clinic",
     description: "Good candidates choose clinics as much as clinics choose them. Here is what makes the right people apply, and what makes them look elsewhere.",
-    date: "2027-02-02",
+    date: "2027-03-09",
     topic: "clinics",
     body: `![A long wall display of eyeglass frames in an optical store.](/images/blog/attract-right-candidates.jpg)
 
@@ -817,7 +817,7 @@ A general job site brings volume. A board built for eye care brings people who a
     slug: "stand-out-in-interview",
     title: "How to stand out in an interview for an eye care job",
     description: "Clinics see many good candidates. These are the small things that make one memorable: preparation, curiosity, care for patients and a clear follow up.",
-    date: "2027-03-02",
+    date: "2027-04-06",
     topic: "applying",
     body: `![A woman reaches across a table to shake hands with a candidate, with a colleague beside her.](/images/blog/stand-out-in-interview.jpg)
 
@@ -851,7 +851,7 @@ Arrive 10 minutes early, dress as you would for work in a clinical setting, brin
     slug: "phone-screening-tips",
     title: "Phone screenings: how to do well in the first call",
     description: "A short phone screen often decides whether you get an interview. Here is how to prepare, what you will be asked and how to follow up.",
-    date: "2027-02-23",
+    date: "2027-03-23",
     topic: "applying",
     body: `![A bearded man in glasses on a phone call, writing notes in a notebook at a table.](/images/blog/phone-screening-tips.jpg)
 
@@ -922,7 +922,7 @@ Do not blame colleagues, and do not make up a result. Real, small stories land b
     slug: "optical-lab-technician",
     title: "What an optical lab technician does, and how to get started",
     description: "Optical lab technicians turn prescriptions into finished glasses. Here is what the work involves, where it happens and how people start in it.",
-    date: "2027-03-30",
+    date: "2027-05-04",
     topic: "careers",
     body: `![A technician in a white coat working at a lens edging machine, with a lens measuring instrument beside it.](/images/blog/optical-lab-technician.jpg)
 

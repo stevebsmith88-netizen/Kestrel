@@ -1,14 +1,14 @@
 # Instagram master schedule
 
-Revised 14th November 2026 for the new cadence (Steve): **2 a week until the end of December, 1 a week in January and February, 1 every 2 weeks after launch (planned for Monday 1st March 2027)**, then monthly with new posts. Posts 1 to 9 went up on 13th November 2026.
+Revised 14th November 2026 for **a launch on Monday 25th January 2027** (Steve: mid to late January at the latest): **2 a week (Monday and Thursday) until the end of December, 1 a week (Monday) in January until launch, then 1 every 2 weeks**, then monthly with new posts. Posts 1 to 9 went up on 13th November 2026. If launch moves, move post 25 with it and shift the later dates by the same amount.
 
 **Images:** every post below is in the folder `Kestrel-Instagram-10-to-32`, named in posting order (number, date, name). The guide cards are built by `design/social-and-merch/instagram-guides/build.mjs`; the Things heard and photo posts come from the Canva designs.
 
-**Grid rule:** no 2 posts of the same colour family side by side or one above the other. Checked for the whole order: no post matches the one before it or the one 3 before it. Every guide card goes out after its blog post, and "Opening soon" goes out before launch.
+**Grid rule:** no 2 posts of the same colour family side by side or one above the other. Checked for the whole order. Every guide card goes out after its blog post, and "Opening soon" goes out before launch.
 
-**Launch day:** post 30 (the empty chair card, aimed at clinics) lands on 1st March. If launch moves, move it with launch and add a line such as "Kestrel is now open for clinics" to its caption.
+**Launch day:** post 25, the "Every job shows its pay" photo, with a launch caption. Consider an extra "We're open" post the same day if there is news to share (first clinics on board).
 
-**After post 32:** new content. Launch brings plenty: first clinics on board, jobs of the week, clinic spotlights (with permission), and pay facts from real posts.
+**After post 32 (early May):** new content. Launch brings plenty: first clinics on board, jobs of the week, clinic spotlights (with permission), and pay facts from real posts.
 
 ## The calendar
 
@@ -17,26 +17,26 @@ Revised 14th November 2026 for the new cadence (Steve): **2 a week until the end
 | 10 | Mon 16th November 2026 | Job ad checklist | Pale blue or buff |
 | 11 | Thu 19th November 2026 | Things heard No. 4 | Cream or paper |
 | 12 | Mon 23rd November 2026 | Optician pay | Chestnut |
-| 13 | Thu 26th November 2026 | Photo: Every job shows its pay | Navy |
+| 13 | Thu 26th November 2026 | Things heard No. 7 | Navy |
 | 14 | Mon 30th November 2026 | AI chatbots | Pale blue or buff |
 | 15 | Thu 3rd December 2026 | Optometrist pay (new) | Cream or paper |
 | 16 | Mon 7th December 2026 | Pay summary | Chestnut |
 | 17 | Thu 10th December 2026 | Becoming an optician (new) | Navy |
 | 18 | Mon 14th December 2026 | Who does what | Chestnut |
-| 19 | Thu 17th December 2026 | Photo: Opening soon | Cream or paper |
-| 20 | Mon 21st December 2026 | Assistant certification (new) | Pale blue or buff |
+| 19 | Thu 17th December 2026 | Assistant certification (new) | Navy |
+| 20 | Mon 21st December 2026 | Photo: Opening soon | Cream or paper |
 | 21 | Mon 28th December 2026 | Questions to ask | Navy |
 | 22 | Mon 4th January 2027 | Things heard: Your turn | Pale blue or buff |
-| 23 | Mon 11th January 2027 | Supplier role (new) | Cream or paper |
-| 24 | Mon 18th January 2027 | Resume tips | Chestnut |
-| 25 | Mon 25th January 2027 | Things heard No. 7 | Navy |
-| 26 | Mon 1st February 2027 | Becoming an optometrist (new) | Chestnut |
-| 27 | Mon 8th February 2027 | Things heard No. 3 | Navy |
-| 28 | Mon 15th February 2027 | Hire for attitude | Cream or paper |
-| 29 | Mon 22nd February 2027 | Eye care jobs on the road | Navy |
-| 30 | Mon 1st March 2027 | Empty chair (new) | Pale blue or buff |
-| 31 | Mon 15th March 2027 | Attract the right people | Navy |
-| 32 | Mon 29th March 2027 | Who works in eye care (new) | Chestnut |
+| 23 | Mon 11th January 2027 | Supplier role (new) | Chestnut |
+| 24 | Mon 18th January 2027 | Who works in eye care (new) | Pale blue or buff |
+| 25 | Mon 25th January 2027 | Photo: Every job shows its pay · LAUNCH DAY | Navy |
+| 26 | Mon 8th February 2027 | Becoming an optometrist (new) | Cream or paper |
+| 27 | Mon 22nd February 2027 | Things heard No. 3 | Navy |
+| 28 | Mon 8th March 2027 | Empty chair (new) | Chestnut |
+| 29 | Mon 22nd March 2027 | Attract the right people | Navy |
+| 30 | Mon 5th April 2027 | Resume tips | Chestnut |
+| 31 | Mon 19th April 2027 | Eye care jobs on the road | Navy |
+| 32 | Mon 3rd May 2027 | Hire for attitude | Cream or paper |
 
 ### 10. Job ad checklist
 **When:** Mon 16th November 2026, 8:00 am Toronto · **Image:** `10 2026-11-16 Job ad checklist.png` · **Location:** Canada
@@ -90,20 +90,18 @@ Alt text:
 ```text
 Kestrel guide: Typical optician pay, by province. Highest, British Columbia at $30.82 an hour. 6 provinces between $28.00 and $30.10. Lowest, Ontario at $24.04 an hour.
 ```
-### 13. Photo: Every job shows its pay
-**When:** Thu 26th November 2026, 8:00 am Toronto · **Image:** `13 2026-11-26 Photo Every job shows its pay.png` · **Location:** Canada
+### 13. Things heard No. 7
+**When:** Thu 26th November 2026, 8:00 am Toronto · **Image:** `13 2026-11-26 Things heard No. 7.png` · **Location:** Canada
 
 Caption:
 ```text
-Every job on Kestrel shows its pay range. No "competitive salary", no guessing, no awkward question at the end of the interview.
+We've seen labs, poodles and one very determined beagle. What's the worst chewed pair you've had across the counter?
 
-Opening soon. Join the waitlist: link in bio.
-
-#EyeCareJobs #PayTransparency #Optometry #Opticians #CanadaJobs
+#optometry #optician #optometrist #eyecare #opticianlife #optometrylife #eyecarecanada #optometricassistant
 ```
 Alt text:
 ```text
-Text reads: Every job shows its pay. No guessing and no "competitive salary". The range is on every post. eyecarejobs.ca. Photo of an optician fitting tortoiseshell glasses on a young woman.
+Things heard in clinic, No. 7: The dog ate them. Again. Underneath: Same dog. Same frames. Third pair. A drawing of chewed glasses.
 ```
 ### 14. AI chatbots
 **When:** Mon 30th November 2026, 8:00 am Toronto · **Image:** `14 2026-11-30 AI chatbots.png` · **Location:** Canada
@@ -192,23 +190,8 @@ Alt text:
 ```text
 Kestrel guide: Who does what in an eye care clinic? More roles than most people expect, and many need no university degree.
 ```
-### 19. Photo: Opening soon
-**When:** Thu 17th December 2026, 8:00 am Toronto · **Image:** `19 2026-12-17 Photo Opening soon.png` · **Location:** Canada
-
-Caption:
-```text
-Kestrel Eye Care Jobs opens soon. Join the waitlist and be first to see eye care jobs across Canada, every one with its pay.
-
-Link in bio.
-
-#EyeCareJobs #Optometry #Opticians #CanadaJobs #EyeCare
-```
-Alt text:
-```text
-Text reads: Opening soon. Join the waitlist. Link in bio. Be first to see eye care jobs across Canada. eyecarejobs.ca. Photo of an optometrist fitting a trial frame on a patient.
-```
-### 20. Assistant certification (new)
-**When:** Mon 21st December 2026, 8:00 am Toronto · **Image:** `20 2026-12-21 Assistant certification.png` · **Location:** Canada
+### 19. Assistant certification (new)
+**When:** Thu 17th December 2026, 8:00 am Toronto · **Image:** `19 2026-12-17 Assistant certification.png` · **Location:** Canada
 
 Caption:
 ```text
@@ -223,6 +206,21 @@ Full guide: link in bio.
 Alt text:
 ```text
 Kestrel guide: Optometric assistants: no licence, 3 ways in. Training on the job. The CCOA program. A college certificate.
+```
+### 20. Photo: Opening soon
+**When:** Mon 21st December 2026, 8:00 am Toronto · **Image:** `20 2026-12-21 Photo Opening soon.png` · **Location:** Canada
+
+Caption:
+```text
+Kestrel Eye Care Jobs opens soon. Join the waitlist and be first to see eye care jobs across Canada, every one with its pay.
+
+Link in bio.
+
+#EyeCareJobs #Optometry #Opticians #CanadaJobs #EyeCare
+```
+Alt text:
+```text
+Text reads: Opening soon. Join the waitlist. Link in bio. Be first to see eye care jobs across Canada. eyecarejobs.ca. Photo of an optometrist fitting a trial frame on a patient.
 ```
 ### 21. Questions to ask
 **When:** Mon 28th December 2026, 8:00 am Toronto · **Image:** `21 2026-12-28 Questions to ask.png` · **Location:** Canada
@@ -273,38 +271,42 @@ Alt text:
 ```text
 Kestrel guide: From the clinic to the road. What changes when you move into a lens rep, trainer or supplier role.
 ```
-### 24. Resume tips
-**When:** Mon 18th January 2027, 8:00 am Toronto · **Image:** `24 2027-01-18 Resume tips.png` · **Location:** Canada
+### 24. Who works in eye care (new)
+**When:** Mon 18th January 2027, 8:00 am Toronto · **Image:** `24 2027-01-18 Who works in eye care.png` · **Location:** Canada
 
 Caption:
 ```text
-A resume for an eye care job does not need to be fancy. A clean, honest 1 or 2 pages gets read.
+14% to 69%.
 
-Put your registration status near the top if the job needs it, such as "Registered Optician, Ontario" or "registration in progress". Add 2 or 3 lines on who you are and what you offer. Be specific about the tests you have done, the lenses you have fitted and the systems you use. You do not need a photo, your date of birth or your home address.
+That is the share of optometrists in Canada who are women, from those aged 65 and over to those aged 25 to 34, in the 2021 Census. Opticians show the same shift.
 
-Full guide: link in bio.
+What it means for clinics and careers: link in bio.
 
-#EyeCareJobs #Resume #Opticians #OptometricAssistant #JobSearch
+#EyeCare #Optometry #Opticians #WomenInOptometry #CanadaJobs
 ```
 Alt text:
 ```text
-Kestrel guide: 4 tips for an eye care resume. 1, your registration status, if the job needs it. 2, 2 or 3 lines on who you are. 3, the tests, lenses and systems you know. 4, leave off your photo and date of birth.
+Kestrel: 14% to 69%. The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census.
 ```
-### 25. Things heard No. 7
-**When:** Mon 25th January 2027, 8:00 am Toronto · **Image:** `25 2027-01-25 Things heard No. 7.png` · **Location:** Canada
+### 25. Photo: Every job shows its pay
+**When:** Mon 25th January 2027, 8:00 am Toronto · **Launch day** · **Image:** `25 2027-01-25 Photo Every job shows its pay.png` · **Location:** Canada
 
 Caption:
 ```text
-We've seen labs, poodles and one very determined beagle. What's the worst chewed pair you've had across the counter?
+Kestrel Eye Care Jobs is open.
 
-#optometry #optician #optometrist #eyecare #opticianlife #optometrylife #eyecarecanada #optometricassistant
+Every job on Kestrel shows its pay range. No "competitive salary", no guessing, no awkward question at the end of the interview. Clinics can post free while we launch.
+
+See the jobs, or post one: link in bio.
+
+#EyeCareJobs #PayTransparency #Optometry #Opticians #CanadaJobs
 ```
 Alt text:
 ```text
-Things heard in clinic, No. 7: The dog ate them. Again. Underneath: Same dog. Same frames. Third pair. A drawing of chewed glasses.
+Text reads: Every job shows its pay. No guessing and no "competitive salary". The range is on every post. eyecarejobs.ca. Photo of an optician fitting tortoiseshell glasses on a young woman.
 ```
 ### 26. Becoming an optometrist (new)
-**When:** Mon 1st February 2027, 8:00 am Toronto · **Image:** `26 2027-02-01 Becoming an optometrist.png` · **Location:** Canada
+**When:** Mon 8th February 2027, 8:00 am Toronto · **Image:** `26 2027-02-08 Becoming an optometrist.png` · **Location:** Canada
 
 Caption:
 ```text
@@ -321,7 +323,7 @@ Alt text:
 Kestrel guide: Becoming an optometrist in Canada. 2 schools, 1 national board exam, and a licence from your province.
 ```
 ### 27. Things heard No. 3
-**When:** Mon 8th February 2027, 8:00 am Toronto · **Image:** `27 2027-02-08 Things heard No. 3.png` · **Location:** Canada
+**When:** Mon 22nd February 2027, 8:00 am Toronto · **Image:** `27 2027-02-22 Things heard No. 3.png` · **Location:** Canada
 
 Caption:
 ```text
@@ -333,25 +335,59 @@ Alt text:
 ```text
 Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A line drawing of a road leading to a house, on navy.
 ```
-### 28. Hire for attitude
-**When:** Mon 15th February 2027, 8:00 am Toronto · **Image:** `28 2027-02-15 Hire for attitude.png` · **Location:** Canada
+### 28. Empty chair (new)
+**When:** Mon 8th March 2027, 8:00 am Toronto · **Image:** `28 2027-03-08 Empty chair.png` · **Location:** Canada
 
 Caption:
 ```text
-Some of the best people in eye care started somewhere else: retail, hospitality, a dental office, a pharmacy counter.
+Clinic owners: what does an empty optician chair really cost?
 
-If someone is warm with patients, careful with detail and keen to learn, the technical side can be taught. Our guide covers when hiring for attitude works, when it does not, and how to train a new starter well.
+Glasses sales that walk out with the prescription, and exam time lost when your optometrist covers the dispensary. Our guide shows the sums, so you can work out yours.
 
 Full guide: link in bio.
 
-#EyeCareJobs #Hiring #ClinicOwner #Optometry #Opticians
+#ClinicOwner #Optometry #Opticians #Hiring #EyeCareJobs
 ```
 Alt text:
 ```text
-Kestrel guide: Hire for attitude. Train for skills. Many good eye care staff start out in retail, hospitality or other health jobs.
+Kestrel guide for clinics: What does an empty optician chair cost? Glasses sales that walk out, and exam time lost. The sums, so you can work out yours.
 ```
-### 29. Eye care jobs on the road
-**When:** Mon 22nd February 2027, 8:00 am Toronto · **Image:** `29 2027-02-22 Eye care jobs on the road.png` · **Location:** Canada
+### 29. Attract the right people
+**When:** Mon 22nd March 2027, 8:00 am Toronto · **Image:** `29 2027-03-22 Attract the right people.png` · **Location:** Canada
+
+Caption:
+```text
+Good candidates choose clinics as much as clinics choose them.
+
+Describe the real week, not "fast paced, friendly team". Put the pay range and the hours in the ad. Keep the application short, and reply to everyone, including the people you will not interview. A candidate who hears back in 2 days feels very different from one who hears nothing.
+
+Full guide: link in bio.
+
+#EyeCareJobs #Hiring #ClinicOwner #Optometry #PracticeManagement
+```
+Alt text:
+```text
+Kestrel guide: How to attract the right people to your clinic. Show the pay. Describe the real week. Reply to everyone.
+```
+### 30. Resume tips
+**When:** Mon 5th April 2027, 8:00 am Toronto · **Image:** `30 2027-04-05 Resume tips.png` · **Location:** Canada
+
+Caption:
+```text
+A resume for an eye care job does not need to be fancy. A clean, honest 1 or 2 pages gets read.
+
+Put your registration status near the top if the job needs it, such as "Registered Optician, Ontario" or "registration in progress". Add 2 or 3 lines on who you are and what you offer. Be specific about the tests you have done, the lenses you have fitted and the systems you use. You do not need a photo, your date of birth or your home address.
+
+Full guide: link in bio.
+
+#EyeCareJobs #Resume #Opticians #OptometricAssistant #JobSearch
+```
+Alt text:
+```text
+Kestrel guide: 4 tips for an eye care resume. 1, your registration status, if the job needs it. 2, 2 or 3 lines on who you are. 3, the tests, lenses and systems you know. 4, leave off your photo and date of birth.
+```
+### 31. Eye care jobs on the road
+**When:** Mon 19th April 2027, 8:00 am Toronto · **Image:** `31 2027-04-19 Eye care jobs on the road.png` · **Location:** Canada
 
 Caption:
 ```text
@@ -369,56 +405,22 @@ Alt text:
 ```text
 Kestrel guide: Eye care jobs on the road. Lens reps, clinical trainers, field technicians and account managers. What they do, and how to find the role.
 ```
-### 30. Empty chair (new)
-**When:** Mon 1st March 2027, 8:00 am Toronto · **Image:** `30 2027-03-01 Empty chair.png` · **Location:** Canada
+### 32. Hire for attitude
+**When:** Mon 3rd May 2027, 8:00 am Toronto · **Image:** `32 2027-05-03 Hire for attitude.png` · **Location:** Canada
 
 Caption:
 ```text
-Clinic owners: what does an empty optician chair really cost?
+Some of the best people in eye care started somewhere else: retail, hospitality, a dental office, a pharmacy counter.
 
-Glasses sales that walk out with the prescription, and exam time lost when your optometrist covers the dispensary. Our guide shows the sums, so you can work out yours.
+If someone is warm with patients, careful with detail and keen to learn, the technical side can be taught. Our guide covers when hiring for attitude works, when it does not, and how to train a new starter well.
 
 Full guide: link in bio.
 
-#ClinicOwner #Optometry #Opticians #Hiring #EyeCareJobs
+#EyeCareJobs #Hiring #ClinicOwner #Optometry #Opticians
 ```
 Alt text:
 ```text
-Kestrel guide for clinics: What does an empty optician chair cost? Glasses sales that walk out, and exam time lost. The sums, so you can work out yours.
-```
-### 31. Attract the right people
-**When:** Mon 15th March 2027, 8:00 am Toronto · **Image:** `31 2027-03-15 Attract the right people.png` · **Location:** Canada
-
-Caption:
-```text
-Good candidates choose clinics as much as clinics choose them.
-
-Describe the real week, not "fast paced, friendly team". Put the pay range and the hours in the ad. Keep the application short, and reply to everyone, including the people you will not interview. A candidate who hears back in 2 days feels very different from one who hears nothing.
-
-Full guide: link in bio.
-
-#EyeCareJobs #Hiring #ClinicOwner #Optometry #PracticeManagement
-```
-Alt text:
-```text
-Kestrel guide: How to attract the right people to your clinic. Show the pay. Describe the real week. Reply to everyone.
-```
-### 32. Who works in eye care (new)
-**When:** Mon 29th March 2027, 8:00 am Toronto · **Image:** `32 2027-03-29 Who works in eye care.png` · **Location:** Canada
-
-Caption:
-```text
-14% to 69%.
-
-That is the share of optometrists in Canada who are women, from those aged 65 and over to those aged 25 to 34, in the 2021 Census. Opticians show the same shift.
-
-What it means for clinics and careers: link in bio.
-
-#EyeCare #Optometry #Opticians #WomenInOptometry #CanadaJobs
-```
-Alt text:
-```text
-Kestrel: 14% to 69%. The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census.
+Kestrel guide: Hire for attitude. Train for skills. Many good eye care staff start out in retail, hospitality or other health jobs.
 ```
 
 ## Posted on 13th November 2026: posts 1 to 9
