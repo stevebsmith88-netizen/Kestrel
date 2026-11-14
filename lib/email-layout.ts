@@ -20,7 +20,7 @@ export function emailLayout({ heading, paragraphs, items, buttonText, buttonUrl,
   const html = `<!doctype html><html lang="en-CA"><body style="margin:0;padding:0;background-color:#F7F1E6;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F7F1E6" style="background-color:#F7F1E6;"><tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#FBF8F2;border:1px solid #E3D9C8;border-radius:8px;">
-<tr><td align="center" bgcolor="#1B2B4B" style="background-color:#1B2B4B;padding:28px 24px;border-radius:8px 8px 0 0;"><img src="${SITE_URL}/brand/kestrel-lockup-full-reversed.png" width="240" alt="Kestrel Eye Care Jobs" style="display:block;width:240px;max-width:100%;height:auto;border:0;"></td></tr>
+<tr><td align="center" bgcolor="#1B2B4B" style="background-color:#1B2B4B;padding:28px 24px;border-radius:8px 8px 0 0;"><img src="${SITE_URL}/brand/kestrel-lockup-email-reversed.png" width="240" alt="Kestrel Eye Care Jobs" style="display:block;width:240px;max-width:100%;height:auto;border:0;"></td></tr>
 <tr><td style="padding:32px 36px 8px 36px;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:32px;color:#1B2B4B;">${esc(heading)}</td></tr>
 <tr><td style="padding:0 36px 8px 36px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:25px;color:#1B2B4B;">${body}</td></tr>
 ${list}
