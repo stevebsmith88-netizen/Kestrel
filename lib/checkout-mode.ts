@@ -5,8 +5,8 @@ import { ROLE_BANDS } from "./pricing.ts";
 
 export type BandKey = (typeof ROLE_BANDS)[number]["key"];
 
-// Which price band a job's role falls in (lib/pricing.ts). Steve decides the roles the ladder does not name: a vision therapist and the
-// field roles (sales, trainers, field service, account managers) are put in the middle band for now, and "unknown" is never cheaper than that.
+// Which price band a job's role falls in (lib/pricing.ts). The roles the ladder does not name, a vision therapist and the field roles (sales,
+// trainers, field service, account managers), are priced in the middle band (agreed by Steve, 14th November 2026), and "unknown" is never cheaper than that.
 export function bandForRole(role: string | null | undefined): BandKey {
   switch (role) {
     case "Optometrist":
