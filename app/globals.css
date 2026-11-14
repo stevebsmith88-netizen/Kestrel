@@ -176,6 +176,12 @@ input.other{margin-top:10px}
 .listactions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .tile .num{font:400 2.5rem/1.1 var(--f-display),Georgia,serif;margin:6px 0 0}
 @media (max-width:820px){.tiles{grid-template-columns:1fr}}
+/* The read only numbers under the pressable tiles: about half the height, the number beside its line (Steve, 14th November 2026). */
+.tile.mini{padding:14px 22px}
+.tile.mini .kicker{margin:0 0 4px}
+.tile.mini .num{display:inline;font-size:1.75rem;margin:0 8px 0 0}
+.tile.mini p:last-child{display:inline;margin:0;color:var(--navy-2)}
+@media (max-width:820px){.tiles .tile.mini{padding:12px 18px}}
 .legal{padding:40px 0 72px}
 .legal-wrap{max-width:760px}
 .legal-logo{display:inline-block;margin-bottom:28px}

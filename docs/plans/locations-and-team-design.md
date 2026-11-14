@@ -40,12 +40,14 @@ Steve's question: a way to help a clinic that is stuck. Proposed **Admin, Clinic
 - **No "sign in as the clinic".** That would show Kestrel staff every applicant's resume, which the privacy policy does not cover and the clinic did not ask for. Admin sees applicant counts only, never resumes.
 - Every admin change is saved in a log (who, what, when, why), and the clinic gets an inbox message ("Kestrel updated your profile at your request").
 
-## Decisions for Steve
+## Decided by Steve (14th November 2026)
 
-1. **"Can see applicants only":** read and add private notes, but no status changes (suggested). Or allow moving applicants too?
-2. **Team members and locations:** owner ticks which locations each person sees, all ticked by default (suggested)?
-3. **Team size:** 10 a clinic, free (suggested)?
-4. **Admin:** edit tools with a log and no "sign in as" (suggested)?
+1. **2 levels for team members, both chosen by the owner:** **"Can view and edit"** (post and edit jobs, see applicants, move them along) and **"View only, with notes"** (read applications and add private notes, no changes). A note from a view only member is passed to the owner: it shows on the application and the owner gets an inbox message, so the owner decides what happens next. These replace the 2 member levels in the table above.
+2. Team members see the locations the owner ticks, all ticked by default.
+3. **Up to 5 members a clinic, free,** counting the owner. More could come later with a paid plan. The owner can remove anyone at any time (for example when someone leaves), and their access ends at once.
+4. Admin support: edit tools with a log, and no "sign in as the clinic".
+
+Access is only ever the owner and the people the owner invites. Kestrel's admin sees applicant counts, never resumes.
 
 ## Build order and SQL
 
