@@ -8,6 +8,8 @@ export function emailLayout({ heading, paragraphs, items, buttonText, buttonUrl,
   const footerNote = unsubscribeUrl
     ? `${esc(reason ?? "You are receiving this because you asked to hear from Kestrel Eye Care Jobs.")} <a href="${esc(unsubscribeUrl)}" style="color:#8C4024;">Unsubscribe</a> at any time.`
     : "This email is about your Kestrel account or an application.";
+  // The layout signs off itself ("Warm regards, The Kestrel team"), so a sign off written into the message is dropped instead of showing twice.
+  paragraphs = paragraphs.filter((p) => p.trim() !== "The Kestrel team");
   const body = paragraphs.map((p) => `<p style="margin:0 0 16px 0;">${esc(p).replace(/\n/g, "<br>")}</p>`).join("");
   const list = items?.length
     ? `<tr><td style="padding:0 36px 8px 36px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:25px;color:#1B2B4B;">${items.map((i) => `<p style="margin:0 0 12px 0;"><a href="${esc(i.url)}" style="color:#8C4024;font-weight:bold;">${esc(i.text)}</a></p>`).join("")}</td></tr>`
