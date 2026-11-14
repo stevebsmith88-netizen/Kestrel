@@ -42,6 +42,12 @@ async function customerFor(db: SupabaseClient, key: string, employerId: string, 
   return customer.id;
 }
 
+// What went wrong, in 1 line, with any Stripe key removed.
+export function describeFailure(e: unknown): string {
+  const text = e instanceof StripeError ? `Stripe ${e.status ?? "no answer"}: ${e.message}` : e instanceof Error ? e.message : String(e);
+  return text.replace(/\b(?:sk|rk|pk)_(?:test|live)_[A-Za-z0-9*]+/g, "[key]").slice(0, 300);
+}
+
 export type CardSetupResult = { url: string } | { alreadySaved: true } | { error: string };
 
 // Sends a clinic to Stripe's page to save a card for a job. Nothing is charged. If a card is already saved for the job, it says so.
@@ -87,7 +93,9 @@ export async function startCardSetup(jobId: string, returnTo: "submit" | "update
     return { url: session.url };
   } catch (e) {
     console.error("Card setup failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
-    return { error: "We could not reach our payment provider just now. Your job is saved as a draft. Please try sending it again in a moment." };
+    // With a test key (the demo, or a trial) the real reason is shown, so a mistake in the set up can be found at once. Never with a live key.
+    const detail = secretKeyMode(key) === "test" ? ` (For testing only: ${describeFailure(e)})` : "";
+    return { error: `We could not reach our payment provider just now. Your job is saved as a draft. Please try sending it again in a moment.${detail}` };
   }
 }
 
