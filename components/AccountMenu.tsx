@@ -3,7 +3,7 @@ import Icon from "@/components/Icon";
 import { ACCOUNT_MENU, SETTINGS_HREF, initialsOf, type BarPerson } from "@/lib/account-menu";
 import { signOut } from "@/lib/auth-actions";
 
-// The initials badge with its menu (profile, sign out, and a gear for account settings beside the name) for a signed in person. Used by the dashboard bar and the public
+// The initials badge with its menu (the name with a gear for account settings, the profile links, sign out) for a signed in person. Used by the dashboard bar and the public
 // header, so it is the same everywhere. Opens with a click or the keyboard, using the browser's own details box.
 export default function AccountMenu({ session, here, className = "" }: { session: BarPerson; here?: string; className?: string }) {
   return (
@@ -15,7 +15,6 @@ export default function AccountMenu({ session, here, className = "" }: { session
         <div className="who-id">
           <div className="who-text">
             <p>{session.fullName || session.email}</p>
-            {session.fullName && <p className="who-email">{session.email}</p>}
           </div>
           {session.role !== "admin" && (
             <Link href={SETTINGS_HREF} className="who-gear" aria-label="Account settings" aria-current={here === SETTINGS_HREF ? "page" : undefined}>

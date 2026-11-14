@@ -154,9 +154,8 @@ input.other{margin-top:10px}
 .who-panel p{margin:0;font-weight:600;color:var(--navy);overflow-wrap:anywhere}
 .who-panel .who-plan{display:block;font-weight:600;font-size:0.875rem;line-height:1.35;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .who-panel .who-email{font-weight:400;color:var(--slate);font-size:0.875rem;line-height:1.35;margin-bottom:6px;overflow-wrap:anywhere}
-/* Name and email on the left, the settings gear on the right and level with the name, so a long email wraps inside its own column and never runs under the gear. */
+/* The name on the left and the settings gear on the right, level with it. The email is not shown here (Steve, 14th November 2026): the profile shows it. */
 .who-panel .who-id{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:start;margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.who-panel .who-text .who-email{margin-bottom:0}
 .who-panel a.who-gear{width:40px;min-height:40px;height:40px;padding:0;margin:-6px -8px 0 0;justify-content:center}
 .who-panel a.who-gear .icon{width:22px;height:22px}
 .who-panel a.who-gear[aria-current=page]{background:var(--cream)}
