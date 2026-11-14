@@ -52,16 +52,16 @@ On the demo site, open `/sign-up` and create 3 accounts with a password you will
 
 | Use | Address to sign up with | Choose |
 | --- | --- | --- |
-| Clinic | `kestrel+democlinic@eyecarejobs.ca` | I'm hiring |
-| Candidate | `kestrel+democandidate@eyecarejobs.ca` | I'm looking for a job |
-| Admin | `kestrel+demoadmin@eyecarejobs.ca` | I'm looking for a job, and you promote it below |
+| Clinic | `kestrel+clinic@eyecarejobs.ca` | I'm hiring |
+| Candidate | `kestrel+candidate@eyecarejobs.ca` | I'm looking for a job |
+| Admin | `kestrel+admin@eyecarejobs.ca` | I'm looking for a job, and you promote it below |
 
 Then, in the demo project's **SQL Editor**:
 1. Run `supabase/demo/seed.sql` again. It now fills in the clinic (a live job with 4 applicants, a second live job, a job waiting in the review queue and a draft) and the candidate (a profile, an application to follow in the tracker, and a job alert).
 2. Run this to make the admin account an admin:
 ```sql
 update public.profiles set role = 'admin'
-where id = (select id from auth.users where email = 'kestrel+demoadmin@eyecarejobs.ca');
+where id = (select id from auth.users where email = 'kestrel+admin@eyecarejobs.ca');
 ```
 
 You can use other addresses. If you do, change the 2 addresses at the top of Part 2 in `seed.sql`, and the list at the top of `reset.sql`.
