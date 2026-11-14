@@ -110,6 +110,10 @@ values
   ((select id from t.things where name = 'job_c_live'), (select id from t.things where name = 'employer_c'), 'Optician', 'Clinic C', 'opticians', 7900, 'charged', 'pm_test_c', 'pi_test_c'),
   ((select id from t.things where name = 'job_d_live'), (select id from t.things where name = 'employer_d'), 'Optician', 'Clinic D', 'opticians', 7900, 'card_saved', 'pm_test_d', null);
 
+-- A pass (0051): clinic C has an active Clinic pass.
+insert into public.location_passes (employer_id, plan, status, stripe_subscription_id, stripe_payment_method_id, current_period_end)
+values ((select id from t.things where name = 'employer_c'), 'clinic_pass', 'active', 'sub_test_c', 'pm_pass_c', now() + interval '20 days');
+
 select t.try('held', 'visitor cannot read profiles', 'visitor', 'count', 'select id from public.profiles', 'blocked');
 select t.try('held', 'visitor cannot read candidate profiles', 'visitor', 'count', 'select user_id from public.candidate_profiles', 'blocked');
 select t.try('held', 'visitor cannot read applications', 'visitor', 'count', 'select id from public.applications', 'blocked');
@@ -372,3 +376,19 @@ select t.try('0050', 'a clinic never reads the Stripe invoice id', 'clinic_c', '
 select t.try('0050', 'another clinic reads only its own invoice links', 'clinic_d', 'count', 'select invoice_url from public.job_payments', '1 rows');
 select t.try('0050', 'a clinic cannot change an invoice link', 'clinic_c', 'write', $$update public.job_payments set invoice_url = 'https://evil.example'$$, 'refused');
 select t.try('0050', 'a visitor cannot read invoice links', 'visitor', 'count', 'select invoice_url from public.job_payments', 'refused');
+
+-- ---------------------------------------------------------------- 0051: passes
+select t.try('0051', 'the owner reads the plan and status of its own pass', 'clinic_c', 'count', 'select plan, status, current_period_end, cancel_at_period_end from public.location_passes', '1 rows');
+select t.try('0051', 'a team member with view and edit reads it too', 'clinic_edith', 'count', 'select plan, status from public.location_passes', '1 rows');
+select t.try('0051', 'another clinic reads no pass of this one', 'clinic_d', 'count', 'select plan from public.location_passes', '0 rows');
+select t.try('0051', 'a clinic never reads the Stripe subscription', 'clinic_c', 'count', 'select stripe_subscription_id from public.location_passes', 'refused');
+select t.try('0051', 'a clinic never reads the saved card reference on a pass', 'clinic_c', 'count', 'select stripe_payment_method_id from public.location_passes', 'refused');
+select t.try('0051', 'a clinic cannot give itself a pass', 'clinic_d', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_d}', 'clinic_pass_plus', 'active')$$, 'refused');
+select t.try('0051', 'a clinic cannot change the status of its pass', 'clinic_c', 'write', $$update public.location_passes set status = 'active', plan = 'clinic_pass_plus'$$, 'refused');
+select t.try('0051', 'a candidate reads no pass', 'ann', 'count', 'select plan from public.location_passes', '0 rows');
+select t.try('0051', 'a visitor cannot read passes', 'visitor', 'count', 'select plan from public.location_passes', 'refused');
+select t.try('0051', 'a location cannot have 2 active passes', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_c}', 'clinic_pass_plus', 'active')$$, 'refused');
+select t.try('0051', 'an unfinished checkout does not block a pass', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_c}', 'clinic_pass_plus', 'incomplete')$$, '1 rows');
+select t.try('0051', 'a pass must be 1 of the 2 plans', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_d}', 'free_forever', 'active')$$, 'refused');
+select t.try('0051', 'a job covered by a pass is a payment status', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_d}', 'Optician', 'Clinic D', 'opticians', 0, 'covered_by_pass')$$, '1 rows');
+select t.try('0051', 'a covered job still cannot have 2 payments in play', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_c_live}', '{employer_c}', 'Optician', 'Clinic C', 'opticians', 0, 'covered_by_pass')$$, 'refused');

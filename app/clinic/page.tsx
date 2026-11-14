@@ -11,6 +11,7 @@ import GettingStarted from "@/components/GettingStarted";
 import StatusBadge from "@/components/StatusBadge";
 import JobPaymentTag from "@/components/JobPaymentTag";
 import { getMyJobPayments } from "@/lib/clinic-payments";
+import { passesAvailable } from "@/lib/pass-flow";
 import { requireRole } from "@/lib/auth";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
@@ -154,6 +155,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                 <h2>{show ? SHOW_LABELS[show].title : "Your jobs"}</h2>
                 <span className="listactions">
                   {show && <Link href="/clinic#your-jobs" className="btn sm ghost">Show all jobs</Link>}
+                  {employer && employer.level === "owner" && passesAvailable() && <Link href="/clinic/plans" className="btn sm ghost">Plans</Link>}
                   {editor && <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>}
                 </span>
               </div>

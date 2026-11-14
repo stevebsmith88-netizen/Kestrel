@@ -678,6 +678,22 @@ export const HELP: HelpSection[] = [
         ],
         links: [{ label: "Billing", href: "/clinic/billing" }],
       },
+      {
+        id: "passes",
+        title: "How do passes work?",
+        keywords: ["pass", "subscription", "monthly", "plan", "plans", "cancel", "renew", "unlimited", "bundle", "clinic pass"],
+        answer: [
+          "A pass covers a number of live posts for 1 location, for a monthly price. The **Clinic pass** covers assistants, technicians, reception, patient care, opticians and practice leads. **Clinic pass Plus** covers every role, optometrists included. Each covers up to 5 live posts at a time. Passes are offered once fees begin.",
+          "A post a pass covers goes straight to our team for review with nothing to pay. A post it does not cover, because the pass is full or the role is not included, is charged at the single post price to the card on the pass once we approve it. You are not sent to a card page again.",
+          "A pass renews each month at the same price until you cancel, and the price changes only with 30 days notice. Cancel any time. You keep the pass to the end of the month you paid for, and part months are not refunded. Only the clinic owner can start or cancel a pass, and a pass belongs to 1 location.",
+        ],
+        steps: [
+          "On your dashboard, press **Plans**.",
+          "Choose a pass and press **Choose**. You finish on Stripe's page, where your card is entered and the pass is charged for the first month.",
+          "To change the card, see your invoices or cancel, press **Manage billing** on the Plans page.",
+        ],
+        links: [{ label: "Plans", href: "/clinic/plans" }],
+      },
     ],
   },
 ];

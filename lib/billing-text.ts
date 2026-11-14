@@ -6,6 +6,7 @@ export const PAYMENT_STATUS_LABEL: Record<string, string> = {
   awaiting_card: "Card not saved yet",
   failed: "Card refused",
   free_launch: "Free launch, nothing to pay",
+  covered_by_pass: "Covered by your pass",
 };
 
 export const paymentStatusLabel = (status: string) => PAYMENT_STATUS_LABEL[status] ?? status;

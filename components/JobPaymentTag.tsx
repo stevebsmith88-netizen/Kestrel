@@ -32,6 +32,9 @@ export default function JobPaymentTag({ jobId, jobStatus, payment, editor }: { j
       </div>
     );
   }
+  if (payment.status === "covered_by_pass" && (jobStatus === "in_review" || jobStatus === "live")) {
+    return <p className="meta">Covered by your pass, nothing to pay.</p>;
+  }
   if (payment.status === "card_saved" && jobStatus === "in_review") {
     return <p className="meta">Card saved. We charge {dollars(payment.amount_cents)} plus HST when the job is approved.</p>;
   }
