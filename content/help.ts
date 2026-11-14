@@ -158,8 +158,7 @@ export const HELP: HelpSection[] = [
           "Candidates can choose news and job alert emails, and whether to be emailed when a clinic updates an application. Clinics can choose how often to be emailed about new applicants, and whether to be reminded when an application has waited 2 weeks without being opened.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page. On a phone, open **Menu** instead.",
-          "Choose **Account settings**.",
+          "Press the **gear** beside your initials at the top of the page. On a phone, open **Menu** and choose **Account settings**.",
           "Find the **Email choices** box and tick or untick what you want.",
           "Press **Save my email choices**.",
         ],
@@ -190,7 +189,7 @@ export const HELP: HelpSection[] = [
           "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to support@eyecarejobs.ca and we will help.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page and choose **Account settings**. On a phone, open **Menu** instead.",
+          "Press the **gear** beside your initials at the top of the page. On a phone, open **Menu** and choose **Account settings**.",
           "Under **Your name**, change your first or last name and press **Save my name**.",
         ],
         links: [{ label: "Account settings", href: "/account" }],
@@ -214,8 +213,7 @@ export const HELP: HelpSection[] = [
           "Deleting is permanent. It removes your profile, your resume and your applications. A clinic that already received your application may have kept its own copy of what you sent. Write to privacy@eyecarejobs.ca and we will ask that clinic to remove it. If you are a clinic, deleting your account also removes your jobs, and you lose access to the applications they received. Candidates keep their own copy of what they sent, marked closed.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page. On a phone, open **Menu** instead.",
-          "Choose **Account settings**.",
+          "Press the **gear** beside your initials at the top of the page. On a phone, open **Menu** and choose **Account settings**.",
           "To download, find **Download your information**, type your password (or, if you sign in with Google, your email address) so we know it is you, and press **Download my information**.",
           "To delete, open **Delete my account** further down the page.",
           "Type your password. If you sign in with Google, type your email address instead.",
