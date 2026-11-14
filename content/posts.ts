@@ -8,7 +8,9 @@ export const POSTS: Post[] = [
     title: "Optometric assistant courses and certification in Canada",
     description: "No licence is needed to work as an optometric assistant. What the CCOA program, college certificates and training on the job each offer, and how to choose.",
     date: "2026-12-15",
-    body: `Unlike opticians and optometrists, optometric assistants do not need a licence in any province. You can be hired with no eye care experience at all, and many clinics prefer to train a reliable, friendly person their own way. So why would anyone take a course? Because it can get you hired faster, give you confidence with the equipment, and show a clinic you mean to stay.
+    body: `![An eye imaging instrument on a desk in a clinic, with someone working at a keyboard beside it.](/images/blog/optometric-assistant-certification-canada.jpg)
+
+Unlike opticians and optometrists, optometric assistants do not need a licence in any province. You can be hired with no eye care experience at all, and many clinics prefer to train a reliable, friendly person their own way. So why would anyone take a course? Because it can get you hired faster, give you confidence with the equipment, and show a clinic you mean to stay.
 
 There are 3 routes, and plenty of good assistants have taken each of them.
 
@@ -47,7 +49,9 @@ If you are hiring, saying in your ad how you train new assistants, and whether y
     title: "How to become an optometrist in Canada",
     description: "The 2 schools, the national board exam, the provincial licence and the routes for optometrists trained abroad, with where the jobs are.",
     date: "2027-01-19",
-    body: `Becoming an optometrist in Canada takes a Doctor of Optometry degree, a national board exam and a licence from the province where you will practise. The steps are the same wherever you start, and the field is small enough to describe in full. This guide was checked against the schools', the exam board's and the regulators' own sources in November 2026, but confirm the details with them before you apply.
+    body: `![An optometrist in a white coat adjusts a phoropter in front of a smiling patient in an exam chair.](/images/blog/how-to-become-an-optometrist-canada.jpg)
+
+Becoming an optometrist in Canada takes a Doctor of Optometry degree, a national board exam and a licence from the province where you will practise. The steps are the same wherever you start, and the field is small enough to describe in full. This guide was checked against the schools', the exam board's and the regulators' own sources in November 2026, but confirm the details with them before you apply.
 
 ## The degree
 
@@ -98,7 +102,9 @@ Most new graduates start as associates. In Ontario, the report counted 1,636 ass
     title: "Who works in eye care in Canada? What the census shows",
     description: "Most optometrists and opticians in Canada are now women, and the change between generations is striking. The numbers by age and province, and what they mean.",
     date: "2027-01-29",
-    body: `Walk into an eye clinic in Canada and the team you meet is probably mostly women. That is not a hunch. The 2021 census and a 2025 report from the Canadian Association of Optometrists both show it, and the numbers by age tell a story about where the profession is heading.
+    body: `![In an optical store, a smiling woman holds a pair of glasses while she talks with an optician, as another customer looks at a wall of frames.](/images/blog/who-works-in-eye-care-canada.jpg)
+
+Walk into an eye clinic in Canada and the team you meet is probably mostly women. That is not a hunch. The 2021 census and a 2025 report from the Canadian Association of Optometrists both show it, and the numbers by age tell a story about where the profession is heading.
 
 The census counted 6,765 optometrists, 59% of them women, and 9,775 opticians, 70% of them women. The association's own count in 2025, which left out British Columbia because it was not reported, puts women at 63% of optometrists: 3,974 women and 2,336 men.
 
@@ -274,7 +280,7 @@ Opticians work in independent clinics, corporate groups and optical stores in ev
 
 There was a time when looking for a new job meant the Saturday paper and a red pen. Then it meant job boards, then job alerts, then scrolling through jobs on your phone at a red light (please do not). Now a growing number of people start somewhere else entirely: they open ChatGPT, Gemini, Copilot, Claude, Perplexity or Grok and type "where can I find optician jobs near me?"
 
-It is happening in Canada too. In a 2025 [Harris Poll for Express Employment Professionals](https://www.expresspros.ca/newsroom/news-releases/news-releases/2025/04/canadian-job-seekers-want-to-interact-with-humans-during-hiring-process-not-ai), 51% of women and 40% of men looking for work in Canada said they had never used AI in their job search. Turn that round, and about half of the women and 6 in 10 of the men had tried it. Most of them, we suspect, asked it to fix a resume. A growing share are asking it where the jobs are.
+It is happening in Canada too. In a 2025 [Harris Poll for Express Employment Professionals](https://www.expresspros.ca/newsroom/news-releases/news-releases/2025/04/canadian-job-seekers-want-to-interact-with-humans-during-hiring-process-not-ai), 51% of women and 40% of men looking for work in Canada said they had never used AI in their job search. Turn that round, and about half of the women and 6 in 10 of the men had tried it. The most common use was writing the resume: 41% of the men and 27% of the women had used AI to draft one. A growing share are now asking it where the jobs are.
 
 So we did what any self respecting new job board would do. We asked the chatbots about ourselves.
 
