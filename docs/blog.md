@@ -36,17 +36,17 @@ Aimed at the searches that bring people who have never heard of Kestrel: pay by 
 | Date | Post | Status and what it needs |
 | --- | --- | --- |
 | Tue 17th November 2026 | Optician pay in Canada: what opticians earn in each province (`optician-pay-canada`) | Written. Job Bank figures revised 19th November 2025 (`lib/pay-benchmark-data.ts`), no Quebec |
-| Tue 24th November | We asked the AI chatbots where to find eye care jobs in Canada (`ai-job-search-eye-care-canada`) | Written 13th November 2026. Light hearted, from Steve's AI visibility log (`docs/marketing/ai-visibility-log.md`). Steve to open the Harris Poll source linked in the post before it goes out, since this session could not reach it |
+| Tue 24th November | We asked the AI chatbots where to find eye care jobs in Canada (`ai-job-search-eye-care-canada`) | Written 13th November 2026. Light hearted, from Steve's AI visibility log (`docs/marketing/ai-visibility-log.md`). Harris Poll figures checked by Steve on 14th November 2026, with the resume figures (41% of men, 27% of women) added |
 | Tue 1st December | Optometrist pay in Canada, and how percentage pay works | Job Bank's optometrist figures are from the 2021 census and include part time and self employed work, so they need careful framing. Explains percentage of billings and why Kestrel asks for expected earnings in dollars |
 | Tue 8th December | How to become an optician in Canada, province by province (`how-to-become-an-optician-canada`) | Written 14th November 2026 from the regulators' own sites and documents (`docs/blog-drafts/licensing-research-opticians.md`). Photo: Canva page 29 |
-| Tue 15th December | Optometric assistant courses and certification in Canada | Same plan. Note that many clinics train on the job |
+| Tue 15th December | Optometric assistant courses and certification in Canada (`optometric-assistant-certification-canada`) | Written 14th November 2026 from the CAO's CCOA pages; SAIT named without length or price (its site could not be read). Photo: Canva page 30 |
 | (22nd and 29th December) | No posts over the holidays | |
 | Tue 5th January 2027 | Locum optometrist work in Canada: how it works | Public facts only; Steve's view on day rates welcome |
 | Tue 12th January | Moving from clinic work to a lens rep or supplier role | Links to the field based jobs post |
-| Tue 19th January | How to become an optometrist in Canada | Same plan. The schools and the national board exam, from their own sites |
+| Tue 19th January | How to become an optometrist in Canada (`how-to-become-an-optometrist-canada`) | Written 14th November 2026 from Waterloo, OEBC, the CAO 2025 report and the regulators. Mentions OEBC registration closing 29th January 2027: check the date before it goes out. Photo: Canva page 31 |
 | Tue 26th January | What an empty optician chair costs a clinic (`empty-optician-chair-cost`), idea 14 below | Written 14th November 2026 from Steve's inputs and public sources (`docs/blog-drafts/why-pay-for-a-job-ad.md`). The sums are written out in the post (Steve decided against a calculator, 14th November 2026). Photo: Canva page 28 |
 
-Friday 29th January 2027 is booked for "Who works in eye care in Canada" (Steve, 14th November 2026; research in `docs/blog-drafts/women-in-eye-care-research.md`). The Fridays left open by the fortnightly run ( 12th and 26th February, 12th and 26th March, 9th and 23rd April, 7th and 21st May, 4th June) are free for more.
+Friday 29th January 2027: "Who works in eye care in Canada? What the census shows" (`who-works-in-eye-care-canada`), written 14th November 2026, photo: Canva page 32 (Steve, 14th November 2026; research in `docs/blog-drafts/women-in-eye-care-research.md`). The Fridays left open by the fortnightly run ( 12th and 26th February, 12th and 26th March, 9th and 23rd April, 7th and 21st May, 4th June) are free for more.
 
 ## What to write next (about 1 post a fortnight)
 
