@@ -1,6 +1,6 @@
 # Supabase email templates
 
-These are the 3 sign in emails Supabase sends, in the Kestrel look (navy header with the logo, chestnut button). Paste each into Supabase, Authentication, Emails, Templates, in the **source** tab, and put the subject (the first line of each file) in the subject box.
+These are the 3 sign in emails Supabase sends, in the Kestrel look (navy header with the logo, chestnut button). Since 14th November 2026 every email header shows only Kestrel and Eye Care Jobs (`public/brand/kestrel-lockup-email-reversed.png`, the full reversed lockup cropped above the maple leaf and the tagline, nothing redrawn), at Steve's request. Paste the 3 templates into Supabase again in both projects to pick it up. Paste each into Supabase, Authentication, Emails, Templates, in the **source** tab, and put the subject (the first line of each file) in the subject box.
 
 | Template in Supabase | File |
 | --- | --- |

@@ -33,7 +33,7 @@ export function brandEmail(e: BrandEmail) {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F7F1E6" style="background-color:#F7F1E6;"><tr><td align="center" style="padding:24px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background-color:#FBF8F2;">
 <tr><td bgcolor="#1B2B4B" style="background-color:#1B2B4B;padding:36px 40px 40px 40px;">
-<a href="${esc(e.bannerUrl)}" style="text-decoration:none;"><img src="${SITE_URL}/brand/kestrel-lockup-full-reversed.png" width="246" alt="Kestrel Eye Care Jobs" style="display:block;margin:0 auto 26px auto;width:246px;max-width:100%;height:auto;border:0;"></a>
+<a href="${esc(e.bannerUrl)}" style="text-decoration:none;"><img src="${SITE_URL}/brand/kestrel-lockup-email-reversed.png" width="246" alt="Kestrel Eye Care Jobs" style="display:block;margin:0 auto 26px auto;width:246px;max-width:100%;height:auto;border:0;"></a>
 <p style="margin:0;font-family:${SERIF};font-size:42px;line-height:47px;color:#F7F1E6;">${esc(e.headline[0])}<br><span style="color:#D8B48A;">${esc(e.headline[1])}</span></p>
 </td></tr>
 ${e.hook ? `<tr><td bgcolor="#F7F1E6" style="background-color:#F7F1E6;padding:24px 40px;border-bottom:1px solid #E3D9C8;"><p style="margin:0 0 4px 0;font-family:${SERIF};font-size:28px;line-height:32px;color:#A4502C;">${esc(e.hook[0])}</p><p style="margin:0;font-family:${SANS};font-size:17px;line-height:24px;color:#2B3F5F;">${esc(e.hook[1])}</p></td></tr>` : ""}
