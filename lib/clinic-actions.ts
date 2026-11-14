@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { logJobActivity } from "@/lib/job-activity";
 import { notifySlack } from "@/lib/notify-slack";
 import { currentPaymentMode, recordFreeLaunchPost, startCardSetup } from "@/lib/job-payment-flow";
-import { applyPassForSubmit } from "@/lib/pass-flow";
+import { applyPassForSubmit, moveToReview } from "@/lib/pass-flow";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
@@ -191,13 +191,15 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       // the role is not included) is recorded against the card already on the pass. Either way there is no Stripe page (lib/pass-flow.ts).
       const passAdmin = supabaseAdmin();
       const pass = passAdmin ? await applyPassForSubmit(passAdmin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name) : ({ kind: "none" } as const);
-      if (pass.kind !== "none") {
-        await db.from("jobs").update({ status: "in_review" }).eq("id", savedId).eq("status", "draft");
-        await notifyAdmin("A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
-        await notifySlack("A job is waiting for review", [job.title, employer.clinic_name], { path: "/admin/review", text: "Open the review queue" });
+      if (pass.kind === "covered" && passAdmin) {
+        await moveToReview(passAdmin, { id: savedId, title: job.title }, employer.clinic_name);
         revalidatePath("/clinic");
-        refreshJobPages();
-        redirect(`/clinic?notice=${pass.kind === "covered" ? "job-submitted-pass" : pass.why === "full" ? "job-submitted-pass-full" : "job-submitted-pass-role"}`);
+        redirect("/clinic?notice=job-submitted-pass");
+      }
+      // The pass is full or does not cover this role: the clinic is asked what it wants before anything is sent or charged.
+      if (pass.kind === "choose") {
+        revalidatePath("/clinic");
+        redirect(`/clinic/jobs/${savedId}/confirm`);
       }
       const started = await startCardSetup(savedId);
       if ("url" in started) {

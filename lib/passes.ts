@@ -53,8 +53,21 @@ export function passStatusLabel(status: string, cancelAtPeriodEnd: boolean): str
   return "Not finished";
 }
 
-// Why a job was not covered, in words for the clinic.
-export function notCoveredNotice(decision: PassDecision, plan: PassPlan, role: string | null | undefined, priceDollars: number): string {
-  if (decision.kind === "role-not-covered") return `Thank you. Your ${plan.name} does not cover ${role === "Optometrist" ? "optometrist" : "this kind of"} jobs, so this post is charged $${priceDollars} plus HST to your card on file, once our team approves it. ${plan.key === "clinic_pass" ? "Clinic pass Plus covers optometrists." : ""}`.trim();
-  return `Thank you. Your ${plan.name} already has ${plan.livePosts} live posts, so this one is charged $${priceDollars} plus HST to your card on file, once our team approves it.`;
+// What the confirm page says when a pass cannot cover a job, and whether switching to Plus would fix it (only for a role the Clinic pass leaves out:
+// both passes hold 5 live posts, so Plus does not add room).
+export function passChoices(decision: Exclude<PassDecision, { kind: "covered" }>, plan: PassPlan, role: string | null | undefined): { headline: string; detail: string; canUpgrade: boolean } {
+  if (decision.kind === "role-not-covered") {
+    const plus = planByKey("clinic_pass_plus")!;
+    const canUpgrade = plan.key === "clinic_pass" && coversRole(plus, role);
+    return {
+      headline: `Your ${plan.name} does not cover ${role === "Optometrist" ? "optometrist jobs" : "this kind of job"}`,
+      detail: canUpgrade ? `${plus.name} covers every role, optometrists included. You can switch now, or pay the single post price for this job only.` : "You can pay the single post price for this job only.",
+      canUpgrade,
+    };
+  }
+  return {
+    headline: `All ${plan.livePosts} live posts on your ${plan.name} are in use`,
+    detail: `A post is freed when a job is closed or has run its 30 days. Both passes hold ${plan.livePosts} live posts at a time, so switching would not add room. You can wait for a post to free up, or pay the single post price for this job only.`,
+    canUpgrade: false,
+  };
 }

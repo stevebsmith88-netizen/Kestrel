@@ -11,6 +11,8 @@ import { longDate } from "@/lib/jobs";
 import { canEdit } from "@/lib/team";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { deleteTemplate } from "@/lib/template-actions";
+import { passUsage } from "@/lib/pass-flow";
+import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Post a job | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -27,6 +29,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
   const templates = await getMyTemplates();
   const ownPay = await loadOwnPayStats();
   const start = templateId && UUID.test(templateId) ? await getMyTemplate(templateId) : null;
+  const usage = await passUsage(supabaseAdmin(), employer.id);
   return (
     <>
       <AppBar session={session} current="/clinic/jobs/new" />
@@ -35,6 +38,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
           <p className="kicker">{employer.clinic_name}</p>
           <h1>Post a job</h1>
           <p className="lede2">About 5 minutes. You can save a draft and come back to it from your dashboard.</p>
+          {usage && <p className="notice" role="status">Your {usage.planName}: {usage.used} of {usage.limit} live posts in use. A post your pass covers uses 1 of them.{usage.used >= usage.limit ? " They are all in use, so you will be asked what you want to do before this job is sent." : ""}</p>}
           {notice === "template-deleted" && <p className="notice" role="status">Template deleted.</p>}
           {notice === "profile-created" && <p className="notice" role="status">Your clinic profile is saved. Now your first job: a person reads it before it goes live, usually within 1 business day.</p>}
 

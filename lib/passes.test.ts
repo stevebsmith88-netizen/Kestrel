@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { PASS_PLANS, coversRole, notCoveredNotice, passCounts, passDecision, passStatusLabel, passesOn, planByKey } from "./passes.ts";
+import { PASS_PLANS, coversRole, passChoices, passCounts, passDecision, passStatusLabel, passesOn, planByKey } from "./passes.ts";
 import { CLINIC_PASS, CLINIC_PASS_PLUS } from "./pricing.ts";
 
 const clinic = planByKey("clinic_pass")!;
@@ -50,6 +50,16 @@ test("the words about a pass and about a job it did not cover", () => {
   assert.match(passStatusLabel("active", false), /renews each month/);
   assert.match(passStatusLabel("active", true), /then it stops/);
   assert.match(passStatusLabel("past_due", false), /overdue/);
-  assert.match(notCoveredNotice({ kind: "role-not-covered" }, clinic, "Optometrist", 99), /does not cover optometrist jobs.*\$99 plus HST.*Clinic pass Plus covers optometrists/);
-  assert.match(notCoveredNotice({ kind: "full" }, plus, "Optician", 79), /already has 5 live posts.*\$79 plus HST/);
+});
+
+test("the confirm page explains why, and offers a switch only when Plus would help", () => {
+  const role = passChoices({ kind: "role-not-covered" }, clinic, "Optometrist");
+  assert.match(role.headline, /does not cover optometrist jobs/);
+  assert.equal(role.canUpgrade, true);
+  assert.match(role.detail, /Clinic pass Plus covers every role/);
+  const full = passChoices({ kind: "full" }, clinic, "Optician");
+  assert.match(full.headline, /All 5 live posts on your Clinic pass are in use/);
+  assert.equal(full.canUpgrade, false);
+  assert.match(full.detail, /switching would not add room/);
+  assert.equal(passChoices({ kind: "role-not-covered" }, plus, "Optometrist").canUpgrade, false);
 });

@@ -11,7 +11,8 @@ import GettingStarted from "@/components/GettingStarted";
 import StatusBadge from "@/components/StatusBadge";
 import JobPaymentTag from "@/components/JobPaymentTag";
 import { getMyJobPayments } from "@/lib/clinic-payments";
-import { passesAvailable } from "@/lib/pass-flow";
+import { passUsage, passesAvailable } from "@/lib/pass-flow";
+import { supabaseAdmin } from "@/lib/supabase-server";
 import { requireRole } from "@/lib/auth";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
@@ -47,6 +48,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const applicants = employer ? await getApplicantCounts() : {};
   const numbers = employer ? await getMyJobNumbers() : {};
   const payments = employer ? await getMyJobPayments(jobs.map((j) => j.id)) : {};
+  const usage = employer ? await passUsage(supabaseAdmin(), employer.id) : null;
   const totals = sumNumbers(numbers);
   const unread = Object.values(applicants).reduce((sum, c) => sum + c.fresh, 0);
   const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
@@ -159,6 +161,8 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                   {editor && <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>}
                 </span>
               </div>
+
+              {usage && <p className="meta">Your {usage.planName}: {usage.used} of {usage.limit} live posts in use.{employer?.level === "owner" ? <> <Link href="/clinic/plans">Plans</Link></> : null}</p>}
 
               {jobs.length === 0 ? (
                 <section className="card"><p>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</p></section>
