@@ -12,9 +12,9 @@ export function teamInviteEmail({ name, clinicName, inviter, level, code }: { na
       paragraphs: [
         `Hi ${name},`,
         `${inviter} has invited you to help with hiring at ${clinicName} on Kestrel Eye Care Jobs. Your access: ${levelLabel(level).toLowerCase()}.`,
-        `Press the button to create your account, or to sign in if you already have one with this email address. If you are asked for an invite code, it is ${code}`,
-        "The code works once, only with this email address, for 14 days. If you were not expecting this, you can ignore it.",
-        "The Kestrel team",
+        "Press the button to create your account, or to sign in if you already have one with this email address. If you are asked for an invite code, use this one:",
+        code,
+        "It works once, only with this email address, for 14 days. If you were not expecting this, you can ignore it.",
       ],
       buttonText: "Join the clinic",
       buttonUrl: `${SITE}/join?code=${encodeURIComponent(code)}`,

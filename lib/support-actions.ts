@@ -7,6 +7,7 @@ import { getMyEmployer } from "@/lib/clinic";
 import { emailLayout, sendEmail, SITE_URL } from "@/lib/email";
 import type { JobFormState } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { notify } from "@/lib/notifications";
 import { ACCESS_DAYS, ACCESS_TEXT, accessEnds, FEEDBACK_KINDS, HELP_REASONS, kindLabel, reasonLabel, REQUESTS_PER_DAY, SUPPORT_EMAIL } from "@/lib/support";
 
 // Help requests and feedback (Steve, 14th November 2026; migration 0046). Each is saved and emailed to Kestrel's support address, with the
@@ -102,6 +103,10 @@ export async function closeSupportRequest(form: FormData) {
   const session = await requireRole("admin");
   const admin = supabaseAdmin();
   const id = String(form.get("id") ?? "");
-  if (admin && UUID.test(id)) await admin.from("support_requests").update({ status: "done", closed_at: new Date().toISOString(), closed_by: session.userId }).eq("id", id);
+  if (admin && UUID.test(id)) {
+    const { data } = await admin.from("support_requests").update({ status: "done", closed_at: new Date().toISOString(), closed_by: session.userId }).eq("id", id).eq("status", "open").select("user_id, kind").maybeSingle();
+    // The person sees it move to Done in their inbox's Help requests tab, with a message.
+    if (data?.user_id) await notify(admin, data.user_id as string, { kind: "support", title: data.kind === "help" ? "Your help request is done" : "Thank you for your feedback", body: data.kind === "help" ? "We have marked it done. If anything is still not right, send us another." : "We have read it and marked it done.", href: "/account/inbox?tab=help" });
+  }
   revalidatePath("/admin/requests");
 }
