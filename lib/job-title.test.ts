@@ -59,3 +59,40 @@ test("a suggested title never carries a town, pay or the clinic's name", () => {
   const title = suggestTitle({ role: "Optician", employmentType: "Full time" });
   assert.ok(!/\$|toronto|ontario|riverside/i.test(title));
 });
+
+import { levelFromTitle, levelsForRole } from "./job-title.ts";
+import { cleanJob, validateJob } from "./jobs.ts";
+
+test("a level word goes in front, and Associate is for optometrists only", () => {
+  assert.equal(suggestTitle({ role: "Optician", employmentType: "Full time", level: "Lead" }), "Lead Optician, Full time");
+  assert.equal(suggestTitle({ role: "Optometrist", level: "Associate", specialties: ["Dry eye and IPL"] }), "Associate Dry Eye Optometrist");
+  assert.equal(suggestTitle({ role: "Optician", level: "Associate" }), "Optician", "Associate is ignored for an optician");
+  assert.equal(suggestTitle({ role: "Optometrist", employmentType: "Locum", level: "Senior" }), "Locum Senior Optometrist");
+  assert.deepEqual([...levelsForRole("Optician")], ["Lead", "Senior"]);
+  assert.deepEqual([...levelsForRole("Optometrist")], ["Lead", "Senior", "Associate"]);
+  assert.deepEqual([...levelsForRole("")], []);
+});
+
+test("a saved title tells the form which level it carries", () => {
+  assert.equal(levelFromTitle("Lead Optician, Full time"), "Lead");
+  assert.equal(levelFromTitle("Locum Senior Optometrist"), "Senior");
+  assert.equal(levelFromTitle("Optician, Full time"), "");
+  assert.equal(levelFromTitle(""), "");
+});
+
+test("once a role is chosen the server sets the title, whatever was typed", () => {
+  const job = cleanJob({ title: "OPTOMETRIST WANTED!!", roleCategory: "Optician", employmentType: "Full time", titleLevel: "Lead" });
+  assert.equal(job.title, "Lead Optician, Full time");
+  assert.equal(job.titleLevel, "Lead");
+  // A typed optometrist title cannot be put on another role's post.
+  const sneaky = cleanJob({ title: "Optometrist", roleCategory: "Optometric assistant or technician", employmentType: "Part time" });
+  assert.equal(sneaky.title, "Optometric Assistant, Part time");
+  // A level that does not fit the role is dropped.
+  assert.equal(cleanJob({ roleCategory: "Optician", titleLevel: "Associate" }).titleLevel, "");
+});
+
+test("a draft with no role yet keeps what was typed, and a submit still needs a title", () => {
+  assert.equal(cleanJob({ title: "LICENSED OPTICIAN" }).title, "Licensed Optician");
+  const empty = cleanJob({});
+  assert.equal(validateJob(empty, false).title, "Choose a role and the job title is set for you.");
+});

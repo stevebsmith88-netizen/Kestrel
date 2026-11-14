@@ -498,14 +498,14 @@ export const HELP: HelpSection[] = [
         title: "How do I post a job, and what does every post need?",
         keywords: ["new job", "create job", "advertise", "hire", "ad builder", "write my ad", "job ad", "draft", "posting", "vacancy"],
         answer: [
-          "Allow about 5 minutes. A draft needs only a title, so you can save it and come back from your dashboard. To send it for review, a post needs the job title, a role, an employment type, a city and a province or territory, a pay range, the 2 quick questions about existing vacancy and AI screening, and a description of at least 50 characters. Jobs in Quebec cannot be posted yet.",
+          "Allow about 5 minutes. A draft needs only a role, so you can save it and come back from your dashboard. To send it for review, a post needs a role, an employment type, a city and a province or territory, a pay range, the 2 quick questions about existing vacancy and AI screening, and a description of at least 50 characters. Jobs in Quebec cannot be posted yet.",
           "Please keep the ad free of email addresses, phone numbers and any mention of Canadian experience, even to say it is not needed. Our post checker refuses that phrase however it is used. You can have up to 10 open jobs at a time, counting drafts, jobs in review and live jobs.",
           "Posting is free during the free launch, and you do not need a credit card.",
           "If you see a **Write my ad** box, it can turn a few lines about the job into a draft ad. The draft goes into the **Describe the job** box for you to read and change. Always check it before you send it.",
         ],
         steps: [
           "Choose **Post a job** in the bar at the top of the page.",
-          "Under **The role**, type a job title and choose a role, an employment type, whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
+          "Under **The role**, choose a role and an employment type, and add a level such as Lead or Senior if you like. The job title is set for you from those choices and any specialty you tick, so every post reads the same way and candidates and Google find it. Then say whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
           "Under **Pay**, fill in the pay range. The next topic explains the options.",
           "Under **Tools and specialties**, tick anything that applies. It is optional, and candidates can search by it.",
           "Under **2 quick questions**, answer **Is this an existing vacancy?** and **Do you use AI to screen or select candidates?**",

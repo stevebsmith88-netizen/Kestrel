@@ -11,7 +11,7 @@ import type { OwnPayStat } from "@/lib/pay-benchmark";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIXED_TERM_EXPLAINER, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { MONEY_PERIODS, OPTOMETRIST_ONLY_PERIODS, OPTOMETRIST_ROLE, PERCENT_OF, WORKING_WEEKS } from "@/lib/job-pay";
 import { TAG_GROUPS } from "@/lib/job-tags";
-import { suggestTitle } from "@/lib/job-title";
+import { levelFromTitle, levelsForRole, suggestTitle } from "@/lib/job-title";
 
 export type JobFormValues = {
   id?: string;
@@ -58,22 +58,21 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const ad = useServerForm(buildAd);
   const form = useRef<HTMLFormElement>(null);
   const [description, setDescription] = useState(initial.description);
-  // The job title starts as the role the clinic picks (Steve, 13th November 2026), unless a title has been typed. It stays editable.
+  // The job title is set from the clinic's choices (Steve, 14th November 2026): the role, the type of work, a level word and a ticked specialty
+  // (lib/job-title.ts). The box only shows it, and the server sets the same title when the job is saved, so every title for a role reads the same
+  // way and always matches the role and its price band.
   const titleRef = useRef<HTMLInputElement>(null);
-  const autoTitle = useRef("");
-  // The title is suggested from the role, the type of work and a ticked specialty (lib/job-title.ts), and keeps following them until the clinic
-  // changes the title itself. A title already saved is never replaced.
+  const [level, setLevel] = useState(levelFromTitle(initial.title));
   const refreshTitle = () => {
     const f = form.current;
     const el = titleRef.current;
     if (!f || !el) return;
     const data = new FormData(f);
-    const next = suggestTitle({ role: String(data.get("roleCategory") ?? ""), employmentType: String(data.get("employmentType") ?? ""), specialties: data.getAll("tagsSpecialties").map(String) });
-    if (next && (!el.value.trim() || el.value === autoTitle.current)) {
-      el.value = next;
-      autoTitle.current = next;
-    }
+    const next = suggestTitle({ role: String(data.get("roleCategory") ?? ""), employmentType: String(data.get("employmentType") ?? ""), specialties: data.getAll("tagsSpecialties").map(String), level: String(data.get("titleLevel") ?? "") });
+    if (next) el.value = next;
   };
+  // A job saved earlier shows the title it will have when saved again.
+  useEffect(() => refreshTitle(), []); // eslint-disable-line react-hooks/exhaustive-deps
   const pickRole = (next: string) => setRole(next);
   // When the ad builder returns a draft, it goes into the ad box for the clinic to edit.
   useEffect(() => {
@@ -112,9 +111,6 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
       {employerId && <input type="hidden" name="employerId" value={employerId} />}
 
       <h2 className="formh">The role</h2>
-      <Field id="jf-title" label="Job title" required error={e.title} hint="We suggest one from your choices below. Change it if you like.">
-        <input ref={titleRef} id="jf-title" name="title" type="text" defaultValue={initial.title} placeholder="For example: Optician, full time" />
-      </Field>
       <div className="pair">
         <Field id="jf-role" label="Role" required error={e.roleCategory}>
           <select id="jf-role" name="roleCategory" value={role} onChange={(ev) => pickRole(ev.target.value)}>
@@ -134,6 +130,17 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
               <option key={t} value={t}>{employmentLabel(t)}</option>
             ))}
           </select>
+        </Field>
+      </div>
+      <div className="pair">
+        <Field id="jf-level" label="Level (optional)" hint={levelsForRole(role).length ? "Adds a word to the title, for example Lead Optician." : "Choose a role first."}>
+          <select id="jf-level" name="titleLevel" value={levelsForRole(role).includes(level) ? level : ""} onChange={(ev) => setLevel(ev.target.value)} disabled={levelsForRole(role).length === 0}>
+            <option value="">None</option>
+            {levelsForRole(role).map((l) => <option key={l} value={l}>{l}</option>)}
+          </select>
+        </Field>
+        <Field id="jf-title" label="Job title" required error={e.title} hint="Set from your choices, so every post reads the same and candidates and Google find it.">
+          <input ref={titleRef} id="jf-title" name="title" type="text" readOnly defaultValue={initial.title} placeholder="Choose a role" />
         </Field>
       </div>
       <Choices
