@@ -2,7 +2,7 @@
 
 Why: helpful articles bring in people who search for things like "optician cover letter" or "how to post an eye care job", and they link to the job board. It is also where we explain the pay range, AI and vacancy rules, which helps clinics post correctly.
 
-How it works: the posts are written in `content/posts.ts`. There is no editor and no database. To add a post, copy one of the blocks in that file, change the text, and run `npm test`, which checks the title and description length, the writing style and that there is no dash used as punctuation. Claude writes and adds posts; Steve reads the preview and approves.
+How it works: the posts are written in `content/posts.ts`. Each post has a `topic` (careers, applying, pay or clinics, listed in `BLOG_TOPICS` in `lib/blog.ts`), which groups it on the blog page: the newest 3 published posts first, then a tile for each topic that jumps to its list (Steve, 14th November 2026). Grouped by topic, not by month, because people search by subject; a post's address never changes. There is no editor and no database. To add a post, copy one of the blocks in that file, change the text, and run `npm test`, which checks the title and description length, the writing style and that there is no dash used as punctuation. Claude writes and adds posts; Steve reads the preview and approves.
 
 What each page gets for search engines: its own title, description and address, an article structured data block, and an entry in the sitemap. The blog index is `/blog`, and posts are at `/blog/<slug>`.
 

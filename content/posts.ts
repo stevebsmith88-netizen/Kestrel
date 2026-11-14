@@ -1,13 +1,14 @@
 import type { Post } from "../lib/blog.ts";
 
 // Blog posts, newest first. A post is shown from its date (see isPublished in lib/blog.ts), so a future date schedules it. To add one, copy a block below and change it, then check with `npm test`.
-// Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
+// Every post needs a topic (lib/blog.ts BLOG_TOPICS), which groups it on the blog page. Write the way the rest of the site reads: warm and plain, numerals, British spelling, and no dashes as punctuation.
 export const POSTS: Post[] = [
   {
     slug: "clinic-to-lens-rep-supplier-role",
     title: "From the clinic to the road: moving into a supplier role",
     description: "What changes when an optician, assistant or clinic manager becomes a lens rep, trainer or account manager, and how to make the move well.",
     date: "2027-01-05",
+    topic: "careers",
     body: `![A person in a wheat field at sunset holds an ear of wheat in 1 hand and a tablet in the other.](/images/blog/clinic-to-lens-rep-supplier-role.jpg)
 
 Every week a rep walks into your clinic with a sample case, a new lens design or a problem to sort out with an order. Plenty of opticians, assistants and managers have watched that and wondered whether they could do the job. Many of the people doing it started exactly where you are.
@@ -61,6 +62,7 @@ On Kestrel, suppliers post field based roles beside clinic jobs, and you can fil
     title: "Optometrist pay in Canada: salary, day rates and percentage deals",
     description: "How optometrists are paid in Canada, from salaries and day rates to a percentage of billings, and how to compare offers that are built in different ways.",
     date: "2026-12-01",
+    topic: "pay",
     body: `Ask 3 associate optometrists how they are paid and you may get 3 different answers. One is on a salary, one is paid by the day, and one takes a share of what they bill, perhaps with a guaranteed minimum underneath. That makes offers hard to compare, and it is the reason this guide is about how pay is built before it is about the numbers.
 
 ![A woman rests her chin at a slit lamp during an eye exam, as the optometrist adjusts the instrument.](/images/blog/optometrist-pay-canada.jpg)
@@ -128,6 +130,7 @@ If you are hiring, our [job ad checklist](/blog/eye-care-job-ad-checklist) cover
     title: "Optometric assistant courses and certification in Canada",
     description: "No licence is needed to work as an optometric assistant. What the CCOA program, college certificates and training on the job each offer, and how to choose.",
     date: "2026-12-15",
+    topic: "careers",
     body: `![An eye imaging instrument on a desk in a clinic, with someone working at a keyboard beside it.](/images/blog/optometric-assistant-certification-canada.jpg)
 
 Unlike opticians and optometrists, optometric assistants do not need a licence in any province. You can be hired with no eye care experience at all, and many clinics prefer to train a reliable, friendly person their own way. So why would anyone take a course? Because it can get you hired faster, give you confidence with the equipment, and show a clinic you mean to stay.
@@ -169,6 +172,7 @@ If you are hiring, saying in your ad how you train new assistants, and whether y
     title: "How to become an optometrist in Canada",
     description: "The 2 schools, the national board exam, the provincial licence and the routes for optometrists trained abroad, with where the jobs are.",
     date: "2027-01-19",
+    topic: "careers",
     body: `![An optometrist in a white coat adjusts a phoropter in front of a smiling patient in an exam chair.](/images/blog/how-to-become-an-optometrist-canada.jpg)
 
 Becoming an optometrist in Canada takes a Doctor of Optometry degree, a national board exam and a licence from the province where you will practise. The steps are the same wherever you start, and the field is small enough to describe in full. This guide was checked against the schools', the exam board's and the regulators' own sources in November 2026, but confirm the details with them before you apply.
@@ -222,6 +226,7 @@ Most new graduates start as associates. In Ontario, the report counted 1,636 ass
     title: "Who works in eye care in Canada? What the census shows",
     description: "Most optometrists and opticians in Canada are now women, and the change between generations is striking. The numbers by age and province, and what they mean.",
     date: "2027-01-29",
+    topic: "careers",
     body: `![In an optical store, a smiling woman holds a pair of glasses while she talks with an optician, as another customer looks at a wall of frames.](/images/blog/who-works-in-eye-care-canada.jpg)
 
 Walk into an eye clinic in Canada and the team you meet is probably mostly women. That is not a hunch. The 2021 census and a 2025 report from the Canadian Association of Optometrists both show it, and the numbers by age tell a story about where the profession is heading.
@@ -282,6 +287,7 @@ A note on the figures: the census numbers are from Statistics Canada's 2021 Cens
     title: "What an empty optician chair costs a clinic",
     description: "A job ad is the cheap part of hiring. The empty chair is not. A worked example, and the sums to work it out for your own clinic.",
     date: "2027-01-26",
+    topic: "clinics",
     body: `![An empty exam chair in an eye clinic, beside a slit lamp, an eye chart on the wall and a case of trial lenses.](/images/blog/empty-optician-chair-cost.jpg)
 
 Free job listings exist, so why would a clinic pay to post a job? It is a fair question, and sometimes the honest answer is that you should not. A part time role you can fill from a referral, or a job you only want to show your own team, may never need a paid ad.
@@ -340,6 +346,7 @@ For the example clinic that is 230 × 41% × 10% × $500, or about $4,700, plus 
     title: "How to become an optician in Canada, province by province",
     description: "The 2 routes in, the national exams, and how each province registers new opticians, from Ontario's intern class to Alberta's provisional permit.",
     date: "2026-12-08",
+    topic: "careers",
     body: `![A smiling optician in a white coat holds a pair of black framed glasses up to the light to check the lenses.](/images/blog/how-to-become-an-optician-canada.jpg)
 
 Opticians are regulated in every province, and the details change as soon as you cross a provincial border. The good news is that the core of the process is the same almost everywhere. This guide sets out the shared part first, then what each province adds. It was checked against each regulator's own website or published documents in November 2026, but rules and fees change, so confirm with the regulator in the province where you plan to work before you apply.
@@ -396,6 +403,7 @@ Opticians work in independent clinics, corporate groups and optical stores in ev
     title: "We asked the AI chatbots where to find eye care jobs in Canada",
     description: "ChatGPT, Gemini, Copilot and friends are now part of the job hunt. What they told us about eye care jobs, and how to use them well.",
     date: "2026-11-24",
+    topic: "applying",
     body: `![A young woman sits cross legged on a bed, talking on her phone, with a laptop and printed pages in front of her.](/images/blog/ai-job-search-eye-care-canada.jpg)
 
 There was a time when looking for a new job meant the Saturday paper and a red pen. Then it meant job boards, then job alerts, then scrolling through jobs on your phone at a red light (please do not). Now a growing number of people start somewhere else entirely: they open ChatGPT, Gemini, Copilot, Claude, Perplexity or Grok and type "where can I find optician jobs near me?"
@@ -457,6 +465,7 @@ We will ask the same 10 questions again every month and keep a note of who gets 
     title: "Optician pay in Canada: what opticians earn in each province",
     description: "Typical hourly pay for opticians in each province from Job Bank, what it comes to over a year, and what moves an offer up or down.",
     date: "2026-11-17",
+    topic: "pay",
     body: `![An optician adjusts a pair of glasses on a smiling woman in front of a wall of frames.](/images/blog/optician-pay-canada.jpg)
 
 If you are weighing up an optician job, or deciding what to offer one, the first question is what is normal where you are. The most reliable public answer comes from Job Bank, the Government of Canada's labour market service, which publishes typical hourly pay for opticians in most provinces. The figures below are from its wage dataset revised on 19th November 2025, covering surveys from 2023 and 2024.
@@ -509,6 +518,7 @@ Every job on Kestrel shows its pay range, so you can see what clinics near you a
     title: "Hiring seasonal workers: the pros and cons for an eye care clinic",
     description: "Seasonal and short term staff can cover busy weeks and holidays. Here is when it works, what it costs and how to make a short stay run smoothly.",
     date: "2027-06-11",
+    topic: "clinics",
     body: `![People of different ages waiting in a clinic waiting room.](/images/blog/hiring-seasonal-workers.jpg)
 
 Eye care clinics have busy stretches. Many people use up their benefits near the end of the year. Back to school brings children in for exams. Summer means holidays and staff who are away. Some clinics hire seasonal or short term workers to get through those weeks. It can work well, and it can also cost more than it saves. Here is how to decide.
@@ -542,6 +552,7 @@ A good first week matters even more for a short contract. Use a simple plan like
     title: "How to ask for a raise in an eye care job",
     description: "Asking for more pay is easier with a plan. Here is how to prepare, when to ask, what to say and what to do if the answer is not yet.",
     date: "2027-04-02",
+    topic: "pay",
     body: `![2 women talking across a table in a bright office.](/images/blog/ask-for-a-raise.jpg)
 
 Asking for a raise is uncomfortable for most people. It helps to treat it as a business conversation with a plan, not a confrontation. Clinics generally expect that good staff will ask at some point, and a well prepared request is easier to say yes to.
@@ -579,6 +590,7 @@ Thank them, confirm the date it starts and the new amount in writing, and keep d
     title: "How to write a resume for an eye care job",
     description: "A clear 1 or 2 page resume is enough for most eye care jobs. Here is what to put in it, what to leave out and how to adapt it to each application.",
     date: "2027-01-08",
+    topic: "applying",
     body: `![A printed resume on a wooden table, beside a pen and a cup of coffee.](/images/blog/eye-care-resume.jpg)
 
 A resume for an eye care job does not need to be fancy. The person reading it is often a busy owner or practice manager with a pile to get through. A clean, honest one or two pages that shows what you have done gets read.
@@ -616,6 +628,7 @@ A short letter says why you want this clinic, which a resume cannot do. Our guid
     title: "Reference checks: what to ask and why they matter",
     description: "A short reference call can save months of trouble. Here is who to call, what to ask and what to do with the answers.",
     date: "2027-05-28",
+    topic: "clinics",
     body: `![A man on a phone call, writing notes with a pencil at a bright desk.](/images/blog/reference-checks-eye-care.jpg)
 
 When a candidate has done well in 2 interviews, it is tempting to skip the reference check. It only takes 15 minutes, and it is often the most honest part of the process. Here is how to do it well.
@@ -657,6 +670,7 @@ Ask the same questions about every candidate you take to this stage, and stick t
     title: "Onboarding a new optician or assistant: the first 30 days",
     description: "A simple plan for a new hire's first month in an eye care clinic: before day one, the first week and how to check in at 30 days.",
     date: "2027-05-14",
+    topic: "clinics",
     body: `![A smiling new employee shakes hands with a colleague as she arrives at the office.](/images/blog/onboarding-first-30-days.jpg)
 
 The first month decides a lot. A new person who feels welcome, knows what to do and is making progress by the end of week 4 is much more likely to stay. You do not need a big programme. You need a simple plan that you actually follow.
@@ -690,6 +704,7 @@ A one page checklist, a buddy and 3 short check ins will do more than a long man
     title: "Hire for attitude, train for skills: hiring from outside eye care",
     description: "Many good eye care staff arrive from retail, hospitality and other health jobs. Here is when hiring for attitude works, and how to train well.",
     date: "2027-01-15",
+    topic: "clinics",
     body: `![4 colleagues around a meeting table, 2 of them sharing a high five.](/images/blog/hire-for-attitude-train-for-skills.jpg)
 
 A clinic can teach someone to run a pre-test. It is much harder to teach someone to be patient with a nervous patient, to turn up on time or to care about getting a fit right. That is the thinking behind hiring for attitude and training for skills. It does not suit every role, but it suits more of them than many clinics assume.
@@ -723,6 +738,7 @@ Say you will train, and say who and how. Many strong candidates, including peopl
     title: "Why people leave eye care jobs, and what clinics can do about it",
     description: "Staff turnover costs clinics time and patients' trust. These are the common reasons people leave and practical ways to keep good people.",
     date: "2027-04-30",
+    topic: "clinics",
     body: `![A young man sits by a window, looking out, deep in thought.](/images/blog/why-people-leave-jobs.jpg)
 
 Every clinic loses people. Some of it is unavoidable: people move, study or change direction. A lot of it is not. When a good optician or assistant leaves after a few months, there is usually a reason that could have been spotted earlier. Here are the ones clinics most often hear.
@@ -764,6 +780,7 @@ Short "stay conversations" help: what do you enjoy, what would you change, what 
     title: "How to attract the right candidates to your clinic",
     description: "Good candidates choose clinics as much as clinics choose them. Here is what makes the right people apply, and what makes them look elsewhere.",
     date: "2027-01-22",
+    topic: "clinics",
     body: `![A long wall display of eyeglass frames in an optical store.](/images/blog/attract-right-candidates.jpg)
 
 Most clinics hire in a hurry, when someone leaves or the schedule is stretched. That is when the ad is written fastest and the right candidate is easiest to miss. A small amount of care at the start brings better applicants and fewer weeks with an empty chair.
@@ -801,6 +818,7 @@ A general job site brings volume. A board built for eye care brings people who a
     title: "How to stand out in an interview for an eye care job",
     description: "Clinics see many good candidates. These are the small things that make one memorable: preparation, curiosity, care for patients and a clear follow up.",
     date: "2027-02-19",
+    topic: "applying",
     body: `![A woman reaches across a table to shake hands with a candidate, with a colleague beside her.](/images/blog/stand-out-in-interview.jpg)
 
 When a clinic interviews 4 or 5 people for one job, most of them are qualified. The person who gets the offer is often the one who made the clinic feel sure about them. You do not need to be flashy to do that. Here are the things that help.
@@ -834,6 +852,7 @@ Arrive 10 minutes early, dress as you would for work in a clinical setting, brin
     title: "Phone screenings: how to do well in the first call",
     description: "A short phone screen often decides whether you get an interview. Here is how to prepare, what you will be asked and how to follow up.",
     date: "2027-02-05",
+    topic: "applying",
     body: `![A bearded man in glasses on a phone call, writing notes in a notebook at a table.](/images/blog/phone-screening-tips.jpg)
 
 The phone screen is the first conversation with a clinic, and it is usually short, around 15 to 20 minutes. It is mainly to check the basics: whether you are registered if the role needs it, whether the hours work, whether the pay is in range and whether you come across as someone patients and colleagues would like. Here is how to do well.
@@ -863,6 +882,7 @@ Send a short thank you email the same day. Say you enjoyed the conversation, men
     title: "Star questions: how to answer interview questions with a story",
     description: "The STAR method turns a vague answer into a clear one. Here is how it works, with examples from an eye care clinic.",
     date: "2026-12-04",
+    topic: "applying",
     body: `![A job interview across a desk, the candidate in a shirt and tie explaining something with his hands.](/images/blog/star-interview-method.jpg)
 
 Interviewers like to ask "tell me about a time when..." questions. They are not trying to catch you out. They want evidence of how you behave, and a good story gives it. The STAR method is a simple way to build one.
@@ -903,6 +923,7 @@ Do not blame colleagues, and do not make up a result. Real, small stories land b
     title: "What an optical lab technician does, and how to get started",
     description: "Optical lab technicians turn prescriptions into finished glasses. Here is what the work involves, where it happens and how people start in it.",
     date: "2027-04-16",
+    topic: "careers",
     body: `![A technician in a white coat working at a lens edging machine, with a lens measuring instrument beside it.](/images/blog/optical-lab-technician.jpg)
 
 When a patient picks out frames and an optician takes the measurements, someone still has to turn the prescription into a finished pair of glasses. That person is the optical lab technician. It is hands-on work for people who like precision, machines and seeing a job through from start to finish.
@@ -940,6 +961,7 @@ People move from the bench into lead technician or lab manager roles, into dispe
     title: "Moving to Canada from another country? Working in eye care",
     description: "What to know if you trained or worked in eye care abroad: which roles need registration, where to start and how to work while you sort it out.",
     date: "2027-03-19",
+    topic: "careers",
     body: `![The Toronto skyline and the CN Tower across the water, with a plane flying overhead.](/images/blog/eye-care-moving-to-canada.jpg)
 
 If you trained or worked in eye care in another country, your skills are in demand here. The way in depends on the role, and the first step is almost always the same: ask the regulator. This post is a general guide, not legal or immigration advice, and rules change, so check each regulator's own website.
@@ -972,6 +994,7 @@ You do not need to apologise for training abroad. Describe your skills, your reg
     title: "Independent practice or corporate group: what is different for staff",
     description: "How working in an independent eye care practice compares with a corporate group, and the questions that help you decide which one suits you.",
     date: "2027-03-05",
+    topic: "careers",
     body: `![A row of brick shop fronts on a small town main street under a blue sky.](/images/blog/independent-or-corporate-eye-care.jpg)
 
 Eye care in Canada is a mix of independent practices, owned by an optometrist or optician, and larger groups that run many locations under one name. Both hire all the time, and neither is better. They feel different to work in, and what suits you depends on what you want from the next few years.
@@ -1011,6 +1034,7 @@ Kestrel lists independent and corporate practices side by side, and you can filt
     title: "Thinking of starting a career in optics? Where to begin",
     description: "A practical first step guide for anyone curious about working in eye care in Canada: the roles, the entry points and the questions worth asking early.",
     date: "2026-12-18",
+    topic: "careers",
     body: `![A young woman tries on black framed glasses in front of a display of frames.](/images/blog/start-a-career-in-optics.jpg)
 
 Eye care has a clear ladder in some places and a lot of side doors in others. If you are wondering whether it is for you, you do not need to decide everything today. Here is a sensible way to start.
@@ -1047,6 +1071,7 @@ A reasonable aim is to spend your first year learning the work, the patients and
     title: "How to write an optometric assistant job ad that works",
     description: "Most assistant ads say 'friendly, fast paced team player'. Here is how to write one that tells candidates what the job is and gets better applicants.",
     date: "2026-12-11",
+    topic: "clinics",
     body: `![A red Now Hiring sign and an Open sign in the window of a wooden shop door.](/images/blog/optometric-assistant-job-ad.jpg)
 
 Most optometric assistant ads say the same things: friendly, fast paced, a team player. They tell a candidate almost nothing, and they attract people who apply to 20 places a day. A better ad has fewer adjectives and more facts, and it is easier to write than it sounds.
@@ -1084,6 +1109,7 @@ Kestrel's ad builder turns a few lines about the role into a draft. You edit eve
     title: "How most people fall into optics as a career",
     description: "Few people plan a career in eye care. Here are the common ways people start, what they find when they arrive and why many of them stay.",
     date: "2026-11-13",
+    topic: "careers",
     body: `![A smiling young woman with a shoulder bag at the front desk of a bright reception, talking to the person behind it.](/images/blog/how-people-fall-into-optics.jpg)
 
 Ask a group of opticians, assistants and clinic managers how they got started, and the answer is rarely "I always wanted to work in eye care." It is more often "I needed a job and a friend knew a clinic," or "I was at the front desk and got curious." Eye care is a career many people fall into, and then find they like.
@@ -1113,6 +1139,7 @@ You do not need a plan to start. A clear, warm [cover letter](/blog/cover-letter
     title: "Questions to ask in an optician job interview",
     description: "Practical questions for opticians to ask before accepting a job: the patients, the lab, the hours, the pay, the training and the team.",
     date: "2026-11-27",
+    topic: "applying",
     body: `![A woman holding a printed resume talks to a candidate on a video call.](/images/blog/optician-interview-questions.jpg)
 
 An interview works both ways. The clinic is deciding whether you are right for the job, and you are deciding whether you want to spend your days there. A few good questions tell you more than the job ad ever will.
@@ -1150,6 +1177,7 @@ Have 3 short stories ready: a time you helped a difficult fit, a time you worked
     title: "Working in the eye care industry: the roles and who does what",
     description: "A plain guide to the jobs inside an eye care clinic and around it, from optometrists and opticians to managers, lab technicians and supplier teams.",
     date: "2026-11-20",
+    topic: "careers",
     body: `![An optometrist adjusts a trial frame on a smiling patient while a colleague looks on, in an exam room full of equipment.](/images/blog/working-in-eye-care.jpg)
 
 If you have only ever been on the patient side of an eye exam, the clinic can look like a small number of jobs. There are more than most people expect, and many of them need no university degree. Here is who does what.
@@ -1192,6 +1220,7 @@ People move between these roles more than you might think. An assistant may stud
     title: "Optometric assistant jobs in Canada: the work and the pay",
     description: "What an optometric assistant does day to day, how pay varies across Canada, and how to start or move up in an eye care clinic.",
     date: "2026-11-13",
+    topic: "careers",
     body: `![An assistant in a white coat runs a pre-test on a patient at an eye testing instrument.](/images/blog/optometric-assistant-jobs-canada.jpg)
 
 An optometric assistant is the person who keeps an eye exam running smoothly. You are the first friendly face a patient meets after reception, and the person who gets them ready for the optometrist. It is one of the most common ways into eye care, and a good fit for someone who likes people, routine and working out how instruments behave.
@@ -1233,6 +1262,7 @@ From there, some assistants become lead assistants or clinic managers, and many 
     title: "How to choose an optical buying group",
     description: "What a buying group does for an independent eye care practice, the questions to ask before you join, and a short look at 3 groups in Canada.",
     date: "2026-11-06",
+    topic: "clinics",
     body: `![A group of colleagues stacking their hands together in the middle of a circle.](/images/blog/choosing-an-optical-buying-group.jpg)
 
 A buying group lets independent practices buy together. One practice ordering frames and lenses has little weight with a supplier, and a few hundred practices ordering together have more. What you get beyond a discount varies a lot from group to group, and so does what you give up.
@@ -1264,6 +1294,7 @@ The Optical Group says it was founded in 1988 to support independent eye care pr
     title: "What every eye care job ad in Canada should include",
     description: "A plain checklist for clinics: the pay range, vacancy and AI questions, fair wording and the details that help the right person say yes.",
     date: "2026-10-30",
+    topic: "clinics",
     updated: "2026-11-12",
     body: `![Hands typing on a laptop at a wooden desk, with notebooks, a phone and framed photos around it.](/images/blog/eye-care-job-ad-checklist.jpg)
 
@@ -1317,6 +1348,7 @@ Post your job on Kestrel and our ad builder will help you turn a few lines into 
     title: "How to write a cover letter for an optical or optometry job",
     description: "A short, honest way to write a cover letter for an optician, optometric assistant or optometry role, with what to say in each part.",
     date: "2026-10-30",
+    topic: "applying",
     body: `![Hands typing on a laptop on a white marble desk, beside a notebook and a printed page.](/images/blog/cover-letter-optical-job.jpg)
 
 Your resume says what you have done. Your cover letter says who you are. For most eye care jobs a short, honest letter helps more than a perfect one, because the person reading it is usually a busy owner or practice manager who wants to know if you would fit in their team.
@@ -1372,6 +1404,7 @@ When you apply through Kestrel, you can attach a cover letter to each applicatio
     title: "Field based eye care jobs: lens reps, trainers and technicians",
     description: "What sales reps, clinical trainers, field technicians and account managers do in eye care, and how to write or find these roles.",
     date: "2026-10-30",
+    topic: "careers",
     body: `![A man in a plaid shirt holding a laptop while he checks plants in a green field.](/images/blog/field-based-eye-care-jobs.jpg)
 
 Not every eye care job is inside a clinic. Lens labs, frame companies, contact lens makers, equipment suppliers and software companies all hire people who spend their week travelling to practices. Kestrel lists these roles alongside clinic jobs, so a clinic hiring an optician and a supplier hiring a territory representative can both be found in one place.
