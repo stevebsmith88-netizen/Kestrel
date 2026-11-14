@@ -429,6 +429,12 @@ async function runDaily(request: Request) {
     admin.from("listing_claims").delete().neq("status", "pending_review").lt("created_at", cut.reportsAndClaims),
   ]);
   for (const r of retention) if (r.error) console.error("Retention clean up:", r.error.code, r.error.message);
+  // Help requests and feedback once done (0046), and the record of changes Kestrel made for a clinic (0045), after 2 years. On a database
+  // without those tables this is only logged.
+  for (const r of await Promise.all([
+    admin.from("support_requests").delete().eq("status", "done").lt("created_at", cut.supportAndAdminRecords),
+    admin.from("admin_actions").delete().lt("created_at", cut.supportAndAdminRecords),
+  ])) if (r.error) console.error("Retention clean up (help and admin records):", r.error.code, r.error.message);
   // Applications kept for the candidate after the clinic left (migration 0044), 2 years on, with the copy of the resume sent with each.
   // On a database without 0044 the column is missing, and this is only logged.
   const { data: oldKept, error: keptError } = await admin.from("applications").select("id, cv_path").is("job_id", null).lt("clinic_left_at", cut.applicationsAfterClinicLeft).limit(500);

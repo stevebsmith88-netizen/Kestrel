@@ -83,7 +83,7 @@ export default async function ClinicTeam({ searchParams }: { searchParams: Promi
               <InviteForm full={full} />
             </section>
           )}
-          <p className="help">Need help with your team? Email <Link href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</Link> and we will sort it out with you.</p>
+          <p className="help">Stuck? <Link href="/account/help">Ask Kestrel for help</Link> and we will sort it out with you.</p>
         </div>
       </main>
       <AppFooter />

@@ -62,6 +62,7 @@ from (
     ('table: employer_invites (team invitations, 0045)', to_regclass('public.employer_invites') is not null),
     ('table: admin_actions (changes Kestrel made for a clinic, 0045)', to_regclass('public.admin_actions') is not null),
     ('function: can_edit_employer (team access, 0045)', exists (select 1 from pg_proc where proname = 'can_edit_employer')),
+    ('table: support_requests (help requests and feedback, 0046)', to_regclass('public.support_requests') is not null),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

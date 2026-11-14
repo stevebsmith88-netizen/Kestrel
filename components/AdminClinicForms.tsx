@@ -17,7 +17,7 @@ function Result({ state }: { state: AdminClinicState }) {
 const Reason = ({ id }: { id: string }) => (
   <div className="row">
     <label className="lab" htmlFor={id}>Why (saved in the record, and shown to the owner)</label>
-    <input id={id} name="reason" type="text" maxLength={500} placeholder="Clinic asked by email on ..." />
+    <input id={id} name="reason" type="text" maxLength={500} placeholder="What you are doing for them" />
   </div>
 );
 

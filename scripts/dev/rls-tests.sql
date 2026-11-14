@@ -307,3 +307,12 @@ select t.try('0045', 'and Edith as view and edit', 'clinic_edith', 'value', $$se
 select t.try('0045', 'and the owner as owner', 'clinic_c', 'value', $$select public.employer_level('{employer_c}')$$, 'owner');
 select t.try('0045', 'and Nell as nothing', 'clinic_nell', 'value', $$select public.employer_level('{employer_c}')$$, '(nothing)');
 select t.try('0045', 'a visitor cannot ask', 'visitor', 'value', $$select public.employer_level('{employer_c}')$$, 'refused');
+
+-- ---------------------------------------------------------------- 0046: help requests and feedback are for the website's server only
+select t.try('0046', 'a visitor cannot read help requests', 'visitor', 'count', 'select * from public.support_requests', 'refused');
+select t.try('0046', 'a clinic cannot read help requests with its own sign in', 'clinic_c', 'count', 'select * from public.support_requests', 'refused');
+select t.try('0046', 'a clinic cannot give Kestrel access by writing a request itself', 'clinic_c', 'write', $$insert into public.support_requests (user_id, employer_id, kind, message, access_until, access_text) values ('{clinic_c}', '{employer_c}', 'help', 'Please help me', now() + interval '7 days', 'x')$$, 'refused');
+select t.try('0046', 'the admin cannot read them with their own sign in either', 'admin', 'count', 'select * from public.support_requests', 'refused');
+select t.try('0046', 'the server records a help request with access', 'server', 'write', $$insert into public.support_requests (user_id, employer_id, kind, reason, message, access_until, access_text) values ('{clinic_c}', '{employer_c}', 'help', 'team', 'Cannot invite my manager', now() + interval '7 days', 'I allow Kestrel')$$, '1 rows');
+select t.try('0046', 'access can only come with a help request from a clinic', 'server', 'write', $$insert into public.support_requests (user_id, kind, message, access_until, access_text) values ('{ann}', 'bug', 'The page is slow', now() + interval '7 days', 'x')$$, 'refused');
+select t.try('0046', 'the server records feedback from a candidate', 'server', 'write', $$insert into public.support_requests (user_id, kind, message) values ('{ann}', 'idea', 'Let me save searches')$$, '1 rows');

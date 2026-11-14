@@ -357,6 +357,8 @@ textarea{resize:vertical;line-height:1.5}
 .teamcodebox .row{margin-top:10px}
 .adminact{margin-top:10px}
 .teamcode{font-family:ui-monospace,Menlo,monospace;letter-spacing:.06em}
+.supportblock{margin-top:28px}
+.supportblock h2{font:400 1.5rem/1.2 var(--f-display),Georgia,serif;margin:0 0 10px}
 .teaminvite{margin-top:28px}
 .teaminvite h2{font:400 1.5rem/1.2 var(--f-display),Georgia,serif;margin:0 0 8px}
 @media (max-width:640px){.teamacts{align-items:flex-start}}

@@ -35,6 +35,13 @@ export async function deleteAccount(_prev: JobFormState, form: FormData): Promis
     if (authError) return { errors: { password: "That password doesn't match." }, error: "That password doesn't match." };
   }
 
+  // A clinic owner with a team hands the clinic over first, so the team does not lose its jobs and applicants (migration 0045).
+  if (session.role === "clinic") {
+    const { data: owned } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
+    const { count } = owned ? await admin.from("employer_members").select("user_id", { count: "exact", head: true }).eq("employer_id", owned.id) : { count: 0 };
+    if (count && count > 0) return { error: "Your clinic has other people on its team. Hand the clinic to one of them from Clinic team first, or remove them, then delete your account." };
+  }
+
   // Collect every stored file that belongs to this account, and count what goes with it for the deletion record.
   const paths: string[] = [];
   let jobsCount = 0;

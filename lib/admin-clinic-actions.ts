@@ -10,6 +10,7 @@ import { supabaseAdmin } from "@/lib/supabase-server";
 import { codeHash, inviteExpiry, newInviteCode } from "@/lib/team";
 import { teamInviteEmail } from "@/lib/team-emails";
 import { logAdminAction, transferOwnership } from "@/lib/team-server";
+import { clinicAccess } from "@/lib/support-server";
 
 // Admin, Clinics (Steve, 14th November 2026): Kestrel fixes things for a clinic that is stuck. Every change asks why, is saved in the
 // admin record (admin_actions, migration 0045) and the clinic's owner is told in their inbox. Admin never sees applicants' resumes here.
@@ -25,7 +26,9 @@ async function adminContext(form: FormData) {
   const reason = reasonOf(form);
   if (!admin) return { error: NOT_CONNECTED } as const;
   if (!UUID.test(employerId)) return { error: "That didn't work. Please refresh and try again." } as const;
-  if (reason.length < 5) return { error: "Say briefly why, for example \"Clinic asked by email on 14th November\"." } as const;
+  if (reason.length < 5) return { error: "Say briefly what you are doing for them." } as const;
+  // Only while the clinic's owner has an open help request that lets Kestrel in (Steve, 14th November 2026; migration 0046).
+  if (!(await clinicAccess(admin, employerId))) return { error: "This clinic has not given Kestrel access. It can do that from Help and feedback in its account." } as const;
   return { session, admin, employerId, reason } as const;
 }
 

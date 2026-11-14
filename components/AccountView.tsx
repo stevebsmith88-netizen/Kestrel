@@ -5,6 +5,8 @@ import { Field } from "@/components/Field";
 import { EXPORT_PROBLEMS, type ExportProblem } from "@/lib/export-check";
 
 export type AccountViewProps = {
+  // People on the clinic's team besides the owner (migration 0045). An owner with a team hands the clinic over before deleting their account.
+  teamCount?: number;
   role: "candidate" | "clinic";
   email: string;
   first: string;
@@ -19,7 +21,7 @@ export type AccountViewProps = {
 };
 
 // What the Account page shows: the person's details, their email choices, and the download and delete options.
-export default function AccountView({ role, email, first, last, nameLockedUntil, nameInPlay = false, hasClinic, hasPassword, prefs, emailNotice, downloadProblem }: AccountViewProps) {
+export default function AccountView({ role, email, first, last, nameLockedUntil, nameInPlay = false, hasClinic, hasPassword, prefs, emailNotice, downloadProblem, teamCount = 0 }: AccountViewProps) {
   const home = role === "clinic" ? "/clinic" : "/candidate";
   return (
         <div className="wrap narrow">
@@ -72,7 +74,15 @@ export default function AccountView({ role, email, first, last, nameLockedUntil,
             <details className="quietdelete" id="delete-account">
               <summary>Delete my account</summary>
               <section className="card">
-                <DeleteAccountForm role={role} hasPassword={hasPassword} email={email} />
+                {teamCount > 0 ? (
+                  <>
+                    <h2>Delete my account</h2>
+                    <p>Your clinic has {teamCount} {teamCount === 1 ? "other person" : "other people"} on its team. Deleting your account would delete the clinic, its jobs and their access too.</p>
+                    <p>To leave Kestrel and keep the clinic going, hand it to someone on your team first, from <Link href="/clinic/team">Clinic team</Link> (open <strong>Hand the clinic over</strong> beside their name). Then you can delete your account. To close the clinic for everyone, remove your team first.</p>
+                  </>
+                ) : (
+                  <DeleteAccountForm role={role} hasPassword={hasPassword} email={email} />
+                )}
               </section>
             </details>
           </div>
