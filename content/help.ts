@@ -129,7 +129,7 @@ export const HELP: HelpSection[] = [
         keywords: ["unclaimed", "listing", "claim", "not claimed", "found listing", "careers page"],
         answer: [
           "Sometimes we find a job on a clinic's own careers page and list it so candidates can see it. We write the facts in our own words, link to the clinic's own application page, and do not use the clinic's logo. The label means the clinic has not yet taken the listing over, and to apply you go to the clinic's own website.",
-          "These listings come down after 21 days. If you run the clinic, you can [claim the listing](/help#claim-a-listing), and your clinic then owns it and manages it from the dashboard. To ask us to take a listing down, write to hello@eyecarejobs.ca.",
+          "These listings come down after 21 days. If you run the clinic, you can [claim the listing](/help#claim-a-listing), and your clinic then owns it and manages it from the dashboard. To ask us to take a listing down, write to support@eyecarejobs.ca.",
         ],
       },
       {
@@ -171,7 +171,7 @@ export const HELP: HelpSection[] = [
         keywords: ["inbox", "envelope", "notifications", "messages", "updates", "unread", "bell"],
         answer: [
           "The inbox keeps the updates about your account in one place, as well as in your email. A candidate sees when a clinic moves an application to a new step, with the clinic's message if it wrote one. A clinic sees new applicants, and when we approve a job or ask for a change. A shortlist is a clinic's private working list, so it never appears in a candidate's inbox.",
-          "The inbox is for reading only. Nobody replies to anybody in it. To reach us, write to hello@eyecarejobs.ca. The envelope beside your initials shows how many messages you have not read yet.",
+          "The inbox is for reading only. Nobody replies to anybody in it. To reach us, use **Help and feedback** in the menu under your initials, or write to support@eyecarejobs.ca. Your help requests are listed under the inbox's **Help requests** tab. The envelope beside your initials shows how many messages you have not read yet.",
         ],
         steps: [
           "Choose the envelope at the top of the page. On a computer it is beside your initials, and on a phone it is beside the **Menu** button. The number on it is how many messages you have not read.",
@@ -187,7 +187,7 @@ export const HELP: HelpSection[] = [
         answer: [
           "Yes. You can change your name on your account page. After each change, including the first, there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again. Fixing capital letters alone, for example smith to Smith, does not start the wait.",
           "If you are a candidate with an application in progress (sent, viewed, at interview or at offer, on a job the clinic still has), your name cannot change until it closes, because the clinic needs to recognise the person it is talking to. Fixing capital letters is always fine.",
-          "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to hello@eyecarejobs.ca and we will help.",
+          "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to support@eyecarejobs.ca and we will help.",
         ],
         steps: [
           "Open the menu under your initials at the top of the page and choose **Account settings**. On a phone, open **Menu** instead.",
@@ -201,7 +201,7 @@ export const HELP: HelpSection[] = [
         keywords: ["support", "help", "email", "hello", "privacy officer", "reach", "question", "feedback"],
         answer: [
           "A person on the Kestrel team reads every message, and we aim to reply promptly, within 1 to 3 business days.",
-          "For general questions and help, write to hello@eyecarejobs.ca. To see, correct or remove your information, write to privacy@eyecarejobs.ca. To report a job, use the **Report this job** link on the job's page.",
+          "For help with your account, use **Help and feedback** in the menu under your initials, or write to support@eyecarejobs.ca. For general questions, write to hello@eyecarejobs.ca. To see, correct or remove your information, write to privacy@eyecarejobs.ca. To report a job, use the **Report this job** link on the job's page.",
         ],
         links: [{ label: "Contact page", href: "/contact" }],
       },
@@ -596,7 +596,7 @@ export const HELP: HelpSection[] = [
         title: "How do I claim a listing you found?",
         keywords: ["found listing", "ownership", "take over", "verify", "unclaimed"],
         answer: [
-          "If we found one of your jobs on your own careers page and listed it, you can claim it. Claiming makes your clinic the owner of the listing: applications arrive in your dashboard with the resume and cover letter, you can close the job whenever you like, and you can post new ones. It is free during the launch. It must be claimed with a clinic account, and a person who already has a clinic profile cannot take over another clinic's listing. Write to hello@eyecarejobs.ca and we will help.",
+          "If we found one of your jobs on your own careers page and listed it, you can claim it. Claiming makes your clinic the owner of the listing: applications arrive in your dashboard with the resume and cover letter, you can close the job whenever you like, and you can post new ones. It is free during the launch. It must be claimed with a clinic account, and a person who already has a clinic profile cannot take over another clinic's listing. Write to support@eyecarejobs.ca and we will help.",
           "We check every claim, usually within 1 business day, and email you when it is approved or if we cannot approve it. The link in the verification email works for 2 days, and only for the account that made the claim.",
         ],
         steps: [

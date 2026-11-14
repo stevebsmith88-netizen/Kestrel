@@ -35,7 +35,7 @@ export const MAINTENANCE_HTML = `<!doctype html>
 <main>
 <h1>We will be back soon</h1>
 <p>Kestrel Eye Care Jobs is being looked after for a short while. Nothing you have saved has been lost.</p>
-<p>Please try again in a little while. If it matters, write to <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>.</p>
+<p>Please try again in a little while. If it matters, write to <a href="mailto:support@eyecarejobs.ca">support@eyecarejobs.ca</a>.</p>
 <p>The Kestrel team</p>
 </main>
 </body>

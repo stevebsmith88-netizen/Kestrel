@@ -28,7 +28,7 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
   const db = supabaseAdmin();
-  if (!db) return { error: "Reporting isn't available right now. Please email hello@eyecarejobs.ca." };
+  if (!db) return { error: "Reporting isn't available right now. Please email support@eyecarejobs.ca." };
 
   const { data: job } = await db.from("jobs").select("id, title").eq("id", jobId).maybeSingle();
   if (!job) return { error: "We couldn't find that job." };
@@ -41,7 +41,7 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   const { error } = await db.from("job_reports").insert({ job_id: jobId, reason, details: details || null, reporter_email: email || null });
   if (error) {
     console.error("Report failed:", error.code, error.message);
-    return { error: "We couldn't send your report. Please try again, or email hello@eyecarejobs.ca." };
+    return { error: "We couldn't send your report. Please try again, or email support@eyecarejobs.ca." };
   }
   await notifyAdmin("A job has been reported", [`${job.title}`, REPORT_REASON_LABEL[reason]], "/admin/reports");
   return { message: THANKS };

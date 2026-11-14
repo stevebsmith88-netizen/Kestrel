@@ -20,7 +20,7 @@ Claude cannot see Vercel, so the "should be" columns are what the code and the d
 | `RESEND_API_KEY` | Sends the website's own emails through Resend. Without it, emails are skipped quietly. | the `kestrel-website` Resend key | Not needed (the demo never sends email) | **Yes** |
 | `RESEND_WEBHOOK_SECRET` | Proves a bounce or spam complaint message really came from Resend (`/api/resend`). | the webhook's signing secret from Resend | Not needed | **Yes** |
 | `EMAIL_FROM` | The "from" line on emails. | Leave unset (the default is `Kestrel Eye Care Jobs <hello@mail.eyecarejobs.ca>`) | Not needed | No |
-| `EMAIL_REPLY_TO` | Where replies to automatic emails go. | Leave unset (the default is `hello@eyecarejobs.ca`) or set it to that | Not needed | No |
+| `EMAIL_REPLY_TO` | Where replies to automatic emails go. | Leave unset (the default is `support@eyecarejobs.ca` since 14th November 2026) or set it to that | Not needed | No |
 | `ADMIN_ALERT_EMAIL` | Your inbox for problems, reported jobs and things waiting for you. | your own address | Not needed | No (but private) |
 | `ADMIN_BACKUP_EMAIL` | A second inbox for the same alerts, so none is lost. | the backup person's address (keep the name out of the repository) | Not needed | No (but private) |
 | `CRON_SECRET` | Protects the daily job, so only Vercel can start it. | a long random string | Not needed | **Yes** |

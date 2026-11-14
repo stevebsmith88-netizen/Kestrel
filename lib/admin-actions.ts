@@ -103,7 +103,7 @@ export async function takeDownReportedJob(form: FormData) {
         heading: "We have taken down one of your jobs",
         paragraphs: [
           `After a report, we took down your post "${job.title}" while we look into it.`,
-          "If you think this was a mistake, or you would like to fix the post and put it back up, just reply to this email or write to hello@eyecarejobs.ca.",
+          "If you think this was a mistake, or you would like to fix the post and put it back up, just reply to this email or write to support@eyecarejobs.ca.",
         ],
         buttonText: "Open your dashboard",
         buttonUrl: `${SITE_URL}/clinic`,

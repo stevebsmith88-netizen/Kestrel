@@ -29,7 +29,7 @@ export default async function Join({ searchParams }: { searchParams: Promise<{ c
         </>
       ) : employer ? (
         <>
-          <p className="auth-intro">Your account already belongs to {employer.clinic_name} on Kestrel, and an account can be on 1 clinic&apos;s team. Ask the clinic to send the invitation to a different email address, or email hello@eyecarejobs.ca and we will help.</p>
+          <p className="auth-intro">Your account already belongs to {employer.clinic_name} on Kestrel, and an account can be on 1 clinic&apos;s team. Ask the clinic to send the invitation to a different email address, or email support@eyecarejobs.ca and we will help.</p>
           <p><Link href="/clinic" className="btn">Go to my dashboard</Link></p>
         </>
       ) : session.role !== "clinic" ? (

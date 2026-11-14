@@ -23,7 +23,7 @@ export function NameForm({ first, last, lockedUntil = null, inPlay = false }: { 
       </div>
       {inPlay && !lockedUntil && <p className="help">{IN_PLAY_NAME_TEXT}</p>}
       {/* The boxes stay open during a hold, because fixing capital letters ("smith" to "Smith") is always allowed (review item X-11). */}
-      {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. Until then you can still fix capital letters. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca.</p>}
+      {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. Until then you can still fix capital letters. If you need an earlier change, for example a typo or a legal name change, write to support@eyecarejobs.ca.</p>}
       {state.error && !state.errors?.firstName && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
       <div><button type="submit" className="btn sm" disabled={pending}>{pending ? "Saving" : "Save my name"}</button></div>
