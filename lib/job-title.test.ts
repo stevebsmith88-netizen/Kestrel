@@ -32,3 +32,30 @@ test("the first word is always capitalised and spaces are tidied", () => {
   assert.equal(tidyTitle("  THE  BEST OPTICIAN "), "The Best Optician");
   assert.equal(tidyTitle(""), "");
 });
+
+import { suggestTitle } from "./job-title.ts";
+
+test("a title is suggested from the role, the type of work and a single specialty", () => {
+  assert.equal(suggestTitle({ role: "Optician", employmentType: "Full time" }), "Optician, Full time");
+  assert.equal(suggestTitle({ role: "Optometric assistant or technician", employmentType: "Part time" }), "Optometric Assistant, Part time");
+  assert.equal(suggestTitle({ role: "Optometrist", employmentType: "Locum" }), "Locum Optometrist");
+  assert.equal(suggestTitle({ role: "Optometrist", employmentType: "Full time", specialties: ["Myopia control and ortho-k"] }), "Myopia Control Optometrist, Full time");
+  assert.equal(suggestTitle({ role: "Optometrist", specialties: ["Dry eye and IPL", "Myopia control and ortho-k"] }), "Optometrist", "2 specialties add nothing");
+  assert.equal(suggestTitle({ role: "Practice or clinic manager", employmentType: "Contract" }), "Practice Manager", "fixed term adds nothing");
+  assert.equal(suggestTitle({ role: "" }), "");
+});
+
+test("an optometrist title is never suggested for another role, whatever is ticked", () => {
+  const roles = ["Optician", "Optometric assistant or technician", "Practice or clinic manager", "Patient care or reception", "Vision therapist", "Sales or territory representative", "Trainer or clinical educator", "Field service or equipment technician", "Account or practice development manager"];
+  for (const role of roles) {
+    for (const employmentType of ["Full time", "Part time", "Locum", "Contract", ""]) {
+      const title = suggestTitle({ role, employmentType, specialties: ["Dry eye and IPL", "Vision therapy"] });
+      assert.ok(!/optometrist/i.test(title), `${role} gave ${title}`);
+    }
+  }
+});
+
+test("a suggested title never carries a town, pay or the clinic's name", () => {
+  const title = suggestTitle({ role: "Optician", employmentType: "Full time" });
+  assert.ok(!/\$|toronto|ontario|riverside/i.test(title));
+});
