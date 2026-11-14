@@ -73,3 +73,9 @@ export function passChoices(decision: Exclude<PassDecision, { kind: "covered" }>
     canUpgrade: false,
   };
 }
+
+// The line under the name in the account menu for a clinic: its account type, and its plan once passes are offered.
+export function planLineText(args: { passesOn: boolean; planName: string | null }): string {
+  if (!args.passesOn) return "Clinic account";
+  return `Clinic account · ${args.planName ?? "Single posts"}`;
+}

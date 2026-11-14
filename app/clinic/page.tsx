@@ -157,12 +157,15 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                 <h2>{show ? SHOW_LABELS[show].title : "Your jobs"}</h2>
                 <span className="listactions">
                   {show && <Link href="/clinic#your-jobs" className="btn sm ghost">Show all jobs</Link>}
-                  {employer && employer.level === "owner" && passesAvailable() && <Link href="/clinic/plans" className="btn sm ghost">Plans</Link>}
                   {editor && <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>}
                 </span>
               </div>
 
-              {usage && <p className="meta">Your {usage.planName}: {usage.used} of {usage.limit} live posts in use.{employer?.level === "owner" ? <> <Link href="/clinic/plans">Plans</Link></> : null}</p>}
+              {usage && <p className="meta">Your {usage.planName}: {usage.used} of {usage.limit} live posts in use.{employer?.level === "owner" ? <> <Link href="/clinic/plans">Plans and billing</Link></> : null}</p>}
+              {/* A quiet note for an owner who posts often without a pass, once passes are offered (Steve, 14th November 2026). */}
+              {!usage && employer?.level === "owner" && passesAvailable() && jobs.filter((j) => j.status !== "draft").length >= 2 && (
+                <p className="meta">Posting often? A pass can cost less per post. See <Link href="/clinic/plans">Plans and billing</Link>.</p>
+              )}
 
               {jobs.length === 0 ? (
                 <section className="card"><p>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</p></section>

@@ -25,7 +25,7 @@ const NAV: Record<Role, NavItem[]> = {
     { href: "/clinic/profile", label: "Clinic profile" },
     { href: "/clinic/team", label: "Clinic team" },
     { href: "/clinic/locations", label: "Locations" },
-    { href: "/clinic/billing", label: "Billing" },
+    { href: "/clinic/plans", label: "Plans and billing" },
     { href: "/jobs", label: "Live jobs" },
     { href: "/account/help", label: "Help and feedback" },
     { href: "/account", label: "Account settings" },

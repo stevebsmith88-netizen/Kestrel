@@ -12,11 +12,13 @@ import { PASS_PLANS, passStatusLabel, planByKey } from "@/lib/passes";
 import { perPassPost, ROLE_BANDS } from "@/lib/pricing";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import PaymentHistory from "@/components/PaymentHistory";
+import { getMyPaymentHistory } from "@/lib/clinic-payments";
 import { foundingNumber } from "@/lib/founding-flow";
 import { foundingOfferOpen, yearlyOffered } from "@/lib/founding";
 import { FOUNDING_CLINICS } from "@/lib/pricing";
 
-export const metadata: Metadata = { title: "Plans | Kestrel Eye Care Jobs", robots: { index: false } };
+export const metadata: Metadata = { title: "Plans and billing | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
@@ -34,7 +36,8 @@ const NOTICES: Record<string, string> = {
 // location they are working in, and manages the card and cancelling on Stripe's own page. Prices are before HST.
 export default async function ClinicPlans({ searchParams }: { searchParams: Promise<{ notice?: string; problem?: string; why?: string }> }) {
   const session = await requireRole("clinic");
-  if (!passesAvailable()) redirect("/clinic");
+  // Passes are offered once prices are on. Until then this page shows the payment history only.
+  const passesOn = passesAvailable();
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile");
   const { notice, problem, why } = await searchParams;
@@ -51,24 +54,29 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
   const used = pass && admin ? await slotsUsed(admin, employer.id) : 0;
   const prices = ROLE_BANDS.map((b) => b.price);
   const message = NOTICES[problem ?? ""] ?? NOTICES[notice ?? ""];
+  const payments = await getMyPaymentHistory(employer.id);
   return (
     <>
       <AppBar session={session} current="/clinic/plans" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">{employer.clinic_name}</p>
-          <h1>Plans</h1>
+          <h1>{passesOn ? "Plans and billing" : "Billing"}</h1>
           <LocationPicker clinics={clinics} current={employer.id} back="/clinic/plans" />
-          <p className="lede2">A pass covers a number of live posts for 1 location, for a monthly price. Single posts are ${Math.min(...prices)} to ${Math.max(...prices)} each. Prices are before HST.</p>
-          {message && <p className={problem ? "err form-err" : "notice"} role={problem ? "alert" : "status"}>{message}{problem && why ? ` (For testing only: ${why})` : ""}</p>}
-          {founding !== null && (
+          {passesOn ? (
+            <p className="lede2">A pass covers a number of live posts for 1 location, for a monthly price. Single posts are ${Math.min(...prices)} to ${Math.max(...prices)} each. Prices are before HST.</p>
+          ) : (
+            <p className="lede2">Every payment for this location, with its invoice and receipt. Amounts are before HST.</p>
+          )}
+          {passesOn && message && <p className={problem ? "err form-err" : "notice"} role={problem ? "alert" : "status"}>{message}{problem && why ? ` (For testing only: ${why})` : ""}</p>}
+          {passesOn && founding !== null && (
             <p className="notice" role="status">
               {employer.clinic_name} is Founding clinic number {founding} of 50.
               {foundingOfferOpen() && !pass ? ` While the launch offer is open, the price you start a pass on is kept for ${FOUNDING_CLINICS.lockMonths} months, or until you cancel, and you can choose the yearly option, 10 months for the price of 12.` : ""}
             </p>
           )}
 
-          {pass && plan ? (
+          {!passesOn ? null : pass && plan ? (
             <section className="card">
               <h2>{plan.name}</h2>
               <dl className="facts">
@@ -85,7 +93,7 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
               ) : (
                 <p className="help">Only the clinic owner can change this pass.</p>
               )}
-              <p className="help">Cancel any time. You keep the pass to the end of the month you paid for, and part months are not refunded. Receipts for each month are on Stripe&apos;s billing page, and your single post payments are under <Link href="/clinic/billing">Billing</Link>.</p>
+              <p className="help">Cancel any time. You keep the pass to the end of the month you paid for, and part months are not refunded. Receipts for each month are on Stripe&apos;s billing page, and your single post payments are in the payment history below.</p>
             </section>
           ) : (
             <div className="joblist">
@@ -117,6 +125,10 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
               <p className="help">A pass renews each month at the same price until you cancel, and the price changes only with 30 days notice. A job the pass does not cover is charged at the single post price to the card on the pass. Nothing is charged until you press Subscribe on Stripe&apos;s page.</p>
             </div>
           )}
+
+          <h2 className="subhead" id="payments">Payment history</h2>
+          <PaymentHistory payments={payments} />
+          <p className="help">Questions about a payment? Use <Link href="/account/help">Help and feedback</Link>.</p>
         </div>
       </main>
       <AppFooter />
