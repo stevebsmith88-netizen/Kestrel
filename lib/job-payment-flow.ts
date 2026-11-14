@@ -159,6 +159,18 @@ export async function completeCardSetup(sessionId: string): Promise<SetupDone> {
   }
 }
 
+type StripeInvoice = { id: string; status: string; number?: string | null; hosted_invoice_url?: string | null; invoice_pdf?: string | null };
+
+// Cancels an invoice that could not be paid, so it is not left open. Best effort: a draft invoice cannot be voided and is harmless, since it
+// is never sent (auto_advance is off).
+async function voidInvoice(key: string, invoiceId: string): Promise<void> {
+  try {
+    await stripePost(`/invoices/${invoiceId}/void`, key, {});
+  } catch {
+    // nothing more to do
+  }
+}
+
 // cardRefused is true only when the cardholder's bank said no (or needs them to confirm). Any other failure is a problem on our side or in the
 // set up, so the clinic is not told and the saved card stays ready for another try.
 export type ChargeResult = { ok: true; charged: boolean; cents: number } | { ok: false; message: string; cardRefused: boolean };
@@ -187,26 +199,37 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
   // The price follows the role as it stands now, so a role changed in review is charged at the right band.
   const cents = jobPriceCents(job.role_category);
   const band = bandForRole(job.role_category);
+  // The charge is a Stripe invoice, paid at once with the saved card: it has its own number, a web page and a PDF the clinic can download
+  // again, and it carries HST once Stripe Tax is on. If the card is refused the invoice is cancelled, so no unpaid invoice is left open.
+  let invoiceId: string | null = null;
   try {
-    const intent = await stripePost<{ id: string; status: string }>("/payment_intents", key, {
-      amount: cents,
-      currency: "cad",
+    const stamp = `${ready.id}-${cents}-${Math.floor(Date.now() / 600_000)}`;
+    const meta = { payment_id: ready.id, job_id: job.id, employer_id: job.employer_id, clinic: clinicName };
+    const draft = await stripePost<StripeInvoice>("/invoices", key, {
       customer: billing.stripe_customer_id,
-      payment_method: ready.stripe_payment_method_id,
-      confirm: true,
-      off_session: true,
+      collection_method: "charge_automatically",
+      default_payment_method: ready.stripe_payment_method_id,
+      auto_advance: false,
+      pending_invoice_items_behavior: "exclude",
       description: `Kestrel Eye Care Jobs: ${job.title} (30 day post)`,
-      metadata: { payment_id: ready.id, job_id: job.id, employer_id: job.employer_id, clinic: clinicName },
-      ...(email ? { receipt_email: email } : {}),
-    }, { idempotencyKey: `kestrel-charge-${ready.id}-${cents}-${Math.floor(Date.now() / 600_000)}` });
-    if (intent.status !== "succeeded") {
+      metadata: meta,
+    }, { idempotencyKey: `kestrel-invoice-${stamp}` });
+    invoiceId = draft.id;
+    await stripePost("/invoiceitems", key, { customer: billing.stripe_customer_id, invoice: draft.id, amount: cents, currency: "cad", description: `Job post: ${job.title} (30 days, ${bandInfo(band).label})`, metadata: meta }, { idempotencyKey: `kestrel-item-${stamp}` });
+    await stripePost<StripeInvoice>(`/invoices/${draft.id}/finalize`, key, { auto_advance: false }, { idempotencyKey: `kestrel-final-${stamp}` });
+    const paid = await stripePost<StripeInvoice>(`/invoices/${draft.id}/pay`, key, { payment_method: ready.stripe_payment_method_id, off_session: true }, { idempotencyKey: `kestrel-pay-${stamp}` });
+    if (paid.status !== "paid") {
       const label = "Card needs the cardholder to confirm";
-      await db.from("job_payments").update({ status: "failed", failure_message: label, stripe_payment_intent_id: intent.id, updated_at: new Date().toISOString() }).eq("id", ready.id);
-      await logJobActivity(db, jobId, `Charge failed: ${label}`, { detail: `Stripe status ${intent.status}` });
+      await voidInvoice(key, draft.id);
+      await db.from("job_payments").update({ status: "failed", failure_message: label, updated_at: new Date().toISOString() }).eq("id", ready.id);
+      await logJobActivity(db, jobId, `Charge failed: ${label}`, { detail: `Stripe invoice status ${paid.status}` });
       return { ok: false, message: label, cardRefused: true };
     }
-    await db.from("job_payments").update({ status: "charged", amount_cents: cents, band, stripe_payment_intent_id: intent.id, failure_message: null, charged_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", ready.id);
-    await logJobActivity(db, jobId, `Charged ${dollars(cents)} plus HST (${bandInfo(band).label} band)`, { detail: `Stripe payment ${intent.id}` });
+    await db.from("job_payments").update({ status: "charged", amount_cents: cents, band, failure_message: null, charged_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", ready.id);
+    // The invoice's number and links are saved apart from the payment itself, so a database that has not had migration 0050 yet still records the charge.
+    const { error: linkError } = await db.from("job_payments").update({ stripe_invoice_id: paid.id, invoice_number: paid.number ?? null, invoice_url: paid.hosted_invoice_url ?? null, invoice_pdf_url: paid.invoice_pdf ?? null }).eq("id", ready.id);
+    if (linkError) console.error("Invoice links not saved:", linkError.code, linkError.message);
+    await logJobActivity(db, jobId, `Charged ${dollars(cents)} plus HST (${bandInfo(band).label} band)${paid.number ? `. Invoice ${paid.number}` : ""}`, { detail: `Stripe invoice ${paid.id}` });
     return { ok: true, charged: true, cents };
   } catch (e) {
     // Only a refusal by the cardholder's bank marks the payment failed and asks the clinic for a new card. Anything else (a mistake in our
@@ -214,6 +237,7 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
     // technical wording goes only in the job's notes.
     const reason = plainReason(e instanceof StripeError ? { status: e.status, type: e.type, code: e.code, declineCode: e.declineCode } : { status: null, type: null, code: null, declineCode: null });
     console.error("Charge failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
+    if (invoiceId) await voidInvoice(key, invoiceId);
     if (reason.cardRefused) await db.from("job_payments").update({ status: "failed", failure_message: reason.label, updated_at: new Date().toISOString() }).eq("id", ready.id);
     await logJobActivity(db, jobId, `Charge failed: ${reason.label}`, { detail: describeFailure(e) });
     return { ok: false, message: reason.label, cardRefused: reason.cardRefused };

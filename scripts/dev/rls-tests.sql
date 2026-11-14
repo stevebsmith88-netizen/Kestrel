@@ -364,3 +364,11 @@ select t.try('0049', 'a visitor cannot read it', 'visitor', 'count', 'select * f
 select t.try('0049', 'the admin cannot read it with their own sign in either (the server does)', 'admin', 'count', 'select * from public.job_activity', 'refused');
 select t.try('0049', 'a clinic cannot write a note', 'clinic_c', 'write', $$insert into public.job_activity (job_id, actor, text) values ('{job_c_live}', 'clinic', 'x')$$, 'refused');
 select t.try('0049', 'the notes go when their job is deleted', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.job_activity'::regclass and confrelid = 'public.jobs'::regclass$$, 'c');
+
+-- ---------------------------------------------------------------- 0050: invoice links on payments
+select t.try('0050', 'the server saves the invoice for a payment', 'server', 'write', $$update public.job_payments set stripe_invoice_id = 'in_test', invoice_number = 'KEST-0001', invoice_url = 'https://invoice.example/x', invoice_pdf_url = 'https://invoice.example/x.pdf' where status = 'charged'$$, '1 rows');
+select t.try('0050', 'a clinic reads the number and links for its own payments', 'clinic_c', 'count', 'select invoice_number, invoice_url, invoice_pdf_url from public.job_payments', '2 rows');
+select t.try('0050', 'a clinic never reads the Stripe invoice id', 'clinic_c', 'count', 'select stripe_invoice_id from public.job_payments', 'refused');
+select t.try('0050', 'another clinic reads only its own invoice links', 'clinic_d', 'count', 'select invoice_url from public.job_payments', '1 rows');
+select t.try('0050', 'a clinic cannot change an invoice link', 'clinic_c', 'write', $$update public.job_payments set invoice_url = 'https://evil.example'$$, 'refused');
+select t.try('0050', 'a visitor cannot read invoice links', 'visitor', 'count', 'select invoice_url from public.job_payments', 'refused');

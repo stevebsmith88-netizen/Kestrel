@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0049), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0050), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3071,6 +3071,23 @@ alter table public.job_activity enable row level security;
 revoke all on public.job_activity from anon, authenticated;
 
 -- ======================================================================
+-- 0050_invoice_links.sql
+-- ======================================================================
+-- 0050: invoices and receipts (Steve, 14th November 2026; item 13 of the Next tasks). Safe to run twice.
+--
+-- When a job is approved the saved card is now charged through a Stripe invoice, which has its own number, a web page and a PDF (and carries HST
+-- once Stripe Tax is on). These columns keep the invoice for each payment. A clinic can read the number and the 2 links for its own payments,
+-- so it can open or download a receipt again; the Stripe invoice id stays for the website's server only.
+
+alter table public.job_payments
+  add column if not exists stripe_invoice_id text,
+  add column if not exists invoice_number text,
+  add column if not exists invoice_url text,
+  add column if not exists invoice_pdf_url text;
+
+grant select (invoice_number, invoice_url, invoice_pdf_url) on public.job_payments to authenticated;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -3172,6 +3189,7 @@ from (
     ('table: job_payments (a card is saved at submission and charged at approval, 0048)', to_regclass('public.job_payments') is not null and not has_table_privilege('anon', 'public.job_payments', 'SELECT') and not has_column_privilege('authenticated', 'public.job_payments', 'stripe_payment_method_id', 'SELECT')),
     ('table: employer_billing (which Stripe customer a clinic is, for the server only, 0048)', to_regclass('public.employer_billing') is not null and not has_table_privilege('authenticated', 'public.employer_billing', 'SELECT')),
     ('table: job_activity (notes log for each job, for the server only, 0049)', to_regclass('public.job_activity') is not null and not has_table_privilege('authenticated', 'public.job_activity', 'SELECT') and not has_table_privilege('anon', 'public.job_activity', 'SELECT')),
+    ('columns: invoice links on job_payments, readable by the clinic, the Stripe invoice id for the server only (0050)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_payments' and column_name = 'invoice_pdf_url') and has_column_privilege('authenticated', 'public.job_payments', 'invoice_pdf_url', 'SELECT') and not has_column_privilege('authenticated', 'public.job_payments', 'stripe_invoice_id', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;
