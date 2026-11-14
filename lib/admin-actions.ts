@@ -50,14 +50,17 @@ export async function approveJob(form: FormData) {
   if (before) {
     const charge = await chargeForJob(id);
     if (!charge.ok) {
-      const { data: job } = await db.from("jobs").select("title, employer_id").eq("id", id).maybeSingle();
-      if (job) {
-        const { data: owner } = await db.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
-        await notify(db, owner?.owner_id, cardRefused({ jobTitle: job.title, jobId: id }));
-        const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
-        if (contact?.notify_email) await sendEmail({ to: contact.notify_email, ...cardRefusedEmail({ title: job.title, jobId: id }) });
+      // Only a refused card is the clinic's to fix. Any other problem is for Kestrel, so the clinic is not emailed.
+      if (charge.cardRefused) {
+        const { data: job } = await db.from("jobs").select("title, employer_id").eq("id", id).maybeSingle();
+        if (job) {
+          const { data: owner } = await db.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+          await notify(db, owner?.owner_id, cardRefused({ jobTitle: job.title, jobId: id }));
+          const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
+          if (contact?.notify_email) await sendEmail({ to: contact.notify_email, ...cardRefusedEmail({ title: job.title, jobId: id }) });
+        }
       }
-      redirect(`/admin/review?notice=payment-failed&why=${encodeURIComponent(charge.message.slice(0, 200))}`);
+      redirect(`/admin/review?notice=${charge.cardRefused ? "payment-failed" : "payment-error"}&why=${encodeURIComponent(charge.message.slice(0, 200))}`);
     }
   }
   const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };

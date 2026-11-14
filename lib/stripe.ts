@@ -6,9 +6,13 @@ export const STRIPE_API = "https://api.stripe.com/v1";
 
 export class StripeError extends Error {
   status: number | null;
-  constructor(status: number | null, message: string) {
+  type: string | null; // "card_error" when a card was refused, other values for a problem with the request or the account
+  code: string | null;
+  constructor(status: number | null, message: string, type: string | null = null, code: string | null = null) {
     super(message);
     this.status = status;
+    this.type = type;
+    this.code = code;
   }
 }
 
@@ -24,8 +28,8 @@ export async function stripeGet<T>(path: string, key: string, timeoutMs = 15_000
   } catch (error) {
     throw new StripeError(null, error instanceof Error ? error.message : String(error));
   }
-  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string } };
-  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText);
+  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string; type?: string; code?: string } };
+  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText, body.error?.type ?? null, body.error?.code ?? null);
   return body as T;
 }
 
@@ -57,7 +61,7 @@ export async function stripePost<T>(path: string, key: string, data: Record<stri
   } catch (error) {
     throw new StripeError(null, error instanceof Error ? error.message : String(error));
   }
-  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string } };
-  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText);
+  const body = (await response.json().catch(() => ({}))) as { error?: { message?: string; type?: string; code?: string } };
+  if (!response.ok) throw new StripeError(response.status, body.error?.message || response.statusText, body.error?.type ?? null, body.error?.code ?? null);
   return body as T;
 }
