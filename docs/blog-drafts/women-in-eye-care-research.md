@@ -38,6 +38,10 @@ Among optometrists 65 and over, about 1 in 7 is a woman. Among those 25 to 34, m
 | New Brunswick | 47% of 95 | 81% of 260 |
 | Nova Scotia | 55% of 165 | 64% of 265 |
 
+## Newer headcount (for context)
+
+Statistics Canada's "Vision health month" page says 6,400 optometrists and 11,700 opticians worked in Canada in 2023 (a different measure from the census, so do not mix the 2 in 1 sentence). Gender split for 2023 is not given there, so the census stays the source for the women and men figures.
+
 ## Angles
 
 1. **Data post (first):** "Who works in eye care in Canada": the generational shift, the provincial differences (Ontario opticians are much more evenly split than the Prairies), and what it means for hiring: flexible hours, return after leave, the path from optician to owner.

@@ -24,6 +24,14 @@ A job ad is the cheapest part of hiring. The expensive part is the chair that st
 - **Weeks open:** 1 to 2 months, as Steve's rough idea.
 - **Candidate quality:** the common problem is a gap between skills and wage expectations. Strong angle: a pay range on the ad filters both ways, so people whose expectations are far off do not apply, and the right ones know where they stand.
 
+## More sources (Steve, 14th November 2026), read on 14th November 2026
+
+- **Statistics Canada, "Vision health month" (statcan.gc.ca/o1/en/plus/6173):** 6,400 optometrists and 11,700 opticians working in Canada in 2023; 6,665 offices of optometrists in December 2023; **$695 million of prescription eyewear retail sales in the last quarter of 2023 alone** (including contact lenses and prescription sunglasses). Strong, citable scale figure for the post. Do not divide it by the number of offices: optical stores sell eyewear too.
+- **The Vision Council, Canadian survey (Q1 and Q2 2025), via Optometry Times:** 47% of prescription glasses wearers bought in the last year, **most from their exam provider**; 43% have vision care insurance, mostly through work; 50% had an eye exam in the past year; 87% prefer buying eyewear in person. Supports the point that the clinic is where the sale happens, if someone is there to make it.
+- **Average sale:** a clinic blog (myeyewellness.com) cites the Canadian Journal of Ophthalmology for prescription glasses costing "from 240 to almost 1,000 dollars". Steve's $500 example sits in that range. Trace the journal article itself before quoting it; until then use $500 as a labelled example only.
+- **University of Waterloo "Careers in optometry" page:** says an average practice handles about 2,800 patient consultations a year, and an optometrist spends 41 hours a week in practice, 35 with patients. **The page is undated and looks old**: it says about 3,000 practising optometrists, but Statistics Canada counts 6,400 (2023) and the 2021 census 6,765, and its income figure ($70,000 to $80,000) is far below Job Bank's. Use 2,800 a year (about 230 a month) only as a labelled example, not as a current average.
+- **Health Canada, national strategy on eye care:** page would not load from this session (connection refused). Steve to share any line worth using, or try again later.
+
 ## The worked example (Steve to fill the blanks)
 
 Labelled in the post as: "A made up clinic, to show the sum. Your own numbers will differ."
@@ -31,11 +39,11 @@ Labelled in the post as: "A made up clinic, to show the sum. Your own numbers wi
 | | Smaller clinic | Mid sized clinic | Larger clinic |
 | --- | --- | --- | --- |
 | Optometrists | 1 | 2 | 3 or more |
-| Eye exams a month | ___ | ___ | ___ |
+| Eye exams a month | ___ | about 230 (2,800 a year, Waterloo's older example figure, Steve to confirm) | ___ |
 | Share of patients who need new glasses | ___% | ___% | ___% |
 | Share who buy them in the clinic, with an optician | ___% | ___% | ___% |
 | Share who buy them in the clinic, without one | ___% | ___% | ___% |
-| Average spectacle sale | $___ | $___ | $___ |
+| Average spectacle sale | $500 (Steve's example) | $500 | $500 |
 | **Glasses revenue at risk each month** | worked out | worked out | worked out |
 
 The sum: exams a month × share needing glasses × (buy in clinic with an optician minus without one) × average sale.
