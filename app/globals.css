@@ -152,6 +152,7 @@ input.other{margin-top:10px}
 .topbar-who summary:focus-visible .avatar{outline:3px solid var(--chestnut);outline-offset:2px}
 .who-panel{position:absolute;right:0;top:calc(100% + 6px);z-index:30;min-width:260px;max-width:min(340px,90vw);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(27,43,75,0.12);padding:12px 14px;display:flex;flex-direction:column;gap:2px}
 .who-panel p{margin:0;font-weight:600;color:var(--navy);overflow-wrap:anywhere}
+.who-panel .who-plan{display:block;font-weight:600;font-size:0.875rem;line-height:1.35;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .who-panel .who-email{font-weight:400;color:var(--slate);font-size:0.875rem;line-height:1.35;margin-bottom:6px;overflow-wrap:anywhere}
 .who-panel .who-id{margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .who-panel .who-name{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -1026,3 +1027,5 @@ body.sf-locked{overflow:hidden}
 
 .activity{margin-top:12px}.activity summary{cursor:pointer;font-weight:600}.activity ul{list-style:none;margin:8px 0 0;padding:0}.activity li{padding:7px 0;border-top:1px solid var(--line)}.activity .when{color:var(--slate,#5A6672);margin-right:6px}.paynote{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:6px}
 h2.subhead{font:400 1.6rem/1.2 var(--f-display),Georgia,serif;margin:40px 0 6px}
+
+.who-panel .who-id .who-plan{border-bottom:0;margin:6px 0 0;padding-bottom:0}

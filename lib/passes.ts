@@ -12,14 +12,16 @@ export type PassPlan = {
   name: string;
   monthly: number;
   livePosts: number;
+  yearly: number;
   lookupKey: string; // the Stripe price (lib/stripe-catalog.ts)
+  yearlyLookupKey: string;
   covers: BandKey[];
   blurb: string;
 };
 
 export const PASS_PLANS: PassPlan[] = [
-  { key: "clinic_pass", name: "Clinic pass", monthly: CLINIC_PASS.monthly, livePosts: CLINIC_PASS.livePosts, lookupKey: "clinic_pass_monthly", covers: ["support", "opticians"], blurb: "Up to 5 live posts at a time for assistants, technicians, reception, patient care, opticians and practice leads, with a featured clinic profile." },
-  { key: "clinic_pass_plus", name: "Clinic pass Plus", monthly: CLINIC_PASS_PLUS.monthly, livePosts: CLINIC_PASS_PLUS.livePosts, lookupKey: "clinic_pass_plus_monthly", covers: ["support", "opticians", "optometrists"], blurb: "Up to 5 live posts at a time for every role, optometrists included, with a featured clinic profile." },
+  { key: "clinic_pass", name: "Clinic pass", monthly: CLINIC_PASS.monthly, yearly: CLINIC_PASS.yearly, livePosts: CLINIC_PASS.livePosts, lookupKey: "clinic_pass_monthly", yearlyLookupKey: "clinic_pass_yearly", covers: ["support", "opticians"], blurb: "Up to 5 live posts at a time for assistants, technicians, reception, patient care, opticians and practice leads, with a featured clinic profile." },
+  { key: "clinic_pass_plus", name: "Clinic pass Plus", monthly: CLINIC_PASS_PLUS.monthly, yearly: CLINIC_PASS_PLUS.yearly, livePosts: CLINIC_PASS_PLUS.livePosts, lookupKey: "clinic_pass_plus_monthly", yearlyLookupKey: "clinic_pass_plus_yearly", covers: ["support", "opticians", "optometrists"], blurb: "Up to 5 live posts at a time for every role, optometrists included, with a featured clinic profile." },
 ];
 
 export const planByKey = (key: string | null | undefined) => PASS_PLANS.find((p) => p.key === key) ?? null;
@@ -53,8 +55,27 @@ export function passStatusLabel(status: string, cancelAtPeriodEnd: boolean): str
   return "Not finished";
 }
 
-// Why a job was not covered, in words for the clinic.
-export function notCoveredNotice(decision: PassDecision, plan: PassPlan, role: string | null | undefined, priceDollars: number): string {
-  if (decision.kind === "role-not-covered") return `Thank you. Your ${plan.name} does not cover ${role === "Optometrist" ? "optometrist" : "this kind of"} jobs, so this post is charged $${priceDollars} plus HST to your card on file, once our team approves it. ${plan.key === "clinic_pass" ? "Clinic pass Plus covers optometrists." : ""}`.trim();
-  return `Thank you. Your ${plan.name} already has ${plan.livePosts} live posts, so this one is charged $${priceDollars} plus HST to your card on file, once our team approves it.`;
+// What the confirm page says when a pass cannot cover a job, and whether switching to Plus would fix it (only for a role the Clinic pass leaves out:
+// both passes hold 5 live posts, so Plus does not add room).
+export function passChoices(decision: Exclude<PassDecision, { kind: "covered" }>, plan: PassPlan, role: string | null | undefined): { headline: string; detail: string; canUpgrade: boolean } {
+  if (decision.kind === "role-not-covered") {
+    const plus = planByKey("clinic_pass_plus")!;
+    const canUpgrade = plan.key === "clinic_pass" && coversRole(plus, role);
+    return {
+      headline: `Your ${plan.name} does not cover ${role === "Optometrist" ? "optometrist jobs" : "this kind of job"}`,
+      detail: canUpgrade ? `${plus.name} covers every role, optometrists included. You can switch now, or pay the single post price for this job only.` : "You can pay the single post price for this job only.",
+      canUpgrade,
+    };
+  }
+  return {
+    headline: `All ${plan.livePosts} live posts on your ${plan.name} are in use`,
+    detail: `A post is freed when a job is closed or has run its 30 days. Both passes hold ${plan.livePosts} live posts at a time, so switching would not add room. You can wait for a post to free up, or pay the single post price for this job only.`,
+    canUpgrade: false,
+  };
+}
+
+// The line under the name in the account menu for a clinic: its account type, and its plan once passes are offered.
+export function planLineText(args: { passesOn: boolean; planName: string | null }): string {
+  if (!args.passesOn) return "Clinic account";
+  return `Clinic account · ${args.planName ?? "Single posts"}`;
 }

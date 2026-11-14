@@ -12,8 +12,13 @@ import { PASS_PLANS, passStatusLabel, planByKey } from "@/lib/passes";
 import { perPassPost, ROLE_BANDS } from "@/lib/pricing";
 import { longDate } from "@/lib/jobs";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import PaymentHistory from "@/components/PaymentHistory";
+import { getMyPaymentHistory } from "@/lib/clinic-payments";
+import { foundingNumber } from "@/lib/founding-flow";
+import { foundingOfferOpen, yearlyOffered } from "@/lib/founding";
+import { FOUNDING_CLINICS } from "@/lib/pricing";
 
-export const metadata: Metadata = { title: "Plans | Kestrel Eye Care Jobs", robots: { index: false } };
+export const metadata: Metadata = { title: "Plans and billing | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +27,7 @@ const NOTICES: Record<string, string> = {
   owner: "Only the clinic owner can start or change a pass.",
   already: "This location already has a pass. Use Manage billing to change the card or cancel it.",
   "not-in-stripe": "Passes are not ready on our side yet, because the pass price is missing in Stripe. Please try again soon.",
+  yearly: "The yearly option is for Founding clinics while the launch offer is open. Nothing has been charged.",
   failed: "We could not start the pass just now. Nothing has been charged. Please try again in a moment.",
   portal: "Billing management could not open just now. Nothing has changed.",
 };
@@ -30,7 +36,8 @@ const NOTICES: Record<string, string> = {
 // location they are working in, and manages the card and cancelling on Stripe's own page. Prices are before HST.
 export default async function ClinicPlans({ searchParams }: { searchParams: Promise<{ notice?: string; problem?: string; why?: string }> }) {
   const session = await requireRole("clinic");
-  if (!passesAvailable()) redirect("/clinic");
+  // Passes are offered once prices are on. Until then this page shows the payment history only.
+  const passesOn = passesAvailable();
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile");
   const { notice, problem, why } = await searchParams;
@@ -38,29 +45,46 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
   const owner = employer.level === "owner";
   const admin = supabaseAdmin();
   const { data: pass } = admin
-    ? await admin.from("location_passes").select("plan, status, current_period_end, cancel_at_period_end").eq("employer_id", employer.id).in("status", ["active", "past_due"]).maybeSingle()
+    ? await admin.from("location_passes").select("plan, status, current_period_end, cancel_at_period_end, billing_interval, price_locked_until, founding").eq("employer_id", employer.id).in("status", ["active", "past_due"]).maybeSingle()
     : { data: null };
   const plan = pass ? planByKey(pass.plan) : null;
+  // Founding clinics (migration 0052): the number, and the yearly option while the launch offer is open.
+  const founding = admin ? await foundingNumber(admin, employer.id) : null;
+  const yearlyOn = yearlyOffered({ founding: founding !== null, offerOpen: foundingOfferOpen() });
   const used = pass && admin ? await slotsUsed(admin, employer.id) : 0;
   const prices = ROLE_BANDS.map((b) => b.price);
   const message = NOTICES[problem ?? ""] ?? NOTICES[notice ?? ""];
+  const payments = await getMyPaymentHistory(employer.id);
   return (
     <>
       <AppBar session={session} current="/clinic/plans" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <p className="kicker">{employer.clinic_name}</p>
-          <h1>Plans</h1>
+          <h1>{passesOn ? "Plans and billing" : "Billing"}</h1>
           <LocationPicker clinics={clinics} current={employer.id} back="/clinic/plans" />
-          <p className="lede2">A pass covers a number of live posts for 1 location, for a monthly price. Single posts are ${Math.min(...prices)} to ${Math.max(...prices)} each. Prices are before HST.</p>
-          {message && <p className={problem ? "err form-err" : "notice"} role={problem ? "alert" : "status"}>{message}{problem && why ? ` (For testing only: ${why})` : ""}</p>}
+          {passesOn ? (
+            <p className="lede2">A pass covers a number of live posts for 1 location, for a monthly price. Single posts are ${Math.min(...prices)} to ${Math.max(...prices)} each. Prices are before HST.</p>
+          ) : (
+            <p className="lede2">Every payment for this location, with its invoice and receipt. Amounts are before HST.</p>
+          )}
+          {passesOn && message && <p className={problem ? "err form-err" : "notice"} role={problem ? "alert" : "status"}>{message}{problem && why ? ` (For testing only: ${why})` : ""}</p>}
+          {passesOn && founding !== null && (
+            <p className="notice" role="status">
+              {employer.clinic_name} is Founding clinic number {founding} of 50.
+              {foundingOfferOpen() && !pass ? ` While the launch offer is open, the price you start a pass on is kept for ${FOUNDING_CLINICS.lockMonths} months, or until you cancel, and you can choose the yearly option, 10 months for the price of 12.` : ""}
+            </p>
+          )}
 
-          {pass && plan ? (
+          {!passesOn ? null : pass && plan ? (
             <section className="card">
               <h2>{plan.name}</h2>
               <dl className="facts">
                 <div><dt>Status</dt><dd>{passStatusLabel(pass.status, pass.cancel_at_period_end)}</dd></div>
                 {pass.current_period_end && <div><dt>{pass.cancel_at_period_end ? "Ends" : "Renews"}</dt><dd>{longDate(pass.current_period_end)}</dd></div>}
+                {pass.billing_interval === "year" && <div><dt>Billing</dt><dd>Yearly, 10 months for the price of 12</dd></div>}
+                {pass.founding && pass.price_locked_until && <div><dt>Founding price locked until</dt><dd>{longDate(pass.price_locked_until)}</dd></div>}
+                {pass.founding && pass.billing_interval === "year" && <div><dt>Founding price</dt><dd>Stays the same each year while the pass renews</dd></div>}
                 <div><dt>Live posts in use</dt><dd>{used} of {plan.livePosts}</dd></div>
                 <div><dt>Covers</dt><dd>{plan.blurb}</dd></div>
               </dl>
@@ -69,7 +93,7 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
               ) : (
                 <p className="help">Only the clinic owner can change this pass.</p>
               )}
-              <p className="help">Cancel any time. You keep the pass to the end of the month you paid for, and part months are not refunded. Receipts for each month are on Stripe&apos;s billing page, and your single post payments are under <Link href="/clinic/billing">Billing</Link>.</p>
+              <p className="help">Cancel any time. You keep the pass to the end of the month you paid for, and part months are not refunded. Receipts for each month are on Stripe&apos;s billing page, and your single post payments are in the payment history below.</p>
             </section>
           ) : (
             <div className="joblist">
@@ -79,10 +103,20 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
                   <p><strong>${p.monthly} a month</strong> plus HST, about {perPassPost(p)} a post when all {p.livePosts} are in use.</p>
                   <p>{p.blurb}</p>
                   {owner ? (
-                    <form action={choosePlan}>
-                      <input type="hidden" name="plan" value={p.key} />
-                      <div className="formbtns"><button type="submit" className="btn">Choose {p.name}</button></div>
-                    </form>
+                    <>
+                      <form action={choosePlan}>
+                        <input type="hidden" name="plan" value={p.key} />
+                        <div className="formbtns"><button type="submit" className="btn">Choose {p.name}, monthly</button></div>
+                      </form>
+                      {yearlyOn && (
+                        <form action={choosePlan}>
+                          <input type="hidden" name="plan" value={p.key} />
+                          <input type="hidden" name="interval" value="year" />
+                          <p className="help">Founding offer: ${p.yearly.toLocaleString("en-CA")} a year plus HST, 10 months for the price of 12, at the same price each year while it renews.</p>
+                          <div className="formbtns"><button type="submit" className="btn ghost">Choose {p.name}, yearly</button></div>
+                        </form>
+                      )}
+                    </>
                   ) : (
                     <p className="help">Only the clinic owner can start a pass.</p>
                   )}
@@ -91,6 +125,10 @@ export default async function ClinicPlans({ searchParams }: { searchParams: Prom
               <p className="help">A pass renews each month at the same price until you cancel, and the price changes only with 30 days notice. A job the pass does not cover is charged at the single post price to the card on the pass. Nothing is charged until you press Subscribe on Stripe&apos;s page.</p>
             </div>
           )}
+
+          <h2 className="subhead" id="payments">Payment history</h2>
+          <PaymentHistory payments={payments} />
+          <p className="help">Questions about a payment? Use <Link href="/account/help">Help and feedback</Link>.</p>
         </div>
       </main>
       <AppFooter />

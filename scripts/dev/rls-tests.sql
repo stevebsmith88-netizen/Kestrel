@@ -392,3 +392,18 @@ select t.try('0051', 'an unfinished checkout does not block a pass', 'server', '
 select t.try('0051', 'a pass must be 1 of the 2 plans', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_d}', 'free_forever', 'active')$$, 'refused');
 select t.try('0051', 'a job covered by a pass is a payment status', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_d}', 'Optician', 'Clinic D', 'opticians', 0, 'covered_by_pass')$$, '1 rows');
 select t.try('0051', 'a covered job still cannot have 2 payments in play', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_c_live}', '{employer_c}', 'Optician', 'Clinic C', 'opticians', 0, 'covered_by_pass')$$, 'refused');
+
+-- ---------------------------------------------------------------- 0052: Founding clinics
+select t.try('0052', 'the first clinic takes place 1', 'server', 'value', $$select public.claim_founding_place('{employer_c}')::text$$, '1');
+select t.try('0052', 'a clinic that already has a place gets the same one back', 'server', 'value', $$select (public.claim_founding_place('{employer_c}') + public.claim_founding_place('{employer_c}'))::text$$, '2');
+select t.try('0052', 'places are given in order and each clinic counts once', 'server', 'value', $$select (public.claim_founding_place('{employer_c}')::text || ',' || public.claim_founding_place('{employer_d}')::text)$$, '1,2');
+select t.try('0052', 'when all the places are taken the next clinic gets none', 'server', 'value', $$select coalesce(public.claim_founding_place('{employer_d}', 0)::text, 'none')$$, 'none');
+select t.try('0052', 'a clinic cannot take a founding place itself', 'clinic_d', 'value', $$select public.claim_founding_place('{employer_d}')::text$$, 'refused');
+select t.try('0052', 'a visitor cannot take a founding place', 'visitor', 'value', $$select public.claim_founding_place('{employer_d}')::text$$, 'refused');
+select t.try('0052', 'a clinic cannot read the founding list with its own sign in', 'clinic_c', 'count', 'select * from public.founding_clinics', 'refused');
+select t.try('0052', 'a visitor cannot read the founding list', 'visitor', 'count', 'select * from public.founding_clinics', 'refused');
+select t.try('0052', 'a clinic cannot add itself to the list', 'clinic_d', 'write', $$insert into public.founding_clinics (employer_id, founding_number) values ('{employer_d}', 7)$$, 'refused');
+select t.try('0052', 'a number outside 1 to 50 is refused', 'server', 'write', $$insert into public.founding_clinics (employer_id, founding_number) values ('{employer_d}', 51)$$, 'refused');
+select t.try('0052', 'a clinic reads whether its pass is a founding pass and its lock date', 'clinic_c', 'count', 'select founding, price_locked_until from public.location_passes', '1 rows');
+select t.try('0052', 'a clinic never reads the Stripe schedule on its pass', 'clinic_c', 'count', 'select stripe_schedule_id from public.location_passes', 'refused');
+select t.try('0052', 'a clinic cannot lock its own price', 'clinic_c', 'write', $$update public.location_passes set founding = true, price_locked_until = now() + interval '5 years'$$, 'refused');

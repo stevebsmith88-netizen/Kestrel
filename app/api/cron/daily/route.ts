@@ -10,6 +10,7 @@ import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { sendDailyDigest } from "@/lib/slack-digest";
+import { sendFoundingReminders } from "@/lib/founding-flow";
 import { notify } from "@/lib/notifications";
 import { applicationNoUpdate, closedAfterTalksText } from "@/lib/notify-text";
 import { submitToIndexNow } from "@/lib/indexnow";
@@ -457,6 +458,12 @@ async function runDaily(request: Request) {
   if (recordError) problems.push(`Recording the run: ${recordError.message}`);
 
   if (problems.length) await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+  // The 30 days notice to Founding clinics whose price lock is about to end. Best effort, and each pass is told once.
+  try {
+    await sendFoundingReminders(admin);
+  } catch (e) {
+    console.error("Founding reminders failed:", e instanceof Error ? e.message : e);
+  }
   // The morning summary for Slack. Best effort: it never changes the result of the run.
   try {
     await sendDailyDigest(admin);

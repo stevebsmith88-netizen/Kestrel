@@ -10,7 +10,7 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 // The public page of a clinic (/clinics) or a supplier (/companies): who they are and every job they have open. Drawn signed out and
 // saved for everyone, like job pages, so it never holds anything about the person looking.
-export default function EmployerPage({ clinic, slug, jobs, confirmed = false }: { clinic: PublicClinic; slug: string; jobs: JobSummary[]; confirmed?: boolean }) {
+export default function EmployerPage({ clinic, slug, jobs, confirmed = false, founding = false }: { clinic: PublicClinic; slug: string; jobs: JobSummary[]; confirmed?: boolean; founding?: boolean }) {
   const supplier = clinic.practice_type === "supplier";
   const jsonLd = clinicJsonLd(clinic, slug, SITE);
   return (
@@ -27,6 +27,7 @@ export default function EmployerPage({ clinic, slug, jobs, confirmed = false }: 
               <span className="chip">{practiceLabel(clinic.practice_type)}</span>
               <span className="chip">{openJobsText(jobs.length)}</span>
               {confirmed && <span className="chip">Company email confirmed</span>}
+              {founding && <span className="chip">Founding clinic</span>}
             </p>
             {clinic.website && (
               <p><a href={clinic.website} className="btn sm ghost" target="_blank" rel="noopener nofollow">Visit their website<span className="sr"> (opens in a new tab)</span></a></p>

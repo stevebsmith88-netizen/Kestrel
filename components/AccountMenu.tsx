@@ -22,6 +22,7 @@ export default function AccountMenu({ session, here, className = "" }: { session
             )}
           </div>
           {session.fullName && <p className="who-email">{session.email}</p>}
+          {session.planLine && <Link href="/clinic/plans" className="who-plan">{session.planLine}</Link>}
         </div>
         {ACCOUNT_MENU[session.role].map((item) => (
           <Link key={item.href} href={item.href} aria-current={here === item.href ? "page" : undefined}>{item.label}</Link>

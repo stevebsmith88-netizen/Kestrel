@@ -33,7 +33,7 @@ export default function SessionBar({ quiz }: { quiz: boolean }) {
       .then((data) => {
         if (!live) return;
         if (data?.signedIn) {
-          lastMe = { role: data.role, email: data.email, fullName: data.fullName, unread: data.unread ?? 0 };
+          lastMe = { role: data.role, email: data.email, fullName: data.fullName, unread: data.unread ?? 0, planLine: data.planLine ?? null };
           setMe(lastMe);
           root.classList.add("session-ready");
         } else {

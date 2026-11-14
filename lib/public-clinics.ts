@@ -1,5 +1,6 @@
 import "server-only";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { foundingNumber } from "@/lib/founding-flow";
 import { QUEBEC } from "@/lib/jobs";
 import { clinicSlugs, employerHref, type PublicClinic } from "@/lib/clinic-pages";
 import { emailMatchesWebsite } from "@/lib/claims";
@@ -47,12 +48,15 @@ async function companyEmailConfirmed(id: string, website: string | null) {
   return emailMatchesWebsite(owner.user?.email ?? "", website);
 }
 
-export async function getPublicClinic(slug: string, kind: "clinic" | "supplier" = "clinic"): Promise<{ clinic: PublicClinic; slug: string; confirmed: boolean } | null> {
+export async function getPublicClinic(slug: string, kind: "clinic" | "supplier" = "clinic"): Promise<{ clinic: PublicClinic; slug: string; confirmed: boolean; founding: boolean } | null> {
   if (!/^[a-z0-9-]{1,100}$/.test(slug)) return null;
   const { clinics, slugs } = await listPublicClinics();
   const clinic = clinics.find((c) => slugs.get(c.id) === slug && (c.practice_type === "supplier") === (kind === "supplier"));
   if (!clinic) return null;
-  return { clinic, slug, confirmed: kind === "supplier" ? await companyEmailConfirmed(clinic.id, clinic.website) : false };
+  // The Founding clinic mark (migration 0052): the first 50 clinic locations. Read with the server key, so the list itself is never public.
+  const db = supabaseAdmin();
+  const founding = kind === "clinic" && db ? (await foundingNumber(db, clinic.id)) !== null : false;
+  return { clinic, slug, confirmed: kind === "supplier" ? await companyEmailConfirmed(clinic.id, clinic.website) : false, founding };
 }
 
 // The address of 1 employer's page, or null when it has none. Used to link a job page to its clinic or company.
