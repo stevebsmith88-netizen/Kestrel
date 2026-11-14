@@ -67,7 +67,9 @@ For the example clinic that is 230 × 41% × 10% × $500, or about $4,700, plus 
     title: "How to become an optician in Canada, province by province",
     description: "The 2 routes in, the national exams, and how each province registers new opticians, from Ontario's intern class to Alberta's provisional permit.",
     date: "2026-12-08",
-    body: `Opticians are regulated in every province, and the details change as soon as you cross a provincial border. The good news is that the core of the process is the same almost everywhere. This guide sets out the shared part first, then what each province adds. It was checked against each regulator's own website or published documents in November 2026, but rules and fees change, so confirm with the regulator in the province where you plan to work before you apply.
+    body: `![A smiling optician in a white coat holds a pair of black framed glasses up to the light to check the lenses.](/images/blog/how-to-become-an-optician-canada.jpg)
+
+Opticians are regulated in every province, and the details change as soon as you cross a provincial border. The good news is that the core of the process is the same almost everywhere. This guide sets out the shared part first, then what each province adds. It was checked against each regulator's own website or published documents in November 2026, but rules and fees change, so confirm with the regulator in the province where you plan to work before you apply.
 
 ## The part that is the same everywhere
 
