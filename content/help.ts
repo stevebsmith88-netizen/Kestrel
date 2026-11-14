@@ -664,16 +664,16 @@ export const HELP: HelpSection[] = [
       },
       {
         id: "receipts-and-billing",
-        title: "Where do I find my receipts and invoices?",
+        title: "Where do I find my invoices and receipts?",
         keywords: ["receipt", "invoice", "payment", "paid", "charge", "bill", "billing", "hst", "tax", "download", "card"],
         answer: [
-          "Under your initials, open **Billing**. It lists every payment for the location you are working in, with the date, the job, the amount and a link to download the receipt or view the invoice again. Amounts are before HST.",
-          "During the free launch you are not asked for a card and nothing is charged. When fees begin, you save a card when you send a job for review, and you are not charged then. The card is charged only when our team approves the job, and a job we do not approve is never charged. A job that is paid shows a **Paid** tag on your dashboard, with a link to its receipt.",
+          "Under your initials, open **Billing**. It lists every payment for the location you are working in, with the date, the job, the amount and links to download the invoice as a PDF, or to open Stripe's page for the invoice and its receipt. Amounts are before HST.",
+          "During the free launch you are not asked for a card and nothing is charged. When fees begin, you save a card when you send a job for review, and you are not charged then. The card is charged only when our team approves the job, and a job we do not approve is never charged. A job that is paid shows a **Paid** tag on your dashboard, with links to its invoice and receipt.",
           "If your card is refused, the job on your dashboard shows **Card payment error: update card**. Press it to save a different card, and the job goes live as soon as the new card works.",
         ],
         steps: [
           "Open the menu under your initials and choose **Billing**.",
-          "Find the payment, then press **Download** for the receipt or **View** for the invoice.",
+          "Find the payment, then press **Invoice PDF** to download the invoice, or **View** to open the invoice and its receipt.",
           "Using several locations? Switch location at the top of the page to see each one's payments.",
         ],
         links: [{ label: "Billing", href: "/clinic/billing" }],

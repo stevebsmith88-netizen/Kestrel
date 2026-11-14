@@ -8,6 +8,7 @@ export const DASHBOARD_NOTICES: Record<string, string> = {
   "job-submitted": "Your job is with our team. We check every post, usually within 1 business day, and it goes live as soon as it is approved.",
   "payment-card-failed": "Your card was not saved, so the job was not sent. It is in your drafts. Open it and press Send for review when you are ready.",
   "card-updated": "Thank you. Your new card is saved and our team has been told. You are not charged until the job is approved.",
+  "job-submitted-card": "Thank you for sending your job. Every post goes through a manual review by our team, usually within 1 business day. Your card is saved, but you are not charged yet: payment is taken once the job is approved. If we do not approve it, you are never charged.",
   "card-updated-live": "Thank you. Your new card worked and your job is live now.",
   "card-updated-failed": "We saved the card, but it was refused as well. Please try a different card from your job in review.",
   "job-closed": "The job is closed and no longer shown to candidates.",

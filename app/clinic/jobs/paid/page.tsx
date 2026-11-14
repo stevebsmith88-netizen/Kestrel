@@ -25,7 +25,7 @@ export default async function CardSaved({ searchParams }: { searchParams: Promis
     const db = await supabaseServer();
     const { data: mine } = db ? await db.from("jobs").select("id").eq("id", done.jobId).maybeSingle() : { data: null };
     if (mine) {
-      const notice = done.autoApproved === "approved" ? "card-updated-live" : done.autoApproved === "refused" ? "card-updated-failed" : from === "update" ? "card-updated" : "job-submitted";
+      const notice = done.autoApproved === "approved" ? "card-updated-live" : done.autoApproved === "refused" ? "card-updated-failed" : from === "update" ? "card-updated" : "job-submitted-card";
       redirect(`/clinic?notice=${notice}`);
     }
   }
