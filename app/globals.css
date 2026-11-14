@@ -1075,3 +1075,4 @@ h2.subhead{font:400 1.6rem/1.2 var(--f-display),Georgia,serif;margin:40px 0 6px}
 .foldcard[open]>summary::after{transform:rotate(-135deg)}
 .foldcard>:not(summary){margin-left:24px;margin-right:24px}
 .foldcard>:last-child{margin-bottom:22px}
+.who-panel .who-sep{border:0;border-top:1px solid var(--line);margin:4px 0}

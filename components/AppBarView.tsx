@@ -24,11 +24,11 @@ const NAV: Record<Exclude<Role, "admin">, NavItem[]> = {
   clinic: [
     { href: "/clinic", label: "My dashboard" },
     { href: "/clinic/jobs/new", label: "Post a job" },
+    { href: "/jobs", label: "Live jobs" },
     { href: "/clinic/profile", label: "Clinic profile" },
     { href: "/clinic/team", label: "Clinic team" },
     { href: "/clinic/locations", label: "Locations" },
     { href: "/clinic/plans", label: "Plans and billing" },
-    { href: "/jobs", label: "Live jobs" },
     { href: "/account/help", label: "Help and feedback" },
     { href: "/account", label: "Account settings" },
   ],

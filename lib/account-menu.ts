@@ -3,7 +3,8 @@
 // Kept free of imports from the app so it can be tested on its own (lib/account-menu.test.ts).
 import type { Role } from "./auth.ts";
 
-export type MenuLink = { href: string; label: string };
+// `group` puts a thin line between sets of links in the menu: the pages about you or your clinic first, then plans and help.
+export type MenuLink = { href: string; label: string; group?: number };
 
 // The little the top bar needs to know about a signed in person. On the public pages the browser fetches exactly this from /api/me.
 export type BarPerson = { role: Role; email: string; fullName: string; planLine?: string | null };
@@ -16,19 +17,18 @@ export const homeOf = (role: Role) => (role === "admin" ? "/admin" : role === "c
 export const SETTINGS_HREF = "/account";
 
 export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
+  // The inbox is the envelope beside the initials (and in the phone Menu), so it is not repeated here (Steve, 14th November 2026).
   candidate: [
-    { href: "/account/inbox", label: "Inbox" },
-    { href: "/candidate/applications", label: "My applications" },
-    { href: "/candidate/profile", label: "Profile and resume" },
-    { href: "/account/help", label: "Help and feedback" },
+    { href: "/candidate/applications", label: "My applications", group: 0 },
+    { href: "/candidate/profile", label: "Profile and resume", group: 0 },
+    { href: "/account/help", label: "Help and feedback", group: 1 },
   ],
   clinic: [
-    { href: "/account/inbox", label: "Inbox" },
-    { href: "/clinic/profile", label: "Clinic profile" },
-    { href: "/clinic/plans", label: "Plans and billing" },
-    { href: "/clinic/team", label: "Clinic team" },
-    { href: "/clinic/locations", label: "Locations" },
-    { href: "/account/help", label: "Help and feedback" },
+    { href: "/clinic/profile", label: "Clinic profile", group: 0 },
+    { href: "/clinic/team", label: "Clinic team", group: 0 },
+    { href: "/clinic/locations", label: "Locations", group: 0 },
+    { href: "/clinic/plans", label: "Plans and billing", group: 1 },
+    { href: "/account/help", label: "Help and feedback", group: 1 },
   ],
   // The tools used now and then (lib/admin-menu.ts has the list).
   admin: [
