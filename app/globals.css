@@ -1047,3 +1047,5 @@ h2.subhead{font:400 1.6rem/1.2 var(--f-display),Georgia,serif;margin:40px 0 6px}
 .waitcount{font-weight:600;color:var(--navy);margin:0 0 14px}
 .adfold{margin:12px 0}
 .adfold>summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.subheadrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.subheadrow .subhead{margin-bottom:0}

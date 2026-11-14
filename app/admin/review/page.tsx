@@ -122,7 +122,10 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
             </div>
           )}
 
-          <h2 className="subhead">Recently handled</h2>
+          <div className="subheadrow">
+            <h2 className="subhead">Recently handled</h2>
+            <Link href="/admin/jobs" className="btn sm ghost">See all jobs</Link>
+          </div>
           <p className="help">The latest {RECENT_LIMIT} jobs approved or sent back in the last 7 days, newest first. Press one for its payment and notes.</p>
           {recent.length === 0 ? (
             <section className="card"><p>Nothing handled in the last 7 days.</p></section>
@@ -131,7 +134,6 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
               {recent.map((j) => <AdminJobRow key={j.id} job={j} payment={payments.get(j.id)} activity={activity.get(j.id) ?? []} />)}
             </div>
           )}
-          <p><Link href="/admin/jobs" className="btn sm ghost">See all jobs</Link></p>
         </div>
       </main>
       <AppFooter />

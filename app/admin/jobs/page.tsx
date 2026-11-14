@@ -63,7 +63,7 @@ export default async function AdminJobs({ searchParams }: { searchParams: Promis
           <form method="get" action="/admin/jobs" className="jobfilter" role="search">
             <div className="row grow">
               <label className="lab" htmlFor="jf-q">Job title or clinic</label>
-              <input id="jf-q" name="q" type="search" defaultValue={query.q} maxLength={60} />
+              <input id="jf-q" name="q" type="text" enterKeyHint="search" autoComplete="off" defaultValue={query.q} maxLength={60} />
             </div>
             <div className="row">
               <label className="lab" htmlFor="jf-status">Show</label>
