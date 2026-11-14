@@ -2,7 +2,7 @@
 // field to decide when to look at a page again, so it must be true: change the date here when the page's own "Last updated" line changes.
 // lib/page-dates.test.ts checks that they agree.
 export const PAGE_DATES = {
-  privacy: "2026-11-13",
+  privacy: "2026-11-14",
   terms: "2026-11-13",
   postingPolicy: "2026-11-13",
   fakeJobs: "2026-11-13",

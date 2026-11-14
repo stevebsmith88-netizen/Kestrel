@@ -4,6 +4,8 @@ import AppFooter from "@/components/AppFooter";
 import ClinicProfileForm from "@/components/ClinicProfileForm";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
+import { practiceLabel } from "@/lib/jobs";
+import { OWNER_ONLY_TEXT } from "@/lib/team";
 
 export const metadata: Metadata = { title: "Clinic profile | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -22,8 +24,23 @@ export default async function ClinicProfile({ searchParams }: { searchParams: Pr
           {!employer && from === "post" && (
             <p className="note" role="status"><strong>You must set up your clinic before posting a job.</strong> It takes about 2 minutes. When you save it, you can post your first job straight away.</p>
           )}
-          <p className="lede2">This is what candidates see on your job posts, apart from your alert email, which stays private.</p>
-          <ClinicProfileForm initial={employer} signUpEmail={session.email} />
+          {employer && employer.level !== "owner" ? (
+            <>
+              <p className="lede2">This is what candidates see on your clinic&apos;s job posts. {OWNER_ONLY_TEXT}</p>
+              <dl className="facts card">
+                <div><dt>Name</dt><dd>{employer.clinic_name}</dd></div>
+                <div><dt>Type</dt><dd>{practiceLabel(employer.practice_type)}</dd></div>
+                <div><dt>Location</dt><dd>{employer.city}, {employer.province}</dd></div>
+                {employer.website && <div><dt>Website</dt><dd>{employer.website}</dd></div>}
+                {employer.about && <div className="wide"><dt>About</dt><dd className="adbody">{employer.about}</dd></div>}
+              </dl>
+            </>
+          ) : (
+            <>
+              <p className="lede2">This is what candidates see on your job posts, apart from your alert email, which stays private.</p>
+              <ClinicProfileForm initial={employer} signUpEmail={session.email} />
+            </>
+          )}
         </div>
       </main>
       <AppFooter />

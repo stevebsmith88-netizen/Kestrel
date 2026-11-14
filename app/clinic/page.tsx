@@ -13,6 +13,7 @@ import { requireRole } from "@/lib/auth";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyEmployer, getMyJobs } from "@/lib/clinic";
+import { canEdit, levelLabel, VIEW_ONLY_TEXT } from "@/lib/team";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
 import { getMyJobNumbers } from "@/lib/job-stats-data";
 import { closeJobQuiet, deleteJobQuiet, dismissNoticesQuiet, extendJobQuiet, repostJob, withdrawJobQuiet } from "@/lib/clinic-actions";
@@ -45,6 +46,8 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   const waiting = Object.values(applicants).reduce((sum, c) => sum + c.waiting, 0);
   const shown = filterJobs(jobs, show, applicants);
   const first = session.firstName || "there";
+  // A "view only" team member sees the same dashboard without the buttons that change jobs (migration 0045).
+  const editor = canEdit(employer.level);
   const count = (s: string) => jobs.filter((j) => j.status === s).length;
   // The green approval messages a clinic has not cleared yet. A message about a change a clinic needs to make is never hidden.
   const notices = visibleNotices(jobNotices(jobs), parseDismissed((await cookies()).get(DISMISS_COOKIE)?.value));
@@ -58,6 +61,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
         <div className="wrap">
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
+          {employer.level !== "owner" && <p className="lede2">You are on the {employer.clinic_name} team ({levelLabel(employer.level).toLowerCase()}).{editor ? "" : ` ${VIEW_ONLY_TEXT}`}</p>}
           {notice && DASHBOARD_NOTICES[notice] && <p className={noticeTone(notice) === "warn" ? "notice warn" : "notice"} role="status">{DASHBOARD_NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
           {notices.map((n) =>
@@ -120,7 +124,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                 <h2>{show ? SHOW_LABELS[show].title : "Your jobs"}</h2>
                 <span className="listactions">
                   {show && <Link href="/clinic#your-jobs" className="btn sm ghost">Show all jobs</Link>}
-                  <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>
+                  {editor && <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>}
                 </span>
               </div>
 
@@ -152,16 +156,16 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                               Applicants ({applicants[j.id].total}{applicants[j.id].fresh ? `, ${applicants[j.id].fresh} new` : ""})
                             </Link>
                           )}
-                          {canExtend(j) && (
+                          {editor && canExtend(j) && (
                             <QuickActionForm action={extendJobQuiet} ids={[j.id]} className={applicants[j.id] ? "btn sm ghost" : "btn sm"}>Extend 30 days</QuickActionForm>
                           )}
-                          {(j.status === "closed" || j.status === "expired") && (
+                          {editor && (j.status === "closed" || j.status === "expired") && (
                             <form action={repostJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm ghost"><Icon name="refresh" />Post again</button></form>
                           )}
-                          {(j.status === "draft" || j.status === "rejected" || j.status === "live") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost"><Icon name="pencil" />Edit</Link>}
+                          {editor && (j.status === "draft" || j.status === "rejected" || j.status === "live") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost"><Icon name="pencil" />Edit</Link>}
                           {j.status === "live" && <Link href={`/jobs/${j.id}`} className="btn sm ghost"><Icon name="eye" />View</Link>}
                         </div>
-                        <div className="jobactions quiet">
+                        {editor && <div className="jobactions quiet">
                           {(j.status === "live" || j.status === "expired") && (
                             <Link href={`/clinic/jobs/${j.id}/ending`} className="linkbtn"><Icon name="check" />Filled it?</Link>
                           )}
@@ -180,7 +184,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                           {(j.status === "draft" || j.status === "rejected") && !j.posted_at && !applicants[j.id] && (
                             <QuickActionForm action={deleteJobQuiet} ids={[j.id]} className="linkbtn warn"><Icon name="trash" />Delete</QuickActionForm>
                           )}
-                        </div>
+                        </div>}
                       </div>
                     </article>
                   ))}

@@ -7,6 +7,8 @@ import { AppStatusBadge, Steps } from "@/components/AppStatus";
 import NoteForm from "@/components/NoteForm";
 import StatusForm from "@/components/StatusForm";
 import { requireRole } from "@/lib/auth";
+import { getMyEmployer } from "@/lib/clinic";
+import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { APP_LABELS, type AppStatus } from "@/lib/applications";
 import { getApplicationForClinic } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
@@ -40,6 +42,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
     }
   }
 
+  const editor = canEdit((await getMyEmployer(session.userId))?.level);
   const db = await supabaseServer();
   const { data: noteRow } = db ? await db.from("application_notes").select("note").eq("application_id", id).maybeSingle() : { data: null };
   const who = a.applicant;
@@ -102,10 +105,10 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
             <aside className="stackcards">
               <section className="card">
                 <h2>Update this application</h2>
-                <StatusForm id={a.id} current={a.status} keepDetails={a.keep_details} clinicName={a.clinic_name} />
+                {editor ? <StatusForm id={a.id} current={a.status} keepDetails={a.keep_details} clinicName={a.clinic_name} /> : <p className="help">{VIEW_ONLY_TEXT}</p>}
               </section>
               <section className="card">
-                <NoteForm id={a.id} initial={noteRow?.note ?? ""} />
+                <NoteForm id={a.id} initial={noteRow?.note ?? ""} addOnly={!editor} />
               </section>
             </aside>
           </div>

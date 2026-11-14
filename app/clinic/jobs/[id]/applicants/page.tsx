@@ -8,6 +8,8 @@ import FilledViaFields from "@/components/FilledViaFields";
 import ToastHost from "@/components/ToastHost";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
+import { getMyEmployer } from "@/lib/clinic";
+import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { GROUP_LABELS } from "@/lib/applications";
 import { FILTERS, WAITING, loadApplicants } from "@/lib/applicant-list";
 import { declineSelected, declineSelectedQuiet, fillRole, interviewSelectedQuiet, shortlistSelectedQuiet } from "@/lib/applicant-actions";
@@ -34,6 +36,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   if (!job) notFound();
   const { rows, active, shown, count, waiting, hireCandidates, talking, clinicName, anyTick } = await loadApplicants(await supabaseServer(), id, filter);
   const sentCount = Number.parseInt(sent ?? "", 10);
+  const editor = canEdit((await getMyEmployer(session.userId))?.level);
 
   return (
     <>
@@ -66,8 +69,8 @@ export default async function Applicants({ params, searchParams }: { params: Pro
             <input type="hidden" name="jobId" value={id} />
             <div className="joblist">
               {shown.map((r) => (
-                <article className={`card jobrow${anyTick ? " withtick" : ""}`} key={r.id}>
-                  {WAITING.includes(r.status) ? (
+                <article className={`card jobrow${editor && anyTick ? " withtick" : ""}`} key={r.id}>
+                  {!editor ? null : WAITING.includes(r.status) ? (
                     <label className="rowtick"><input type="checkbox" name="ids" value={r.id} /><span className="sr">Select {r.applicant.name ?? "this applicant"}</span></label>
                   ) : (
                     anyTick && <span aria-hidden="true" />
@@ -84,13 +87,14 @@ export default async function Applicants({ params, searchParams }: { params: Pro
                 </article>
               ))}
             </div>
-            {shown.some((r) => WAITING.includes(r.status)) && (
+            {editor && shown.some((r) => WAITING.includes(r.status)) && (
               <BulkApplicantPanel shortlist={shortlistSelectedQuiet} interview={interviewSelectedQuiet} decline={declineSelectedQuiet} />
             )}
             </form>
           )}
 
-          {(waiting.length > 0 || talking.length > 0) && job.status === "live" && (
+          {!editor && <p className="help">{VIEW_ONLY_TEXT}</p>}
+          {editor && (waiting.length > 0 || talking.length > 0) && job.status === "live" && (
             <form action={fillRole} className="card bulkfill">
               <input type="hidden" name="jobId" value={id} />
               <h2>Role filled?</h2>

@@ -58,6 +58,10 @@ from (
     ('permission: candidates can save their job preferences', has_column_privilege('authenticated', 'public.candidate_profiles', 'home_city', 'UPDATE')),
     ('column: days a week on a daily rate', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_days_per_week')),
     ('private resume storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('table: employer_members (clinic team, 0045)', to_regclass('public.employer_members') is not null),
+    ('table: employer_invites (team invitations, 0045)', to_regclass('public.employer_invites') is not null),
+    ('table: admin_actions (changes Kestrel made for a clinic, 0045)', to_regclass('public.admin_actions') is not null),
+    ('function: can_edit_employer (team access, 0045)', exists (select 1 from pg_proc where proname = 'can_edit_employer')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

@@ -8,6 +8,7 @@ import { payAndTagValues } from "@/lib/job-form";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer, getMyTemplate, getMyTemplates } from "@/lib/clinic";
 import { longDate } from "@/lib/jobs";
+import { canEdit } from "@/lib/team";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { deleteTemplate } from "@/lib/template-actions";
 
@@ -22,6 +23,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
   const { template: templateId, notice } = await searchParams;
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile?from=post");
+  if (!canEdit(employer.level)) redirect("/clinic");
   const templates = await getMyTemplates();
   const ownPay = await loadOwnPayStats();
   const start = templateId && UUID.test(templateId) ? await getMyTemplate(templateId) : null;

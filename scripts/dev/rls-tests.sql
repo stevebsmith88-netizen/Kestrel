@@ -14,7 +14,10 @@ update public.signup_gate set open = true;
 delete from auth.users where email like '%@rls.test';
 
 insert into t.people values
-  ('ann', gen_random_uuid()), ('bo', gen_random_uuid()), ('clinic_c', gen_random_uuid()), ('clinic_d', gen_random_uuid()), ('admin', gen_random_uuid());
+  ('ann', gen_random_uuid()), ('bo', gen_random_uuid()), ('clinic_c', gen_random_uuid()), ('clinic_d', gen_random_uuid()), ('admin', gen_random_uuid()),
+  -- 0045: clinic C's team. Edith can view and edit, Vic can view only, Nell has a clinic account but no clinic, m3 to m5 fill the team up.
+  ('clinic_edith', gen_random_uuid()), ('clinic_vic', gen_random_uuid()), ('clinic_nell', gen_random_uuid()),
+  ('clinic_m3', gen_random_uuid()), ('clinic_m4', gen_random_uuid()), ('clinic_m5', gen_random_uuid());
 
 insert into auth.users (id, email, raw_user_meta_data)
 select id, name || '@rls.test',
@@ -44,6 +47,10 @@ insert into public.jobs (id, employer_id, title, status)
 values ((select id from t.things where name = 'job_c_draft'), (select id from t.things where name = 'employer_c'), 'Draft job', 'draft');
 
 insert into public.candidate_profiles (user_id, profession) select id, 'Optician' from t.people where name in ('ann', 'bo');
+
+insert into public.employer_members (employer_id, user_id, level)
+values ((select id from t.things where name = 'employer_c'), (select id from t.people where name = 'clinic_edith'), 'edit'),
+       ((select id from t.things where name = 'employer_c'), (select id from t.people where name = 'clinic_vic'), 'view');
 
 insert into public.applications (id, job_id, candidate_id, status, applicant, job_title, clinic_name, job_location, viewed_at)
 values ((select id from t.things where name = 'app_ann_c'), (select id from t.things where name = 'job_c_live'), (select id from t.people where name = 'ann'),
@@ -256,3 +263,47 @@ select t.try('P1-24', 'a visitor cannot read the count', 'visitor', 'count', 'se
 select t.try('P1-24', 'a signed in person cannot read the count', 'bo', 'count', 'select * from public.email_send_counts', 'refused');
 select t.try('P1-24', 'a signed in person cannot add to the count', 'bo', 'value', $$select public.count_email_send(50)::text$$, 'refused');
 select t.try('P1-24', 'a visitor cannot add to the count', 'visitor', 'value', $$select public.count_email_send(50)::text$$, 'refused');
+
+-- ---------------------------------------------------------------- 0045: a clinic's team (owner, can view and edit, view only)
+select t.try('0045', 'Edith (view and edit) sees Ann''s application to clinic C', 'clinic_edith', 'count', 'select id from public.applications', '1 rows');
+select t.try('0045', 'Vic (view only) sees Ann''s application to clinic C', 'clinic_vic', 'count', 'select id from public.applications', '1 rows');
+select t.try('0045', 'Vic sees its history', 'clinic_vic', 'count', 'select id from public.application_events', '3 rows');
+select t.try('0045', 'Nell (a clinic account with no clinic) sees no applications', 'clinic_nell', 'count', 'select id from public.applications', 'blocked');
+select t.try('0045', 'Nell sees no jobs through her own sign in', 'clinic_nell', 'count', 'select id from public.jobs', 'blocked');
+select t.try('0045', 'Edith reads clinic C''s 2 jobs', 'clinic_edith', 'count', 'select * from public.jobs', '2 rows');
+select t.try('0045', 'Vic reads clinic C''s 2 jobs', 'clinic_vic', 'count', 'select * from public.jobs', '2 rows');
+select t.try('0045', 'Edith reads her clinic', 'clinic_edith', 'count', 'select id from public.employers', '1 rows');
+select t.try('0045', 'Edith can send a job for review', 'clinic_edith', 'write', $$insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, status) values ('{employer_c}', 'Optician', 'Optician', 'Full time', 'Ontario', 'Guelph', 'year', 50000, 60000, true, false, 'A made up job used only by the access tests in scripts/dev.', 'in_review')$$, '1 rows');
+select t.try('0045', 'Vic cannot send a job for review', 'clinic_vic', 'write', $$insert into public.jobs (employer_id, title, status) values ('{employer_c}', 'Draft', 'draft')$$, 'refused');
+select t.try('0045', 'Edith can change a draft', 'clinic_edith', 'write', $$update public.jobs set title = 'Changed' where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0045', 'Vic cannot change a draft', 'clinic_vic', 'write', $$update public.jobs set title = 'Changed' where id = '{job_c_draft}'$$, 'blocked');
+select t.try('0045', 'Edith can delete a draft', 'clinic_edith', 'write', $$delete from public.jobs where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0045', 'Vic cannot delete a draft', 'clinic_vic', 'write', $$delete from public.jobs where id = '{job_c_draft}'$$, 'blocked');
+select t.try('0045', 'Edith cannot touch clinic D''s job', 'clinic_edith', 'write', $$update public.jobs set status = 'closed' where id = '{job_d_live}'$$, 'blocked');
+select t.try('0045', 'Edith cannot change the clinic profile (owner only)', 'clinic_edith', 'write', $$update public.employers set clinic_name = 'Mine' where id = '{employer_c}'$$, 'blocked');
+select t.try('0045', 'Vic cannot change the clinic profile', 'clinic_vic', 'write', $$update public.employers set clinic_name = 'Mine' where id = '{employer_c}'$$, 'blocked');
+select t.try('0045', 'Edith cannot read the private alert address (owner only)', 'clinic_edith', 'count', 'select notify_email from public.employer_contacts', 'blocked');
+select t.try('0045', 'Vic can add a private note', 'clinic_vic', 'write', $$insert into public.application_notes (application_id, note) values ('{app_ann_c}', 'Looks good')$$, '1 rows');
+select t.try('0045', 'Nell cannot add a note', 'clinic_nell', 'write', $$insert into public.application_notes (application_id, note) values ('{app_ann_c}', 'x')$$, 'refused');
+select t.try('0045', 'Vic still cannot change an application directly', 'clinic_vic', 'write', $$update public.applications set status = 'offer' where id = '{app_ann_c}'$$, 'refused');
+select t.try('0045', 'Vic reads the numbers for clinic C''s jobs', 'clinic_vic', 'count', 'select * from public.job_daily_stats', '0 rows');
+select t.try('0045', 'Vic cannot read templates (they are for posting)', 'clinic_vic', 'count', 'select * from public.job_templates', 'blocked');
+select t.try('0045', 'the owner sees the 2 team members', 'clinic_c', 'count', 'select * from public.employer_members', '2 rows');
+select t.try('0045', 'Vic sees the team too', 'clinic_vic', 'count', 'select * from public.employer_members', '2 rows');
+select t.try('0045', 'clinic D sees nothing of clinic C''s team', 'clinic_d', 'count', 'select * from public.employer_members', 'blocked');
+select t.try('0045', 'nobody adds a member with their own sign in, not even the owner', 'clinic_c', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_nell}', 'edit')$$, 'refused');
+select t.try('0045', 'Vic cannot raise herself to view and edit', 'clinic_vic', 'write', $$update public.employer_members set level = 'edit' where user_id = '{clinic_vic}'$$, 'refused');
+select t.try('0045', 'Edith cannot remove someone', 'clinic_edith', 'write', $$delete from public.employer_members where user_id = '{clinic_vic}'$$, 'refused');
+select t.try('0045', 'nobody reads invitations with their own sign in', 'clinic_c', 'count', 'select * from public.employer_invites', 'refused');
+select t.try('0045', 'the admin record is for the server only', 'admin', 'count', 'select * from public.admin_actions', 'refused');
+select t.try('0045', 'the server can add 2 more (5 people with the owner)', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_m3}', 'view'), ('{employer_c}', '{clinic_m4}', 'view')$$, '2 rows');
+select t.try('0045', 'a 6th person is refused', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_m3}', 'view'), ('{employer_c}', '{clinic_m4}', 'view'), ('{employer_c}', '{clinic_m5}', 'view')$$, 'refused');
+select t.try('0045', 'the owner of another clinic cannot join clinic C', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_d}', 'view')$$, 'refused');
+select t.try('0045', 'a person joins 1 clinic only', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_d}', '{clinic_vic}', 'view')$$, 'refused');
+select t.try('0045', 'a team member cannot create a clinic of their own', 'clinic_vic', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) values ('{clinic_vic}', 'Vic Eye Care', 'independent', 'Ontario', 'Guelph')$$, 'refused');
+select t.try('0045', 'nor be made the owner of a clinic by the server', 'server', 'write', $$update public.employers set owner_id = '{clinic_vic}' where id = '{employer_d}'$$, 'refused');
+select t.try('0045', 'the database knows Vic as view only', 'clinic_vic', 'value', $$select public.employer_level('{employer_c}')$$, 'view');
+select t.try('0045', 'and Edith as view and edit', 'clinic_edith', 'value', $$select public.employer_level('{employer_c}')$$, 'edit');
+select t.try('0045', 'and the owner as owner', 'clinic_c', 'value', $$select public.employer_level('{employer_c}')$$, 'owner');
+select t.try('0045', 'and Nell as nothing', 'clinic_nell', 'value', $$select public.employer_level('{employer_c}')$$, '(nothing)');
+select t.try('0045', 'a visitor cannot ask', 'visitor', 'value', $$select public.employer_level('{employer_c}')$$, 'refused');

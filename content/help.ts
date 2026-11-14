@@ -421,6 +421,38 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Clinic profile", href: "/clinic/profile" }, { label: "Create an account", href: "/sign-up" }],
       },
       {
+        id: "clinic-team",
+        title: "How do I add people from my clinic?",
+        keywords: ["team", "staff", "manager", "colleague", "invite", "add user", "another login", "access", "remove", "permissions", "owner"],
+        answer: [
+          "Up to 5 people can use your clinic's account, including you. You choose what each person can do. **Can view and edit** lets them post and change jobs, read applicants and their resumes, and move applicants along. **View only, with notes** lets them read jobs and applicants and add notes. Their notes are added under yours with their name and the date, and you get a message in your inbox to decide what happens next.",
+          "Only you, as the owner, can change the clinic profile, the private alert address and the team. Open invitations count toward the 5 until they are used or cancelled. When someone leaves, remove them and their access ends straight away.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Clinic team**.",
+          "Under **Invite someone**, type their name and work email, choose what they can do, and press **Send invite**.",
+          "They get an email with a link and a code. If it does not arrive, the page shows the code once so you can pass it on yourself, or press **Send again** beside their name for a new one.",
+          "To change what someone can do, choose it beside their name and press **Save**. To take away their access, press **Remove**.",
+          "To hand the clinic to someone else, open **Hand the clinic over** beside their name. You stay on the team and can still view and edit.",
+        ],
+        links: [{ label: "Clinic team", href: "/clinic/team" }],
+      },
+      {
+        id: "join-clinic-team",
+        title: "My clinic invited me. How do I join?",
+        keywords: ["invite code", "invitation", "join clinic", "team member", "manager", "code", "kt"],
+        answer: [
+          "Use the email address the invitation was sent to. The code works once, only with that address, for 14 days. An account can be on 1 clinic's team, and an account set up for looking for work cannot join a clinic, so use your work email.",
+        ],
+        steps: [
+          "Open the invitation email and press **Join the clinic**.",
+          "New to Kestrel? Press **Create my account** and fill in the form. Your account joins the clinic as soon as it is created. You can also type the code yourself: on **Create an account**, open **I have an invite code from my clinic**.",
+          "Already have a clinic account? Press **Sign in**, then enter the code and press **Join the clinic**.",
+          "Confirm your email address if asked, then sign in. Your dashboard shows your clinic's jobs and applicants.",
+        ],
+        links: [{ label: "Join a clinic", href: "/join" }],
+      },
+      {
         id: "post-a-job",
         title: "How do I post a job, and what does every post need?",
         keywords: ["new job", "create job", "advertise", "hire", "ad builder", "write my ad", "job ad", "draft", "posting", "vacancy"],

@@ -345,6 +345,22 @@ textarea{resize:vertical;line-height:1.5}
 .jobgrid h2{font:400 1.5rem/1.2 var(--f-display),Georgia,serif;margin:0 0 10px}
 .jobgrid h2:not(:first-child){margin-top:26px}
 .adbody{white-space:pre-wrap;color:var(--navy-2)}
+.teamlist{list-style:none;margin:22px 0;padding:0;display:flex;flex-direction:column;gap:12px}
+.teamlist li{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;padding:18px 22px}
+.teamlist .meta{margin:4px 0 0}
+.teamacts{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+.teamact{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.teamact select{width:auto}
+.teammore summary{cursor:pointer;color:var(--navy-2);font-size:.9375rem}
+.teamcodebox{margin:0 0 18px}
+.teamcodebox summary{cursor:pointer;color:var(--navy-2);font-weight:600}
+.teamcodebox .row{margin-top:10px}
+.adminact{margin-top:10px}
+.teamcode{font-family:ui-monospace,Menlo,monospace;letter-spacing:.06em}
+.teaminvite{margin-top:28px}
+.teaminvite h2{font:400 1.5rem/1.2 var(--f-display),Georgia,serif;margin:0 0 8px}
+@media (max-width:640px){.teamacts{align-items:flex-start}}
+.notesread{margin:0 0 14px;padding:12px 14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;max-height:260px;overflow:auto}
 .jobaside{display:flex;flex-direction:column;gap:18px}
 .applybox p{margin:0 0 16px;color:var(--navy-2)}
 .applybox .btn{width:100%;text-align:center}

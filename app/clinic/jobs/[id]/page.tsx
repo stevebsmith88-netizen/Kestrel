@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import JobForm from "@/components/JobForm";
 import { payAndTagValues } from "@/lib/job-form";
 import { requireRole } from "@/lib/auth";
+import { getMyEditableEmployer } from "@/lib/clinic";
 import { getMyJob } from "@/lib/clinic";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 
@@ -17,6 +18,8 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export default async function EditJob({ params }: { params: Promise<{ id: string }> }) {
   const session = await requireRole("clinic");
+  // Changing a job is for the owner and "view and edit" team members (migration 0045).
+  if (!(await getMyEditableEmployer(session.userId))) redirect("/clinic");
   const { id } = await params;
   if (!UUID.test(id)) notFound();
   const job = await getMyJob(id);
