@@ -81,6 +81,28 @@ const POSTS = [
   { file: "t03-just-look-at-the-house", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.buff, k: "kestrel-k-mark-reversed.svg", tl: "THINGS HEARD IN CLINIC", tr: "No. 3", icon: "road", size: 120,
     head: "Just look at", head2: "the house.", sub: "It will go blurry. That's fine.",
     alt: "Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A line drawing of a road leading to a house, on navy." },
+  // 7 cards for the blog posts written 14th November 2026, colours chosen by the grid check (docs/marketing/instagram-master-schedule.md).
+  { file: "g14-optometrist-pay", bg: C.cream, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", tr: "Pay guide", icon: "question", size: 104,
+    head: "Salary, day rate", head2: "or a percentage?", sub: "How optometrist pay is built, and how to compare offers that are built differently.",
+    alt: "Kestrel guide: Salary, day rate or a percentage? How optometrist pay is built, and how to compare offers that are built differently." },
+  { file: "g15-become-optician", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", icon: "pin", size: 100,
+    head: "The exam is national.", head2: "The licence is provincial.", sub: "How to become an optician in Canada, province by province.",
+    alt: "Kestrel guide: The exam is national. The licence is provincial. How to become an optician in Canada, province by province." },
+  { file: "g16-assistant-certification", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "New guide", size: 100, marks: true,
+    head: "Optometric assistants: no licence, 3 ways in.", list: ["Training on the job", "The CCOA program", "A college certificate"],
+    alt: "Kestrel guide: Optometric assistants: no licence, 3 ways in. Training on the job. The CCOA program. A college certificate." },
+  { file: "g17-supplier-role", bg: C.paper, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", icon: "path", size: 112,
+    head: "From the clinic", head2: "to the road.", sub: "What changes when you move into a lens rep, trainer or supplier role.",
+    alt: "Kestrel guide: From the clinic to the road. What changes when you move into a lens rep, trainer or supplier role." },
+  { file: "g18-become-optometrist", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", icon: "eye", size: 104,
+    head: "Becoming an optometrist", head2: "in Canada.", sub: "2 schools, 1 national board exam, and a licence from your province.",
+    alt: "Kestrel guide: Becoming an optometrist in Canada. 2 schools, 1 national board exam, and a licence from your province." },
+  { file: "g19-empty-chair", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "For clinics", icon: "door", size: 100,
+    head: "What does an empty", head2: "optician chair cost?", sub: "Glasses sales that walk out, and exam time lost. The sums, so you can work out yours.",
+    alt: "Kestrel guide for clinics: What does an empty optician chair cost? Glasses sales that walk out, and exam time lost. The sums, so you can work out yours." },
+  { file: "g20-who-works", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "The census", size: 150,
+    head: "14% to 69%.", sub: "The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census.",
+    alt: "Kestrel: 14% to 69%. The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census." },
 ];
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&apos;").replace(/"/g, "&quot;");
