@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { cardRefusedEmail, jobLiveEmail, jobNeedsChangeEmail } from "@/lib/clinic-emails";
 import { sendEmail } from "@/lib/email";
 import { logJobActivity } from "@/lib/job-activity";
+import { notifySlack } from "@/lib/notify-slack";
 import { refreshJobPages } from "@/lib/job-cache";
 import { cancelPaymentForJob, chargeForJob } from "@/lib/job-payment-flow";
 import { expiryFrom, isQuebecJob, longDate } from "@/lib/jobs";
@@ -77,6 +78,8 @@ export async function approveJobNow(id: string, actor: "admin" | "system"): Prom
   }
   await logJobActivity(db, id, `Went live${data[0].expires_at ? `, runs until ${longDate(data[0].expires_at)}` : ""}`);
   await emailClinic(db, id, "live", { wasEdit: Boolean(before?.posted_at) });
+  const { data: liveJob } = await db.from("jobs").select("title, city, province, employers(clinic_name)").eq("id", id).maybeSingle();
+  if (liveJob) await notifySlack("A job is live", [liveJob.title, `${(liveJob.employers as unknown as { clinic_name: string } | null)?.clinic_name ?? "A clinic"}, ${liveJob.city}, ${liveJob.province}`], { path: `/jobs/${id}`, text: "View the job" });
   refreshJobPages();
   return { key: "approved" };
 }
