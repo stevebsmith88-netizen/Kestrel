@@ -84,13 +84,13 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const [payDays, setPayDays] = useState(initial.pay_days);
   const [pctMin, setPctMin] = useState(initial.pay_percent_min);
   const [pctMax, setPctMax] = useState(initial.pay_percent_max);
-  // A daily rate and a percentage are for optometrist roles. Until a role is chosen, everything is offered.
-  const roleChosen = role !== "";
+  // A daily rate, the days a week, a guaranteed minimum and a percentage are for optometrist roles only (Steve, 14th November 2026).
+  // Until a role is chosen they stay hidden, so no other role ever sees those questions.
   const isOptometrist = role === OPTOMETRIST_ROLE;
-  const periods = !roleChosen || isOptometrist ? MONEY_PERIODS : MONEY_PERIODS.filter((p) => !OPTOMETRIST_ONLY_PERIODS.includes(p.value));
+  const periods = isOptometrist ? MONEY_PERIODS : MONEY_PERIODS.filter((p) => !OPTOMETRIST_ONLY_PERIODS.includes(p.value));
   const period = periods.some((p) => p.value === payPeriod) ? payPeriod : "year";
   const example = EXAMPLES[period];
-  const showPercent = !roleChosen || isOptometrist;
+  const showPercent = isOptometrist;
   const hasMoney = payMin.trim() !== "" || payMax.trim() !== "";
   const hasPercent = pctMin.trim() !== "" || pctMax.trim() !== "";
   // The typical pay line compares salary, hourly and a daily rate with the days a week given. Anything with a percentage is left alone.
