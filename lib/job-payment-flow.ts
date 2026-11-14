@@ -80,6 +80,9 @@ export async function startCardSetup(jobId: string, returnTo: "submit" | "update
     const meta = { payment_id: payment.id, job_id: job.id, employer_id: job.employer_id };
     const session = await stripePost<{ id: string; url: string }>("/checkout/sessions", key, {
       mode: "setup",
+      // Managed Payments (Stripe acting as the seller) is on by default on the account and only supports payment and subscription mode, not
+      // saving a card for later. It is turned off for this request only. Whether to use it for passes is Steve's decision (docs/plans/stripe-plan.md).
+      managed_payments: { enabled: false },
       currency: "cad",
       customer,
       // Stripe no longer accepts payment_method_types on Checkout: the methods offered are set in the Stripe dashboard (Settings, Payment
