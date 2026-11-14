@@ -106,7 +106,7 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const toYear = (v: string) => (period === "day" ? String(Math.round(Number(v.replace(/[$,\s]/g, "")) * daysNumber * WORKING_WEEKS)) : v);
   const e = state.errors ?? {};
   return (
-    <form ref={form} onSubmit={submit} onChange={(ev) => ev.target !== titleRef.current && refreshTitle()} noValidate className="panel formpanel">
+    <form ref={form} onSubmit={submit} onChange={(ev) => { const changed: EventTarget = ev.target; if (changed !== titleRef.current) refreshTitle(); }} noValidate className="panel formpanel">
       <RequiredNote />
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
       {employerId && <input type="hidden" name="employerId" value={employerId} />}
