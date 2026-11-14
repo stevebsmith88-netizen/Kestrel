@@ -33,7 +33,8 @@ Change one by creating the new key first, putting it in Vercel (Settings, Enviro
 | `ADMIN_ALERT_EMAIL` | Vercel only | Not secret. The address that gets admin alerts. | Change the value in Vercel and redeploy. |
 | `CRON_SECRET` | Vercel only | Run the daily housekeeping job on demand (expire jobs, send alert emails). | Make up a new long random string in Vercel and redeploy. Vercel sends it automatically. |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public by design | Nothing on its own. Our database rules (row level security) decide what it can see, and we have tested them. | Not secret. Only change it if Supabase asks. |
-| Stripe keys (when built) | Vercel only | Take payments and read customers. | Use restricted keys, and roll them in the Stripe dashboard. |
+| `STRIPE_SECRET_KEY` | Vercel only (both projects; test keys only on the demo) | Read customers and payments, refund, and create charges or checkouts on Kestrel's Stripe account. A test key touches only test data. Cannot read the database. | Stripe, Developers, API keys: roll the key (Stripe can keep the old one working for a few hours), paste the new one into Vercel, redeploy without the build cache, check Admin, Payments. A restricted key (`rk_`) with only the permissions we use is the safer choice once checkout is built. |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Public by design | Nothing on its own; it only starts a checkout the server has already created. | Rolled together with the secret key. Must be the same mode (test or live) as the secret key. |
 
 Links we email (unsubscribe, confirm your email) are signed with the Supabase secret key. If that key changes, links already sent stop working, which is safe.
 
