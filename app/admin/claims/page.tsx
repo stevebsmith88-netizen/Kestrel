@@ -59,7 +59,7 @@ export default async function Claims({ searchParams }: { searchParams: Promise<{
                       <div><dt>Email</dt><dd>{c.claimant_email}</dd></div>
                     </dl>
                     {c.note && <pre className="adtext">{c.note}</pre>}
-                    {jobIds[c.employers?.id ?? ""] && <p><Link href={`/jobs/${jobIds[c.employers?.id ?? ""]}`}>Open the listing</Link></p>}
+                    {jobIds[c.employers?.id ?? ""] && <p><Link href={`/jobs/${jobIds[c.employers?.id ?? ""]}`} className="btn sm ghost">Open the listing</Link></p>}
                     <div className="reviewbtns">
                       <form action={approveClaim}><input type="hidden" name="id" value={c.id} /><button type="submit" className="btn">Approve this claim</button></form>
                       <form action={rejectClaim} className="rejectform">

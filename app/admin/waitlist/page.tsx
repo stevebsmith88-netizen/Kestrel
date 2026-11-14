@@ -29,8 +29,13 @@ export default async function Waitlist() {
         <div className="wrap">
           <h1>Waitlist</h1>
           <p className="lede2">
-            {count ?? rows.length} {(count ?? rows.length) === 1 ? "person" : "people"} on the list. <a href="/admin/waitlist.csv">Download the ready to email list</a> (confirmed, not unsubscribed, with each person's unsubscribe link) or <a href="/admin/waitlist.csv?all=1">everyone, with a status column</a>
+            {count ?? rows.length} {(count ?? rows.length) === 1 ? "person" : "people"} on the list.
           </p>
+          <p className="jobactions">
+            <a href="/admin/waitlist.csv" className="btn sm ghost">Download the ready to email list</a>
+            <a href="/admin/waitlist.csv?all=1" className="btn sm ghost">Download everyone, with a status column</a>
+          </p>
+          <p className="help">The ready to email list has people who have confirmed and not unsubscribed, each with their unsubscribe link.</p>
           <p className="help">People now confirm their address by email. Only email people from the ready to email download, never from the full list. Anyone marked "Joined before confirmation emails" ticked the consent box, but we never checked their address.</p>
           {sources.length > 0 && (
             <p className="help">

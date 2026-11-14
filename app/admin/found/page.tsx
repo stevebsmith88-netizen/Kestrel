@@ -73,12 +73,13 @@ export default async function FoundListings({ searchParams }: { searchParams: Pr
           <h2>Saved leads ({leads.length})</h2>
           {leads.length === 0 ? <section className="card"><p>No leads saved yet. Search a province above and save the clinics worth following up. A lead is a note, not a listing: nothing is published from it and nobody is contacted.</p></section> : (
             <section className="card">
-              <p className="help">Contact emails are kept with the page they were published on. Nobody is emailed from here, and outreach stays off until your disclosure conversation has happened. <a href="/admin/found/leads.csv">Download as a spreadsheet</a></p>
+              <p className="help">Contact emails are kept with the page they were published on. Nobody is emailed from here, and outreach stays off until your disclosure conversation has happened.</p>
+              <p><a href="/admin/found/leads.csv" className="btn sm ghost">Download as a spreadsheet</a></p>
               <ul className="plainlist">
                 {leads.map((l) => (
                   <li key={l.id}>
-                    <strong>{l.clinic_name}</strong>, {[l.city, l.province].filter(Boolean).join(", ")}{l.job_title ? ` · ${l.job_title}` : ""} · <a href={l.website} target="_blank" rel="noopener noreferrer">website<span className="sr"> (opens in a new tab)</span></a>
-                    {l.contact_email ? <> · {l.contact_email}{l.email_source_url && <> (<a href={l.email_source_url} target="_blank" rel="noopener noreferrer">where it was published<span className="sr"> (opens in a new tab)</span></a>)</>}</> : " · no email yet"}
+                    <strong>{l.clinic_name}</strong>, {[l.city, l.province].filter(Boolean).join(", ")}{l.job_title ? ` · ${l.job_title}` : ""} · <a href={l.website} target="_blank" rel="noopener noreferrer" className="btn sm ghost">Website<span className="sr"> (opens in a new tab)</span></a>
+                    {l.contact_email ? <> · {l.contact_email}{l.email_source_url && <> <a href={l.email_source_url} target="_blank" rel="noopener noreferrer" className="btn sm ghost">Where it was published<span className="sr"> (opens in a new tab)</span></a></>}</> : " · no email yet"}
                     {" "}· {l.status} · found {longDate(l.found_at)}{" "}
                     <form action={setLeadStatus} className="inlineform">
                       <input type="hidden" name="id" value={l.id} />
@@ -156,7 +157,7 @@ function FoundSummary({ j }: { j: FoundRow }) {
       <h3>{j.title}</h3>
       <p className="meta">{j.employers?.clinic_name} · {j.city}, {j.province} · {employmentLabel(j.employment_type)} · {formatPay(j.pay_min, j.pay_max, j.pay_period)}</p>
       <dl className="facts">
-        <div><dt>Found</dt><dd>{j.found_at ? longDate(j.found_at) : "Unknown"}{j.source_url && <> on <a href={j.source_url} target="_blank" rel="noopener noreferrer">the clinic&apos;s page<span className="sr"> (opens in a new tab)</span></a></>}</dd></div>
+        <div><dt>Found</dt><dd>{j.found_at ? longDate(j.found_at) : "Unknown"}{j.source_url && <> <a href={j.source_url} target="_blank" rel="noopener noreferrer" className="btn sm ghost">Open the clinic&apos;s page<span className="sr"> (opens in a new tab)</span></a></>}</dd></div>
         <div><dt>Existing vacancy</dt><dd>{answerLabel(j.is_existing_vacancy)}</dd></div>
         <div><dt>Uses AI to screen</dt><dd>{answerLabel(j.uses_ai_screening)}</dd></div>
         <div><dt>Applications</dt><dd>{j.apply_url}</dd></div>

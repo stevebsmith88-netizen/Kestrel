@@ -62,7 +62,8 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
 
           <section className="card">
             <h2>Ready to add ({ready.length})</h2>
-            <p className="help">Clinics from <Link href="/admin/found">the province search</Link> with a published address and the page it came from. Ticking them and starting is your approval of this batch.</p>
+            <p className="help">Clinics from the province search with a published address and the page it came from. Ticking them and starting is your approval of this batch.</p>
+            <p><Link href="/admin/found" className="btn sm ghost">Go to found listings</Link></p>
             {ready.length === 0 ? (
               <p className="help">No one is waiting. Save clinics with a contact email in the province search first.</p>
             ) : (
@@ -72,7 +73,7 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
                     <li key={l.id}>
                       <label className="consent">
                         <input type="checkbox" name="leadIds" value={l.id} />
-                        <span><strong>{l.clinic_name}</strong>{l.city ? `, ${l.city}` : ""} {l.province}<br /><span className="help">{l.contact_email}, found on <a href={l.email_source_url ?? "#"} rel="noopener noreferrer" target="_blank">their page</a></span></span>
+                        <span><strong>{l.clinic_name}</strong>{l.city ? `, ${l.city}` : ""} {l.province}<br /><span className="help">{l.contact_email}, found on their page <a href={l.email_source_url ?? "#"} rel="noopener noreferrer" target="_blank" className="btn sm ghost">Open the page<span className="sr"> (opens in a new tab)</span></a></span></span>
                       </label>
                     </li>
                   ))}
