@@ -18,6 +18,10 @@ Covers items 5, 9 and 20 of the next tasks in CLAUDE.md, and feeds item 18 (drop
 
 Top bar for an admin, 4 items: Dashboard, To do (with a count), Jobs, People. Under the initials: Payments and Stripe, Outreach (while it is switched off), Do not email, Waitlist (before launch only), Support and Sign out. The Dashboard links to each of those with its top line number.
 
+## Update (Steve, 14th November 2026): the Dashboard also holds the approvals
+
+Like My dashboard for a clinic, the admin Dashboard is the hub. It opens with what needs Steve (jobs waiting for review, open support requests, claims, reported jobs) as clickable tiles with the count, then the informational numbers: top line for each section and a finance overview. That makes a separate "To do" menu unnecessary. Proposed top bar: Dashboard (with the total waiting as a badge), Jobs, People. Jobs: Review queue (badge), All jobs, Found listings, Post for a clinic, Reported jobs (badge). People: Clinics, Claims (badge), Support (badge), Waitlist (before launch only). Initials menu: Payments and Stripe, Outreach (while switched off), Do not email, Sign out. Waiting on Steve's yes.
+
 ## What is there today
 
 13 admin pages: Overview, Review queue, Jobs, Found listings, Post for a clinic, Outreach, Clinics, Claims, Reports, Help requests, Waitlist, Do not email, Payments. Two CSV downloads (numbers, waitlist) and one for found leads.
