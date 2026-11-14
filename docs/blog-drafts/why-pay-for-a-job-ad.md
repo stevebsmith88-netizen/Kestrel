@@ -15,6 +15,15 @@ A job ad is the cheapest part of hiring. The expensive part is the chair that st
 5. **What the ad itself costs.** Pay per click boards bill by the click, so the final bill is unknown until the budget is gone, and a large spend can still bring a handful of the wrong people. A flat fee for 30 days is known in advance. (During the free launch: "free while we launch". Check `lib/pricing.ts` and `/compare` on the day.)
 6. **Try it with your own numbers.** Link to the calculator.
 
+## Steve's answers (14th November 2026), and what changes
+
+- **Clinic sizes:** by number of optometrists: 1, 2, and 3 or more. Exams a month still needed (Steve's rough idea, labelled as an example).
+- **Share needing new glasses:** public data exists. A University of Waterloo study (2016, about 6,400 patients at its clinic) found a prescription change in 41% of routine exams of people with no symptoms, rising with age. To verify at the source before use. The gap between that, capture rate benchmarks and actual capture is the story.
+- **Buying in the clinic with versus without an optician:** Steve says impossible to calculate. So the post does not claim a figure. It shows "if even 1 in 10 of those sales walks out while you are short, that is $X a month", and lets the owner pick the share in the calculator.
+- **Average spectacle sale:** Steve's example, about $500 per 2 year cycle. The Vision Council's Canadian release (Q3 and Q4 2024) confirms a **median replacement cycle of 24 months** and that 38% paid $99 or less out of pocket, but gives **no average sale**. So $500 is labelled as an example, not credited to the Vision Council.
+- **Weeks open:** 1 to 2 months, as Steve's rough idea.
+- **Candidate quality:** the common problem is a gap between skills and wage expectations. Strong angle: a pay range on the ad filters both ways, so people whose expectations are far off do not apply, and the right ones know where they stand.
+
 ## The worked example (Steve to fill the blanks)
 
 Labelled in the post as: "A made up clinic, to show the sum. Your own numbers will differ."

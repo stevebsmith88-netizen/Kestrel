@@ -52,14 +52,34 @@ Source: opticiansofmanitoba.ca, application and licensure page
 - Applicants must meet the education requirements and pass the exam(s) for eyeglass dispensing and/or contact lens fitting, and keep up continuing education ("Maintenance of Competency").
 - Separate pages: student registration, international candidates.
 
+## British Columbia: College of Health and Care Professionals of BC
+
+Source: chcpbc.org, the opticianry application steps, pasted by Steve on 14th November 2026 (the site refuses automated visits)
+
+- 13 steps. First an equivalency determination, unless the program is a Recognized Education Program in Schedule 5 of the college's bylaws. Nothing else can start until that is confirmed.
+- 2 classes: **Full** licensure needs both national exams (Optical Sciences 1 and 2) passed. **Provisional** licensure allows supervised practice while waiting, if you are registered for the next sittings of both exams. A provisional licensee works only under a Full licensee the college has approved (Supervision Agreement).
+- English proficiency: not needed if the recognized program was in English within the last 5 years; otherwise an approved test, sent directly by the testing agency.
+- Official transcripts sent by the school. A program not on the recognized list also needs a credential evaluation (ICAS, ICES, IQAS or WES).
+- Verification from every regulator you have ever been licensed with, sent by them within 60 days before you apply.
+- Professional liability insurance of at least $2 million per claim (an employer's policy may count).
+- 2 notarized identity documents, at least 1 from the primary list.
+- Online application in the Licensee Portal (Alinity), with a criminal record check, the application fee, then the annual fee. The licence year runs 1st April to 31st March, prorated from 1st October.
+
+## Saskatchewan: Saskatchewan College of Opticians
+
+Source: the college's accredited education page, pasted by Steve on 14th November 2026
+
+- Bylaws require graduation from an accredited program (or one the council deems equivalent). A Canadian high school diploma or assessed equivalent is needed to start.
+- You register with the college as a **student optician**. After the eyeglass program, you may sit the NACOR exam, then apply to register. Once licensed, an optician may dispense eyeglasses in Saskatchewan.
+- NAIT's distance program needs you to be working in the industry, with a qualified supervisor licensed in Saskatchewan (an optician, contact lens optician, optometrist or ophthalmologist).
+- The college lists the accredited schools with an accreditation status and expiry. Several expiry dates shown there have passed (for example Douglas College 30th September 2025, NAIT 30th September 2024), so the guide should not quote accreditation status: point readers to Accreditation Canada for the current list. That list also includes the Ontario College of Optics (London, "Registered").
+
 ## Still to read
 
 | Province | Regulator | Problem |
 | --- | --- | --- |
-| British Columbia | College of Health and Care Professionals of BC (chcpbc.org) | The site refuses automated visits (403). Try again, or Steve opens the opticians applicant page |
-| Saskatchewan | Saskatchewan College of Opticians | No website found yet |
-| New Brunswick | Opticians Association of New Brunswick | No website found; the province's page redirects to www.gnb.ca, which needs allowing |
-| Nova Scotia | Nova Scotia College of Dispensing Opticians | The province's page redirects to www.novascotia.ca, which needs allowing |
+| New Brunswick | Opticians Association of New Brunswick | No website found; www.gnb.ca now allowed, read the province's registration page |
+| Nova Scotia | Nova Scotia College of Dispensing Opticians | www.novascotia.ca now allowed, read the fair registration pages |
 | Prince Edward Island | PEI Board of Dispensing Opticians | No website found; princeedwardisland.ca refuses automated visits |
 | Newfoundland and Labrador | Dispensing Opticians Board of Newfoundland and Labrador | gov.nl.ca has annual reports; read the latest for registration details |
 
