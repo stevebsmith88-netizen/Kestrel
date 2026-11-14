@@ -1,5 +1,6 @@
 "use server";
 
+import { notifySlack } from "@/lib/notify-slack";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { REPORT_REASON_LABEL } from "@/lib/reports";
 import type { JobFormState } from "@/lib/jobs";
@@ -44,5 +45,6 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
     return { error: "We couldn't send your report. Please try again, or email support@eyecarejobs.ca." };
   }
   await notifyAdmin("A job has been reported", [`${job.title}`, REPORT_REASON_LABEL[reason]], "/admin/reports");
+  await notifySlack("A job was reported", [job.title, REPORT_REASON_LABEL[reason]], { path: "/admin/reports", text: "Open the reports" }, "support");
   return { message: THANKS };
 }

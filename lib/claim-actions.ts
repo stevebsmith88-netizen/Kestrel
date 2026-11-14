@@ -1,5 +1,6 @@
 "use server";
 
+import { notifySlack } from "@/lib/notify-slack";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
@@ -115,6 +116,7 @@ export async function verifyClaim(form: FormData) {
   if (!claim || !valid) redirect("/claim/verify?problem=1");
   await admin.from("listing_claims").update({ status: "pending_review", verified_at: new Date().toISOString(), token_hash: null, token_expires_at: null }).eq("id", claim.id);
   const { data: employer } = await admin.from("employers").select("clinic_name").eq("id", claim.employer_id).maybeSingle();
+  await notifySlack("A claim is waiting for review", [employer?.clinic_name ?? "A clinic"], { path: "/admin/claims", text: "Open the claims" }, "support");
   await notifyAdmin("A clinic has confirmed a claim", [`${employer?.clinic_name ?? "A clinic"}`, `${claim.claimant_name} (${claim.role_at_clinic}) confirmed ${claim.claimant_email}.`], "/admin/claims");
   redirect("/claim/verify?done=1");
 }

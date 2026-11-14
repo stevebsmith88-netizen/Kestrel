@@ -83,7 +83,7 @@ export async function approveJobNow(id: string, actor: "admin" | "system"): Prom
   const { data: liveJob } = await db.from("jobs").select("title, city, province, employer_id, employers(clinic_name)").eq("id", id).maybeSingle();
   // The first 50 clinic locations to have a job approved during the free launch become Founding clinics (migration 0052).
   if (liveJob?.employer_id) await claimFoundingPlace(db, liveJob.employer_id as string);
-  if (liveJob) await notifySlack("A job is live", [liveJob.title, `${(liveJob.employers as unknown as { clinic_name: string } | null)?.clinic_name ?? "A clinic"}, ${liveJob.city}, ${liveJob.province}`], { path: `/jobs/${id}`, text: "View the job" });
+  if (liveJob) await notifySlack("A job is live", [liveJob.title, `${(liveJob.employers as unknown as { clinic_name: string } | null)?.clinic_name ?? "A clinic"}, ${liveJob.city}, ${liveJob.province}`], { path: `/jobs/${id}`, text: "View the job" }, "jobs");
   refreshJobPages();
   return { key: "approved" };
 }

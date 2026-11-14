@@ -6,7 +6,8 @@ import StripeSetupCheck from "@/components/StripeSetupCheck";
 import { requireRole } from "@/lib/auth";
 import SlackCheck from "@/components/SlackCheck";
 import StripeCatalogPanel from "@/components/StripeCatalogPanel";
-import { slackStatus } from "@/lib/slack-text";
+import { channelStatuses } from "@/lib/slack-channels";
+import { isSlackWebhook } from "@/lib/slack-text";
 import { FOUNDING_CLINICS, FREE_LAUNCH_ENDS } from "@/lib/pricing";
 import { listFounding } from "@/lib/founding-flow";
 import { longDate } from "@/lib/jobs";
@@ -37,7 +38,7 @@ export default async function AdminPayments() {
           <h1>Payments</h1>
           <p className="lede2">Whether Stripe and Slack are connected, the products and prices Stripe holds, and the Founding clinics.</p>
           <StripeSetupCheck checks={stripeChecks(process.env)} />
-          <SlackCheck {...slackStatus(process.env.SLACK_WEBHOOK_URL)} />
+          <SlackCheck channels={channelStatuses(process.env, isSlackWebhook)} />
           <section className="card">
             <h2>Founding clinics: {founding.length} of {FOUNDING_CLINICS.places}</h2>
             <p className="help">The first {FOUNDING_CLINICS.places} clinic locations to have a job approved during the free launch, in that order. Each carries a Founding clinic mark on its public page. The offer is open until {FREE_LAUNCH_ENDS}.</p>

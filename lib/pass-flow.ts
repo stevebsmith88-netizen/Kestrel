@@ -131,14 +131,14 @@ export async function completePassCheckout(sessionId: string): Promise<PassDone>
           await lockFoundingPrice(db, key, sub.id, plan, row.id);
         } catch (e) {
           console.error("Founding price lock failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
-          await notifySlack("Could not lock a Founding clinic's price in Stripe", [plan.name, secretKeyMode(key) === "test" ? describeFailure(e) : "See the website logs"], { path: "/admin/payments", text: "Open Admin, Payments" });
+          await notifySlack("Could not lock a Founding clinic's price in Stripe", [plan.name, secretKeyMode(key) === "test" ? describeFailure(e) : "See the website logs"], { path: "/admin/payments", text: "Open Admin, Payments" }, "jobs");
         }
       }
       await sendFoundingThanks(db, { id: row.id, employer_id: row.employer_id, plan: row.plan, billing_interval: row.billing_interval, price_locked_until: lockedUntil });
     }
     if (firstTime) {
       const { data: employer } = await db.from("employers").select("clinic_name").eq("id", row.employer_id).maybeSingle();
-      await notifySlack("A clinic started a pass", [`${plan?.name ?? "Pass"}: ${employer?.clinic_name ?? "A clinic"}`], { path: "/admin/clinics", text: "Open Admin, Clinics" });
+      await notifySlack("A clinic started a pass", [`${plan?.name ?? "Pass"}: ${employer?.clinic_name ?? "A clinic"}`], { path: "/admin/clinics", text: "Open Admin, Clinics" }, "jobs");
     }
     return { planName: plan?.name ?? "Pass", employerId: row.employer_id, firstTime };
   } catch (e) {
@@ -267,7 +267,7 @@ export async function confirmSinglePost(db: SupabaseClient, job: { id: string; t
 export async function moveToReview(db: SupabaseClient, job: { id: string; title: string }, clinicName: string): Promise<void> {
   await db.from("jobs").update({ status: "in_review" }).eq("id", job.id).eq("status", "draft");
   await notifyAdmin("A job is waiting for review", [job.title, clinicName], "/admin/review");
-  await notifySlack("A job is waiting for review", [job.title, clinicName], { path: "/admin/review", text: "Open the review queue" });
+  await notifySlack("A job is waiting for review", [job.title, clinicName], { path: "/admin/review", text: "Open the review queue" }, "jobs");
   refreshJobPages();
 }
 
@@ -302,7 +302,7 @@ export async function switchPassPlan(employerId: string, toKey: string): Promise
       metadata: { employer_id: employerId, plan: to.key },
     }, { idempotencyKey: `kestrel-switch-${pass.row.id}-${to.key}-${Math.floor(Date.now() / 600_000)}` });
     await db.from("location_passes").update({ plan: to.key, current_period_end: periodEnd(updated) ?? pass.row.current_period_end, updated_at: new Date().toISOString() }).eq("id", pass.row.id);
-    await notifySlack("A clinic switched pass", [`${pass.plan.name} to ${to.name}`], { path: "/admin/clinics", text: "Open Admin, Clinics" });
+    await notifySlack("A clinic switched pass", [`${pass.plan.name} to ${to.name}`], { path: "/admin/clinics", text: "Open Admin, Clinics" }, "jobs");
     return { ok: true };
   } catch (e) {
     console.error("Pass switch failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);

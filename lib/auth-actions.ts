@@ -117,7 +117,7 @@ export async function signUp(_prev: FormState, form: FormData): Promise<FormStat
     if (problem) console.error("A new account could not join its clinic:", problem);
   }
   // Steve's Slack channel hears about a new account, with its type only: never the name or the email address.
-  if (data.user?.identities?.length) await notifySlack(`New ${accountType === "clinic" ? "clinic" : "candidate"} account`, [], { path: accountType === "clinic" ? "/admin/clinics" : "/admin", text: accountType === "clinic" ? "Open Admin, Clinics" : "Open the admin overview" });
+  if (data.user?.identities?.length) await notifySlack(`New ${accountType === "clinic" ? "clinic" : "candidate"} account`, [], { path: accountType === "clinic" ? "/admin/clinics" : "/admin", text: accountType === "clinic" ? "Open Admin, Clinics" : "Open the admin overview" }, "signups");
   if (data.session) redirect(accountType === "candidate" && after ? after : "/dashboard");
   return { message: "We have sent a link to your email. Open it to confirm your address, then sign in.", email };
 }
