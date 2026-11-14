@@ -154,12 +154,13 @@ input.other{margin-top:10px}
 .who-panel p{margin:0;font-weight:600;color:var(--navy);overflow-wrap:anywhere}
 .who-panel .who-plan{display:block;font-weight:600;font-size:0.875rem;line-height:1.35;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
 .who-panel .who-email{font-weight:400;color:var(--slate);font-size:0.875rem;line-height:1.35;margin-bottom:6px;overflow-wrap:anywhere}
-.who-panel .who-id{margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
-.who-panel .who-name{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.who-panel .who-name .who-email{margin:0}
-.who-panel a.who-gear{flex:none;width:44px;min-height:44px;padding:0;margin:-8px -10px -8px 0;justify-content:center}
+/* Name and email on the left, the settings gear on the right and level with the name, so a long email wraps inside its own column and never runs under the gear. */
+.who-panel .who-id{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;align-items:start;margin-bottom:6px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.who-panel .who-text .who-email{margin-bottom:0}
+.who-panel a.who-gear{width:40px;min-height:40px;height:40px;padding:0;margin:-6px -8px 0 0;justify-content:center}
 .who-panel a.who-gear .icon{width:22px;height:22px}
 .who-panel a.who-gear[aria-current=page]{background:var(--cream)}
+.who-panel .who-id .who-plan{grid-column:1 / -1;min-height:0;margin:6px 0 0;padding:0;border-bottom:0}
 .who-panel a{color:var(--navy);text-decoration:none;font-weight:600;padding:10px 0;min-height:44px;display:flex;align-items:center}
 .who-panel a,.who-panel .linkbtn{padding:10px;margin:0 -10px;border-radius:8px;text-align:left}
 .who-panel .linkbtn{display:flex;width:calc(100% + 20px);color:var(--navy)}
@@ -1028,4 +1029,3 @@ body.sf-locked{overflow:hidden}
 .activity{margin-top:12px}.activity summary{cursor:pointer;font-weight:600}.activity ul{list-style:none;margin:8px 0 0;padding:0}.activity li{padding:7px 0;border-top:1px solid var(--line)}.activity .when{color:var(--slate,#5A6672);margin-right:6px}.paynote{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin-top:6px}
 h2.subhead{font:400 1.6rem/1.2 var(--f-display),Georgia,serif;margin:40px 0 6px}
 
-.who-panel .who-id .who-plan{border-bottom:0;margin:6px 0 0;padding-bottom:0}

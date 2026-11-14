@@ -13,15 +13,15 @@ export default function AccountMenu({ session, here, className = "" }: { session
       </summary>
       <div className="who-panel">
         <div className="who-id">
-          <div className="who-name">
+          <div className="who-text">
             <p>{session.fullName || session.email}</p>
-            {session.role !== "admin" && (
-              <Link href={SETTINGS_HREF} className="who-gear" aria-label="Account settings" aria-current={here === SETTINGS_HREF ? "page" : undefined}>
-                <Icon name="gear" />
-              </Link>
-            )}
+            {session.fullName && <p className="who-email">{session.email}</p>}
           </div>
-          {session.fullName && <p className="who-email">{session.email}</p>}
+          {session.role !== "admin" && (
+            <Link href={SETTINGS_HREF} className="who-gear" aria-label="Account settings" aria-current={here === SETTINGS_HREF ? "page" : undefined}>
+              <Icon name="gear" />
+            </Link>
+          )}
           {session.planLine && <Link href="/clinic/plans" className="who-plan">{session.planLine}</Link>}
         </div>
         {ACCOUNT_MENU[session.role].map((item) => (
