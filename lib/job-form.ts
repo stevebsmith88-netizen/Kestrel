@@ -9,6 +9,7 @@ const field = (form: FormData, key: string) => form.get(key) ?? "";
 export function jobFromForm(form: FormData, submit: boolean) {
   const job = cleanJob({
     title: field(form, "title"),
+    titleLevel: field(form, "titleLevel"),
     roleCategory: field(form, "roleCategory"),
     employmentType: field(form, "employmentType"),
     province: field(form, "province"),

@@ -4,7 +4,7 @@
 
 import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLES } from "./waitlist.ts";
 import { HOURS_IN_A_YEAR, markupPayLine, parseMoney, payFlags, payRangeAllowed, payText, salaryForMarkup, validatePay, type PayFields } from "./job-pay.ts";
-import { tidyTitle } from "./job-title.ts";
+import { levelsForRole, suggestTitle, tidyTitle } from "./job-title.ts";
 import { cleanTags, EQUIPMENT_TAGS, SOFTWARE_TAGS, SPECIALTY_TAGS } from "./job-tags.ts";
 
 export { HOURS_IN_A_YEAR, parseMoney, payRangeAllowed };
@@ -75,6 +75,7 @@ export const STATUS_LABELS: Record<JobStatus, string> = {
 
 export type JobInput = {
   title: string;
+  titleLevel: string; // a level word added to the suggested title: Lead, Senior or Associate
   roleCategory: string;
   employmentType: string;
   province: string;
@@ -172,10 +173,18 @@ export function mentionsCanadianExperience(text: string) {
 }
 
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {
+  const roleCategory = clean(raw.roleCategory, 80);
+  const employmentType = clean(raw.employmentType, 30);
+  const tagsSpecialties = cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS);
+  const titleLevel = levelsForRole(roleCategory).includes(clean(raw.titleLevel, 12)) ? clean(raw.titleLevel, 12) : "";
+  // Once a role is chosen the title is set from the choices (Steve, 14th November 2026), so every title for a role reads the same way and the
+  // title always matches the role and the price band. Only a draft with no role yet keeps what was typed.
+  const suggested = suggestTitle({ role: roleCategory, employmentType, specialties: tagsSpecialties, level: titleLevel });
   return {
-    title: tidyTitle(clean(raw.title, 120)),
-    roleCategory: clean(raw.roleCategory, 80),
-    employmentType: clean(raw.employmentType, 30),
+    title: levelsForRole(roleCategory).length ? suggested : tidyTitle(clean(raw.title, 120)),
+    titleLevel,
+    roleCategory,
+    employmentType,
     province: clean(raw.province, 40),
     city: clean(raw.city, 80),
     payPeriod: clean(raw.payPeriod, 12),
@@ -199,14 +208,14 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     payDays: clean(raw.payDays, 2),
     tagsSoftware: cleanTags(raw.tagsSoftware, SOFTWARE_TAGS),
     tagsEquipment: cleanTags(raw.tagsEquipment, EQUIPMENT_TAGS),
-    tagsSpecialties: cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS),
+    tagsSpecialties,
   };
 }
 
 // A draft only needs a title. Submitting for review needs everything.
 export function validateJob(job: JobInput, submit: boolean) {
   const errors: Record<string, string> = {};
-  if (!job.title) errors.title = "Give the job a title.";
+  if (!job.title) errors.title = "Choose a role and the job title is set for you.";
   if (job.description && mentionsCanadianExperience(`${job.title} ${job.description}`)) {
     errors.description = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   }
