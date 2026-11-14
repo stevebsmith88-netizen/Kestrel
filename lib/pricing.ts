@@ -21,6 +21,10 @@ export const CLINIC_PASS_PLUS = { monthly: 349, livePosts: 5, yearly: 3490, lock
 // until it cancels, whichever comes first. Then the price in force at that time applies, after 30 days notice. Stripe checkout must follow this.
 export const FOUNDING_CLINICS = { places: 50, lockMonths: 12, noticeDays: 30 } as const;
 
+// The free launch coupon (Steve, 14th November 2026: "July 2027, I think"). Stripe cannot change a coupon's end date once it exists, so the
+// end date lives here and checkout only applies the coupon on or before it. Change the date here, nothing in Stripe needs remaking.
+export const FREE_LAUNCH_ENDS = "2027-07-31";
+
 const money = (n: number, places = 0) => "$" + n.toLocaleString("en-CA", { minimumFractionDigits: places, maximumFractionDigits: places });
 
 export const perDay = (price: number) => money(price / POST_DAYS, 2);
