@@ -19,7 +19,7 @@ function Result({ state }: { state: TeamState }) {
 }
 
 // The owner's invitation form: 3 boxes and a button (Steve, 14th November 2026).
-export function InviteForm({ full }: { full: boolean }) {
+export function InviteForm({ full, locations = [], current }: { full: boolean; locations?: { id: string; clinic_name: string; city: string }[]; current?: string }) {
   const { state, pending, submit } = useServerForm<TeamState>(inviteTeamMember);
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
@@ -33,6 +33,17 @@ export function InviteForm({ full }: { full: boolean }) {
           <input id="tm-email" name="email" type="email" autoComplete="off" maxLength={254} />
         </div>
       </div>
+      {locations.length > 1 && (
+        <fieldset className="row">
+          <legend className="lab">Which locations</legend>
+          {locations.map((l) => (
+            <label className="choice" key={l.id}>
+              <input type="checkbox" name="locations" value={l.id} defaultChecked disabled={l.id === current} />
+              <span>{l.clinic_name}, {l.city}{l.id === current ? " (this location, always included)" : ""}</span>
+            </label>
+          ))}
+        </fieldset>
+      )}
       <fieldset className="row">
         <legend className="lab">What they can do</legend>
         {LEVELS.map((l, i) => (

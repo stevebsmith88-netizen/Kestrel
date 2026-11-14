@@ -7,6 +7,7 @@ export const DASHBOARD_NOTICES: Record<string, string> = {
   "job-saved": "Your draft is saved.",
   "job-submitted": "Your job is with our team. We check every post, usually within 1 business day, and it goes live as soon as it is approved.",
   "job-closed": "The job is closed and no longer shown to candidates.",
+  "location-added": "Your new location is saved, and you are working in it now. Use the Location picker to switch.",
   "team-joined": "Welcome to the team. You can now see your clinic's jobs and applicants.",
   "job-withdrawn": "The job is back in your drafts, so you can change it and send it again.",
   "job-deleted": "The job is deleted.",

@@ -27,16 +27,11 @@ export default async function Join({ searchParams }: { searchParams: Promise<{ c
           <p><Link href={`/sign-up${code ? `?team=${encodeURIComponent(code)}` : ""}`} className="btn">Create my account</Link></p>
           <p className="alt">Already have an account? <Link href={`/sign-in?next=${encodeURIComponent(here)}`}>Sign in</Link></p>
         </>
-      ) : employer ? (
-        <>
-          <p className="auth-intro">Your account already belongs to {employer.clinic_name} on Kestrel, and an account can be on 1 clinic&apos;s team. Ask the clinic to send the invitation to a different email address, or email support@eyecarejobs.ca and we will help.</p>
-          <p><Link href="/clinic" className="btn">Go to my dashboard</Link></p>
-        </>
       ) : session.role !== "clinic" ? (
         <p className="auth-intro">You are signed in with an account for looking for work. Ask the clinic to send the invitation to a different email address, such as your work email, and create a clinic account with it.</p>
       ) : (
         <>
-          <p className="auth-intro">Enter the code from your invitation email to join the clinic.</p>
+          <p className="auth-intro">Enter the code from your invitation email to join the clinic.{employer ? ` You keep ${employer.clinic_name} too, and switch between them with the Location picker on your dashboard.` : ""}</p>
           <JoinForm code={code} />
         </>
       )}

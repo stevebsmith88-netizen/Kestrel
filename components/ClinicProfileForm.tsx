@@ -18,7 +18,8 @@ const EMPLOYER_TYPES = [
 type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; employee_band: string | null; direct_hire_confirmed_at: string | null };
 
 // A new clinic's alert address starts as the email it signed up with, so it is not typed twice (it can be changed).
-export default function ClinicProfileForm({ initial, signUpEmail = "" }: { initial: Initial | null; signUpEmail?: string }) {
+// `newLocation` adds another location for the same owner (migration 0047): an empty form, saved as a new clinic.
+export default function ClinicProfileForm({ initial, signUpEmail = "", newLocation = false }: { initial: Initial | null; signUpEmail?: string; newLocation?: boolean }) {
   const { state, pending, submit } = useServerForm(saveClinic);
   const e = state.errors ?? {};
   const [type, setType] = useState(initial?.practice_type ?? "");
@@ -27,6 +28,7 @@ export default function ClinicProfileForm({ initial, signUpEmail = "" }: { initi
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
       <RequiredNote />
+      {newLocation && <input type="hidden" name="newLocation" value="yes" />}
       <Choices name="practiceType" label="Who are you hiring for?" options={EMPLOYER_TYPES} value={initial?.practice_type} error={e.practiceType} onChange={setType} />
       <Field id="cp-website" label="Website" error={e.website} hint="Optional. Shown on your job posts and your public page. Type it, then press Fill in from my website to save typing.">
         <input id="cp-website" name="website" type="url" placeholder="https://" defaultValue={initial?.website ?? ""} />
@@ -73,7 +75,7 @@ export default function ClinicProfileForm({ initial, signUpEmail = "" }: { initi
 
       {state.error && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message} <Link href="/clinic">Back to your dashboard</Link></p>}
-      <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : initial ? "Save changes" : `Create my ${place} profile`}</button>
+      <button type="submit" className="btn" disabled={pending}>{pending ? "Saving" : newLocation ? "Add this location" : initial ? "Save changes" : `Create my ${place} profile`}</button>
     </form>
   );
 }

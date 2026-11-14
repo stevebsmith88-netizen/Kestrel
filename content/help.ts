@@ -445,7 +445,7 @@ export const HELP: HelpSection[] = [
         ],
         steps: [
           "Open the menu under your initials and choose **Clinic team**.",
-          "Under **Invite someone**, type their name and work email, choose what they can do, and press **Send invite**.",
+          "Under **Invite someone**, type their name and work email, choose what they can do, and press **Send invite**. If you have more than 1 location, tick the ones they should see. All are ticked to start with.",
           "They get an email with a link and a code. If it does not arrive, the page shows the code once so you can pass it on yourself, or press **Send again** beside their name for a new one.",
           "To change what someone can do, choose it beside their name and press **Save**. To take away their access, press **Remove**.",
           "To hand the clinic to someone else, open **Hand the clinic over** beside their name. You stay on the team and can still view and edit.",
@@ -453,11 +453,26 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Clinic team", href: "/clinic/team" }],
       },
       {
+        id: "clinic-locations",
+        title: "Can I run several locations from 1 account?",
+        keywords: ["locations", "branches", "second clinic", "another clinic", "group", "multiple", "switch", "chain"],
+        answer: [
+          "Yes, up to 25. Each location has its own clinic profile, public page, jobs, applicants and team. Your dashboard, jobs, applicants, team and profile all follow the location you are working in, so a job is always posted to the right one.",
+          "Team members see only the locations you choose for them. Each location can have up to 5 people, counting you.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Locations**.",
+          "Under **Add a location**, fill in the clinic's name, town and province, and anything else you would like candidates to see, then press **Add this location**. You are working in it straight away.",
+          "To switch, use the **Location** picker at the top of your dashboard, or press **Work in this location** on the Locations page. Your dashboard also has **All locations**, with the live jobs and new applicants at each.",
+        ],
+        links: [{ label: "Locations", href: "/clinic/locations" }],
+      },
+      {
         id: "join-clinic-team",
         title: "My clinic invited me. How do I join?",
         keywords: ["invite code", "invitation", "join clinic", "team member", "manager", "code", "kt"],
         answer: [
-          "Use the email address the invitation was sent to. The code works once, only with that address, for 14 days. An account can be on 1 clinic's team, and an account set up for looking for work cannot join a clinic, so use your work email.",
+          "Use the email address the invitation was sent to. The code works once, only with that address, for 14 days. An account set up for looking for work cannot join a clinic, so use your work email. If you are already on another clinic's team, or run your own, you keep that too and switch between them with the **Location** picker on your dashboard.",
         ],
         steps: [
           "Open the invitation email and press **Join the clinic**.",

@@ -357,6 +357,13 @@ textarea{resize:vertical;line-height:1.5}
 .teamcodebox .row{margin-top:10px}
 .adminact{margin-top:10px}
 .teamcode{font-family:ui-monospace,Menlo,monospace;letter-spacing:.06em}
+.locationpicker{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 18px}
+.locationpicker .lab{margin:0}
+.locationpicker select{width:auto;max-width:100%}
+.allloc{margin:0 0 20px;padding:16px 20px}
+.allloc summary{cursor:pointer;font-weight:600}
+.locationsum{width:100%;border-collapse:collapse}
+.locationsum th,.locationsum td{text-align:left;padding:8px 10px;border-top:1px solid var(--line)}
 .supportblock{margin-top:28px}
 .supportblock h2{font:400 1.5rem/1.2 var(--f-display),Georgia,serif;margin:0 0 10px}
 .teaminvite{margin-top:28px}

@@ -8,6 +8,7 @@ import { changeName, type NameDb } from "@/lib/name-change";
 import { IN_PLAY_NAME_TEXT } from "@/lib/name-hold";
 import { hasApplicationInPlay } from "@/lib/live-applications";
 import { requireRole } from "@/lib/auth";
+import { getMyEmployer } from "@/lib/clinic";
 import { MARKETING_CONSENT_TEXT, NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
@@ -93,7 +94,9 @@ export async function savePreferences(_prev: JobFormState, form: FormData): Prom
   if (session.role === "candidate") {
     await admin.from("profiles").update({ notify_application_updates: form.get("applicationUpdates") === "yes" }).eq("id", session.userId);
   } else {
-    const { data: employer } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
+    // The email choices belong to the location being worked in (migration 0047), and only its owner sets them.
+    const current = await getMyEmployer(session.userId);
+    const employer = current?.level === "owner" ? current : null;
     if (employer) {
       const frequency = cleanFrequency(form.get("applicantEmails"));
       await admin.from("employer_contacts").update({ notify_frequency: frequency, notify_new_applications: frequency !== "off", notify_reminders: form.get("reminders") === "yes" }).eq("employer_id", employer.id);

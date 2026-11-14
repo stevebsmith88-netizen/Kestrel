@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
-import { getMyEditableEmployer, getMyEmployer } from "@/lib/clinic";
+import { getMyEditableEmployer, getMyEmployer, LOCATION_COOKIE } from "@/lib/clinic";
 import { canEdit, OWNER_ONLY_TEXT, VIEW_ONLY_TEXT } from "@/lib/team";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
@@ -50,9 +50,12 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
 
-  const existing = await getMyEmployer(session.userId);
+  const current = await getMyEmployer(session.userId);
   // A team member can see the profile but only the owner changes it (migration 0045).
-  if (existing && existing.level !== "owner") return { error: OWNER_ONLY_TEXT };
+  if (current && current.level !== "owner") return { error: OWNER_ONLY_TEXT };
+  // "Add a location" (migration 0047): the owner of a location saves a new one instead of changing the one they are in.
+  const newLocation = form.get("newLocation") === "yes" && current?.level === "owner";
+  const existing = newLocation ? null : current;
   const row = {
     clinic_name: clinic.clinicName,
     practice_type: clinic.practiceType,
@@ -61,7 +64,7 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     city: clinic.city,
     about: clinic.about || null,
     // Keep the first date they confirmed.
-    direct_hire_confirmed_at: existing?.direct_hire_confirmed_at ?? new Date().toISOString(),
+    direct_hire_confirmed_at: existing?.direct_hire_confirmed_at ?? current?.direct_hire_confirmed_at ?? new Date().toISOString(),
   };
 
   let employerId = existing?.id;
@@ -81,9 +84,12 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     const { data, error } = await db.from("employers").insert({ ...row, owner_id: session.userId }).select("id").single();
     if (error || !data) {
       console.error("Clinic create failed:", error?.code, error?.message);
+      if (/25 locations/.test(error?.message ?? "")) return { error: "An account can hold up to 25 locations. Please email support@eyecarejobs.ca to add more." };
       return { error: "We couldn't save your clinic profile. Please try again." };
     }
     employerId = data.id;
+    // The new location becomes the one being worked in.
+    if (newLocation) (await cookies()).set(LOCATION_COOKIE, data.id, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 365 * 86_400 });
   }
 
   const { error: contactError } = await db.from("employer_contacts").upsert({ employer_id: employerId, notify_email: clinic.notifyEmail, ...(clinic.employeeBand ? { employee_band: clinic.employeeBand } : {}) }, { onConflict: "employer_id" });
@@ -95,6 +101,7 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   revalidatePath("/clinic");
   refreshJobPages(); // the clinic name and about text appear on its saved job pages
   // A new clinic goes straight on to its first post (Steve, 13th November 2026), with no stop on the empty dashboard.
+  if (newLocation) redirect("/clinic?notice=location-added");
   if (!existing) redirect("/clinic/jobs/new?notice=profile-created");
   return { message: "Your clinic profile is saved." };
 }
