@@ -44,7 +44,7 @@ Statistics Canada's "Vision health month" page says 6,400 optometrists and 11,70
 
 ## Canadian Association of Optometrists, "Optometry in Canada: Optometric Leaders' Forum 2025 Report"
 
-Shared by Steve as a PDF on 14th November 2026. Gathered by the CAO from the provincial associations and colleges, both schools and student leaders. Before quoting, confirm the report is published on opto.ca and link to it there (cite it as the CAO's report, not as Kestrel's numbers).
+Shared by Steve as a PDF on 14th November 2026. Gathered by the CAO from the provincial associations and colleges, both schools and student leaders. Steve confirmed on 14th November 2026 that it is a public PDF on opto.ca. Link to it there when quoting, and cite it as the CAO's report, not as Kestrel's numbers.
 
 - **Gender:** women 3,974, men 2,336, other or not specified 3 (63% women), excluding British Columbia, which did not report. Agrees with the census (59% in 2021) and suggests the share is still rising.
 - **By province (women and men):** Alberta 519 and 428; Manitoba 106 and 94; New Brunswick 86 and 51; Newfoundland and Labrador 34 and 23; Nova Scotia 103 and 59; Ontario 1,829 and 1,162; Prince Edward Island 16 and 8; Saskatchewan 114 and 86. (Quebec is in the report but Kestrel publishes no Quebec content.)
