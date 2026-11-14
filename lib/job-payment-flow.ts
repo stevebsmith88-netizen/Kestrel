@@ -82,7 +82,8 @@ export async function startCardSetup(jobId: string, returnTo: "submit" | "update
       mode: "setup",
       currency: "cad",
       customer,
-      payment_method_types: ["card"],
+      // Stripe no longer accepts payment_method_types on Checkout: the methods offered are set in the Stripe dashboard (Settings, Payment
+      // methods). In setup mode only methods that can be saved and charged later are shown.
       success_url: `${SITE_URL}/clinic/jobs/paid?session_id={CHECKOUT_SESSION_ID}&from=${returnTo}`,
       cancel_url: `${SITE_URL}/clinic/jobs/paid?cancelled=${job.id}`,
       custom_text: { submit: { message: chargeNotice(cents) } },
