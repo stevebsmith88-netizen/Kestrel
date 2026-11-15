@@ -3,7 +3,7 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { longDate } from "@/lib/jobs";
-import { markAllRead, markOneRead, openMessage } from "@/lib/notification-actions";
+import InboxList from "@/components/InboxList";
 import { getMyNotifications } from "@/lib/notifications";
 import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -33,7 +33,6 @@ export default async function Inbox({ searchParams }: { searchParams: Promise<{ 
   // Help requests and feedback have their own tab, so open requests are not lost among the updates (Steve, 14th November 2026).
   if (tab === "help") return <TicketsView session={session} tickets={tickets} openTickets={openTickets} />;
   const items = await getMyNotifications();
-  const unread = items.filter((n) => !n.read_at).length;
   return (
     <>
       <AppBar session={session} current="/account/inbox" />
@@ -49,36 +48,7 @@ export default async function Inbox({ searchParams }: { searchParams: Promise<{ 
             </section>
           ) : (
             <section className="card">
-              {unread > 0 && (
-                <form action={markAllRead}>
-                  <button type="submit" className="btn sm ghost">Mark all as read</button>
-                </form>
-              )}
-              <ul className="inboxlist">
-                {items.map((n) => (
-                  <li key={n.id} className={n.read_at ? undefined : "unread"}>
-                    <h2>{n.title}</h2>
-                    <span className="when">{longDate(n.created_at)}</span>
-                    {n.body && <p>{n.body}</p>}
-                    {(n.href || !n.read_at) && (
-                      <span className="actions">
-                        {n.href && (
-                          <form action={openMessage}>
-                            <input type="hidden" name="id" value={n.id} />
-                            <button type="submit" className="btn sm ghost">Open</button>
-                          </form>
-                        )}
-                        {!n.href && !n.read_at && (
-                          <form action={markOneRead}>
-                            <input type="hidden" name="id" value={n.id} />
-                            <button type="submit" className="btn sm ghost">Mark as read</button>
-                          </form>
-                        )}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              <InboxList items={items.map((n) => ({ id: n.id, title: n.title, body: n.body, href: n.href, read: Boolean(n.read_at), when: longDate(n.created_at) }))} />
             </section>
           )}
         </div>

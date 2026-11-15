@@ -18,6 +18,7 @@ import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyClinics, getMyEmployer, getMyJobs } from "@/lib/clinic";
 import LocationPicker from "@/components/LocationPicker";
+import PublicPageLink from "@/components/PublicPageLink";
 import { switchLocation } from "@/lib/location-actions";
 import { canEdit, levelLabel, VIEW_ONLY_TEXT } from "@/lib/team";
 import { numbersLine, sumNumbers } from "@/lib/job-stats";
@@ -76,6 +77,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
           <p className="kicker">{employer ? employer.clinic_name : "Clinic dashboard"}</p>
           <h1>Welcome, {first}</h1>
           <LocationPicker clinics={clinics} current={employer.id} back="/clinic" />
+          <PublicPageLink employerId={employer.id} supplier={employer.practice_type === "supplier"} />
           {employer.level !== "owner" && <p className="lede2">You are on the {employer.clinic_name} team ({levelLabel(employer.level).toLowerCase()}).{editor ? "" : ` ${VIEW_ONLY_TEXT}`}</p>}
           {notice && DASHBOARD_NOTICES[notice] && <p className={noticeTone(notice) === "warn" ? "notice warn" : "notice"} role="status">{DASHBOARD_NOTICES[notice]}{template === "failed" ? " We could not also save it as a template. Use Save as template on the job to try again." : template ? " It is also saved as a template for next time." : ""}</p>}
 
