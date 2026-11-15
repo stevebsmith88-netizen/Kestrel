@@ -7,7 +7,8 @@ export function alertMessage(text: string, buttons: SlackButton[] = []) {
   return {
     text,
     blocks: [
-      { type: "section", text: { type: "mrkdwn", text } },
+      // Slack refuses a block over 3,000 characters, which would lose the whole alert, so a very long one is cut.
+      { type: "section", text: { type: "mrkdwn", text: text.length > 2900 ? `${text.slice(0, 2900)} ...` : text } },
       {
         type: "actions",
         elements: buttons.map((b) => ({
