@@ -21,7 +21,9 @@ export default function SlackCheck({ channels, approvals }: { channels: ChannelS
       <dl className="facts">
         <div><dt>SLACK_SIGNING_SECRET<br /><span className="help">Lets the site trust a press from Slack</span></dt><dd>{approvals.signingSecretSet ? "OK. It is set." : "Needs attention. Not set."}</dd></div>
         <div><dt>SLACK_APPROVER_IDS<br /><span className="help">Who may press Approve</span></dt><dd>{approvals.approversValid > 0 ? `OK. ${approvals.approversValid} ${approvals.approversValid === 1 ? "person" : "people"} on the list.` : approvals.approversGiven > 0 ? "Needs attention. Set, but not in the right shape." : "Needs attention. Not set."}</dd></div>
-        <div><dt>Will buttons appear on alerts?</dt><dd>{approvals.ready ? "Yes, on a job with nothing flagged and a claim confirmed by email." : "No."}</dd></div>
+        <div><dt>SLACK_BOT_TOKEN<br /><span className="help">Opens the note form for Send back and Decline</span></dt><dd>{approvals.botTokenSet ? "OK. It is set." : "Not set. Approve still works, but Send back and Decline buttons are not added."}</dd></div>
+        <div><dt>Will Approve appear on alerts?</dt><dd>{approvals.ready ? "Yes, on a job with nothing flagged and a claim confirmed by email." : "No."}</dd></div>
+        <div><dt>Will Send back and Decline appear?</dt><dd>{approvals.sendBackReady ? "Yes, on every job waiting for review and every claim waiting." : "No."}</dd></div>
       </dl>
       {approvals.problems.map((p) => <p key={p} className="err form-err" role="status">{p}</p>)}
       <form onSubmit={submit} noValidate>

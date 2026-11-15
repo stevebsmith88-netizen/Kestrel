@@ -12,16 +12,20 @@ export function alertMessage(text: string, buttons: SlackButton[] = []) {
         type: "actions",
         elements: buttons.map((b) => ({
           type: "button",
-          style: "primary",
+          ...(b.style ? { style: b.style } : {}),
           text: { type: "plain_text", text: b.label },
           action_id: b.actionId,
           value: b.value,
-          confirm: {
-            title: { type: "plain_text", text: b.confirmTitle },
-            text: { type: "mrkdwn", text: b.confirmText },
-            confirm: { type: "plain_text", text: "Approve" },
-            deny: { type: "plain_text", text: "Cancel" },
-          },
+          ...(b.confirmTitle && b.confirmText
+            ? {
+                confirm: {
+                  title: { type: "plain_text", text: b.confirmTitle },
+                  text: { type: "mrkdwn", text: b.confirmText },
+                  confirm: { type: "plain_text", text: "Approve" },
+                  deny: { type: "plain_text", text: "Cancel" },
+                },
+              }
+            : {}),
         })),
       },
     ],
@@ -34,3 +38,25 @@ export function resultMessage(originalText: string, result: string) {
 }
 
 export const ephemeral = (text: string) => ({ response_type: "ephemeral", replace_original: false, text });
+
+// The small form Slack shows for Send back and Decline: a box for the note, which goes to the clinic or the claimant. `metadata` rides along and comes
+// back when the form is submitted, so the site knows which job or claim it was for and which message to update.
+export function noteModal(args: { callbackId: string; title: string; label: string; submit: string; hint: string; metadata: { id: string; responseUrl: string; original: string } }) {
+  return {
+    type: "modal",
+    callback_id: args.callbackId,
+    title: { type: "plain_text", text: args.title.slice(0, 24) },
+    submit: { type: "plain_text", text: args.submit.slice(0, 24) },
+    close: { type: "plain_text", text: "Cancel" },
+    private_metadata: JSON.stringify({ ...args.metadata, original: args.metadata.original.slice(0, 1200) }),
+    blocks: [
+      {
+        type: "input",
+        block_id: "note",
+        label: { type: "plain_text", text: args.label },
+        hint: { type: "plain_text", text: args.hint },
+        element: { type: "plain_text_input", action_id: "note_input", multiline: true, max_length: 1000 },
+      },
+    ],
+  };
+}

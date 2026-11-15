@@ -51,6 +51,18 @@ Once these are set up, the alert for a job waiting for review, and for a claim c
 5. Redeploy as in step 4 above (Deployments, the 3 dots, Redeploy, untick the build cache).
 6. The next job or claim alert will have the button. If it does not, tell Claude what you see.
 
+## Send back and Decline buttons
+
+These sit beside Approve. **Send back** is on every job waiting for review, flagged or not, because it publishes and charges nothing. **Decline** is on a claim waiting for review. Pressing either opens a small form in Slack asking for your note, which is emailed to the clinic or the claimant exactly as you write it (at least 10 characters). The message then changes to "Sent back by you from Slack". They need one more setting, a bot token:
+
+1. At api.slack.com/apps, open the Kestrel app. Choose **App Home** and make sure the app has a display name (this gives it a bot user, which the token belongs to).
+2. Choose **OAuth and Permissions**. Under **Bot Token Scopes**, add `chat:write`. Slack may then show a banner asking you to **Reinstall to Workspace**. Do that and allow it.
+3. On the same page, copy the **Bot User OAuth Token** (it starts `xoxb-`). It is a password, so never paste it into a chat.
+4. In Vercel, in the live project (**kestrel**), add `SLACK_BOT_TOKEN` with that value, Production, **Sensitive**. Then redeploy without the build cache.
+5. Open Payments and Stripe on the live site. The Approve buttons box should now show the bot token as OK and "Will Send back and Decline appear? Yes".
+
+Slack's screens change from time to time. If a step looks different, tell Claude what you see.
+
 ## A tech channel for Vercel and GitHub (no code)
 
 Slack has its own apps for these, so nothing needs building. Make a channel called #kestrel-tech. Steps can differ slightly from what is written here, so if a screen looks different, tell Claude what you see.
