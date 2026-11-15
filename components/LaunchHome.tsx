@@ -27,6 +27,7 @@ export default async function LaunchHome() {
           <div className="wrap">
             <h1 id="lh-title">Find your next eye care job</h1>
             <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and a person reads every post before it goes live.</p>
+            {!postingOn() && <p className="lh-lede"><strong>Sign up is open for you to look around.</strong> Create an account now, and we will let you know when clinics can start posting jobs.</p>}
             <form method="get" action="/jobs" className="lh-search" role="search" aria-label="Search jobs">
               <label className="sr" htmlFor="lh-q">Role or keyword</label>
               <input id="lh-q" name="q" type="text" placeholder="Role or keyword, for example optician" autoComplete="off" />

@@ -121,7 +121,7 @@ export function SignInForm({ notice, next, google = false, signupOpen = true }: 
 }
 
 // `team` is a clinic team invitation (migration 0045): the account joins that clinic as soon as it is created.
-export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, invitation, next, team }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean; invitation?: string; next?: string; team?: { code: string; clinicName: string; email: string } }) {
+export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, invitation, next, team, postingSoon = false }: { defaultType?: "candidate" | "clinic"; postingSoon?: boolean; google?: boolean; inviteOnly?: boolean; invitation?: string; next?: string; team?: { code: string; clinicName: string; email: string } }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -130,6 +130,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
           We have sent a confirmation link to <strong>{state.email}</strong>. Open it to confirm your address, then sign in.
         </p>
         <p className="help">It can take a minute to arrive. If you don&apos;t see it, check your spam or junk folder.</p>
+        {postingSoon && <p className="help">You can look around as soon as you are signed in. Clinics cannot post jobs yet, and we will email you when posting opens.</p>}
       </Done>
     );
   }
@@ -144,7 +145,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
       <>
       <h1>Create your account</h1>
       <p className="auth-intro">
-        Free to join. Candidates can save a resume and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and tips for getting started.
+        Free to join. {postingSoon ? "Create an account to look around: clinics can set up a profile now, and posting jobs opens soon." : "Candidates can save a resume and follow their applications, and clinics can post jobs."} Tick the second box below if you would also like launch news and tips for getting started.
       </p>
       <p className="help">Looking for a job? Your profile and resume stay private until you apply. A clinic sees only what you send with an application.</p>
       </>
