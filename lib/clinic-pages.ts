@@ -1,3 +1,5 @@
+import { socialLinksFrom } from "./social-links.ts";
+
 // Public clinic pages (Steve, 14th November 2026): an address for each clinic, such as /clinics/northgate-eye-care-kelowna, with its open
 // jobs. No database change is needed: the address is worked out from the clinic's name and town, and when 2 clinics would share one, both
 // get a short piece of their id on the end. Plan: docs/plans/clinic-and-supplier-pages.md.
@@ -10,6 +12,10 @@ export type PublicClinic = {
   province: string;
   city: string;
   about: string | null;
+  // The optional social links (migration 0054), shown as icons. Missing until the database has them.
+  social_instagram?: string | null;
+  social_facebook?: string | null;
+  social_linkedin?: string | null;
 };
 
 // Lowercase letters and numbers joined by single hyphens, with accents taken off ("Clinique Lévis" to "clinique-levis").
@@ -57,6 +63,11 @@ export const clinicIndexable = (about: string | null, liveJobs: number) => liveJ
 
 export const openJobsText = (n: number) => (n === 0 ? "No open jobs right now" : n === 1 ? "1 open job" : `${n} open jobs`);
 
+// The clinic's own website and the social pages it chose to list, for search engines.
+function sameAsLinks(c: PublicClinic) {
+  return [...(c.website ? [c.website] : []), ...socialLinksFrom(c).map((l) => l.url)];
+}
+
 // Organization data for search engines, matching what the page shows: the name, the town, the website and the description.
 export function clinicJsonLd(c: PublicClinic, slug: string, site: string) {
   return {
@@ -64,7 +75,7 @@ export function clinicJsonLd(c: PublicClinic, slug: string, site: string) {
     "@type": c.practice_type === "supplier" ? "Organization" : "MedicalBusiness",
     name: c.clinic_name,
     url: `${site}${employerHref(slug, c.practice_type)}`,
-    ...(c.website ? { sameAs: [c.website] } : {}),
+    ...(sameAsLinks(c).length ? { sameAs: sameAsLinks(c) } : {}),
     ...(c.about ? { description: c.about.slice(0, 500) } : {}),
     address: { "@type": "PostalAddress", addressLocality: c.city, addressRegion: c.province, addressCountry: "CA" },
   };

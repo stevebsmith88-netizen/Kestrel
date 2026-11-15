@@ -107,7 +107,7 @@ export const HELP: HelpSection[] = [
         title: "Who can see my details?",
         keywords: ["privacy", "visible", "employer sees", "profile private", "share", "cv visible", "hidden"],
         answer: [
-          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number if you added one, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
+          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number and LinkedIn profile if you added them, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
           "**If you are a clinic:** your job posts are public, but the email address that applicant alerts go to is never shown on a post, and neither is the answer about how many people work for you. Candidates apply through Kestrel, so recruiters cannot harvest your address.",
           "We do not sell personal information. Our team can see account details when it needs to run the site, and a small number of service providers handle information only to provide their service to us.",
         ],
@@ -431,7 +431,7 @@ export const HELP: HelpSection[] = [
         answer: [
           "You need a clinic account and a clinic profile before you can post. The profile is where candidates learn about you, so a few honest lines about your team help. Some details are private: the email address that applicant alerts go to is never shown on a post, and neither is how many people work for you.",
           "While clinic accounts are by invitation, the sign up form also asks for the invitation code we sent you. You can change your profile later from the menu under your initials.",
-          "Once Kestrel has approved your first job, your clinic gets its own public page listing your open jobs, with your name, town and About text. Every job page links to it. Suppliers and manufacturers get a company page in the same way, which shows **Company email confirmed** when your account uses an email address at your company's own website.",
+          "Once Kestrel has approved your first job, your clinic gets its own public page listing your open jobs, with your name, town and About text. Every job page links to it. You can add your clinic's Instagram, Facebook and LinkedIn page to your profile, and they show as small icons on that page. Suppliers and manufacturers get a company page in the same way, which shows **Company email confirmed** when your account uses an email address at your company's own website.",
         ],
         steps: [
           "Choose **Create account** at the top of the page. On a phone, open **Menu** first.",

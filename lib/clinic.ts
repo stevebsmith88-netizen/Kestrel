@@ -1,4 +1,6 @@
 import { withExpected } from "@/lib/expected-columns";
+import { withClinicSocial } from "@/lib/social-columns";
+import type { SocialColumns } from "@/lib/social-links";
 import "server-only";
 import { cookies } from "next/headers";
 import { HIREABLE } from "@/lib/applications";
@@ -19,7 +21,7 @@ export type Employer = {
   direct_hire_confirmed_at: string | null;
   // Who the signed in person is to this clinic: its owner, or a team member who can view and edit, or view only (migration 0045).
   level: ClinicLevel;
-};
+} & SocialColumns; // the optional social links (migration 0054), present once the database has them
 
 export type MyJob = {
   id: string;
@@ -94,7 +96,8 @@ export async function getMyEmployer(userId: string): Promise<Employer | null> {
     picked = undefined; // outside a request
   }
   const current = clinics.find((c) => c.id === picked) ?? clinics[0];
-  const { data } = await db.from("employers").select(EMPLOYER_COLUMNS).eq("id", current.id).maybeSingle();
+  const { data: row } = await db.from("employers").select(await withClinicSocial(EMPLOYER_COLUMNS)).eq("id", current.id).maybeSingle();
+  const data = row as unknown as (Record<string, unknown> & { id: string }) | null;
   if (!data) return null;
   if (current.level === "owner") {
     const { data: contact } = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", data.id).maybeSingle();

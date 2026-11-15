@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0053), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0054), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3218,6 +3218,38 @@ alter table public.location_passes
 grant select (founding, price_locked_until) on public.location_passes to authenticated;
 
 -- ======================================================================
+-- 0054_social_links.sql
+-- ======================================================================
+-- 0054: optional social links (Steve, 15th November 2026). Safe to run twice.
+--
+-- A clinic or company can add its Instagram, Facebook and LinkedIn page, shown as small icons on its public page. A candidate can add their
+-- LinkedIn profile, which goes to a clinic only with an application (it is saved with the application, like the phone number).
+-- The website checks every address (lib/social-links.ts: https only, on the platform's own website). The database only limits the length.
+
+alter table public.employers add column if not exists social_instagram text;
+alter table public.employers add column if not exists social_facebook text;
+alter table public.employers add column if not exists social_linkedin text;
+
+alter table public.employers drop constraint if exists employers_social_length;
+alter table public.employers add constraint employers_social_length check (
+  char_length(coalesce(social_instagram, '')) <= 200 and char_length(coalesce(social_facebook, '')) <= 200 and char_length(coalesce(social_linkedin, '')) <= 200
+);
+
+-- Public columns: visitors see the links on a clinic's page. Only the clinic's own people change them (the row rules already decide who).
+grant select (social_instagram, social_facebook, social_linkedin) on public.employers to anon;
+grant insert (social_instagram, social_facebook, social_linkedin) on public.employers to authenticated;
+grant update (social_instagram, social_facebook, social_linkedin) on public.employers to authenticated;
+
+-- A candidate's LinkedIn profile. Private: not readable by visitors, and a clinic gets it only inside an application the candidate sends.
+alter table public.candidate_profiles add column if not exists linkedin_url text;
+
+alter table public.candidate_profiles drop constraint if exists candidate_profiles_linkedin_length;
+alter table public.candidate_profiles add constraint candidate_profiles_linkedin_length check (linkedin_url is null or char_length(linkedin_url) <= 200);
+
+grant insert (linkedin_url) on public.candidate_profiles to authenticated;
+grant update (linkedin_url) on public.candidate_profiles to authenticated;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
@@ -3373,6 +3405,7 @@ from (
     ('function: claim_founding_place is for the server only (0052)', exists (select 1 from pg_proc where proname = 'claim_founding_place' and pronamespace = 'public'::regnamespace) and not has_function_privilege('anon', 'public.claim_founding_place(uuid, integer)', 'EXECUTE') and not has_function_privilege('authenticated', 'public.claim_founding_place(uuid, integer)', 'EXECUTE')),
     ('columns: a pass remembers if it is a founding pass and its price lock (0052)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'location_passes' and column_name = 'price_locked_until') and has_column_privilege('authenticated', 'public.location_passes', 'price_locked_until', 'SELECT') and not has_column_privilege('authenticated', 'public.location_passes', 'stripe_schedule_id', 'SELECT')),
     ('column: an optional headline on a job, readable by visitors (0053)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'headline') and has_column_privilege('anon', 'public.jobs', 'headline', 'SELECT')),
+    ('columns: a clinic''s social links readable by visitors, a candidate''s LinkedIn private (0054)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'social_linkedin') and has_column_privilege('anon', 'public.employers', 'social_linkedin', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'linkedin_url') and not has_column_privilege('anon', 'public.candidate_profiles', 'linkedin_url', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

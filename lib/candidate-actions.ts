@@ -1,6 +1,8 @@
 "use server";
 
 import { applicantSnapshot } from "./application-details.ts";
+import { candidateLinkedinReady, withCandidateLinkedin } from "@/lib/social-columns";
+import { cleanSocialUrl } from "@/lib/social-links";
 import { APPLY_LIMIT_TEXT, MAX_APPLICATIONS_PER_DAY, applyWindowStart, overApplyLimit } from "@/lib/apply-limit";
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
@@ -79,11 +81,15 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
     profession,
   );
   Object.assign(errors, prefs.errors);
+  // An optional LinkedIn profile (Steve, 15th November 2026): the candidate's own page only, sent to a clinic with an application.
+  const linkedin = cleanSocialUrl("linkedin", text(form, "linkedin", 300), "candidate");
+  if (linkedin.error) errors.linkedin = linkedin.error;
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
-  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...prefs.row };
+  // Left out until the database has the column (migration 0054), so saving a profile never fails because of it.
+  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...((await candidateLinkedinReady()) ? { linkedin_url: linkedin.url || null } : {}), ...prefs.row };
 
   const { data: existing } = await db.from("candidate_profiles").select("user_id").eq("user_id", session.userId).maybeSingle();
   const { error } = existing
@@ -206,7 +212,8 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   if (!job || job.status !== "live" || new Date(job.expires_at) <= new Date() || !clinicName) return { error: "This job is no longer open for applications." };
   if (job.apply_method !== "kestrel") return { error: "This job takes applications on the clinic's own website." };
 
-  const { data: profile } = await admin.from("candidate_profiles").select("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, home_city, home_province").eq("user_id", session.userId).maybeSingle();
+  const { data: profileRow } = await admin.from("candidate_profiles").select(await withCandidateLinkedin("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, home_city, home_province")).eq("user_id", session.userId).maybeSingle();
+  const profile = profileRow as unknown as { profession: string | null; pref_other_roles: string[] | null; licensed_provinces: string[] | null; years_experience: string | null; available_from: string | null; phone: string | null; cv_path: string | null; cv_filename: string | null; home_city: string | null; home_province: string | null; linkedin_url?: string | null } | null;
   if (!profile || !readyToApply(profile)) return { error: `Please add ${missingSentence(profile ?? null)} to your profile first.` };
   if (!profile.profession || !profile.cv_path) return { error: "Please finish your profile and save your resume first." };
   // The role on the profile has to fit the job (lib/role-fit.ts). The job page and the apply page say so first, and this stops it from the server too.

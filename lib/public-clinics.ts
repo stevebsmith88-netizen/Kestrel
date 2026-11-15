@@ -4,6 +4,7 @@ import { foundingNumber } from "@/lib/founding-flow";
 import { QUEBEC } from "@/lib/jobs";
 import { clinicSlugs, employerHref, type PublicClinic } from "@/lib/clinic-pages";
 import { emailMatchesWebsite } from "@/lib/claims";
+import { withClinicSocial } from "@/lib/social-columns";
 
 // Which clinics and suppliers have a public page, and the details shown on it. Read with the server key, because an employer with no live
 // job today is hidden from the visitor's key (migration 0040), and its page should still work. Only these public columns are shown: never
@@ -24,7 +25,7 @@ export async function listPublicClinics(): Promise<ClinicIndex> {
   const db = supabaseAdmin();
   if (!db) return empty;
   const [{ data: rows, error }, { data: approved, error: jobsError }] = await Promise.all([
-    db.from("employers").select(COLUMNS).eq("status", "active").eq("claimed", true).neq("province", QUEBEC).limit(5000),
+    db.from("employers").select(await withClinicSocial(COLUMNS)).eq("status", "active").eq("claimed", true).neq("province", QUEBEC).limit(5000),
     db.from("jobs").select("employer_id").in("status", APPROVED_STATUSES).not("posted_at", "is", null).limit(20000),
   ]);
   if (error || jobsError) {
@@ -33,7 +34,7 @@ export async function listPublicClinics(): Promise<ClinicIndex> {
   }
   const withJobs = new Set((approved ?? []).map((j) => j.employer_id as string));
   // The owner id is only used below to check a supplier's email domain, and is dropped before anything is returned.
-  const all = ((rows ?? []) as Row[]).map(({ owner_id: _owner, ...rest }) => rest as PublicClinic);
+  const all = ((rows ?? []) as unknown as Row[]).map(({ owner_id: _owner, ...rest }) => rest as PublicClinic);
   // Addresses are worked out across every employer, so 2 with the same name and town never swap pages when one gains its first job.
   return { clinics: all.filter((c) => withJobs.has(c.id)), slugs: clinicSlugs(all) };
 }

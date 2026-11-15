@@ -12,6 +12,7 @@ import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { APP_LABELS, type AppStatus } from "@/lib/applications";
 import { getApplicationForClinic } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
+import { cleanSocialUrl } from "@/lib/social-links";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -46,6 +47,8 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
   const db = await supabaseServer();
   const { data: noteRow } = db ? await db.from("application_notes").select("note").eq("application_id", id).maybeSingle() : { data: null };
   const who = a.applicant;
+  // Re-checked on the way out, so only a real LinkedIn profile address can ever become a link a clinic clicks.
+  const linkedinUrl = cleanSocialUrl("linkedin", who.linkedin_url, "candidate").url || null;
 
   return (
     <>
@@ -73,6 +76,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
                 <dl className="facts">
                   <div><dt>Email</dt><dd><a href={`mailto:${who.email}`}>{who.email}</a></dd></div>
                   {who.phone && <div><dt>Phone</dt><dd>{who.phone}</dd></div>}
+                  {linkedinUrl && <div><dt>LinkedIn</dt><dd><a href={linkedinUrl} target="_blank" rel="noopener nofollow noreferrer">View their profile<span className="sr"> (opens in a new tab)</span></a></dd></div>}
                   <div><dt>Role</dt><dd>{who.profession ?? "Not given"}</dd></div>
                   <div><dt>Licensed in</dt><dd>{who.licensed_provinces?.length ? who.licensed_provinces.join(", ") : "Not given"}</dd></div>
                   <div><dt>Experience</dt><dd>{who.years_experience ?? "Not given"}</dd></div>

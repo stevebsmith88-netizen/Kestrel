@@ -7,6 +7,7 @@ import { useServerForm } from "@/components/useServerForm";
 import { readMyWebsite, saveClinic } from "@/lib/clinic-actions";
 import type { SiteDetails } from "@/lib/site-details";
 import { EMPLOYEE_BANDS, PROVINCES } from "@/lib/jobs";
+import { SOCIAL_PLATFORMS } from "@/lib/social-links";
 
 // Clinics first, then suppliers (Steve, 14th November 2026). The answer changes the wording of the questions below it.
 const EMPLOYER_TYPES = [
@@ -15,7 +16,7 @@ const EMPLOYER_TYPES = [
   { value: "supplier", label: "A supplier or manufacturer" },
 ] as const;
 
-type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; employee_band: string | null; direct_hire_confirmed_at: string | null };
+type Initial = { clinic_name: string; practice_type: string; website: string | null; province: string; city: string; about: string | null; notify_email: string; employee_band: string | null; direct_hire_confirmed_at: string | null; social_instagram?: string | null; social_facebook?: string | null; social_linkedin?: string | null };
 
 // A new clinic's alert address starts as the email it signed up with, so it is not typed twice (it can be changed).
 // `newLocation` adds another location for the same owner (migration 0047): an empty form, saved as a new clinic.
@@ -61,6 +62,15 @@ export default function ClinicProfileForm({ initial, signUpEmail = "", newLocati
       <Field id="cp-about" label={`About your ${place}`} error={e.about} hint={supplier ? "Optional. What your company makes or does, where your team works, and what it is like to work with you. Shown on your job posts." : "Optional. A few lines about your team and what it is like to work with you. Shown on your job posts."}>
         <textarea id="cp-about" name="about" rows={5} defaultValue={initial?.about ?? ""} />
       </Field>
+      <fieldset className="row socialfields">
+        <legend className="lab">Find us online (optional)</legend>
+        <p className="help">Shown as small icons on your public page. A full profile helps candidates get to know you.</p>
+        {SOCIAL_PLATFORMS.map((p) => (
+          <Field key={p.key} id={`cp-social-${p.key}`} label={p.name} error={e[`social_${p.key}`]} hint={`Your ${place}'s page, like ${p.example}`}>
+            <input id={`cp-social-${p.key}`} name={`social${p.name}`} type="url" inputMode="url" autoComplete="off" placeholder="https://" defaultValue={initial?.[`social_${p.key}` as const] ?? ""} />
+          </Field>
+        ))}
+      </fieldset>
       <Field id="cp-email" label="Send new applicant alerts to" required error={e.notifyEmail} hint="Private. We never show this address on a job post. Applicants contact you through Kestrel.">
         <input id="cp-email" name="notifyEmail" type="email" autoComplete="email" defaultValue={initial?.notify_email ?? signUpEmail} />
       </Field>
