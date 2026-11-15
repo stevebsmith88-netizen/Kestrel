@@ -1,5 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { adLines } from "@/lib/slack-ad";
 import { paymentLine } from "@/lib/checkout-mode";
 import { withExpected } from "@/lib/expected-columns";
 import { REVIEW_COLUMNS, loadQueueJob } from "@/lib/review-queue";
@@ -18,12 +19,13 @@ export async function jobSlackExtras(db: SupabaseClient, jobId: string): Promise
     if (!waiting) return NONE;
     // Send back is safe on any waiting job, flagged or not, since it publishes and charges nothing. It needs the Slack bot token for its form.
     const back = modalButtonsAllowed(process.env) ? [sendBackButton(jobId)] : [];
+    const ad = adLines(waiting.job);
     if (!jobMayBeApprovedFromSlack(waiting.flags)) {
       const n = waiting.flags.length;
-      return { lines: [`${n} ${n === 1 ? "thing needs" : "things need"} a look first, so this one is approved in the review queue${back.length ? ", or sent back from here" : ""}.`], buttons: back };
+      return { lines: [...ad, ...waiting.flags.map((f) => `Flag: ${f}`), `${n} ${n === 1 ? "thing needs" : "things need"} a look first, so this one is approved in the review queue${back.length ? ", or sent back from here" : ""}.`], buttons: back };
     }
     const { data: payment } = await db.from("job_payments").select("status, amount_cents, band, failure_message").eq("job_id", jobId).order("created_at", { ascending: false }).limit(1).maybeSingle();
-    return { lines: ["Nothing flagged.", paymentLine(payment ?? null, waiting.job.role_category)], buttons: [approveJobButton(jobId), ...back] };
+    return { lines: [...ad, "Nothing flagged.", paymentLine(payment ?? null, waiting.job.role_category)], buttons: [approveJobButton(jobId), ...back] };
   } catch (e) {
     console.error("Slack approve button not added:", e instanceof Error ? e.message : e);
     return NONE;
