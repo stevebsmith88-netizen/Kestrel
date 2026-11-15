@@ -73,8 +73,8 @@ const PATHS = {
   facebook: (
     <>
       <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
-      <path d="M16.5 7.2h-1.1a2 2 0 0 0-2 2V20.5" />
-      <path d="M11 12.8h5.2" />
+      <path d="M14.75 7.2h-1.1a2 2 0 0 0-2 2V20.5" />
+      <path d="M9.25 12.8h5.2" />
     </>
   ),
   linkedin: (
