@@ -23,28 +23,34 @@ export default function EmployerPage({ clinic, slug, jobs, confirmed = false, fo
       <main id="main" tabIndex={-1} className="clinicpage">
         <div className="wrap">
           <p className="back"><Link href={supplier ? "/jobs?arrangement=field" : "/jobs"}>Back to all jobs</Link></p>
-          <header className="jobhead">
-            <h1>{clinic.clinic_name}</h1>
-            <p className="meta">{supplier ? `Canadian office: ${clinic.city}, ${clinic.province}` : `${clinic.city}, ${clinic.province}`}</p>
-            <p className="chips">
-              <span className="chip">{practiceLabel(clinic.practice_type)}</span>
-              <span className="chip">{openJobsText(jobs.length)}</span>
-              {confirmed && <span className="chip">Company email confirmed</span>}
-              {founding && <span className="chip">Founding clinic</span>}
-            </p>
-            {clinic.website && (
-              <p><a href={clinic.website} className="btn sm ghost" target="_blank" rel="noopener nofollow">Visit their website<span className="sr"> (opens in a new tab)</span></a></p>
-            )}
-            {socials.length > 0 && (
-              <ul className="clinic-social" aria-label={`${clinic.clinic_name} on social media`}>
-                {socials.map((s) => (
-                  <li key={s.key}>
-                    <a href={s.url} target="_blank" rel="noopener nofollow noreferrer" aria-label={`${clinic.clinic_name} on ${s.name} (opens in a new tab)`}>
-                      <Icon name={s.key} />
-                    </a>
-                  </li>
-                ))}
-              </ul>
+          <header className="jobhead clinichead">
+            <div className="clinicid">
+              <h1>{clinic.clinic_name}</h1>
+              <p className="meta">{supplier ? `Canadian office: ${clinic.city}, ${clinic.province}` : `${clinic.city}, ${clinic.province}`}</p>
+              <p className="chips">
+                <span className="chip">{practiceLabel(clinic.practice_type)}</span>
+                <span className="chip">{openJobsText(jobs.length)}</span>
+                {confirmed && <span className="chip">Company email confirmed</span>}
+                {founding && <span className="chip">Founding clinic</span>}
+              </p>
+            </div>
+            {(clinic.website || socials.length > 0) && (
+              <div className="clinicactions">
+                {clinic.website && (
+                  <a href={clinic.website} className="btn sm ghost" target="_blank" rel="noopener nofollow">Visit their website<span className="sr"> (opens in a new tab)</span></a>
+                )}
+                {socials.length > 0 && (
+                  <ul className="clinic-social" aria-label={`${clinic.clinic_name} on social media`}>
+                    {socials.map((s) => (
+                      <li key={s.key}>
+                        <a href={s.url} target="_blank" rel="noopener nofollow noreferrer" aria-label={`${clinic.clinic_name} on ${s.name} (opens in a new tab)`}>
+                          <Icon name={s.key} />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
           </header>
 

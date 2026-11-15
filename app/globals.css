@@ -1080,7 +1080,7 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 .headline{margin:2px 0 6px;font-size:1.0625rem;color:var(--navy-2)}
 
 /* Optional social links: on a clinic's public page and in the profile form (Steve, 15th November 2026). */
-.clinic-social{list-style:none;margin:8px 0 0 -10px;padding:0;display:flex;gap:4px}
+.clinic-social{list-style:none;margin:0;padding:0;display:flex;gap:2px}
 .clinic-social a{display:inline-flex;align-items:center;justify-content:center;width:44px;min-height:44px;padding:0;border-radius:8px;color:var(--navy)}
 .clinic-social a:hover{background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px var(--line)}
 .clinic-social .icon{width:22px;height:22px}
@@ -1101,3 +1101,11 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 /* A page heading with a button beside it, wrapping under it on a narrow screen (Steve, 15th November 2026). */
 .pagehead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
 .pagehead h1{margin:0}
+
+/* Public clinic page header: the name and facts on the left, the website button and social icons together on the right, wrapping under on a
+   narrow screen (Steve, 15th November 2026). */
+.clinichead{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px 24px}
+.clinichead .clinicid{flex:1 1 380px;min-width:0}
+.clinichead .meta{margin:0}
+.clinichead .clinicactions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:6px}
+.clinicpage .wrap > .card{margin-top:18px}
