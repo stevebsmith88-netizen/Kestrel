@@ -1097,3 +1097,7 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 .inboxpick{grid-row:1;display:flex;align-items:center;justify-content:center;width:32px;min-height:32px}
 .inboxpick input{width:20px;height:20px}
 .inboxform .inboxlist .actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* A page heading with a button beside it, wrapping under it on a narrow screen (Steve, 15th November 2026). */
+.pagehead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.pagehead h1{margin:0}
