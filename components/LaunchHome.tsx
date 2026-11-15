@@ -28,7 +28,7 @@ export default async function LaunchHome() {
           <div className="wrap">
             <h1 id="lh-title">Find your next eye care job</h1>
             <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and a person reads every post before it goes live.</p>
-            {!postingOn() && <p className="lh-lede"><strong>{PRELAUNCH_HOME_LEAD}</strong> {PRELAUNCH_HOME_BODY}</p>}
+            {!postingOn() && <p className="lh-lede lh-note"><strong>{PRELAUNCH_HOME_LEAD}</strong> {PRELAUNCH_HOME_BODY}</p>}
             <form method="get" action="/jobs" className="lh-search" role="search" aria-label="Search jobs">
               <label className="sr" htmlFor="lh-q">Role or keyword</label>
               <input id="lh-q" name="q" type="text" placeholder="Role or keyword, for example optician" autoComplete="off" />
