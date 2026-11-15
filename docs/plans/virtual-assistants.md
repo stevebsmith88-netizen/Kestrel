@@ -64,9 +64,9 @@ Nothing in the outreach area is switched on for any VA before Steve confirms the
 
 Steve gets a preview link showing what a VA sees after A and B (the preview uses the demo database), plus a screenshot set.
 
-## Questions for Steve
+## Decisions (Steve, 15th November 2026)
 
-1. Where will the VA work from (Canada or another country)? Clinic contact details are mostly business information, but it affects the privacy policy, and nothing about resumes or candidates is ever visible to them.
-2. One VA or several? The plan allows several, each with their own login and log.
-3. Do you agree with releasing every outreach batch yourself at first (recommended)?
-4. Will the VA use their own browser and device? The logins assume so.
+1. The VA works from Canada, which keeps with the brand and the privacy policy.
+2. 1 VA to begin with, perhaps 2 depending on finances. The plan allows several, each with their own login and log.
+3. Steve releases every outreach batch himself.
+4. The VA uses their own device and browser.
