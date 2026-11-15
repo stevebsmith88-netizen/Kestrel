@@ -12,6 +12,8 @@ import { canEdit } from "@/lib/team";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { deleteTemplate } from "@/lib/template-actions";
 import { passUsage } from "@/lib/pass-flow";
+import { postingOn } from "@/lib/features";
+import { POSTING_SOON_BODY, POSTING_SOON_HEADING } from "@/lib/posting-copy";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Post a job | Kestrel Eye Care Jobs", robots: { index: false } };
@@ -26,6 +28,25 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile?from=post");
   if (!canEdit(employer.level)) redirect("/clinic");
+  // Sign up is open before posting is (ENABLE_POSTING, lib/features.ts): show a friendly page instead of the form.
+  if (!postingOn()) {
+    return (
+      <>
+        <AppBar session={session} current="/clinic/jobs/new" />
+        <main id="main" tabIndex={-1} className="app">
+          <div className="wrap narrow">
+            <p className="kicker">{employer.clinic_name}</p>
+            <h1>{POSTING_SOON_HEADING}</h1>
+            <section className="card">
+              <p>{POSTING_SOON_BODY}</p>
+              <p className="formbtns"><Link href="/clinic/profile" className="btn">Check my clinic profile</Link><Link href="/jobs" className="btn ghost">Look at the job board</Link></p>
+            </section>
+          </div>
+        </main>
+        <AppFooter />
+      </>
+    );
+  }
   const templates = await getMyTemplates();
   const ownPay = await loadOwnPayStats();
   const start = templateId && UUID.test(templateId) ? await getMyTemplate(templateId) : null;

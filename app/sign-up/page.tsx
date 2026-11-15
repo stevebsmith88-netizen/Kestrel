@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import AuthShell from "@/components/AuthShell";
+import { postingOn } from "@/lib/features";
 import { SignUpForm } from "@/components/AuthForms";
 import { getSession, homeFor } from "@/lib/auth";
 import { safeNext } from "@/lib/auth-copy";
@@ -39,7 +40,7 @@ export default async function SignUp({ searchParams }: { searchParams: Promise<{
   if (!open && !invited && !team) redirect("/#join");
   return (
     <AuthShell>
-      <SignUpForm defaultType={type === "clinic" ? "clinic" : "candidate"} google={open && googleSignInOn()} inviteOnly={open && clinicInviteOnly()} invitation={invited ? invite : undefined} next={after || undefined} team={team} />
+      <SignUpForm defaultType={type === "clinic" ? "clinic" : "candidate"} google={open && googleSignInOn()} inviteOnly={open && clinicInviteOnly()} invitation={invited ? invite : undefined} next={after || undefined} team={team} postingSoon={!postingOn()} />
     </AuthShell>
   );
 }
