@@ -13,11 +13,11 @@ export function previewText(paragraphs: string[], max = 110) {
 }
 
 // A short, branded email in the same look as the sign up emails.
-export function emailLayout({ heading, paragraphs, items, buttonText, buttonUrl, unsubscribeUrl, reason, preview }: { heading: string; paragraphs: string[]; items?: { text: string; url: string }[]; buttonText?: string; buttonUrl?: string; unsubscribeUrl?: string; reason?: string; preview?: string }) {
+export function emailLayout({ heading, paragraphs, items, buttonText, buttonUrl, unsubscribeUrl, reason, preview, note }: { heading: string; paragraphs: string[]; items?: { text: string; url: string }[]; buttonText?: string; buttonUrl?: string; unsubscribeUrl?: string; reason?: string; preview?: string; note?: string }) {
   // Marketing emails carry an unsubscribe link and the mailing address, as Canada's anti-spam law requires.
   const footerNote = unsubscribeUrl
     ? `${esc(reason ?? "You are receiving this because you asked to hear from Kestrel Eye Care Jobs.")} <a href="${esc(unsubscribeUrl)}" style="color:#8C4024;">Unsubscribe</a> at any time.`
-    : "This email is about your Kestrel account or an application.";
+    : esc(note ?? "This email is about your Kestrel account or an application.");
   // The layout signs off itself ("Warm regards, The Kestrel team"), so a sign off written into the message is dropped instead of showing twice.
   paragraphs = paragraphs.filter((p) => p.trim() !== "The Kestrel team");
   const body = paragraphs.map((p) => `<p style="margin:0 0 16px 0;">${esc(p).replace(/\n/g, "<br>")}</p>`).join("");

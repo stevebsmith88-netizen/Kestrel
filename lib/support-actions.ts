@@ -64,7 +64,7 @@ export async function requestHelp(_prev: JobFormState, form: FormData): Promise<
     }),
   });
   revalidatePath("/account/help");
-  return { message: until ? "Sent. We usually reply within 1 business day, and we can now look at your clinic's account to help. You can take that back below." : "Sent. We usually reply within 1 business day, by email." };
+  return { message: until ? "Sent. We reply within 2 business days, and we can now look at your clinic's account to help. You can take that back below." : "Sent. We reply within 2 business days, by email." };
 }
 
 export async function sendFeedback(_prev: JobFormState, form: FormData): Promise<JobFormState> {

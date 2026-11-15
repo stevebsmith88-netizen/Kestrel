@@ -12,10 +12,12 @@ export const FACEBOOK_URL: string | null = "https://www.facebook.com/kestreleye2
 // The Reddit community for eye care jobs in Canada (Steve, 15th November 2026). Plan: item 22 in CLAUDE.md.
 export const REDDIT_URL: string | null = "https://www.reddit.com/r/EyeCareJobsCanada/";
 
+// The order is the order of the audience: LinkedIn first (clinic owners and professionals), Facebook (older clinic owners and groups),
+// then Instagram, then the newest and smallest, Reddit. Revisit it with the real visitor numbers once there are any.
 export function socialPages(): SocialPage[] {
   const pages: SocialPage[] = [{ name: "LinkedIn", url: LINKEDIN_URL }];
-  if (INSTAGRAM_URL) pages.push({ name: "Instagram", url: INSTAGRAM_URL });
   if (FACEBOOK_URL) pages.push({ name: "Facebook", url: FACEBOOK_URL });
+  if (INSTAGRAM_URL) pages.push({ name: "Instagram", url: INSTAGRAM_URL });
   if (REDDIT_URL) pages.push({ name: "Reddit", url: REDDIT_URL });
   return pages;
 }

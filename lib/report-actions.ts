@@ -1,5 +1,7 @@
 "use server";
 
+import { sendEmail } from "@/lib/email";
+import { reportAckEmail } from "@/lib/report-ack";
 import { notifySlack } from "@/lib/notify-slack";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { REPORT_REASON_LABEL } from "@/lib/reports";
@@ -39,6 +41,13 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   const { count } = await db.from("job_reports").select("id", { count: "exact", head: true }).eq("job_id", jobId).gte("created_at", since);
   if ((count ?? 0) >= 10) return { message: THANKS };
 
+  // Anyone can type any address here, so an acknowledgement goes to an address at most once a day. It is decided before this report is saved.
+  let sendAck = false;
+  if (email) {
+    const { count: earlier } = await db.from("job_reports").select("id", { count: "exact", head: true }).eq("reporter_email", email).gte("created_at", since);
+    sendAck = (earlier ?? 0) === 0;
+  }
+
   const { error } = await db.from("job_reports").insert({ job_id: jobId, reason, details: details || null, reporter_email: email || null });
   if (error) {
     console.error("Report failed:", error.code, error.message);
@@ -46,5 +55,6 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   }
   await notifyAdmin("A job has been reported", [`${job.title}`, REPORT_REASON_LABEL[reason]], "/admin/reports");
   await notifySlack("A job was reported", [job.title, REPORT_REASON_LABEL[reason]], { path: "/admin/reports", text: "Open the reports" }, "support");
+  if (sendAck) await sendEmail({ to: email, subject: "We have your report", ...reportAckEmail(job.title) });
   return { message: THANKS };
 }
