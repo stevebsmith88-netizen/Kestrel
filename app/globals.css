@@ -1107,5 +1107,6 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 .clinichead{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px 24px}
 .clinichead .clinicid{flex:1 1 380px;min-width:0}
 .clinichead .meta{margin:0}
-.clinichead .clinicactions{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding-top:6px}
+.clinichead .clinicactions{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:6px}
+.clinichead .clinic-social{justify-content:center}
 .clinicpage .wrap > .card{margin-top:18px}
