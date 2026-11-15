@@ -173,7 +173,7 @@ export const HELP: HelpSection[] = [
           "The inbox is for reading only. Nobody replies to anybody in it. To reach us, use **Help and feedback** in the menu under your initials, or write to support@eyecarejobs.ca. Your help requests are listed under the inbox's **Help requests** tab. The envelope beside your initials shows how many messages you have not read yet.",
         ],
         steps: [
-          "Choose the envelope at the top of the page. On a computer it is beside your initials, and on a phone it is beside the **Menu** button. The number on it is how many messages you have not read.",
+          "Choose the envelope at the top of the page. On a computer it is beside your initials, and on a phone it is beside the **Menu** button. The number on it is how many messages you have not read. Tick the box beside one or more messages to mark them as read or delete them, or tick **Select all** to choose every message.",
           "Choose **Open** on a message to go to the application or job it is about. Opening a message marks it as read. A message with no page to open has its own **Mark as read** button.",
           "Choose **Mark all as read** to clear the number on the envelope in one go.",
         ],

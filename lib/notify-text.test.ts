@@ -80,5 +80,5 @@ test("opening a message marks it read before it redirects, and the inbox page us
   const actions = readFileSync("lib/notification-actions.ts", "utf8");
   const open = actions.slice(actions.indexOf("export async function openMessage"), actions.indexOf("export async function markOneRead"));
   assert.ok(open.indexOf("read_at") > -1 && open.indexOf("read_at") < open.indexOf("redirect("), "marks read first");
-  assert.match(readFileSync("app/account/inbox/page.tsx", "utf8"), /action=\{openMessage\}/);
+  assert.match(readFileSync("components/InboxList.tsx", "utf8"), /formAction=\{openMessage\}/);
 });
