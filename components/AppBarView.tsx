@@ -57,7 +57,7 @@ export default function AppBarView({ session, current, unread, quiz, adminMenu }
   return (
     <header className="topbar">
       <div className="wrap">
-        <Link href={homeOf(session.role)} className="topbar-logo" aria-label="Kestrel Eye Care Jobs, home">
+        <Link href="/" className="topbar-logo" aria-label="Kestrel Eye Care Jobs, home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/brand/kestrel-wordmark.svg" alt="Kestrel Eye Care Jobs" width={132} height={39} />
         </Link>
