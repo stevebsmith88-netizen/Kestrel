@@ -2,13 +2,13 @@
 
 Revised 14th November 2026 for **a launch on Monday 25th January 2027** (Steve: mid to late January at the latest): **2 a week (Monday and Thursday) until the end of December, 1 a week (Monday) in January until launch, then 1 every 2 weeks**, then monthly with new posts. Posts 1 to 9 went up on 13th November 2026. If launch moves, move post 25 with it and shift the later dates by the same amount.
 
-**Images:** every post below is in the folder `Kestrel-Instagram-10-to-32`, named in posting order (number, date, name). The guide cards are built by `design/social-and-merch/instagram-guides/build.mjs`; the Things heard and photo posts come from the Canva designs.
+**Images:** every post below is in the folder `Kestrel-Instagram-1-to-40` (posts 1 to 9 included for reference, already posted), named in posting order (number, date, name). The guide cards are built by `design/social-and-merch/instagram-guides/build.mjs`; the Things heard and photo posts come from the Canva designs.
 
 **Grid rule:** no 2 posts of the same colour family side by side or one above the other. Checked for the whole order. Every guide card goes out after its blog post, and "Opening soon" goes out before launch.
 
 **Launch day:** post 25, the "Every job shows its pay" photo, with a launch caption. Consider an extra "We're open" post the same day if there is news to share (first clinics on board).
 
-**After post 32 (early May):** new content. Launch brings plenty: first clinics on board, jobs of the week, clinic spotlights (with permission), and pay facts from real posts.
+**Posts 33 to 40 (added 15th November 2026):** guide cards for the blog posts from March to June 2027, every 2 weeks from 17th May to 23rd August 2027, each after its blog post, with the grid rule kept. **After post 40 (late August), and alongside them:** new content. Launch brings plenty: first clinics on board, jobs of the week, clinic spotlights (with permission), and pay facts from real posts.
 
 ## The calendar
 
@@ -37,6 +37,14 @@ Revised 14th November 2026 for **a launch on Monday 25th January 2027** (Steve: 
 | 30 | Mon 5th April 2027 | Resume tips | Chestnut |
 | 31 | Mon 19th April 2027 | Eye care jobs on the road | Navy |
 | 32 | Mon 3rd May 2027 | Hire for attitude | Cream or paper |
+| 33 | Mon 17th May 2027 | Phone screenings | Pale blue or buff |
+| 34 | Mon 31st May 2027 | Stand out in an interview | Chestnut |
+| 35 | Mon 14th June 2027 | Ask for a raise | Navy |
+| 36 | Mon 28th June 2027 | Optical lab technician | Cream or paper |
+| 37 | Mon 12th July 2027 | Why people leave | Pale blue or buff |
+| 38 | Mon 26th July 2027 | First 30 days | Chestnut |
+| 39 | Mon 9th August 2027 | Reference checks | Navy |
+| 40 | Mon 23rd August 2027 | Seasonal staff | Cream or paper |
 
 ### 10. Job ad checklist
 **When:** Mon 16th November 2026, 8:00 am Toronto · **Image:** `10 2026-11-16 Job ad checklist.png` · **Location:** Canada
@@ -421,6 +429,143 @@ Full guide: link in bio.
 Alt text:
 ```text
 Kestrel guide: Hire for attitude. Train for skills. Many good eye care staff start out in retail, hospitality or other health jobs.
+```
+
+### 33. Phone screenings (new)
+**When:** Mon 17th May 2027, 8:00 am Toronto · **Image:** `33 2027-05-17 Phone screenings.png` · **Location:** Canada
+
+Caption:
+```text
+The first call is often short. It still decides who gets an interview.
+
+Have the job ad open, a quiet spot to talk, and 2 or 3 things you want them to know about you. Expect questions about your availability, your pay range and why this clinic. Then send a short thank you the same day.
+
+Full guide: link in bio.
+
+#EyeCareJobs #Opticians #OptometricAssistant #JobSearch #CanadaJobs
+```
+Alt text:
+```text
+Kestrel guide: The first call decides a lot. How to get ready for a phone screen, what clinics tend to ask, and how to follow up.
+```
+### 34. Stand out in an interview (new)
+**When:** Mon 31st May 2027, 8:00 am Toronto · **Image:** `34 2027-05-31 Stand out in an interview.png` · **Location:** Canada
+
+Caption:
+```text
+Most candidates a clinic meets are good. A few are memorable.
+
+They have looked at the clinic's website, they ask about the patients and the team, they talk about a time they helped someone, and they follow up. None of it is complicated, and it shows.
+
+Full guide: link in bio.
+
+#EyeCareJobs #Interview #Opticians #Optometry #CanadaJobs
+```
+Alt text:
+```text
+Kestrel guide: How to stand out in an interview. Clinics see plenty of good candidates. The small things that make one memorable.
+```
+### 35. Ask for a raise (new)
+**When:** Mon 14th June 2027, 8:00 am Toronto · **Image:** `35 2027-06-14 Ask for a raise.png` · **Location:** Canada
+
+Caption:
+```text
+Asking for more pay is easier with a plan.
+
+Know what the role typically pays in your province, note what you have taken on since your last review, and pick a calm moment, not the end of a busy Saturday. If the answer is not yet, ask what would change it, and when you can talk again.
+
+Full guide: link in bio.
+
+#EyeCareJobs #Pay #Opticians #OptometricAssistant #CareerAdvice
+```
+Alt text:
+```text
+Kestrel guide: How to ask for a raise. How to prepare, when to ask, what to say, and what to do if the answer is not yet.
+```
+### 36. Optical lab technician (new)
+**When:** Mon 28th June 2027, 8:00 am Toronto · **Image:** `36 2027-06-28 Optical lab technician.png` · **Location:** Canada
+
+Caption:
+```text
+Every pair of glasses passes through someone's hands before it reaches the patient.
+
+Optical lab technicians surface, edge and fit lenses, in clinic labs and in larger wholesale labs. It is careful, practical work, and many people start with on the job training.
+
+Full guide: link in bio.
+
+#EyeCareJobs #OpticalLab #Opticians #Eyewear #CanadaJobs
+```
+Alt text:
+```text
+Kestrel guide: Optical lab technicians. Where glasses get made. What the work involves, where it happens, and how people get started in it.
+```
+### 37. Why people leave (new)
+**When:** Mon 12th July 2027, 8:00 am Toronto · **Image:** `37 2027-07-12 Why people leave.png` · **Location:** Canada
+
+Caption:
+```text
+When a good optician or assistant leaves, the cost is more than the job ad.
+
+The reasons are often the same: pay that has not moved, no path forward, short staffing that never ends, or not feeling heard. Most of them can be fixed before the resignation letter.
+
+Full guide for clinics: link in bio.
+
+#EyeCareJobs #ClinicOwner #Retention #Optometry #PracticeManagement
+```
+Alt text:
+```text
+Kestrel guide for clinics: Why people leave eye care jobs. The usual reasons, and practical ways to keep good people.
+```
+### 38. First 30 days (new)
+**When:** Mon 26th July 2027, 8:00 am Toronto · **Image:** `38 2027-07-26 First 30 days.png` · **Location:** Canada
+
+Caption:
+```text
+A new hire decides a lot in their first month.
+
+Have their login, schedule and uniform ready before day 1. Give the first week a plan and a person to ask. At 30 days, sit down for 15 minutes and ask how it is going, then listen.
+
+Full guide for clinics: link in bio.
+
+#EyeCareJobs #Onboarding #ClinicOwner #Optometry #PracticeManagement
+```
+Alt text:
+```text
+Kestrel guide for clinics: A new hire's first 30 days. What to have ready before day 1, how to run the first week, and a check in at 30 days.
+```
+### 39. Reference checks (new)
+**When:** Mon 9th August 2027, 8:00 am Toronto · **Image:** `39 2027-08-09 Reference checks.png` · **Location:** Canada
+
+Caption:
+```text
+A 10 minute call can save months of trouble.
+
+Call a manager the candidate actually reported to, ask about real situations (a busy day, an unhappy patient), and listen for what is not said as much as what is.
+
+Full guide for clinics: link in bio.
+
+#EyeCareJobs #Hiring #ClinicOwner #Optometry #PracticeManagement
+```
+Alt text:
+```text
+Kestrel guide for clinics: Reference checks worth making. Who to call, what to ask, and what to do with the answers.
+```
+### 40. Seasonal staff (new)
+**When:** Mon 23rd August 2027, 8:00 am Toronto · **Image:** `40 2027-08-23 Seasonal staff.png` · **Location:** Canada
+
+Caption:
+```text
+Short term help can carry a clinic through the back to school rush, holidays and leave.
+
+It works best when the role is clear, the training is short and someone owns the handover. Our guide covers when it pays off, what it costs and how to make a short stay go well.
+
+Full guide for clinics: link in bio.
+
+#EyeCareJobs #Hiring #ClinicOwner #Optometry #SeasonalJobs
+```
+Alt text:
+```text
+Kestrel guide for clinics: Seasonal staff. Worth it? When short term help works, what it costs, and how to make a short stay go well.
 ```
 
 ## Posted on 13th November 2026: posts 1 to 9

@@ -27,6 +27,14 @@ const ICON = {
   pin: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M2 40 H88" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6"/><path d="M45 34 C35 22 33 18 33 13 a12 12 0 0 1 24 0 C57 18 55 22 45 34 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="45" cy="13" r="4" fill="${a}"/></svg>`,
   road: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M2 30 H88" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M40 30 L26 44 M50 30 L64 44" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M45 34 V36 M45 39 V42" stroke="${a}" stroke-width="2" stroke-linecap="round"/><path d="M38 28 V18 L45 11 L52 18 V28" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 19 L45 9 L54 19" fill="none" stroke="${a}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="43" y="21" width="4" height="7" fill="${a}"/></svg>`,
   pen: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M8 38 C20 30 26 40 36 32 S52 30 58 34" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/><path d="M60 30 L82 8 L86 12 L64 34 L58 36 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+  phone: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M30 6 C26 6 24 9 25 13 C29 27 39 37 53 41 C57 42 60 40 60 36 L60 31 L50 28 L46 32 C40 29 35 24 32 18 L36 14 L33 6 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M66 10 C72 14 74 20 72 26 M70 4 C80 10 82 22 78 30" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  spark: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M45 4 L49 18 L63 22 L49 26 L45 40 L41 26 L27 22 L41 18 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72" cy="10" r="3.5" fill="${a}"/><circle cx="18" cy="34" r="3" fill="${a}"/></svg>`,
+  rise: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M4 40 H86" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M10 34 L32 24 L48 30 L78 8" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M68 8 H78 V18" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  lens: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><ellipse cx="32" cy="22" rx="18" ry="15" fill="none" stroke="${c}" stroke-width="2.5"/><ellipse cx="32" cy="22" rx="10" ry="8" fill="${a}" fill-opacity=".35"/><path d="M56 34 L68 22 L76 30 L64 42" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M70 18 L80 8" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  exit: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M44 4 H20 V40 H44" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 22 H80" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/><path d="M70 12 L80 22 L70 32" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  calendar: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><rect x="24" y="6" width="42" height="36" rx="4" fill="none" stroke="${c}" stroke-width="2.5"/><path d="M24 16 H66 M34 2 V10 M56 2 V10" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M34 29 L41 35 L56 22" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  check: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><rect x="28" y="4" width="34" height="38" rx="3" fill="none" stroke="${c}" stroke-width="2.5"/><rect x="38" y="1" width="14" height="7" rx="2" fill="${a}"/><path d="M35 20 L39 24 L46 16 M35 32 L39 36 L46 28" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 21 H56 M50 33 H56" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  sun: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><circle cx="45" cy="22" r="9" fill="${a}" fill-opacity=".45" stroke="${c}" stroke-width="2.5"/><path d="M45 3 V8 M45 36 V41 M26 22 H31 M59 22 H64 M32 9 L35 12 M55 32 L58 35 M58 9 L55 12 M32 35 L35 32" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
 };
 
 // Each post: background, colours, icon, headline (with an optional second headline line in the accent colour), and a line under it.
@@ -103,6 +111,31 @@ const POSTS = [
   { file: "g20-who-works", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "The census", size: 150,
     head: "14% to 69%.", sub: "The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census.",
     alt: "Kestrel: 14% to 69%. The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census." },
+  // Posts 33 to 40 (Steve, 15th November 2026): the blog posts from March to June 2027, every 2 weeks after post 32.
+  { file: "g21-phone-screening", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", icon: "phone", size: 112,
+    head: "The first call", head2: "decides a lot.", sub: "How to get ready for a phone screen, what clinics tend to ask, and how to follow up.",
+    alt: "Kestrel guide: The first call decides a lot. How to get ready for a phone screen, what clinics tend to ask, and how to follow up." },
+  { file: "g22-stand-out-interview", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", icon: "spark", size: 112,
+    head: "How to stand out", head2: "in an interview.", sub: "Clinics see plenty of good candidates. The small things that make one memorable.",
+    alt: "Kestrel guide: How to stand out in an interview. Clinics see plenty of good candidates. The small things that make one memorable." },
+  { file: "g23-ask-for-a-raise", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", icon: "rise", size: 120,
+    head: "How to ask", head2: "for a raise.", sub: "How to prepare, when to ask, what to say, and what to do if the answer is not yet.",
+    alt: "Kestrel guide: How to ask for a raise. How to prepare, when to ask, what to say, and what to do if the answer is not yet." },
+  { file: "g24-optical-lab-technician", bg: C.cream, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", icon: "lens",
+    head: "Optical lab technicians.", head2: "Where glasses get made.", size: 96, sub: "What the work involves, where it happens, and how people get started in it.",
+    alt: "Kestrel guide: Optical lab technicians. Where glasses get made. What the work involves, where it happens, and how people get started in it." },
+  { file: "g25-why-people-leave", bg: C.buff, fg: C.navy, label: C.navy, accent: C.chestnutD, line: C.navy, k: "kestrel-k-mark.svg", tr: "For clinics", icon: "exit", size: 112,
+    head: "Why people leave", head2: "eye care jobs.", sub: "The usual reasons, and practical ways to keep good people.",
+    alt: "Kestrel guide for clinics: Why people leave eye care jobs. The usual reasons, and practical ways to keep good people." },
+  { file: "g26-first-30-days", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "For clinics", icon: "calendar", size: 112,
+    head: "A new hire's", head2: "first 30 days.", sub: "What to have ready before day 1, how to run the first week, and a check in at 30 days.",
+    alt: "Kestrel guide for clinics: A new hire's first 30 days. What to have ready before day 1, how to run the first week, and a check in at 30 days." },
+  { file: "g27-reference-checks", bg: C.soft, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", tr: "For clinics", icon: "check", size: 112,
+    head: "Reference checks", head2: "worth making.", sub: "Who to call, what to ask, and what to do with the answers.",
+    alt: "Kestrel guide for clinics: Reference checks worth making. Who to call, what to ask, and what to do with the answers." },
+  { file: "g28-seasonal-staff", bg: C.paper, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", tr: "For clinics", icon: "sun", size: 112,
+    head: "Seasonal staff.", head2: "Worth it?", sub: "When short term help works, what it costs, and how to make a short stay go well.",
+    alt: "Kestrel guide for clinics: Seasonal staff. Worth it? When short term help works, what it costs, and how to make a short stay go well." },
 ];
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&apos;").replace(/"/g, "&quot;");
