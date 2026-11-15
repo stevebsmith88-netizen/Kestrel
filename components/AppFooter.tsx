@@ -45,7 +45,7 @@ export default function AppFooter() {
                 {socialPages().map((p) => (
                   <li key={p.name}>
                     <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Kestrel Eye Care Jobs on ${p.name} (opens in a new tab)`}>
-                      <Icon name={p.name === "LinkedIn" ? "linkedin" : "instagram"} />
+                      <Icon name={p.name === "LinkedIn" ? "linkedin" : p.name === "Reddit" ? "reddit" : "instagram"} />
                     </a>
                   </li>
                 ))}
