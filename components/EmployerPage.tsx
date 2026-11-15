@@ -1,10 +1,12 @@
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import JobCard from "@/components/JobCard";
+import Icon from "@/components/Icon";
 import SiteHeader from "@/components/SiteHeader";
 import { clinicJsonLd, openJobsText, type PublicClinic } from "@/lib/clinic-pages";
 import { practiceLabel } from "@/lib/jobs";
 import type { JobSummary } from "@/lib/public-jobs";
+import { socialLinksFrom } from "@/lib/social-links";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -13,6 +15,7 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 export default function EmployerPage({ clinic, slug, jobs, confirmed = false, founding = false }: { clinic: PublicClinic; slug: string; jobs: JobSummary[]; confirmed?: boolean; founding?: boolean }) {
   const supplier = clinic.practice_type === "supplier";
   const jsonLd = clinicJsonLd(clinic, slug, SITE);
+  const socials = socialLinksFrom(clinic);
   return (
     <>
       <SiteHeader />
@@ -31,6 +34,17 @@ export default function EmployerPage({ clinic, slug, jobs, confirmed = false, fo
             </p>
             {clinic.website && (
               <p><a href={clinic.website} className="btn sm ghost" target="_blank" rel="noopener nofollow">Visit their website<span className="sr"> (opens in a new tab)</span></a></p>
+            )}
+            {socials.length > 0 && (
+              <ul className="clinic-social" aria-label={`${clinic.clinic_name} on social media`}>
+                {socials.map((s) => (
+                  <li key={s.key}>
+                    <a href={s.url} target="_blank" rel="noopener nofollow noreferrer" aria-label={`${clinic.clinic_name} on ${s.name} (opens in a new tab)`}>
+                      <Icon name={s.key} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
             )}
           </header>
 

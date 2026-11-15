@@ -28,6 +28,8 @@ import { fetchPage } from "@/lib/fetch-page";
 import { startAddress } from "@/lib/page-reader";
 import { siteDetails, type SiteDetails } from "@/lib/site-details";
 import { emailMatchesWebsite, hostOf } from "@/lib/claims";
+import { clinicSocialReady } from "@/lib/social-columns";
+import { cleanClinicSocials, socialRow } from "@/lib/social-links";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const field = (form: FormData, key: string) => form.get(key) ?? "";
@@ -51,6 +53,9 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   });
   // The staff count is optional (Steve, 13th November 2026): it is for Kestrel only and changes no rule, so it should not slow a clinic down.
   const errors = validateClinic(clinic);
+  // Optional social links (Steve, 15th November 2026): each must be a real page on its own platform, or blank.
+  const socials = cleanClinicSocials({ instagram: field(form, "socialInstagram"), facebook: field(form, "socialFacebook"), linkedin: field(form, "socialLinkedin") });
+  Object.assign(errors, socials.errors);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
@@ -69,6 +74,8 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     province: clinic.province,
     city: clinic.city,
     about: clinic.about || null,
+    // Left out until the database has the columns (migration 0054), so saving a profile never fails because of them.
+    ...((await clinicSocialReady()) ? socialRow(socials.links) : {}),
     // Keep the first date they confirmed.
     direct_hire_confirmed_at: existing?.direct_hire_confirmed_at ?? current?.direct_hire_confirmed_at ?? new Date().toISOString(),
   };

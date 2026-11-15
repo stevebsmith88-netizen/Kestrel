@@ -59,6 +59,12 @@ const PATHS = {
       <path d="M17.3 6.7v.1" />
     </>
   ),
+  facebook: (
+    <>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
+      <path d="M15.5 20.5v-6h2l.4-2.6h-2.4v-1.5c0-.8.3-1.4 1.5-1.4h1V6.7a12 12 0 0 0-1.6-.1c-2.1 0-3.4 1.3-3.4 3.5v1.8H11v2.6h2v6" />
+    </>
+  ),
   linkedin: (
     <>
       <rect x="3.5" y="3.5" width="17" height="17" rx="3" />

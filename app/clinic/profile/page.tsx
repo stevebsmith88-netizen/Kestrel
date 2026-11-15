@@ -7,6 +7,7 @@ import { getMyClinics, getMyEmployer } from "@/lib/clinic";
 import LocationPicker from "@/components/LocationPicker";
 import { practiceLabel } from "@/lib/jobs";
 import { OWNER_ONLY_TEXT } from "@/lib/team";
+import { socialLinksFrom } from "@/lib/social-links";
 
 export const metadata: Metadata = { title: "Clinic profile | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -36,6 +37,7 @@ export default async function ClinicProfile({ searchParams }: { searchParams: Pr
                 <div><dt>Location</dt><dd>{employer.city}, {employer.province}</dd></div>
                 {employer.website && <div><dt>Website</dt><dd>{employer.website}</dd></div>}
                 {employer.about && <div className="wide"><dt>About</dt><dd className="adbody">{employer.about}</dd></div>}
+                {socialLinksFrom(employer).map((s) => <div key={s.key}><dt>{s.name}</dt><dd>{s.url}</dd></div>)}
               </dl>
             </>
           ) : (

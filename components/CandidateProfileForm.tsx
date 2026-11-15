@@ -14,6 +14,7 @@ type Initial = {
   years_experience: string | null;
   available_from: string | null;
   phone: string | null;
+  linkedin_url?: string | null;
   home_city: string | null;
   home_province: string | null;
   pref_radius_km: number;
@@ -45,7 +46,7 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
   useEffect(() => {
     if (window.location.hash === "#looking-for") setLookingOpen(true);
   }, []);
-  const aboutError = Boolean(e.yearsExperience || e.availableFrom || e.phone);
+  const aboutError = Boolean(e.yearsExperience || e.availableFrom || e.phone || e.linkedin);
   const lookingError = Boolean(e.minPay || e.payPeriod);
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
@@ -92,7 +93,7 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
 
       <details className="moreopts" id="about-you" open={aboutOpen || aboutError} onToggle={(ev) => setAboutOpen(ev.currentTarget.open)}>
         <summary>More about you</summary>
-        <p className="help">Optional. Your years of experience, when you can start and your phone number are sent to a clinic only when you apply to it.</p>
+        <p className="help">Optional. Your years of experience, when you can start and your phone number and your LinkedIn profile are sent to a clinic only when you apply to it.</p>
         <div className="pair">
           <Field id="cpf-years" label="Years of experience" error={e.yearsExperience}>
             <select id="cpf-years" name="yearsExperience" defaultValue={initial?.years_experience ?? ""}>
@@ -108,6 +109,9 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
         </div>
         <Field id="cpf-phone" label="Phone" error={e.phone} hint="Only shared with a clinic when you apply to it.">
           <input id="cpf-phone" name="phone" type="tel" autoComplete="tel" defaultValue={initial?.phone ?? ""} />
+        </Field>
+        <Field id="cpf-linkedin" label="LinkedIn profile" error={e.linkedin} hint="Only shared with a clinic when you apply to it. Your own profile, like https://www.linkedin.com/in/yourname.">
+          <input id="cpf-linkedin" name="linkedin" type="url" inputMode="url" autoComplete="url" placeholder="https://" defaultValue={initial?.linkedin_url ?? ""} />
         </Field>
       </details>
 

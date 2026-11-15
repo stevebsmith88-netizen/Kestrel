@@ -9,6 +9,7 @@ export type ProfileForApplication = {
   years_experience?: string | null;
   available_from?: string | null;
   cv_filename?: string | null;
+  linkedin_url?: string | null; // optional (migration 0054)
 };
 
 export type Applicant = {
@@ -19,6 +20,7 @@ export type Applicant = {
   licensed_provinces: string[] | null;
   years_experience: string | null;
   available_from: string | null;
+  linkedin_url: string | null;
 };
 
 export function applicantSnapshot(who: { name: string; email: string }, p: ProfileForApplication): Applicant {
@@ -30,6 +32,7 @@ export function applicantSnapshot(who: { name: string; email: string }, p: Profi
     licensed_provinces: p.licensed_provinces ?? null,
     years_experience: p.years_experience ?? null,
     available_from: p.available_from ?? null,
+    linkedin_url: p.linkedin_url ?? null,
   };
 }
 
@@ -45,6 +48,7 @@ export function sentDetails(a: Applicant, resumeFilename: string | null | undefi
     { label: "Registered in", value: a.licensed_provinces?.length ? a.licensed_provinces.join(", ") : NOT_GIVEN },
     { label: "Years of experience", value: a.years_experience || NOT_GIVEN },
     { label: "Available from", value: a.available_from ? formatDate(a.available_from) : NOT_GIVEN },
+    { label: "LinkedIn", value: a.linkedin_url?.trim() || NOT_GIVEN },
     { label: "Resume", value: resumeFilename || NOT_GIVEN },
   ];
 }

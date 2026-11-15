@@ -87,7 +87,8 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     const appRows = list<ApplicationRow>(apps.data);
     const appIds = appRows.map((a) => a.id);
     const events = appIds.length ? await db.from("application_events").select("application_id, status, note, created_at").in("application_id", appIds).order("created_at") : { data: [] };
-    data.candidateProfile = cp.data ?? null;
+    const li = await db.from("candidate_profiles").select("linkedin_url").eq("user_id", id).maybeSingle();
+    data.candidateProfile = cp.data ? { ...cp.data, ...(li.error ? {} : { linkedin_url: (li.data as { linkedin_url?: string | null } | null)?.linkedin_url ?? null }) } : null;
     // What the candidate chose for "Recommended for you", the career stage answer, hidden jobs and the name change date. All private to them.
     const extras = await candidateExtras(db, id);
     data.preferences = extras.preferences;
