@@ -6,9 +6,8 @@ export const LINKEDIN_URL = "https://www.linkedin.com/company/kestrel-eye-care-j
 // The Instagram account (Steve, 13th November 2026).
 export const INSTAGRAM_URL: string | null = "https://www.instagram.com/kestreleye26/";
 
-// The Facebook Page (Steve, 15th November 2026). Still the long numbered address, because Meta offered no username on a new
-// Page. Swap it for the short address (facebook.com/<username>) when one can be set.
-export const FACEBOOK_URL: string | null = "https://www.facebook.com/profile.php?id=61596238157146";
+// The Facebook Page (Steve, 15th November 2026), on its short address.
+export const FACEBOOK_URL: string | null = "https://www.facebook.com/kestreleye26";
 
 // The Reddit community for eye care jobs in Canada (Steve, 15th November 2026). Plan: item 22 in CLAUDE.md.
 export const REDDIT_URL: string | null = "https://www.reddit.com/r/EyeCareJobsCanada/";
