@@ -1,6 +1,6 @@
 # Licensing guides by province: plan for Steve to approve
 
-Written 13th November 2026. Copilot and Perplexity both said guides on getting licensed in each province are what assistants quote, and `/resources` only links to the regulators today. This is the list of guides, provinces and sources. **Nothing is written yet.** Each fact will come from the regulator's own website, checked on the day of writing and dated in the guide.
+**Update, 15th November 2026: all 3 guides are written and scheduled (see the Slot column), and Steve has said to leave the dates as they are because the Instagram posts run alongside them. The notes below are the original plan and the sources.** Written 13th November 2026. Copilot and Perplexity both said guides on getting licensed in each province are what assistants quote, and `/resources` only links to the regulators today. This is the list of guides, provinces and sources. Each fact will come from the regulator's own website, checked on the day of writing and dated in the guide.
 
 ## What I suggest
 
