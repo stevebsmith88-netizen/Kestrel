@@ -10,6 +10,25 @@ Revised 14th November 2026 for **a launch on Monday 25th January 2027** (Steve: 
 
 **Posts 33 to 40 (added 15th November 2026):** guide cards for the blog posts from March to June 2027, every 2 weeks from 17th May to 23rd August 2027, each after its blog post, with the grid rule kept. **After post 40 (late August), and alongside them:** new content. Launch brings plenty: first clinics on board, jobs of the week, clinic spotlights (with permission), and pay facts from real posts.
 
+## Extra post: Who should we follow? (Steve, 15th November 2026)
+
+Not part of the numbered order. **Post it, then pin it** (Instagram allows 3 pins, beside posts 8 and 9). A pinned post leaves the grid order, so the colour plan for posts 10 to 40 is unchanged; posting it unpinned would shift every later post by 1 square and break the plan. With 3 pins the top row is all pins, and each new post then starts the second row. Images: `design/social-and-merch/instagram-guides/x01-who-should-we-follow.png` (feed) and `x01-who-should-we-follow-story.png` (story, asking for replies). The goal is to follow 2,020 eye care accounts, a play on 20/20.
+
+Caption:
+```text
+Who should we follow?
+
+We want to follow 2,020 eye care accounts across Canada. Clinics, opticians, optometrists, assistants, labs, suppliers and schools: the people who make eye care work.
+
+Tag them below, or tag yourself. Help us get to 20/20.
+
+#EyeCareJobs #Optometry #Opticians #EyeCareCanada #OptometricAssistant
+```
+Alt text:
+```text
+An eye chart on navy. The lines get smaller: WHO, SHOULD, WE, FOLLOW?, and on the 20/20 line, TAG THEM BELOW. Underneath: Clinics, opticians, optometrists, labs and suppliers. We want to follow 2,020 eye care accounts across Canada.
+```
+
 ## The calendar
 
 | Post | Date | What | Colour family |
