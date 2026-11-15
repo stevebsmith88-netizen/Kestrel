@@ -59,6 +59,17 @@ const PATHS = {
       <path d="M17.3 6.7v.1" />
     </>
   ),
+  reddit: (
+    <>
+      <ellipse cx="12" cy="14.2" rx="7.5" ry="5" />
+      <circle cx="4.6" cy="11.6" r="1.4" />
+      <circle cx="19.4" cy="11.6" r="1.4" />
+      <path d="M12 9.2 13.1 4.5 17 5.4" />
+      <circle cx="17.6" cy="5.6" r="1.2" />
+      <path d="M9.6 13.4v.1M14.4 13.4v.1" />
+      <path d="M9.6 16.4c1.3 1 3.5 1 4.8 0" />
+    </>
+  ),
   facebook: (
     <>
       <rect x="3.5" y="3.5" width="17" height="17" rx="3" />
