@@ -89,7 +89,8 @@ export async function approveJobNow(id: string, actor: "admin" | "system", via?:
   return { key: "approved" };
 }
 
-export async function rejectJobNow(id: string, note: string): Promise<ApprovalResult> {
+// `via` says where the decision came from, so the job's Activity notes it (for example "from Slack").
+export async function rejectJobNow(id: string, note: string, via?: string): Promise<ApprovalResult> {
   const db = supabaseAdmin();
   if (!UUID.test(id) || !db) return { key: "error" };
   if (!note) return { key: "need-note" };
@@ -100,7 +101,7 @@ export async function rejectJobNow(id: string, note: string): Promise<ApprovalRe
   }
   // The job was not approved, so a card saved for it is never charged.
   await cancelPaymentForJob(db, id);
-  await logJobActivity(db, id, `Sent back to the clinic: ${note.slice(0, 200)}`, { actor: "admin" });
+  await logJobActivity(db, id, `Sent back to the clinic${via ? ` (${via})` : ""}: ${note.slice(0, 200)}`, { actor: "admin" });
   await emailClinic(db, id, "needs-change", { note });
   refreshJobPages();
   return { key: "rejected" };

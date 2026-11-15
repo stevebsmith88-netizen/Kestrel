@@ -1,6 +1,6 @@
 # Approve from Slack (plan, 14th November 2026)
 
-Status: built 14th November 2026 (Steve said yes to buttons only, no button on a flagged job, and claims as well as jobs). Send back from Slack is the second step, not built. Steve's setup steps are in `docs/slack-setup.md`.
+Status: built 14th November 2026 (Steve said yes to buttons only, no button on a flagged job, and claims as well as jobs). Send back (every waiting job) and Decline (a waiting claim) built 14th November 2026 as the second step, with a form for the note; they need `SLACK_BOT_TOKEN`. Steve's setup steps are in `docs/slack-setup.md`.
 
 ## What Steve wants
 

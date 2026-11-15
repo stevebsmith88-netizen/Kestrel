@@ -1,6 +1,6 @@
 "use server";
 
-import { approveClaimCore } from "@/lib/claim-approval";
+import { approveClaimCore, rejectClaimCore } from "@/lib/claim-approval";
 import { claimSlackExtras } from "@/lib/slack-approve-buttons";
 import { notifySlack } from "@/lib/notify-slack";
 import { revalidatePath } from "next/cache";
@@ -142,14 +142,7 @@ export async function rejectClaim(form: FormData) {
   const note = String(form.get("note") ?? "").trim().slice(0, 1000);
   const admin = supabaseAdmin();
   if (!UUID.test(id) || !admin) redirect("/admin/claims?notice=error");
-  if (!note) redirect("/admin/claims?notice=need-note");
-  const { data: claim } = await admin.from("listing_claims").update({ status: "rejected", decided_at: new Date().toISOString(), decision_note: note }).eq("id", id).eq("status", "pending_review").select("claimant_email");
-  if (!claim?.length) redirect("/admin/claims?notice=error");
-  const mail = emailLayout({
-    heading: "About your claim",
-    paragraphs: ["Thank you for your claim. We were not able to approve it this time.", note, "If you think we have made a mistake, just reply to this email or write to support@eyecarejobs.ca and a person will look again."],
-  });
-  await sendEmail({ to: claim[0].claimant_email, subject: "About your claim on Kestrel", ...mail });
-  revalidatePath("/admin/claims");
+  const result = await rejectClaimCore(admin, id, note);
+  if (!result.ok) redirect(`/admin/claims?notice=${result.reason}`);
   redirect("/admin/claims?notice=rejected");
 }

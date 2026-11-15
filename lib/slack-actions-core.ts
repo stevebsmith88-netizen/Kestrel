@@ -1,6 +1,6 @@
 // What happens when someone presses an Approve button in Slack (Steve, 14th November 2026; plan in docs/plans/slack-approvals.md). The checks and the
 // words are here, with the database work passed in, so every rule can be tested. The route (app/api/slack/actions/route.ts) supplies the real work.
-import { claimMayBeApprovedFromSlack, jobMayBeApprovedFromSlack, parseApprovers, type SlackAction } from "./slack-approvals.ts";
+import { claimMayBeApprovedFromSlack, jobMayBeApprovedFromSlack, noteProblem, parseApprovers, type ModalSubmit, type SlackAction } from "./slack-approvals.ts";
 
 export type SlackDeps = {
   env: Record<string, string | undefined>;
@@ -12,12 +12,14 @@ export type SlackDeps = {
 
 export type SlackOutcome = { ok: boolean; result: string };
 
+// Whether this person may press a button at all. Nothing is opened or done for anyone else.
+export const NOT_APPROVER_MESSAGE = "You are not on the list of people who can approve from Slack. Open the admin pages instead.";
+export const isApprover = (userId: string, env: Record<string, string | undefined>) => parseApprovers(env.SLACK_APPROVER_IDS).has(userId);
+
 const safeName = (name: string) => name.replace(/[^\w .'-]/g, "").slice(0, 40) || "someone";
 
 export async function runSlackAction(action: SlackAction, deps: SlackDeps, now: Date = new Date()): Promise<SlackOutcome> {
-  if (!parseApprovers(deps.env.SLACK_APPROVER_IDS).has(action.userId)) {
-    return { ok: false, result: "You are not on the list of people who can approve from Slack. Open the admin pages instead." };
-  }
+  if (!isApprover(action.userId, deps.env)) return { ok: false, result: NOT_APPROVER_MESSAGE };
   const who = safeName(action.userName);
   const time = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Toronto", hour: "numeric", minute: "2-digit" }).format(now);
 
@@ -43,4 +45,37 @@ export async function runSlackAction(action: SlackAction, deps: SlackDeps, now: 
   if (claimed.reason === "has-clinic") return { ok: false, result: "That account already owns a clinic, so this needs the claims page." };
   if (claimed.reason === "taken") return { ok: false, result: "Someone else already claimed this listing." };
   return { ok: false, result: "Something went wrong, and nothing was approved. Open the claims page." };
+}
+
+// The second half of Send back and Decline: the form has been submitted with a note. Everything is checked again, because time has passed since the
+// button was pressed.
+export type DecisionDeps = {
+  env: Record<string, string | undefined>;
+  jobWaiting: (id: string) => Promise<boolean>;
+  sendBackJob: (id: string, note: string, via: string) => Promise<{ key: string }>;
+  claimPending: (id: string) => Promise<boolean>;
+  declineClaim: (id: string, note: string) => Promise<{ ok: true } | { ok: false; reason: string }>;
+};
+
+export async function runSlackDecision(sub: ModalSubmit, deps: DecisionDeps, now: Date = new Date()): Promise<SlackOutcome> {
+  if (!isApprover(sub.userId, deps.env)) return { ok: false, result: NOT_APPROVER_MESSAGE };
+  const problem = noteProblem(sub.note);
+  if (problem) return { ok: false, result: problem };
+  const note = sub.note.trim();
+  const who = safeName(sub.userName);
+  const time = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Toronto", hour: "numeric", minute: "2-digit" }).format(now);
+
+  if (sub.kind === "send_back_job") {
+    if (!(await deps.jobWaiting(sub.id))) return { ok: false, result: "This job is no longer waiting for review. It may already have been handled." };
+    const result = await deps.sendBackJob(sub.id, note, `from Slack by ${who}`);
+    return result.key === "rejected"
+      ? { ok: true, result: `Sent back by ${who} from Slack at ${time}. The clinic has been emailed.` }
+      : { ok: false, result: "Something went wrong, and nothing was sent back. Open the review queue." };
+  }
+
+  if (!(await deps.claimPending(sub.id))) return { ok: false, result: "This claim is no longer waiting. It may already have been handled." };
+  const declined = await deps.declineClaim(sub.id, note);
+  return declined.ok
+    ? { ok: true, result: `Claim declined by ${who} from Slack at ${time}. They have been emailed.` }
+    : { ok: false, result: "Something went wrong, and nothing was declined. Open the claims page." };
 }

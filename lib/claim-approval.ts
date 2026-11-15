@@ -39,3 +39,20 @@ export async function approveClaimCore(admin: NonNullable<ReturnType<typeof supa
   return { ok: true, clinicName: taken[0].clinic_name };
 }
 
+
+// Declining a claim with a note for the claimant, with no page and no sign in check of its own: the claims page and the Slack form both call it after their
+// own checks. The claimant is told by email.
+export type ClaimDecline = { ok: true } | { ok: false; reason: "error" | "need-note" };
+
+export async function rejectClaimCore(admin: NonNullable<ReturnType<typeof supabaseAdmin>>, id: string, note: string): Promise<ClaimDecline> {
+  if (!note) return { ok: false, reason: "need-note" };
+  const { data: claim } = await admin.from("listing_claims").update({ status: "rejected", decided_at: new Date().toISOString(), decision_note: note }).eq("id", id).eq("status", "pending_review").select("claimant_email");
+  if (!claim?.length) return { ok: false, reason: "error" };
+  const mail = emailLayout({
+    heading: "About your claim",
+    paragraphs: ["Thank you for your claim. We were not able to approve it this time.", note, "If you think we have made a mistake, just reply to this email or write to support@eyecarejobs.ca and a person will look again."],
+  });
+  await sendEmail({ to: claim[0].claimant_email, subject: "About your claim on Kestrel", ...mail });
+  revalidatePath("/admin/claims");
+  return { ok: true };
+}
