@@ -1,6 +1,6 @@
 # Virtual assistant logins (plan, 15th November 2026)
 
-Status: draft for Steve to approve. Nothing is built. This is item 6 in `CLAUDE.md`, step 8 of the order of work.
+Status: plan agreed, build on hold (Steve, 15th November 2026) until he is ready to hire the VA. Nothing is built. This is item 6 in `CLAUDE.md`, step 8 of the order of work.
 
 ## What Steve wants the VA to do (decided 15th November 2026)
 
