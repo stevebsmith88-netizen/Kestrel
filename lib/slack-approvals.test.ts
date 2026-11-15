@@ -49,3 +49,24 @@ test("the message has its buttons, each asking Are you sure, and the result repl
   assert.equal(done.blocks.length, 1, "the buttons are gone");
   assert.equal((ephemeral("no") as { response_type: string }).response_type, "ephemeral");
 });
+
+import { approvalStatus } from "./slack-approvals.ts";
+
+test("the check says what is missing, and never shows a value", () => {
+  const ok = approvalStatus({ SLACK_SIGNING_SECRET: "abc", SLACK_APPROVER_IDS: "U0ABC123" });
+  assert.equal(ok.ready, true);
+  assert.deepEqual(ok.problems, []);
+  assert.equal(ok.approversValid, 1);
+  const none = approvalStatus({});
+  assert.equal(none.ready, false);
+  assert.equal(none.problems.length, 2);
+  const wrongShape = approvalStatus({ SLACK_SIGNING_SECRET: "abc", SLACK_APPROVER_IDS: "@steve" });
+  assert.equal(wrongShape.ready, false);
+  assert.equal(wrongShape.approversGiven, 1);
+  assert.equal(wrongShape.approversValid, 0);
+  assert.match(wrongShape.problems[0], /capital U or W/);
+  const demo = approvalStatus({ SLACK_SIGNING_SECRET: "abc", SLACK_APPROVER_IDS: "U0ABC123", DEMO_MODE: "yes" });
+  assert.equal(demo.ready, false);
+  assert.match(demo.problems[0], /demo/);
+  assert.ok(!JSON.stringify(ok).includes("abc") && !JSON.stringify(ok).includes("U0ABC123"), "no value leaks");
+});

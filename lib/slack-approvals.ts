@@ -17,6 +17,23 @@ export function buttonsAllowed(env: Env): boolean {
   return env.DEMO_MODE !== "yes" && Boolean(env.SLACK_SIGNING_SECRET?.trim()) && parseApprovers(env.SLACK_APPROVER_IDS).size > 0;
 }
 
+// What the check on Admin, Payments shows about the Approve buttons: whether each setting is there and in the right shape, and so whether a button will
+// appear. It never shows a value, only whether it is set and how many member IDs were understood.
+export type ApprovalStatus = { ready: boolean; demo: boolean; signingSecretSet: boolean; approversGiven: number; approversValid: number; problems: string[] };
+
+export function approvalStatus(env: Env): ApprovalStatus {
+  const demo = env.DEMO_MODE === "yes";
+  const signingSecretSet = Boolean(env.SLACK_SIGNING_SECRET?.trim());
+  const given = (env.SLACK_APPROVER_IDS ?? "").split(/[,\s]+/).map((v) => v.trim()).filter(Boolean);
+  const approversValid = parseApprovers(env.SLACK_APPROVER_IDS).size;
+  const problems: string[] = [];
+  if (demo) problems.push("This is the demo site, which never gets Approve buttons. Check the live site instead.");
+  if (!signingSecretSet) problems.push("SLACK_SIGNING_SECRET is not set on this site. Add it in Vercel (Production), then redeploy without the build cache.");
+  if (given.length === 0) problems.push("SLACK_APPROVER_IDS is not set on this site. Add your Slack member ID in Vercel (Production), then redeploy without the build cache.");
+  else if (approversValid === 0) problems.push(`SLACK_APPROVER_IDS has ${given.length} ${given.length === 1 ? "entry" : "entries"} but none looks like a Slack member ID. A member ID starts with a capital U or W and has only capital letters and numbers, for example U0ABC123.`);
+  return { ready: problems.length === 0, demo, signingSecretSet, approversGiven: given.length, approversValid, problems };
+}
+
 export type SlackAction = { kind: "approve_job" | "approve_claim"; id: string; userId: string; userName: string; responseUrl: string };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
