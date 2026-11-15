@@ -9,6 +9,23 @@ Written 15th November 2026 for Steve to run with. The community is at https://ww
 3. **Flairs:** Discussion, Resource, Job brief, and 1 per province later. Rules already include respect, pay shown on every job, no agencies or recruiters, and no personal data.
 4. **Pin the welcome post** once it is up.
 
+## Flairs and widgets (decided with Steve, 15th November 2026)
+
+**Post flairs** (the tag on a post; a post carries only 1): Discussion, Resource, Job brief, Question, Pay talk. No flair per province for now, because a post can only carry 1. A weekly brief uses Job brief with the province in the title ("Ontario: eye care jobs this week"). Split out province flairs later if the briefs grow.
+
+**Member flairs** (the tag beside a username; people choose their own, optional): Optometrist, Optician, Optometric assistant, Technician, Practice manager, Clinic owner, Supplier, Student, Other. Give the Kestrel account the mod set flair **Kestrel team**. Roles only: no province, employer, registration number or proof, so nobody is shown to be verified and nobody is pushed to share who they are.
+
+**Widgets** (Mod Tools, Widgets). Keep to 3 plus the ones Reddit adds itself (community details, rules, moderators):
+1. **Button widget**, named "Kestrel Job Board", with the description "Eye care jobs across Canada, with pay shown on every post. Run by Kestrel Eye Care Jobs." Use text buttons, not image buttons, for now (an image button would need an upload; if one is added later it must be the existing Kestrel logo file, never redrawn). Each button has its text and a link. Tag every link as in `docs/utm-guide.md`, with source `reddit`, medium `social` and campaign `2026-11-reddit-community`:
+   - Kestrel job board: `https://eyecarejobs.ca/?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community`
+   - Pay guide: `https://eyecarejobs.ca/resources?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community#pay`
+   - Blog: `https://eyecarejobs.ca/blog?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community`
+   Drag the widget to sit just under the community details (Edit Widgets).
+2. **Text widget** "Start here": "New here? Read the pinned welcome post. Every job posted here shows its pay."
+3. **Post flair widget**, switched on once there are a few posts.
+
+Skip the calendar, image, community list and related communities widgets for now: they make an empty community look busier than it is.
+
 ## The order to post
 
 | When | Post | Flair | Notes |
