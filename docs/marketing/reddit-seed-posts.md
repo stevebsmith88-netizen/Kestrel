@@ -1,0 +1,108 @@
+# r/EyeCareJobsCanada: setup checklist and the first 5 posts
+
+Written 15th November 2026 for Steve to run with. The community is at https://www.reddit.com/r/EyeCareJobsCanada/ (Restricted, posts need approval). The plan and decisions are in item 22 of `CLAUDE.md`. Post from the Kestrel account only, never a personal one. Every fact below is from Job Bank or from Kestrel's own blog posts, so nothing needs checking again except the dates.
+
+## Setup first (about 10 minutes)
+
+1. **Community details widget.** Weekly visitors' nickname: `Visitors` (or `Readers`). Weekly contributions nickname: `Contributions` (not `Online`, which would read as "5 Online"). In the description, change "Weekly job briefs by province" to "Weekly job briefs by province are coming" and add "Run by Kestrel Eye Care Jobs, eyecarejobs.ca." at the end (it is 364 of 500 characters now).
+2. **Link back.** Add a link widget to https://eyecarejobs.ca (Mod Tools, then Widgets or Menu), and put the website in the Kestrel account's profile bio.
+3. **Flairs:** Discussion, Resource, Job brief, and 1 per province later. Rules already include respect, pay shown on every job, no agencies or recruiters, and no personal data.
+4. **Pin the welcome post** once it is up.
+
+## The order to post
+
+| When | Post | Flair | Notes |
+| --- | --- | --- | --- |
+| Mon 16th November | 1. Welcome | Discussion, pinned | Post first, so the community has a front door |
+| Tue 17th November | 2. Optician pay by province | Resource | The blog post goes live that day, so post on or after 17th |
+| Wed 18th November | 3. What would make you apply | Discussion | Gives both candidates and clinics a reason to reply |
+| Fri 20th November | 4. Who does what in a clinic | Resource | The blog post goes live that day |
+| Tue 24th November | 5. We asked the AI chatbots | Discussion | The blog post goes live that day |
+
+After that: 1 post a week, tied to each new blog post (Tuesday and Friday), always with a question at the end. Reply to every comment within a day, as the Kestrel account. Keep a note of which posts get replies, since the replies are the ideas for later blog posts. Never use another account or ask people to upvote.
+
+## 1. Welcome (pin it)
+
+**Title:** Welcome to r/EyeCareJobsCanada
+
+> This is a home for the people who work in eye care across Canada: optometrists, opticians, assistants, technicians, practice managers and the clinics that hire them. We will share jobs that show their pay, plus honest conversation about hiring, working and moving in this profession.
+>
+> A few ground rules: every job post shows its pay, no agencies or recruiters, no personal details, and be kind. Posts need approval for now, to keep spam out.
+>
+> To get us started: what made you choose eye care, and what do you wish you had known when you began?
+>
+> Kestrel Eye Care Jobs runs this community. Our job board is at eyecarejobs.ca.
+
+## 2. Typical optician pay by province (on or after 17th November)
+
+**Title:** Typical optician pay by province, from Job Bank
+
+> We pulled together what Job Bank, the Government of Canada's labour market service, publishes for opticians. These figures come from its wage data revised 19th November 2025, covering surveys from 2023 and 2024.
+>
+> The median is the middle figure: half of opticians surveyed earned more, half earned less. The middle half is the range between the low and high figures, where Job Bank gives them.
+>
+> | Province | Median an hour | Middle half |
+> | --- | --- | --- |
+> | British Columbia | $30.82 | $23 to $32 |
+> | Saskatchewan | $30.10 | Not published |
+> | Manitoba | $29.69 | Not published |
+> | Newfoundland and Labrador | $29.59 | Not published |
+> | New Brunswick | $28.50 | Not published |
+> | Nova Scotia | $28.07 | Not published |
+> | Alberta | $28.00 | $25 to $39.40 |
+> | Ontario | $24.04 | $23 to $33.65 |
+>
+> A few notes. Job Bank does not publish a figure for Prince Edward Island or the territories. British Columbia's figure may cover a wider mix of dispensing staff, because glasses there can be sold without a registered optician. Ontario's median is the lowest, but the top of its range is well above it, so treat any median as a starting point for a conversation and not a ceiling.
+>
+> The full write-up, with what moves pay up or down, is here: https://eyecarejobs.ca/blog/optician-pay-canada
+>
+> Does this match what you see where you work or hire? And what is missing from these numbers?
+
+## 3. What would make you apply
+
+**Title:** What would make you apply for a job in eye care?
+
+> Whether you are an optician, an optometric assistant, a technician or an optometrist, you have read plenty of job ads. Some make you want to call the clinic that afternoon. Others make you close the tab.
+>
+> What is the one thing an ad could say, or show, that would make you apply? Pay, hours, the team, training, the kind of patients, a mentor, something else?
+>
+> And if you are on the hiring side: what do you wish candidates understood about your clinic before they applied?
+>
+> No right answers. Short replies are welcome, and so are long ones.
+
+## 4. Who does what in an eye care clinic (on or after 20th November)
+
+**Title:** Who does what in an eye care clinic? A plain guide to the roles
+
+> If you have only been on the patient side of an eye exam, a clinic can look like a few jobs. There are more, and many of them need no university degree. A short map:
+>
+> | Role | What they do | Provincial registration |
+> | --- | --- | --- |
+> | Optometrist | Examines eyes, diagnoses and prescribes | Required |
+> | Optician | Fits glasses and, in some provinces, contact lenses | Required |
+> | Optometric assistant or technician | Runs the first tests and keeps the day moving | Not usually |
+> | Reception and patient care | Books, greets and handles insurance | Not usually |
+> | Practice or clinic manager | Staff, schedules, ordering and finances | Not usually |
+> | Supplier roles | Sales, training and equipment service | Not usually |
+>
+> Behind the dispensary there is also the lab, where lenses are cut to fit the frame. And around clinics, lens labs, frame companies, contact lens makers and software companies all hire people who know clinics.
+>
+> People move between these roles more than you might expect. An assistant may study to become an optician. A receptionist may become a clinic manager. An optician may move to the supplier side to train other clinics.
+>
+> The full guide is here: https://eyecarejobs.ca/blog/working-in-eye-care
+>
+> Which role did you start in, and where are you now? If you are hiring, which role is hardest to fill?
+
+## 5. We asked the AI chatbots (on or after 24th November)
+
+**Title:** We asked ChatGPT, Gemini and Copilot where to find eye care jobs in Canada. Here is what they said
+
+> More people now start a job search by typing a question into an AI assistant. So in early November 2026 we put a fixed set of questions to ChatGPT, Gemini and Copilot, like "Is there a job board just for eye care jobs in Canada?" and "Where should an independent optometry clinic post a job ad?"
+>
+> What they got right: asked what an optician earns in Alberta, ChatGPT and Copilot both quoted the same Job Bank median, $28.00 an hour. They also described Ontario's new job ad rules correctly, and pointed to the national and provincial optometry associations and the college programs.
+>
+> What they got wrong or could not know: each gave a different list of job boards, one answer about Ontario slipped in an Alberta example, and none of them can tell you whether a job is still open today or what it really pays. A chatbot summarises what it has read. It cannot ring the clinic.
+>
+> Our write-up, with tips for using AI in a job search without being burned by it, is here: https://eyecarejobs.ca/blog/ai-job-search-eye-care-canada
+>
+> Have you used an AI assistant to look for work, or to write a job ad? What did it get right, and what did it get wrong?
