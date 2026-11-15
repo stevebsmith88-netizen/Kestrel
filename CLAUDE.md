@@ -35,6 +35,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 
 ## Current state
 
+- The public clinic page header (15th November 2026): name, place and facts on the left, the website button and social icons together on the right (`components/EmployerPage.tsx`).
 - The Kestrel logo in the signed in top bar goes to the public home page, and My dashboard is the way back to the dashboard (Steve, 15th November 2026).
 - A "View my public page" button on the clinic profile page only (moved from the dashboard at Steve's request) (`components/PublicPageLink.tsx`, beside the heading, 15th November 2026, no SQL), with a short line instead until the first job is approved.
 - Inbox bulk actions (Steve, 15th November 2026, no SQL): the inbox has tick boxes, Select all, Mark as read and Delete for the ticked messages (`components/InboxList.tsx`, `lib/notification-actions.ts`, `lib/inbox-select.ts`); Delete asks first and is done with the server key limited to the person's own messages, so no migration was needed.
