@@ -39,7 +39,7 @@ export default async function NewJob({ searchParams }: { searchParams: Promise<{
             <h1>{POSTING_SOON_HEADING}</h1>
             <section className="card">
               <p>{POSTING_SOON_BODY}</p>
-              <p className="formbtns"><Link href="/clinic/profile" className="btn">Check my clinic profile</Link><Link href="/jobs" className="btn ghost">Look at the job board</Link></p>
+              <p className="formbtns"><Link href="/clinic/profile" className="btn">Check my clinic profile</Link><Link href="/jobs" className="btn ghost">Look at the job board</Link><Link href="/account/help" className="btn ghost">Send feedback</Link></p>
             </section>
           </div>
         </main>
