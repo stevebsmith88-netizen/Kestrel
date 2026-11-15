@@ -5,7 +5,8 @@ import ClinicProfileForm from "@/components/ClinicProfileForm";
 import { requireRole } from "@/lib/auth";
 import { getMyClinics, getMyEmployer } from "@/lib/clinic";
 import LocationPicker from "@/components/LocationPicker";
-import PublicPageLink from "@/components/PublicPageLink";
+import { PublicPageButton, PublicPageNote } from "@/components/PublicPageLink";
+import { clinicHrefFor } from "@/lib/public-clinics";
 import { practiceLabel } from "@/lib/jobs";
 import { OWNER_ONLY_TEXT } from "@/lib/team";
 import { socialLinksFrom } from "@/lib/social-links";
@@ -19,14 +20,18 @@ export default async function ClinicProfile({ searchParams }: { searchParams: Pr
   const { from } = await searchParams;
   const employer = await getMyEmployer(session.userId);
   const clinics = employer ? await getMyClinics(session.userId) : [];
+  const publicHref = employer ? await clinicHrefFor(employer.id) : null;
   return (
     <>
       <AppBar session={session} current="/clinic/profile" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <h1>{employer ? "Your clinic" : "Set up your clinic"}</h1>
+          <div className="pagehead">
+            <h1>{employer ? "Your clinic" : "Set up your clinic"}</h1>
+            <PublicPageButton href={publicHref} />
+          </div>
           {employer && <LocationPicker clinics={clinics} current={employer.id} back="/clinic/profile" />}
-          {employer && <PublicPageLink employerId={employer.id} supplier={employer.practice_type === "supplier"} />}
+          {employer && <PublicPageNote href={publicHref} supplier={employer.practice_type === "supplier"} />}
           {!employer && from === "post" && (
             <p className="note" role="status"><strong>You must set up your clinic before posting a job.</strong> It takes about 2 minutes. When you save it, you can post your first job straight away.</p>
           )}
