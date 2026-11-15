@@ -15,7 +15,7 @@ export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Post eye care jobs in Canada",
-  description: "Post jobs and reach eye care professionals across Canada. Create an account to look around now, and we will let you know when posting opens.",
+  description: "Post jobs and reach eye care professionals across Canada. Create an account to look around now. We expect to launch in early 2027, when posting opens.",
   path: "/clinics",
 });
 
@@ -83,7 +83,7 @@ export default async function Clinics() {
           </section>
           {launched ? (
             <>
-              {!postingOn() && <p>Posting opens soon. Create your clinic account now to set up your profile and look around, and we will email you the moment you can post.</p>}
+              {!postingOn() && <p>We are in our pre launch phase, and posting opens at our launch in early 2027. Create your clinic account now to set up your profile, look around and send us feedback, and we will email you when you can post.</p>}
               <Link href="/sign-up?type=clinic" className="btn">Create your clinic account</Link>
             </>
           ) : (

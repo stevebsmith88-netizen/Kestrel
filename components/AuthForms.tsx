@@ -130,7 +130,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
           We have sent a confirmation link to <strong>{state.email}</strong>. Open it to confirm your address, then sign in.
         </p>
         <p className="help">It can take a minute to arrive. If you don&apos;t see it, check your spam or junk folder.</p>
-        {postingSoon && <p className="help">You can look around as soon as you are signed in. Clinics cannot post jobs yet, and we will email you when posting opens.</p>}
+        {postingSoon && <p className="help">You can look around as soon as you are signed in. Kestrel is in its pre launch phase, so clinics cannot post jobs yet. We expect to launch in early 2027 and will email you then.</p>}
       </Done>
     );
   }
@@ -145,7 +145,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
       <>
       <h1>Create your account</h1>
       <p className="auth-intro">
-        Free to join. {postingSoon ? "Create an account to look around: clinics can set up a profile now, and posting jobs opens soon." : "Candidates can save a resume and follow their applications, and clinics can post jobs."} Tick the second box below if you would also like launch news and tips for getting started.
+        Free to join. {postingSoon ? "We are in our pre launch phase, so create an account to look around and tell us what you think. Clinics can set up a profile now, and posting opens at our launch in early 2027." : "Candidates can save a resume and follow their applications, and clinics can post jobs."} Tick the second box below if you would also like launch news and tips for getting started.
       </p>
       <p className="help">Looking for a job? Your profile and resume stay private until you apply. A clinic sees only what you send with an application.</p>
       </>

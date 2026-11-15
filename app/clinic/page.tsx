@@ -15,6 +15,7 @@ import { passUsage, passesAvailable } from "@/lib/pass-flow";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { requireRole } from "@/lib/auth";
 import { postingOn } from "@/lib/features";
+import { POSTING_SOON_BODY, POSTING_SOON_HEADING } from "@/lib/posting-copy";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyClinics, getMyEmployer, getMyJobs } from "@/lib/clinic";
@@ -120,7 +121,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
             </section>
           ) : (
             <>
-              {!postingOn() && <section className="card"><h2>Posting opens soon</h2><p>Your clinic profile is set up. We will email you as soon as you can post your first job. Until then, look around the job board and the resources.</p></section>}
+              {!postingOn() && <section className="card"><h2>{POSTING_SOON_HEADING}</h2><p>{POSTING_SOON_BODY}</p><p><Link href="/account/help" className="btn sm ghost">Send feedback</Link></p></section>}
               {postingOn() && <GettingStarted
                 title="Your first application"
                 steps={clinicSteps({ hasProfile: true, submitted: jobs.filter((j) => j.status !== "draft").length, live: jobs.filter((j) => j.posted_at).length, applications: Object.values(applicants).reduce((sum, a) => sum + a.total, 0) })}
@@ -170,7 +171,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               )}
 
               {jobs.length === 0 ? (
-                <section className="card"><p>{postingOn() ? <>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</> : <>Posting jobs opens soon. Have a look around, and we will email you the moment it does.</>}</p></section>
+                <section className="card"><p>{postingOn() ? <>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</> : <>Posting opens at our launch in early 2027. Have a look around, and we will email you when it does.</>}</p></section>
               ) : shown.length === 0 && show ? (
                 <section className="card"><p>{SHOW_LABELS[show].empty}</p></section>
               ) : (
