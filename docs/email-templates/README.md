@@ -8,7 +8,7 @@ These are the 3 sign in emails Supabase sends, in the Kestrel look (navy header 
 | Reset password | `reset-password.html` |
 | Change email address | `change-email.html` |
 
-**15th November 2026:** the Confirm sign up template now says posting is not open yet. Paste it again into the live project, and take that sentence out when posting opens.
+**15th November 2026:** the Confirm sign up template now says Kestrel is in its pre launch phase, asks for feedback and gives the early 2027 launch. Paste it again into the live project, and take that paragraph out when posting opens.
 
 Leave out the first line of the file, which is only a note of the subject. Keep "Secure email change" switched on under Authentication, Sign In / Providers, Email. The change email template is sent twice, once to the old address and once to the new one.
 
