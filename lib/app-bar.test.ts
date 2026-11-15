@@ -16,3 +16,10 @@ test("the envelope with its count sits beside the Menu button on a phone", () =>
   assert.match(css, /@media \(max-width:700px\)\{\.topbar-narrow\{display:flex\}\}/);
   assert.match(css, /\.inboxlink\{[^}]*width:44px;height:44px/, "keeps the 44 pixel tap size");
 });
+
+test("the Kestrel logo in the account bar goes to the public home page, and My dashboard goes to the dashboard (Steve, 15th November 2026)", async () => {
+  const { readFileSync } = await import("node:fs");
+  const view = readFileSync("components/AppBarView.tsx", "utf8");
+  assert.match(view, /<Link href="\/" className="topbar-logo"/);
+  assert.ok(!/href=\{homeOf\(session\.role\)\} className="topbar-logo"/.test(view));
+});
