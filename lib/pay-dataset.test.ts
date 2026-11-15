@@ -19,6 +19,11 @@ test("the pay table's data set names its Job Bank source, licence and date", () 
   assert.equal(d.isBasedOn.dateModified, JOB_BANK_SOURCE.revised);
   assert.equal(d.dateModified, JOB_BANK_SOURCE.revised);
   assert.ok(d.creditText.includes(LICENCE_STATEMENT));
+  // Google's Datasets report flags a missing description (critical), creator and licence, on this data set and on the source it is based on.
+  assert.equal(d.license, LICENCE_URL);
+  assert.ok(d.creator.name);
+  assert.ok(d.isBasedOn.description.length >= 50);
+  assert.ok(d.isBasedOn.creator.name);
   assert.match(d.description, /19th November 2025/);
   assert.ok(d.name.length > 0 && d.description.length >= 50 && d.description.length <= 5000);
 });
