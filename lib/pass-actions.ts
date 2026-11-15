@@ -1,5 +1,6 @@
 "use server";
 
+import { postingOn } from "@/lib/features";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
@@ -13,7 +14,7 @@ async function owner() {
   const session = await requireRole("clinic");
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile");
-  if (!passesAvailable()) redirect("/clinic");
+  if (!passesAvailable() || !postingOn()) redirect("/clinic");
   if (employer.level !== "owner") redirect("/clinic/plans?problem=owner");
   return employer;
 }
@@ -37,7 +38,7 @@ async function draftJob(form: FormData) {
   const session = await requireRole("clinic");
   const employer = await getMyEditableEmployer(session.userId);
   if (!employer) redirect("/clinic");
-  if (!passesAvailable()) redirect("/clinic");
+  if (!passesAvailable() || !postingOn()) redirect("/clinic");
   const id = String(form.get("id") ?? "");
   const db = supabaseAdmin();
   if (!db || !/^[0-9a-f-]{36}$/i.test(id)) redirect("/clinic");

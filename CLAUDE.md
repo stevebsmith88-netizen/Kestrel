@@ -35,6 +35,7 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 
 ## Current state
 
+- Sign up before posting (Steve, 15th November 2026, no SQL): the sign up gate can be opened while clinics still cannot post. `ENABLE_POSTING` (`postingOn()` in `lib/features.ts`, wording in `lib/posting-copy.ts`) is off by default, so a clinic that signs up sees "Posting opens soon" on Post a job and its dashboard, and the server refuses new jobs, reposts and pass purchases. The demo sets it to `yes`. Steps are in `docs/launch-home.md`.
 - The public clinic page header (15th November 2026): name, place and facts on the left, the website button and social icons together on the right (`components/EmployerPage.tsx`).
 - The Kestrel logo in the signed in top bar goes to the public home page, and My dashboard is the way back to the dashboard (Steve, 15th November 2026).
 - A "View my public page" button on the clinic profile page only (moved from the dashboard at Steve's request) (`components/PublicPageLink.tsx`, beside the heading, 15th November 2026, no SQL), with a short line instead until the first job is approved.

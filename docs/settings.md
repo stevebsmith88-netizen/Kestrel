@@ -51,6 +51,7 @@ Claude cannot see Vercel, so the "should be" columns are what the code and the d
 | `CLINIC_INVITE_CODE` | The code an invited clinic types at sign up while `CLINIC_SIGNUP` is not `yes`. | a code you choose and give to invited clinics | Not needed | No (but do not publish it) |
 | `ENABLE_GOOGLE_SIGNIN` | `yes` shows Continue with Google (docs/google-signin.md). | unset until launch, then `yes` | Leave unset | No |
 | `ENABLE_ONBOARDING_EMAILS` | `yes` sends the first week emails. Off until the lawyer answers question 43. | Leave unset | Leave unset (the demo sends nothing anyway) | No |
+| `ENABLE_POSTING` | `yes` lets clinics start, save and send jobs. While it is not `yes`, sign up works and clinics can set up a profile and look around, but the Post a job page says posting opens soon and the server refuses new jobs (lib/features.ts). Admin tools that post for a clinic still work. | Leave unset until you open posting, then `yes` | `yes` | No |
 | `ENABLE_SEEDING` | `yes` lets found listings be published. Off until your disclosure conversation. | Leave unset | Leave unset | No |
 | `ENABLE_OUTREACH` | `yes` sends clinic outreach emails. Off until your disclosure conversation and the lawyer's check. | Leave unset | Leave unset | No |
 | `OUTREACH_DAILY_LIMIT` | Most outreach emails a day once outreach is on. Default 20. | Leave unset | Leave unset | No |

@@ -2,8 +2,11 @@
 // person back here with ?notice=) and the small message that appears in place when a button saves without leaving the page
 // (components/QuickActionForm.tsx). Kept free of imports from the app so it can be tested on its own.
 
+import { POSTING_SOON_TEXT } from "./posting-copy.ts";
+
 export const DASHBOARD_NOTICES: Record<string, string> = {
   "profile-created": "Your clinic profile is saved. You can post your first job now.",
+  "profile-created-waiting": POSTING_SOON_TEXT,
   "job-saved": "Your draft is saved.",
   "job-submitted": "Your job is with our team. We check every post, usually within 1 business day, and it goes live as soon as it is approved.",
   "payment-card-failed": "Your card was not saved, so the job was not sent. It is in your drafts. Open it and press Send for review when you are ready.",

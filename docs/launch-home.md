@@ -28,6 +28,10 @@ The pre launch home shows 2 screens of the product under the hero, "What the boa
 
 Idea for later (Steve, 8th November 2026, not built): a sponsored area on the home page listing either brand advertisements or chosen jobs. It must be labelled "Sponsored", must never look like an ordinary job, and waits for the disclosure conversation, like the sponsored listings in `docs/marketing/directory-plan.md`.
 
+## Open for sign up, not yet for posting (Steve, 15th November 2026)
+
+Sign up can open before clinics can post. Run `update public.signup_gate set open = true;` (the launch layout and Create account take over), set `CLINIC_SIGNUP` to `yes` so clinics can create accounts without a code, and leave `ENABLE_POSTING` unset. People can then create accounts, set up profiles and look around. A clinic sees "Posting opens soon" instead of the post form, the dashboard hides Post a job, the server refuses new jobs and pass purchases, and the For clinics page and home page say posting opens soon. When you are ready, set `ENABLE_POSTING` to `yes` in Vercel and redeploy. The demo site sets `ENABLE_POSTING` to `yes` so it still shows the whole flow.
+
 ## What flips it
 
 Nothing new to remember. At launch you already run `update public.signup_gate set open = true;` (see `docs/launch-checklist.md`). The layout follows that same gate, remembered for 5 minutes, and the home page refreshes at least hourly, so it changes within the hour. Redeploying in Vercel makes it immediate.

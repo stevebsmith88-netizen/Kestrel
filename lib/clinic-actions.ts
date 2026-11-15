@@ -28,6 +28,8 @@ import { fetchPage } from "@/lib/fetch-page";
 import { startAddress } from "@/lib/page-reader";
 import { siteDetails, type SiteDetails } from "@/lib/site-details";
 import { emailMatchesWebsite, hostOf } from "@/lib/claims";
+import { postingOn } from "@/lib/features";
+import { POSTING_CLOSED_TEXT } from "@/lib/posting-copy";
 import { clinicSocialReady } from "@/lib/social-columns";
 import { cleanClinicSocials, socialRow } from "@/lib/social-links";
 
@@ -115,7 +117,7 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   refreshJobPages(); // the clinic name and about text appear on its saved job pages
   // A new clinic goes straight on to its first post (Steve, 13th November 2026), with no stop on the empty dashboard.
   if (newLocation) redirect("/clinic?notice=location-added");
-  if (!existing) redirect("/clinic/jobs/new?notice=profile-created");
+  if (!existing) redirect(postingOn() ? "/clinic/jobs/new?notice=profile-created" : "/clinic?notice=profile-created-waiting");
   // Suppliers show "Company email confirmed" on their public page when the account's email is at the company's own website (Steve,
   // 14th November 2026). Say how to get it when it is missing.
   if (clinic.practiceType === "supplier" && clinic.website && !emailMatchesWebsite(session.email, clinic.website)) {
@@ -140,6 +142,7 @@ const templateFields = (row: {
 });
 
 export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobFormState> {
+  if (!postingOn()) return { error: POSTING_CLOSED_TEXT };
   const session = await requireRole("clinic");
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile");
@@ -371,6 +374,7 @@ export async function deleteJobQuiet(_prev: QuickState, form: FormData): Promise
 // Starts a new draft from an old job (one that has closed or expired), so it can be posted again
 // without typing everything in again. The dates start fresh when it is approved.
 export async function repostJob(form: FormData) {
+  if (!postingOn()) redirect("/clinic");
   const session = await requireRole("clinic");
   const id = idFrom(form);
   const employer = await getMyEditableEmployer(session.userId);

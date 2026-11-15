@@ -14,6 +14,7 @@ import { getMyJobPayments } from "@/lib/clinic-payments";
 import { passUsage, passesAvailable } from "@/lib/pass-flow";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { requireRole } from "@/lib/auth";
+import { postingOn } from "@/lib/features";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyClinics, getMyEmployer, getMyJobs } from "@/lib/clinic";
@@ -119,10 +120,11 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
             </section>
           ) : (
             <>
-              <GettingStarted
+              {!postingOn() && <section className="card"><h2>Posting opens soon</h2><p>Your clinic profile is set up. We will email you as soon as you can post your first job. Until then, look around the job board and the resources.</p></section>}
+              {postingOn() && <GettingStarted
                 title="Your first application"
                 steps={clinicSteps({ hasProfile: true, submitted: jobs.filter((j) => j.status !== "draft").length, live: jobs.filter((j) => j.posted_at).length, applications: Object.values(applicants).reduce((sum, a) => sum + a.total, 0) })}
-              />
+              />}
               {waiting > 0 && <p className="replynote">{waiting} {waiting === 1 ? "applicant is" : "applicants are"} waiting for a reply. {RESPONSE_NOTE}</p>}
               <div className="tiles stats">
                 {/* Top row: the 3 tiles you can press, each showing the jobs behind it (prefetched so the jump is instant). Bottom row: numbers to read only (Steve, 14th November 2026). */}
@@ -157,7 +159,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                 <h2>{show ? SHOW_LABELS[show].title : "Your jobs"}</h2>
                 <span className="listactions">
                   {show && <Link href="/clinic#your-jobs" className="btn sm ghost">Show all jobs</Link>}
-                  {editor && <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>}
+                  {editor && postingOn() && <Link href="/clinic/jobs/new" className="btn sm"><Icon name="plus" />Post a job</Link>}
                 </span>
               </div>
 
@@ -168,7 +170,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
               )}
 
               {jobs.length === 0 ? (
-                <section className="card"><p>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</p></section>
+                <section className="card"><p>{postingOn() ? <>You have not posted anything yet. When you are ready, choose <strong>Post a job</strong>.</> : <>Posting jobs opens soon. Have a look around, and we will email you the moment it does.</>}</p></section>
               ) : shown.length === 0 && show ? (
                 <section className="card"><p>{SHOW_LABELS[show].empty}</p></section>
               ) : (

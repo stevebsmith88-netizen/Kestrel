@@ -27,7 +27,7 @@ test("a first application is finished on the apply page, with no second question
 });
 
 test("a new clinic goes from its profile straight to its first post, and is never stopped by the staff count", () => {
-  assert.match(read("lib/clinic-actions.ts"), /redirect\("\/clinic\/jobs\/new\?notice=profile-created"\)/);
+  assert.match(read("lib/clinic-actions.ts"), /"\/clinic\/jobs\/new\?notice=profile-created"/);
   assert.doesNotMatch(read("lib/clinic-actions.ts"), /requireBand/);
   assert.match(read("app/clinic/page.tsx"), /if \(!employer\) redirect\("\/clinic\/profile"\)/);
   assert.match(read("app/clinic/profile/page.tsx"), /signUpEmail=\{session\.email\}/);
