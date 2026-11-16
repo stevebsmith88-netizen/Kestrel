@@ -184,7 +184,20 @@ for (let n = 0; n < FPS * SECONDS; n++) {
 }
 ff.stdin.end();
 await done;
-await page.evaluate(() => window.render(3.0));
+// The cover (Steve, 16th November 2026): Cream, "Hello, we're" with the wordmark, and the bird hovering below.
+// A 1080 x 1920 version for the Reel, and a 1080 x 1350 one for the profile grid with the same words and bird.
+await page.evaluate(() => {
+  document.getElementById("t0").innerHTML = document.getElementById("t0").innerHTML
+    .replace(/>Why</, ">Hello, we&apos;re<").replace(/A job board for eye care, named after a bird with remarkable eyes\./, "A Canada-wide eye care job board, opening in early 2027. Every job shows its pay.");
+  document.getElementById("tl").textContent = "EYE CARE JOBS";
+  document.getElementById("tr").textContent = "Hello";
+  window.render(3.0);
+});
 await frame.screenshot({ path: join(OUT, "kestrel-hover-eye-reel-cover.jpg"), type: "jpeg", quality: 92 });
+await page.evaluate(() => { const f = document.getElementById("f"); f.style.height = "1350px";
+  for (const id of ["tl", "tr"]) document.getElementById(id).style.top = (id === "tl" ? 88 : 80) + "px";
+  document.getElementById("t0").style.top = "180px";
+  const svg = document.querySelector("svg.abs"); svg.style.top = "610px"; svg.style.transformOrigin = "50% 0"; svg.style.transform = "scale(0.68)"; svg.style.overflow = "visible"; });
+await frame.screenshot({ path: join(OUT, "kestrel-hello-post-1080x1350.jpg"), type: "jpeg", quality: 92 });
 await browser.close();
 console.log(`Built ${mp4}`);
