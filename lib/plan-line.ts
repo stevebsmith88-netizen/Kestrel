@@ -5,8 +5,8 @@ import { passesAvailable } from "@/lib/pass-flow";
 import { planByKey, planLineText } from "@/lib/passes";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
-// The line under the name in a clinic's account menu: "Clinic account · Clinic pass" (or "Single posts"), for the location being worked in. Used by the
-// bar on dashboard pages and by /api/me for the saved public pages. A problem gives the plain line, so the menu never fails.
+// The line under the name in a clinic's account menu: "Clinic pass" (or "Single posts"; nothing until passes are offered), for the location being worked in. Used by the
+// bar on dashboard pages and by /api/me for the saved public pages. A problem gives no line, so the menu never fails.
 export async function planLineFor(userId: string): Promise<string> {
   try {
     const on = passesAvailable();
