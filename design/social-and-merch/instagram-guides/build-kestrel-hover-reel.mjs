@@ -79,7 +79,7 @@ body{margin:0}p{margin:0}
 <p style="font-family:'DM Serif Display';font-size:84px;color:${C.cream}">Hello, we&apos;re</p>
 <img src="${brand("kestrel-wordmark-reversed.svg")}" alt="" style="display:block;width:760px;margin-top:30px">
 <p style="font-family:Poppins;font-size:40px;line-height:1.4;color:${C.mist};margin-top:70px">A Canada-wide eye care job board, opening in early 2027. Every job shows its pay.</p>
-<p style="font-family:Poppins;font-weight:600;font-size:40px;color:${C.buff};margin-top:56px">Join the waitlist: link in bio</p></div>
+<p style="font-family:Poppins;font-weight:600;font-size:40px;color:${C.buff};margin-top:56px">Pre launch is open. Create your account: link in bio</p></div>
 <div class="abs" style="left:80px;top:1560px;display:flex;align-items:center;gap:18px">
 <img id="k" src="${brand("kestrel-k-mark-reversed.svg")}" alt="" style="width:64px;height:64px;display:block">
 <p style="font-family:Poppins;font-size:28px;letter-spacing:0.06em;color:${C.mist}">eyecarejobs.ca</p></div>

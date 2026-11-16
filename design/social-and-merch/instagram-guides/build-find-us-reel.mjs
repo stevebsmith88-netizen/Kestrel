@@ -49,7 +49,7 @@ p{margin:0}
 ${tiles}
 <div class="abs" id="list" style="left:80px;right:80px;top:1110px;font-family:Poppins;font-size:38px;line-height:1.55;color:${C.navy};text-align:center">
 ${TILES.map((t) => `<p><span style="font-family:'DM Serif Display';color:${C.chestnut}">${t.name}</span>&nbsp; ${t.handle}</p>`).join("")}</div>
-<p class="abs" id="cta" style="left:80px;right:80px;top:1440px;text-align:center;font-family:Poppins;font-weight:600;font-size:40px;color:${C.chestnut}">Join the waitlist: link in bio</p>
+<p class="abs" id="cta" style="left:80px;right:80px;top:1440px;text-align:center;font-family:Poppins;font-weight:600;font-size:40px;color:${C.chestnut}">Pre launch is open. Create your account: link in bio</p>
 <div class="abs" id="foot" style="left:80px;top:1560px;display:flex;align-items:center;gap:18px">
 <img src="${brand("kestrel-k-mark.svg")}" alt="" style="width:64px;height:64px;display:block">
 <p style="font-family:Poppins;font-size:28px;letter-spacing:0.06em;color:${C.slate}">eyecarejobs.ca</p></div>
