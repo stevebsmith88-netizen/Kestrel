@@ -3,92 +3,155 @@
 @font-face{font-family:Poppins;font-weight:400;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2)}
 @font-face{font-family:Poppins;font-weight:600;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2)}
 body{margin:0}p{margin:0}
-#f{width:1080px;height:1920px;position:relative;overflow:hidden;background:#1B2B4B}
+#f{width:1080px;height:1920px;position:relative;overflow:hidden;background:#F7F1E6}
 .abs{position:absolute}
-.fact{position:absolute;left:80px;right:80px;top:420px;opacity:0}
-.art{height:260px;display:flex;align-items:flex-end}
-.num{font-family:'DM Serif Display';font-size:96px;line-height:1;color:#D8B48A;margin-top:70px}
-.fh{font-family:'DM Serif Display';font-size:96px;line-height:1.04;color:#F7F1E6;margin-top:22px}
-.fl{font-family:Poppins;font-size:40px;line-height:1.4;color:#DCE3E6;margin-top:44px}
-.chip{width:190px;height:150px;border-radius:30px;display:flex;align-items:flex-end;padding:0 0 18px 22px;box-sizing:border-box;font-family:Poppins;font-weight:600;font-size:28px;color:#F7F1E6;box-shadow:0 16px 30px rgba(0,0,0,.25)}
+.tb{position:absolute;left:80px;right:80px;top:370px;opacity:0}
+.h{font-family:'DM Serif Display';font-size:86px;line-height:1.04;color:#1B2B4B}
+.big{font-size:140px}
+.l{font-family:Poppins;font-size:36px;line-height:1.4;color:#5A6672;margin-top:28px}
+.lbig{font-family:'DM Serif Display';font-size:68px;line-height:1.1;color:#A4502C;margin-top:24px}
+.tag{position:absolute;right:80px;top:268px;font-family:'DM Serif Display';font-size:38px;color:#A4502C;opacity:0}
+#win{position:absolute;left:0;top:860px;width:1080px;height:1060px;overflow:hidden}
+.chip{position:absolute;padding:14px 26px;border-radius:999px;font-family:Poppins;font-weight:600;font-size:32px;color:#F7F1E6;opacity:0}
 </style></head><body><div id="f">
-<div class="abs" style="left:80px;right:80px;top:270px;display:flex;justify-content:space-between;align-items:center">
-<p id="tl" style="font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:#D8B48A">DID YOU KNOW</p>
-<p id="tr" style="font-family:'DM Serif Display';font-size:38px;color:#D8B48A">The kestrel</p></div>
-<div class="abs" id="intro" style="left:80px;right:80px;top:640px">
-<p style="font-family:'DM Serif Display';font-size:150px;line-height:1;color:#F7F1E6">Did you know?</p>
-<p style="font-family:'DM Serif Display';font-size:84px;line-height:1.1;color:#D8B48A;margin-top:36px">4 things about the bird we&apos;re named after.</p></div>
+<p class="abs" id="tl" style="left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:#A4502C">DID YOU KNOW</p>
 
-<div class="fact" id="f0">
-<div class="art"><svg viewBox="0 0 120 40" width="420" height="140" fill="none" stroke="#D8B48A" stroke-width="2.4" stroke-linecap="round">
-<path id="rule" d="M6 30H114"/><path class="tick" data-i="0" d="M6 30v-14"/><path class="tick" data-i="1" d="M15.8 30v-8"/><path class="tick" data-i="2" d="M25.6 30v-8"/><path class="tick" data-i="3" d="M35.400000000000006 30v-14"/><path class="tick" data-i="4" d="M45.2 30v-8"/><path class="tick" data-i="5" d="M55 30v-8"/><path class="tick" data-i="6" d="M64.80000000000001 30v-14"/><path class="tick" data-i="7" d="M74.60000000000001 30v-8"/><path class="tick" data-i="8" d="M84.4 30v-8"/><path class="tick" data-i="9" d="M94.2 30v-14"/><path class="tick" data-i="10" d="M104 30v-8"/><path class="tick" data-i="11" d="M113.80000000000001 30v-8"/></svg></div>
-<p class="num">1</p>
-<p class="fh">Canada's kestrel is the smallest falcon in North America.</p>
-<p class="fl">The American kestrel is smaller than a pigeon, and nests across most of Canada in summer.</p>
+<div class="tb" id="x-intro">
+<p class="h big">Did you know?</p>
+<p class="l lbig">4 things about the bird we&apos;re named after.</p></div>
+<p class="tag" id="g-intro">The kestrel</p>
+<div class="tb" id="x-uv">
+<p class="h">Kestrels may see ultraviolet light.</p>
+<p class="l">Studies of kestrels in Europe found they can spot the trails voles leave, which reflect ultraviolet light.</p></div>
+<p class="tag" id="g-uv">1 of 4</p>
+<div class="tb" id="x-hover">
+<p class="h">It can hover in 1 spot.</p>
+<p class="l">Facing into the wind, it holds still in the air while it watches the grass below.</p></div>
+<p class="tag" id="g-hover">2 of 4</p>
+<div class="tb" id="x-small">
+<p class="h">The smallest falcon in North America.</p>
+<p class="l">Canada&apos;s kestrel is 22 to 31 cm long, smaller than a pigeon, and nests across most of Canada in summer.</p></div>
+<p class="tag" id="g-small">3 of 4</p>
+<div class="tb" id="x-wings">
+<p class="h">You can tell males and females apart.</p>
+<p class="l">Males have slate blue wings. Females have chestnut wings with dark bars.</p></div>
+<p class="tag" id="g-wings">4 of 4</p>
+<div id="win">
+<svg width="1080" height="1060" viewBox="0 0 1080 1060">
+  <g id="wind" fill="none" stroke="#1B2B4B" stroke-width="6" stroke-linecap="round" opacity="0">
+    <path class="gust" d="M1120 150H860a40 40 0 1 1 40-40"/><path class="gust" d="M1120 260H800"/><path class="gust" d="M1120 380H880a40 40 0 1 0 40 40"/><path class="gust" d="M1120 520H780"/></g>
+  <g id="ruler" stroke="#A4502C" stroke-width="6" stroke-linecap="round" opacity="0">
+    <path id="rline" d="M960 120V960"/><path class="rt" data-i="0" d="M960 120h-40"/><path class="rt" data-i="1" d="M960 225h-22"/><path class="rt" data-i="2" d="M960 330h-40"/><path class="rt" data-i="3" d="M960 435h-22"/><path class="rt" data-i="4" d="M960 540h-40"/><path class="rt" data-i="5" d="M960 645h-22"/><path class="rt" data-i="6" d="M960 750h-40"/><path class="rt" data-i="7" d="M960 855h-22"/><path class="rt" data-i="8" d="M960 960h-40"/></g>
+  <g id="cam">
+<g id="bird">
+  <path d="M150 330 C 120 470, 110 600, 90 900 L 560 900 C 515 600, 480 500, 425 420 Z" fill="#FBF8F2"/>
+  <ellipse cx="300" cy="520" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/><ellipse cx="360" cy="560" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/><ellipse cx="250" cy="600" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/><ellipse cx="330" cy="640" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/><ellipse cx="400" cy="610" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/><ellipse cx="280" cy="690" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/><ellipse cx="370" cy="700" rx="9" ry="13" fill="#1B2B4B" opacity=".85"/>
+  <path d="M152 320 C 108 470, 86 600, 40 900 L 290 900 C 236 620, 205 500, 196 380 Z" fill="#A4502C"/>
+  <path d="M128 470 l44 -6" stroke="#1B2B4B" stroke-width="9" stroke-linecap="round" opacity=".7"/><path d="M108 560 l44 -6" stroke="#1B2B4B" stroke-width="9" stroke-linecap="round" opacity=".7"/><path d="M138 620 l44 -6" stroke="#1B2B4B" stroke-width="9" stroke-linecap="round" opacity=".7"/><path d="M96 670 l44 -6" stroke="#1B2B4B" stroke-width="9" stroke-linecap="round" opacity=".7"/>
+  <path id="wing" d="M104 500 C 150 560, 205 640, 330 900 L 30 900 C 66 670, 80 580, 104 500 Z" fill="#7F93AE"/>
+  <g id="bars" opacity="0"><path d="M84 600 l70 22" stroke="#1B2B4B" stroke-width="10" stroke-linecap="round"/><path d="M96 642 l88 22" stroke="#1B2B4B" stroke-width="10" stroke-linecap="round"/><path d="M108 684 l106 22" stroke="#1B2B4B" stroke-width="10" stroke-linecap="round"/><path d="M120 726 l124 22" stroke="#1B2B4B" stroke-width="10" stroke-linecap="round"/></g>
+  <ellipse cx="300" cy="300" rx="152" ry="146" fill="#FBF8F2"/>
+  <path d="M150 300 C 160 150, 430 132, 450 282 C 405 236, 222 232, 150 300 Z" fill="#7F93AE"/>
+  <ellipse cx="292" cy="188" rx="48" ry="27" fill="#A4502C"/>
+  <path d="M150 300 C 140 330, 146 360, 160 380 C 176 350, 182 322, 176 296 Z" fill="#A4502C"/>
+  <circle cx="190" cy="318" r="11" fill="#1B2B4B"/>
+  <path d="M325 322 C 322 360, 316 392, 308 426 L 332 426 C 338 392, 343 358, 346 324 Z" fill="#1B2B4B"/>
+  <path d="M232 306 C 224 344, 216 384, 208 418 L 230 418 C 238 384, 244 344, 252 308 Z" fill="#1B2B4B"/>
+  <path d="M410 280 Q 432 272 444 292 Q 430 304 412 302 Z" fill="#D8B48A"/>
+  <path d="M424 282 C 462 276, 492 300, 484 344 C 474 326, 458 320, 438 322 C 432 310, 428 296, 424 282 Z" fill="#1B2B4B"/>
+  <g id="rings" fill="none"></g>
+  <g id="eye">
+    <circle cx="340" cy="290" r="31" fill="#D8B48A"/>
+    <circle id="pupil" cx="340" cy="290" r="24" fill="#1B2B4B"/>
+    <circle id="shine" cx="348" cy="282" r="7" fill="#F7F1E6"/>
+  </g>
+</g></g>
+</svg>
+<p class="chip" id="cm" style="left:96px;top:930px;background:#7F93AE">Male</p>
+<p class="chip" id="cf" style="left:96px;top:930px;background:#A4502C">Female</p>
 </div>
-<div class="fact" id="f1">
-<div class="art"><svg viewBox="0 0 120 60" width="420" height="210" fill="none" stroke="#D8B48A" stroke-width="2.4" stroke-linecap="round">
-<path class="gust" d="M4 14h70a10 10 0 1 0-10-10"/><path class="gust" d="M4 30h96a10 10 0 1 1-10 10"/><path class="gust" d="M4 46h50"/></svg></div>
-<p class="num">2</p>
-<p class="fh">It can hover in 1 spot.</p>
-<p class="fl">Facing into the wind, it holds still in the air while it watches the grass below.</p>
-</div>
-<div class="fact" id="f2">
-<div class="art"><svg viewBox="0 0 24 24" width="230" height="230" fill="none" stroke="#D8B48A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle id="iris" cx="12" cy="12" r="3"/><circle id="glow" cx="12" cy="12" r="3" stroke="#F7F1E6" stroke-width="0.6"/></svg></div>
-<p class="num">3</p>
-<p class="fh">Kestrels may see ultraviolet light.</p>
-<p class="fl">Studies of kestrels in Europe found they can spot the trails voles leave, which reflect ultraviolet light.</p>
-</div>
-<div class="fact" id="f3">
-<div class="art"><div style="display:flex;gap:28px"><div class="chip" style="background:#7F93AE">Male</div><div class="chip" style="background:#A4502C">Female</div></div></div>
-<p class="num">4</p>
-<p class="fh">You can tell males and females apart.</p>
-<p class="fl">Males have slate blue wings. Females have chestnut wings with dark bars.</p>
-</div>
-<div class="abs" id="end" style="left:80px;right:80px;top:560px;opacity:0">
+<div class="abs" id="end" style="inset:0;background:#1B2B4B;opacity:0">
+<p class="abs" style="left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:#D8B48A">EYE CARE JOBS</p>
+<div class="abs" id="endtext" style="left:80px;right:80px;top:600px">
 <p style="font-family:'DM Serif Display';font-size:84px;color:#F7F1E6">Hello, we&apos;re</p>
 <img src="file:///home/user/Kestrel/public/brand/kestrel-wordmark-reversed.svg" alt="" style="display:block;width:760px;margin-top:30px">
 <p style="font-family:Poppins;font-size:40px;line-height:1.4;color:#DCE3E6;margin-top:70px">A Canada-wide eye care job board, opening in early 2027. Every job shows its pay.</p>
 <p style="font-family:Poppins;font-weight:600;font-size:40px;color:#D8B48A;margin-top:56px">Join the waitlist: link in bio</p></div>
-<div class="abs" id="foot" style="left:80px;top:1560px;display:flex;align-items:center;gap:18px">
+<div class="abs" style="left:80px;top:1560px;display:flex;align-items:center;gap:18px">
 <img id="k" src="file:///home/user/Kestrel/public/brand/kestrel-k-mark-reversed.svg" alt="" style="width:64px;height:64px;display:block">
 <p style="font-family:Poppins;font-size:28px;letter-spacing:0.06em;color:#DCE3E6">eyecarejobs.ca</p></div>
 </div>
+</div>
 <script>
-const START = 2.2, EACH = 3.6, END = 16.6;
+const S = {"intro":[0,2.6],"uv":[2.6,6.6],"hover":[6.6,10.4],"small":[10.4,14.2],"wings":[14.2,18],"end":[18,22]};
+const EYE = [340,290];
 const clamp = (x) => Math.max(0, Math.min(1, x));
 const span = (t, a, b) => clamp((t - a) / (b - a));
 const out = (x) => 1 - Math.pow(1 - x, 3);
+const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const el = (id) => document.getElementById(id);
-const show = (e, o, y) => { e.style.opacity = o; e.style.transform = "translateY(" + y + "px)"; };
-// In over 0.5 seconds rising, out over 0.4 seconds lifting away.
-const inOut = (t, a, b) => { const i = out(span(t, a, a + 0.5)), o = out(span(t, b - 0.4, b)); return [i * (1 - o), 60 * (1 - i) - 60 * o]; };
+const lerp = (a, b, x) => a + (b - a) * x;
+// Camera shots: which point of the bird sits where in the window, and how big.
+const WIDE = { x: 300, y: 430, s: 1.25, fx: 540, fy: 560 };
+const SMALL = { x: 300, y: 430, s: 0.95, fx: 470, fy: 600 };
+const EYESHOT = { x: EYE[0], y: EYE[1], s: 12, fx: 540, fy: 520 };
+const PUPIL = { x: EYE[0], y: EYE[1], s: 160, fx: 540, fy: 520 };
+// Zoom in log scale, so it feels like a steady push in rather than a lurch.
+const mix = (A, B, k) => { const s = Math.exp(lerp(Math.log(A.s), Math.log(B.s), k)); const w = (s - A.s) / ((B.s - A.s) || 1); const q = B.s === A.s ? k : clamp(w);
+  return { x: lerp(A.x, B.x, q), y: lerp(A.y, B.y, q), s, fx: lerp(A.fx, B.fx, k), fy: lerp(A.fy, B.fy, k) }; };
+function shot(t) {
+  if (t < S.uv[0]) return WIDE;
+  if (t < S.hover[0]) return mix(WIDE, EYESHOT, io(span(t, S.uv[0], S.uv[0] + 1.1)));
+  if (t < S.small[0]) return mix(EYESHOT, WIDE, io(span(t, S.hover[0], S.hover[0] + 1.0)));
+  if (t < S.wings[0]) return mix(WIDE, SMALL, io(span(t, S.small[0], S.small[0] + 0.8)));
+  if (t < S.end[0] - 1.2) return mix(SMALL, WIDE, io(span(t, S.wings[0], S.wings[0] + 0.8)));
+  const a = S.end[0] - 1.2;
+  if (t < S.end[0]) return mix(WIDE, EYESHOT, io(span(t, a, S.end[0])));
+  return mix(EYESHOT, PUPIL, Math.pow(span(t, S.end[0], S.end[0] + 1.0), 2));
+}
+const showText = (k, t, a, b) => { const i = out(span(t, a + 0.15, a + 0.7)), o = out(span(t, b - 0.45, b)); const e = el("x-" + k);
+  e.style.opacity = i * (1 - o); e.style.transform = "translateY(" + (40 * (1 - i) - 40 * o) + "px)"; el("g-" + k).style.opacity = i * (1 - o); };
 window.render = (t) => {
-  const top = out(span(t, 0, 0.5)); el("tl").style.opacity = top; el("tr").style.opacity = top;
-  el("foot").style.opacity = out(span(t, 0.3, 0.9));
-  const [io, iy] = inOut(t, 0.2, START); show(el("intro"), io, iy);
-  for (let i = 0; i < 4; i++) {
-    const a = START + EACH * i, b = a + EACH;
-    const [o, y] = inOut(t, a, b); const f = el("f" + i); show(f, o, y);
-    const p = span(t, a + 0.3, b - 0.5); // progress for the drawing
-    if (i === 0) { // the ruler draws itself, then the ticks pop up 1 by 1
-      const r = f.querySelector("#rule"); r.style.strokeDasharray = 110; r.style.strokeDashoffset = 110 * (1 - out(span(p, 0, 0.35)));
-      f.querySelectorAll(".tick").forEach((k) => { k.style.opacity = span(p, 0.3 + k.dataset.i * 0.04, 0.34 + k.dataset.i * 0.04); });
-    }
-    if (i === 1) { // gusts blow through from the left, again and again
-      f.querySelectorAll(".gust").forEach((g, n) => { const L = 200; g.style.strokeDasharray = L * 0.55 + " " + L; g.style.strokeDashoffset = L * 0.55 - ((p * 2.2 + n * 0.25) % 1) * (L * 1.55); });
-    }
-    if (i === 2) { // the iris widens and a soft ring pulses out from it
-      el("iris").setAttribute("r", 3 + 0.9 * Math.sin(Math.min(1, p * 2) * Math.PI / 2));
-      const g = (p * 2.4) % 1; el("glow").setAttribute("r", 3.5 + 6 * g); el("glow").style.opacity = 0.9 * (1 - g);
-    }
-    if (i === 3) { // the 2 wing colours flip in like cards
-      f.querySelectorAll(".chip").forEach((c, n) => { const q = out(span(p, n * 0.15, 0.25 + n * 0.15)); c.style.transform = "rotate(" + (n ? 6 : -6) * q + "deg) scale(" + (0.6 + 0.4 * q) + ")"; c.style.opacity = q; });
-    }
-  }
-  const e = out(span(t, END, END + 0.7)); show(el("end"), e, 60 * (1 - e));
-  // The K hovers gently, like the bird holding still in the wind.
+  el("tl").style.opacity = out(span(t, 0, 0.5));
+  showText("intro", t, -0.15, S.intro[1]);
+  for (const k of ["uv", "hover", "small", "wings"]) showText(k, t, S[k][0], S[k][1]);
+  // The bird rises in, then hovers: a gentle bob all the way, bigger while the hover fact is on screen.
+  const rise = 700 * (1 - out(span(t, 0.2, 1.4)));
+  const hov = span(t, S.hover[0] + 0.6, S.hover[0] + 1.2) * (1 - span(t, S.hover[1] - 0.6, S.hover[1]));
+  const bob = Math.sin(t * 2.6) * (5 + 16 * hov) / 1;
+  const c = shot(t);
+  el("cam").setAttribute("transform", "translate(" + c.fx + " " + (c.fy + rise + bob * Math.min(1, 1.25 / c.s)) + ") scale(" + c.s + ") translate(" + (-c.x) + " " + (-c.y) + ")");
+  // Blinks: a quick squash of the eye now and then.
+  const blink = (a) => { const x = span(t, a, a + 0.22); return 1 - 0.92 * Math.sin(Math.PI * x); };
+  const k = Math.min(blink(1.9), blink(5.3), blink(9.2), blink(16.4));
+  el("eye").setAttribute("transform", "translate(" + EYE[0] + " " + EYE[1] + ") scale(1 " + k + ") translate(" + (-EYE[0]) + " " + (-EYE[1]) + ")");
+  // Ultraviolet: rings ripple out of the eye while we are in close.
+  const uv = span(t, S.uv[0] + 1.0, S.uv[0] + 1.4) * (1 - span(t, S.hover[0], S.hover[0] + 0.4));
+  let rings = "";
+  if (uv > 0) for (let n = 0; n < 4; n++) { const g = ((t - S.uv[0]) * 0.55 + n / 4) % 1;
+    rings += '<circle cx="' + EYE[0] + '" cy="' + EYE[1] + '" r="' + (33 + 46 * g) + '" stroke="' + (n % 2 ? "#A4502C" : "#7F93AE") + '" stroke-width="' + (2.2 * (1 - g) + 0.4) + '" opacity="' + (uv * (1 - g)) + '"/>'; }
+  el("rings").innerHTML = rings;
+  // Wind gusts blow past while it hovers.
+  el("wind").style.opacity = hov;
+  // Each gust is a short dash travelling along its path from the right edge, into the face of the hovering bird.
+  document.querySelectorAll(".gust").forEach((g, n) => { const L = g.getTotalLength(), d = Math.min(180, L * 0.6); const p = (((t - S.hover[0]) * 0.8 + n * 0.27) % 1);
+    g.style.strokeDasharray = d + " " + (L + d); g.style.strokeDashoffset = d - p * (L + d); });
+  // Size: a ruler draws itself down the side.
+  const r = span(t, S.small[0] + 0.6, S.small[0] + 1.6) * (1 - out(span(t, S.small[1] - 0.45, S.small[1])));
+  el("ruler").style.opacity = r > 0 ? 1 - out(span(t, S.small[1] - 0.45, S.small[1])) : 0;
+  el("rline").style.strokeDasharray = 840; el("rline").style.strokeDashoffset = 840 * (1 - out(span(t, S.small[0] + 0.6, S.small[0] + 1.4)));
+  document.querySelectorAll(".rt").forEach((e) => { e.style.opacity = span(t, S.small[0] + 0.7 + e.dataset.i * 0.08, S.small[0] + 0.8 + e.dataset.i * 0.08); });
+  // Wings: slate blue (male), then chestnut with dark bars (female), then back.
+  const fem = span(t, S.wings[0] + 1.6, S.wings[0] + 2.0) * (1 - span(t, S.wings[1] - 0.3, S.wings[1]));
+  const blend = (a, b, x) => "rgb(" + [0, 2, 4].map((i) => Math.round(lerp(parseInt(a.slice(1 + i, 3 + i), 16), parseInt(b.slice(1 + i, 3 + i), 16), x))).join(",") + ")";
+  el("wing").setAttribute("fill", blend("#7F93AE", "#8C4024", fem));
+  el("bars").setAttribute("opacity", fem * 0.8);
+  const w = span(t, S.wings[0] + 0.5, S.wings[0] + 0.9) * (1 - span(t, S.wings[1] - 0.45, S.wings[1]));
+  el("cm").style.opacity = w * (1 - fem); el("cf").style.opacity = w * fem;
+  // The end: we dive into the pupil, which opens into the navy end card.
+  el("shine").style.opacity = 1 - span(t, S.end[0] - 0.2, S.end[0] + 0.4);
+  const e = span(t, S.end[0] + 0.75, S.end[0] + 1.0); el("end").style.opacity = e;
+  const et = out(span(t, S.end[0] + 0.9, S.end[0] + 1.6)); el("endtext").style.opacity = et; el("endtext").style.transform = "translateY(" + 50 * (1 - et) + "px)";
   el("k").style.transform = "translateY(" + (-6 * Math.sin(t * 2.4)) + "px)";
 };
 </script></body></html>
