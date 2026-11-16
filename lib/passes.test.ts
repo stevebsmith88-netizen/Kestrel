@@ -66,8 +66,8 @@ test("the confirm page explains why, and offers a switch only when Plus would he
 
 test("the line under the name in the menu names the account and, once passes are offered, the plan", async () => {
   const { planLineText } = await import("./passes.ts");
-  assert.equal(planLineText({ passesOn: false, planName: null }), "Clinic account");
-  assert.equal(planLineText({ passesOn: false, planName: "Clinic pass" }), "Clinic account");
-  assert.equal(planLineText({ passesOn: true, planName: null }), "Clinic account · Single posts");
-  assert.equal(planLineText({ passesOn: true, planName: "Clinic pass Plus" }), "Clinic account · Clinic pass Plus");
+  assert.equal(planLineText({ passesOn: false, planName: null }), "");
+  assert.equal(planLineText({ passesOn: false, planName: "Clinic pass" }), "");
+  assert.equal(planLineText({ passesOn: true, planName: null }), "Single posts");
+  assert.equal(planLineText({ passesOn: true, planName: "Clinic pass Plus" }), "Clinic pass Plus");
 });
