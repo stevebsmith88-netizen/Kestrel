@@ -2,6 +2,31 @@
 
 Written 15th November 2026 for Steve to run with. The community is at https://www.reddit.com/r/EyeCareJobsCanada/ (Restricted, posts need approval). The plan and decisions are in item 22 of `CLAUDE.md`. Post from the Kestrel account only, never a personal one. Every fact below is from Job Bank or from Kestrel's own blog posts, so nothing needs checking again except the dates.
 
+## Status (16th November 2026)
+
+Done by Steve on 15th and 16th November 2026:
+
+- **Post flairs:** Discussion, Resource, Job brief (mods only), Question and Pay talk, in the brand colours (Navy, Mist, Chestnut, Wing Buff and Line), ordered with Job brief last.
+- **Member flairs:** the 9 roles, all Mist with dark text, and **Kestrel team** (Deep Chestnut, mods only) on the Kestrel account. Text and editing are off, so nobody can type a claim such as a registration number.
+- **Widgets:** community details (nicknames and description), the "Kestrel Job Board" button widget (Job Board, Pay Guide, Blog, each tagged) and the "Start here" text widget. The wording of "Start here" was changed from "Every job posted here shows its pay", because there are no jobs yet. The post flair widget is left off until there are a few posts.
+- **Posts:** the welcome post is up and pinned in Community highlights (16th November), "What would make you apply" is up with a Kestrel comment under it (16th November), and the optician pay post is scheduled for the morning of 17th November, after its blog post is live, so it can carry the blog link itself (comment 2 is then not needed). Wednesday 18th November is free.
+- **AutoModerator:** a rule comments on any post that looks like a job ("hiring", "job opening" and similar) and points clinics to the sign up page, with moderators exempt. It was saved on 16th November. Still to do: make sure the first line `---` has no spaces before it, then test it once by setting `moderators_exempt` to `false`, posting "We are hiring an optician", checking the comment, deleting the test and setting it back to `true`. It rarely fires while the community is Restricted.
+- **Welcome message:** limit is 200 characters. Wording chosen: "Welcome to r/EyeCareJobsCanada, a home for people in eye care across Canada. Read the welcome post and say hello: what is your role, and what do you wish you had known when you started?" (185 characters).
+
+Still to do:
+
+- **Rules:** the community still shows only 2 rules (respect, no spam). Add "Every job post shows its pay", "No agencies or recruiters" and "No personal details", so they match the welcome post.
+- **Profile:** replace the Kestrel account's bio with: "Eye care jobs across Canada, with pay shown on every post. Opening in early 2027. Run by Kestrel Eye Care Jobs, eyecarejobs.ca. Come and say hello in r/EyeCareJobsCanada." (170 of 200 characters), and add the website as a profile link.
+- **Reddit's "Get ready for visitors" checklist** on the community page.
+- **Posts 4 and 5** (20th and 24th November) go on Reddit's own scheduler, as post 2 did.
+- **Job Bank:** Job Bank publishes its next wage file on 18th November 2026. Refresh the pay table (`docs/pay-benchmark.md`) before post 4 goes out, and note the change in a follow up post.
+
+Decisions of 16th November 2026:
+
+- **Reddit API:** not used. Reddit's own scheduler covers the need, and the terms for commercial use were not clear from what could be found (third party sources only: written approval for new API access, commercial use under a separate agreement, no published commercial price). Read Reddit's own terms before any automation. A middle step is possible later: the site prepares the post text and link for each new blog post and sends it to Slack, and a person adds the question and posts it.
+- **Reddit Pro (beta):** useful for ideas. Search it for eye care keywords (optician, optometrist, optometric assistant, contact lens, dispensing, optical) rather than "Jobs Canada". Paraphrase themes, never quote a commenter without asking. Themes that fit Kestrel: take it or leave it offers, ghosting, crowded applicant pools, and healthcare as a steadier field.
+- **Reddit ads:** not yet. No jobs to show, a small audience, and posting opens in early 2027. Revisit after launch with a small test (for example $150 to $300 over 2 weeks, Canada only, tagged links). Third party sources put the minimum at about $5 a day and clicks at roughly $0.59 to $1.47. A spending decision for Steve.
+
 ## Setup first (about 10 minutes)
 
 1. **Community details widget.** Weekly visitors' nickname: `Visitors` (or `Readers`). Weekly contributions nickname: `Contributions` (not `Online`, which would read as "5 Online"). In the description, change "Weekly job briefs by province" to "Weekly job briefs by province are coming" and add "Run by Kestrel Eye Care Jobs, eyecarejobs.ca." at the end (it is 364 of 500 characters now).
