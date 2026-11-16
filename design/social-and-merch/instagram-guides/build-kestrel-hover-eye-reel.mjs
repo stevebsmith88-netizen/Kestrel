@@ -1,6 +1,8 @@
 // Hover plus eye zoom Reel (Steve, 16th November 2026): the hovering kestrel holds its head still, so the camera pushes into its eye
 // for the ultraviolet fact, pulls back as the vole's trail lights up in the grass, and the bird dives to the navy end card.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-kestrel-hover-eye-reel.mjs
+// Ending (Steve, 16th November 2026): it swoops on the vole, flies back across with it, the camera zooms into its eye and through the pupil,
+// and the full logo is revealed on navy.
 // Opens with the name: "Why" and the wordmark (Steve: start with the reason behind the name). Slower pacing at his request.
 // 1080 x 1920, 30 frames a second, 25 seconds, no sound. Every frame is drawn by render(t). Needs ffmpeg.
 // The ultraviolet fact comes from studies of kestrels in Europe, so it says so.
@@ -19,10 +21,10 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", paper: "#FBF8F2", buff: "#D8B48A", mist: "#DCE3E6", slate: "#5A6672", slateBlue: "#7F93AE" };
 const FPS = 30;
-const SECONDS = 25;
-const END = 20.2;
+const SECONDS = 30;
+const END = 24.3;
 
-const eye = (x, y, k) => `<circle cx="${x}" cy="${y}" r="${31 * k}" fill="${C.buff}"/><circle cx="${x}" cy="${y}" r="${24 * k}" fill="${C.navy}"/><circle cx="${x + 8 * k}" cy="${y - 8 * k}" r="${7 * k}" fill="${C.cream}"/>`;
+const eye = (x, y, k) => `<circle cx="${x}" cy="${y}" r="${31 * k}" fill="${C.buff}"/><circle cx="${x}" cy="${y}" r="${24 * k}" fill="${C.navy}"/><circle class="shine" cx="${x + 8 * k}" cy="${y - 8 * k}" r="${7 * k}" fill="${C.cream}"/>`;
 const wing = `<path d="M262 330 C 200 300, 110 228, 22 150 C 70 240, 120 300, 160 362 C 196 386, 236 384, 266 372 Z" fill="${C.slateBlue}"/>
   <path d="M22 150 C 74 198, 116 236, 146 262 L 118 282 C 86 246, 56 206, 22 150 Z" fill="${C.navy}"/>
   ${[0, 1, 2].map((i) => `<path d="M${190 - i * 34} ${330 - i * 26} l-18 34" stroke="${C.paper}" stroke-width="6" stroke-linecap="round" opacity=".7"/>`).join("")}`;
@@ -31,6 +33,9 @@ const BODY = `
   <g id="tail"><path d="M262 520 L 214 700 Q 300 736 386 700 L 338 520 Z" fill="${C.chestnut}"/>
   <path d="M222 668 Q 300 694 378 668 L 384 690 Q 300 718 216 690 Z" fill="${C.navy}"/></g>
   <g id="wl">${wing}</g><g transform="translate(600 0) scale(-1 1)"><g id="wr">${wing}</g></g>
+  <g id="catch" opacity="0"><ellipse cx="300" cy="752" rx="30" ry="18" fill="${C.navy}"/><circle cx="324" cy="740" r="8" fill="${C.navy}"/>
+    <path d="M272 756 q -22 6 -30 -6" stroke="${C.navy}" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M286 712 v26 M314 712 v26" stroke="${C.buff}" stroke-width="7" stroke-linecap="round"/></g>
   <ellipse cx="300" cy="420" rx="70" ry="128" fill="${C.paper}"/>
   ${[[280, 380], [318, 400], [292, 440], [326, 460], [276, 480], [306, 510]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="7" ry="10" fill="${C.navy}" opacity=".85"/>`).join("")}`;
 const HEAD = `
@@ -67,6 +72,9 @@ body{margin:0}p{margin:0}
 <div class="abs" id="t2" style="left:80px;right:80px;top:370px;opacity:0">
 <p style="font-family:'DM Serif Display';font-size:100px;line-height:1.04;color:${C.navy}">Steady head.<br><span style="color:${C.chestnut}">Sharp eyes.</span></p>
 <p style="font-family:Poppins;font-size:36px;line-height:1.4;color:${C.slate};margin-top:28px">So it can follow the trail to 1 spot in the grass below.</p></div>
+<div class="abs" id="t4" style="left:80px;right:80px;top:370px;opacity:0">
+<p style="font-family:'DM Serif Display';font-size:100px;line-height:1.04;color:${C.navy}">Sharp eyes find<br><span style="color:${C.chestnut}">the right fit.</span></p>
+<p style="font-family:Poppins;font-size:36px;line-height:1.4;color:${C.slate};margin-top:28px">That&apos;s the idea behind our name.</p></div>
 <div class="abs" id="t3" style="left:80px;right:80px;top:370px;opacity:0">
 <p style="font-family:'DM Serif Display';font-size:88px;line-height:1.04;color:${C.navy}">Kestrels may see ultraviolet light.</p>
 <p style="font-family:Poppins;font-size:36px;line-height:1.4;color:${C.slate};margin-top:28px">Studies of kestrels in Europe found they can spot the trails voles leave, which reflect ultraviolet light.</p></div>
@@ -85,15 +93,11 @@ body{margin:0}p{margin:0}
   </g>
 </svg>
 <div class="abs" id="end" style="inset:0;background:${C.navy};opacity:0">
-<p class="abs" style="left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:${C.buff}">EYE CARE JOBS</p>
-<div class="abs" id="endtext" style="left:80px;right:80px;top:600px">
-<p style="font-family:'DM Serif Display';font-size:84px;color:${C.cream}">Hello, we&apos;re</p>
-<img src="${brand("kestrel-wordmark-reversed.svg")}" alt="" style="display:block;width:760px;margin-top:30px">
-<p style="font-family:Poppins;font-size:40px;line-height:1.4;color:${C.mist};margin-top:70px">A Canada-wide eye care job board, opening in early 2027. Every job shows its pay.</p>
-<p style="font-family:Poppins;font-weight:600;font-size:40px;color:${C.buff};margin-top:56px">Pre launch is open. Create your account: link in bio</p></div>
-<div class="abs" style="left:80px;top:1560px;display:flex;align-items:center;gap:18px">
-<img id="k" src="${brand("kestrel-k-mark-reversed.svg")}" alt="" style="width:64px;height:64px;display:block">
-<p style="font-family:Poppins;font-size:28px;letter-spacing:0.06em;color:${C.mist}">eyecarejobs.ca</p></div>
+<img id="logo" src="${brand("kestrel-lockup-full-reversed.svg")}" alt="" style="position:absolute;left:90px;width:900px;top:430px;display:block;opacity:0">
+<div class="abs" id="endtext" style="left:80px;right:80px;top:1080px;text-align:center;opacity:0">
+<p style="font-family:'DM Serif Display';font-size:72px;line-height:1.1;color:${C.cream}">Every job shows its pay.</p>
+<p style="font-family:Poppins;font-weight:600;font-size:40px;line-height:1.4;color:${C.buff};margin-top:56px">Pre launch is open.<br>Create your account: link in bio</p>
+<p style="font-family:Poppins;font-size:30px;letter-spacing:0.06em;color:${C.mist};margin-top:48px">eyecarejobs.ca</p></div>
 </div>
 </div>
 <script>
@@ -109,22 +113,24 @@ const toWin = (x, y, dy) => [CAM.fx + CAM.s * (x - CAM.x), CAM.fy + CAM.s * (y -
 const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const lerp = (a, b, x) => a + (b - a) * x;
 const EYESHOT = { x: 326, y: 262, s: 26, fx: 540, fy: 560 };
+const PUPIL = { x: 326, y: 262, s: 600, fx: 540, fy: 560 };
 // Zoom in log scale so the push in feels steady; the point under the camera moves in step with the zoom.
 const mix = (A, B, k) => { const s = Math.exp(lerp(Math.log(A.s), Math.log(B.s), k)), q = (s - A.s) / (B.s - A.s);
   return { x: lerp(A.x, B.x, q), y: lerp(A.y, B.y, q), s, fx: lerp(A.fx, B.fx, k), fy: lerp(A.fy, B.fy, k) }; };
-const shot = (t) => t < 8.5 ? CAM : t < 13.6 ? mix(CAM, EYESHOT, io(span(t, 8.5, 9.9))) : mix(EYESHOT, CAM, io(span(t, 13.6, 14.8)));
+const shot = (t) => t < 8.5 ? CAM : t < 13.6 ? mix(CAM, EYESHOT, io(span(t, 8.5, 9.9))) : t < 22.4 ? mix(EYESHOT, CAM, io(span(t, 13.6, 14.8)))
+  : t < 23.6 ? mix(CAM, EYESHOT, io(span(t, 22.4, 23.6))) : mix(EYESHOT, PUPIL, Math.pow(span(t, 23.6, 24.4), 2));
 window.render = (t) => {
   el("tl").style.opacity = el("tr").style.opacity = out(span(t, 0, 0.5)) * (1 - span(t, END - 0.2, END));
-  fade("t0", 0.1, 4.2, t); fade("t1", 4.2, 8.5, t); fade("t3", 8.5, 14.0, t); fade("t2", 14.0, END - 0.6, t);
+  fade("t0", 0.1, 4.2, t); fade("t1", 4.2, 8.5, t); fade("t3", 8.5, 14.0, t); fade("t2", 14.0, 19.2, t); fade("t4", 20.2, 23.4, t);
   const c = shot(t); el("cam").setAttribute("transform", "translate(" + c.fx + " " + c.fy + ") scale(" + c.s + ") translate(" + (-c.x) + " " + (-c.y) + ")");
-  const near = span(t, 8.6, 9.4) * (1 - span(t, 13.7, 14.4)); el("ground").style.opacity = 1 - near;
+  const near = Math.max(span(t, 8.6, 9.4) * (1 - span(t, 13.7, 14.4)), span(t, 22.5, 23.2)); el("ground").style.opacity = 1 - near;
   // Flight: rises in, hovers, then folds its wings and drops out of frame after the vole.
   const rise = 900 * (1 - out(span(t, 0.8, 2.2)));
   const dive = inn(span(t, 19.0, 19.9));
   const drift = 7 * Math.sin(t * 1.4) + 3 * Math.sin(t * 2 * Math.PI * 3.2 + 1);
   // Wings beat fast (about 3 times a second here), smaller and quicker as it tucks in to dive.
   const beat = Math.sin(t * 2 * Math.PI * 3.2);
-  const tuck = dive;
+  const back = t >= 20.0; const tuck = back ? 0 : dive;
   const a = (1 - tuck) * 18 * beat + 34 * tuck;
   el("wl").setAttribute("transform", "rotate(" + (-a) + " 262 350)");
   el("wr").setAttribute("transform", "rotate(" + (-a) + " 262 350)");
@@ -132,7 +138,12 @@ window.render = (t) => {
   // The head stays still while the body bobs under it: that is the fact on screen.
   el("body").setAttribute("transform", "translate(0 " + drift + ")");
   const fall = rise / CAM.s + dive * 900;
-  el("all").setAttribute("transform", "translate(" + (dive * 140) + " " + fall + ") rotate(" + (dive * 28) + " 300 420)");
+  if (!back) el("all").setAttribute("transform", "translate(" + (dive * 140) + " " + fall + ") rotate(" + (dive * 28) + " 300 420)");
+  else { // Flies back in from the left with the vole, levels out and hovers in the middle again.
+    const f = out(span(t, 20.0, 22.3));
+    el("all").setAttribute("transform", "translate(" + lerp(-950, 0, f) + " " + lerp(320, 0, f) + ") rotate(" + lerp(16, 0, f) + " 300 420)"); }
+  el("catch").setAttribute("opacity", back ? 1 : 0);
+  document.querySelectorAll(".shine").forEach((e) => (e.style.opacity = 1 - span(t, 23.3, 23.7)));
   // It spots the vole: a dotted line of sight from its eye down to the grass, and a ping.
   // Ultraviolet: rings ripple out of the eye while we are in close.
   const uv = span(t, 9.8, 10.2) * (1 - span(t, 13.4, 13.7)); let rings = "";
@@ -154,8 +165,9 @@ window.render = (t) => {
   document.querySelectorAll(".gust").forEach((p, n) => { const L = p.getTotalLength(), d = Math.min(170, L * 0.6), q = ((t * 0.8 + n * 0.3) % 1);
     p.style.strokeDasharray = d + " " + (L + d); p.style.strokeDashoffset = d - q * (L + d); });
   const e = out(span(t, END, END + 0.4)); el("end").style.opacity = e;
-  const et = out(span(t, END + 0.2, END + 0.9)); el("endtext").style.opacity = et; el("endtext").style.transform = "translateY(" + 50 * (1 - et) + "px)";
-  el("k").style.transform = "translateY(" + (-6 * Math.sin(t * 2.4)) + "px)";
+  // The logo grows out of the dark of the pupil, then the line and the sign up.
+  const lg = out(span(t, END + 0.3, END + 1.4)); el("logo").style.opacity = lg; el("logo").style.transform = "scale(" + (0.82 + 0.18 * lg) + ")";
+  const et = out(span(t, END + 1.6, END + 2.3)); el("endtext").style.opacity = et; el("endtext").style.transform = "translateY(" + 40 * (1 - et) + "px)";
 };
 </script></body></html>`;
 
@@ -168,7 +180,7 @@ await page.evaluate(() => document.fonts.ready);
 const frame = page.locator("#f");
 const STILLS = process.env.STILLS;
 if (STILLS) {
-  for (const t of [3.0, 6.5, 11.5, 15.5, 17.5, 22.5]) {
+  for (const t of [19.6, 20.8, 21.8, 23.0, 24.0, 25.2, 28]) {
     await page.evaluate((x) => window.render(x), t);
     await frame.screenshot({ path: join(STILLS, `hovereye-still-${String(t).replace(".", "-")}.jpg`), type: "jpeg", quality: 80 });
   }
@@ -184,20 +196,6 @@ for (let n = 0; n < FPS * SECONDS; n++) {
 }
 ff.stdin.end();
 await done;
-// The cover (Steve, 16th November 2026): Cream, "Hello, we're" with the wordmark, and the bird hovering below.
-// A 1080 x 1920 version for the Reel, and a 1080 x 1350 one for the profile grid with the same words and bird.
-await page.evaluate(() => {
-  document.getElementById("t0").innerHTML = document.getElementById("t0").innerHTML
-    .replace(/>Why</, ">Hello, we&apos;re<").replace(/A job board for eye care, named after a bird with remarkable eyes\./, "A Canada-wide eye care job board, opening in early 2027. Every job shows its pay.");
-  document.getElementById("tl").textContent = "EYE CARE JOBS";
-  document.getElementById("tr").textContent = "Hello";
-  window.render(3.0);
-});
-await frame.screenshot({ path: join(OUT, "kestrel-hover-eye-reel-cover.jpg"), type: "jpeg", quality: 92 });
-await page.evaluate(() => { const f = document.getElementById("f"); f.style.height = "1350px";
-  for (const id of ["tl", "tr"]) document.getElementById(id).style.top = (id === "tl" ? 88 : 80) + "px";
-  document.getElementById("t0").style.top = "180px";
-  const svg = document.querySelector("svg.abs"); svg.style.top = "610px"; svg.style.transformOrigin = "50% 0"; svg.style.transform = "scale(0.68)"; svg.style.overflow = "visible"; });
-await frame.screenshot({ path: join(OUT, "kestrel-hello-post-1080x1350.jpg"), type: "jpeg", quality: 92 });
+// The cover is the logo design, built by build-kestrel-hello-covers.mjs.
 await browser.close();
 console.log(`Built ${mp4}`);
