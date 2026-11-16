@@ -1,7 +1,8 @@
 // Hover plus eye zoom Reel (Steve, 16th November 2026): the hovering kestrel holds its head still, so the camera pushes into its eye
 // for the ultraviolet fact, pulls back as the vole's trail lights up in the grass, and the bird dives to the navy end card.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-kestrel-hover-eye-reel.mjs
-// 1080 x 1920, 30 frames a second, 16 seconds, no sound. Every frame is drawn by render(t). Needs ffmpeg.
+// Opens with the name: "Why" and the wordmark (Steve: start with the reason behind the name). Slower pacing at his request.
+// 1080 x 1920, 30 frames a second, 25 seconds, no sound. Every frame is drawn by render(t). Needs ffmpeg.
 // The ultraviolet fact comes from studies of kestrels in Europe, so it says so.
 // Facts: kestrels hover facing into the wind and hold their head almost perfectly still while they hunt (well documented).
 // The bird is a new illustration, not the logo; the K mark and wordmark are used as they are.
@@ -18,8 +19,8 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", paper: "#FBF8F2", buff: "#D8B48A", mist: "#DCE3E6", slate: "#5A6672", slateBlue: "#7F93AE" };
 const FPS = 30;
-const SECONDS = 16;
-const END = 12.2;
+const SECONDS = 25;
+const END = 20.2;
 
 const eye = (x, y, k) => `<circle cx="${x}" cy="${y}" r="${31 * k}" fill="${C.buff}"/><circle cx="${x}" cy="${y}" r="${24 * k}" fill="${C.navy}"/><circle cx="${x + 8 * k}" cy="${y - 8 * k}" r="${7 * k}" fill="${C.cream}"/>`;
 const wing = `<path d="M262 330 C 200 300, 110 228, 22 150 C 70 240, 120 300, 160 362 C 196 386, 236 384, 266 372 Z" fill="${C.slateBlue}"/>
@@ -56,7 +57,11 @@ body{margin:0}p{margin:0}
 </style></head><body><div id="f">
 <p class="abs" id="tl" style="left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:${C.chestnut}">DID YOU KNOW</p>
 <p class="abs" id="tr" style="right:80px;top:268px;font-family:'DM Serif Display';font-size:38px;color:${C.chestnut}">The kestrel</p>
-<div class="abs" id="t1" style="left:80px;right:80px;top:370px">
+<div class="abs" id="t0" style="left:80px;right:80px;top:370px">
+<p style="font-family:'DM Serif Display';font-size:96px;line-height:1;color:${C.navy}">Why</p>
+<img src="${brand("kestrel-wordmark.svg")}" alt="" style="display:block;width:560px;margin-top:18px">
+<p style="font-family:Poppins;font-size:36px;line-height:1.4;color:${C.slate};margin-top:30px">A job board for eye care, named after a bird with remarkable eyes.</p></div>
+<div class="abs" id="t1" style="left:80px;right:80px;top:370px;opacity:0">
 <p style="font-family:'DM Serif Display';font-size:88px;line-height:1.04;color:${C.navy}">It can hover in 1 spot.</p>
 <p style="font-family:Poppins;font-size:36px;line-height:1.4;color:${C.slate};margin-top:28px">Facing into the wind, it beats its wings fast and holds its head almost perfectly still.</p></div>
 <div class="abs" id="t2" style="left:80px;right:80px;top:370px;opacity:0">
@@ -107,15 +112,15 @@ const EYESHOT = { x: 326, y: 262, s: 26, fx: 540, fy: 560 };
 // Zoom in log scale so the push in feels steady; the point under the camera moves in step with the zoom.
 const mix = (A, B, k) => { const s = Math.exp(lerp(Math.log(A.s), Math.log(B.s), k)), q = (s - A.s) / (B.s - A.s);
   return { x: lerp(A.x, B.x, q), y: lerp(A.y, B.y, q), s, fx: lerp(A.fx, B.fx, k), fy: lerp(A.fy, B.fy, k) }; };
-const shot = (t) => t < 4.4 ? CAM : t < 7.9 ? mix(CAM, EYESHOT, io(span(t, 4.4, 5.6))) : mix(EYESHOT, CAM, io(span(t, 7.9, 8.9)));
+const shot = (t) => t < 8.5 ? CAM : t < 13.6 ? mix(CAM, EYESHOT, io(span(t, 8.5, 9.9))) : mix(EYESHOT, CAM, io(span(t, 13.6, 14.8)));
 window.render = (t) => {
   el("tl").style.opacity = el("tr").style.opacity = out(span(t, 0, 0.5)) * (1 - span(t, END - 0.2, END));
-  fade("t1", 0.1, 4.4, t); fade("t3", 4.4, 8.4, t); fade("t2", 8.4, END - 0.6, t);
+  fade("t0", 0.1, 4.2, t); fade("t1", 4.2, 8.5, t); fade("t3", 8.5, 14.0, t); fade("t2", 14.0, END - 0.6, t);
   const c = shot(t); el("cam").setAttribute("transform", "translate(" + c.fx + " " + c.fy + ") scale(" + c.s + ") translate(" + (-c.x) + " " + (-c.y) + ")");
-  const near = span(t, 4.5, 5.2) * (1 - span(t, 8.0, 8.6)); el("ground").style.opacity = 1 - near;
+  const near = span(t, 8.6, 9.4) * (1 - span(t, 13.7, 14.4)); el("ground").style.opacity = 1 - near;
   // Flight: rises in, hovers, then folds its wings and drops out of frame after the vole.
-  const rise = 900 * (1 - out(span(t, 0.1, 1.3)));
-  const dive = inn(span(t, 11.0, 11.9));
+  const rise = 900 * (1 - out(span(t, 0.8, 2.2)));
+  const dive = inn(span(t, 19.0, 19.9));
   const drift = 7 * Math.sin(t * 1.4) + 3 * Math.sin(t * 2 * Math.PI * 3.2 + 1);
   // Wings beat fast (about 3 times a second here), smaller and quicker as it tucks in to dive.
   const beat = Math.sin(t * 2 * Math.PI * 3.2);
@@ -130,22 +135,22 @@ window.render = (t) => {
   el("all").setAttribute("transform", "translate(" + (dive * 140) + " " + fall + ") rotate(" + (dive * 28) + " 300 420)");
   // It spots the vole: a dotted line of sight from its eye down to the grass, and a ping.
   // Ultraviolet: rings ripple out of the eye while we are in close.
-  const uv = span(t, 5.4, 5.8) * (1 - span(t, 7.8, 8.1)); let rings = "";
-  if (uv > 0) for (let n = 0; n < 4; n++) { const g = ((t - 5.4) * 0.55 + n / 4) % 1;
+  const uv = span(t, 9.8, 10.2) * (1 - span(t, 13.4, 13.7)); let rings = "";
+  if (uv > 0) for (let n = 0; n < 4; n++) { const g = ((t - 9.8) * 0.45 + n / 4) % 1;
     rings += '<circle cx="326" cy="262" r="' + (17 + 22 * g) + '" stroke="' + (n % 2 ? "${C.chestnut}" : "${C.slateBlue}") + '" stroke-width="' + (1.1 * (1 - g) + 0.2) + '" opacity="' + uv * (1 - g) + '"/>'; }
   el("rings").innerHTML = rings;
   // Back out wide, the vole's trail lights up in the grass, and the bird looks along it.
-  const tr = el("trail"); const tp = out(span(t, 8.9, 9.9));
-  tr.style.opacity = span(t, 8.9, 9.1) * (1 - span(t, 11.0, 11.4));
+  const tr = el("trail"); const tp = out(span(t, 14.8, 16.2));
+  tr.style.opacity = span(t, 14.8, 15.0) * (1 - span(t, 19.0, 19.4));
   tr.style.clipPath = "inset(0 " + (100 - 100 * tp) + "% 0 0)"; // the trail lights up from left to right
-  const sight = span(t, 9.6, 10.3) * (1 - span(t, 10.9, 11.1));
+  const sight = span(t, 15.9, 16.8) * (1 - span(t, 18.9, 19.1));
   const [ex, ey] = toWin(326, 262, rise / CAM.s);
-  el("sight").setAttribute("d", "M" + ex + " " + (ey + 14) + " L" + (ex + (VOLE[0] - ex) * out(span(t, 9.6, 10.3))) + " " + (ey + 14 + (VOLE[1] - 30 - ey - 14) * out(span(t, 9.6, 10.3))));
+  el("sight").setAttribute("d", "M" + ex + " " + (ey + 14) + " L" + (ex + (VOLE[0] - ex) * out(span(t, 15.9, 16.8))) + " " + (ey + 14 + (VOLE[1] - 30 - ey - 14) * out(span(t, 15.9, 16.8))));
   el("sight").style.opacity = sight;
-  el("vole").style.opacity = span(t, 9.6, 9.9) * (1 - span(t, 11.6, 11.9));
-  const g = ((t - 10.3) * 1.1) % 1; el("ping").setAttribute("r", 30 + 50 * g); el("ping").style.opacity = t > 10.3 ? (1 - g) * (1 - span(t, 11.0, 11.4)) : 0;
+  el("vole").style.opacity = span(t, 15.4, 15.8) * (1 - span(t, 19.6, 19.9));
+  const g = ((t - 16.8) * 1.1) % 1; el("ping").setAttribute("r", 30 + 50 * g); el("ping").style.opacity = t > 16.8 ? (1 - g) * (1 - span(t, 18.9, 19.3)) : 0;
   // Wind gusts blow in from the right the whole time it hovers.
-  el("wind").style.opacity = span(t, 0.8, 1.3) * (1 - near) * (1 - span(t, 10.8, 11.2));
+  el("wind").style.opacity = span(t, 0.8, 1.3) * (1 - near) * (1 - span(t, 18.8, 19.2));
   document.querySelectorAll(".gust").forEach((p, n) => { const L = p.getTotalLength(), d = Math.min(170, L * 0.6), q = ((t * 0.8 + n * 0.3) % 1);
     p.style.strokeDasharray = d + " " + (L + d); p.style.strokeDashoffset = d - q * (L + d); });
   const e = out(span(t, END, END + 0.4)); el("end").style.opacity = e;
@@ -163,7 +168,7 @@ await page.evaluate(() => document.fonts.ready);
 const frame = page.locator("#f");
 const STILLS = process.env.STILLS;
 if (STILLS) {
-  for (const t of [2.5, 5.0, 6.5, 9.6, 10.6, 13.5]) {
+  for (const t of [3.0, 6.5, 11.5, 15.5, 17.5, 22.5]) {
     await page.evaluate((x) => window.render(x), t);
     await frame.screenshot({ path: join(STILLS, `hovereye-still-${String(t).replace(".", "-")}.jpg`), type: "jpeg", quality: 80 });
   }
@@ -179,7 +184,7 @@ for (let n = 0; n < FPS * SECONDS; n++) {
 }
 ff.stdin.end();
 await done;
-await page.evaluate(() => window.render(2.4));
+await page.evaluate(() => window.render(3.0));
 await frame.screenshot({ path: join(OUT, "kestrel-hover-eye-reel-cover.jpg"), type: "jpeg", quality: 92 });
 await browser.close();
 console.log(`Built ${mp4}`);
