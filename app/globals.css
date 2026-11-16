@@ -159,7 +159,7 @@ input.other{margin-top:10px}
 .who-panel a.who-gear{width:40px;min-height:40px;height:40px;padding:0;margin:-6px -8px 0 0;justify-content:center}
 .who-panel a.who-gear .icon{width:22px;height:22px}
 .who-panel a.who-gear[aria-current=page]{background:var(--cream)}
-.who-panel .who-id .who-plan{grid-column:1 / -1;min-height:0;margin:6px 0 0;padding:0;border-bottom:0}
+.who-panel .who-id .who-plan{grid-column:1 / -1;min-height:36px;margin:2px -10px 0;padding:8px 10px;border-bottom:0;font-size:0.9375rem;font-weight:600;color:var(--navy)}
 .who-panel a{color:var(--navy);text-decoration:none;font-weight:600;padding:10px 0;min-height:44px;display:flex;align-items:center}
 .who-panel a,.who-panel .linkbtn{padding:10px;margin:0 -10px;border-radius:8px;text-align:left}
 .who-panel .linkbtn{display:flex;width:calc(100% + 20px);color:var(--navy)}
