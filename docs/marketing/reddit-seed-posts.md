@@ -30,11 +30,11 @@ Skip the calendar, image, community list and related communities widgets for now
 
 | When | Post | Flair | Notes |
 | --- | --- | --- | --- |
-| Tue 17th November | 1. Welcome | Discussion, pinned | Post first, so the community has a front door |
-| Wed 18th November | 2. Optician pay by province | Resource | The blog post is live from 17th November |
+| Tue 17th November | 1. Welcome | Discussion, pinned | **Posted.** Post first, so the community has a front door |
+| Wed 18th November | 2. Optician pay by province | Pay talk | **Posted** (flair Pay talk). The blog post is live from 17th November |
 | Fri 20th November | 4. Who does what in a clinic | Resource | The blog post goes live that day. The page now has 3 posts |
 | Fri 27th November | 5. We asked the AI chatbots | Discussion | The blog post is live from 24th November |
-| Spare | 3. What would make you apply | Discussion | Use in any quiet week |
+| Done | 3. What would make you apply | Discussion | **Posted** early, with 1 comment so far |
 
 The dated plan after this, with LinkedIn and Facebook, is `reddit-and-linkedin-calendar.md`. Reddit runs about 1 post a week from here (revised 17th November 2026).
 
