@@ -22,7 +22,7 @@ LinkedIn pages have a Commitments box. It is for promises an employer makes to i
 
 ## Posting rules (Kestrel's own commitments to itself, not the LinkedIn box)
 
-1. **1 post a week, at most.** Skipping a week is fine. A quiet page is better than one that posts filler.
+1. **1 post a week, at most** (the calendar in `reddit-and-linkedin-calendar.md` proposes 2 a week on the blog days, Tuesday and Friday, pending Steve's yes; change this rule to match whichever he picks). Skipping a week is fine. A quiet page is better than one that posts filler.
 2. **Posts come from things Kestrel owns:** a new blog post, the pay table, the resources page, the hiring rules, and later the landing pages. Nothing is invented, and every number has a source on the site.
 3. **Steve approves each batch** before it goes out. Claude drafts a batch of 4 posts at a time. Nothing is scheduled by an automatic tool until a month of clean posts.
 4. **No unclaimed found listings.** A job found on a clinic's own site is not posted anywhere until the clinic claims it.
