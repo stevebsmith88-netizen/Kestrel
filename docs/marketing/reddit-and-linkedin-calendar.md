@@ -25,19 +25,18 @@ Links from Reddit, LinkedIn, Facebook and Instagram are "nofollow", so they pass
 - **Do not promote any job that is not live.** There are none yet.
 - **A skipped week is fine.** Nothing here has to run on a schedule. No posts on 25th December or 1st January.
 
-## Today and tomorrow
+## Where Reddit is now (seen by Steve on 17th/18th November 2026)
 
-- **Tue 17th Nov (today):** Reddit welcome post, then pin it. Nothing else.
-- **Wed 18th Nov:** Reddit optician pay post, and the LinkedIn introduction post (L2).
+Already live on r/EyeCareJobsCanada: the welcome post (pinned), "What would make you apply for a job in eye care?" (1 comment, reply to it) and the optician pay post (flair Pay talk). So the community already has its 3 posts. Next on Reddit: Fri 20th Nov, who does what. LinkedIn starts with the introduction post (L2) on Wed 18th Nov.
 
 ## The calendar
 
 | Date | Where | Post |
 | --- | --- | --- |
-| Tue 17th Nov | Reddit | 1. Welcome (pinned) |
-| Wed 18th Nov | Reddit | 2. Optician pay by province |
+| Tue 17th Nov | Reddit | 1. Welcome (pinned). **Done** |
+| Wed 18th Nov | Reddit | 2. Optician pay by province. **Done** (posted early) |
 | Wed 18th Nov | LinkedIn | L2. Introducing the page (once only) |
-| Fri 20th Nov | Reddit | 4. Who does what in a clinic (the page now has 3 posts) |
+| Fri 20th Nov | Reddit | 4. Who does what in a clinic |
 | Tue 24th Nov | Facebook | Introducing the page (the L2 text) |
 | Wed 25th Nov | LinkedIn | L1. Optician pay |
 | Fri 27th Nov | Reddit | 5. We asked the AI chatbots |
@@ -56,7 +55,7 @@ Links from Reddit, LinkedIn, Facebook and Instagram are "nofollow", so they pass
 | Wed 30th Dec | LinkedIn | L13. Moving to Canada |
 | Fri 8th Jan | Reddit | R10. What would make 2027 better |
 
-**Spare posts, for a week you want to add something, or for January:** Reddit post 3 (what would make you apply) and R6 (optician interview questions). LinkedIn L3 (who does what), L4 (AI chatbots), L5 (interview questions), L7 (STAR questions), L9 (assistant job ad) and L11 (starting a career). The text is below. Skip any that no longer fit.
+**Spare posts, for a week you want to add something, or for January:** Reddit R6 (optician interview questions). Reddit post 3 (what would make you apply) is already live. LinkedIn L3 (who does what), L4 (AI chatbots), L5 (interview questions), L7 (STAR questions), L9 (assistant job ad) and L11 (starting a career). The text is below. Skip any that no longer fit.
 
 ## Facebook posts
 
