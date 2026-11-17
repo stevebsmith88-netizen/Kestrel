@@ -1,6 +1,26 @@
 # Reddit, LinkedIn and Facebook: what to post, and when
 
-Revised 17th November 2026, after Steve's note: **Instagram is the main channel** (about 12 posts up, running 2 a week on Mondays and Thursdays, `instagram-master-schedule.md`). Nothing has been posted yet on Reddit, LinkedIn or Facebook. Those 3 are by-products of the same content, so each gets **about 1 post a week, on its own day**, and a quiet week is fine. **Every post links back to eyecarejobs.ca**, with the tags from `docs/utm-guide.md` already on the links.
+Revised 17th November 2026, after Steve's note: **Instagram is the main channel** (about 12 posts up, running 2 a week on Mondays and Thursdays, `instagram-master-schedule.md`). Reddit has its first 3 posts live; nothing has been posted yet on LinkedIn or Facebook. Those 3 are by-products of the same content, so each gets **about 1 post a week, on its own day**, and a quiet week is fine. **Every post links back to eyecarejobs.ca**, with the tags from `docs/utm-guide.md` already on the links.
+
+## At a glance: week by week, all channels
+
+Instagram and the blog are already scheduled and are shown here only so you can see the whole week. Blog posts go live at midnight Toronto time on their date.
+
+| Week of | Instagram (Mon and Thu) | Blog (Tue and Fri) | Facebook (Tue) | LinkedIn (Wed) | Reddit (Fri) |
+| --- | --- | --- | --- | --- | --- |
+| 16th Nov | Mon: job ad checklist. Thu: things heard No. 4 | Tue: optician pay. Fri: roles in eye care | Nothing yet | Introducing the page | Who does what |
+| 23rd Nov | Mon: optician pay. Thu: things heard No. 7 | Tue: AI chatbots. Fri: optician interview questions | Introducing the page | Optician pay (check Job Bank first) | AI chatbots |
+| 30th Nov | Mon: AI chatbots. Thu: optometrist pay | Tue: optometrist pay. Fri: STAR questions | Optician pay | How optometrists are paid | How optometrists are paid |
+| 7th Dec | Mon: pay summary. Thu: becoming an optician | Tue: becoming an optician. Fri: assistant job ad | How optometrists are paid | Becoming an optician | Becoming an optician |
+| 14th Dec | Mon: who does what. Thu: assistant certification | Tue: assistant courses. Fri: starting a career | Becoming an optician | Assistant courses | Optometric assistants |
+| 21st Dec | Mon: Opening soon photo | Tue: independent or corporate | Assistant courses | Independent or corporate | Rest week |
+| 28th Dec | Mon: questions to ask | Tue: moving to Canada | Independent or corporate | Moving to Canada | Rest week |
+
+Reddit already has its first 3 posts (welcome, what would make you apply, optician pay), so its first row above is the 4th post. The next Reddit post after December is on Fri 8th Jan.
+
+## Before the pay posts go out: Job Bank's new figures
+
+Job Bank publishes its next wage file on **18th November 2026**. The optician pay blog post, the Reddit pay post and LinkedIn post L1 (25th November) all use the file revised 19th November 2025. After the 18th, refresh the pay table (`docs/pay-benchmark.md`), then check whether any figure changed in those 3 places. If it did, edit the Reddit post and update L1 before it goes out. Tell Claude when the file is out and it will list exactly what needs changing.
 
 ## What the links do for the Google goal
 
@@ -27,7 +47,7 @@ Links from Reddit, LinkedIn, Facebook and Instagram are "nofollow", so they pass
 
 ## Where Reddit is now (seen by Steve on 17th/18th November 2026)
 
-Already live on r/EyeCareJobsCanada: the welcome post (pinned), "What would make you apply for a job in eye care?" (1 comment, reply to it) and the optician pay post (flair Pay talk). So the community already has its 3 posts. Next on Reddit: Fri 20th Nov, who does what. LinkedIn starts with the introduction post (L2) on Wed 18th Nov.
+Already live on r/EyeCareJobsCanada: the welcome post (pinned), "What would make you apply for a job in eye care?" (1 comment, reply to it) and the optician pay post (flair Pay talk). So the community already has its 3 posts. Next on Reddit: Fri 20th Nov, who does what. LinkedIn starts with the introduction post (L2) on Wed 18th Nov. Reddit has its own scheduler, so posts 4 and 5 can be set up in advance for 8:00 am. Edit the welcome post to add the "where else to find us" paragraph (it is in `reddit-seed-posts.md`).
 
 ## The calendar
 
