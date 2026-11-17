@@ -57,7 +57,7 @@ None are shown yet. Claude had no Anthropic key in the session that built this, 
 
 ## Refreshing the figures
 
-Job Bank publishes a new file each November or December. Download it, run `scripts/build-pay-benchmark.py` (instructions at the top of the script), run `npm test`, read the diff, and update the file name and date in this page.
+Job Bank publishes a new file each November or December. **Steve (16th November 2026): the next file is published on 18th November 2026.** The optician pay blog post and the Reddit pay post (17th November) use the file revised 19th November 2025, so refresh soon after the 18th, and before the "Who does what in a clinic" Reddit post on 20th November. Download it, run `scripts/build-pay-benchmark.py` (instructions at the top of the script), run `npm test`, read the diff, and update the file name and date in this page.
 
 ## Where the code is
 
