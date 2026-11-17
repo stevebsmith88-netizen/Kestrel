@@ -52,6 +52,12 @@ After that: about 1 post a week, tied to a recent blog post, always with a quest
 >
 > Kestrel Eye Care Jobs runs this community. Our job board and guides are at [eyecarejobs.ca](https://eyecarejobs.ca/?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community).
 
+### Welcome post edit: where else to find us (Steve's idea, 17th November 2026)
+
+Edit the welcome post (the 3 dots, then Edit post) and add this paragraph before the last line. Add the Facebook line once the Page has its first post (Tue 24th November in the calendar). Editing keeps the pin and any comments.
+
+> You can also find Kestrel here: [Instagram](https://www.instagram.com/kestreleye26/) for guides and things we hear in clinics, [LinkedIn](https://www.linkedin.com/company/kestrel-eye-care-jobs/) for pay and hiring posts, and [eyecarejobs.ca](https://eyecarejobs.ca/?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community) for the blog, the pay guide and the job board when it opens.
+
 ## 2. Typical optician pay by province (on or after 17th November)
 
 **Title:** Typical optician pay by province, from Job Bank
