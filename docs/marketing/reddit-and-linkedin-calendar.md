@@ -1,54 +1,66 @@
-# Reddit and LinkedIn: what to post, and when
+# Reddit, LinkedIn and Facebook: what to post, and when
 
-Written 17th November 2026 for Steve to run with, to the end of December 2026. January is at the end of this file and gets its own batch later. Every post is ready to paste. Nothing here has been posted except what you tell me you have.
+Revised 17th November 2026, after Steve's note: **Instagram is the main channel** (about 12 posts up, running 2 a week on Mondays and Thursdays, `instagram-master-schedule.md`). Nothing has been posted yet on Reddit, LinkedIn or Facebook. Those 3 are by-products of the same content, so each gets **about 1 post a week, on its own day**, and a quiet week is fine. **Every post links back to eyecarejobs.ca**, with the tags from `docs/utm-guide.md` already on the links.
 
-Instagram is separate and already scheduled (`docs/marketing/instagram-master-schedule.md`). Facebook is not covered here yet.
+## What the links do for the Google goal
 
-## Decisions to confirm
+Links from Reddit, LinkedIn, Facebook and Instagram are "nofollow", so they pass little ranking credit directly. What they do help with: people searching for Kestrel by name, visits to the blog and pay pages, Google and Bing finding new posts sooner, and AI assistants, which quote Reddit and LinkedIn heavily. The stronger ranking lever stays links from other websites: associations, schools, suppliers and the directory (`backlinks-plan.md`). So keep these channels steady and honest, and put your own effort into those links.
 
-1. **LinkedIn rhythm.** `linkedin.md` says 1 post a week at most, and the older `linkedin-posts.md` says 3 a week. This calendar uses **2 a week, on the 2 blog days (Tuesday and Friday)**, plus 1 introduction post. Each post is short and carries a question. If that is too much, drop the Friday posts first. Tell me and I will update `linkedin.md` to match.
-2. **Reddit rhythm.** The first 5 posts are in `reddit-seed-posts.md`. After that, 1 a week on Tuesdays, plus Fri 27th November, with a break over the holidays.
-3. **Nothing in January yet.** The posts for 5th January onward come in the next batch, once these have run and we know what got replies.
+## The weekly rhythm
+
+| Channel | Day | What | How often |
+| --- | --- | --- | --- |
+| Instagram | Mon and Thu | Already scheduled | Leave as it is. Make sure the profile link goes to `https://eyecarejobs.ca/?utm_source=instagram&utm_medium=organic-profile&utm_campaign=profile`, since links in captions cannot be pressed |
+| LinkedIn | Wednesday | The blog post from the day before | 1 a week |
+| Reddit | Friday (plus 3 posts in the first week) | A discussion built on a blog post, with a question | 1 a week |
+| Facebook | Tuesday | The LinkedIn text from the week before, without the hashtags | 1 a week, from 24th November |
 
 ## Rules for every post
 
-- **Time:** 8:00 am Toronto time on the day, so it lands when people open their phones before clinic.
-- **Links:** every link carries the tags from `docs/utm-guide.md`. The links below are already tagged. On Reddit they are hidden behind link text so they do not look cluttered. On LinkedIn, paste the link at the end of the post (or in the first comment if you prefer), and delete the preview text LinkedIn adds if it looks messy.
+- **Time:** 8:00 am Toronto time.
 - **Check the link first.** A blog post is only live from its own date. Open the link before you post.
-- **Voice:** warm and plain, numerals, no emoji, no hashtags beyond 2 on LinkedIn, no hashtags on Reddit. Never name a clinic or person without a written yes. No mention of Eye Recommend.
-- **Replies:** answer every comment within a day on Reddit and within 2 business days on LinkedIn, as the Kestrel team. Quote nobody without asking them.
-- **Reddit flairs:** Discussion, Resource, Job brief, Question, Pay talk (see `reddit-seed-posts.md`).
-- **Do not use found listings** or promote any job that is not live. There are none yet.
+- **Voice:** warm and plain, numerals, no emoji, at most 2 hashtags on LinkedIn and none on Reddit or Facebook. Never name a clinic or person without a written yes. No mention of Eye Recommend.
+- **Replies:** answer every comment within a day on Reddit, and within 2 business days on LinkedIn and Facebook, as the Kestrel team. Quote nobody without asking them.
+- **Reddit flairs:** Discussion, Resource, Job brief, Question, Pay talk.
+- **Do not promote any job that is not live.** There are none yet.
+- **A skipped week is fine.** Nothing here has to run on a schedule. No posts on 25th December or 1st January.
+
+## Today and tomorrow
+
+- **Tue 17th Nov (today):** Reddit welcome post, then pin it. Nothing else.
+- **Wed 18th Nov:** Reddit optician pay post, and the LinkedIn introduction post (L2).
 
 ## The calendar
 
-| Date | Where | Post | Link needed live? |
-| --- | --- | --- | --- |
-| Mon 16th Nov | Reddit | 1. Welcome (pinned) | No. If it is not up yet, post it first today |
-| **Tue 17th Nov** | Reddit | 2. Optician pay by province (`reddit-seed-posts.md`) | Yes, optician pay blog, live today |
-| **Tue 17th Nov** | LinkedIn | L1. Optician pay | Yes |
-| Wed 18th Nov | Reddit | 3. What would make you apply (`reddit-seed-posts.md`) | No |
-| Thu 19th Nov | LinkedIn | L2. Introducing the page (once only) | Home page |
-| Fri 20th Nov | Reddit | 4. Who does what in a clinic (`reddit-seed-posts.md`) | Yes, roles blog |
-| Fri 20th Nov | LinkedIn | L3. Who does what | Yes |
-| Tue 24th Nov | Reddit | 5. We asked the AI chatbots (`reddit-seed-posts.md`) | Yes |
-| Tue 24th Nov | LinkedIn | L4. We asked the AI chatbots | Yes |
-| Fri 27th Nov | Reddit | R6. Optician interview questions | Yes |
-| Fri 27th Nov | LinkedIn | L5. Optician interview questions | Yes |
-| Tue 1st Dec | Reddit | R7. How optometrists are paid | Yes |
-| Tue 1st Dec | LinkedIn | L6. How optometrists are paid | Yes |
-| Fri 4th Dec | LinkedIn | L7. STAR questions | Yes |
-| Tue 8th Dec | Reddit | R8. Becoming an optician | Yes |
-| Tue 8th Dec | LinkedIn | L8. Becoming an optician | Yes |
-| Fri 11th Dec | LinkedIn | L9. Writing an assistant job ad | Yes |
-| Tue 15th Dec | Reddit | R9. Optometric assistants: how did you learn the job | Yes |
-| Tue 15th Dec | LinkedIn | L10. Assistant courses and certification | Yes |
-| Fri 18th Dec | LinkedIn | L11. Starting a career in optics | Yes |
-| Tue 22nd Dec | LinkedIn | L12. Independent or corporate | Yes |
-| Tue 29th Dec | Reddit | R10. What would make 2027 better (light, no link) | No |
-| Tue 29th Dec | LinkedIn | L13. Moving to Canada | Yes |
+| Date | Where | Post |
+| --- | --- | --- |
+| Tue 17th Nov | Reddit | 1. Welcome (pinned) |
+| Wed 18th Nov | Reddit | 2. Optician pay by province |
+| Wed 18th Nov | LinkedIn | L2. Introducing the page (once only) |
+| Fri 20th Nov | Reddit | 4. Who does what in a clinic (the page now has 3 posts) |
+| Tue 24th Nov | Facebook | Introducing the page (the L2 text) |
+| Wed 25th Nov | LinkedIn | L1. Optician pay |
+| Fri 27th Nov | Reddit | 5. We asked the AI chatbots |
+| Tue 1st Dec | Facebook | Optician pay (the L1 text) |
+| Wed 2nd Dec | LinkedIn | L6. How optometrists are paid |
+| Fri 4th Dec | Reddit | R7. How optometrists are paid |
+| Tue 8th Dec | Facebook | How optometrists are paid (the L6 text) |
+| Wed 9th Dec | LinkedIn | L8. Becoming an optician |
+| Fri 11th Dec | Reddit | R8. Becoming an optician |
+| Tue 15th Dec | Facebook | Becoming an optician (the L8 text) |
+| Wed 16th Dec | LinkedIn | L10. Assistant courses and certification |
+| Fri 18th Dec | Reddit | R9. Optometric assistants: how did you learn the job |
+| Tue 22nd Dec | Facebook | Assistant courses (the L10 text) |
+| Wed 23rd Dec | LinkedIn | L12. Independent or corporate |
+| Tue 29th Dec | Facebook | Independent or corporate (the L12 text) |
+| Wed 30th Dec | LinkedIn | L13. Moving to Canada |
+| Fri 8th Jan | Reddit | R10. What would make 2027 better |
 
-No posts on 25th December or 1st January.
+**Spare posts, for a week you want to add something, or for January:** Reddit post 3 (what would make you apply) and R6 (optician interview questions). LinkedIn L3 (who does what), L4 (AI chatbots), L5 (interview questions), L7 (STAR questions), L9 (assistant job ad) and L11 (starting a career). The text is below. Skip any that no longer fit.
+
+## Facebook posts
+
+Use the matching LinkedIn text, without the hashtags, and change `utm_source=linkedin` in the link to `utm_source=facebook`. A Facebook post can carry a pressable link in its text, so put the link at the end as written. Post to the Page, not a personal profile. If cross-posting from Instagram starts working, leave it on for Monday and Thursday, since those are different posts.
 
 ---
 
@@ -56,7 +68,7 @@ No posts on 25th December or 1st January.
 
 Each is under 80 words. Replace nothing except the link, which is already filled in.
 
-## L1. Tue 17th Nov: optician pay
+## L1. Wed 25th Nov: optician pay
 
 > What does an optician earn where you work?
 >
@@ -68,7 +80,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #Opticians
 
-## L2. Thu 19th Nov: introducing the page (post once)
+## L2. Wed 18th Nov: introducing the page (post once)
 
 > Kestrel Eye Care Jobs is a job board for eye care across Canada, and we are in our pre launch phase.
 >
@@ -80,7 +92,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #Optometry
 
-## L3. Fri 20th Nov: who does what
+## L3. Spare: who does what
 
 > An eye care clinic is more than the optometrist.
 >
@@ -92,7 +104,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare
 
-## L4. Tue 24th Nov: the AI chatbots
+## L4. Spare: the AI chatbots
 
 > We asked ChatGPT, Gemini and Copilot where to find eye care jobs in Canada.
 >
@@ -104,7 +116,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #JobSearch
 
-## L5. Fri 27th Nov: optician interview questions
+## L5. Spare: optician interview questions
 
 > An interview works both ways. A few good questions tell you more than the job ad does.
 >
@@ -116,7 +128,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #Opticians
 
-## L6. Tue 1st Dec: how optometrists are paid
+## L6. Wed 2nd Dec: how optometrists are paid
 
 > Ask 3 associate optometrists how they are paid and you may get 3 different answers: a salary, a day rate, or a percentage of what they bring in, sometimes with a guaranteed minimum.
 >
@@ -128,7 +140,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #Optometry #EyeCare
 
-## L7. Fri 4th Dec: STAR questions
+## L7. Spare: STAR questions
 
 > Interviewers ask "tell me about a time when..." to see how you behave, not to catch you out.
 >
@@ -140,7 +152,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #Interviews
 
-## L8. Tue 8th Dec: becoming an optician
+## L8. Wed 9th Dec: becoming an optician
 
 > The exam is national, but the licence is provincial.
 >
@@ -152,7 +164,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #Opticians #EyeCare
 
-## L9. Fri 11th Dec: writing an assistant job ad
+## L9. Spare: writing an assistant job ad
 
 > Most optometric assistant ads say friendly, fast paced, team player. They tell a candidate almost nothing.
 >
@@ -164,7 +176,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #Hiring
 
-## L10. Tue 15th Dec: assistant courses and certification
+## L10. Wed 16th Dec: assistant courses and certification
 
 > Optometric assistants do not need a licence in any province. So why take a course?
 >
@@ -176,7 +188,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare
 
-## L11. Fri 18th Dec: starting a career in optics
+## L11. Spare: starting a career in optics
 
 > Eye care has a clear ladder in some places and a lot of side doors in others.
 >
@@ -188,7 +200,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare #Careers
 
-## L12. Tue 22nd Dec: independent or corporate
+## L12. Wed 23rd Dec: independent or corporate
 
 > Independent practice or corporate group? Neither is better, but they feel different to work in.
 >
@@ -200,7 +212,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 >
 > #EyeCare
 
-## L13. Tue 29th Dec: moving to Canada
+## L13. Wed 30th Dec: moving to Canada
 
 > If you trained in eye care abroad, your skills are in demand here. The first step is almost always the same: ask the regulator.
 >
@@ -216,9 +228,9 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 
 # Reddit posts
 
-Posts 1 to 5 are in `reddit-seed-posts.md` (welcome, optician pay, what would make you apply, who does what, the AI chatbots). From here on, each ends with a question, and the link is hidden behind link text.
+Posts 1, 2, 4 and 5 are in `reddit-seed-posts.md` (welcome, optician pay, who does what, the AI chatbots). Post 3 there (what would make you apply) is a spare. The posts below ends with a question, and the link is hidden behind link text.
 
-## R6. Fri 27th Nov: optician interview questions (Discussion)
+## R6. Spare: optician interview questions (Discussion)
 
 **Title:** What do you ask in an optician interview, and what do you wish candidates asked you?
 
@@ -234,7 +246,7 @@ Posts 1 to 5 are in `reddit-seed-posts.md` (welcome, optician pay, what would ma
 >
 > What is the one question you always ask? And if you hire, what is the question you wish more candidates asked you?
 
-## R7. Tue 1st Dec: how optometrists are paid (Pay talk)
+## R7. Fri 4th Dec: how optometrists are paid (Pay talk)
 
 **Title:** How are optometrists paid in Canada? Salary, day rate or percentage
 
@@ -249,7 +261,7 @@ Posts 1 to 5 are in `reddit-seed-posts.md` (welcome, optician pay, what would ma
 >
 > How are you paid, and what do you wish you had asked before you signed? Share as much or as little as you like, and no clinic names please.
 
-## R8. Tue 8th Dec: becoming an optician (Resource)
+## R8. Fri 11th Dec: becoming an optician (Resource)
 
 **Title:** Becoming an optician in Canada: what is the same everywhere, and what changes by province
 
@@ -261,7 +273,7 @@ Posts 1 to 5 are in `reddit-seed-posts.md` (welcome, optician pay, what would ma
 >
 > If you went through it, what do you wish someone had told you at the start? Anything we have wrong or out of date?
 
-## R9. Tue 15th Dec: how did you learn the job (Discussion)
+## R9. Fri 18th Dec: how did you learn the job (Discussion)
 
 **Title:** Optometric assistants: how did you learn the job?
 
@@ -273,15 +285,15 @@ Posts 1 to 5 are in `reddit-seed-posts.md` (welcome, optician pay, what would ma
 >
 > How did you learn yours? And if you train assistants, what do you wish they knew on day one?
 
-## R10. Tue 29th Dec: a light one for the holidays (Discussion, no link)
+## R10. Fri 8th Jan: a light one for the new year (Discussion)
 
 **Title:** What would make 2027 a better year for working or hiring in eye care?
 
-> As the year ends, a simple question. If you could change one thing about how eye care jobs are advertised, hired for or worked in Canada, what would it be?
+> As the new year starts, a simple question. If you could change one thing about how eye care jobs are advertised, hired for or worked in Canada, what would it be?
 >
 > Pay shown up front? Clearer hours? Better training? A faster reply after you apply? Something else entirely?
 >
-> Whatever you say helps us decide what to write about in the new year. Thank you for being here early.
+> Whatever you say helps us decide what to write about this year. Thank you for being here early. You can find our guides and the job board at [eyecarejobs.ca](https://eyecarejobs.ca/?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community).
 
 ---
 
@@ -294,8 +306,8 @@ The next batch covers the blog posts from the new year. Dates follow `content/po
 - Tue 19th Jan: how to become an optometrist in Canada
 - Tue 26th Jan: what an empty optician chair costs a clinic
 
-Also planned for the next batch: a Reddit "weekly job brief" format for when real jobs exist, and a LinkedIn thank you to the first clinics (only with their written yes).
+Also planned: a Reddit weekly job brief when real jobs exist, and a LinkedIn thank you to the first clinics (only with their written yes).
 
 # What to track
 
-Once a month, on the 1st: followers on LinkedIn, members and which posts got replies on Reddit, and which links brought visits (Admin, Waitlist shows the source, and Search Console shows the rest). Note it beside the Search Console numbers.
+Once a month, on the 1st: followers on LinkedIn and Facebook, members and which posts got replies on Reddit, and which links brought visits (Admin, Waitlist shows the source, and Search Console shows the rest). Note it beside the Search Console numbers.

@@ -30,13 +30,15 @@ Skip the calendar, image, community list and related communities widgets for now
 
 | When | Post | Flair | Notes |
 | --- | --- | --- | --- |
-| Mon 16th November | 1. Welcome | Discussion, pinned | Post first, so the community has a front door |
-| Tue 17th November | 2. Optician pay by province | Resource | The blog post goes live that day, so post on or after 17th |
-| Wed 18th November | 3. What would make you apply | Discussion | Gives both candidates and clinics a reason to reply |
-| Fri 20th November | 4. Who does what in a clinic | Resource | The blog post goes live that day |
-| Tue 24th November | 5. We asked the AI chatbots | Discussion | The blog post goes live that day |
+| Tue 17th November | 1. Welcome | Discussion, pinned | Post first, so the community has a front door |
+| Wed 18th November | 2. Optician pay by province | Resource | The blog post is live from 17th November |
+| Fri 20th November | 4. Who does what in a clinic | Resource | The blog post goes live that day. The page now has 3 posts |
+| Fri 27th November | 5. We asked the AI chatbots | Discussion | The blog post is live from 24th November |
+| Spare | 3. What would make you apply | Discussion | Use in any quiet week |
 
-After that: 1 post a week, tied to each new blog post (Tuesday and Friday), always with a question at the end. Reply to every comment within a day, as the Kestrel account. Keep a note of which posts get replies, since the replies are the ideas for later blog posts. Never use another account or ask people to upvote.
+The dated plan after this, with LinkedIn and Facebook, is `reddit-and-linkedin-calendar.md`. Reddit runs about 1 post a week from here (revised 17th November 2026).
+
+After that: about 1 post a week, tied to a recent blog post, always with a question at the end. Reply to every comment within a day, as the Kestrel account. Keep a note of which posts get replies, since the replies are the ideas for later blog posts. Never use another account or ask people to upvote.
 
 ## 1. Welcome (pin it)
 
@@ -48,7 +50,7 @@ After that: 1 post a week, tied to each new blog post (Tuesday and Friday), alwa
 >
 > To get us started: what made you choose eye care, and what do you wish you had known when you began?
 >
-> Kestrel Eye Care Jobs runs this community. Our job board is at eyecarejobs.ca.
+> Kestrel Eye Care Jobs runs this community. Our job board and guides are at [eyecarejobs.ca](https://eyecarejobs.ca/?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community).
 
 ## 2. Typical optician pay by province (on or after 17th November)
 
@@ -85,7 +87,7 @@ After that: 1 post a week, tied to each new blog post (Tuesday and Friday), alwa
 >
 > And if you are on the hiring side: what do you wish candidates understood about your clinic before they applied?
 >
-> No right answers. Short replies are welcome, and so are long ones.
+> No right answers. Short replies are welcome, and so are long ones. If you are curious how Kestrel shows pay on every job, our [pay guide](https://eyecarejobs.ca/resources?utm_source=reddit&utm_medium=social&utm_campaign=2026-11-reddit-community#pay) has typical pay by role and province.
 
 ## 4. Who does what in an eye care clinic (on or after 20th November)
 
