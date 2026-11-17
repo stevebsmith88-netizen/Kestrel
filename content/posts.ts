@@ -222,6 +222,46 @@ Most new graduates start as associates. In Ontario, the report counted 1,636 ass
 [See optometrist jobs across Canada](/jobs)`,
   },
   {
+    slug: "is-optometry-a-good-career-canada",
+    title: "Is optometry a good career in Canada? How a clinic makes money",
+    description: "How an optometry clinic earns, why patients come back, and whether you need to own one. A plain look at optometry as a career in Canada.",
+    date: "2027-02-12",
+    topic: "careers",
+    body: `People who are thinking about optometry school often ask the same few questions. How can a clinic make money if people only come in about once a year? Why would anyone buy glasses from an optometrist when they can buy them online or at a big store for less? Do people even care about their eye health? And is it a good career, or a risky one? Here are plain answers, from the way clinics work day to day.
+
+## Two kinds of patient, and a lot of them
+
+Almost everyone who comes through the door is one of 2 kinds of patient. Some have a concern: blurry vision, a red or sore eye, headaches, something that does not feel right. The rest come for a routine check. Different neighbourhoods and towns attract different mixes. A clinic near a school sees a lot of children, one in a retirement area sees more older patients, and one by an office tower sees people who spend their days on screens.
+
+Eye care is a large market in Canada. In a busy clinic an optometrist can see somewhere around 15 to 20 patients on a full day, and in some places the appointment book is full for months ahead. That varies a great deal by town and by clinic, so treat it as an idea of the scale and not a promise.
+
+## How a clinic earns, and why patients come back
+
+A clinic earns from exams, from glasses and contact lenses, and from ongoing care. That last part answers the once a year worry, because many patients come back more often. Contact lens wearers need follow up and renewals. Children whose short sightedness is being managed are seen regularly. People with dry eye, or with a condition such as glaucoma or diabetes that affects the eyes, need regular checks. In some provinces public health insurance covers certain exams for children, older adults or people with particular conditions, and the rules differ by province, so check your provincial ministry of health.
+
+> Many patients come back more often than once a year.
+
+## Why people still buy glasses from a clinic
+
+Online shops and big stores are cheaper for a simple pair of glasses, and plenty of people use them. People still choose a clinic for the fit and adjustment, for progressive lenses that are right the first time, for a warranty and an easy fix when something goes wrong, and for the person who tested their eyes standing behind the result. For many clinics, glasses and lenses are an important part of the income, which is why good clinics put real effort into the dispensary.
+
+## You do not have to own a clinic
+
+Many optometrists never own one. Associates work in independent practices and in groups, paid by salary, by the day or by a share of what they bring in, and our guide to [optometrist pay](/blog/optometrist-pay-canada) explains how those models differ. Once you are qualified, there are many other routes: contact lens and lens companies, research, dry eye and other specialties, and locum work. Demand for optometrists is strong in many parts of the country, and it tends to be strongest the further you are from the biggest cities. If you are willing to relocate, you have more choice.
+
+## Look at both sides before you decide
+
+Independent practices and corporate groups are both good places to learn, and they feel different. In an independent practice the owner is usually close by and the team is smaller. In a group there are often written systems and more places to move to. Our post on [independent practice or corporate group](/blog/independent-or-corporate-eye-care) lists the differences and the questions to ask.
+
+> Explore both sides and see where you fit.
+
+## What to do before you commit
+
+Spend time in a few clinics, independent and corporate, before you decide. Ask optometrists what a normal week looks like and what they wish they had known. Read how the route works, province by province, in our guide to [how to become an optometrist in Canada](/blog/how-to-become-an-optometrist-canada). Nobody can promise you an income or a job, but if you like people, enjoy the science and want work that is in demand, optometry gives you a lot of options.
+
+[Browse eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "who-works-in-eye-care-canada",
     title: "Who works in eye care in Canada? What the census shows",
     description: "Most optometrists and opticians in Canada are now women, and the change between generations is striking. The numbers by age and province, and what they mean.",
