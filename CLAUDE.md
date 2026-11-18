@@ -86,6 +86,8 @@ Fonts are self hosted through @fontsource (no Google Fonts requests). Images liv
 
 ## Writing style for anything users read
 
+The full brand voice for every kind of writing (blog, social, email, replies, Reddit) is `docs/marketing/brand-voice.md`. It can be pasted whole into another chat. Keep it in step with the rules below, and update its "where it stands today" and facts lists whenever they change.
+
 - No em dashes, and no hyphens used as punctuation. Use commas, full stops or "to".
 - Say "resume", never "CV" (Steve, 11th November 2026). Code names (`cv_path`, `CvCard`, the `/cv` routes) stay as they are. `lib/resume-wording.test.ts` fails if the capital word CV appears in the code. The help search keeps a lowercase "cv" keyword so people who type it still find topics.
 - Numerals throughout (3, not three). Ordinal dates (1st January 2027).
