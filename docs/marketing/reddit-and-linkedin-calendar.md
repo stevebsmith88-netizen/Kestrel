@@ -9,7 +9,7 @@ Instagram and the blog are already scheduled and are shown here only so you can 
 | Week of | Instagram (Mon and Thu) | Blog (Tue and Fri) | Facebook (Tue) | LinkedIn (Wed) | Reddit (Fri) |
 | --- | --- | --- | --- | --- | --- |
 | 16th Nov | Mon: job ad checklist. Thu: things heard No. 4 | Tue: optician pay. Fri: roles in eye care | Nothing yet | Introducing the page | Who does what |
-| 23rd Nov | Mon: optician pay. Thu: things heard No. 7 | Tue: AI chatbots. Fri: optician interview questions | Introducing the page | Optician pay (check Job Bank first) | AI chatbots |
+| 23rd Nov | Mon: optician pay. Thu: things heard No. 7 | Tue: AI chatbots. Fri: optician interview questions | Introducing the page (own text) | Optician pay (check Job Bank first) | AI chatbots |
 | 30th Nov | Mon: AI chatbots. Thu: optometrist pay | Tue: optometrist pay. Fri: STAR questions | Optician pay | How optometrists are paid | How optometrists are paid |
 | 7th Dec | Mon: pay summary. Thu: becoming an optician | Tue: becoming an optician. Fri: assistant job ad | How optometrists are paid | Becoming an optician | Becoming an optician |
 | 14th Dec | Mon: who does what. Thu: assistant certification | Tue: assistant courses. Fri: starting a career | Becoming an optician | Assistant courses | Optometric assistants |
@@ -57,7 +57,7 @@ Already live on r/EyeCareJobsCanada: the welcome post (pinned), "What would make
 | Wed 18th Nov | Reddit | 2. Optician pay by province. **Done** (posted early) |
 | Wed 18th Nov | LinkedIn | L2. Introducing the page (once only) |
 | Fri 20th Nov | Reddit | 4. Who does what in a clinic |
-| Tue 24th Nov | Facebook | Introducing the page (the L2 text) |
+| Tue 24th Nov | Facebook | Introducing the page (its own text, below) |
 | Wed 25th Nov | LinkedIn | L1. Optician pay |
 | Fri 27th Nov | Reddit | 5. We asked the AI chatbots |
 | Tue 1st Dec | Facebook | Optician pay (the L1 text) |
@@ -76,6 +76,25 @@ Already live on r/EyeCareJobsCanada: the welcome post (pinned), "What would make
 | Fri 8th Jan | Reddit | R10. What would make 2027 better |
 
 **Spare posts, for a week you want to add something, or for January:** Reddit R6 (optician interview questions). Reddit post 3 (what would make you apply) is already live. LinkedIn L3 (who does what), L4 (AI chatbots), L5 (interview questions), L7 (STAR questions), L9 (assistant job ad) and L11 (starting a career). The text is below. Skip any that no longer fit.
+
+## Facebook introduction post (Tue 24th Nov)
+
+Use this text, not the LinkedIn one. It points to the other pages, and Facebook makes every link pressable.
+
+> Kestrel Eye Care Jobs is a Canada-wide job board for eye care, and we are in our pre launch phase.
+>
+> Independent clinics, corporate groups and suppliers will post side by side. Every job will show its pay.
+>
+> Accounts are open now so you can look around, and we expect to launch officially in early 2027.
+>
+> You can also find us here:
+> Instagram: https://www.instagram.com/kestreleye26/
+> LinkedIn: https://www.linkedin.com/company/kestrel-eye-care-jobs/
+> Reddit: https://www.reddit.com/r/EyeCareJobsCanada/
+>
+> What do you wish more eye care job ads said?
+>
+> https://eyecarejobs.ca/?utm_source=facebook&utm_medium=social&utm_campaign=2026-11-intro
 
 ## Facebook posts
 
@@ -101,15 +120,26 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 
 ## L2. Wed 18th Nov: introducing the page (post once)
 
-> Kestrel Eye Care Jobs is a job board for eye care across Canada, and we are in our pre launch phase.
+Revised 18th November 2026: it no longer says a person reads every post (Steve is not sure he wants to promise that beyond launch), and it points to the other pages. 79 words. Post the text, then add the first comment below it.
+
+> Kestrel Eye Care Jobs is a Canada-wide job board for eye care, and we are in our pre launch phase.
 >
-> Independent clinics, corporate groups, suppliers and labs will post side by side. Every job will show its pay, and a person will read every post before it goes live.
+> Independent clinics, corporate groups and suppliers will post side by side. Every job will show its pay.
 >
-> Accounts are open now so you can look around, and we expect to launch officially in early 2027. What do you wish more eye care job ads said?
+> Accounts are open now so you can look around, and we expect to launch officially in early 2027. You can also find us on Instagram, Facebook and Reddit (links in the first comment).
+>
+> What do you wish more eye care job ads said?
 >
 > https://eyecarejobs.ca/?utm_source=linkedin&utm_medium=social&utm_campaign=2026-11-intro
 >
 > #EyeCare #Optometry
+
+**First comment, posted straight after:**
+
+> Find us elsewhere:
+> Instagram: https://www.instagram.com/kestreleye26/
+> Facebook: https://www.facebook.com/kestreleye26
+> Reddit: https://www.reddit.com/r/EyeCareJobsCanada/
 
 ## L3. Spare: who does what
 
