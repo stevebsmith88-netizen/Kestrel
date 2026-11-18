@@ -15,10 +15,12 @@ Kestrel Eye Care Jobs (eyecarejobs.ca) is a Canada-wide job board for eye care. 
 What makes it different, in plain terms:
 
 * Every job shows its pay.
-* A person reads every post before it goes live.
+* Every job shows its pay (this is always true, the form requires it). Human review of every post is how launch works, so only say it with "during launch" until the founder decides what to promise long term.
 * Agencies and recruiters can't post.
 * Every post answers 2 yes or no questions: is it a real vacancy, and does it use AI to screen applicants.
 * Kestrel doesn't use AI to rank applicants, and personal data stays in Canada where possible.
+
+Human review (decided 18th November 2026): do not promise that a person reads every post beyond launch. In new copy, leave it out or say "during launch". The website still says it in many places (the home page, For clinics, Compare, the posting policy, help, emails), so do not repeat it as a lasting promise, and do not rewrite those pages without the founder's yes.
 
 Where it stands today (update this when it changes): the site is live and sign up has been open since 15th November 2026 so people can look around. Clinics can't post yet. Official launch is expected in early 2027. A free launch period comes first, with no card needed, and those first jobs run 60 days. The site is in English only for now, so jobs in Quebec aren't accepted yet and we don't write about them.
 
@@ -44,7 +46,7 @@ On voice, for reference:
 "The exam is national, but the licence is provincial."
 "A better ad has fewer adjectives and more facts."
 "Ask which tests you would be trained to do, and who trains you. The answer tells you more about the clinic than the job title does."
-"Every job shows its pay, and a person reads every post before it goes live."
+"Every job shows its pay, and says whether it is a real vacancy."
 
 Off voice, never write like this:
 
