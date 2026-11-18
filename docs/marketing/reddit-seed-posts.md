@@ -85,24 +85,26 @@ Edit the welcome post (the 3 dots, then Edit post) and add this paragraph before
 
 ## 2. Typical optician pay by province (on or after 17th November)
 
+**Refreshed 18th November 2026** with Job Bank's new file. If the 17th November version is already live on Reddit, edit the post to match this text (the old table showed Ontario at $24.04 and British Columbia at $30.82).
+
 **Title:** Typical optician pay by province, from Job Bank
 
-> We pulled together what Job Bank, the Government of Canada's labour market service, publishes for opticians. These figures come from its wage data revised 19th November 2025, covering surveys from 2023 and 2024.
+> We pulled together what Job Bank, the Government of Canada's labour market service, publishes for opticians. These figures come from its wage data revised 18th November 2026, covering surveys from 2024 and 2025.
 >
 > The median is the middle figure: half of opticians surveyed earned more, half earned less. The middle half is the range between the low and high figures, where Job Bank gives them.
 >
 > | Province | Median an hour | Middle half |
 > | --- | --- | --- |
-> | British Columbia | $30.82 | $23 to $32 |
-> | Saskatchewan | $30.10 | Not published |
-> | Manitoba | $29.69 | Not published |
-> | Newfoundland and Labrador | $29.59 | Not published |
-> | New Brunswick | $28.50 | Not published |
-> | Nova Scotia | $28.07 | Not published |
-> | Alberta | $28.00 | $25 to $39.40 |
-> | Ontario | $24.04 | $23 to $33.65 |
+> | Newfoundland and Labrador | $30.03 | Not published |
+> | Nova Scotia | $30.00 | $25 to $40 |
+> | Saskatchewan | $30.00 | $26 to $34.62 |
+> | British Columbia | $29.00 | $27.05 to $32.10 |
+> | Ontario | $29.00 | $23.44 to $35.43 |
+> | Manitoba | $28.90 | Not published |
+> | Alberta | $28.00 | $25 to $33 |
+> | New Brunswick | $27.63 | Not published |
 >
-> A few notes. Job Bank does not publish a figure for Prince Edward Island or the territories. British Columbia's figure may cover a wider mix of dispensing staff, because glasses there can be sold without a registered optician. Ontario's median is the lowest, but the top of its range is well above it, so treat any median as a starting point for a conversation and not a ceiling.
+> A few notes. Job Bank does not publish a figure for Prince Edward Island or the territories. British Columbia's figure may cover a wider mix of dispensing staff, because glasses there can be sold without a registered optician. Ontario and British Columbia share a median of $29, but Ontario's middle half is wider, so treat any median as a starting point for a conversation and not a ceiling.
 >
 > The full write-up, with what moves pay up or down, is here: https://eyecarejobs.ca/blog/optician-pay-canada
 >

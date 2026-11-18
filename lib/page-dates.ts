@@ -7,9 +7,9 @@ export const PAGE_DATES = {
   postingPolicy: "2026-11-13",
   fakeJobs: "2026-11-13",
   security: "2026-11-12",
-  resources: "2026-11-13",
+  resources: "2026-11-18",
   ontarioJobAds: "2026-11-08",
-  paySummary: "2026-11-13",
+  paySummary: "2026-11-18",
   compare: "2026-11-06",
   help: "2026-11-13",
 } as const;

@@ -5,7 +5,7 @@ Shown to a clinic on the post a job form (and the edit form), under the pay boxe
 ## Source, licence and date
 
 - **Data:** the Job Bank "Wages" dataset from Employment and Social Development Canada, on open.canada.ca: https://open.canada.ca/data/en/dataset/adad580f-76b0-4502-bd05-20c125de9116
-- **File used:** `2a71-das-wage2025opendata-esdc-all-19nov2025-vf.csv`, revised 19th November 2025, downloaded by Claude on 5th November 2026. The file is served from `opencanada.blob.core.windows.net`, which is why that host is allowed in the cloud environment.
+- **File used:** `2a71-das-wage2026opendata-esdc-all-18nov2026-vf.csv`, revised 18th November 2026, downloaded by Claude on 18th November 2026 (the 2025 file, revised 19th November 2025, was used before). The file is served from `opencanada.blob.core.windows.net`, which is why that host is allowed in the cloud environment.
 - **Licence:** Open Government Licence – Canada, version 2.0 (https://open.canada.ca/en/open-government-licence-canada). The dataset page names no attribution of its own, so the licence's default statement is used and shown on the form with a link: "Contains information licensed under the Open Government Licence – Canada."
 - **What the licence asks of us:** acknowledge the source, link the licence, do not suggest the Government of Canada endorses Kestrel, and do not use its names or logos. The form says the figures are adapted (hourly and yearly pay put on one basis) and not endorsed. The licence gives the data "as is", so the form also says it is guidance only. Whether anything more is needed is question 38 in the lawyer pack.
 - **What the figures are:** wages come from Statistics Canada surveys. Hourly occupations use the Labour Force Survey 2023 to 2024. Optometrists are published as a yearly amount from the 2021 Census, so that figure is the oldest. Each line on the form states the years it covers.
@@ -57,7 +57,7 @@ None are shown yet. Claude had no Anthropic key in the session that built this, 
 
 ## Refreshing the figures
 
-Job Bank publishes a new file each November or December. **Steve (16th November 2026): the next file is published on 18th November 2026.** The optician pay blog post and the Reddit pay post (17th November) use the file revised 19th November 2025, so refresh soon after the 18th, and before the "Who does what in a clinic" Reddit post on 20th November. Download it, run `scripts/build-pay-benchmark.py` (instructions at the top of the script), run `npm test`, read the diff, and update the file name and date in this page.
+Job Bank publishes a new file each November or December. **Refreshed on 18th November 2026** (the 2026 file; the build script now finds the year named source column by itself). Next refresh: the file Job Bank publishes in November or December 2027. Download it, run `scripts/build-pay-benchmark.py` (instructions at the top of the script), run `npm test`, read the diff, and update the file name and date in this page.
 
 ## Where the code is
 

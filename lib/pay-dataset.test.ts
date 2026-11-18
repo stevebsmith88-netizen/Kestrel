@@ -24,7 +24,7 @@ test("the pay table's data set names its Job Bank source, licence and date", () 
   assert.ok(d.creator.name);
   assert.ok(d.isBasedOn.description.length >= 50);
   assert.ok(d.isBasedOn.creator.name);
-  assert.match(d.description, /19th November 2025/);
+  assert.match(d.description, /18th November 2026/);
   assert.ok(d.name.length > 0 && d.description.length >= 50 && d.description.length <= 5000);
 });
 

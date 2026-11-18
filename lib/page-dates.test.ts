@@ -25,7 +25,7 @@ test("the sitemap dates match the 'last updated' line on each page", () => {
 });
 
 test("a page changed in the last 3 days is sent to search engines, and an old one is not", () => {
-  const now = new Date("2026-11-14T09:00:00Z");
+  const now = new Date("2026-11-19T09:00:00Z");
   const urls = recentlyChangedPages("https://eyecarejobs.ca", now);
   assert.ok(urls.includes("https://eyecarejobs.ca/resources/eye-care-pay-summary"));
   assert.ok(!urls.includes("https://eyecarejobs.ca/resources/ontario-job-ads"));
