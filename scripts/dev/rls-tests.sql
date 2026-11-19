@@ -474,3 +474,5 @@ select t.try('0059', 'a clinic cannot see who saved its job', 'clinic_c', 'count
 select t.try('0059', 'a visitor cannot read saved jobs', 'visitor', 'count', 'select * from public.saved_jobs', 'refused');
 select t.try('0059', 'the admin cannot read saved jobs with their own sign in either (the server does)', 'admin', 'count', 'select * from public.saved_jobs', 'refused');
 select t.try('0059', 'a saved job goes when the candidate or the job goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.saved_jobs'::regclass and contype = 'f'$$, 'c,c');
+select t.try('0059', 'a candidate cannot read or change when she was reminded', 'ann', 'write', $$update public.saved_jobs set reminded_at = now()$$, 'refused');
+select t.try('0059', 'the server records that a candidate was reminded a saved job is closing', 'server', 'write', $$update public.saved_jobs set reminded_at = now()$$, 'not refused');

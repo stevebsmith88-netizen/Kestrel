@@ -315,7 +315,7 @@ export const HELP: HelpSection[] = [
         keywords: ["save", "saved", "bookmark", "later", "favourite", "favorite", "shortlist jobs", "keep job"],
         answer: [
           "Press **Save job** on a job in the search results, or on the job page. You need a candidate account. Your saved jobs are on the **Saved jobs** page, with the ones closing soonest at the top, and an **Apply** button beside each.",
-          "A job you saved can end before you apply. It then stays on your list, marked as no longer open, until you remove it. Only you can see your saved jobs, and a clinic is never told you saved its job. You can save up to 100.",
+          "A job you saved can end before you apply. We mention it once, in your daily email, when it is 3 days from closing and you have not applied, and you can stop those emails with the unsubscribe link or in Email choices. After it ends it stays on your list, marked as no longer open, until you remove it. Only you can see your saved jobs, and a clinic is never told you saved its job. You can save up to 100.",
         ],
         steps: [
           "Open a job and press **Save job**. If you are signed out, you are asked to sign in first.",
