@@ -44,9 +44,9 @@ How sure each line is: **Confirmed** means I opened the regulator's own site and
 
 | Province | Optometrists (regulator, register) | Opticians (regulator, register) | Contact lens fitting |
 | --- | --- | --- | --- |
-| Alberta | Alberta College of Optometrists. Register "Find An Optometrist": https://aco.alinityapp.com/client/publicdirectory (confirmed on the college's site; same software as BC's registry) | College of Opticians of Alberta. Register "Look up an Optician": https://coa.alinityapp.com/Client/PublicDirectory (confirmed on the college's site) | Not seen. The college's site did not mention a contact lens category. |
+| Alberta | Alberta College of Optometrists. Register "Find An Optometrist": https://aco.alinityapp.com/client/publicdirectory (confirmed on the college's site; same software as BC's registry) | College of Opticians of Alberta. Register "Look up an Optician": https://coa.alinityapp.com/Client/PublicDirectory (confirmed on the college's site) | **Yes, a separate registration.** The college's register page says it lists Registered Opticians (RO) and Registered Contact Lens Practitioners (RCLP) (seen by Steve, 19th November 2026). |
 | Saskatchewan | Saskatchewan Association of Optometrists. "Find an Optometrist": https://optometrists.sk.ca/about/find-a-member/ (confirmed; a directory by community, not described as a register) | Saskatchewan College of Opticians, https://scoptic.ca/ (from a government page; register not seen) | Not seen. |
-| Manitoba | Manitoba Association of Optometrists, https://optometrists.mb.ca/ (from a government page; register not seen) | The Opticians of Manitoba. "Find an Optician": https://www.opticianry.ca/oom/MemberRoster.aspx (confirmed on the regulator's site) | The regulator says people who practise as "Opticians and Contact Lens Opticians" must be registered. No separate category seen in the search. |
+| Manitoba | Manitoba Association of Optometrists, https://optometrists.mb.ca/ (from a government page; register not seen) | The Opticians of Manitoba. "Find an Optician": https://www.opticianry.ca/oom/MemberRoster.aspx (confirmed on the regulator's site) | **Yes, an advanced practice.** Results show "Eyeglass Optician" and, for some, "Advanced Practice: Contact Lens Optician" (seen by Steve, 19th November 2026). |
 | Ontario | College of Optometrists of Ontario (see above, confirmed by screenshots) | College of Opticians of Ontario (see above, confirmed by screenshots) | Shown as "Areas of Practice" on an optician's page. |
 | Quebec | Ordre des optométristes du Québec, https://www.ooq.org/ (from a government page) | Ordre des opticiens d'ordonnances du Québec, https://opticien.qc.ca/ (from a government page) | Not researched. Kestrel does not take Quebec jobs yet, but a candidate may be licensed there. |
 | New Brunswick | New Brunswick Association of Optometrists, https://www.nbao.ca/ (from a government page; register not seen) | Opticians Association of New Brunswick, https://opticiansnb.com/ (from a government page; register not seen) | Not seen. |
@@ -64,3 +64,31 @@ How sure each line is: **Confirmed** means I opened the regulator's own site and
 - **Alberta and BC use the same registry software (Alinity).** BC masks most of the number. Alberta's behaviour is not yet seen.
 - **Provinces where the register is only a directory, not a register with numbers (Saskatchewan optometrists so far)** need the button to say "Look this person up" rather than "Check this number".
 - **To finish:** a person's page from Alberta (both colleges), Manitoba opticians, and a check of the register links for Saskatchewan opticians, Nova Scotia, New Brunswick, Newfoundland and Labrador and PEI. Quebec later.
+
+## Alberta and Manitoba opticians, as seen by Steve (screenshots, 19th November 2026)
+
+No real person's details are copied here.
+
+**Alberta, College of Opticians of Alberta (Alinity registry, https://coa.alinityapp.com/Client/PublicDirectory)**
+- **Search fields:** First/common name, Secondary Language, Last name, City, Postal code. "Search by at least one of the following fields." **There is no registration number field**, so a clinic cannot search by number. It searches by name.
+- **A person's page:** "Status as of" with the date and time, full name, **Registration # shown in full** (5 digits with leading zeros, for example 02723), Language of Service, Current Registration (the example said Optician), Status (Active), Effective, Expiry, Initial registration, Additional Skills (None in the example), Conditions, and Location of Practice(s) with the practice's name and its own number.
+- **Notes:** the page says status is shown in "real time", members' status can change through the year, and employers should check the registry often. The page says it lists Registered Opticians (RO) and Registered Contact Lens Practitioners (RCLP), so contact lens practice is its own registration there.
+- **What it means for us:** a clinic searches the candidate's last name (and city if needed), opens the person, and compares the name and the Registration # on the page with what the candidate gave us. The number is visible, so it is a real check. The button must say "Look this person up" and show the name and number to compare.
+
+**Manitoba, The Opticians of Manitoba (https://www.opticianry.ca/oom/MemberRoster.aspx)**
+- **Search fields:** Business Name, 1st Given Name, Phone (area code and number), Language Fluency, City, Surname, Postal Code, Specialties. **No registration number field.**
+- **Results list:** Member Name, the type (for example Eyeglass Optician), an "Advanced Practice: Contact Lens Optician" line where it applies, a status (Active - Practicing, Active - Student), and Practice Location(s), often "Unpublished address".
+- **A person's page:** tabs Summary, Practice Locations, License Details. The Summary showed the name, type, language fluency and gender, and "Credential Information not yet available" in the example. A registration number was not visible on the Summary tab. The License Details tab was not seen.
+- **What it means for us:** a clinic searches the candidate's surname and checks the status and the contact lens line. Whether a number appears under License Details is not yet seen, so for Manitoba the form should still collect the number but the button should say "Look this person up", and the help line should not promise a number match.
+
+## What the contact lens research now says
+
+Contact lens practice is its own registration, level or advanced practice in **BC, Alberta, Manitoba, Nova Scotia (statute) and Newfoundland and Labrador (older text)**, and an area of practice in **Ontario**. So the profile asks every optician "What are you registered to do?" with 2 ticks (Eyeglasses, Contact lenses), and each clinic can check it on the register. I earlier wrote that Alberta and Manitoba showed nothing separate. That is corrected above.
+
+## Register button design (per register)
+
+Each register is described once, in 1 list in the code, with: its name, address, whether it can be searched by number, and whether the number is shown on a person's page. The button's wording and help line come from that:
+- **Search by number works (Ontario both colleges, BC):** "Check this number on the register." Help line: "Search for this number, then check the name and status match."
+- **Search by name only, number shown on the page (Alberta opticians):** "Look this person up on the register." Help line: "Search the last name, then check the registration number and status match."
+- **Name only, number not seen (Manitoba opticians):** "Look this person up on the register." Help line: "Search the surname, then check the status and that they are registered."
+- **Register not confirmed yet:** a link to the regulator's own website, and "Check with the college" wording, until the register is seen.
