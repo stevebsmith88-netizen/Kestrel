@@ -113,3 +113,11 @@ test("the Saskatchewan optometrists page is only a patient directory, like Manit
   assert.match(registerAdvice(sk).help, /patient directory/);
   assert.equal(registerLink(sk, "Rhea Anderson"), "https://optometrists.sk.ca/about/find-a-member/", "no link search seen, so the page opens as it is");
 });
+
+test("the Newfoundland and Labrador optometrists page is a public list of names and licence numbers", () => {
+  const nl = registerFor("Optometrist", "Newfoundland and Labrador")!;
+  assert.equal(nl.url, "https://nlco.ca/members_list/");
+  assert.match(registerAdvice(nl).button, /on the list/);
+  assert.match(registerAdvice(nl).help, /lists every registered optometrist/);
+  assert.equal(cleanLicence("Optometrist", { province: "Newfoundland and Labrador", number: "2106-A", does: [], notYet: "" }).licence?.number, "2106-A", "the College's own format is accepted");
+});
