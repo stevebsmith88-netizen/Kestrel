@@ -19,7 +19,7 @@ export type Register = { college: string; url: string | null; kind: RegisterKind
 const CHCPBC = "https://chcpbc.alinityapp.com/client/publicdirectory";
 
 const OPTOMETRIST: Record<string, Register> = {
-  "Alberta": { college: "Alberta College of Optometrists", url: "https://aco.alinityapp.com/client/publicdirectory", kind: "name", numberShown: "unknown" },
+  "Alberta": { college: "Alberta College of Optometrists", url: "https://aco.alinityapp.com/client/publicdirectory", kind: "number", numberShown: "full" },
   "British Columbia": { college: "College of Health and Care Professionals of BC", url: CHCPBC, kind: "number", numberShown: "masked" },
   "Manitoba": { college: "Manitoba Association of Optometrists", url: "https://optometrists.mb.ca/", kind: "college", numberShown: "unknown" },
   "New Brunswick": { college: "New Brunswick Association of Optometrists", url: "https://www.nbao.ca/", kind: "college", numberShown: "unknown" },

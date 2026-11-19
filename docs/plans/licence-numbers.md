@@ -122,3 +122,11 @@ No real person's details are copied here. Address: https://www.opticianry.ca/Mem
 ## Newfoundland and Labrador opticians (18th November 2026)
 
 Steve could not check this one: no online register was found on the Dispensing Opticians Board's site (opticiansnl.ca). The register button there opens the Board's website with the wording "We could not find an online register for this College. Contact the College to check the person." (`noOnlineRegister` in `lib/licence.ts`). Remove that flag and add the address if a register turns up.
+
+## Alberta optometrists, as seen by Steve (screenshots, 19th November 2026)
+
+No real person's details are copied here. Address: https://aco.alinityapp.com/client/publicdirectory (Alberta College of Optometrists, on the same Alinity software as the Alberta opticians' register, but this one has a number box).
+- **Search fields:** First/common name, Last name, **Licence number**, City and Postal code, and a Search button. So a clinic can search by the number itself.
+- **Results list:** Member with the number in brackets in full (for example "Smith, Amy (975)"), Registration Status (Current), and a Details button. Icons mark a member who has conditions or a comment.
+- **A person's page:** "Status as of" with the date and time, name, **Registration number** (in full, 3 digits in the examples), registration date (the year), nickname, Registration Status and Class (Regulated), Specializations (empty in the example), Conditions, Disciplinary Actions, and the practice locations with address and phone.
+- **What it means for us:** the register can be searched by number and shows it in full, so the button says "Check this number on the register": search the number, then check the name and status match. The same College's opticians register has no number box and is searched by name.
