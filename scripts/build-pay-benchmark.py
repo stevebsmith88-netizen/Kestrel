@@ -4,7 +4,7 @@
 Run once a year, when Job Bank publishes a new file (the 2025 file was revised on 19th November 2025):
   1. Download the newest "Wages" CSV from https://open.canada.ca/data/en/dataset/adad580f-76b0-4502-bd05-20c125de9116
      (the file is served from opencanada.blob.core.windows.net) into an empty folder.
-  2. python3 scripts/build-pay-benchmark.py path/to/wages.csv --file-name "2a71-das-wage2025opendata-esdc-all-19nov2025-vf.csv"
+  2. python3 scripts/build-pay-benchmark.py path/to/wages.csv --file-name "2a71-das-wage2026opendata-esdc-all-18nov2026-vf.csv"
   3. npm test, then read the diff before committing. docs/pay-benchmark.md explains the choices.
 
 Only the rows listed in MAPPING are kept. To add a province or a role, add it below, run the script, and read the figures.
@@ -38,6 +38,14 @@ def number(text):
     text = (text or "").strip()
     return float(text) if text else None
 
+def src(r):
+    """The survey column is named for the file year (Source2025_NHQ, Source2026_NHQ), so find it."""
+    for k in r:
+        if k.startswith("Source") and k.endswith("_NHQ"):
+            return r[k]
+    return ""
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("csv_path")
@@ -51,7 +59,7 @@ def main():
     for r in rows:
         if r["NOC_CNP"] not in noc_to_role or r["prov"] not in PROVINCES:
             continue
-        if r["Median_Wage_Salaire_Median"].strip() == "" or r["Source2025_NHQ"].strip() in ("", "N/A"):
+        if r["Median_Wage_Salaire_Median"].strip() == "" or src(r).strip() in ("", "N/A"):
             continue
         # The province wide row has a 4 character region code such as ER35. Economic regions inside a province have longer codes.
         if len(r["ER_Code_Code_RE"]) != 4:
@@ -65,7 +73,7 @@ def main():
             "match": dict(MAPPING.values())[r["NOC_CNP"]],
             "basis": "year" if r["Annual_Wage_Flag_Salaire_annuel"].strip() == "1" else "hour",
             **{k: number(r[c]) for k, c in COLUMNS.items()},
-            "survey": r["Data_Source_E"].strip() or r["Source2025_NHQ"].strip(),
+            "survey": r["Data_Source_E"].strip() or src(r).strip(),
             "period": r["Reference_Period"].strip(),
         })
     if len(revision) != 1:
