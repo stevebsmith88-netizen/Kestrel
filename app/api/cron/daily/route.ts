@@ -14,6 +14,8 @@ import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { sendDailyDigest, sendWaitingReminder } from "@/lib/slack-digest";
+import { sendMilestones } from "@/lib/slack-milestones";
+import { notifySlack } from "@/lib/notify-slack";
 import { sendFoundingReminders } from "@/lib/founding-flow";
 import { notify } from "@/lib/notifications";
 import { applicationNoUpdate, closedAfterTalksText } from "@/lib/notify-text";
@@ -61,6 +63,8 @@ export async function GET(request: Request) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Daily job crashed:", message);
     await notifyAdmin("The daily housekeeping job failed", ["It stopped with this error:", message.slice(0, 300)]);
+    // Slack too, so a failed day is seen on the phone. Best effort.
+    await notifySlack("The daily housekeeping job failed", ["It stopped with this error:", message.slice(0, 300)], { path: "/admin", text: "Open the admin dashboard" }, "daily").catch(() => undefined);
     return new Response("Failed", { status: 500 });
   }
 }
@@ -573,7 +577,10 @@ async function runDaily(request: Request) {
   );
   if (recordError) problems.push(`Recording the run: ${recordError.message}`);
 
-  if (problems.length) await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+  if (problems.length) {
+    await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+    await notifySlack("The daily housekeeping job had problems", problems.slice(0, 5).map((p) => p.slice(0, 300)), { path: "/admin", text: "Open the admin dashboard" }, "daily").catch(() => undefined);
+  }
   // The 30 days notice to Founding clinics whose price lock is about to end. Best effort, and each pass is told once.
   try {
     await sendFoundingReminders(admin);
@@ -591,6 +598,12 @@ async function runDaily(request: Request) {
     await sendWaitingReminder(admin);
   } catch (e) {
     console.error("Slack reminder not sent:", e instanceof Error ? e.message : e);
+  }
+  // A cheer when a round number is passed (10th clinic, 100th waitlist sign up). Best effort.
+  try {
+    await sendMilestones(admin);
+  } catch (e) {
+    console.error("Slack milestones not sent:", e instanceof Error ? e.message : e);
   }
   return Response.json({ ok: problems.length === 0, ...summary });
 }

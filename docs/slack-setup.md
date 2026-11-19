@@ -77,3 +77,7 @@ Slack has its own apps for these, so nothing needs building. Make a channel call
 - Reminders and a weekly summary of the numbers.
 - Vercel and GitHub notifications into a tech channel, using Slack's own apps with no code.
 - Approving a job or a claim from the alert itself, with a button. The plan is in `docs/plans/slack-approvals.md`.
+
+## Milestones and failed daily runs (19th November 2026)
+
+The daily job also posts a short cheer when Kestrel reaches a round number: waitlist sign ups, clinic accounts, candidate accounts, live jobs, applications and paid job posts. Sign up milestones go to the Sign ups channel and the rest to Jobs and payments. Each one is announced once. The first night after this is switched on, it only records where things stand, so nothing old is announced. The demo site never posts milestones. If the daily job fails or has problems, the daily summary channel gets a message too, as well as the email. Counts only, never names. No new setting is needed.
