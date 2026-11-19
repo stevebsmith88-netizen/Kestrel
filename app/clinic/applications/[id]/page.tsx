@@ -94,7 +94,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
                 )}
               </section>
 
-              <RegisterCheck profession={who.profession} licence={who.licence ? { province: who.licence.province ?? null, number: who.licence.number ?? null, does: (who.licence.does ?? []).filter((d): d is Does => (DOES as readonly string[]).includes(d)), notYet: Boolean(who.licence.notYet) } : null} />
+              <RegisterCheck candidateName={who.name} profession={who.profession} licence={who.licence ? { province: who.licence.province ?? null, number: who.licence.number ?? null, does: (who.licence.does ?? []).filter((d): d is Does => (DOES as readonly string[]).includes(d)), notYet: Boolean(who.licence.notYet) } : null} />
 
               <section className="card">
                 <h2>History</h2>
