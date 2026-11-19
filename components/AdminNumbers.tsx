@@ -46,7 +46,7 @@ export default function AdminNumbers({ s, period, finance, launched }: { s: NonN
             <div className="tiles stats">
               <Link href="/admin/jobs?status=live" prefetch className="card tile tilelink"><p className="kicker">Live jobs</p><p className="num">{n(s.liveJobs)}</p><p>{s.publishedNow} new in the {label}</p></Link>
               <Link href="/admin/clinics" prefetch className="card tile tilelink"><p className="kicker">Clinics and suppliers</p><p className="num">{n(s.employers)}</p><p>{s.claimedEmployers} claimed</p></Link>
-              <div className="card tile"><p className="kicker">Candidates</p><p className="num">{n(s.candidateAccounts)}</p><p>{s.candidatesNow} new in the {label}</p></div>
+              <Link href="/admin/candidates" prefetch className="card tile tilelink"><p className="kicker">Candidates</p><p className="num">{n(s.candidateAccounts)}</p><p>{s.candidatesNow} new in the {label}</p></Link>
               <div className="card tile"><p className="kicker">Applications</p><p className="num">{n(s.applicationsNow)}</p><p>In the {label}</p></div>
               {!launched && <Link href="/admin/waitlist" prefetch className="card tile tilelink"><p className="kicker">Waitlist</p><p className="num">{n(s.waitlistConfirmed)}</p><p>{s.waitlistNow} new in the {label}</p></Link>}
               <Link href="/admin/payments" prefetch className="card tile tilelink">

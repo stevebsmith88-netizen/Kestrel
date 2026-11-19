@@ -24,6 +24,7 @@ export const ADMIN_GROUPS: { label: string; pages: Page[] }[] = [
     label: "People",
     pages: [
       { href: "/admin/clinics", label: "Clinics" },
+      { href: "/admin/candidates", label: "Candidates" },
       { href: "/admin/claims", label: "Claims", count: "claims" },
       { href: "/admin/interest", label: "Interest in clinics" },
       { href: "/admin/requests", label: "Support", count: "support" },
