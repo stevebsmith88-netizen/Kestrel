@@ -68,6 +68,6 @@ test("the line under the name in the menu names the account and, once passes are
   const { planLineText } = await import("./passes.ts");
   assert.equal(planLineText({ passesOn: false, planName: null }), "");
   assert.equal(planLineText({ passesOn: false, planName: "Clinic pass" }), "");
-  assert.equal(planLineText({ passesOn: true, planName: null }), "Single posts");
-  assert.equal(planLineText({ passesOn: true, planName: "Clinic pass Plus" }), "Clinic pass Plus");
+  assert.equal(planLineText({ passesOn: true, planName: null }), "Plan: Pay as you go");
+  assert.equal(planLineText({ passesOn: true, planName: "Clinic pass Plus" }), "Plan: Clinic pass Plus");
 });

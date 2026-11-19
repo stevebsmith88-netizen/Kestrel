@@ -84,3 +84,13 @@ test("every change to a job or a clinic clears the saved job pages", () => {
   assert.match(helper, /revalidatePath\("\/"\)/, "the home page shows the latest jobs, so a job change clears it too");
   assert.match(helper, /revalidatePath\("\/eye-care-jobs", "layout"\)/);
 });
+
+test("the View applicants button asks in the browser and the route returns counts only, never a name", async () => {
+  const { readFileSync } = await import("node:fs");
+  const route = readFileSync(new URL("../app/api/job-applicants/route.ts", import.meta.url), "utf8");
+  assert.match(route, /session\.role !== "clinic"/);
+  assert.match(route, /count: "exact", head: true/);
+  assert.doesNotMatch(route, /\.select\("[^"]*(name|email|applicant)/i, "no personal columns are read");
+  const page = readFileSync(new URL("../app/jobs/[id]/page.tsx", import.meta.url), "utf8");
+  assert.match(page, /<ViewApplicantsButton jobId=\{job\.id\} \/>/);
+});
