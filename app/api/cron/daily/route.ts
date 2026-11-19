@@ -5,7 +5,7 @@ import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } fro
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
-import { alertHeading, alertSubject, followedLine } from "@/lib/follows";
+import { CLOSING_SOON_DAYS, alertHeading, alertSubject, closingLine, followedLine } from "@/lib/follows";
 import { INTEREST_JOINED_BODY, INTEREST_JOINED_TITLE, matchPublicClinic } from "@/lib/clinic-interest";
 import { employerHref } from "@/lib/clinic-pages";
 import { listPublicClinics } from "@/lib/public-clinics";
@@ -296,7 +296,23 @@ async function runDaily(request: Request) {
   followRows
     .filter((f) => now.getTime() - new Date(f.last_sent_at).getTime() >= GAP_HOURS.daily * 60 * 60 * 1000)
     .forEach((f) => followsByUser.set(f.user_id, [...(followsByUser.get(f.user_id) ?? []), f]));
-  const alertUsers = new Set([...byUser.keys(), ...followsByUser.keys()]);
+  // Saved jobs that end within 3 days, for candidates who have not applied (migration 0059). Each is mentioned once, in the same daily email.
+  type ClosingRow = { user_id: string; job_id: string; jobs: (PayFields & { id: string; title: string; province: string; city: string; employers: { clinic_name: string } | null }) | null };
+  const closingByUser = new Map<string, ClosingRow[]>();
+  {
+    const soon = new Date(now.getTime() + CLOSING_SOON_DAYS * DAY).toISOString();
+    const { data: closingRows, error: closingError } = await admin
+      .from("saved_jobs")
+      .select(`user_id, job_id, jobs!inner(id, title, province, city, status, expires_at, ${ALERT_PAY_COLUMNS}, employers(clinic_name))`)
+      .is("reminded_at", null)
+      .eq("jobs.status", "live")
+      .gt("jobs.expires_at", now.toISOString())
+      .lte("jobs.expires_at", soon)
+      .limit(2000);
+    if (closingError) problems.push(`Reading saved jobs that are closing (has migration 0059 been run?): ${closingError.message}`);
+    ((closingRows ?? []) as unknown as ClosingRow[]).forEach((c) => closingByUser.set(c.user_id, [...(closingByUser.get(c.user_id) ?? []), c]));
+  }
+  const alertUsers = new Set([...byUser.keys(), ...followsByUser.keys(), ...closingByUser.keys()]);
   let leftForTomorrow = 0;
   for (const userId of alertUsers) {
     const mine = byUser.get(userId) ?? [];
@@ -347,7 +363,18 @@ async function runDaily(request: Request) {
         }
       }
     }
-    if (found.size === 0) continue;
+    // Saved jobs about to close, unless the person has already applied to them (or they are in the list above anyway).
+    const closingFound = new Map<string, AlertJob>();
+    const myClosing = closingByUser.get(userId) ?? [];
+    if (myClosing.length) {
+      const { data: appliedRows } = await admin.from("applications").select("job_id").eq("candidate_id", userId).in("job_id", myClosing.map((c) => c.job_id));
+      const appliedIds = new Set((appliedRows ?? []).map((a) => a.job_id as string));
+      for (const c of myClosing) {
+        if (!c.jobs || appliedIds.has(c.job_id) || found.has(c.job_id)) continue;
+        closingFound.set(c.job_id, { ...c.jobs, title: c.jobs.title, clinic: c.jobs.employers?.clinic_name ?? "", place: `${c.jobs.city}, ${c.jobs.province}` });
+      }
+    }
+    if (found.size === 0 && closingFound.size === 0) continue;
     const { data: user } = await admin.auth.admin.getUserById(userId);
     const email = user?.user?.email;
     if (!email) continue;
@@ -360,10 +387,12 @@ async function runDaily(request: Request) {
     const claims = await Promise.all([
       ...mine.map((a) => admin.from("job_alerts").update({ last_sent_at: stamp }).eq("id", a.id).eq("last_sent_at", a.last_sent_at).select("id")),
       ...myFollows.map((f) => admin.from("employer_follows").update({ last_sent_at: stamp }).eq("user_id", f.user_id).eq("employer_id", f.employer_id).eq("last_sent_at", f.last_sent_at).select("user_id")),
+      ...[...closingFound.keys()].map((jobId) => admin.from("saved_jobs").update({ reminded_at: stamp }).eq("user_id", userId).eq("job_id", jobId).is("reminded_at", null).select("job_id")),
     ]);
     const putBack = () => Promise.all([
       ...mine.map((a) => admin.from("job_alerts").update({ last_sent_at: a.last_sent_at }).eq("id", a.id).eq("last_sent_at", stamp)),
       ...myFollows.map((f) => admin.from("employer_follows").update({ last_sent_at: f.last_sent_at }).eq("user_id", f.user_id).eq("employer_id", f.employer_id).eq("last_sent_at", stamp)),
+      ...[...closingFound.keys()].map((jobId) => admin.from("saved_jobs").update({ reminded_at: null }).eq("user_id", userId).eq("job_id", jobId).eq("reminded_at", stamp)),
     ]);
     if (claims.some((c) => c.error || !c.data?.length)) {
       await putBack();
@@ -372,14 +401,21 @@ async function runDaily(request: Request) {
     }
     const unsubscribeUrl = unsubscribeIdUrl(userId);
     const mail = emailLayout({
-      heading: alertHeading(found.size, followedFound.size),
-      paragraphs: ["Here is what has been posted since we last emailed you.", ...(followedFound.size ? ["Jobs marked \"From a place you follow\" come from clinics and companies you follow. You can change who you follow under Job alerts in your account."] : [])],
-      items: [...found].slice(0, 15).map(([id, j]) => ({ text: followedFound.has(id) ? followedLine(alertLine(j)) : alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
+      heading: alertHeading(found.size + closingFound.size, followedFound.size, closingFound.size),
+      paragraphs: [
+        found.size ? "Here is what has been posted since we last emailed you." : "A job you saved is about to end.",
+        ...(followedFound.size ? ["Jobs marked \"From a place you follow\" come from clinics and companies you follow. You can change who you follow under Job alerts in your account."] : []),
+        ...(closingFound.size ? [`Jobs marked "Closing soon" are ones you saved that end within ${CLOSING_SOON_DAYS} days. You can apply from Saved jobs in your account.`] : []),
+      ],
+      items: [
+        ...[...closingFound].map(([id, j]) => ({ text: closingLine(alertLine(j)), url: `${SITE_URL}/jobs/${id}` })),
+        ...[...found].map(([id, j]) => ({ text: followedFound.has(id) ? followedLine(alertLine(j)) : alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
+      ].slice(0, 15),
       buttonText: "See all jobs",
       buttonUrl: `${SITE_URL}/jobs`,
       unsubscribeUrl,
     });
-    if (note(await deliverEmail({ to: email, subject: alertSubject(found.size, followedFound.size), unsubscribeUrl, ...mail }))) {
+    if (note(await deliverEmail({ to: email, subject: alertSubject(found.size + closingFound.size, followedFound.size, closingFound.size), unsubscribeUrl, ...mail }))) {
       summary.alertsSent += 1;
     } else {
       await putBack();

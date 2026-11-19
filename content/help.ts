@@ -310,6 +310,21 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Profile and resume", href: "/candidate/profile#registration" }],
       },
       {
+        id: "save-a-job",
+        title: "How do I save a job to apply for later?",
+        keywords: ["save", "saved", "bookmark", "later", "favourite", "favorite", "shortlist jobs", "keep job"],
+        answer: [
+          "Press **Save job** on a job in the search results, or on the job page. You need a candidate account. Your saved jobs are on the **Saved jobs** page, with the ones closing soonest at the top, and an **Apply** button beside each.",
+          "A job you saved can end before you apply. We mention it once, in your daily email, when it is 3 days from closing and you have not applied, and you can stop those emails with the unsubscribe link or in Email choices. After it ends it stays on your list, marked as no longer open, until you remove it. Only you can see your saved jobs, and a clinic is never told you saved its job. You can save up to 100.",
+        ],
+        steps: [
+          "Open a job and press **Save job**. If you are signed out, you are asked to sign in first.",
+          "Open **Saved jobs** from the menu under your initials.",
+          "Press **Apply** when you are ready, or **Remove** to take it off the list.",
+        ],
+        links: [{ label: "Saved jobs", href: "/candidate/saved" }, { label: "Find jobs", href: "/jobs" }],
+      },
+      {
         id: "follow-a-clinic",
         title: "How do I follow a clinic or company and hear about its new jobs?",
         keywords: ["follow", "favourite", "favorite", "save clinic", "notify", "alert", "supplier", "company", "new jobs", "unfollow"],

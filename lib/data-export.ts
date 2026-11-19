@@ -103,6 +103,9 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     data.placesIWouldLikeToWorkAt = interest.error ? [] : interest.data ?? [];
     // Clinics and companies the candidate follows (migration 0057), by name. Empty before the SQL is run.
     const follows = await db.from("employer_follows").select("created_at, employers(clinic_name, city, province)").eq("user_id", id).order("created_at", { ascending: false });
+    // Jobs the candidate saved to apply for later (migration 0059). Empty before the SQL is run.
+    const saved = await db.from("saved_jobs").select("created_at, jobs(title, city, province)").eq("user_id", id).order("created_at", { ascending: false });
+    data.savedJobs = saved.error ? [] : list<{ created_at: string; jobs: object | null }>(saved.data).map((s) => ({ savedOn: s.created_at, ...(s.jobs ?? {}) }));
     data.clinicsAndCompaniesIFollow = follows.error ? [] : list<{ created_at: string; employers: object | null }>(follows.data).map((f) => ({ followedOn: f.created_at, ...(f.employers ?? {}) }));
   } else {
     // Every location this account owns (migration 0047). The first is "clinic", as before; any others are under "otherLocations".

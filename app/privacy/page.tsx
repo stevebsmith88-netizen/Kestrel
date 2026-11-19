@@ -59,6 +59,10 @@ export default function Privacy() {
               has asked about it.
             </li>
             <li>
+              <strong>If you save a job:</strong> which jobs you saved, so you can find them again under Saved jobs. A clinic is never told
+              who saved its job, and we show it no list. You can remove a saved job at any time.
+            </li>
+            <li>
               <strong>If you follow a clinic or company:</strong> which clinics and companies you follow, kept with your account. We use it
               to email you when they post a new job, in the same daily email as your job alerts. A clinic is never told who follows it, and
               we show it no list of followers. You can unfollow at any time under Job alerts.
@@ -207,6 +211,7 @@ export default function Privacy() {
             <li><strong>&quot;Keep my details for future roles&quot;:</strong> if you tick this when you apply, the clinic may keep your application to consider you for later roles for 12 months. You can ask the clinic, or us, to remove it at any time.</li>
             <li><strong>Job posts as published:</strong> kept for 3 years after they close.</li>
             <li><strong>Reports about a job, and claims of a listing:</strong> deleted after 2 years.</li>
+            <li><strong>Jobs you saved:</strong> kept while your account is open, and deleted with it. A saved job also goes when the clinic deletes the job.</li>
             <li><strong>Clinics and companies you follow:</strong> kept while your account is open, and deleted with it.</li>
             <li><strong>Clinics you told us you would like to work for:</strong> kept while your account is open, and deleted with it.</li>
             <li><strong>Help requests and feedback you send us, and the record of changes we made to a clinic&apos;s account at its request:</strong> deleted after 2 years.</li>

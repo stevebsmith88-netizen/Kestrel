@@ -15,6 +15,7 @@ import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, findPlace, placeLabel } from "@/lib/places";
 import { clampPage } from "@/lib/paging";
 import ClinicInterest from "@/components/ClinicInterest";
+import { savedAmong } from "@/lib/saved-server";
 import { findPublicClinics } from "@/lib/public-clinics";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
@@ -111,6 +112,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const alertHref = session ? (session.role === "candidate" ? "/candidate/alerts" : null) : launched ? "/sign-up?next=%2Fcandidate%2Falerts" : null;
   const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.tags && hasTagFilters(filters.tags)));
   const page = shown;
+  const savedIds = await savedAmong(session, jobs.map((j) => j.id));
   const suggestions = filtered && jobs.length === 0 && !placeNotFound ? emptySearchSuggestions(filters) : [];
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const inUse = activeFilters(filters, keep);
@@ -275,7 +277,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             <>
               <p className="resultcount" role="status">{total} {total === 1 ? "job" : "jobs"}{view === "me" ? " for you" : ""}{place ? ` within ${filters.radius ?? 25} km of ${placeLabel(place)}, and field based jobs` : ""}</p>
               <div className="joblist">
-                {jobs.map((j) => <JobCard key={j.id} job={j} applied={appliedTo.has(j.id)} />)}
+                {jobs.map((j) => <JobCard key={j.id} job={j} applied={appliedTo.has(j.id)} saved={session?.role === "candidate" ? savedIds.has(j.id) : undefined} />)}
               </div>
               {pages > 1 && (
                 <nav className="pager" aria-label="Pages of jobs">
