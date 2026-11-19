@@ -25,6 +25,7 @@ export const ADMIN_GROUPS: { label: string; pages: Page[] }[] = [
     pages: [
       { href: "/admin/clinics", label: "Clinics" },
       { href: "/admin/claims", label: "Claims", count: "claims" },
+      { href: "/admin/interest", label: "Interest in clinics" },
       { href: "/admin/requests", label: "Support", count: "support" },
       // The waitlist goes quiet once sign up opens, so it hides then.
       { href: "/admin/waitlist", label: "Waitlist", prelaunchOnly: true },

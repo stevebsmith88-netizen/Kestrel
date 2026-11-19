@@ -30,8 +30,8 @@ export default async function LaunchHome() {
             <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and a person reads every post before it goes live.</p>
             {!postingOn() && <p className="lh-lede lh-note"><strong>{PRELAUNCH_HOME_LEAD}</strong> {PRELAUNCH_HOME_BODY}</p>}
             <form method="get" action="/jobs" className="lh-search" role="search" aria-label="Search jobs">
-              <label className="sr" htmlFor="lh-q">Role or keyword</label>
-              <input id="lh-q" name="q" type="text" placeholder="Role or keyword, for example optician" autoComplete="off" />
+              <label className="sr" htmlFor="lh-q">Role, keyword or clinic name</label>
+              <input id="lh-q" name="q" type="text" placeholder="Role, keyword or clinic name" autoComplete="off" />
               <label className="sr" htmlFor="lh-province">Province or territory</label>
               <select id="lh-province" name="province" defaultValue="">
                 <option value="">All of Canada</option>

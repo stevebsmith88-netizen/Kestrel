@@ -67,3 +67,17 @@ export async function clinicHrefFor(employerId: string): Promise<string | null> 
   const slug = c ? slugs.get(c.id) : null;
   return c && slug ? employerHref(slug, c.practice_type) : null;
 }
+
+// Clinics and companies whose name contains what a candidate typed in the job search, with the address of their public page. Only employers
+// that have a public page can match (the same rule as the page itself), so a name search never exposes anyone else. At most 3.
+export type ClinicMatch = { name: string; place: string; href: string; supplier: boolean };
+
+export async function findPublicClinics(q: string): Promise<ClinicMatch[]> {
+  const needle = q.trim().toLowerCase();
+  if (needle.length < 3) return [];
+  const { clinics, slugs } = await listPublicClinics();
+  return clinics
+    .filter((c) => c.clinic_name.toLowerCase().includes(needle) && slugs.get(c.id))
+    .slice(0, 3)
+    .map((c) => ({ name: c.clinic_name, place: [c.city, c.province].filter(Boolean).join(", "), href: employerHref(slugs.get(c.id) as string, c.practice_type), supplier: c.practice_type === "supplier" }));
+}

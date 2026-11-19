@@ -82,7 +82,8 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.tags?.software.length) query = query.overlaps("tags_software", filters.tags.software);
   if (filters.tags?.equipment.length) query = query.overlaps("tags_equipment", filters.tags.equipment);
   if (filters.tags?.specialties.length) query = query.overlaps("tags_specialties", filters.tags.specialties);
-  if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
+  // The clinic or company name is searched too (Steve, 19th November 2026), so a candidate can look up a place they would like to work.
+  if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%,employers.clinic_name.ilike.%${filters.q}%`);
   return query.order("posted_at", { ascending: false });
   };
   const query = build(summaryColumns);

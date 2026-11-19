@@ -295,6 +295,16 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Find jobs", href: "/jobs" }, { label: "What you are looking for", href: "/candidate/profile#looking-for" }],
       },
       {
+        id: "work-for-a-clinic-not-on-kestrel",
+        title: "What if the clinic or company I want to work for is not on Kestrel?",
+        keywords: ["clinic not listed", "not on kestrel", "interested", "request a clinic", "favourite", "company", "supplier", "find a clinic"],
+        answer: [
+          "Type the name into the search box on **Find jobs**. If the clinic or company has a page on Kestrel, a link to it appears above the results, with its open jobs. A name only finds places that have a page, which needs at least 1 job approved by Kestrel.",
+          "If nothing matches and no jobs come up, open **Looking for a clinic or company that is not on Kestrel yet?** under the search box and tell us who it is. We keep a count of who people ask about, and if they join Kestrel we will let you know. We do not share your name or details with the clinic. You can tell us about up to 20 places, and they are deleted with your account.",
+        ],
+        links: [{ label: "Find jobs", href: "/jobs" }],
+      },
+      {
         id: "search-and-filter-jobs",
         title: "How do I search and filter jobs, including by distance?",
         keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "filters", "phone", "city"],
@@ -439,7 +449,7 @@ export const HELP: HelpSection[] = [
           "Tick the box to agree to the terms of use and the privacy policy, complete the security check and press **Create my account**.",
           "Open the confirmation email, follow the link, and sign in. You go straight to setting up your clinic profile.",
           "Under **Who are you hiring for?**, choose an independent clinic, a corporate clinic or group, or a supplier or manufacturer. The questions below change to match. Then fill in the name, and your city and province or territory. How many people work for you is optional.",
-          "To save typing, type your website and press **Fill in from my website**. Kestrel reads the name, description and address your website gives search engines, shows you what it found, and fills in only what you tick. Nothing is saved until you save the form.",
+          "To save typing, type your website and press **Fill in from my website**. Kestrel reads the name, description and address your website gives search engines, along with your Instagram, Facebook and LinkedIn pages if your website links to them, shows you what it found, and fills in only what you tick. Nothing is saved until you save the form.",
           "Add your website and a few lines **About your clinic** (or company) if you like. They are shown on your job posts.",
           "Check the private address that new applicant alerts go to. It starts as the email you signed up with, and you can change it.",
           "Tick the box confirming that you hire directly and are not a recruiter, staffing agency or job broker, and press **Create my clinic profile** (or company profile). You go straight on to posting your first job.",
@@ -566,7 +576,7 @@ export const HELP: HelpSection[] = [
         keywords: ["applicants", "candidates", "resume", "cv download", "notes", "interview", "offer", "reject", "decline", "reply", "response", "shortlist"],
         answer: [
           "We email you about new applicants as often as you chose under Email choices, and the email has no personal details in it. The applicants are always on your dashboard, newest first. Opening an application marks it **Viewed**, so the candidate can see it has been read. Then you can read the cover letter and details, download the resume, and move the application along.",
-          "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. Your message is sent with a line saying your clinic wrote it, and any web address in it arrives as plain text, not a link, so the candidate can see where it goes before typing it in. **Kept for future roles** is only offered if the candidate agreed to that when they applied.", "**Shortlisting** is your own working list. No message goes with it and the candidate is not emailed, whether you shortlist one person or tick several. A candidate is never shown that they are shortlisted: they see Viewed until you invite them to interview, make an offer or close the application. You see Shortlisted everywhere.", "We encourage clinics to reply to candidates within 5 days, even with a short no, and the applicants page reminds you how many are waiting. If an application has gone 2 weeks unopened, we send you a reminder email, which you can turn off under Email choices. If a job ends and people are still waiting a week later, we close their applications for you so they are never left hanging, and they see **No update from the clinic**.",
+          "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. For an interview you choose how it will happen (in person, online or by phone), and can add the date, time, address and, for online, a Zoom, Microsoft Teams, Google Meet, Webex or Whereby link. The candidate sees it clearly, gets a **Join the meeting** button, and an email with a calendar file they can add to Apple, Google or Outlook calendars in 1 tap. Create the meeting in your own account first, since Kestrel does not link to your Zoom account yet. Your message is sent with a line saying your clinic wrote it, and any web address in it arrives as plain text, not a link, so the candidate can see where it goes before typing it in. **Kept for future roles** is only offered if the candidate agreed to that when they applied.", "**Shortlisting** is your own working list. No message goes with it and the candidate is not emailed, whether you shortlist one person or tick several. A candidate is never shown that they are shortlisted: they see Viewed until you invite them to interview, make an offer or close the application. You see Shortlisted everywhere.", "We encourage clinics to reply to candidates within 5 days, even with a short no, and the applicants page reminds you how many are waiting. If an application has gone 2 weeks unopened, we send you a reminder email, which you can turn off under Email choices. If a job ends and people are still waiting a week later, we close their applications for you so they are never left hanging, and they see **No update from the clinic**.",
           "Your private notes on an application are for you. The candidate never sees them. Kestrel does not use AI to rank applicants, so the list shows everyone in the order they applied.",
           "If a job ends and you have not given a decision, each application still open is closed as **No update from the clinic**, and the candidate is told: a week after the job ends, or 14 days after for anyone at interview or offer. To keep talking to someone after that, mark the job as filled and tick **Don't close this one yet** beside them.",
         ],
@@ -587,14 +597,14 @@ export const HELP: HelpSection[] = [
         keywords: ["bulk", "several", "multiple", "tick", "mass", "shortlist", "decline", "reject", "invite"],
         answer: [
           "On the applicants list, tick the boxes next to the people you want, then use the panel **With the ticked applicants**. Only applications still waiting can be ticked: Applied, Viewed and Shortlisted. You can act on up to 100 at a time.",
-          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. **Invite to interview** sends everyone you ticked the same message, by email and in their account, so write the date, time and how to join in the **Interview invitation** box first. The panel with these 3 buttons sits below the list. For different times, open each application instead. **Send a kind no** gives each person the same warm message you would send one at a time.",
+          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. The panel with these 2 buttons sits below the list. Interviews and offers are never made in bulk, because each needs its own time, place and details, so open the application to invite someone. **Send a kind no** gives each person the same warm message you would send one at a time.",
           "Offers are never made in bulk. Open the application to make one. Applicants who are already at the interview or offer step cannot be ticked.",
         ],
         steps: [
           "Open the applicants list for the job.",
           "Tick the box next to each applicant you want to include.",
           "For an interview, write your invitation in the **Interview invitation** box first.",
-          "Press **Shortlist**, **Invite to interview** or **Send a kind no**.",
+          "Press **Shortlist** or **Send a kind no**.",
           "If nothing is ticked, or the invitation is empty or still has square brackets in it, the page tells you straight away and keeps your ticks. Otherwise it confirms how many were moved. Anyone who was already at that step, or who had withdrawn, is left as they were.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],

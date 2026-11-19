@@ -53,6 +53,12 @@ export default function Privacy() {
               <strong>If you create an account:</strong> your name, your email address and whether you are a candidate or a clinic.
             </li>
             <li>
+              <strong>If you tell us you would like to work for a clinic or company that is not on Kestrel:</strong> the name you
+              type, and the town, province and website if you add them, kept with your account. We use it to see how many people are asking
+              about each clinic. We do not share your name or details with the clinic. If we contact a clinic, we say only that a candidate
+              has asked about it.
+            </li>
+            <li>
               <strong>If you sign in with Google:</strong> Google tells us your name and email address. We never see your Google password.
             </li>
             <li>
@@ -189,6 +195,7 @@ export default function Privacy() {
             <li><strong>&quot;Keep my details for future roles&quot;:</strong> if you tick this when you apply, the clinic may keep your application to consider you for later roles for 12 months. You can ask the clinic, or us, to remove it at any time.</li>
             <li><strong>Job posts as published:</strong> kept for 3 years after they close.</li>
             <li><strong>Reports about a job, and claims of a listing:</strong> deleted after 2 years.</li>
+            <li><strong>Clinics you told us you would like to work for:</strong> kept while your account is open, and deleted with it.</li>
             <li><strong>Help requests and feedback you send us, and the record of changes we made to a clinic&apos;s account at its request:</strong> deleted after 2 years.</li>
           </ul>
           <p>

@@ -5,7 +5,9 @@ import { requireRole } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, sendEmail } from "@/lib/email";
-import { applicationUpdateEmail } from "@/lib/clinic-message";
+import { applicationUpdateEmail, interviewCalendarFile, updateSubject } from "@/lib/clinic-message";
+import { cleanMeetingLink } from "@/lib/meeting-link";
+import { cleanInterview, withInterview } from "@/lib/interview-details";
 import { candidateRecipient } from "@/lib/recipient";
 import { notify } from "@/lib/notifications";
 import { applicationMoved, teamNoteAdded } from "@/lib/notify-text";
@@ -39,8 +41,9 @@ async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>
   const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
   if (email && wants) {
     // The clinic's words go as plain text, with a line saying the clinic wrote them (P1-47).
-    const mail = applicationUpdateEmail({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id, site: SITE_URL });
-    await sendEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail });
+    const mail = applicationUpdateEmail({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id, site: SITE_URL, status: to });
+    const file = to === "interview" ? interviewCalendarFile({ jobTitle: app.job_title, clinicName: app.clinic_name, message, applicationId: app.id }) : null;
+    await sendEmail({ to: email, subject: updateSubject(to, app.job_title, app.clinic_name), ...mail, ...(file ? { attachments: [file] } : {}) });
   }
 }
 
@@ -133,20 +136,6 @@ export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData):
   const { moved, skipped, historyFailed } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
   return bulkAnswer(movedText("shortlisted", moved, skipped) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
-}
-
-export async function interviewSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
-  const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
-  const jobId = String(form.get("jobId") ?? "");
-  const ids = pickedIds(form);
-  if (!UUID.test(jobId)) redirect("/clinic");
-  if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
-  const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
-  if (clinicMoveError("viewed", "interview", true, message)) return bulkAnswer(message ? BULK_PROBLEMS.brackets : BULK_PROBLEMS.message, "warn");
-  const { moved, skipped, historyFailed } = await moveWaiting(jobId, ids, "interview", { message });
-  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  return bulkAnswer(movedText("interview", moved, skipped) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
 }
 
 export async function declineSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
@@ -258,18 +247,29 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   const to = String(form.get("status") ?? "");
   // Shortlisting is the clinic's own working list: no message goes with it and the candidate is not emailed.
   const quiet = to === "shortlisted";
-  const message = quiet ? "" : String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
+  let message = quiet ? "" : String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
   if (!UUID.test(id) || !isAppStatus(to)) return { error: "That didn't work. Please refresh and try again." };
 
   const db = await supabaseServer();
   const admin = supabaseAdmin();
   if (!db || !admin) return { error: NOT_CONNECTED };
 
-  const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id").eq("id", id).maybeSingle();
+  const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id, job_id").eq("id", id).maybeSingle();
   if (!app) return { error: "We couldn't find that application." };
 
   const problem = clinicMoveError(app.status, to, app.keep_details, message);
   if (problem) return { errors: { message: problem }, error: problem };
+
+  // An interview says how it will happen (in person, online or by phone), and can carry a date and time, a place and a meeting link (Zoom,
+  // Teams, Google Meet and the like). They are kept as the last lines of the message, and the candidate also gets a calendar file.
+  if (to === "interview") {
+    const { data: job } = app.job_id ? await admin.from("jobs").select("province").eq("id", app.job_id).maybeSingle() : { data: null };
+    const checked = cleanInterview({ format: form.get("format"), date: form.get("date"), time: form.get("time"), minutes: form.get("minutes"), place: form.get("place") }, job?.province as string | undefined);
+    if (!checked.interview) return { errors: { [checked.field]: checked.error }, error: checked.error };
+    const link = checked.interview.format === "online" ? cleanMeetingLink(form.get("meetingLink")) : { url: "" };
+    if (link.error) return { errors: { meetingLink: link.error }, error: link.error };
+    message = withInterview(message, checked.interview, link.url ?? "");
+  }
 
   const now = new Date().toISOString();
   const { error } = await admin

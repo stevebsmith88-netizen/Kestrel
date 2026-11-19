@@ -5,6 +5,7 @@
 export type NotifyMessage = { kind: string; title: string; body?: string; href?: string };
 
 import { writtenBy } from "./clinic-message.ts";
+import { splitInterview } from "./interview-details.ts";
 
 const cut = (text: string, max: number) => (text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}...`);
 
@@ -12,6 +13,10 @@ const cut = (text: string, max: number) => (text.length <= max ? text : `${text.
 // Returns null for the steps a candidate is never told about as their own news: a shortlist is private to the clinic.
 export function applicationMoved(args: { jobTitle: string; clinicName: string; status: string; label: string; message?: string; applicationId: string }): NotifyMessage | null {
   if (args.status === "shortlisted") return null;
+  // A meeting link is shown as a button on the application page, so the inbox line keeps only the clinic's words.
+  const { text: words, interview, link } = splitInterview(args.message);
+  const extra = interview || link ? " Open it for the interview details." : "";
+  args = { ...args, message: words ? `${words}${extra}` : extra.trim() };
   return {
     kind: "application",
     title: cut(`${args.jobTitle}: ${args.label}`, 150),

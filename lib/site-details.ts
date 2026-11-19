@@ -1,11 +1,15 @@
 // "Fill in from my website" on the clinic profile, with no AI (Steve, 14th November 2026). Most websites carry short labels written for
 // search engines and for link previews: the site's name, a 1 or 2 sentence description, and often the business's town and province in a
 // standard format (schema.org). This reads only those labels, with fixed rules. It never reads the page's own wording, and nothing is
-// saved: the clinic sees what was found and chooses what to use.
+// saved: the clinic sees what was found and chooses what to use. Since 19th November 2026 it also picks up the clinic's own Instagram,
+// Facebook and LinkedIn page, from the "sameAs" list in the structured data first and then from the page's links (addresses only, never
+// words). Every address goes through the same checks as one typed by hand (lib/social-links.ts), so only a real page on those 3 sites
+// gets through, and share buttons and posts are left out.
 import { decodeEntities } from "./page-reader.ts";
 import { PROVINCES, QUEBEC } from "./waitlist.ts";
+import { SOCIAL_PLATFORMS, cleanSocialUrl, type SocialKey } from "./social-links.ts";
 
-export type SiteDetails = { name?: string; about?: string; city?: string; province?: string };
+export type SiteDetails = { name?: string; about?: string; city?: string; province?: string; instagram?: string; facebook?: string; linkedin?: string };
 
 const clean = (text: string, max: number) => decodeEntities(text.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim().slice(0, max);
 
@@ -56,6 +60,23 @@ export function provinceFrom(text: string): string | undefined {
 // "Northgate Eye Care | Optometrists in Kelowna" gives "Northgate Eye Care".
 const nameFromTitle = (title: string) => clean(title.split(/\s+[|–—-]\s+|\s+::\s+/)[0] ?? "", 160);
 
+// Share buttons, single posts and tools that sit on these sites' own addresses but are not the clinic's page.
+const NOT_A_PAGE = /^\/(sharer|share|dialog|tr|plugins|intent|login|p|reel|reels|explore|stories|accounts|groups|events|watch|hashtag|feed|posts|sharing|pages\/create)(\/|$)/i;
+
+function socialsIn(candidates: string[]): Partial<Record<SocialKey, string>> {
+  const out: Partial<Record<SocialKey, string>> = {};
+  for (const raw of candidates) {
+    for (const p of SOCIAL_PLATFORMS) {
+      if (out[p.key]) continue;
+      const checked = cleanSocialUrl(p.key, raw, "clinic");
+      if (!checked.url) continue;
+      if (NOT_A_PAGE.test(new URL(checked.url).pathname)) continue;
+      out[p.key] = checked.url;
+    }
+  }
+  return out;
+}
+
 export function siteDetails(html: string): SiteDetails {
   const page = html.slice(0, 2_000_000);
   const tags = metaTags(page.slice(0, 300_000));
@@ -76,7 +97,11 @@ export function siteDetails(html: string): SiteDetails {
   const about = meta(tags, "description") || meta(tags, "og:description") || text(business?.description, 3000);
   const city = address && typeof address === "object" ? text(address.addressLocality, 80) : "";
   const province = address && typeof address === "object" ? provinceFrom(text(address.addressRegion, 40)) : undefined;
-  const found: SiteDetails = {};
+  // The structured data's own list of the business's other pages comes first, then the links on the page.
+  const sameAs = ([] as unknown[]).concat(business?.sameAs ?? []).filter((v): v is string => typeof v === "string").slice(0, 40);
+  const hrefs = [...page.matchAll(/<a\b[^>]*?\bhref\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)].map((m) => (m[1] ?? m[2] ?? "").trim()).filter((h) => /^(https?:)?\/\/|^[a-z]+\.com\//i.test(h)).slice(0, 400);
+  const socials = socialsIn([...sameAs, ...hrefs]);
+  const found: SiteDetails = { ...socials };
   if (name) found.name = name;
   if (about) found.about = about;
   if (city) found.city = city;

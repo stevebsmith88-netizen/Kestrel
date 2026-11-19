@@ -14,6 +14,8 @@ import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATE
 import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, findPlace, placeLabel } from "@/lib/places";
 import { clampPage } from "@/lib/paging";
+import ClinicInterest from "@/components/ClinicInterest";
+import { findPublicClinics } from "@/lib/public-clinics";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -90,7 +92,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const from = searched ?? home;
   const { options: sortOptions, sort } = sortChoice(parseSort(one("sort")), { forMe: view === "me", hasPlace: Boolean(from) });
   const everything = view === "me" || sort === "near";
-  const [found, counts] = await Promise.all([searchJobs(filters, { everything }), getFilterCounts()]);
+  const [found, counts, clinicMatches] = await Promise.all([searchJobs(filters, { everything }), getFilterCounts(), filters.q ? findPublicClinics(filters.q) : Promise.resolve([])]);
   const { place, placeNotFound } = found;
   let jobs = found.jobs;
   let total = found.total;
@@ -123,8 +125,8 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
 
           <form method="get" action="/jobs" className="searchform" role="search" aria-label="Search jobs">
             <div className="sf-main">
-              <label className="sr" htmlFor="s-q">Role or keyword</label>
-              <input id="s-q" name="q" type="text" placeholder="Role or keyword" defaultValue={filters.q} />
+              <label className="sr" htmlFor="s-q">Role, keyword or clinic name</label>
+              <input id="s-q" name="q" type="text" placeholder="Role, keyword or clinic name" defaultValue={filters.q} />
               <button type="submit" className="btn">Search</button>
             </div>
             <MobileFilters count={inUse.length}>
@@ -193,6 +195,18 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             </details>
             </MobileFilters>
           </form>
+          {clinicMatches.length > 0 && (
+            <ul className="clinicmatches" aria-label="Clinics and companies matching your search">
+              {clinicMatches.map((c) => (
+                <li key={c.href}>
+                  <Link href={c.href} className="btn sm ghost"><strong>{c.name}</strong>{c.place ? `, ${c.place}` : ""}: see their page{c.supplier ? "" : " and open jobs"}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          {filters.q && filters.q.length >= 3 && clinicMatches.length === 0 && jobs.length === 0 && !placeNotFound && (launched || session) && (
+            <ClinicInterest name={filters.q} signedIn={session ? (session.role === "candidate" ? "candidate" : "other") : "out"} />
+          )}
           {inUse.length > 0 && (
             <ul className="sf-tags" aria-label="Filters in use">
               {inUse.map((f) => <li key={f.label}><Link href={f.href} className="sf-tag" aria-label={`Remove ${f.label}`}>{f.label} <span aria-hidden="true">&times;</span></Link></li>)}
@@ -229,6 +243,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 <>
                   <h2>No jobs match this search yet</h2>
                   <p>That is not a dead end. Here are quick ways to look a little wider:</p>
+                  {filters.q && <p className="help">Looking for a particular clinic or company? A name only finds places with a job on Kestrel right now. If one is not here yet, it has no live job with us.</p>}
                   <ul className="emptylinks">
                     {suggestions.map((s) => <li key={s.label}><Link href={s.href} className="btn sm ghost">{s.label}</Link></li>)}
                     <li><Link href="/jobs" className="btn sm ghost">Start again with every job</Link></li>

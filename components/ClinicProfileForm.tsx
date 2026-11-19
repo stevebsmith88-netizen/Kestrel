@@ -95,6 +95,9 @@ const FILL_FIELDS: { key: keyof SiteDetails; label: string; input: string }[] = 
   { key: "city", label: "City", input: "cp-city" },
   { key: "province", label: "Province", input: "cp-province" },
   { key: "about", label: "About", input: "cp-about" },
+  { key: "instagram", label: "Instagram", input: "cp-social-instagram" },
+  { key: "facebook", label: "Facebook", input: "cp-social-facebook" },
+  { key: "linkedin", label: "LinkedIn", input: "cp-social-linkedin" },
 ];
 
 // Reads the labels the clinic's own website gives search engines (no AI), shows what it found, and fills in only what is ticked.
@@ -128,10 +131,10 @@ function WebsiteFill() {
       {error && <p className="err" role="alert">{error}</p>}
       {found && (
         <div className="fillfound" role="status">
-          <p>We found these on your website. Untick anything you do not want, then press Use these.</p>
+          <p>We are not perfect, so please check the information below is correct. Tick the boxes you would like to use to fill in your profile, then press Use these.</p>
           {FILL_FIELDS.filter((f) => found[f.key]).map((f) => (
             <label className="choice" key={f.key}>
-              <input type="checkbox" name={`fill-${f.key}`} defaultChecked />
+              <input type="checkbox" name={`fill-${f.key}`} />
               <span><strong>{f.label}:</strong> {found[f.key]}</span>
             </label>
           ))}
