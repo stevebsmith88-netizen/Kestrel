@@ -90,7 +90,7 @@ body{margin:0}p{margin:0}
 .lk{position:absolute;left:${LOCK.left}px;top:${LOCK.top}px;width:${LOCK.width}px;display:block}
 .lk svg{width:100%;height:auto;display:block}
 </style></head><body><div id="f"><div id="world">
-<img src="${skyline}" alt="" style="position:absolute;left:0;top:${1920 - 462}px;width:2000px;height:462px">
+<img id="sky" src="${skyline}" alt="" style="position:absolute;left:0;top:${1920 - 462}px;width:2000px;height:462px">
 <div class="lk" id="lock">${lockup("main")}</div>
 <div class="abs" id="endtext" style="position:absolute;left:80px;right:80px;top:${CAM_END + 1100}px;text-align:center;opacity:0">
 <p id="open" style="font-family:'DM Serif Display';font-size:120px;line-height:1;color:${C.navy}">Now open.</p>
@@ -176,6 +176,7 @@ window.render = (t) => {
   const follow = t < DROP ? 0 : Math.max(0, Math.min(CAM_END, fy - 760));
   const cam = lerp(follow, CAM_END, out(span(t, 15.0, 16.4)) * (t > 15 ? 1 : 0));
   el("world").style.transform = "translateY(" + (-cam) + "px)";
+  el("sky").style.opacity = 1 - span(cam, 500, 1500); // the landscape fades as we drop below it, so the logo ends on clean Cream
   // Once the feather is home, the rest of the lockup and the words arrive.
   const rest = out(span(t, 16.3, 17.2));
   el("lsvg").querySelectorAll(".lp-ecj, .lp-leaf, .lp-tag").forEach((e) => (e.style.opacity = rest));
