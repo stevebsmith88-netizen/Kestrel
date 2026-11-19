@@ -9,6 +9,10 @@ test("demo and test accounts are recognised, real people are not", () => {
   assert.equal(isDemoAccountEmail("demo.person@example.com"), true);
   assert.equal(isDemoAccountEmail("anna.demorest@example.com"), false);
   assert.equal(isDemoAccountEmail("sam@demo.example.com"), false);
+  assert.equal(isDemoAccountEmail("kestrel+candidate@eyecarejobs.ca"), true);
+  assert.equal(isDemoAccountEmail("steve@eyecarejobs.ca"), true);
+  assert.equal(isDemoAccountEmail("sam@eyecarejobs.ca.example.com"), false);
+  assert.equal(isDemoAccountEmail("sam@gmail.com"), false);
   assert.equal(isDemoAccountEmail(null), false);
 });
 
