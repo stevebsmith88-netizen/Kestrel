@@ -38,6 +38,8 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
     ownerId ? admin.from("profiles").select("full_name").eq("id", ownerId).maybeSingle() : Promise.resolve({ data: null }),
     admin.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", id).maybeSingle(),
   ]);
+  // Links show without https:// and www. so a long address stays short on a phone.
+  const shortLink = (url: string) => url.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "");
   const ownerEmail = ownerUser?.user?.email ?? "";
   const web = (clinic.website as string | null) ?? "";
   const safeWeb = /^https?:\/\//i.test(web) ? web : "";
@@ -45,14 +47,14 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
     ["Owner", (ownerProfile?.full_name as string | undefined) || "Name not given"],
     ["Owner sign in email", ownerEmail ? <a key="oe" href={`mailto:${ownerEmail}`}>{ownerEmail}</a> : "Not available"],
     ["Job alert email", contactRow?.notify_email ? <a key="ne" href={`mailto:${contactRow.notify_email as string}`}>{contactRow.notify_email as string}</a> : "Not given"],
-    ["Website", safeWeb ? <a key="w" href={safeWeb} target="_blank" rel="noopener noreferrer">{web}</a> : web || "Not given"],
+    ["Website", safeWeb ? <a key="w" href={safeWeb} target="_blank" rel="noopener noreferrer">{shortLink(web)}</a> : web || "Not given"],
     ["Place", `${clinic.city}, ${clinic.province}`],
     ["Type", clinic.practice_type === "corporate" ? "Corporate" : clinic.practice_type === "supplier" ? "Supplier or manufacturer" : "Independent"],
     ["Team size", employeeBandLabel(contactRow?.employee_band as string | null)],
     ["Registered", extra.created_at ? longDate(extra.created_at) : "Not available"],
     ...(["social_instagram", "social_facebook", "social_linkedin"] as const)
       .filter((k) => extra[k])
-      .map((k): [string, ReactNode] => [k.replace("social_", "").replace(/^./, (c) => c.toUpperCase()), <a key={k} href={extra[k] as string} target="_blank" rel="noopener noreferrer">{extra[k]}</a>]),
+      .map((k): [string, ReactNode] => [k.replace("social_", "").replace(/^./, (c) => c.toUpperCase()), <a key={k} href={extra[k] as string} target="_blank" rel="noopener noreferrer">{shortLink(extra[k] as string)}</a>]),
   ];
   const [{ people, invites }, { data: jobs }, { data: log }] = await Promise.all([
     loadTeam(admin, id),

@@ -389,6 +389,8 @@ textarea{resize:vertical;line-height:1.5}
 .facts{margin:0}
 .facts div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
 .facts div:first-child{border-top:0}
+.facts dt{flex:none}
+.facts dd{margin:0;min-width:0;text-align:right;overflow-wrap:anywhere}
 .facts dt{color:var(--muted)}
 .facts dd{margin:0;font-weight:600;text-align:right}
 .review h2{font:400 1.625rem/1.15 var(--f-display),Georgia,serif;margin:0}
