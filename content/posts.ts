@@ -506,9 +506,10 @@ We will ask the same 10 questions again every month and keep a note of who gets 
     description: "Typical hourly pay for opticians in each province from Job Bank, what it comes to over a year, and what moves an offer up or down.",
     date: "2026-11-17",
     topic: "pay",
+    updated: "2026-11-18",
     body: `![An optician adjusts a pair of glasses on a smiling woman in front of a wall of frames.](/images/blog/optician-pay-canada.jpg)
 
-If you are weighing up an optician job, or deciding what to offer one, the first question is what is normal where you are. The most reliable public answer comes from Job Bank, the Government of Canada's labour market service, which publishes typical hourly pay for opticians in most provinces. The figures below are from its wage dataset revised on 19th November 2025, covering surveys from 2023 and 2024.
+If you are weighing up an optician job, or deciding what to offer one, the first question is what is normal where you are. The most reliable public answer comes from Job Bank, the Government of Canada's labour market service, which publishes typical hourly pay for opticians in most provinces. The figures below are from its wage dataset revised on 18th November 2026, covering surveys from 2024 and 2025.
 
 A median is the middle figure: half of the opticians surveyed earned more, half earned less. Where Job Bank also gives a low and a high figure, those mark the middle half of pay, so about a quarter earned less than the low figure and a quarter more than the high one.
 
@@ -516,20 +517,20 @@ A median is the middle figure: half of the opticians surveyed earned more, half 
 
 | Province | Median an hour | Middle half | Over a year, at 37.5 hours a week |
 | --- | --- | --- | --- |
-| British Columbia | $30.82 | $23 to $32 | About $60,100 |
-| Saskatchewan | $30.10 | Not published | About $58,700 |
-| Manitoba | $29.69 | Not published | About $57,900 |
-| Newfoundland and Labrador | $29.59 | Not published | About $57,700 |
-| New Brunswick | $28.50 | Not published | About $55,600 |
-| Nova Scotia | $28.07 | Not published | About $54,700 |
-| Alberta | $28.00 | $25 to $39.40 | About $54,600 |
-| Ontario | $24.04 | $23 to $33.65 | About $46,900 |
+| Newfoundland and Labrador | $30.03 | Not published | About $58,600 |
+| Nova Scotia | $30.00 | $25 to $40 | About $58,500 |
+| Saskatchewan | $30.00 | $26 to $34.62 | About $58,500 |
+| British Columbia | $29.00 | $27.05 to $32.10 | About $56,600 |
+| Ontario | $29.00 | $23.44 to $35.43 | About $56,600 |
+| Manitoba | $28.90 | Not published | About $56,400 |
+| Alberta | $28.00 | $25 to $33 | About $54,600 |
+| New Brunswick | $27.63 | Not published | About $53,900 |
 
-**British Columbia** has the highest median, and 6 provinces sit within about $2 of each other. **Alberta** has the widest spread of the 3 provinces where Job Bank gives one, with the middle half running from $25 to $39.40.
+**Newfoundland and Labrador** has the highest median, and all 8 provinces sit within about $2.40 of each other, from $27.63 in New Brunswick to $30.03. **Nova Scotia** has the widest spread of the 5 provinces where Job Bank gives one, with the middle half running from $25 to $40.
 
-**Ontario** stands out at the other end, with a median of $24.04 and a middle half from $23 to $33.65. Job Bank does not say why Ontario is lower, and the top of its range is well above the median, so treat the median as a starting point for a conversation, not a ceiling.
+**Ontario** and **British Columbia** share a median of $29, but their ranges differ. Ontario's middle half runs from $23.44 to $35.43, a wider spread than British Columbia's $27.05 to $32.10, so the median is a starting point for a conversation, not a ceiling.
 
-Job Bank does not publish a figure for Prince Edward Island or the territories, and for the smaller provinces it gives a median only, with no low or high. It does not say how many people each figure is based on, so read the smaller provinces' numbers as a rough guide.
+Job Bank does not publish a figure for Prince Edward Island or the territories, and for 3 provinces it gives a median only, with no low or high. It does not say how many people each figure is based on, so read the smaller provinces' numbers as a rough guide.
 
 British Columbia needs a note of its own. Glasses there can be sold without a registered optician, though the title optician is still protected and fitting contact lenses still needs a regulated professional. Job Bank groups people by the work they do, not by whether they are registered, so the British Columbia figure may cover a wider mix of dispensing staff than in provinces where dispensing is restricted.
 

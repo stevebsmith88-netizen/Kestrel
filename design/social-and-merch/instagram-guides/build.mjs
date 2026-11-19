@@ -77,14 +77,14 @@ const POSTS = [
   // Added 13th November 2026 for the new blog posts and the pay summary page (docs/marketing/instagram-master-schedule.md, Thursday posts).
   { file: "g11-optician-pay", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay guide",
     head: "Typical optician pay, by province.", size: 96, marks: true,
-    list: ["Highest: British Columbia, $30.82 an hour", "6 provinces between $28.00 and $30.10", "Lowest: Ontario, $24.04 an hour"],
-    alt: "Kestrel guide: Typical optician pay, by province. Highest, British Columbia at $30.82 an hour. 6 provinces between $28.00 and $30.10. Lowest, Ontario at $24.04 an hour." },
+    list: ["Highest: Newfoundland and Labrador, $30.03 an hour", "Ontario: $29.00 an hour", "Lowest: New Brunswick, $27.63 an hour"],
+    alt: "Kestrel guide: Typical optician pay, by province. Highest, Newfoundland and Labrador at $30.03 an hour. Lowest, New Brunswick at $27.63 an hour. Ontario at $29.00 an hour." },
   { file: "g12-ai-chatbots", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "On the blog", icon: "question", size: 100,
     head: "We asked the AI chatbots", head2: "about eye care jobs.", sub: "We were named in 0 of 21 answers. What they got right, and what they got wrong.",
     alt: "Kestrel blog: We asked the AI chatbots about eye care jobs. We were named in 0 of 21 answers. What they got right, and what they got wrong." },
   { file: "g13-pay-summary", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay summary", icon: "pin", size: 92,
-    head: "3 of 4 eye care roles", head2: "pay most in British Columbia.", sub: "Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.",
-    alt: "Kestrel pay summary: 3 of 4 eye care roles pay most in British Columbia. Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures." },
+    head: "2 of 4 eye care roles", head2: "pay most in British Columbia.", sub: "Assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.",
+    alt: "Kestrel pay summary: 2 of 4 eye care roles pay most in British Columbia. Assistants and patient care teams. Our 2026 pay summary, from Job Bank figures." },
   // Things heard No. 3 redrawn as a flat navy card (Steve, 13th November 2026: the landscape picture stood out from the grid).
   { file: "t03-just-look-at-the-house", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.buff, k: "kestrel-k-mark-reversed.svg", tl: "THINGS HEARD IN CLINIC", tr: "No. 3", icon: "road", size: 120,
     head: "Just look at", head2: "the house.", sub: "It will go blurry. That's fine.",

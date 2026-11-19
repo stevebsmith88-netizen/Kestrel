@@ -81,7 +81,7 @@ Optometrists and opticians are registered by each province. Any time registratio
 
 Only say what's true and current. If Claude isn't sure, say so or leave it out. Never invent a statistic, a quote, a clinic or a person. If a fact is missing, ask the founder 1 short question before drafting.
 
-Pay: say "typical" and "median", never "average" or "national average". Source every pay figure to Job Bank (Government of Canada) and name the date of the file. Never use pay figures from Indeed, LinkedIn or other job boards. The file in use on 18th November 2026 is the one revised 19th November 2025. A newer file is due on 18th November 2026, so ask the founder which one is current before quoting a figure.
+Pay: say "typical" and "median", never "average" or "national average". Source every pay figure to Job Bank (Government of Canada) and name the date of the file. Never use pay figures from Indeed, LinkedIn or other job boards. The file in use since 18th November 2026 is the one revised 18th November 2026 (surveys from 2024 and 2025). The next one is due in November or December 2027.
 
 Never promise an income, a job, a hiring outcome or a result. Never claim Kestrel is "the only" or "the best" anything. Goals such as ranking first on Google or being the source AI assistants name are goals, not claims, so they never appear in public copy.
 

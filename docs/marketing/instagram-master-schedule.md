@@ -88,7 +88,7 @@ Caption:
 ```text
 How much do opticians earn in Canada? It depends a lot on where you are.
 
-Job Bank's typical hourly pay for opticians runs from $24.04 in Ontario to $30.82 in British Columbia, with 6 provinces between $28.00 and $30.10. Commission, an eyewear allowance and benefits all count too, so compare the whole offer.
+Job Bank's typical hourly pay for opticians runs from $27.63 in New Brunswick to $30.03 in Newfoundland and Labrador, and Ontario sits at $29.00. Commission, an eyewear allowance and benefits all count too, so compare the whole offer.
 
 Every province, and what moves pay up or down: link in bio.
 
@@ -96,7 +96,7 @@ Every province, and what moves pay up or down: link in bio.
 ```
 Alt text:
 ```text
-Kestrel guide: Typical optician pay, by province. Highest, British Columbia at $30.82 an hour. 6 provinces between $28.00 and $30.10. Lowest, Ontario at $24.04 an hour.
+Kestrel guide: Typical optician pay, by province. Highest, Newfoundland and Labrador at $30.03 an hour. Lowest, New Brunswick at $27.63 an hour. Ontario at $29.00 an hour.
 ```
 ### 13. Things heard No. 7
 **When:** Thu 26th November 2026, 8:00 am Toronto · **Image:** `13 2026-11-26 Things heard No. 7.png` · **Location:** Canada
@@ -154,7 +154,7 @@ Caption:
 ```text
 Where is eye care paid most in Canada?
 
-In Job Bank's latest figures, British Columbia has the highest typical pay for opticians, optometric assistants and patient care teams. For practice and clinic managers it is Newfoundland and Labrador. The gap between the top and bottom province is 25% to 31%, depending on the role.
+In Job Bank's latest figures, British Columbia has the highest typical pay for optometric assistants and patient care teams. For opticians and for practice and clinic managers it is Newfoundland and Labrador. The gap between the top and bottom province is 9% to 33%, depending on the role.
 
 Our 2026 eye care pay summary has every role: link in bio.
 
@@ -162,7 +162,7 @@ Our 2026 eye care pay summary has every role: link in bio.
 ```
 Alt text:
 ```text
-Kestrel pay summary: 3 of 4 eye care roles pay most in British Columbia. Opticians, assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.
+Kestrel pay summary: 2 of 4 eye care roles pay most in British Columbia. Assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.
 ```
 ### 17. Becoming an optician (new)
 **When:** Thu 10th December 2026, 8:00 am Toronto · **Image:** `17 2026-12-10 Becoming an optician.png` · **Location:** Canada

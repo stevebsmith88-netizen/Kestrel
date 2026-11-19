@@ -24,7 +24,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/resources",
 });
 
-const UPDATED = "13th November 2026";
+const UPDATED = "18th November 2026";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export default async function Resources() {

@@ -19,7 +19,7 @@ export const metadata: Metadata = shareMetadata({
 });
 
 // Change this, and PAGE_DATES.paySummary in lib/page-dates.ts, when the Job Bank figures are refreshed each year (docs/pay-benchmark.md).
-const UPDATED = "13th November 2026";
+const UPDATED = "18th November 2026";
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 const PLAIN_ROLE: Record<string, string> = {
@@ -33,6 +33,7 @@ export default function PaySummary() {
   const rows = roleSummaries();
   const top = provincesOnTop();
   const leader = top[0];
+  const tied = top.filter((t) => t.roles === leader.roles);
   const widest = [...rows].sort((a, b) => b.gapPercent - a.gapPercent)[0];
   const others = rows.filter((r) => r !== widest).map((r) => r.gapPercent);
   const otherRange = Math.min(...others) === Math.max(...others) ? `${Math.min(...others)}%` : `between ${Math.min(...others)}% and ${Math.max(...others)}%`;
@@ -42,7 +43,7 @@ export default function PaySummary() {
     "@type": "Article",
     headline: "Eye care pay in Canada: the 2026 summary",
     datePublished: "2026-11-13",
-    dateModified: "2026-11-13",
+    dateModified: "2026-11-18",
     author: { "@type": "Organization", name: "Kestrel Eye Care Jobs", url: SITE },
     publisher: { "@type": "Organization", name: "Kestrel Eye Care Jobs", logo: { "@type": "ImageObject", url: `${SITE}/brand/kestrel-lockup-full.png` } },
     isBasedOn: JOB_BANK_SOURCE.dataset,
@@ -64,7 +65,7 @@ export default function PaySummary() {
 
           <h2>The short version</h2>
           <p>
-            {leader.province} has the highest median for {leader.roles} of the {rows.length} roles below.
+            {tied.length > 1 ? `${tied.map((t) => t.province).join(" and ")} each have the highest median for ${leader.roles} of the ${rows.length} roles below.` : `${leader.province} has the highest median for ${leader.roles} of the ${rows.length} roles below.`}
             The gap between provinces is widest for {PLAIN_ROLE[widest.role]}, at {widest.gapPercent}% between the top and the bottom. For the other roles it is {otherRange}.
             Optometrists are left out, because Job Bank&apos;s figures for them come from the 2021 census and mix in part time and self employed work. Quebec is left out while Kestrel is in English only.
           </p>
