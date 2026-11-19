@@ -106,3 +106,10 @@ test("the Manitoba optometrists directory opens already searched for the surname
   assert.match(registerAdvice(mb).button, /directory/);
   assert.match(registerAdvice(mb).help, /patient directory/);
 });
+
+test("the Saskatchewan optometrists page is only a patient directory, like Manitoba's", () => {
+  const sk = registerFor("Optometrist", "Saskatchewan")!;
+  assert.equal(sk.directoryOnly, true);
+  assert.match(registerAdvice(sk).help, /patient directory/);
+  assert.equal(registerLink(sk, "Rhea Anderson"), "https://optometrists.sk.ca/about/find-a-member/", "no link search seen, so the page opens as it is");
+});
