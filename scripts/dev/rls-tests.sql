@@ -407,3 +407,40 @@ select t.try('0052', 'a number outside 1 to 50 is refused', 'server', 'write', $
 select t.try('0052', 'a clinic reads whether its pass is a founding pass and its lock date', 'clinic_c', 'count', 'select founding, price_locked_until from public.location_passes', '1 rows');
 select t.try('0052', 'a clinic never reads the Stripe schedule on its pass', 'clinic_c', 'count', 'select stripe_schedule_id from public.location_passes', 'refused');
 select t.try('0052', 'a clinic cannot lock its own price', 'clinic_c', 'write', $$update public.location_passes set founding = true, price_locked_until = now() + interval '5 years'$$, 'refused');
+
+-- ---------------------------------------------------------------- 0053: job headline (public, like the title)
+select t.try('0053', 'a visitor reads the headline column on a live job', 'visitor', 'count', 'select headline from public.jobs', 'not refused');
+select t.try('0053', 'a clinic can set a headline on its own draft job', 'clinic_c', 'write', $$update public.jobs set headline = 'A friendly team' where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0053', 'a clinic cannot set a headline on another clinic''s job', 'clinic_d', 'write', $$update public.jobs set headline = 'Not mine' where id = '{job_c_draft}'$$, 'blocked');
+
+-- ---------------------------------------------------------------- 0054: social links (clinic links public, a candidate's LinkedIn private)
+select t.try('0054', 'a visitor reads a clinic''s social links', 'visitor', 'count', 'select social_linkedin from public.employers', 'not refused');
+select t.try('0054', 'a clinic can add its own social link', 'clinic_c', 'write', $$update public.employers set social_instagram = 'https://www.instagram.com/clinicc' where id = '{employer_c}'$$, '1 rows');
+select t.try('0054', 'a clinic cannot change another clinic''s social link', 'clinic_d', 'write', $$update public.employers set social_instagram = 'https://www.instagram.com/stolen' where id = '{employer_c}'$$, 'blocked');
+select t.try('0054', 'a visitor cannot read a candidate''s LinkedIn', 'visitor', 'count', 'select linkedin_url from public.candidate_profiles', 'blocked');
+select t.try('0054', 'a clinic cannot read a candidate''s LinkedIn with its own sign in', 'clinic_c', 'count', 'select linkedin_url from public.candidate_profiles', 'blocked');
+select t.try('0054', 'Bo cannot read Ann''s LinkedIn', 'bo', 'count', $$select linkedin_url from public.candidate_profiles where user_id = '{ann}'$$, 'blocked');
+select t.try('0054', 'Ann can save her own LinkedIn', 'ann', 'write', $$update public.candidate_profiles set linkedin_url = 'https://www.linkedin.com/in/ann' where user_id = '{ann}'$$, '1 rows');
+select t.try('0054', 'Bo cannot change Ann''s LinkedIn', 'bo', 'write', $$update public.candidate_profiles set linkedin_url = 'https://www.linkedin.com/in/stolen' where user_id = '{ann}'$$, 'blocked');
+
+-- ---------------------------------------------------------------- 0055: interest in clinics not on Kestrel (server only)
+select t.try('0055', 'the server saves that a candidate is interested', 'server', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, town, name_key) values ('{ann}', 'Brightview Optical', 'Guelph', 'brightview optical|guelph')$$, '1 rows');
+select t.try('0055', 'the same candidate cannot ask about the same clinic twice', 'server', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, name_key) values ('{ann}', 'A', 'dup|'), ('{ann}', 'B', 'dup|')$$, 'refused');
+select t.try('0055', 'a clinic name must be 2 to 120 characters', 'server', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, name_key) values ('{ann}', 'X', 'x|')$$, 'refused');
+select t.try('0055', 'a candidate cannot read the list with her own sign in', 'ann', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'a candidate cannot write to the list herself', 'ann', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, name_key) values ('{ann}', 'Mine', 'mine|')$$, 'refused');
+select t.try('0055', 'a clinic cannot read the list', 'clinic_c', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'a visitor cannot read the list', 'visitor', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'the admin cannot read it with their own sign in either (the server does)', 'admin', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'a candidate''s interest goes with her account', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.employer_interest'::regclass and contype = 'f'$$, 'c');
+
+-- ---------------------------------------------------------------- 0056: a candidate's registration number (private)
+select t.try('0056', 'Ann can save her own registration number', 'ann', 'write', $$update public.candidate_profiles set licence_province = 'Alberta', licence_number = '02723', licence_does = array['eyeglasses'], licence_not_yet = false where user_id = '{ann}'$$, '1 rows');
+select t.try('0056', 'Ann reads her own registration number', 'ann', 'count', 'select licence_number from public.candidate_profiles', '1 rows');
+select t.try('0056', 'Bo cannot read Ann''s registration number', 'bo', 'count', $$select licence_number from public.candidate_profiles where user_id = '{ann}'$$, 'blocked');
+select t.try('0056', 'Bo cannot change Ann''s registration number', 'bo', 'write', $$update public.candidate_profiles set licence_number = '99999' where user_id = '{ann}'$$, 'blocked');
+select t.try('0056', 'a clinic cannot read any registration number with its own sign in', 'clinic_c', 'count', 'select licence_number from public.candidate_profiles', 'blocked');
+select t.try('0056', 'a visitor cannot read a registration number', 'visitor', 'count', 'select licence_number from public.candidate_profiles', 'blocked');
+select t.try('0056', 'a visitor cannot write a registration number', 'visitor', 'write', $$update public.candidate_profiles set licence_number = '1' where user_id = '{ann}'$$, 'refused');
+select t.try('0056', 'a registration number over 20 characters is refused', 'ann', 'write', $$update public.candidate_profiles set licence_number = repeat('1', 21) where user_id = '{ann}'$$, 'refused');
+select t.try('0056', 'a clinic reaches a number only through an application the candidate sent (it is in the application, not the profile)', 'clinic_c', 'count', 'select applicant from public.applications', '1 rows');
