@@ -1,5 +1,6 @@
 import "server-only";
 import { buildCandidateRows, type CandidateSource } from "@/lib/admin-candidates";
+import { loadAccountEmails } from "@/lib/account-emails";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 async function all<T>(table: string, columns: string, role?: string): Promise<T[]> {
@@ -20,13 +21,7 @@ async function all<T>(table: string, columns: string, role?: string): Promise<T[
 export async function loadCandidates() {
   const db = supabaseAdmin();
   if (!db) return null;
-  const emails = new Map<string, string>();
-  for (let page = 1; page <= 30; page++) {
-    const { data } = await db.auth.admin.listUsers({ page, perPage: 1000 });
-    const users = data?.users ?? [];
-    users.forEach((u) => emails.set(u.id, u.email ?? ""));
-    if (users.length < 1000) break;
-  }
+  const emails = await loadAccountEmails(db);
   const [profiles, candidateProfiles, applications] = await Promise.all([
     all<CandidateSource["profiles"][number]>("profiles", "id, full_name, created_at", "candidate"),
     all<CandidateSource["candidateProfiles"][number]>("candidate_profiles", "user_id, profession, home_city, home_province, cv_path"),
