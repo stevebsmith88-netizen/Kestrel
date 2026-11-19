@@ -155,3 +155,9 @@ No real person's details are copied here. Address: https://optometrists.mb.ca/ab
 - **Search by link:** a search puts the name in the address, `?name=Lecker&locality=`, so the button can open the directory already searched for the candidate's surname.
 - **Results:** one entry per practice location: the name, the practice address, phone, website, and services such as Diabetic and Paediatric. **No registration number, status, expiry or conditions** are shown.
 - **What it means for us:** the directory can show that an optometrist is listed in Manitoba, and nothing more. The button says so ("Look this person up in the directory") and tells the clinic to ask the College to confirm a licence.
+
+## Saskatchewan optometrists, as seen by Steve (screenshot, 19th November 2026)
+
+No real person's details are copied here. Address: https://optometrists.sk.ca/about/find-a-member/ (Saskatchewan Association of Optometrists, "Find an Optometrist").
+- **A patient directory, not a register**, like Manitoba's. A Search box and a Search by Location drop down, then entries listing the optometrist's name with "O.D.", the practice (with a logo in the example), address, phone numbers, website and a map. **No registration number, status, expiry or conditions** are shown, and a link search was not seen.
+- **What it means for us:** the same as Manitoba: the button says "Look this person up in the directory", and the help line says it shows only whether an optometrist is listed and to ask the College to confirm a licence.
