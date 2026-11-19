@@ -37,7 +37,7 @@ const OPTICIAN: Record<string, Register> = {
   "Alberta": { college: "College of Opticians of Alberta", url: "https://coa.alinityapp.com/Client/PublicDirectory", kind: "name", numberShown: "full" },
   "British Columbia": { college: "College of Health and Care Professionals of BC", url: CHCPBC, kind: "number", numberShown: "masked" },
   "Manitoba": { college: "The Opticians of Manitoba", url: "https://www.opticianry.ca/oom/MemberRoster.aspx", kind: "name", numberShown: "unknown" },
-  "New Brunswick": { college: "Opticians Association of New Brunswick", url: "https://opticiansnb.com/", kind: "college", numberShown: "unknown" },
+  "New Brunswick": { college: "Opticians Association of New Brunswick", url: "https://opticiansnb.com/find-optician/", kind: "name", numberShown: "full" },
   "Newfoundland and Labrador": { college: "Dispensing Opticians Board of Newfoundland and Labrador", url: "https://opticiansnl.ca/", kind: "college", numberShown: "unknown" },
   "Nova Scotia": { college: "Nova Scotia College of Dispensing Opticians", url: "https://nscdo.ca/optician-directory", kind: "name", numberShown: "full" },
   "Ontario": { college: "College of Opticians of Ontario", url: "https://members.collegeofopticians.ca/Public-Register", kind: "number", numberShown: "full" },
