@@ -6,6 +6,7 @@ import { type AdminJob } from "@/components/admin-job-types";
 import AdminJobRow from "@/components/AdminJobRow";
 import { requireRole } from "@/lib/auth";
 import { JOBS_PAGE_SIZE, JOB_STATUS_FILTERS, filtersInUse, jobsHref, pageRange, parseJobsQuery } from "@/lib/admin-jobs-filter";
+import { loadDemoEmployerIds } from "@/lib/account-emails";
 import { loadActivity } from "@/lib/job-activity";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -28,6 +29,9 @@ export default async function AdminJobs({ searchParams }: { searchParams: Promis
   let total = 0;
   if (db) {
     let request = db.from("jobs").select(COLUMNS, { count: "exact" }).neq("status", "draft");
+    // Demo clinics' jobs are left out (Steve, 19th November 2026).
+    const demoEmployers = await loadDemoEmployerIds(db);
+    if (demoEmployers.length) request = request.not("employer_id", "in", `(${demoEmployers.join(",")})`);
     if (query.status !== "all") request = request.eq("status", query.status);
     if (query.q) {
       // A search matches the job title or the clinic's name. The clinics that match are found first, then their jobs.

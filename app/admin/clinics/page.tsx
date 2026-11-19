@@ -4,6 +4,7 @@ import AdminSearch from "@/components/AdminSearch";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
+import { loadDemoEmployerIds } from "@/lib/account-emails";
 import { clinicSearchPattern } from "@/lib/admin-loaders";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -38,6 +39,11 @@ export default async function AdminClinics({ searchParams }: { searchParams: Pro
       const { data } = await admin.from("employers").select("id, clinic_name, city, province, practice_type").not("owner_id", "is", null).or(`clinic_name.ilike.${pattern},city.ilike.${pattern}`).order("clinic_name").limit(50);
       rows = (data ?? []) as Row[];
     }
+  }
+  // Demo clinics are left out (Steve, 19th November 2026).
+  if (admin) {
+    const demoEmployers = new Set(await loadDemoEmployerIds(admin));
+    rows = rows.filter((r) => !demoEmployers.has(r.id));
   }
   return (
     <>

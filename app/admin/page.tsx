@@ -39,6 +39,7 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
         <div className="wrap">
           <h1>Dashboard</h1>
           <p className="lede2">What needs you, and how Kestrel is doing.</p>
+          <p><Link className="btn sm ghost" href="/admin/insights">Insights for blog posts</Link></p>
           {s ? <AdminNumbers s={s} period={period} finance={finance} launched={launched} /> : <section className="card"><p>The numbers are not available because the database is not connected.</p></section>}
         </div>
       </main>

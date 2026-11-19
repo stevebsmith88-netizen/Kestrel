@@ -24,6 +24,7 @@ export const ADMIN_GROUPS: { label: string; pages: Page[] }[] = [
     label: "People",
     pages: [
       { href: "/admin/clinics", label: "Clinics" },
+      { href: "/admin/candidates", label: "Candidates" },
       { href: "/admin/claims", label: "Claims", count: "claims" },
       { href: "/admin/interest", label: "Interest in clinics" },
       { href: "/admin/requests", label: "Support", count: "support" },
@@ -36,6 +37,7 @@ export const ADMIN_GROUPS: { label: string; pages: Page[] }[] = [
 // Under the initials: the tools used now and then.
 export const ADMIN_MORE: Page[] = [
   { href: "/admin/payments", label: "Payments and Stripe" },
+  { href: "/admin/insights", label: "Insights" },
   { href: "/admin/outreach", label: "Outreach" },
   { href: "/admin/suppressions", label: "Do not email" },
 ];
