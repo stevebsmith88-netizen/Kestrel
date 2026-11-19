@@ -310,6 +310,21 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Profile and resume", href: "/candidate/profile#registration" }],
       },
       {
+        id: "follow-a-clinic",
+        title: "How do I follow a clinic or company and hear about its new jobs?",
+        keywords: ["follow", "favourite", "favorite", "save clinic", "notify", "alert", "supplier", "company", "new jobs", "unfollow"],
+        answer: [
+          "Open the page of a clinic or company on Kestrel and press **Follow for new jobs**. When it posts a new job, you get it in your daily job alert email, marked \"From a place you follow\". There is never more than 1 email a day, and you only hear about jobs posted after you followed. You need a candidate account.",
+          "You can follow up to 50 places. A clinic is never told who follows it. To stop, press **Following. Unfollow** on its page, or use **Unfollow** under **Clinics and companies you follow** on the **Job alerts** page. Unsubscribing from emails in your account also stops these emails.",
+        ],
+        steps: [
+          "Find the clinic or company with the search box on **Find jobs**, or follow the link to it from any of its job pages.",
+          "Press **Follow for new jobs**. If you are signed out, you are asked to sign in first.",
+          "Manage who you follow on the **Job alerts** page.",
+        ],
+        links: [{ label: "Job alerts", href: "/candidate/alerts#following" }, { label: "Find jobs", href: "/jobs" }],
+      },
+      {
         id: "work-for-a-clinic-not-on-kestrel",
         title: "What if the clinic or company I want to work for is not on Kestrel?",
         keywords: ["clinic not listed", "not on kestrel", "interested", "request a clinic", "favourite", "company", "supplier", "find a clinic"],

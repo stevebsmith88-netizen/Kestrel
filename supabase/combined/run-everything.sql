@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0056), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0057), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3351,6 +3351,29 @@ grant update (licence_province, licence_number, licence_does, licence_not_yet) o
 
 
 -- ======================================================================
+-- 0057_employer_follows.sql
+-- ======================================================================
+-- 0057: follow a clinic or company (Steve, 19th November 2026). Safe to run twice.
+--
+-- A candidate can follow a clinic or supplier that has a public page on Kestrel, and gets an email when it posts a new job (in the same daily
+-- email as their job alerts, never more than 1 email a day). `last_sent_at` starts when they follow, so they hear only about jobs posted after
+-- that. Only the website's server reads and writes this table: visitors, other candidates and the clinics themselves have no access, so a
+-- clinic cannot see who follows it. Follows go when the candidate's account or the clinic is deleted, and are in the candidate's data download.
+
+create table if not exists public.employer_follows (
+  user_id      uuid not null references auth.users (id) on delete cascade,
+  employer_id  uuid not null references public.employers (id) on delete cascade,
+  created_at   timestamptz not null default now(),
+  last_sent_at timestamptz not null default now(),
+  primary key (user_id, employer_id)
+);
+create index if not exists employer_follows_employer_idx on public.employer_follows (employer_id);
+create index if not exists employer_follows_due_idx on public.employer_follows (last_sent_at);
+alter table public.employer_follows enable row level security;
+revoke all on public.employer_follows from anon, authenticated;
+
+
+-- ======================================================================
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3459,6 +3482,7 @@ from (
     ('columns: a clinic''s social links readable by visitors, a candidate''s LinkedIn private (0054)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'social_linkedin') and has_column_privilege('anon', 'public.employers', 'social_linkedin', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'linkedin_url') and not has_column_privilege('anon', 'public.candidate_profiles', 'linkedin_url', 'SELECT')),
     ('table: employer_interest (candidates asking about clinics not on Kestrel, for the server only, 0055)', to_regclass('public.employer_interest') is not null and not has_table_privilege('anon', 'public.employer_interest', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT')),
     ('columns: a candidate''s registration number, private to them and to a clinic through an application (0056)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'licence_number') and not has_column_privilege('anon', 'public.candidate_profiles', 'licence_number', 'SELECT') and has_column_privilege('authenticated', 'public.candidate_profiles', 'licence_number', 'UPDATE')),
+    ('table: employer_follows (candidates following a clinic or company, for the server only, 0057)', to_regclass('public.employer_follows') is not null and not has_table_privilege('anon', 'public.employer_follows', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_follows', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

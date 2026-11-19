@@ -12,6 +12,7 @@ import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
 import { clinicHrefFor } from "@/lib/public-clinics";
+import FollowButton from "@/components/FollowButton";
 import { shareMetadata } from "@/lib/share";
 
 // Saved and shared for up to 5 minutes (audit P1-10), and cleared at once when the job changes (lib/job-cache.ts). force-static means the
@@ -85,7 +86,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   </>
                 )}
                 {clinicPage && (
-                  <p><Link href={clinicPage} className="btn sm ghost">More about {clinic?.clinic_name} and all its jobs</Link></p>
+                  <p className="clinicbtns"><Link href={clinicPage} className="btn sm ghost">More about {clinic?.clinic_name} and all its jobs</Link> <FollowButton employerId={job.employer_id} name={clinic?.clinic_name ?? "this clinic"} /></p>
                 )}
               </section>
               <section className="card jobfacts">

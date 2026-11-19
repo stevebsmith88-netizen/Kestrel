@@ -7,6 +7,7 @@ import { clinicJsonLd, openJobsText, type PublicClinic } from "@/lib/clinic-page
 import { practiceLabel } from "@/lib/jobs";
 import type { JobSummary } from "@/lib/public-jobs";
 import { socialLinksFrom } from "@/lib/social-links";
+import FollowButton from "@/components/FollowButton";
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
@@ -34,24 +35,23 @@ export default function EmployerPage({ clinic, slug, jobs, confirmed = false, fo
                 {founding && <span className="chip">Founding clinic</span>}
               </p>
             </div>
-            {(clinic.website || socials.length > 0) && (
-              <div className="clinicactions">
-                {clinic.website && (
-                  <a href={clinic.website} className="btn sm ghost" target="_blank" rel="noopener nofollow">Visit their website<span className="sr"> (opens in a new tab)</span></a>
-                )}
-                {socials.length > 0 && (
-                  <ul className="clinic-social" aria-label={`${clinic.clinic_name} on social media`}>
-                    {socials.map((s) => (
-                      <li key={s.key}>
-                        <a href={s.url} target="_blank" rel="noopener nofollow noreferrer" aria-label={`${clinic.clinic_name} on ${s.name} (opens in a new tab)`}>
-                          <Icon name={s.key} />
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
+            <div className="clinicactions">
+              <FollowButton employerId={clinic.id} name={clinic.clinic_name} />
+              {clinic.website && (
+                <a href={clinic.website} className="btn sm ghost" target="_blank" rel="noopener nofollow">Visit their website<span className="sr"> (opens in a new tab)</span></a>
+              )}
+              {socials.length > 0 && (
+                <ul className="clinic-social" aria-label={`${clinic.clinic_name} on social media`}>
+                  {socials.map((s) => (
+                    <li key={s.key}>
+                      <a href={s.url} target="_blank" rel="noopener nofollow noreferrer" aria-label={`${clinic.clinic_name} on ${s.name} (opens in a new tab)`}>
+                        <Icon name={s.key} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </header>
 
           {clinic.about && (
