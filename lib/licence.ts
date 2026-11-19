@@ -22,7 +22,7 @@ const OPTOMETRIST: Record<string, Register> = {
   "Alberta": { college: "Alberta College of Optometrists", url: "https://aco.alinityapp.com/client/publicdirectory", kind: "number", numberShown: "full" },
   "British Columbia": { college: "College of Health and Care Professionals of BC", url: CHCPBC, kind: "number", numberShown: "masked" },
   "Manitoba": { college: "Manitoba Association of Optometrists", url: "https://optometrists.mb.ca/", kind: "college", numberShown: "unknown" },
-  "New Brunswick": { college: "New Brunswick Association of Optometrists", url: "https://www.nbao.ca/", kind: "college", numberShown: "unknown" },
+  "New Brunswick": { college: "New Brunswick Association of Optometrists", url: "https://www.nbao.ca/en/find-an-optometrist", kind: "name", numberShown: "unknown", noStatus: true },
   "Newfoundland and Labrador": { college: "Newfoundland and Labrador College of Optometrists", url: "https://nlco.ca/", kind: "college", numberShown: "unknown" },
   "Nova Scotia": { college: "Nova Scotia College of Optometrists", url: "https://nsco.ca/site/findanoptometrist", kind: "name", numberShown: "full", noStatus: true },
   "Ontario": { college: "College of Optometrists of Ontario", url: "https://members.collegeoptom.on.ca/COO/PublicDirectory/Public_Directory_Member/Public_Register/PublicRegisterMember.aspx", kind: "number", numberShown: "full" },
@@ -122,6 +122,9 @@ export function registerAdvice(reg: Register): { button: string; help: string } 
         ? "Search for this number, then check the name, profession and status match. This register shows only the last 2 digits of a number."
         : "Search for this number, then check the name and status match.",
     };
+  }
+  if (reg.kind === "name" && reg.noStatus && reg.numberShown === "unknown") {
+    return { button: "Look this person up on the directory", help: "Search the name. The directory lists a code in brackets beside each name, which may be the registration number, and shows no status line. Ask the College if you need to confirm the licence is current." };
   }
   if (reg.kind === "name" && reg.noStatus) {
     return { button: "Look this person up on the register", help: "Search the last name, then check the licence number matches. This roster shows no status line, so ask the College if you need to confirm the licence is current." };

@@ -138,3 +138,11 @@ No real person's details are copied here. Address: https://nsco.ca/site/findanop
 - **Results:** cards with "Dr." and the name, **Licence No** in full (5 digits, for example 50540), and a Details link.
 - **A person's page:** "Optometrist", the name, **Licence No**, and the main office and satellite offices with address and phone, with a map. **No status, expiry or conditions** are shown.
 - **What it means for us:** a clinic searches the surname and compares the licence number. Because the roster shows no status line, the help text says to ask the College if the clinic needs to confirm the licence is current.
+
+## New Brunswick optometrists, as seen by Steve (screenshots, 19th November 2026)
+
+No real person's details are copied here. Address: https://www.nbao.ca/en/find-an-optometrist (New Brunswick Association of Optometrists).
+- **Search:** 1 box, "Search for an optometrist or practice", with a map of New Brunswick on the right, and a list down the left by practice.
+- **Each entry:** the practice (or professional corporation) with address, phone and fax, then "Optometrist" and the optometrist's name with a code in brackets in italics, for example (325T2) or (293T2). The code is probably the registration number but that is not stated on the page.
+- **No status, expiry or conditions** are shown, and there is no person page in what was seen.
+- **What it means for us:** a clinic searches the name and compares the code. Until someone confirms what the code is, the button says "Look this person up on the directory" and the help line says the code may be the registration number and that the directory shows no status line. A candidate's number may not look like these codes, so the field's wording for New Brunswick should be checked with a real optometrist.
