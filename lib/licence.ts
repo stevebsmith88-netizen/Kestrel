@@ -14,7 +14,7 @@ export const licenceRole = (profession: string | null | undefined): LicenceRole 
 export type RegisterKind = "number" | "name" | "college";
 // `nameParam` is the web address part some registers use to search by name from a link (New Brunswick: ?_search_by_name=Smith), so the button can open
 // the register already searched for the candidate's surname. Only registers seen to do this have it.
-export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string; noOnlineRegister?: boolean };
+export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string; noOnlineRegister?: boolean; noStatus?: boolean };
 
 const CHCPBC = "https://chcpbc.alinityapp.com/client/publicdirectory";
 
@@ -24,7 +24,7 @@ const OPTOMETRIST: Record<string, Register> = {
   "Manitoba": { college: "Manitoba Association of Optometrists", url: "https://optometrists.mb.ca/", kind: "college", numberShown: "unknown" },
   "New Brunswick": { college: "New Brunswick Association of Optometrists", url: "https://www.nbao.ca/", kind: "college", numberShown: "unknown" },
   "Newfoundland and Labrador": { college: "Newfoundland and Labrador College of Optometrists", url: "https://nlco.ca/", kind: "college", numberShown: "unknown" },
-  "Nova Scotia": { college: "Nova Scotia College of Optometrists", url: "https://nsco.ca/", kind: "college", numberShown: "unknown" },
+  "Nova Scotia": { college: "Nova Scotia College of Optometrists", url: "https://nsco.ca/site/findanoptometrist", kind: "name", numberShown: "full", noStatus: true },
   "Ontario": { college: "College of Optometrists of Ontario", url: "https://members.collegeoptom.on.ca/COO/PublicDirectory/Public_Directory_Member/Public_Register/PublicRegisterMember.aspx", kind: "number", numberShown: "full" },
   "Prince Edward Island": { college: "PEI College of Optometrists", url: "https://peico.ca/", kind: "college", numberShown: "unknown" },
   "Quebec": { college: "Ordre des optométristes du Québec", url: "https://www.ooq.org/", kind: "college", numberShown: "unknown" },
@@ -122,6 +122,9 @@ export function registerAdvice(reg: Register): { button: string; help: string } 
         ? "Search for this number, then check the name, profession and status match. This register shows only the last 2 digits of a number."
         : "Search for this number, then check the name and status match.",
     };
+  }
+  if (reg.kind === "name" && reg.noStatus) {
+    return { button: "Look this person up on the register", help: "Search the last name, then check the licence number matches. This roster shows no status line, so ask the College if you need to confirm the licence is current." };
   }
   if (reg.kind === "name") {
     return {

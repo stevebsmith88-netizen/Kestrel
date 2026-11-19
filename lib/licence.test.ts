@@ -83,3 +83,11 @@ test("Alberta optometrists can be searched by licence number, which the register
   assert.match(registerAdvice(ab).button, /Check this number/);
   assert.equal(registerFor("Optician", "Alberta")?.kind, "name", "the opticians register has no number box");
 });
+
+test("Nova Scotia optometrists are searched by name, show the licence number, and show no status line", () => {
+  const ns = registerFor("Optometrist", "Nova Scotia")!;
+  assert.equal(ns.url, "https://nsco.ca/site/findanoptometrist");
+  assert.equal(ns.kind, "name");
+  assert.match(registerAdvice(ns).help, /shows no status line/);
+  assert.doesNotMatch(registerAdvice(registerFor("Optician", "Alberta")!).help, /no status line/);
+});
