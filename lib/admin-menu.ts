@@ -36,6 +36,7 @@ export const ADMIN_GROUPS: { label: string; pages: Page[] }[] = [
 // Under the initials: the tools used now and then.
 export const ADMIN_MORE: Page[] = [
   { href: "/admin/payments", label: "Payments and Stripe" },
+  { href: "/admin/insights", label: "Insights" },
   { href: "/admin/outreach", label: "Outreach" },
   { href: "/admin/suppressions", label: "Do not email" },
 ];
