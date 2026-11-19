@@ -39,7 +39,7 @@ const OPTICIAN: Record<string, Register> = {
   "Manitoba": { college: "The Opticians of Manitoba", url: "https://www.opticianry.ca/oom/MemberRoster.aspx", kind: "name", numberShown: "unknown" },
   "New Brunswick": { college: "Opticians Association of New Brunswick", url: "https://opticiansnb.com/", kind: "college", numberShown: "unknown" },
   "Newfoundland and Labrador": { college: "Dispensing Opticians Board of Newfoundland and Labrador", url: "https://opticiansnl.ca/", kind: "college", numberShown: "unknown" },
-  "Nova Scotia": { college: "Nova Scotia College of Dispensing Opticians", url: "https://nscdo.ca/", kind: "college", numberShown: "unknown" },
+  "Nova Scotia": { college: "Nova Scotia College of Dispensing Opticians", url: "https://nscdo.ca/optician-directory", kind: "name", numberShown: "full" },
   "Ontario": { college: "College of Opticians of Ontario", url: "https://members.collegeofopticians.ca/Public-Register", kind: "number", numberShown: "full" },
   "Prince Edward Island": { college: "College of Opticians of Prince Edward Island", url: null, kind: "college", numberShown: "unknown" },
   "Quebec": { college: "Ordre des opticiens d'ordonnances du Québec", url: "https://opticien.qc.ca/", kind: "college", numberShown: "unknown" },
@@ -125,7 +125,7 @@ export function registerAdvice(reg: Register): { button: string; help: string } 
     return {
       button: "Look this person up on the register",
       help: reg.numberShown === "full"
-        ? "Search the last name, open the person, then check the registration number and status match."
+        ? "Search the last name, then check the registration number and status match."
         : "Search the name, then check the status and that they are registered.",
     };
   }

@@ -49,5 +49,7 @@ test("the wording a clinic reads says where the number is from, and the button f
   assert.match(registerAdvice(registerFor("Optometrist", "Ontario")!).button, /Check this number/);
   assert.match(registerAdvice(registerFor("Optician", "Alberta")!).button, /Look this person up/);
   assert.match(registerAdvice(registerFor("Optometrist", "British Columbia")!).help, /last 2 digits/);
-  assert.match(registerAdvice(registerFor("Optician", "Nova Scotia")!).button, /College's website/);
+  assert.match(registerAdvice(registerFor("Optician", "New Brunswick")!).button, /College's website/);
+  assert.equal(registerFor("Optician", "Nova Scotia")?.url, "https://nscdo.ca/optician-directory");
+  assert.match(registerAdvice(registerFor("Optician", "Nova Scotia")!).button, /Look this person up/);
 });
