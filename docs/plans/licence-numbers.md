@@ -169,3 +169,11 @@ No real person's details are copied here. Address: https://nlco.ca/members_list/
 - **Number format:** 4 digits, a hyphen and a letter, for example 2106-A, 0602-A, and one that ends in -T. The meaning of the letter is not stated on the page. Our field accepts this format.
 - **No status, expiry or conditions** are shown.
 - **What it means for us:** the number is shown in full, so a clinic finds the name and compares the licence number. The button says "Look this person up on the list". The help line says the page lists every registered optometrist, and that it shows no status line.
+
+## PEI optometrists, as seen by Steve (screenshots, 19th November 2026)
+
+No real person's details are copied here. Address: https://peico.ca/optometrists/ (PEI College of Optometrists, "Find an Optometrist").
+- **Search:** a "Search by name" box and filters by town (All, Alberton, Charlottetown, Montague, O'Leary, Summerside). The page notes "AT - Advanced Therapeutics certification (authorized to treat glaucoma and prescribe schedule 1 oral medications to treat eye conditions)".
+- **Cards:** "Dr." and the name, **License#** in full with a suffix (for example 23-AT, 41-AT, 20-T and 43-T), then the practice address and phone for each location.
+- **No status, expiry or conditions** are shown.
+- **What it means for us:** the number is shown in full, so a clinic searches the surname and compares the licence number. The number carries a suffix (T, or AT for Advanced Therapeutics), which our field accepts. The help line notes that the page shows no status line.
