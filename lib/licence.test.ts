@@ -99,3 +99,10 @@ test("New Brunswick optometrists are a directory with a code beside each name an
   assert.match(registerAdvice(nb).help, /code in brackets/);
   assert.match(registerAdvice(registerFor("Optometrist", "Nova Scotia")!).help, /licence number matches/);
 });
+
+test("the Manitoba optometrists directory opens already searched for the surname, and says it is only a patient directory", () => {
+  const mb = registerFor("Optometrist", "Manitoba")!;
+  assert.equal(registerLink(mb, "Robert Lecker"), "https://optometrists.mb.ca/about/find-optometrist?name=Lecker");
+  assert.match(registerAdvice(mb).button, /directory/);
+  assert.match(registerAdvice(mb).help, /patient directory/);
+});

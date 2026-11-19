@@ -14,14 +14,14 @@ export const licenceRole = (profession: string | null | undefined): LicenceRole 
 export type RegisterKind = "number" | "name" | "college";
 // `nameParam` is the web address part some registers use to search by name from a link (New Brunswick: ?_search_by_name=Smith), so the button can open
 // the register already searched for the candidate's surname. Only registers seen to do this have it.
-export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string; noOnlineRegister?: boolean; noStatus?: boolean };
+export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string; noOnlineRegister?: boolean; noStatus?: boolean; directoryOnly?: boolean };
 
 const CHCPBC = "https://chcpbc.alinityapp.com/client/publicdirectory";
 
 const OPTOMETRIST: Record<string, Register> = {
   "Alberta": { college: "Alberta College of Optometrists", url: "https://aco.alinityapp.com/client/publicdirectory", kind: "number", numberShown: "full" },
   "British Columbia": { college: "College of Health and Care Professionals of BC", url: CHCPBC, kind: "number", numberShown: "masked" },
-  "Manitoba": { college: "Manitoba Association of Optometrists", url: "https://optometrists.mb.ca/", kind: "college", numberShown: "unknown" },
+  "Manitoba": { college: "Manitoba Association of Optometrists", url: "https://optometrists.mb.ca/about/find-optometrist", kind: "name", numberShown: "unknown", nameParam: "name", directoryOnly: true },
   "New Brunswick": { college: "New Brunswick Association of Optometrists", url: "https://www.nbao.ca/en/find-an-optometrist", kind: "name", numberShown: "unknown", noStatus: true },
   "Newfoundland and Labrador": { college: "Newfoundland and Labrador College of Optometrists", url: "https://nlco.ca/", kind: "college", numberShown: "unknown" },
   "Nova Scotia": { college: "Nova Scotia College of Optometrists", url: "https://nsco.ca/site/findanoptometrist", kind: "name", numberShown: "full", noStatus: true },
@@ -122,6 +122,9 @@ export function registerAdvice(reg: Register): { button: string; help: string } 
         ? "Search for this number, then check the name, profession and status match. This register shows only the last 2 digits of a number."
         : "Search for this number, then check the name and status match.",
     };
+  }
+  if (reg.directoryOnly) {
+    return { button: "Look this person up in the directory", help: "This is a patient directory. It shows whether an optometrist is listed, but no registration number or status, so ask the College if you need to confirm the licence." };
   }
   if (reg.kind === "name" && reg.noStatus && reg.numberShown === "unknown") {
     return { button: "Look this person up on the directory", help: "Search the name. The directory lists a code in brackets beside each name, which may be the registration number, and shows no status line. Ask the College if you need to confirm the licence is current." };

@@ -146,3 +146,12 @@ No real person's details are copied here. Address: https://www.nbao.ca/en/find-a
 - **Each entry:** the practice (or professional corporation) with address, phone and fax, then "Optometrist" and the optometrist's name with a code in brackets in italics, for example (325T2) or (293T2). The code is probably the registration number but that is not stated on the page.
 - **No status, expiry or conditions** are shown, and there is no person page in what was seen.
 - **What it means for us:** a clinic searches the name and compares the code. Until someone confirms what the code is, the button says "Look this person up on the directory" and the help line says the code may be the registration number and that the directory shows no status line. A candidate's number may not look like these codes, so the field's wording for New Brunswick should be checked with a real optometrist.
+
+## Manitoba optometrists, as seen by Steve (screenshots, 19th November 2026)
+
+No real person's details are copied here. Address: https://optometrists.mb.ca/about/find-optometrist (Manitoba Association of Optometrists, "Find an Optometrist").
+- **This is a patient directory, not a register.** The page is for finding an optometrist near you.
+- **Search:** Optometrist Name, City and Area (drop downs), a Search Now button, and filters for Wheelchair Accessible, Languages, Paediatric, Personal Care Homes, Safety Eyewear and ESEL First Pair.
+- **Search by link:** a search puts the name in the address, `?name=Lecker&locality=`, so the button can open the directory already searched for the candidate's surname.
+- **Results:** one entry per practice location: the name, the practice address, phone, website, and services such as Diabetic and Paediatric. **No registration number, status, expiry or conditions** are shown.
+- **What it means for us:** the directory can show that an optometrist is listed in Manitoba, and nothing more. The button says so ("Look this person up in the directory") and tells the clinic to ask the College to confirm a licence.
