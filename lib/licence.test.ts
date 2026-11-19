@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { cleanLicence, doesSummary, licenceComplete, licenceProvinces, licenceRequiredFor, licenceSummary, registerAdvice, registerFor } from "./licence.ts";
+import { registerLink, surnameOf, cleanLicence, doesSummary, licenceComplete, licenceProvinces, licenceRequiredFor, licenceSummary, registerAdvice, registerFor } from "./licence.ts";
 
 test("opticians are not asked in the territories, optometrists are asked everywhere", () => {
   assert.ok(!licenceProvinces("Optician").some((p) => ["Yukon", "Northwest Territories", "Nunavut"].includes(p)));
@@ -49,5 +49,21 @@ test("the wording a clinic reads says where the number is from, and the button f
   assert.match(registerAdvice(registerFor("Optometrist", "Ontario")!).button, /Check this number/);
   assert.match(registerAdvice(registerFor("Optician", "Alberta")!).button, /Look this person up/);
   assert.match(registerAdvice(registerFor("Optometrist", "British Columbia")!).help, /last 2 digits/);
-  assert.match(registerAdvice(registerFor("Optician", "Nova Scotia")!).button, /College's website/);
+  assert.match(registerAdvice(registerFor("Optician", "Saskatchewan")!).button, /College's website/);
+  assert.equal(registerFor("Optician", "Nova Scotia")?.url, "https://nscdo.ca/optician-directory");
+  assert.equal(registerFor("Optician", "New Brunswick")?.url, "https://opticiansnb.com/find-optician/");
+  assert.match(registerAdvice(registerFor("Optician", "New Brunswick")!).button, /Look this person up/);
+  assert.match(registerAdvice(registerFor("Optician", "Nova Scotia")!).button, /Look this person up/);
+});
+
+test("the register button can open the register already searched for the candidate's surname", () => {
+  assert.equal(surnameOf("Wayne (Manny) Smith"), "Smith");
+  assert.equal(surnameOf("  Ana  Lopez-Garcia "), "Lopez-Garcia");
+  assert.equal(surnameOf(null), "");
+  const nb = registerFor("Optician", "New Brunswick")!;
+  assert.equal(registerLink(nb, "Wayne Smith"), "https://opticiansnb.com/find-optician/?_search_by_name=Smith");
+  assert.equal(registerLink(nb, "Zo\u00eb O'Brien"), "https://opticiansnb.com/find-optician/?_search_by_name=O'Brien");
+  assert.equal(registerLink(nb, ""), "https://opticiansnb.com/find-optician/", "no name, no search");
+  assert.equal(registerLink(registerFor("Optician", "Nova Scotia")!, "Sam Lee"), "https://nscdo.ca/optician-directory", "only registers seen to search from a link");
+  assert.equal(registerLink(registerFor("Optician", "Prince Edward Island")!, "Sam Lee"), null);
 });

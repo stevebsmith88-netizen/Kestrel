@@ -92,3 +92,21 @@ Each register is described once, in 1 list in the code, with: its name, address,
 - **Search by name only, number shown on the page (Alberta opticians):** "Look this person up on the register." Help line: "Search the last name, then check the registration number and status match."
 - **Name only, number not seen (Manitoba opticians):** "Look this person up on the register." Help line: "Search the surname, then check the status and that they are registered."
 - **Register not confirmed yet:** a link to the regulator's own website, and "Check with the college" wording, until the register is seen.
+
+## Nova Scotia opticians, as seen by Steve (screenshots, 18th November 2026)
+
+No real person's details are copied here. Address: https://nscdo.ca/optician-directory (Nova Scotia College of Dispensing Opticians).
+- **Search:** 1 search box that filters the whole list as you type (345 registrants listed), and a Show control for how many rows. Steve searched by surname. Whether a number typed in the box finds the person is not yet tried.
+- **Results list:** columns Name-License (the name, with the licence number in full underneath, 3 digits in the examples), Status, Any conditions, restrictions, sanctions, and Valid to (empty in the examples). Statuses seen: **Dispensing Optician**, **Non-Practicing Dispensing Optician**, **Contact Lens Fitter**, and **Student - DO** (a student has no number). The page says to contact the Registrar (registrar@nscdo.org) for a registrant whose information may not be on the website.
+- **A person's page:** name, the practice (organization), the licence number, Membership level (for example Dispensing Optician), first and last name, Organization, a License Number line, and a statement of declaration about convictions. No expiry date, no area of practice.
+- **What it means for us:** the number is shown in full, so a clinic searches the surname and compares the number and the status. **Contact lens fitter is its own membership level in Nova Scotia** (not a tick under one licence), like BC and Alberta. A student has no number, so the "I am not registered yet" tick fits. The button now opens this directory with the wording for a name search that shows the number.
+
+## New Brunswick opticians, as seen by Steve (screenshot, 18th November 2026)
+
+No real person's details are copied here. Address: https://opticiansnb.com/find-optician/ (Opticians Association of New Brunswick).
+- **Search:** 338 members listed as cards, with a Search by Name box and filters by Dispensary, Membership and Area.
+- **Each card:** the name, the town, **Standing** (Current in the examples), **Membership** with a code such as "EG/CL - 20170308C" or "EG - 20030105", the dispensary (practice and town) and its website.
+- **What the membership code means:** EG is eyeglasses and **EG/CL is eyeglasses and contact lenses**, so what an optician is registered for is shown on the card. The number after it (8 digits, sometimes with a letter, and in the examples it looks like a date) is the registration code.
+- **What it means for us:** the code is shown in full, so a clinic searches the surname and compares the code, the standing and the EG or EG/CL scope. A candidate gives the code as shown after the dash (for example 20170308C). The button now opens this page with the name search wording. The page has no person page, only cards.
+
+**New Brunswick search by link (screenshot, 18th November 2026):** a search for a surname puts it in the address, https://opticiansnb.com/find-optician/?_search_by_name=Smith, and shows the matching cards (the example showed 1 member with the code, Standing: Current, Membership EG, and the dispensary). So the register button on an application now opens the page already searched for the candidate's surname (`registerLink` and `nameParam` in `lib/licence.ts`). Other registers open at their search page until a link search is seen on them.

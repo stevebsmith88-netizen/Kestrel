@@ -12,7 +12,9 @@ export const licenceRole = (profession: string | null | undefined): LicenceRole 
 //   name    the register is searched by name, then the person's page is compared with the number given (Alberta, Manitoba, Saskatchewan optometrists)
 //   college we have the regulator's website but have not seen a register, so the clinic is sent to the college (everything else)
 export type RegisterKind = "number" | "name" | "college";
-export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown" };
+// `nameParam` is the web address part some registers use to search by name from a link (New Brunswick: ?_search_by_name=Smith), so the button can open
+// the register already searched for the candidate's surname. Only registers seen to do this have it.
+export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string };
 
 const CHCPBC = "https://chcpbc.alinityapp.com/client/publicdirectory";
 
@@ -37,9 +39,9 @@ const OPTICIAN: Record<string, Register> = {
   "Alberta": { college: "College of Opticians of Alberta", url: "https://coa.alinityapp.com/Client/PublicDirectory", kind: "name", numberShown: "full" },
   "British Columbia": { college: "College of Health and Care Professionals of BC", url: CHCPBC, kind: "number", numberShown: "masked" },
   "Manitoba": { college: "The Opticians of Manitoba", url: "https://www.opticianry.ca/oom/MemberRoster.aspx", kind: "name", numberShown: "unknown" },
-  "New Brunswick": { college: "Opticians Association of New Brunswick", url: "https://opticiansnb.com/", kind: "college", numberShown: "unknown" },
+  "New Brunswick": { college: "Opticians Association of New Brunswick", url: "https://opticiansnb.com/find-optician/", kind: "name", numberShown: "full", nameParam: "_search_by_name" },
   "Newfoundland and Labrador": { college: "Dispensing Opticians Board of Newfoundland and Labrador", url: "https://opticiansnl.ca/", kind: "college", numberShown: "unknown" },
-  "Nova Scotia": { college: "Nova Scotia College of Dispensing Opticians", url: "https://nscdo.ca/", kind: "college", numberShown: "unknown" },
+  "Nova Scotia": { college: "Nova Scotia College of Dispensing Opticians", url: "https://nscdo.ca/optician-directory", kind: "name", numberShown: "full" },
   "Ontario": { college: "College of Opticians of Ontario", url: "https://members.collegeofopticians.ca/Public-Register", kind: "number", numberShown: "full" },
   "Prince Edward Island": { college: "College of Opticians of Prince Edward Island", url: null, kind: "college", numberShown: "unknown" },
   "Quebec": { college: "Ordre des opticiens d'ordonnances du Québec", url: "https://opticien.qc.ca/", kind: "college", numberShown: "unknown" },
@@ -125,9 +127,24 @@ export function registerAdvice(reg: Register): { button: string; help: string } 
     return {
       button: "Look this person up on the register",
       help: reg.numberShown === "full"
-        ? "Search the last name, open the person, then check the registration number and status match."
+        ? "Search the last name, then check the registration number and status match."
         : "Search the name, then check the status and that they are registered.",
     };
   }
   return { button: "Visit the College's website", help: "We have not set up a direct link to this College's register yet. Check the person with the College." };
+}
+
+// The surname to search for: the last word of the name, without brackets or punctuation, so "Wayne (Manny) Smith" gives "Smith".
+export function surnameOf(fullName: string | null | undefined): string {
+  const words = (fullName ?? "").replace(/[()"]/g, " ").trim().split(/\s+/).filter(Boolean);
+  return (words[words.length - 1] ?? "").replace(/[^\p{L}\p{N}'\-]/gu, "").slice(0, 40);
+}
+
+// The address the register button opens: the register itself, or, where the register is known to search from a link, already searched for the
+// candidate's surname (the clinic only opens a page and reads it, like typing the name in).
+export function registerLink(reg: Register, candidateName?: string | null): string | null {
+  if (!reg.url) return null;
+  const surname = surnameOf(candidateName);
+  if (!reg.nameParam || !surname) return reg.url;
+  return `${reg.url}${reg.url.includes("?") ? "&" : "?"}${reg.nameParam}=${encodeURIComponent(surname)}`;
 }
