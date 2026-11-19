@@ -131,10 +131,10 @@ function WebsiteFill() {
       {error && <p className="err" role="alert">{error}</p>}
       {found && (
         <div className="fillfound" role="status">
-          <p>We found these on your website. Untick anything you do not want, then press Use these.</p>
+          <p>We are not perfect, so please check the information below is correct. Tick the boxes you would like to use to fill in your profile, then press Use these.</p>
           {FILL_FIELDS.filter((f) => found[f.key]).map((f) => (
             <label className="choice" key={f.key}>
-              <input type="checkbox" name={`fill-${f.key}`} defaultChecked />
+              <input type="checkbox" name={`fill-${f.key}`} />
               <span><strong>{f.label}:</strong> {found[f.key]}</span>
             </label>
           ))}

@@ -14,6 +14,7 @@ import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATE
 import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, findPlace, placeLabel } from "@/lib/places";
 import { clampPage } from "@/lib/paging";
+import { findPublicClinics } from "@/lib/public-clinics";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -90,7 +91,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const from = searched ?? home;
   const { options: sortOptions, sort } = sortChoice(parseSort(one("sort")), { forMe: view === "me", hasPlace: Boolean(from) });
   const everything = view === "me" || sort === "near";
-  const [found, counts] = await Promise.all([searchJobs(filters, { everything }), getFilterCounts()]);
+  const [found, counts, clinicMatches] = await Promise.all([searchJobs(filters, { everything }), getFilterCounts(), filters.q ? findPublicClinics(filters.q) : Promise.resolve([])]);
   const { place, placeNotFound } = found;
   let jobs = found.jobs;
   let total = found.total;
@@ -193,6 +194,15 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             </details>
             </MobileFilters>
           </form>
+          {clinicMatches.length > 0 && (
+            <ul className="clinicmatches" aria-label="Clinics and companies matching your search">
+              {clinicMatches.map((c) => (
+                <li key={c.href}>
+                  <Link href={c.href} className="btn sm ghost"><strong>{c.name}</strong>{c.place ? `, ${c.place}` : ""}: see their page{c.supplier ? "" : " and open jobs"}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
           {inUse.length > 0 && (
             <ul className="sf-tags" aria-label="Filters in use">
               {inUse.map((f) => <li key={f.label}><Link href={f.href} className="sf-tag" aria-label={`Remove ${f.label}`}>{f.label} <span aria-hidden="true">&times;</span></Link></li>)}

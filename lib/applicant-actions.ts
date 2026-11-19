@@ -5,8 +5,9 @@ import { requireRole } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, sendEmail } from "@/lib/email";
-import { applicationUpdateEmail, updateSubject } from "@/lib/clinic-message";
-import { cleanMeetingLink, withMeetingLink } from "@/lib/meeting-link";
+import { applicationUpdateEmail, interviewCalendarFile, updateSubject } from "@/lib/clinic-message";
+import { cleanMeetingLink } from "@/lib/meeting-link";
+import { cleanInterview, withInterview } from "@/lib/interview-details";
 import { candidateRecipient } from "@/lib/recipient";
 import { notify } from "@/lib/notifications";
 import { applicationMoved, teamNoteAdded } from "@/lib/notify-text";
@@ -41,7 +42,8 @@ async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>
   if (email && wants) {
     // The clinic's words go as plain text, with a line saying the clinic wrote them (P1-47).
     const mail = applicationUpdateEmail({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id, site: SITE_URL, status: to });
-    await sendEmail({ to: email, subject: updateSubject(to, app.job_title, app.clinic_name), ...mail });
+    const file = to === "interview" ? interviewCalendarFile({ jobTitle: app.job_title, clinicName: app.clinic_name, message, applicationId: app.id }) : null;
+    await sendEmail({ to: email, subject: updateSubject(to, app.job_title, app.clinic_name), ...mail, ...(file ? { attachments: [file] } : {}) });
   }
 }
 
@@ -266,17 +268,21 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   const admin = supabaseAdmin();
   if (!db || !admin) return { error: NOT_CONNECTED };
 
-  const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id").eq("id", id).maybeSingle();
+  const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id, job_id").eq("id", id).maybeSingle();
   if (!app) return { error: "We couldn't find that application." };
 
   const problem = clinicMoveError(app.status, to, app.keep_details, message);
   if (problem) return { errors: { message: problem }, error: problem };
 
-  // An interview can carry a meeting link (Zoom, Teams, Google Meet and the like), kept as the last line of the message.
+  // An interview says how it will happen (in person, online or by phone), and can carry a date and time, a place and a meeting link (Zoom,
+  // Teams, Google Meet and the like). They are kept as the last lines of the message, and the candidate also gets a calendar file.
   if (to === "interview") {
-    const link = cleanMeetingLink(form.get("meetingLink"));
+    const { data: job } = app.job_id ? await admin.from("jobs").select("province").eq("id", app.job_id).maybeSingle() : { data: null };
+    const checked = cleanInterview({ format: form.get("format"), date: form.get("date"), time: form.get("time"), minutes: form.get("minutes"), place: form.get("place") }, job?.province as string | undefined);
+    if (!checked.interview) return { errors: { [checked.field]: checked.error }, error: checked.error };
+    const link = checked.interview.format === "online" ? cleanMeetingLink(form.get("meetingLink")) : { url: "" };
     if (link.error) return { errors: { meetingLink: link.error }, error: link.error };
-    if (link.url) message = withMeetingLink(message, link.url);
+    message = withInterview(message, checked.interview, link.url ?? "");
   }
 
   const now = new Date().toISOString();

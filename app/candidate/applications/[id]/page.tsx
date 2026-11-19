@@ -10,7 +10,7 @@ import { getApplication } from "@/lib/candidate";
 import WithdrawForm from "@/components/WithdrawForm";
 import { longDate } from "@/lib/jobs";
 import { writtenBy } from "@/lib/clinic-message";
-import { splitMeetingLink } from "@/lib/meeting-link";
+import { calendarLinks, detailsLines, splitInterview } from "@/lib/interview-details";
 
 export const metadata: Metadata = { title: "Your application | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -53,11 +53,29 @@ export default async function ApplicationDetail({ params, searchParams }: { para
             <section className="card">
               <h2>A message from {a.clinic_name}</h2>
               {(() => {
-                const { text, link } = splitMeetingLink(a.clinic_message);
+                const { text, interview, link } = splitInterview(a.clinic_message);
+                const calendar = interview ? calendarLinks({ id: a.id, jobTitle: a.job_title, clinicName: a.clinic_name ?? "the clinic", interview, link }) : null;
                 return (
                   <>
                     {text && <blockquote className="msg">{text}</blockquote>}
-                    {link && <p><a className="btn" href={link} target="_blank" rel="noopener noreferrer">Join the meeting</a></p>}
+                    {interview && (
+                      <ul className="interviewdetails">
+                        {detailsLines(interview, link).map((line) => <li key={line}>{line}</li>)}
+                      </ul>
+                    )}
+                    {(link || calendar) && (
+                      <p className="emptyactions">
+                        {link && <a className="btn" href={link} target="_blank" rel="noopener noreferrer">Join the meeting</a>}
+                        {calendar && a.status === "interview" && (
+                          <>
+                            {" "}
+                            <a className="btn ghost" href={`/candidate/applications/${a.id}/calendar`}>Add to my calendar</a>{" "}
+                            <a className="btn sm ghost" href={calendar.google} target="_blank" rel="noopener noreferrer">Google Calendar</a>{" "}
+                            <a className="btn sm ghost" href={calendar.outlook} target="_blank" rel="noopener noreferrer">Outlook</a>
+                          </>
+                        )}
+                      </p>
+                    )}
                   </>
                 );
               })()}

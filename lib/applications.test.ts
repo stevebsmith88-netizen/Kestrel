@@ -49,7 +49,8 @@ test("a clinic cannot make a move it should not", () => {
 test("closing and offering needs a message with no blanks left in it", () => {
   assert.ok(clinicMoveError("viewed", "not_selected", false, "   "));
   assert.equal(clinicMoveError("viewed", "not_selected", false, messageTemplate("not_selected", "Harbourside Optical")), null);
-  assert.ok(clinicMoveError("viewed", "interview", false, messageTemplate("interview", "Harbourside Optical")));
+  // The interview form carries the date, time and place in its own fields, so its ready made message needs no blanks filled in.
+  assert.ok(clinicMoveError("viewed", "offer", false, messageTemplate("offer", "Harbourside Optical")));
   assert.equal(clinicMoveError("viewed", "interview", false, "Harbourside Optical would like to meet you on Friday at 2 pm by video."), null);
 });
 
