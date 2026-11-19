@@ -118,3 +118,7 @@ No real person's details are copied here. Address: https://www.opticianry.ca/Mem
 - **Results list:** the heading is **Member Name, Reg #**, and each row reads like "Smith, Darla - 000824" (a 6 digit number with leading zeros, in full), then the type (Eyeglass Optician), the status (Active - Practicing, Active - Student) and the practice location with address and phone.
 - **A person's page:** a Summary tab (name and number, type, language fluency), a Practice Locations tab, and a Registration Details tab (not seen).
 - **What it means for us:** the number is shown in full in the results, so a clinic searches the surname and compares the number and status. A student in Saskatchewan has a number too. Whether a contact lens practice shows (Manitoba's roster shows an Advanced Practice line) is not yet seen, and the Specialties search may cover it. The button now opens this register with the name search wording.
+
+## Newfoundland and Labrador opticians (18th November 2026)
+
+Steve could not check this one: no online register was found on the Dispensing Opticians Board's site (opticiansnl.ca). The register button there opens the Board's website with the wording "We could not find an online register for this College. Contact the College to check the person." (`noOnlineRegister` in `lib/licence.ts`). Remove that flag and add the address if a register turns up.
