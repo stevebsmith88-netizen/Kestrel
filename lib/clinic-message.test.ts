@@ -38,6 +38,20 @@ test("the email has the message as plain text, the writer line, and the only lin
   assert.ok(hrefs.every((h) => h.startsWith("https://eyecarejobs.ca/")), hrefs.join(", "));
 });
 
+test("an interview email opens warmly and carries a meeting link as the only outside link", () => {
+  const mail = applicationUpdateEmail({ jobTitle: "Optician", clinicName: "Brightview", label: "Interview", message: "See you Monday at 2 pm.\n\nJoin the meeting: https://zoom.us/j/123456789?pwd=abc", applicationId: "a1", site: "https://eyecarejobs.ca", status: "interview" });
+  assert.match(mail.html, /Good news, you have been invited to interview/);
+  assert.match(mail.text, /Join the meeting: https:\/\/zoom\.us\/j\/123456789\?pwd=abc/);
+  assert.match(mail.text, /See you Monday at 2 pm\./);
+  const outside = [...mail.html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]).filter((h) => !h.startsWith("https://eyecarejobs.ca/"));
+  assert.deepEqual(outside, ["https://zoom.us/j/123456789?pwd=abc"]);
+});
+
+test("a look alike meeting link in a message is not turned into a link", () => {
+  const mail = applicationUpdateEmail({ jobTitle: "Optician", clinicName: "Brightview", label: "Interview", message: "Hi.\n\nJoin the meeting: https://evil.example.com/login", applicationId: "a1", site: "https://eyecarejobs.ca", status: "interview" });
+  assert.doesNotMatch(mail.html + mail.text, /https?:\/\/evil\.example\.com/);
+});
+
 test("an update with no message has no writer line", () => {
   const mail = applicationUpdateEmail({ jobTitle: "Optician", clinicName: "Brightview", label: "Interview", message: "", applicationId: "a1", site: "https://eyecarejobs.ca" });
   assert.doesNotMatch(mail.text, /written by/);

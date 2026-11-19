@@ -95,6 +95,9 @@ const FILL_FIELDS: { key: keyof SiteDetails; label: string; input: string }[] = 
   { key: "city", label: "City", input: "cp-city" },
   { key: "province", label: "Province", input: "cp-province" },
   { key: "about", label: "About", input: "cp-about" },
+  { key: "instagram", label: "Instagram", input: "cp-social-instagram" },
+  { key: "facebook", label: "Facebook", input: "cp-social-facebook" },
+  { key: "linkedin", label: "LinkedIn", input: "cp-social-linkedin" },
 ];
 
 // Reads the labels the clinic's own website gives search engines (no AI), shows what it found, and fills in only what is ticked.

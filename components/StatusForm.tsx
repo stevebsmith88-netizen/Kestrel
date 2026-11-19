@@ -35,7 +35,15 @@ export default function StatusForm({ id, current, keepDetails, clinicName }: { i
           {state.errors?.message && <p className="err" role="alert">{state.errors.message}</p>}
         </div>
       )}
-      {state.error && !state.errors?.message && <p className="err form-err" role="alert">{state.error}</p>}
+      {status === "interview" && (
+        <div className={`row ${state.errors?.meetingLink ? "invalid" : ""}`}>
+          <label className="lab" htmlFor="sf-meeting">Meeting link (optional)</label>
+          <input id="sf-meeting" name="meetingLink" type="text" inputMode="url" autoComplete="off" placeholder="https://zoom.us/j/1234567890" aria-describedby="sf-meeting-help" />
+          <p className="help" id="sf-meeting-help">Paste a Zoom, Microsoft Teams, Google Meet, Webex or Whereby link and the candidate gets a Join button, so you can leave it out of the message. Create the meeting in your own account first, then paste its link here.</p>
+          {state.errors?.meetingLink && <p className="err" role="alert">{state.errors.meetingLink}</p>}
+        </div>
+      )}
+      {state.error && !state.errors?.message && !state.errors?.meetingLink && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
       <button type="submit" className="btn" disabled={pending || !status}>{pending ? "Saving" : status === "shortlisted" ? "Save" : "Save and tell the candidate"}</button>
     </form>

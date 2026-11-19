@@ -10,6 +10,7 @@ import { getApplication } from "@/lib/candidate";
 import WithdrawForm from "@/components/WithdrawForm";
 import { longDate } from "@/lib/jobs";
 import { writtenBy } from "@/lib/clinic-message";
+import { splitMeetingLink } from "@/lib/meeting-link";
 
 export const metadata: Metadata = { title: "Your application | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -51,7 +52,15 @@ export default async function ApplicationDetail({ params, searchParams }: { para
           {a.clinic_message && (
             <section className="card">
               <h2>A message from {a.clinic_name}</h2>
-              <blockquote className="msg">{a.clinic_message}</blockquote>
+              {(() => {
+                const { text, link } = splitMeetingLink(a.clinic_message);
+                return (
+                  <>
+                    {text && <blockquote className="msg">{text}</blockquote>}
+                    {link && <p><a className="btn" href={link} target="_blank" rel="noopener noreferrer">Join the meeting</a></p>}
+                  </>
+                );
+              })()}
               <p className="help">{writtenBy(a.clinic_name || "the clinic")} Clinics choose what to tell you. Their private notes are never shown.</p>
             </section>
           )}

@@ -5,7 +5,8 @@ import { requireRole } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { APP_LABELS, HIREABLE, clinicMoveError, isAppStatus, messageTemplate } from "@/lib/applications";
 import { SITE_URL, sendEmail } from "@/lib/email";
-import { applicationUpdateEmail } from "@/lib/clinic-message";
+import { applicationUpdateEmail, updateSubject } from "@/lib/clinic-message";
+import { cleanMeetingLink, withMeetingLink } from "@/lib/meeting-link";
 import { candidateRecipient } from "@/lib/recipient";
 import { notify } from "@/lib/notifications";
 import { applicationMoved, teamNoteAdded } from "@/lib/notify-text";
@@ -39,8 +40,8 @@ async function tellCandidate(admin: NonNullable<ReturnType<typeof supabaseAdmin>
   const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
   if (email && wants) {
     // The clinic's words go as plain text, with a line saying the clinic wrote them (P1-47).
-    const mail = applicationUpdateEmail({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id, site: SITE_URL });
-    await sendEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail });
+    const mail = applicationUpdateEmail({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS[to as keyof typeof APP_LABELS], message, applicationId: app.id, site: SITE_URL, status: to });
+    await sendEmail({ to: email, subject: updateSubject(to, app.job_title, app.clinic_name), ...mail });
   }
 }
 
@@ -258,7 +259,7 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
   const to = String(form.get("status") ?? "");
   // Shortlisting is the clinic's own working list: no message goes with it and the candidate is not emailed.
   const quiet = to === "shortlisted";
-  const message = quiet ? "" : String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
+  let message = quiet ? "" : String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
   if (!UUID.test(id) || !isAppStatus(to)) return { error: "That didn't work. Please refresh and try again." };
 
   const db = await supabaseServer();
@@ -270,6 +271,13 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
 
   const problem = clinicMoveError(app.status, to, app.keep_details, message);
   if (problem) return { errors: { message: problem }, error: problem };
+
+  // An interview can carry a meeting link (Zoom, Teams, Google Meet and the like), kept as the last line of the message.
+  if (to === "interview") {
+    const link = cleanMeetingLink(form.get("meetingLink"));
+    if (link.error) return { errors: { meetingLink: link.error }, error: link.error };
+    if (link.url) message = withMeetingLink(message, link.url);
+  }
 
   const now = new Date().toISOString();
   const { error } = await admin

@@ -123,8 +123,8 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
 
           <form method="get" action="/jobs" className="searchform" role="search" aria-label="Search jobs">
             <div className="sf-main">
-              <label className="sr" htmlFor="s-q">Role or keyword</label>
-              <input id="s-q" name="q" type="text" placeholder="Role or keyword" defaultValue={filters.q} />
+              <label className="sr" htmlFor="s-q">Role, keyword or clinic name</label>
+              <input id="s-q" name="q" type="text" placeholder="Role, keyword or clinic name" defaultValue={filters.q} />
               <button type="submit" className="btn">Search</button>
             </div>
             <MobileFilters count={inUse.length}>
@@ -229,6 +229,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 <>
                   <h2>No jobs match this search yet</h2>
                   <p>That is not a dead end. Here are quick ways to look a little wider:</p>
+                  {filters.q && <p className="help">Looking for a particular clinic or company? A name only finds places with a job on Kestrel right now. If one is not here yet, it has no live job with us.</p>}
                   <ul className="emptylinks">
                     {suggestions.map((s) => <li key={s.label}><Link href={s.href} className="btn sm ghost">{s.label}</Link></li>)}
                     <li><Link href="/jobs" className="btn sm ghost">Start again with every job</Link></li>

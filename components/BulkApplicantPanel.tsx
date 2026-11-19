@@ -83,7 +83,7 @@ export default function BulkApplicantPanel({ shortlist, interview, decline }: { 
         onChange={() => problem && setProblem("")}
         placeholder="For example: We would like to meet you at the clinic on Tuesday 24th November at 2 pm. We will contact you using the details on your application to confirm."
       />
-      <p className="help">Offers are never made in bulk. Open the application to make one.</p>
+      <p className="help">Offers are never made in bulk. Open the application to make one, and to add a Zoom, Teams or Google Meet link to an interview invitation.</p>
       {problem && <p className="notice warn bulkproblem" id="bulk-problem" role="alert">{problem}</p>}
       <div className="bulkbtns">
         <BulkButton action={shortlist} className="btn sm" onCheck={(e) => check(e, false)}>Shortlist</BulkButton>
