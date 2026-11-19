@@ -40,7 +40,7 @@ export async function loadStats(period: Period) {
   if (!db) return null;
   const range = periodRange(period);
 
-  const [allProfiles, waitlist, employers, jobs, allApplications, allCandidateProfiles, inReview, openReports, pendingClaims, contacts, openSupport] = await Promise.all([
+  const [allProfiles, waitlist, allEmployers, allJobs, allApplications, allCandidateProfiles, inReview, openReports, pendingClaims, allContacts, openSupport] = await Promise.all([
     fetchAll<{ id: string; role: string; created_at: string }>(db, "profiles", "id, role, created_at"),
     fetchAll<{ created_at: string; confirmed_at: string | null; unsubscribed_at: string | null }>(db, "waitlist", "created_at, confirmed_at, unsubscribed_at"),
     fetchAll<{ id: string; claimed: boolean; owner_id: string | null; created_at: string }>(db, "employers", "id, claimed, owner_id, created_at"),
@@ -57,7 +57,13 @@ export async function loadStats(period: Period) {
   // The demo and test accounts are left out of every candidate number (Steve, 19th November 2026).
   const demo = demoAccountIds(await loadAccountEmails(db));
   const profiles = allProfiles.filter((p) => !demo.has(p.id));
-  const applications = allApplications.filter((a) => !demo.has(a.candidate_id));
+  // A demo clinic, its jobs, its contacts and the applications to them are left out too.
+  const demoEmployers = new Set(allEmployers.filter((e) => e.owner_id && demo.has(e.owner_id)).map((e) => e.id));
+  const employers = allEmployers.filter((e) => !demoEmployers.has(e.id));
+  const jobs = allJobs.filter((j) => !demoEmployers.has(j.employer_id));
+  const contacts = allContacts.filter((c) => !demoEmployers.has(c.employer_id));
+  const liveJobIds = new Set(jobs.map((j) => j.id));
+  const applications = allApplications.filter((a) => !demo.has(a.candidate_id) && liveJobIds.has(a.job_id));
   const candidateProfiles = allCandidateProfiles.filter((c) => !demo.has(c.user_id));
   const candidates = profiles.filter((p) => p.role === "candidate");
   const clinicAccounts = profiles.filter((p) => p.role === "clinic");
