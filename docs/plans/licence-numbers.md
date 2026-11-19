@@ -161,3 +161,11 @@ No real person's details are copied here. Address: https://optometrists.mb.ca/ab
 No real person's details are copied here. Address: https://optometrists.sk.ca/about/find-a-member/ (Saskatchewan Association of Optometrists, "Find an Optometrist").
 - **A patient directory, not a register**, like Manitoba's. A Search box and a Search by Location drop down, then entries listing the optometrist's name with "O.D.", the practice (with a logo in the example), address, phone numbers, website and a map. **No registration number, status, expiry or conditions** are shown, and a link search was not seen.
 - **What it means for us:** the same as Manitoba: the button says "Look this person up in the directory", and the help line says it shows only whether an optometrist is listed and to ask the College to confirm a licence.
+
+## Newfoundland and Labrador optometrists, as seen by Steve (screenshot, 19th November 2026)
+
+No real person's details are copied here. Address: https://nlco.ca/members_list/ (Newfoundland and Labrador College of Optometrists, headed "Public Notice").
+- **A public list.** The page says it gives "the names and license numbers of Optometrists registered with the Newfoundland and Labrador College of Optometrists", as a table with Name and Licence No. No search box was seen, so a clinic finds the name by scrolling or with the browser's find tool.
+- **Number format:** 4 digits, a hyphen and a letter, for example 2106-A, 0602-A, and one that ends in -T. The meaning of the letter is not stated on the page. Our field accepts this format.
+- **No status, expiry or conditions** are shown.
+- **What it means for us:** the number is shown in full, so a clinic finds the name and compares the licence number. The button says "Look this person up on the list". The help line says the page lists every registered optometrist, and that it shows no status line.
