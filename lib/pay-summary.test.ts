@@ -32,5 +32,5 @@ test("the real figures give a summary for all 4 public roles", () => {
   const rows = roleSummaries();
   assert.equal(rows.length, 4);
   for (const r of rows) assert.ok(r.gap > 0 && r.highest.median > r.lowest.median, r.role);
-  assert.equal(yearly(24.04), "$50,000");
+  assert.equal(yearly(29), "$60,300");
 });
