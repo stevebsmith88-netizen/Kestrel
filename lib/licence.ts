@@ -14,7 +14,7 @@ export const licenceRole = (profession: string | null | undefined): LicenceRole 
 export type RegisterKind = "number" | "name" | "college";
 // `nameParam` is the web address part some registers use to search by name from a link (New Brunswick: ?_search_by_name=Smith), so the button can open
 // the register already searched for the candidate's surname. Only registers seen to do this have it.
-export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string };
+export type Register = { college: string; url: string | null; kind: RegisterKind; numberShown: "full" | "masked" | "unknown"; nameParam?: string; noOnlineRegister?: boolean };
 
 const CHCPBC = "https://chcpbc.alinityapp.com/client/publicdirectory";
 
@@ -40,7 +40,7 @@ const OPTICIAN: Record<string, Register> = {
   "British Columbia": { college: "College of Health and Care Professionals of BC", url: CHCPBC, kind: "number", numberShown: "masked" },
   "Manitoba": { college: "The Opticians of Manitoba", url: "https://www.opticianry.ca/oom/MemberRoster.aspx", kind: "name", numberShown: "unknown" },
   "New Brunswick": { college: "Opticians Association of New Brunswick", url: "https://opticiansnb.com/find-optician/", kind: "name", numberShown: "full", nameParam: "_search_by_name" },
-  "Newfoundland and Labrador": { college: "Dispensing Opticians Board of Newfoundland and Labrador", url: "https://opticiansnl.ca/", kind: "college", numberShown: "unknown" },
+  "Newfoundland and Labrador": { college: "Dispensing Opticians Board of Newfoundland and Labrador", url: "https://opticiansnl.ca/", kind: "college", numberShown: "unknown", noOnlineRegister: true },
   "Nova Scotia": { college: "Nova Scotia College of Dispensing Opticians", url: "https://nscdo.ca/optician-directory", kind: "name", numberShown: "full" },
   "Ontario": { college: "College of Opticians of Ontario", url: "https://members.collegeofopticians.ca/Public-Register", kind: "number", numberShown: "full" },
   "Prince Edward Island": { college: "College of Opticians of Prince Edward Island", url: null, kind: "college", numberShown: "unknown" },
@@ -131,6 +131,7 @@ export function registerAdvice(reg: Register): { button: string; help: string } 
         : "Search the name, then check the status and that they are registered.",
     };
   }
+  if (reg.noOnlineRegister) return { button: "Visit the College's website", help: "We could not find an online register for this College. Contact the College to check the person." };
   return { button: "Visit the College's website", help: "We have not set up a direct link to this College's register yet. Check the person with the College." };
 }
 

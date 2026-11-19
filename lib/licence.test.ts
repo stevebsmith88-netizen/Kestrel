@@ -49,7 +49,7 @@ test("the wording a clinic reads says where the number is from, and the button f
   assert.match(registerAdvice(registerFor("Optometrist", "Ontario")!).button, /Check this number/);
   assert.match(registerAdvice(registerFor("Optician", "Alberta")!).button, /Look this person up/);
   assert.match(registerAdvice(registerFor("Optometrist", "British Columbia")!).help, /last 2 digits/);
-  assert.match(registerAdvice(registerFor("Optician", "Newfoundland and Labrador")!).button, /College's website/);
+  assert.match(registerAdvice(registerFor("Optician", "Prince Edward Island")!).button, /College's website/);
   assert.equal(registerFor("Optician", "Nova Scotia")?.url, "https://nscdo.ca/optician-directory");
   assert.equal(registerFor("Optician", "New Brunswick")?.url, "https://opticiansnb.com/find-optician/");
   assert.equal(registerFor("Optician", "Saskatchewan")?.url, "https://www.opticianry.ca/MemberRoster/MemberRoster.aspx?OrgID=SCO");
@@ -68,4 +68,10 @@ test("the register button can open the register already searched for the candida
   assert.equal(registerLink(nb, ""), "https://opticiansnb.com/find-optician/", "no name, no search");
   assert.equal(registerLink(registerFor("Optician", "Nova Scotia")!, "Sam Lee"), "https://nscdo.ca/optician-directory", "only registers seen to search from a link");
   assert.equal(registerLink(registerFor("Optician", "Prince Edward Island")!, "Sam Lee"), null);
+});
+
+test("a College with no online register we can find says so, and points to the College", () => {
+  const nl = registerFor("Optician", "Newfoundland and Labrador")!;
+  assert.match(registerAdvice(nl).help, /could not find an online register/);
+  assert.match(registerAdvice(nl).button, /College's website/);
 });
