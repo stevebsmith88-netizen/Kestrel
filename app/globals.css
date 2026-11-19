@@ -1123,3 +1123,4 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 .clinicinterest{margin:14px 0 0;border:1px solid var(--line);border-radius:8px;padding:12px 16px;background:var(--paper)}.clinicinterest summary{cursor:pointer;font-weight:600}.clinicinterest[open] summary{margin-bottom:10px}
 .licencefields{border:0;padding:0;margin:0 0 18px;min-width:0}.licencefields legend{padding:0;margin-bottom:2px}
 .registercheck .registeractions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px}.registercheck .icon{vertical-align:-3px;margin-left:2px}
+.followbtn{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center}

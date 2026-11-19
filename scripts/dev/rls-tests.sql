@@ -444,3 +444,14 @@ select t.try('0056', 'a visitor cannot read a registration number', 'visitor', '
 select t.try('0056', 'a visitor cannot write a registration number', 'visitor', 'write', $$update public.candidate_profiles set licence_number = '1' where user_id = '{ann}'$$, 'refused');
 select t.try('0056', 'a registration number over 20 characters is refused', 'ann', 'write', $$update public.candidate_profiles set licence_number = repeat('1', 21) where user_id = '{ann}'$$, 'refused');
 select t.try('0056', 'a clinic reaches a number only through an application the candidate sent (it is in the application, not the profile)', 'clinic_c', 'count', 'select applicant from public.applications', '1 rows');
+
+-- ---------------------------------------------------------------- 0057: following a clinic or company (server only)
+select t.try('0057', 'the server saves that a candidate follows a clinic', 'server', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '{employer_c}')$$, '1 rows');
+select t.try('0057', 'a candidate cannot follow the same clinic twice', 'server', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '{employer_c}'), ('{ann}', '{employer_c}')$$, 'refused');
+select t.try('0057', 'a follow must be a real clinic', 'server', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '00000000-0000-0000-0000-000000000000')$$, 'refused');
+select t.try('0057', 'a candidate cannot read follows with her own sign in', 'ann', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'a candidate cannot follow a clinic herself', 'ann', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '{employer_c}')$$, 'refused');
+select t.try('0057', 'a clinic cannot see who follows it', 'clinic_c', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'a visitor cannot read follows', 'visitor', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'the admin cannot read follows with their own sign in either (the server does)', 'admin', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'a follow goes when the candidate or the clinic goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.employer_follows'::regclass and contype = 'f'$$, 'c,c');

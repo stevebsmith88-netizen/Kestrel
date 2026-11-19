@@ -5,6 +5,7 @@ import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } fro
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
+import { alertHeading, alertSubject, followedLine } from "@/lib/follows";
 import { withExpected } from "@/lib/expected-columns";
 import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
@@ -275,8 +276,28 @@ async function runDaily(request: Request) {
   const due = alerts.filter((a) => now.getTime() - new Date(a.last_sent_at).getTime() >= (GAP_HOURS[a.frequency] ?? GAP_HOURS.weekly) * 60 * 60 * 1000);
   const byUser = new Map<string, AlertRow[]>();
   due.forEach((a) => byUser.set(a.user_id, [...(byUser.get(a.user_id) ?? []), a]));
+  // Clinics and companies a candidate follows (migration 0057) are folded into the same daily email, so nobody gets more than 1 a day.
+  // `last_sent_at` starts the moment they follow, so they hear only about jobs posted after that. Before the SQL is run this just finds nothing.
+  type FollowRow = { user_id: string; employer_id: string; last_sent_at: string };
+  const followRows: FollowRow[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await admin.from("employer_follows").select("user_id, employer_id, last_sent_at").order("last_sent_at", { ascending: true }).order("user_id", { ascending: true }).order("employer_id", { ascending: true }).range(from, from + 999);
+    if (error) {
+      problems.push(`Reading follows (has migration 0057 been run?): ${error.message}`);
+      break;
+    }
+    followRows.push(...((data ?? []) as FollowRow[]));
+    if ((data?.length ?? 0) < 1000) break;
+  }
+  const followsByUser = new Map<string, FollowRow[]>();
+  followRows
+    .filter((f) => now.getTime() - new Date(f.last_sent_at).getTime() >= GAP_HOURS.daily * 60 * 60 * 1000)
+    .forEach((f) => followsByUser.set(f.user_id, [...(followsByUser.get(f.user_id) ?? []), f]));
+  const alertUsers = new Set([...byUser.keys(), ...followsByUser.keys()]);
   let leftForTomorrow = 0;
-  for (const [userId, mine] of byUser) {
+  for (const userId of alertUsers) {
+    const mine = byUser.get(userId) ?? [];
+    const myFollows = followsByUser.get(userId) ?? [];
     if (outOfTime()) {
       leftForTomorrow += 1;
       continue;
@@ -301,6 +322,28 @@ async function runDaily(request: Request) {
         found.set(job.id, { ...job, title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
       }
     }
+    // Jobs from places this person follows, posted since they followed (or since they were last emailed).
+    const followedFound = new Set<string>();
+    if (myFollows.length) {
+      const oldest = myFollows.reduce((min, f) => (f.last_sent_at < min ? f.last_sent_at : min), myFollows[0].last_sent_at);
+      const { data: followedJobs } = await admin
+        .from("jobs")
+        .select(await withExpected(`id, title, province, city, employer_id, posted_at, ${ALERT_PAY_COLUMNS}, employers!inner(clinic_name, practice_type)`))
+        .eq("status", "live")
+        .gt("expires_at", now.toISOString())
+        .gt("posted_at", oldest)
+        .in("employer_id", myFollows.map((f) => f.employer_id))
+        .order("posted_at", { ascending: false })
+        .limit(40);
+      for (const job of (followedJobs ?? []) as unknown as (PayFields & { id: string; title: string; province: string; city: string; employer_id: string; posted_at: string; employers: { clinic_name: string } | null })[]) {
+        const since = myFollows.find((f) => f.employer_id === job.employer_id)?.last_sent_at;
+        if (!since || job.posted_at <= since) continue;
+        if (!found.has(job.id)) {
+          found.set(job.id, { ...job, title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
+          followedFound.add(job.id);
+        }
+      }
+    }
     if (found.size === 0) continue;
     const { data: user } = await admin.auth.admin.getUserById(userId);
     const email = user?.user?.email;
@@ -311,8 +354,14 @@ async function runDaily(request: Request) {
     }
     // Claim these alerts before emailing, so a second copy of this job could never send the same email. Put them back if it fails.
     const stamp = now.toISOString();
-    const claims = await Promise.all(mine.map((a) => admin.from("job_alerts").update({ last_sent_at: stamp }).eq("id", a.id).eq("last_sent_at", a.last_sent_at).select("id")));
-    const putBack = () => Promise.all(mine.map((a) => admin.from("job_alerts").update({ last_sent_at: a.last_sent_at }).eq("id", a.id).eq("last_sent_at", stamp)));
+    const claims = await Promise.all([
+      ...mine.map((a) => admin.from("job_alerts").update({ last_sent_at: stamp }).eq("id", a.id).eq("last_sent_at", a.last_sent_at).select("id")),
+      ...myFollows.map((f) => admin.from("employer_follows").update({ last_sent_at: stamp }).eq("user_id", f.user_id).eq("employer_id", f.employer_id).eq("last_sent_at", f.last_sent_at).select("user_id")),
+    ]);
+    const putBack = () => Promise.all([
+      ...mine.map((a) => admin.from("job_alerts").update({ last_sent_at: a.last_sent_at }).eq("id", a.id).eq("last_sent_at", stamp)),
+      ...myFollows.map((f) => admin.from("employer_follows").update({ last_sent_at: f.last_sent_at }).eq("user_id", f.user_id).eq("employer_id", f.employer_id).eq("last_sent_at", stamp)),
+    ]);
     if (claims.some((c) => c.error || !c.data?.length)) {
       await putBack();
       budget.refund();
@@ -320,14 +369,14 @@ async function runDaily(request: Request) {
     }
     const unsubscribeUrl = unsubscribeIdUrl(userId);
     const mail = emailLayout({
-      heading: found.size === 1 ? "A new job matches your alert" : `${found.size} new jobs match your alerts`,
-      paragraphs: ["Here is what has been posted since we last emailed you."],
-      items: [...found].slice(0, 15).map(([id, j]) => ({ text: alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
+      heading: alertHeading(found.size, followedFound.size),
+      paragraphs: ["Here is what has been posted since we last emailed you.", ...(followedFound.size ? ["Jobs marked \"From a place you follow\" come from clinics and companies you follow. You can change who you follow under Job alerts in your account."] : [])],
+      items: [...found].slice(0, 15).map(([id, j]) => ({ text: followedFound.has(id) ? followedLine(alertLine(j)) : alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
       buttonText: "See all jobs",
       buttonUrl: `${SITE_URL}/jobs`,
       unsubscribeUrl,
     });
-    if (note(await deliverEmail({ to: email, subject: found.size === 1 ? "New job alert: 1 new job" : `New job alert: ${found.size} new jobs`, unsubscribeUrl, ...mail }))) {
+    if (note(await deliverEmail({ to: email, subject: alertSubject(found.size, followedFound.size), unsubscribeUrl, ...mail }))) {
       summary.alertsSent += 1;
     } else {
       await putBack();
