@@ -45,7 +45,7 @@ const OPTICIAN: Record<string, Register> = {
   "Ontario": { college: "College of Opticians of Ontario", url: "https://members.collegeofopticians.ca/Public-Register", kind: "number", numberShown: "full" },
   "Prince Edward Island": { college: "College of Opticians of Prince Edward Island", url: null, kind: "college", numberShown: "unknown" },
   "Quebec": { college: "Ordre des opticiens d'ordonnances du Québec", url: "https://opticien.qc.ca/", kind: "college", numberShown: "unknown" },
-  "Saskatchewan": { college: "Saskatchewan College of Opticians", url: "https://scoptic.ca/", kind: "college", numberShown: "unknown" },
+  "Saskatchewan": { college: "Saskatchewan College of Opticians", url: "https://www.opticianry.ca/MemberRoster/MemberRoster.aspx?OrgID=SCO", kind: "name", numberShown: "full" },
 };
 
 const REGISTERS: Record<LicenceRole, Record<string, Register>> = { Optometrist: OPTOMETRIST, Optician: OPTICIAN };
