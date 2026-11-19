@@ -13,6 +13,7 @@ import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
 import { clinicHrefFor } from "@/lib/public-clinics";
 import FollowButton from "@/components/FollowButton";
+import SaveJobButton from "@/components/SaveJobButton";
 import { shareMetadata } from "@/lib/share";
 
 // Saved and shared for up to 5 minutes (audit P1-10), and cleared at once when the job changes (lib/job-cache.ts). force-static means the
@@ -125,6 +126,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                     <ApplyLink jobId={job.id} href={`/jobs/${job.id}/apply`}>Quick Apply</ApplyLink>
                   </>
                 )}
+                <p className="savewrap"><SaveJobButton jobId={job.id} /></p>
               </section>
               <div className="reportbox">
                 <p className="reportlink"><Link href={`/jobs/${job.id}/report`}><Icon name="warning" />Report this job</Link></p>

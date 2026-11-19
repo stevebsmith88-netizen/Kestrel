@@ -20,6 +20,7 @@ export const ACCOUNT_MENU: Record<Role, MenuLink[]> = {
   // The inbox is the envelope beside the initials (and in the phone Menu), so it is not repeated here (Steve, 14th November 2026).
   candidate: [
     { href: "/candidate/applications", label: "My applications", group: 0 },
+    { href: "/candidate/saved", label: "Saved jobs", group: 0 },
     { href: "/candidate/profile", label: "Profile and resume", group: 0 },
     { href: "/account/help", label: "Help and feedback", group: 1 },
   ],

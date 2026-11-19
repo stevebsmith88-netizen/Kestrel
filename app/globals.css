@@ -1124,3 +1124,4 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 .licencefields{border:0;padding:0;margin:0 0 18px;min-width:0}.licencefields legend{padding:0;margin-bottom:2px}
 .registercheck .registeractions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0 6px}.registercheck .icon{vertical-align:-3px;margin-left:2px}
 .followbtn{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center}
+.savebtn{display:inline-flex;flex-wrap:wrap;gap:8px;align-items:center}.savewrap{margin:12px 0 0}.savedlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}.savedlist li{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;padding:16px 20px}

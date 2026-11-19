@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0058), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0059), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3388,6 +3388,26 @@ create index if not exists employer_interest_waiting_idx on public.employer_inte
 
 
 -- ======================================================================
+-- 0059_saved_jobs.sql
+-- ======================================================================
+-- 0059: saved jobs (Steve, 19th November 2026). Safe to run twice.
+--
+-- A candidate can save a job to apply for later. Only the website's server reads and writes this table: visitors, other candidates and
+-- clinics have no access, so a clinic never sees who saved its job. A saved job goes when the candidate's account or the job is deleted, and
+-- the list is in the candidate's data download.
+
+create table if not exists public.saved_jobs (
+  user_id    uuid not null references auth.users (id) on delete cascade,
+  job_id     uuid not null references public.jobs (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key (user_id, job_id)
+);
+create index if not exists saved_jobs_job_idx on public.saved_jobs (job_id);
+alter table public.saved_jobs enable row level security;
+revoke all on public.saved_jobs from anon, authenticated;
+
+
+-- ======================================================================
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3498,6 +3518,7 @@ from (
     ('columns: a candidate''s registration number, private to them and to a clinic through an application (0056)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'licence_number') and not has_column_privilege('anon', 'public.candidate_profiles', 'licence_number', 'SELECT') and has_column_privilege('authenticated', 'public.candidate_profiles', 'licence_number', 'UPDATE')),
     ('table: employer_follows (candidates following a clinic or company, for the server only, 0057)', to_regclass('public.employer_follows') is not null and not has_table_privilege('anon', 'public.employer_follows', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_follows', 'SELECT')),
     ('columns: who has been told a clinic they asked about joined, still for the server only (0058)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_interest' and column_name = 'notified_at') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT') and not has_column_privilege('authenticated', 'public.employer_interest', 'notified_at', 'SELECT')),
+    ('table: saved_jobs (jobs candidates saved to apply for later, for the server only, 0059)', to_regclass('public.saved_jobs') is not null and not has_table_privilege('anon', 'public.saved_jobs', 'SELECT') and not has_table_privilege('authenticated', 'public.saved_jobs', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

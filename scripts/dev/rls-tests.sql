@@ -463,3 +463,14 @@ select t.try('0058', 'a candidate cannot mark herself as told', 'ann', 'write', 
 select t.try('0058', 'a clinic cannot read who was told', 'clinic_c', 'count', 'select notified_employer_id from public.employer_interest', 'refused');
 select t.try('0058', 'a visitor cannot read who was told', 'visitor', 'count', 'select notified_at from public.employer_interest', 'refused');
 select t.try('0058', 'a deleted clinic does not delete the candidate''s request', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.employer_interest'::regclass and confrelid = 'public.employers'::regclass$$, 'n');
+
+-- ---------------------------------------------------------------- 0059: saved jobs (server only)
+select t.try('0059', 'the server saves a job for a candidate', 'server', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '{job_c_live}')$$, '1 rows');
+select t.try('0059', 'a candidate cannot save the same job twice', 'server', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '{job_c_live}'), ('{ann}', '{job_c_live}')$$, 'refused');
+select t.try('0059', 'a saved job must be a real job', 'server', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '00000000-0000-0000-0000-000000000000')$$, 'refused');
+select t.try('0059', 'a candidate cannot read saved jobs with her own sign in', 'ann', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'a candidate cannot save a job herself', 'ann', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '{job_c_live}')$$, 'refused');
+select t.try('0059', 'a clinic cannot see who saved its job', 'clinic_c', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'a visitor cannot read saved jobs', 'visitor', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'the admin cannot read saved jobs with their own sign in either (the server does)', 'admin', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'a saved job goes when the candidate or the job goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.saved_jobs'::regclass and contype = 'f'$$, 'c,c');

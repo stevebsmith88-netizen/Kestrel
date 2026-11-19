@@ -16,6 +16,7 @@ const NAV: Record<Exclude<Role, "admin">, NavItem[]> = {
     { href: "/candidate", label: "My dashboard" },
     { href: "/jobs", label: "Find jobs" },
     { href: "/candidate/applications", label: "My applications" },
+    { href: "/candidate/saved", label: "Saved jobs" },
     { href: "/candidate/profile", label: "Profile and resume" },
     { href: "/candidate/alerts", label: "Job alerts" },
     { href: "/account/help", label: "Help and feedback" },
