@@ -11,7 +11,8 @@ import { getSession } from "@/lib/auth";
 import { getMyCandidateProfile, profileReady } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
 import { payText } from "@/lib/job-pay";
-import { canApplyForRole, roleMismatchText } from "@/lib/role-fit";
+import { canAddAsOtherRole, canApplyForRole, roleMismatchText } from "@/lib/role-fit";
+import { addRoleToProfile } from "@/lib/candidate-actions";
 import { licenceReady } from "@/lib/licence-columns";
 import { LICENCE_MISSING_TEXT, licenceComplete, licenceRequiredFor } from "@/lib/licence";
 import { getLiveJob } from "@/lib/public-jobs";
@@ -71,7 +72,16 @@ export default async function Apply({ params }: { params: Promise<{ id: string }
         <section className="card setup">
           <h2>This role is not your role</h2>
           <p>{roleMismatchText(profile.profession, job.role_category)}</p>
-          <Link href={`/candidate/profile?next=${next}`} className="btn">Update my profile</Link>
+          <div className="formbtns">
+            {canAddAsOtherRole(profile.profession, job.role_category) && (
+              <form action={addRoleToProfile}>
+                <input type="hidden" name="jobId" value={job.id} />
+                <input type="hidden" name="role" value={job.role_category} />
+                <button type="submit" className="btn">Yes, I would consider this role</button>
+              </form>
+            )}
+            <Link href={`/candidate/profile?next=${next}#other-roles`} className={canAddAsOtherRole(profile.profession, job.role_category) ? "btn ghost" : "btn"}>Update my profile</Link>
+          </div>
         </section>
       );
     } else if (profile && (await licenceReady()) && licenceRequiredFor(profile.profession, { role_category: job.role_category, province: job.province }) && !licenceComplete({ province: profile.licence_province ?? null, number: profile.licence_number ?? null, does: [], notYet: Boolean(profile.licence_not_yet) })) {

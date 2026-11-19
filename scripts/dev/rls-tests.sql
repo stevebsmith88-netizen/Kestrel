@@ -455,3 +455,11 @@ select t.try('0057', 'a clinic cannot see who follows it', 'clinic_c', 'count', 
 select t.try('0057', 'a visitor cannot read follows', 'visitor', 'count', 'select * from public.employer_follows', 'refused');
 select t.try('0057', 'the admin cannot read follows with their own sign in either (the server does)', 'admin', 'count', 'select * from public.employer_follows', 'refused');
 select t.try('0057', 'a follow goes when the candidate or the clinic goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.employer_follows'::regclass and contype = 'f'$$, 'c,c');
+
+-- ---------------------------------------------------------------- 0058: told when a clinic they asked about joins (server only)
+select t.try('0058', 'the server records that a candidate was told a clinic joined', 'server', 'write', $$update public.employer_interest set notified_at = now(), notified_employer_id = '{employer_c}'$$, 'not refused');
+select t.try('0058', 'a candidate cannot read who was told', 'ann', 'count', 'select notified_at from public.employer_interest', 'refused');
+select t.try('0058', 'a candidate cannot mark herself as told', 'ann', 'write', $$update public.employer_interest set notified_at = now()$$, 'refused');
+select t.try('0058', 'a clinic cannot read who was told', 'clinic_c', 'count', 'select notified_employer_id from public.employer_interest', 'refused');
+select t.try('0058', 'a visitor cannot read who was told', 'visitor', 'count', 'select notified_at from public.employer_interest', 'refused');
+select t.try('0058', 'a deleted clinic does not delete the candidate''s request', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.employer_interest'::regclass and confrelid = 'public.employers'::regclass$$, 'n');

@@ -19,7 +19,7 @@ import { FIELD_ROLES, PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/li
 import { missingSentence, readyToApply } from "@/lib/profile-ready";
 import { notify } from "@/lib/notifications";
 import { applicantWithdrew, newApplicant } from "@/lib/notify-text";
-import { canApplyForRole, canHaveFieldRoles, roleMismatchText } from "@/lib/role-fit";
+import { canApplyForRole, canHaveFieldRoles, roleMismatchText, canAddAsOtherRole, withRoleAdded } from "@/lib/role-fit";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -316,4 +316,23 @@ export async function withdrawApplication(form: FormData) {
   }
   revalidatePath("/candidate/applications");
   redirect(`/candidate/applications/${id}?notice=withdrawn`);
+}
+
+// One tap from the apply page: "Add this role to my profile". The role is added to Other roles you would consider, under the same rules as the
+// profile form (lib/role-fit.ts), and the candidate goes straight back to the apply page (Steve, 19th November 2026).
+export async function addRoleToProfile(form: FormData) {
+  const session = await requireRole("candidate");
+  const jobId = String(form.get("jobId") ?? "");
+  const role = String(form.get("role") ?? "");
+  if (!UUID.test(jobId)) redirect("/jobs");
+  const db = await supabaseServer();
+  if (db) {
+    const { data } = await db.from("candidate_profiles").select("profession, pref_other_roles").eq("user_id", session.userId).maybeSingle();
+    if (data?.profession && canAddAsOtherRole(data.profession, role)) {
+      const { error } = await db.from("candidate_profiles").update({ pref_other_roles: withRoleAdded(data.pref_other_roles as string[] | null, role) }).eq("user_id", session.userId);
+      if (error) console.error("Adding a role failed:", error.code, error.message);
+    }
+  }
+  revalidatePath("/candidate/profile");
+  redirect(`/jobs/${jobId}/apply`);
 }

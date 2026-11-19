@@ -85,6 +85,27 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
         </Field>
       </div>
 
+      {profession && (
+        <fieldset className="row provinces otherroles" id="other-roles">
+          <legend className="lab">What else would you consider?</legend>
+          <p className="help">Tick any other roles you would be happy to apply for, such as a practice or clinic manager role, or a step into a field or supplier role. A job only lets you apply when its role is yours or is ticked here. Optional.</p>
+          <div className="checkgrid">
+            {otherRolesOffered(profession).map((r) => (
+              <label className="consent" key={r}>
+                <input type="checkbox" name="otherRoles" value={r} defaultChecked={(initial?.pref_other_roles ?? []).includes(r)} />
+                <span>{r}</span>
+              </label>
+            ))}
+          </div>
+          {canHaveFieldRoles(profession) && (
+            <label className="consent fieldtick">
+              <input type="checkbox" name="openToField" defaultChecked={openToField(initial?.pref_other_roles)} />
+              <span><strong>Open to field and supplier roles.</strong> Sales, training, equipment service and account roles that travel to clinics. Jobs for these roles can then appear in your list, and you can apply for them.</span>
+            </label>
+          )}
+        </fieldset>
+      )}
+
       {REGISTERED_ROLES.includes(profession) && (
         <fieldset className="row provinces">
           <legend className="lab">Registered in (optional)</legend>
@@ -229,24 +250,6 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
               </label>
             ))}
           </div>
-        </fieldset>
-
-        <fieldset className="row provinces">
-          <legend className="lab">Other roles you would consider</legend>
-          <div className="checkgrid">
-            {otherRolesOffered(profession).map((r) => (
-              <label className="consent" key={r}>
-                <input type="checkbox" name="otherRoles" value={r} defaultChecked={(initial?.pref_other_roles ?? []).includes(r)} />
-                <span>{r}</span>
-              </label>
-            ))}
-          </div>
-          {canHaveFieldRoles(profession) && (
-            <label className="consent fieldtick">
-              <input type="checkbox" name="openToField" defaultChecked={openToField(initial?.pref_other_roles)} />
-              <span><strong>Open to field and supplier roles.</strong> Sales, training, equipment service and account roles that travel to clinics. Jobs for these roles can then appear in your list, and you can apply for them.</span>
-            </label>
-          )}
         </fieldset>
       </details>
 

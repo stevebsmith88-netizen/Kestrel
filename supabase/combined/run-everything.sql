@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0057), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0058), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3374,6 +3374,20 @@ revoke all on public.employer_follows from anon, authenticated;
 
 
 -- ======================================================================
+-- 0058_interest_notified.sql
+-- ======================================================================
+-- 0058: remember who has been told that a clinic they asked about has joined (Steve, 19th November 2026). Safe to run twice.
+--
+-- The "tell us you would like to work for them" form (0055) promises "if they join Kestrel we will let you know". When a clinic or company gets a
+-- public page, the daily job finds the people who asked about it, tells them once, and records it here so nobody is told twice. Still readable
+-- and writable only by the website's server (0055 gave visitors and signed in people no access, and nothing here changes that).
+
+alter table public.employer_interest add column if not exists notified_at timestamptz;
+alter table public.employer_interest add column if not exists notified_employer_id uuid references public.employers (id) on delete set null;
+create index if not exists employer_interest_waiting_idx on public.employer_interest (created_at) where notified_at is null;
+
+
+-- ======================================================================
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3483,6 +3497,7 @@ from (
     ('table: employer_interest (candidates asking about clinics not on Kestrel, for the server only, 0055)', to_regclass('public.employer_interest') is not null and not has_table_privilege('anon', 'public.employer_interest', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT')),
     ('columns: a candidate''s registration number, private to them and to a clinic through an application (0056)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'licence_number') and not has_column_privilege('anon', 'public.candidate_profiles', 'licence_number', 'SELECT') and has_column_privilege('authenticated', 'public.candidate_profiles', 'licence_number', 'UPDATE')),
     ('table: employer_follows (candidates following a clinic or company, for the server only, 0057)', to_regclass('public.employer_follows') is not null and not has_table_privilege('anon', 'public.employer_follows', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_follows', 'SELECT')),
+    ('columns: who has been told a clinic they asked about joined, still for the server only (0058)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_interest' and column_name = 'notified_at') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT') and not has_column_privilege('authenticated', 'public.employer_interest', 'notified_at', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

@@ -6,6 +6,9 @@ import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/emai
 import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
 import { alertHeading, alertSubject, followedLine } from "@/lib/follows";
+import { INTEREST_JOINED_BODY, INTEREST_JOINED_TITLE, matchPublicClinic } from "@/lib/clinic-interest";
+import { employerHref } from "@/lib/clinic-pages";
+import { listPublicClinics } from "@/lib/public-clinics";
 import { withExpected } from "@/lib/expected-columns";
 import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
@@ -74,7 +77,7 @@ async function runDaily(request: Request) {
   const started = Date.now();
   const outOfTime = () => Date.now() - started > TIME_LIMIT;
   const now = new Date();
-  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, onboardingSent: 0, indexNowSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
+  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, interestTold: 0, onboardingSent: 0, indexNowSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
   const problems: string[] = [];
 
   // Only one run at a time. If two copies started together, every email would go twice.
@@ -380,6 +383,34 @@ async function runDaily(request: Request) {
       summary.alertsSent += 1;
     } else {
       await putBack();
+    }
+  }
+
+  // 5d. Tell candidates when a clinic or company they asked about has joined (migration 0058). The "tell us you would like to work for them"
+  // form promises it. Each request is claimed before anything is sent, so nobody is told twice, and the clinic is never told who asked.
+  if (!outOfTime()) {
+    const { data: waiting, error: waitingError } = await admin.from("employer_interest").select("id, candidate_id, name_key, province").is("notified_at", null).order("created_at", { ascending: true }).limit(500);
+    if (waitingError) problems.push(`Reading clinic requests (has migration 0058 been run?): ${waitingError.message}`);
+    else if (waiting?.length) {
+      const { clinics, slugs } = await listPublicClinics();
+      for (const row of waiting) {
+        if (outOfTime()) break;
+        const match = matchPublicClinic(row as { name_key: string; province: string | null }, clinics);
+        const slug = match ? slugs.get(match.id) : null;
+        if (!match || !slug) continue;
+        const { data: claimed } = await admin.from("employer_interest").update({ notified_at: now.toISOString(), notified_employer_id: match.id }).eq("id", row.id).is("notified_at", null).select("id");
+        if (!claimed?.length) continue;
+        const href = employerHref(slug, match.practice_type);
+        await notify(admin, row.candidate_id, { kind: "clinic_joined", title: INTEREST_JOINED_TITLE(match.clinic_name), body: INTEREST_JOINED_BODY, href });
+        const [{ email, wants }, { data: asker }] = await Promise.all([candidateRecipient(admin, row.candidate_id), admin.from("profiles").select("unsubscribed_at").eq("id", row.candidate_id).maybeSingle()]);
+        if (!email || !wants || asker?.unsubscribed_at) continue;
+        if (!budget.take()) {
+          summary.emailsHeldBack += 1;
+          continue;
+        }
+        const mail = emailLayout({ heading: INTEREST_JOINED_TITLE(match.clinic_name), paragraphs: [INTEREST_JOINED_BODY], buttonText: "See their page", buttonUrl: `${SITE_URL}${href}` });
+        if (note(await deliverEmail({ to: email, subject: INTEREST_JOINED_TITLE(match.clinic_name), ...mail }))) summary.interestTold += 1;
+      }
     }
   }
 
