@@ -60,3 +60,21 @@ export function roleMismatchText(profession: string, jobRole: string): string {
   }
   return `${start} If that is not right, you can change your role in your profile to apply. You can also add this role under Other roles you would consider.`;
 }
+
+// Whether a job's role can be added to a candidate's profile as one they would consider, which is what the one tap "add this role" on the apply
+// page does. The same rules as the profile form: never the person's own role, never an optometrist job for someone who is not an optometrist, and
+// field and supplier roles only for people who can have them (Steve, 19th November 2026).
+export function canAddAsOtherRole(profession: string | null | undefined, jobRole: string | null | undefined): boolean {
+  if (!profession || !jobRole || profession === jobRole) return false;
+  if (neverTogether(profession, jobRole)) return false;
+  if ((FIELD_ROLES as readonly string[]).includes(jobRole)) return canHaveFieldRoles(profession);
+  return (CLINIC_ROLES as readonly string[]).includes(jobRole);
+}
+
+// The other roles after adding 1 more. A field or supplier role adds every field role, as the single tick on the profile does.
+export function withRoleAdded(otherRoles: readonly string[] | null | undefined, jobRole: string): string[] {
+  const field = FIELD_ROLES as readonly string[];
+  const base = [...(otherRoles ?? [])];
+  const add = field.includes(jobRole) ? [...FIELD_ROLES] : [jobRole];
+  return [...new Set([...base, ...add])];
+}

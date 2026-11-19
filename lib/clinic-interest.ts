@@ -37,3 +37,27 @@ export function cleanInterest(raw: Partial<Record<keyof InterestInput, unknown>>
   if (Object.keys(errors).length) return { errors };
   return { value: { clinicName, town: town || null, province: province || null, website, key: nameKey(clinicName, town) } };
 }
+
+export const INTEREST_JOINED_TITLE = (clinic: string) => `${clinic} has joined Kestrel`;
+export const INTEREST_JOINED_BODY = "You told us you would like to work for them. Open their page to see their jobs, or follow them to hear about new ones.";
+
+const normalise = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+export type PublicPlace = { id: string; clinic_name: string; city: string | null; province: string | null };
+
+// The clinic a saved request is about, once it has a public page. The name must match (spelling, capitals and punctuation aside). If the
+// candidate gave a town it must match too, and if they gave a province it must match. If more than 1 clinic fits (a chain with no town given),
+// nothing matches, so nobody is told about the wrong place.
+export function matchPublicClinic<T extends PublicPlace>(interest: { name_key: string; province?: string | null }, clinics: T[]): T | null {
+  const at = interest.name_key.lastIndexOf("|");
+  const name = at < 0 ? interest.name_key : interest.name_key.slice(0, at);
+  const town = at < 0 ? "" : interest.name_key.slice(at + 1);
+  if (!name) return null;
+  const fits = clinics.filter(
+    (c) =>
+      normalise(c.clinic_name) === name &&
+      (!town || normalise(c.city ?? "") === town) &&
+      (!interest.province || (c.province ?? "") === interest.province),
+  );
+  return fits.length === 1 ? fits[0] : null;
+}
