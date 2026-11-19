@@ -130,3 +130,11 @@ No real person's details are copied here. Address: https://aco.alinityapp.com/cl
 - **Results list:** Member with the number in brackets in full (for example "Smith, Amy (975)"), Registration Status (Current), and a Details button. Icons mark a member who has conditions or a comment.
 - **A person's page:** "Status as of" with the date and time, name, **Registration number** (in full, 3 digits in the examples), registration date (the year), nickname, Registration Status and Class (Regulated), Specializations (empty in the example), Conditions, Disciplinary Actions, and the practice locations with address and phone.
 - **What it means for us:** the register can be searched by number and shows it in full, so the button says "Check this number on the register": search the number, then check the name and status match. The same College's opticians register has no number box and is searched by name.
+
+## Nova Scotia optometrists, as seen by Steve (screenshots, 19th November 2026)
+
+No real person's details are copied here. Address: https://nsco.ca/site/findanoptometrist (Nova Scotia College of Optometrists, "Find an Optometrist", a member roster).
+- **Search fields:** First Name, Last Name, and a Home Address block (Address Line 1 and 2, City, Country, Province/State, Postal/Zip), with Search and Clear Form buttons. **No licence number box.** With no search it lists all 176 profiles, 50 a page.
+- **Results:** cards with "Dr." and the name, **Licence No** in full (5 digits, for example 50540), and a Details link.
+- **A person's page:** "Optometrist", the name, **Licence No**, and the main office and satellite offices with address and phone, with a map. **No status, expiry or conditions** are shown.
+- **What it means for us:** a clinic searches the surname and compares the licence number. Because the roster shows no status line, the help text says to ask the College if the clinic needs to confirm the licence is current.
