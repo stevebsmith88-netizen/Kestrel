@@ -75,3 +75,11 @@ test("a College with no online register we can find says so, and points to the C
   assert.match(registerAdvice(nl).help, /could not find an online register/);
   assert.match(registerAdvice(nl).button, /College's website/);
 });
+
+test("Alberta optometrists can be searched by licence number, which the register shows in full", () => {
+  const ab = registerFor("Optometrist", "Alberta")!;
+  assert.equal(ab.kind, "number");
+  assert.equal(ab.numberShown, "full");
+  assert.match(registerAdvice(ab).button, /Check this number/);
+  assert.equal(registerFor("Optician", "Alberta")?.kind, "name", "the opticians register has no number box");
+});
