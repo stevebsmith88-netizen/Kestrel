@@ -14,6 +14,7 @@ import { getLiveJob } from "@/lib/public-jobs";
 import { clinicHrefFor } from "@/lib/public-clinics";
 import FollowButton from "@/components/FollowButton";
 import SaveJobButton from "@/components/SaveJobButton";
+import ViewApplicantsButton from "@/components/ViewApplicantsButton";
 import { shareMetadata } from "@/lib/share";
 
 // Saved and shared for up to 5 minutes (audit P1-10), and cleared at once when the job changes (lib/job-cache.ts). force-static means the
@@ -112,6 +113,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             </div>
 
             <aside className="jobaside">
+              <ViewApplicantsButton jobId={job.id} />
               <section className="card applybox" id="apply">
                 <h2>Apply</h2>
                 {job.apply_method === "external" && job.apply_url ? (

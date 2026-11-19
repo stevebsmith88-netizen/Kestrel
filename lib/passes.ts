@@ -74,8 +74,9 @@ export function passChoices(decision: Exclude<PassDecision, { kind: "covered" }>
   };
 }
 
-// The line under the name in the account menu for a clinic: its plan once passes are offered, and no line before that (it would only repeat Plans and billing).
+// The line under the name in the account menu for a clinic: "Plan: Clinic pass", "Plan: Clinic pass Plus" or "Plan: Pay as you go" (a clinic with no pass
+// pays for each post), once passes are offered, and no line before that (it would only repeat Plans and billing). Steve, 19th November 2026.
 export function planLineText(args: { passesOn: boolean; planName: string | null }): string {
   if (!args.passesOn) return "";
-  return args.planName ?? "Single posts";
+  return `Plan: ${args.planName ?? "Pay as you go"}`;
 }
