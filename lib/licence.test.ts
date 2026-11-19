@@ -91,3 +91,11 @@ test("Nova Scotia optometrists are searched by name, show the licence number, an
   assert.match(registerAdvice(ns).help, /shows no status line/);
   assert.doesNotMatch(registerAdvice(registerFor("Optician", "Alberta")!).help, /no status line/);
 });
+
+test("New Brunswick optometrists are a directory with a code beside each name and no status line", () => {
+  const nb = registerFor("Optometrist", "New Brunswick")!;
+  assert.equal(nb.url, "https://www.nbao.ca/en/find-an-optometrist");
+  assert.match(registerAdvice(nb).button, /Look this person up/);
+  assert.match(registerAdvice(nb).help, /code in brackets/);
+  assert.match(registerAdvice(registerFor("Optometrist", "Nova Scotia")!).help, /licence number matches/);
+});
