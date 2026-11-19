@@ -2,6 +2,8 @@
 
 import { applicantSnapshot } from "./application-details.ts";
 import { candidateLinkedinReady, withCandidateLinkedin } from "@/lib/social-columns";
+import { licenceReady, withLicence } from "@/lib/licence-columns";
+import { LICENCE_MISSING_TEXT, cleanLicence, licenceComplete, licenceRequiredFor, licenceRole } from "@/lib/licence";
 import { cleanSocialUrl } from "@/lib/social-links";
 import { APPLY_LIMIT_TEXT, MAX_APPLICATIONS_PER_DAY, applyWindowStart, overApplyLimit } from "@/lib/apply-limit";
 import { randomUUID } from "node:crypto";
@@ -84,12 +86,15 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
   // An optional LinkedIn profile (Steve, 15th November 2026): the candidate's own page only, sent to a clinic with an application.
   const linkedin = cleanSocialUrl("linkedin", text(form, "linkedin", 300), "candidate");
   if (linkedin.error) errors.linkedin = linkedin.error;
+  // An optometrist or optician can give their registration number (Steve, 19th November 2026). Entered by them, never checked by Kestrel.
+  const licence = cleanLicence(licenceRole(profession), { province: text(form, "licenceProvince", 40), number: text(form, "licenceNumber", 40), does: form.getAll("licenceDoes").map(String), notYet: form.get("licenceNotYet") === "on" });
+  if (licence.errors) Object.assign(errors, licence.errors);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
   // Left out until the database has the column (migration 0054), so saving a profile never fails because of it.
-  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...((await candidateLinkedinReady()) ? { linkedin_url: linkedin.url || null } : {}), ...prefs.row };
+  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...((await candidateLinkedinReady()) ? { linkedin_url: linkedin.url || null } : {}), ...((await licenceReady()) && licence.licence ? { licence_province: licence.licence.province, licence_number: licence.licence.number, licence_does: licence.licence.does, licence_not_yet: licence.licence.notYet } : {}), ...prefs.row };
 
   const { data: existing } = await db.from("candidate_profiles").select("user_id").eq("user_id", session.userId).maybeSingle();
   const { error } = existing
@@ -212,12 +217,16 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   if (!job || job.status !== "live" || new Date(job.expires_at) <= new Date() || !clinicName) return { error: "This job is no longer open for applications." };
   if (job.apply_method !== "kestrel") return { error: "This job takes applications on the clinic's own website." };
 
-  const { data: profileRow } = await admin.from("candidate_profiles").select(await withCandidateLinkedin("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, home_city, home_province")).eq("user_id", session.userId).maybeSingle();
-  const profile = profileRow as unknown as { profession: string | null; pref_other_roles: string[] | null; licensed_provinces: string[] | null; years_experience: string | null; available_from: string | null; phone: string | null; cv_path: string | null; cv_filename: string | null; home_city: string | null; home_province: string | null; linkedin_url?: string | null } | null;
+  const { data: profileRow } = await admin.from("candidate_profiles").select(await withLicence(await withCandidateLinkedin("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, home_city, home_province"))).eq("user_id", session.userId).maybeSingle();
+  const profile = profileRow as unknown as { profession: string | null; pref_other_roles: string[] | null; licensed_provinces: string[] | null; years_experience: string | null; available_from: string | null; phone: string | null; cv_path: string | null; cv_filename: string | null; home_city: string | null; home_province: string | null; linkedin_url?: string | null; licence_province?: string | null; licence_number?: string | null; licence_does?: string[] | null; licence_not_yet?: boolean | null } | null;
   if (!profile || !readyToApply(profile)) return { error: `Please add ${missingSentence(profile ?? null)} to your profile first.` };
   if (!profile.profession || !profile.cv_path) return { error: "Please finish your profile and save your resume first." };
   // The role on the profile has to fit the job (lib/role-fit.ts). The job page and the apply page say so first, and this stops it from the server too.
   if (!canApplyForRole(profile.profession, profile.pref_other_roles, job.role_category)) return { error: roleMismatchText(profile.profession, job.role_category) };
+  // Optometrist jobs, and optician jobs where the province regulates opticians, ask for the registration number (Steve, 19th November 2026).
+  // The number is the candidate's own answer, never checked by Kestrel. Someone not registered yet can say so instead. The apply page says
+  // this first, and this stops it from the server too. A database without migration 0056 has no number to ask for, so nobody is held up.
+  if ((await licenceReady()) && licenceRequiredFor(profile.profession, { role_category: job.role_category, province: job.province }) && !licenceComplete({ province: profile.licence_province ?? null, number: profile.licence_number ?? null, does: [], notYet: Boolean(profile.licence_not_yet) })) return { error: LICENCE_MISSING_TEXT };
 
   // No more than 30 applications in 24 hours (lib/apply-limit.ts). If the count cannot be read, the application goes ahead.
   const now = new Date();

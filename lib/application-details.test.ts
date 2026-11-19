@@ -8,15 +8,26 @@ const date = (iso: string) => `date:${iso}`;
 const who = { name: "Sam Lee", email: "sam@example.com" };
 
 test("the apply page lists all 9 things that are sent (P1-32)", () => {
-  const a = applicantSnapshot(who, { profession: "Optician", phone: "416 555 0101", licensed_provinces: ["Ontario", "Alberta"], years_experience: "5 to 10 years", available_from: "2027-01-04", linkedin_url: "https://www.linkedin.com/in/sam-lee" });
+  const a = applicantSnapshot(who, { profession: "Dental hygienist", phone: "416 555 0101", licensed_provinces: ["Ontario", "Alberta"], years_experience: "5 to 10 years", available_from: "2027-01-04", linkedin_url: "https://www.linkedin.com/in/sam-lee" });
   const rows = sentDetails(a, "sam-resume.pdf", date);
   assert.deepEqual(rows.map((r) => r.label), ["Name", "Email", "Phone", "Role", "Registered in", "Years of experience", "Available from", "LinkedIn", "Resume"]);
-  assert.deepEqual(rows.map((r) => r.value), ["Sam Lee", "sam@example.com", "416 555 0101", "Optician", "Ontario, Alberta", "5 to 10 years", "date:2027-01-04", "https://www.linkedin.com/in/sam-lee", "sam-resume.pdf"]);
+  assert.deepEqual(rows.map((r) => r.value), ["Sam Lee", "sam@example.com", "416 555 0101", "Dental hygienist", "Ontario, Alberta", "5 to 10 years", "date:2027-01-04", "https://www.linkedin.com/in/sam-lee", "sam-resume.pdf"]);
+});
+
+test("an optician or optometrist also sends the registration number they entered, and the apply page lists it (Steve, 19th November 2026)", () => {
+  const a = applicantSnapshot(who, { profession: "Optician", licence_province: "Alberta", licence_number: "02723", licence_does: ["eyeglasses", "contact_lenses", "junk"], licence_not_yet: false });
+  assert.deepEqual(a.licence, { province: "Alberta", number: "02723", does: ["eyeglasses", "contact_lenses"], notYet: false });
+  const rows = sentDetails(a, "r.pdf", date);
+  assert.equal(rows.find((r) => r.label === "Registration number")?.value, "02723, Alberta (College of Opticians of Alberta)");
+  assert.equal(rows.find((r) => r.label === "Registered for")?.value, "Eyeglasses and Contact lenses");
+  assert.equal(sentDetails(applicantSnapshot(who, { profession: "Optometrist" }), null, date).find((r) => r.label === "Registration number")?.value, "Not given");
+  assert.equal(applicantSnapshot(who, { profession: "Optometric assistant or technician", licence_number: "1234" }).licence, undefined, "only these 2 roles send a number");
+  assert.equal(applicantSnapshot(who, { profession: "Optician", licence_not_yet: true }).licence?.notYet, true);
 });
 
 test("empty details show Not given", () => {
   const rows = sentDetails(applicantSnapshot(who, { profession: "Optician" }), null, date);
-  assert.deepEqual(rows.filter((r) => r.value === "Not given").map((r) => r.label), ["Phone", "Registered in", "Years of experience", "Available from", "LinkedIn", "Resume"]);
+  assert.deepEqual(rows.filter((r) => r.value === "Not given").map((r) => r.label), ["Phone", "Registered in", "Registration number", "Years of experience", "Available from", "LinkedIn", "Resume"]);
   assert.equal(sentDetails(applicantSnapshot(who, { licensed_provinces: [] }), "x.pdf", date).find((r) => r.label === "Registered in")?.value, "Not given");
 });
 
