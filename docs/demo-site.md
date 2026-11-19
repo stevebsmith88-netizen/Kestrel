@@ -66,6 +66,15 @@ where id = (select id from auth.users where email = 'kestrel+demoadmin@eyecarejo
 
 You can use other addresses. If you do, change the 2 addresses at the top of Part 2 in `seed.sql`, and the list at the top of `reset.sql`.
 
+## What the sample data shows from the November 2026 builds
+
+Run `seed.sql` (Part 2 needs the demo accounts) and these are in place:
+
+- **Candidate (`democandidate`):** a registration number on the profile (Optician, Ontario, both eyeglasses and contact lenses) and a LinkedIn address; an application at the **Interview** step, with an online interview in 5 days, a Join the meeting button and add to calendar buttons; 3 followed clinics (Job alerts, Following); 4 saved jobs (Saved jobs, 1 closes in 2 days, which the daily email mentions); an inbox message that Harbourside Optical has joined, after they asked about it.
+- **Clinic (`democlinic`):** applicants with registration numbers (Registration card with the register button, and one "not registered yet"), 1 applicant invited to interview with a Zoom link, a public page with Instagram and Facebook icons, and a headline on the Optician job. The View applicants button shows on the Optician job page when signed in as this clinic.
+- **Public pages:** Harbourside Optical and Maple Grove (sample) have social icons and a Follow button; 2 jobs carry a headline.
+- **Admin (`demoadmin`):** People, Interest in clinics shows Birchwood Eye Care in Barrie with 3 people asking, never who.
+
 ## A 10 minute walkthrough
 
 1. **As a visitor:** home page (the numbers box and the blog), Find jobs, a filter, a job page.
