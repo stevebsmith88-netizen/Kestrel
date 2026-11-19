@@ -31,7 +31,7 @@ export default async function AdminCandidates({ searchParams }: { searchParams: 
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
           <h1>Candidates</h1>
-          <p className="lede2">Everyone who has registered as a candidate, newest first, without the demo accounts. You see who they are and what they have set up, never a resume or what an application says.</p>
+          <p className="lede2">Everyone who has registered as a candidate, newest first, without the demo and Kestrel test accounts. You see who they are and what they have set up, never a resume or what an application says.</p>
           <AdminSearch id="ac-cq" label="Name, email, town or profession" defaultValue={search} clearHref="/admin/candidates" />
           {!everyone ? (
             <p className="help">The list is not available because the database is not connected.</p>

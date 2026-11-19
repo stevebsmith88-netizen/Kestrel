@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { AdminCancel, AdminMakeOwner, AdminProfileForm, AdminRemove, AdminResend } from "@/components/AdminClinicForms";
 import { requireRole } from "@/lib/auth";
-import { longDate } from "@/lib/jobs";
+import { employeeBandLabel, longDate } from "@/lib/jobs";
+import { withClinicSocial } from "@/lib/social-columns";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { levelLabel } from "@/lib/team";
 import { loadTeam } from "@/lib/team-server";
@@ -26,6 +28,32 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
   if (!UUID.test(id) || !admin) notFound();
   const { data: clinic } = await admin.from("employers").select("id, clinic_name, practice_type, website, province, city, about, status, claimed").eq("id", id).maybeSingle();
   if (!clinic) notFound();
+  // How to reach the clinic (Steve, 19th November 2026): its own business details and the owner's name and sign in email, read only. This does not
+  // open the team or settings, which still need the owner's help request (migration 0046).
+  const { data: more } = await admin.from("employers").select(await withClinicSocial("owner_id, created_at")).eq("id", id).maybeSingle();
+  const extra = (more ?? {}) as unknown as Record<string, string | null>;
+  const ownerId = extra.owner_id ?? null;
+  const [{ data: ownerUser }, { data: ownerProfile }, { data: contactRow }] = await Promise.all([
+    ownerId ? admin.auth.admin.getUserById(ownerId) : Promise.resolve({ data: null }),
+    ownerId ? admin.from("profiles").select("full_name").eq("id", ownerId).maybeSingle() : Promise.resolve({ data: null }),
+    admin.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", id).maybeSingle(),
+  ]);
+  const ownerEmail = ownerUser?.user?.email ?? "";
+  const web = (clinic.website as string | null) ?? "";
+  const safeWeb = /^https?:\/\//i.test(web) ? web : "";
+  const contactFacts: [string, ReactNode][] = [
+    ["Owner", (ownerProfile?.full_name as string | undefined) || "Name not given"],
+    ["Owner sign in email", ownerEmail ? <a key="oe" href={`mailto:${ownerEmail}`}>{ownerEmail}</a> : "Not available"],
+    ["Job alert email", contactRow?.notify_email ? <a key="ne" href={`mailto:${contactRow.notify_email as string}`}>{contactRow.notify_email as string}</a> : "Not given"],
+    ["Website", safeWeb ? <a key="w" href={safeWeb} target="_blank" rel="noopener noreferrer">{web}</a> : web || "Not given"],
+    ["Place", `${clinic.city}, ${clinic.province}`],
+    ["Type", clinic.practice_type === "corporate" ? "Corporate" : clinic.practice_type === "supplier" ? "Supplier or manufacturer" : "Independent"],
+    ["Team size", employeeBandLabel(contactRow?.employee_band as string | null)],
+    ["Registered", extra.created_at ? longDate(extra.created_at) : "Not available"],
+    ...(["social_instagram", "social_facebook", "social_linkedin"] as const)
+      .filter((k) => extra[k])
+      .map((k): [string, ReactNode] => [k.replace("social_", "").replace(/^./, (c) => c.toUpperCase()), <a key={k} href={extra[k] as string} target="_blank" rel="noopener noreferrer">{extra[k]}</a>]),
+  ];
   const [{ people, invites }, { data: jobs }, { data: log }] = await Promise.all([
     loadTeam(admin, id),
     admin.from("jobs").select("id, title, status, posted_at, expires_at").eq("employer_id", id).order("created_at", { ascending: false }).limit(50),
@@ -46,6 +74,13 @@ export default async function AdminClinic({ params }: { params: Promise<{ id: st
           <h1>{clinic.clinic_name}</h1>
           <p className="lede2">{clinic.status === "active" ? "Active" : "Suspended"} · {clinic.claimed ? "Claimed" : "Not claimed"}.</p>
           {access && <p><Link href={`/admin/post-for-clinic/${clinic.id}`} className="btn sm ghost">Post a job for this clinic</Link></p>}
+
+          <h2>Contact</h2>
+          <dl className="facts">
+            {contactFacts.map(([k, v]) => (
+              <div key={k}><dt>{k}</dt><dd>{v}</dd></div>
+            ))}
+          </dl>
 
           {access ? (
             <div className="notice" role="status"><strong>Access given until {longDate(access.access_until as string)}</strong> for: {reasonLabel(access.reason as string | null)}. &quot;{access.message}&quot;</div>

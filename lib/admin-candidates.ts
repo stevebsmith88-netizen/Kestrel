@@ -1,11 +1,11 @@
 // Admin, Candidates (Steve, 19th November 2026): who has registered, without the demo accounts. Kept free of the database so it can be tested.
 // Shows who they are and what they have set up, never a resume, a note or the contents of an application.
 
-// The demo and test accounts used to show people around ("kestrel+democandidate@..."): "+demo" or a start of "demo" in the part before the @.
-// A real person whose name merely contains "demo" is not hidden.
+// The demo and test accounts used to show people around, and Kestrel's own addresses (Steve, 19th November 2026): "+demo" or a start of "demo"
+// in the part before the @, or any address at eyecarejobs.ca (no real candidate has one). A real person whose name merely contains "demo" is not hidden.
 export function isDemoAccountEmail(email: string | null | undefined): boolean {
-  const local = (email ?? "").toLowerCase().split("@")[0] ?? "";
-  return local.startsWith("demo") || local.includes("+demo");
+  const [local = "", domain = ""] = (email ?? "").toLowerCase().split("@");
+  return local.startsWith("demo") || local.includes("+demo") || domain === "eyecarejobs.ca" || domain.endsWith(".eyecarejobs.ca");
 }
 
 export type CandidateRow = {
