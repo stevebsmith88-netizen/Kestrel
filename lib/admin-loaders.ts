@@ -103,3 +103,22 @@ export async function loadSuppressions(db: Db | null) {
   const { data } = await db.from("email_suppressions").select("id, address, reason, source, created_at").order("created_at", { ascending: false }).limit(500);
   return (data ?? []) as Row[];
 }
+
+// ---- Interest: clinics and companies not on Kestrel that candidates said they would like to work for (migration 0055) ----
+// Grouped by name and town, with how many different candidates asked. No candidate is named here, so nothing personal is on the page.
+export async function loadInterest(db: Db | null) {
+  if (!db) return { groups: [] as { name: string; town: string | null; province: string | null; website: string | null; people: number; latest: string }[], error: null as string | null };
+  const { data, error } = await db.from("employer_interest").select("clinic_name, town, province, website, name_key, created_at").order("created_at", { ascending: false }).limit(5000);
+  if (error) return { groups: [], error: String(error.message ?? "") };
+  const byKey = new Map<string, { name: string; town: string | null; province: string | null; website: string | null; people: number; latest: string }>();
+  for (const r of (data ?? []) as Row[]) {
+    const key = String(r.name_key);
+    const g = byKey.get(key);
+    if (g) {
+      g.people += 1;
+      g.website = g.website ?? (r.website as string | null);
+      g.province = g.province ?? (r.province as string | null);
+    } else byKey.set(key, { name: String(r.clinic_name), town: (r.town as string | null) ?? null, province: (r.province as string | null) ?? null, website: (r.website as string | null) ?? null, people: 1, latest: String(r.created_at) });
+  }
+  return { groups: [...byKey.values()].sort((a, b) => b.people - a.people || b.latest.localeCompare(a.latest)), error: null };
+}

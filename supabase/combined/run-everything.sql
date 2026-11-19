@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0054), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0055), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3300,6 +3300,33 @@ $$;
 
 
 -- ======================================================================
+-- 0055_employer_interest.sql
+-- ======================================================================
+-- 0055: "Tell us you would like to work for them" (Steve, 19th November 2026). Safe to run twice.
+--
+-- A candidate who looks for a clinic or company that is not on Kestrel yet can say they would like to work for it. Kestrel keeps the clinic's
+-- name, town and website (if the candidate knows it), with who asked, so Admin can see how many people are asking about each. Nothing is sent
+-- to the clinic now. When clinic outreach is switched on, a clinic that is asked about can be sent 1 short email to its published business
+-- address, with no candidate's name or details in it. Only the website's server reads and writes this table (visitors and signed in people
+-- have no access), and the candidate's own rows are in their data download and are deleted with their account.
+
+create table if not exists public.employer_interest (
+  id            uuid primary key default gen_random_uuid(),
+  created_at    timestamptz not null default now(),
+  candidate_id  uuid not null references auth.users (id) on delete cascade,
+  clinic_name   text not null check (char_length(clinic_name) between 2 and 120),
+  town          text check (town is null or char_length(town) <= 80),
+  province      text check (province is null or char_length(province) <= 40),
+  website       text check (website is null or char_length(website) <= 200),
+  name_key      text not null check (char_length(name_key) <= 220),
+  unique (candidate_id, name_key)
+);
+create index if not exists employer_interest_name_key_idx on public.employer_interest (name_key);
+alter table public.employer_interest enable row level security;
+revoke all on public.employer_interest from anon, authenticated;
+
+
+-- ======================================================================
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3406,6 +3433,7 @@ from (
     ('columns: a pass remembers if it is a founding pass and its price lock (0052)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'location_passes' and column_name = 'price_locked_until') and has_column_privilege('authenticated', 'public.location_passes', 'price_locked_until', 'SELECT') and not has_column_privilege('authenticated', 'public.location_passes', 'stripe_schedule_id', 'SELECT')),
     ('column: an optional headline on a job, readable by visitors (0053)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'headline') and has_column_privilege('anon', 'public.jobs', 'headline', 'SELECT')),
     ('columns: a clinic''s social links readable by visitors, a candidate''s LinkedIn private (0054)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'social_linkedin') and has_column_privilege('anon', 'public.employers', 'social_linkedin', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'linkedin_url') and not has_column_privilege('anon', 'public.candidate_profiles', 'linkedin_url', 'SELECT')),
+    ('table: employer_interest (candidates asking about clinics not on Kestrel, for the server only, 0055)', to_regclass('public.employer_interest') is not null and not has_table_privilege('anon', 'public.employer_interest', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

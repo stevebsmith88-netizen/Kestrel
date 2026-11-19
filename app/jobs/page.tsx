@@ -14,6 +14,7 @@ import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATE
 import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, findPlace, placeLabel } from "@/lib/places";
 import { clampPage } from "@/lib/paging";
+import ClinicInterest from "@/components/ClinicInterest";
 import { findPublicClinics } from "@/lib/public-clinics";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
@@ -202,6 +203,9 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 </li>
               ))}
             </ul>
+          )}
+          {filters.q && filters.q.length >= 3 && clinicMatches.length === 0 && jobs.length === 0 && !placeNotFound && (launched || session) && (
+            <ClinicInterest name={filters.q} signedIn={session ? (session.role === "candidate" ? "candidate" : "other") : "out"} />
           )}
           {inUse.length > 0 && (
             <ul className="sf-tags" aria-label="Filters in use">

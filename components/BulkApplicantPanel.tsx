@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useState, type MouseEvent, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { showToast } from "@/components/toast";
 import { BULK_PROBLEMS } from "@/lib/bulk-notices";
@@ -31,35 +31,19 @@ function BulkButton({ action, className, onCheck, children }: { action: BulkActi
 }
 
 // The "With the ticked applicants" box on the applicants page. It sits inside the page's form, so the 3 buttons send the ticked
-// applicants (and the message) to the server. The checks for "nothing ticked" and "no interview message" happen here, on the
+// applicants (and the message) to the server. The check for "nothing ticked" happens here, on the
 // page, before anything is sent, so the ticks and the message are never lost. The server checks again (lib/applicant-actions.ts).
 // When a button works, the applicants list refreshes where it stands, the ticks and message clear, and a small message appears.
-export default function BulkApplicantPanel({ shortlist, interview, decline }: { shortlist: BulkAction; interview: BulkAction; decline: BulkAction }) {
+export default function BulkApplicantPanel({ shortlist, decline }: { shortlist: BulkAction; decline: BulkAction }) {
   const [problem, setProblem] = useState("");
-  const message = useRef<HTMLTextAreaElement>(null);
 
-  function check(e: MouseEvent<HTMLButtonElement>, needsMessage: boolean) {
+  function check(e: MouseEvent<HTMLButtonElement>) {
     const form = e.currentTarget.form;
     if (!form) return;
     if (!form.querySelector('input[name="ids"]:checked')) {
       e.preventDefault();
       setProblem(BULK_PROBLEMS.none);
       return;
-    }
-    if (needsMessage) {
-      const text = message.current?.value.trim() ?? "";
-      if (!text) {
-        e.preventDefault();
-        setProblem(BULK_PROBLEMS.message);
-        message.current?.focus();
-        return;
-      }
-      if (/\[[^\]]+\]/.test(text)) {
-        e.preventDefault();
-        setProblem(BULK_PROBLEMS.brackets);
-        message.current?.focus();
-        return;
-      }
     }
     setProblem("");
   }
@@ -69,26 +53,13 @@ export default function BulkApplicantPanel({ shortlist, interview, decline }: { 
       <h2 id="bulk-title">With the ticked applicants</h2>
       <ul className="bulkhelp">
         <li><strong>Shortlist</strong> is your own working list. No email is sent.</li>
-        <li><strong>Invite to interview</strong> sends everyone you tick the message below, by email and in their account. For different times, open each application.</li>
         <li><strong>Send a kind no</strong> gives each person the same warm message you would send one at a time, by email and in their account.</li>
       </ul>
-      <label className="lab" htmlFor="bulkMessage">Interview invitation (used only for Invite to interview)</label>
-      <textarea
-        ref={message}
-        id="bulkMessage"
-        name="message"
-        rows={3}
-        maxLength={1500}
-        aria-describedby={problem ? "bulk-problem" : undefined}
-        onChange={() => problem && setProblem("")}
-        placeholder="For example: We would like to meet you at the clinic on Tuesday 24th November at 2 pm. We will contact you using the details on your application to confirm."
-      />
-      <p className="help">Offers are never made in bulk. Open the application to make one, and to add a Zoom, Teams or Google Meet link to an interview invitation.</p>
+      <p className="help">Interviews and offers are never made in bulk, because each needs its own time, place and details. Open the application to invite someone.</p>
       {problem && <p className="notice warn bulkproblem" id="bulk-problem" role="alert">{problem}</p>}
       <div className="bulkbtns">
-        <BulkButton action={shortlist} className="btn sm" onCheck={(e) => check(e, false)}>Shortlist</BulkButton>
-        <BulkButton action={interview} className="btn sm" onCheck={(e) => check(e, true)}>Invite to interview</BulkButton>
-        <BulkButton action={decline} className="btn sm ghost" onCheck={(e) => check(e, false)}>Send a kind no</BulkButton>
+        <BulkButton action={shortlist} className="btn sm" onCheck={check}>Shortlist</BulkButton>
+        <BulkButton action={decline} className="btn sm ghost" onCheck={check}>Send a kind no</BulkButton>
       </div>
     </section>
   );

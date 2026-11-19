@@ -12,7 +12,7 @@ import { getMyEmployer } from "@/lib/clinic";
 import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { GROUP_LABELS } from "@/lib/applications";
 import { FILTERS, WAITING, loadApplicants } from "@/lib/applicant-list";
-import { declineSelected, declineSelectedQuiet, fillRole, interviewSelectedQuiet, shortlistSelectedQuiet } from "@/lib/applicant-actions";
+import { declineSelected, declineSelectedQuiet, fillRole, shortlistSelectedQuiet } from "@/lib/applicant-actions";
 import { BULK_PROBLEMS, declinedText } from "@/lib/bulk-notices";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getMyJob } from "@/lib/clinic";
@@ -88,7 +88,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
               ))}
             </div>
             {editor && shown.some((r) => WAITING.includes(r.status)) && (
-              <BulkApplicantPanel shortlist={shortlistSelectedQuiet} interview={interviewSelectedQuiet} decline={declineSelectedQuiet} />
+              <BulkApplicantPanel shortlist={shortlistSelectedQuiet} decline={declineSelectedQuiet} />
             )}
             </form>
           )}

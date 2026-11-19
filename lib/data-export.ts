@@ -96,6 +96,9 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     data.jobsMarkedNotInterested = extras.jobsMarkedNotInterested;
     (data.account as Record<string, unknown>).name_last_changed_at = extras.nameLastChangedAt;
     data.applications = exportApplications(appRows, list<EventRow>(events.data));
+    // Clinics and companies not on Kestrel that the candidate said they would like to work for (migration 0055). Empty before the SQL is run.
+    const interest = await db.from("employer_interest").select("clinic_name, town, province, website, created_at").eq("candidate_id", id).order("created_at", { ascending: false });
+    data.placesIWouldLikeToWorkAt = interest.error ? [] : interest.data ?? [];
   } else {
     // Every location this account owns (migration 0047). The first is "clinic", as before; any others are under "otherLocations".
     const owned = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).order("created_at");

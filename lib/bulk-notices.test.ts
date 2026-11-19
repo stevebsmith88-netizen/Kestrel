@@ -39,7 +39,7 @@ test("every history write and job write in the applicant actions is checked", ()
   assert.match(source, /notifyAdmin\(/);
   // fillRole and markHired check the job writes too.
   assert.doesNotMatch(source, /^\s*await (db|admin)\.from\("jobs"\)\.update\(/m, "job writes are checked");
-  for (const name of ["shortlistSelectedQuiet", "interviewSelectedQuiet", "declineSelectedQuiet"]) {
+  for (const name of ["shortlistSelectedQuiet", "declineSelectedQuiet"]) {
     const body = source.slice(source.indexOf(`export async function ${name}(`));
     assert.match(body.slice(0, body.indexOf("\n}\n")), /historyNote\(/, `${name} tells the clinic`);
   }

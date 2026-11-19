@@ -295,6 +295,16 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Find jobs", href: "/jobs" }, { label: "What you are looking for", href: "/candidate/profile#looking-for" }],
       },
       {
+        id: "work-for-a-clinic-not-on-kestrel",
+        title: "What if the clinic or company I want to work for is not on Kestrel?",
+        keywords: ["clinic not listed", "not on kestrel", "interested", "request a clinic", "favourite", "company", "supplier", "find a clinic"],
+        answer: [
+          "Type the name into the search box on **Find jobs**. If the clinic or company has a page on Kestrel, a link to it appears above the results, with its open jobs. A name only finds places that have a page, which needs at least 1 job approved by Kestrel.",
+          "If nothing matches and no jobs come up, open **Looking for a clinic or company that is not on Kestrel yet?** under the search box and tell us who it is. We keep a count of who people ask about, and if they join Kestrel we will let you know. We do not share your name or details with the clinic. You can tell us about up to 20 places, and they are deleted with your account.",
+        ],
+        links: [{ label: "Find jobs", href: "/jobs" }],
+      },
+      {
         id: "search-and-filter-jobs",
         title: "How do I search and filter jobs, including by distance?",
         keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "filters", "phone", "city"],
@@ -587,14 +597,14 @@ export const HELP: HelpSection[] = [
         keywords: ["bulk", "several", "multiple", "tick", "mass", "shortlist", "decline", "reject", "invite"],
         answer: [
           "On the applicants list, tick the boxes next to the people you want, then use the panel **With the ticked applicants**. Only applications still waiting can be ticked: Applied, Viewed and Shortlisted. You can act on up to 100 at a time.",
-          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. **Invite to interview** sends everyone you ticked the same message, by email and in their account, so write the date, time and how to join in the **Interview invitation** box first. The panel with these 3 buttons sits below the list. For different times, open each application instead. **Send a kind no** gives each person the same warm message you would send one at a time.",
+          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. The panel with these 2 buttons sits below the list. Interviews and offers are never made in bulk, because each needs its own time, place and details, so open the application to invite someone. **Send a kind no** gives each person the same warm message you would send one at a time.",
           "Offers are never made in bulk. Open the application to make one. Applicants who are already at the interview or offer step cannot be ticked.",
         ],
         steps: [
           "Open the applicants list for the job.",
           "Tick the box next to each applicant you want to include.",
           "For an interview, write your invitation in the **Interview invitation** box first.",
-          "Press **Shortlist**, **Invite to interview** or **Send a kind no**.",
+          "Press **Shortlist** or **Send a kind no**.",
           "If nothing is ticked, or the invitation is empty or still has square brackets in it, the page tells you straight away and keeps your ticks. Otherwise it confirms how many were moved. Anyone who was already at that step, or who had withdrawn, is left as they were.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],

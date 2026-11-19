@@ -138,20 +138,6 @@ export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData):
   return bulkAnswer(movedText("shortlisted", moved, skipped) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
 }
 
-export async function interviewSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
-  const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
-  const jobId = String(form.get("jobId") ?? "");
-  const ids = pickedIds(form);
-  if (!UUID.test(jobId)) redirect("/clinic");
-  if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
-  const message = String(form.get("message") ?? "").replace(/\r\n/g, "\n").trim().slice(0, 1500);
-  if (clinicMoveError("viewed", "interview", true, message)) return bulkAnswer(message ? BULK_PROBLEMS.brackets : BULK_PROBLEMS.message, "warn");
-  const { moved, skipped, historyFailed } = await moveWaiting(jobId, ids, "interview", { message });
-  revalidatePath(`/clinic/jobs/${jobId}/applicants`);
-  return bulkAnswer(movedText("interview", moved, skipped) + historyNote(historyFailed), historyFailed ? "warn" : "ok");
-}
-
 export async function declineSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
   const session = await requireRole("clinic");
   if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
