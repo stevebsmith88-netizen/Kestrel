@@ -20,7 +20,7 @@ Reddit already has its first 3 posts (welcome, what would make you apply, optici
 
 ## Before the pay posts go out: Job Bank's new figures
 
-Job Bank publishes its next wage file on **18th November 2026**. The optician pay blog post, the Reddit pay post and LinkedIn post L1 (25th November) all use the file revised 19th November 2025. After the 18th, refresh the pay table (`docs/pay-benchmark.md`), then check whether any figure changed in those 3 places. If it did, edit the Reddit post and update L1 before it goes out. Tell Claude when the file is out and it will list exactly what needs changing.
+Job Bank publishes its next wage file on **18th November 2026**. The optician pay blog post, the Reddit pay post and LinkedIn post L1 (25th November) all used the file revised 19th November 2025. **The 2026 file (18th November 2026) is now in the pay table, the blog post and the text drafts here. Edit the live Reddit post (17th November) to match `reddit-seed-posts.md`, section 2. L1 is already updated.**
 
 ## What the links do for the Google goal
 
@@ -110,7 +110,7 @@ Each is under 80 words. Replace nothing except the link, which is already filled
 
 > What does an optician earn where you work?
 >
-> Job Bank, the Government of Canada's labour market service, publishes typical hourly pay for opticians in most provinces. Ontario's median is the lowest at $24.04 an hour, and British Columbia's is the highest at $30.82. The middle half of pay is wider than you might expect.
+> Job Bank, the Government of Canada's labour market service, publishes typical hourly pay for opticians in most provinces. Medians run from $27.63 an hour in New Brunswick to $30.03 in Newfoundland and Labrador, and Ontario's is $29.00. The middle half of pay is wider than you might expect.
 >
 > We put the table, and what moves an offer up or down, on the blog. Does it match what you see?
 >
