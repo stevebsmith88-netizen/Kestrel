@@ -121,3 +121,10 @@ test("the Newfoundland and Labrador optometrists page is a public list of names 
   assert.match(registerAdvice(nl).help, /lists every registered optometrist/);
   assert.equal(cleanLicence("Optometrist", { province: "Newfoundland and Labrador", number: "2106-A", does: [], notYet: "" }).licence?.number, "2106-A", "the College's own format is accepted");
 });
+
+test("PEI optometrists are searched by name and show a licence number such as 23-AT", () => {
+  const pe = registerFor("Optometrist", "Prince Edward Island")!;
+  assert.equal(pe.url, "https://peico.ca/optometrists/");
+  assert.match(registerAdvice(pe).help, /licence number matches/);
+  assert.equal(cleanLicence("Optometrist", { province: "Prince Edward Island", number: "23-AT", does: [], notYet: "" }).licence?.number, "23-AT", "the College's own format is accepted");
+});

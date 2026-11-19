@@ -26,7 +26,7 @@ const OPTOMETRIST: Record<string, Register> = {
   "Newfoundland and Labrador": { college: "Newfoundland and Labrador College of Optometrists", url: "https://nlco.ca/members_list/", kind: "name", numberShown: "full", noStatus: true, listOnly: true },
   "Nova Scotia": { college: "Nova Scotia College of Optometrists", url: "https://nsco.ca/site/findanoptometrist", kind: "name", numberShown: "full", noStatus: true },
   "Ontario": { college: "College of Optometrists of Ontario", url: "https://members.collegeoptom.on.ca/COO/PublicDirectory/Public_Directory_Member/Public_Register/PublicRegisterMember.aspx", kind: "number", numberShown: "full" },
-  "Prince Edward Island": { college: "PEI College of Optometrists", url: "https://peico.ca/", kind: "college", numberShown: "unknown" },
+  "Prince Edward Island": { college: "PEI College of Optometrists", url: "https://peico.ca/optometrists/", kind: "name", numberShown: "full", noStatus: true },
   "Quebec": { college: "Ordre des optométristes du Québec", url: "https://www.ooq.org/", kind: "college", numberShown: "unknown" },
   "Saskatchewan": { college: "Saskatchewan Association of Optometrists", url: "https://optometrists.sk.ca/about/find-a-member/", kind: "name", numberShown: "unknown", directoryOnly: true },
   "Yukon": { college: "Yukon professional licensing", url: "https://yukon.ca/en/doing-business/professional-licensing", kind: "college", numberShown: "unknown" },
