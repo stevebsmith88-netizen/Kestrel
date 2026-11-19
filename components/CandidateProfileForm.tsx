@@ -7,6 +7,7 @@ import { saveCandidateProfile } from "@/lib/candidate-actions";
 import { SOFTWARE_TAGS } from "@/lib/job-tags";
 import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, employmentLabel } from "@/lib/jobs";
 import { canHaveFieldRoles, openToField, otherRolesOffered } from "@/lib/role-fit";
+import { BC_NOTE, DOES, DOES_LABELS, licenceProvinces, licenceRole, registerFor } from "@/lib/licence";
 
 type Initial = {
   profession: string | null;
@@ -15,6 +16,10 @@ type Initial = {
   available_from: string | null;
   phone: string | null;
   linkedin_url?: string | null;
+  licence_province?: string | null;
+  licence_number?: string | null;
+  licence_does?: string[] | null;
+  licence_not_yet?: boolean | null;
   home_city: string | null;
   home_province: string | null;
   pref_radius_km: number;
@@ -40,6 +45,10 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
   const licensed = initial?.licensed_provinces ?? [];
   // The other roles offered depend on the role chosen above, so keep it in step as it changes.
   const [profession, setProfession] = useState(initial?.profession ?? "");
+  const [licProvince, setLicProvince] = useState(initial?.licence_province ?? "");
+  const [licNotYet, setLicNotYet] = useState(Boolean(initial?.licence_not_yet));
+  const licRole = licenceRole(profession);
+  const licRegister = registerFor(licRole, licProvince);
   // The two "more" sections start closed. They open when the page is reached from "Edit what you are looking for", or when a box inside has a problem.
   const [aboutOpen, setAboutOpen] = useState(false);
   const [lookingOpen, setLookingOpen] = useState(false);
@@ -88,6 +97,42 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
               </label>
             ))}
           </div>
+        </fieldset>
+      )}
+
+      {licRole && (
+        <fieldset className="row licencefields" id="registration">
+          <legend className="lab">Your registration number{licRole === "Optician" ? " and what you are registered for" : ""}</legend>
+          <p className="help">Some jobs ask for it, and clinics see it only when you apply. You enter it and Kestrel does not check it. The clinic can check it on the College&apos;s register.</p>
+          <div className="pair">
+            <Field id="cpf-lic-province" label="Registered by" error={e.licenceProvince} hint={licRegister ? licRegister.college : undefined}>
+              <select id="cpf-lic-province" name="licenceProvince" value={licProvince} onChange={(ev) => setLicProvince(ev.target.value)} disabled={licNotYet}>
+                <option value="">Choose a province or territory</option>
+                {licenceProvinces(licRole).map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </Field>
+            <Field id="cpf-lic-number" label="Registration number" error={e.licenceNumber} hint={licProvince === "British Columbia" ? BC_NOTE : "Type it as the College shows it, with any leading zero."}>
+              <input id="cpf-lic-number" name="licenceNumber" type="text" autoComplete="off" maxLength={15} defaultValue={initial?.licence_number ?? ""} disabled={licNotYet} />
+            </Field>
+          </div>
+          {licRole === "Optician" && (
+            <div className="row">
+              <p className="lab">What you are registered to do</p>
+              <div className="checkgrid">
+                {DOES.map((d) => (
+                  <label className="consent" key={d}>
+                    <input type="checkbox" name="licenceDoes" value={d} defaultChecked={(initial?.licence_does ?? []).includes(d)} />
+                    <span>{DOES_LABELS[d]}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="help">Contact lens work is its own registration or advanced practice in several provinces.</p>
+            </div>
+          )}
+          <label className="consent">
+            <input type="checkbox" name="licenceNotYet" checked={licNotYet} onChange={(ev) => setLicNotYet(ev.target.checked)} />
+            <span>I am not registered yet (a student, a new graduate, or moving to a new province)</span>
+          </label>
         </fieldset>
       )}
 

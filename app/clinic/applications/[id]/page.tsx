@@ -5,6 +5,8 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { AppStatusBadge, Steps } from "@/components/AppStatus";
 import NoteForm from "@/components/NoteForm";
+import RegisterCheck from "@/components/RegisterCheck";
+import { DOES, type Does } from "@/lib/licence";
 import StatusForm from "@/components/StatusForm";
 import { requireRole } from "@/lib/auth";
 import { getMyEmployer } from "@/lib/clinic";
@@ -91,6 +93,8 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
                   </>
                 )}
               </section>
+
+              <RegisterCheck profession={who.profession} licence={who.licence ? { province: who.licence.province ?? null, number: who.licence.number ?? null, does: (who.licence.does ?? []).filter((d): d is Does => (DOES as readonly string[]).includes(d)), notYet: Boolean(who.licence.notYet) } : null} />
 
               <section className="card">
                 <h2>History</h2>

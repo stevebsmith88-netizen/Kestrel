@@ -88,7 +88,9 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     const appIds = appRows.map((a) => a.id);
     const events = appIds.length ? await db.from("application_events").select("application_id, status, note, created_at").in("application_id", appIds).order("created_at") : { data: [] };
     const li = await db.from("candidate_profiles").select("linkedin_url").eq("user_id", id).maybeSingle();
-    data.candidateProfile = cp.data ? { ...cp.data, ...(li.error ? {} : { linkedin_url: (li.data as { linkedin_url?: string | null } | null)?.linkedin_url ?? null }) } : null;
+    // The registration number (migration 0056) is read apart too, so the download works before the SQL is run.
+    const lic = await db.from("candidate_profiles").select("licence_province, licence_number, licence_does, licence_not_yet").eq("user_id", id).maybeSingle();
+    data.candidateProfile = cp.data ? { ...cp.data, ...(li.error ? {} : { linkedin_url: (li.data as { linkedin_url?: string | null } | null)?.linkedin_url ?? null }), ...(lic.error ? {} : (lic.data ?? {})) } : null;
     // What the candidate chose for "Recommended for you", the career stage answer, hidden jobs and the name change date. All private to them.
     const extras = await candidateExtras(db, id);
     data.preferences = extras.preferences;

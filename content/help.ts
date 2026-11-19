@@ -107,7 +107,7 @@ export const HELP: HelpSection[] = [
         title: "Who can see my details?",
         keywords: ["privacy", "visible", "employer sees", "profile private", "share", "cv visible", "hidden"],
         answer: [
-          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number and LinkedIn profile if you added them, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
+          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number, LinkedIn profile and, if you are an optometrist or optician, your registration number if you added them, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
           "**If you are a clinic:** your job posts are public, but the email address that applicant alerts go to is never shown on a post, and neither is the answer about how many people work for you. Candidates apply through Kestrel, so recruiters cannot harvest your address.",
           "We do not sell personal information. Our team can see account details when it needs to run the site, and a small number of service providers handle information only to provide their service to us.",
         ],
@@ -293,6 +293,21 @@ export const HELP: HelpSection[] = [
           "To change what appears, choose **Edit what you are looking for**.",
         ],
         links: [{ label: "Find jobs", href: "/jobs" }, { label: "What you are looking for", href: "/candidate/profile#looking-for" }],
+      },
+      {
+        id: "registration-number",
+        title: "Do I have to give my registration number?",
+        keywords: ["licence", "license", "registration", "college", "number", "optician", "optometrist", "contact lens", "register", "student", "new graduate"],
+        answer: [
+          "If you are an optometrist or optician, your profile has a place for the registration number your College issued you, the province or territory, and for opticians what you are registered to do: eyeglasses, contact lenses or both. You enter it and Kestrel does not check it. A clinic sees it only with an application you send, and can check it on the College's own register.",
+          "Optometrist jobs, and optician jobs in provinces that regulate opticians, ask for it before you can apply. If you are a student, a new graduate or moving province, tick **I am not registered yet** instead, and the clinic sees that. Opticians are not regulated in Yukon, the Northwest Territories or Nunavut, so nobody is asked there. In BC, give the number issued from June 2026, because the old college numbers no longer work in the register.",
+        ],
+        steps: [
+          "Open **Profile and resume**. Under **Your role**, choose Optometrist or Optician.",
+          "Find **Your registration number** and choose the province that registered you.",
+          "Type the number as the College shows it, with any leading zero, and tick what you are registered to do. Then save.",
+        ],
+        links: [{ label: "Profile and resume", href: "/candidate/profile#registration" }],
       },
       {
         id: "work-for-a-clinic-not-on-kestrel",
@@ -567,6 +582,17 @@ export const HELP: HelpSection[] = [
           "Press **Edit**.",
           "Change what you need. The page reminds you that the job goes offline until our team has read the changes.",
           "Press **Send my changes for review**.",
+        ],
+        links: [{ label: "Your dashboard", href: "/clinic" }],
+      },
+      {
+        id: "check-a-registration-number",
+        title: "How do I check an optometrist or optician's registration number?",
+        keywords: ["licence", "license", "registration", "college", "verify", "check", "register", "optician", "optometrist", "number"],
+        answer: [
+          "An optometrist or optician who gives a registration number sends it with their application. You see it on the application under **Registration**, marked as entered by the candidate and not checked by Kestrel. Kestrel never looks a number up in a College register, so the check is yours to make.",
+          "Press the button beside the number to open the College's register in a new tab, and **Copy number** to paste it in. In Ontario and BC you can search the register by the number itself. In Alberta and Manitoba you search the name, then compare the number and status on the person's page. Check that the name matches (allow for a former surname), that the status says they are allowed to practise, and for an optician that the register shows contact lenses if the job needs them. The BC register shows only the last 2 digits of a number. Where we have no direct link yet, the button takes you to the College's website.",
+          "Someone who is not registered yet, such as a student or a new graduate, says so instead of giving a number. Check their status with the College before offering the role.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
       },

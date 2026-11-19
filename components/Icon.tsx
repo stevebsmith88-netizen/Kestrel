@@ -59,6 +59,13 @@ const PATHS = {
       <path d="M17.3 6.7v.1" />
     </>
   ),
+  external: (
+    <>
+      <path d="M14 4h6v6" />
+      <path d="M20 4l-9 9" />
+      <path d="M18 14v5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10" />
+    </>
+  ),
   reddit: (
     <>
       <ellipse cx="12" cy="14.2" rx="7.5" ry="5" />

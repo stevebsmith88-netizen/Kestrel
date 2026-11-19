@@ -74,6 +74,13 @@ export default function Privacy() {
               sees only with an application the candidate sends to it, as it was the day they applied.
             </li>
             <li>
+              <strong>If you are an optometrist or optician and give your registration number:</strong> the number your College issued you,
+              the province or territory, and for opticians what you are registered to do (eyeglasses, contact lenses or both). You enter it
+              and Kestrel does not check it, and does not look it up in any College register. A clinic sees it only with an application you
+              send to it, as it was the day you applied, and can check it on the College&apos;s own register. Some jobs ask for it before you
+              can apply, and you can say instead that you are not registered yet.
+            </li>
+            <li>
               <strong>Also for candidates, private to you:</strong> your home town and province, how far you would travel, the provinces and
               types of work you would consider, other roles you would consider, the lowest pay you would accept and whether that is by the hour or the year, whether you
               prefer an independent or a corporate practice, the practice software you know,

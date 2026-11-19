@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0055), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0056), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -3327,6 +3327,30 @@ revoke all on public.employer_interest from anon, authenticated;
 
 
 -- ======================================================================
+-- 0056_licence_numbers.sql
+-- ======================================================================
+-- 0056: registration number on a candidate's profile (Steve, 19th November 2026; plan in docs/plans/licence-numbers.md). Safe to run twice.
+--
+-- An optometrist or optician can give the number their college issued them, the province, and (opticians) whether they are registered for
+-- eyeglasses, contact lenses or both. It is entered by the candidate and is not checked by Kestrel. It is private: visitors cannot read it,
+-- and a clinic gets it only inside an application the candidate sends (it is saved with the application, like the phone number). The number
+-- is text, so a leading zero is kept. The website checks the shape (lib/licence.ts); the database limits the length.
+
+alter table public.candidate_profiles add column if not exists licence_province text;
+alter table public.candidate_profiles add column if not exists licence_number text;
+alter table public.candidate_profiles add column if not exists licence_does text[] not null default '{}';
+alter table public.candidate_profiles add column if not exists licence_not_yet boolean not null default false;
+
+alter table public.candidate_profiles drop constraint if exists candidate_profiles_licence_length;
+alter table public.candidate_profiles add constraint candidate_profiles_licence_length check (
+  char_length(coalesce(licence_province, '')) <= 40 and char_length(coalesce(licence_number, '')) <= 20
+);
+
+grant insert (licence_province, licence_number, licence_does, licence_not_yet) on public.candidate_profiles to authenticated;
+grant update (licence_province, licence_number, licence_does, licence_not_yet) on public.candidate_profiles to authenticated;
+
+
+-- ======================================================================
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3434,6 +3458,7 @@ from (
     ('column: an optional headline on a job, readable by visitors (0053)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'headline') and has_column_privilege('anon', 'public.jobs', 'headline', 'SELECT')),
     ('columns: a clinic''s social links readable by visitors, a candidate''s LinkedIn private (0054)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'social_linkedin') and has_column_privilege('anon', 'public.employers', 'social_linkedin', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'linkedin_url') and not has_column_privilege('anon', 'public.candidate_profiles', 'linkedin_url', 'SELECT')),
     ('table: employer_interest (candidates asking about clinics not on Kestrel, for the server only, 0055)', to_regclass('public.employer_interest') is not null and not has_table_privilege('anon', 'public.employer_interest', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT')),
+    ('columns: a candidate''s registration number, private to them and to a clinic through an application (0056)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'licence_number') and not has_column_privilege('anon', 'public.candidate_profiles', 'licence_number', 'SELECT') and has_column_privilege('authenticated', 'public.candidate_profiles', 'licence_number', 'UPDATE')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;
