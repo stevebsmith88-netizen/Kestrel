@@ -37,4 +37,5 @@ export const BLOG_IMAGES: Record<string, { width: number; height: number }> = {
   "/images/blog/who-works-in-eye-care-canada.jpg": { width: 1354, height: 762 },
   "/images/blog/optometrist-pay-canada.jpg": { width: 604, height: 900 },
   "/images/blog/clinic-to-lens-rep-supplier-role.jpg": { width: 1375, height: 773 },
+  "/images/blog/working-in-eye-care-2026.jpg": { width: 1600, height: 900 },
 };
