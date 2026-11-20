@@ -19,6 +19,18 @@ Read: robots.txt and the sitemap index. Not read: the home page and inner pages,
 - robots.txt allows GPTBot and Google-Extended, closes employer detail pages, filter pages, apply pages and, notably, the blog. It publishes an `/llms.txt` in English and French.
 - Strength: an exact match name for optometry searches, bilingual, and a visible employer directory. Weakness: little content, and the blog is closed to search engines, so it has no pay or career articles to be cited.
 
+## Jobs4ECPs seen in a browser (Steve's screenshots, 20th November 2026, 12:06 to 12:07)
+
+What Steve saw as a visitor, added the same day. Counts are from the site's own filter panel.
+
+- **32 live jobs**: 30 full time and 2 part time, all on site. By province: Ontario 20, Alberta 9, British Columbia 2, Saskatchewan 1. Nothing from Manitoba or the Maritimes. The newest were posted 20th November 2026 and several sit at 26th to 28th October, so some are over 3 weeks old.
+- **Pay is rare.** The Compensation filter counts 3 jobs at every step from $20,000+ to $100,000+, so at most 3 of 32 jobs (about 9%) show a pay figure. Where pay appears, it is sometimes inside the job title ("$160,000 Full-Time Minimum | $700/Day Part-Time Minimum"), which also makes the title long. Kestrel shows pay on every job, and keeps it out of the title.
+- **Titles are plain** ("Optometrist", "Associate Optometrist") with the town in a separate field, and several titles run on with extra wording or capitals. Kestrel's locked titles are cleaner for Google.
+- **Many jobs show a grey placeholder** in place of a clinic logo, and the "Urgent!" ribbon is on about 1 job in 4.
+- **Browse Profiles lists 859 profiles, and many are not eye care**: the first ones on the page are a pest control firm, a visa service, a machinery maker and a taxi service in New Zealand. Employers and the Browse Profiles pages are a trust weakness for it. Kestrel's review queue and the `/fake-jobs` policy are the contrast, and worth saying plainly in clinic facing pages.
+- The top menu has All Jobs, Post a Job, Employers, Browse Profiles, About, Contact and Blog. It has a blog, so the Jobs4ECPs blog is worth reading for topics.
+- Still unknown: its title tag, structured data and employer pricing (see above).
+
 ## What this means for Kestrel
 
 - Neither site publishes dated pay data or licensing guides that an AI assistant can quote. That is the gap the pay summary, the pay table and the licensing guides (8th December, 15th December, 19th January) are built to fill.
