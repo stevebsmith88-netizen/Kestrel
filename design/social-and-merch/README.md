@@ -7,7 +7,13 @@ Live, editable canvas (private to Steve): https://claude.ai/artifact/YMXrxLJGGjS
 ## What is in this folder
 
 - `instagram/`: 8 posts, 1080 x 1350 (4:5 portrait), exported at 2x (2160 x 2700) so they stay sharp in Canva. Post them in number order.
-- `stickers/draft-2/` (20th November 2026, the current version): every sticker is built around a drawing of the real kit and carries eyecarejobs.ca, curved along the bottom edge of the circles and in a corner of the others.
+- `stickers/draft-3/` (20th November 2026, the current version, after Steve's notes on draft 2): 32 stickers, numbered as in his feedback (4, 12, 18 and 31 cut; 10 split into 10a plain Snellen and 10b double vision; new 32 colour vision plate with a hidden K and eyecarejobs.ca in the bottom dots, 33 duochrome test, 34 visual field arcade, 35 statement frames).
+  - `print/kestrel-stickers-letter.pdf`: the file for the printer. 3 US Letter pages (8.5 x 11 inches), print at 100% (actual size, no "fit to page"), fonts embedded. A thin grey line around each sticker is the cut line. Stickers are 2.3 to 3.3 inches. At full size they need 4 sheets; all 32 on 1 sheet would be half size, too small to read eyecarejobs.ca.
+  - `print/sheet-N-300dpi.png`: the same sheets as images, for a printer that wants images.
+  - `individual/`: each sticker alone, transparent background, white edge included, about 300 dpi. File names start with the feedback number.
+  - `review/`: the 3 sheets with the feedback numbers beside each sticker (not for printing).
+  - Built by `source/stickers3.py` (all 32 designs in 1 file), then `source/shoot3.js` and `source/pdf3.js`. The script reads the logo files from `public/brand` and uses them unchanged.
+- `stickers/draft-2/` (20th November 2026, superseded by draft 3): every sticker is built around a drawing of the real kit and carries eyecarejobs.ca, curved along the bottom edge of the circles and in a corner of the others.
   - `sheets/`: 4 review sheets (Things we say set 1 and 2, Inspired by the kit, My superpower is).
   - `individual/`: each of the 25 stickers on its own, transparent background, white die cut edge included, at 3x (about 300 dpi at 3 to 4 inches). These are the files to drop into Canva or send to a printer for a proof.
 - `stickers/draft-1/`: the first text only drafts, kept for comparison. The Kestrel and eyecarejobs.ca sheet (wordmark, K, seal, chart and mug wrap) lives here and now carries eyecarejobs.ca on every sticker too.
