@@ -31,6 +31,15 @@ What Steve saw as a visitor, added the same day. Counts are from the site's own 
 - The top menu has All Jobs, Post a Job, Employers, Browse Profiles, About, Contact and Blog. It has a blog, so the Jobs4ECPs blog is worth reading for topics.
 - Still unknown: its title tag, structured data and employer pricing (see above).
 
+## Jobs4ECPs: employers, about, blog, price and source (Steve, 20th November 2026, 12:45 to 12:50)
+
+- **Home page source:** a search for "JobPosting" finds only the words "Job Posting" in its $100 30 Day Job Posting button, so the home page carries no JobPosting structured data (job pages were not checked). It loads a "Jobs from our partners" block by script, so some jobs shown there come from other sources. Its copy uses "leverage" and claims a large social following, with no numbers shown.
+- **Employers page:** 1,783 employers (Ontario 343, Alberta 159, British Columbia 130, Manitoba 24, Saskatchewan 18), but the list is not all eye care: a driving school sits among the first results. Only 5 jobs in 32 are by logo employers shown above, and many employers have a grey placeholder. Kestrel's public clinic pages are only for clinics with an approved job.
+- **About:** "a niche jobsite for eye care professionals in Canada. Started in 2011", operated by Eye Care Edge Ltd. (see `docs/competitor-pricing.md` on ownership). Its history since 2011 is its main strength, and the page says nothing about pay, review or candidate protections.
+- **Blog:** 5 posts are visible, aimed at employers: "5 Things Every Job Posting Needs", "Making Your Optometry Practice Less Stressful For Staff", "10 Ways To Advertise Your Eye Care Job Posting", "Have Your Eye Care Job Posting Show Up On Google Jobs With Jobs4ecps" and "Top Tips For Eye Care Employers Posting A Job". Dates show a month and day with no year. Nothing for candidates, no pay data, no licensing guides. Posting is infrequent, so it is not a content threat.
+- **Price:** $100 for a 30 day job posting (page source), the same as in `docs/competitor-pricing.md`.
+- **Privacy policy:** wording from a UK publisher (names The Tab and babe, the EEA and ad networks), last updated July 2023, covering advertising cookies, Flash and CAN-SPAM. Ideas for Kestrel's own policy are in `docs/legal/privacy-policy-ideas-from-competitors.md`. Its wording is not to be copied.
+
 ## What this means for Kestrel
 
 - Neither site publishes dated pay data or licensing guides that an AI assistant can quote. That is the gap the pay summary, the pay table and the licensing guides (8th December, 15th December, 19th January) are built to fill.

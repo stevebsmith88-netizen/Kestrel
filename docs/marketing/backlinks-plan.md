@@ -73,6 +73,35 @@ Send from a Kestrel address, to a published business address, with the mailing a
 
 > Hello, I'm the founder of Kestrel Eye Care Jobs, a Canada wide job board for eye care where every job shows its pay. We've published typical pay by province for 5 eye care roles, from Job Bank, and a plain guide to Ontario's job posting rules for clinics. If either would be useful to your members, you're welcome to link to them: [tagged link]. I'd be glad to hear what would make them more useful. The Kestrel team
 
+## Who to ask, how, and what to say (added 20th November 2026)
+
+**What is open now, before Gate A (no clinic or association outreach yet):** quality Canadian directories and niche job board lists, submitted by hand from `docs/marketing/profiles-checklist.md`; the baseline of Backlinks in Bing and Google; and writing to the people Kestrel has already cited, once the posts are live (the Canadian New ODs survey, its author and its sponsor, behind the 2026 pay and hours post). Citing someone and telling them is the warmest ask there is, and it is not a request to a buying group or clinic.
+
+**After Gate A, in this order:**
+1. The people Kestrel has cited (a thank you with a link to the post).
+2. Provincial optician and optometry associations and colleges, starting where Kestrel has the most to offer: Ontario, Alberta, British Columbia, Manitoba. Look for a "resources", "careers" or "for new graduates" page and a member newsletter. Where an association has its own job board, ask for a resource link, not a listing, because it may see Kestrel as a competitor.
+3. School career services: the University of Waterloo School of Optometry, and the college opticianry programs (for example Seneca and Georgian in Ontario, once their current page is checked). New graduates are the people who start a job search.
+4. Trade publications and newsletters, with a story, not a link request: the first Canadian eye care pay by province summary built from Job Bank, or the licensing guides.
+5. Student and new graduate groups.
+
+Check every name and address by hand from the organisation's own page before sending. Send from a Kestrel address, to one published business address per organisation, 1 organisation at a time, with the mailing address and an unsubscribe line (CASL). Follow up once after 7 to 10 days, then leave it. Never offer or accept money, a link swap or a free listing for a link.
+
+**The shape of every message:** who you are in 1 line, the useful thing (never "please link to us"), why it fits their members in 1 line, and a small ask. Tag the links (`docs/utm-guide.md`) so Admin, Waitlist shows which one worked.
+
+Template A, to someone Kestrel has cited:
+
+> Hello [name], I'm the founder of Kestrel Eye Care Jobs, a Canada wide job board where every job shows its pay. We used your [survey or article] in our post "[post title]", with a link and credit to you: [link]. We thought you would want to know, and we would be glad to hear if we described anything wrongly. Thank you for publishing it.
+
+Template B, to an association or school:
+
+> Hello, I'm the founder of Kestrel Eye Care Jobs. We've published typical pay by province for 5 eye care roles, built from Job Bank figures, and plain guides to becoming licensed as an [optician or optometric assistant] in [province]. If either would help your [members or graduates], you're welcome to link to them from your [resources or careers] page, or I can send a short summary for your newsletter. [link to pay page] [link to guide]
+
+Template C, to a publication:
+
+> Hello [name], we've pulled together Job Bank pay and hiring figures for Canadian eye care, by role and province, with dated sources, and the Ontario pay disclosure rules that apply to clinics from 1st January 2026. If a short summary or the figures would be useful for a story, I can send it with the sources. I'm the founder of Kestrel Eye Care Jobs.
+
+Keep each message under 120 words, in the brand voice (`brand-voice.md`), and plain text.
+
 ## Measuring
 
 - **Bing Webmaster Tools, Backlinks:** a baseline now, then monthly.
