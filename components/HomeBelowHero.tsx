@@ -62,7 +62,7 @@ export default function HomeBelowHero() {
               <h3>What happens next</h3>
               <p>We send a link to confirm your address. Press it and you are on the list.</p>
               <p>
-                When Kestrel opens, you hear from us first. Clinics post a job with its pay range, a person reads every post before it goes live, and candidates see the pay on each job.
+                When Kestrel opens, you hear from us first. Clinics post a job with its pay range, and candidates see the pay on each job.
               </p>
               <p>
                 While you wait, see <Link href="/resources#pay">typical pay by province</Link> or read the <Link href="/blog">blog</Link> for help with interviews, resumes and job ads.

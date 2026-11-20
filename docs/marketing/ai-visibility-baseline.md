@@ -14,6 +14,25 @@ Kestrel has no jobs live yet, so expect "not named" everywhere. The baseline is 
 4. For each answer, note whether Kestrel is named, whether eyecarejobs.ca is linked, and the first 5 sources or boards named.
 5. Log it in the table at the bottom. Keep the first run as the baseline row set.
 
+## Faster: all the monthly prompts in 1 chat (added 20th November 2026)
+
+To save time, paste all 10 monthly prompts into 1 new chat per assistant, with this opening. It is a little less clean than 10 separate chats, because an assistant can carry a hint from 1 answer to the next, so use the same method every month and do not compare these results with a one chat per prompt run. Ask prompts 11 to 16 in a separate new chat, because they name Kestrel and would colour everything else. Turn on web search or browsing where it is a setting.
+
+> I am going to ask you 10 separate questions. Treat each one as a brand new conversation: answer it fully on its own, search the web for it, do not refer to or reuse any earlier answer, and do not mention that the questions are related. Number your answers 1 to 10.
+>
+> 1. Where can I find optician jobs in Canada?
+> 2. What are the best job boards for optometric assistants in Ontario?
+> 3. How much do opticians make in Alberta?
+> 4. I am an optometrist moving to British Columbia. Where do I look for jobs?
+> 5. Is there a job board just for eye care jobs in Canada?
+> 6. Where should an independent optometry clinic in Canada post a job ad?
+> 7. How much does it cost to advertise an optician job in Canada?
+> 8. What does a job ad have to include in Ontario in 2026?
+> 9. Eluta vs Indeed vs Jobs4ECPs for hiring an optician. Which is better for a small clinic?
+> 10. What are the alternatives to Indeed for hiring eye care staff in Canada?
+
+If an assistant stops partway or shortens the later answers, say "Continue from question N" in the same chat. The log is `docs/marketing/ai-visibility-log.csv`.
+
 ## The 10 prompts
 
 Candidates

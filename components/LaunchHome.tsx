@@ -26,8 +26,8 @@ export default async function LaunchHome() {
       <main id="main" tabIndex={-1} className="lh">
         <section className="lh-hero" aria-labelledby="lh-title">
           <div className="wrap">
-            <h1 id="lh-title">Find your next eye care job</h1>
-            <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and a person reads every post before it goes live.</p>
+            <h1 id="lh-title">The eye care job board for Canada</h1>
+            <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay.</p>
             {!postingOn() && <p className="lh-lede lh-note"><strong>{PRELAUNCH_HOME_LEAD}</strong> {PRELAUNCH_HOME_BODY}</p>}
             <form method="get" action="/jobs" className="lh-search" role="search" aria-label="Search jobs">
               <label className="sr" htmlFor="lh-q">Role, keyword or clinic name</label>
@@ -89,7 +89,7 @@ export default async function LaunchHome() {
             <div>
               <p className="kicker">For clinics</p>
               <h2 id="lh-clinics-h">Hire people who chose eye care</h2>
-              <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, a person reads it before it goes live, and agencies cannot post.</p>
+              <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, and agencies cannot post.</p>
             </div>
             <div className="lh-offer">
               <p className="lh-offerhead">{postingOn() ? "Free to post while we launch, and first jobs stay up for 60 days" : "Posting opens at launch in early 2027, and it will be free while we launch"}</p>

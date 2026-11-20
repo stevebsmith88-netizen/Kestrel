@@ -22,8 +22,8 @@ export async function generateMetadata(): Promise<Metadata> {
   if (mode === "coming-soon") return {};
   // Its own title, description and canonical address, so search engines are not left with the default "Coming soon" title.
   // Bing's checker wants a title under about 70 characters (the site name is added to the end) and a description of about 70 to 160.
-  if (mode === "prelaunch") return shareMetadata({ title: "Optician and Optometrist Jobs in Canada", shareTitle: "Eye care jobs across Canada, opening soon", description: "A Canada-wide eye care job board for optometrists, opticians, assistants and clinic teams. Every job shows its pay. Join the waitlist.", path: "/" });
-  return shareMetadata({ title: "Optician and Optometrist Jobs in Canada", shareTitle: "Eye care jobs across Canada", description: "A Canada-wide eye care job board for optometrists, opticians, assistants and clinic teams. Independent and corporate practices, and every job shows its pay.", path: "/" });
+  if (mode === "prelaunch") return shareMetadata({ title: "Eye Care Job Board Canada", shareTitle: "The eye care job board for Canada", description: "A Canada-wide eye care job board for optometrists, opticians, assistants and clinic teams. Every job shows its pay. Join the waitlist.", path: "/" });
+  return shareMetadata({ title: "Eye Care Job Board Canada", shareTitle: "The eye care job board for Canada", description: "A Canada-wide eye care job board for optometrists, opticians, assistants and clinic teams. Independent and corporate practices, and every job shows its pay.", path: "/" });
 }
 
 // At launch the sign up gate opens (docs/launch-checklist.md) and the launch layout takes over from the coming soon page by itself.

@@ -14,7 +14,7 @@ export default function PreLaunchHome() {
         <section className="lh-hero" aria-labelledby="pl-title">
           <div className="wrap">
             <span className="pill">Waitlist now open</span>
-            <h1 id="pl-title">Eye care jobs across Canada, opening soon</h1>
+            <h1 id="pl-title">The eye care job board for Canada</h1>
             <p className="lh-lede">
               Optometrists, opticians, assistants and clinic teams, in one place. Every job shows its pay.
             </p>
