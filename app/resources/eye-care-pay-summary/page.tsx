@@ -60,7 +60,7 @@ export default function PaySummary() {
 
           <p>
             Once a year, when Job Bank publishes new wage figures, we pull out what they say about eye care: where each role is paid most and least, and how wide the gap is.
-            The figures are typical hourly pay (the median) from the Government of Canada&apos;s Job Bank, revised on {plainDate(JOB_BANK_SOURCE.revised)}. Every number here also appears in our <Link href="/resources#pay">pay table</Link>, province by province.
+            The figures are typical hourly pay (the median) from the Government of Canada&apos;s Job Bank, revised on {plainDate(JOB_BANK_SOURCE.revised)} (<a href={JOB_BANK_SOURCE.dataset} rel="noopener">the open data file</a>). Every number here also appears in our <Link href="/resources#pay">pay table</Link>, province by province.
           </p>
 
           <h2>The short version</h2>
