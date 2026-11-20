@@ -17,9 +17,7 @@ export const POSTS: Post[] = [
 
 The survey is the Canadian Optometry Landscape Report, written by Dr. Wynn Nguyen for Canadian New ODs and sponsored by OSI Group. It leans recent: 57% of the 460 respondents graduated in 2013 or later, and most trained at Waterloo. So it is a detailed picture of those respondents, not a count of every optometrist in the country. An [earlier edition](http://newods.ca/wp-content/uploads/2025/05/Canadian-New-ODs-FINAL-REPORT.pdf) ran in early 2025.
 
-The median take-home income for 2025, before tax, was $175,000, from the 323 optometrists who answered and had worked a full year. Owners reported $200,000 and associates $168,310. Per day worked, the medians were $996 for owners and $775 for associates. By province, Ontario came in at about $169,000, Alberta at about $163,000 and British Columbia at $180,000. Saskatchewan showed $230,000, but from only 19 people, so treat it as a hint.
-
-Smaller places paid more. Optometrists in communities under 10,000 reported a median of $190,000 and in cities of 10,000 to 100,000 $185,000, against $160,000 in cities over a million. Per day, it was $993 in the smallest places and $800 in the largest. Only 33 respondents were in the smallest group, so that is a direction and not a rule. If you run a clinic in a smaller town, it fits what owners there tell us about hiring (more on that below).
+The median take-home income for 2025, before tax, was $175,000, from the 323 optometrists who answered and had worked a full year. Owners reported $200,000 and associates $168,310. Per day worked, the medians were $996 for owners and $775 for associates. By province, Ontario came in at about $169,000, Alberta at about $163,000 and British Columbia at $180,000.
 
 A typical week was shorter than many people assume: 4 days, about 33 hours with patients, 15 patients a day (12 of them full exams) and 24 days of vacation. Associates worked 4.5 days a week to owners' 4. The report also found that a longer week did not pay more. Median income peaked at $190,000 for people working 4.5 days and slipped to $175,000 for those working 5.5 days or more, while income per day fell from about $1,000 at 3.5 days or fewer to $712 at 5.5 or more.
 
@@ -57,7 +55,7 @@ The rules do not apply to an employer with fewer than 25 employees, so a small c
 
 Guarantees. If 39% of recent graduates having a guaranteed minimum is a sign of where offers are heading, clinics that do not post a floor will find it harder to compete. Ontario, at 21%, has the most room to move.
 
-The Prairies. If owners there keep struggling to recruit, we would expect to see more daily minimums, and a closer look at pay in smaller communities. The [Canadian Association of Optometrists](https://opto.ca/sites/default/files/2026-02/Optometry_in_Canada.2026.ENG_.pdf) tracks the workforce in its 2026 "Optometry in Canada" report.
+The Prairies. If owners there keep struggling to recruit, we would expect to see more daily minimums. The [Canadian Association of Optometrists](https://opto.ca/sites/default/files/2026-02/Optometry_in_Canada.2026.ENG_.pdf) tracks the workforce in its 2026 "Optometry in Canada" report.
 
 The next Job Bank file, due in November or December, will show whether Ontario's optician figure holds. Another edition of the survey next year would turn these comparisons into a real year on year series.
 
