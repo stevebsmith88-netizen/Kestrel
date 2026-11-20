@@ -11,5 +11,5 @@ export const POSTING_SOON_TEXT = "Your clinic profile is saved. Kestrel is in it
 export const POSTING_CLOSED_TEXT = "Posting jobs is not open yet. We expect to launch officially in early 2027, and we will email you when it opens.";
 
 // The line under the home page headline while sign up is open and posting is not.
-export const PRELAUNCH_HOME_LEAD = "We are in our pre launch phase.";
-export const PRELAUNCH_HOME_BODY = "Create an account, take a look around and tell us what you think. We expect to launch officially in early 2027, when clinics can start posting jobs, and we will email you then.";
+export const PRELAUNCH_HOME_LEAD = "Pre launch.";
+export const PRELAUNCH_HOME_BODY = "Create an account to look around. Clinics can post from early 2027, and we will email you then.";
