@@ -2,7 +2,7 @@
 // A phone's "Auto apply" switch flicks on and job cards are swiped right on everything; then the clinic's inbox fills with the same
 // letter; the kestrel swoops across and clears it; then Kestrel's 2 real rules and the logo.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-autoapply-reel.mjs
-// 1080 x 1920, 30 frames a second, 20 seconds, no sound. Needs ffmpeg.
+// 1080 x 1920, 30 frames a second, 18 seconds, no sound. Needs ffmpeg.
 // Claims are true today: at most 30 applications in 24 hours (lib/apply-limit.ts), and only for roles that fit the candidate's
 // profession (lib/role-fit.ts). The phone and cards are generic (no real app, job board or company names).
 import { createRequire } from "node:module";
@@ -19,7 +19,7 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", paper: "#FBF8F2", buff: "#D8B48A", mist: "#DCE3E6", line: "#E3D9C8", slate: "#5A6672" };
 const FPS = 30;
-const SECONDS = 20;
+const SECONDS = 18;
 
 const ROLES = ["Optician", "Forklift operator", "Dental hygienist", "Chief executive", "Rockstar wanted!", "Barista", "Airline pilot", "Optometrist",
   "Welder", "Night security", "Yoga instructor", "Payroll clerk", "Brain surgeon", "Lifeguard", "Sous chef", "Crane operator", "Optometric assistant", "Tattoo artist"];
@@ -30,8 +30,8 @@ const swipeTimes = []; for (let i = 0, t = SWIPE_START; t < SWIPE_END - 0.2; i++
 const LETTER = "Dear Hiring Manager, I am excited to apply for the [Job Title] position at [Company]. I am a passionate self starter with a proven track record of";
 
 function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
-// The clinic's inbox: 50 rows of the same application, arriving faster than anyone could read them.
-const INBOX_ROWS = 50, ROW_H = 168;
+// The clinic's inbox: 200 rows of the same application, arriving faster than anyone could read them.
+const INBOX_ROWS = 200, ROW_H = 168;
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Auto apply</title><style>
 @font-face{font-family:'DM Serif Display';src:url(${font("dm-serif-display/files/dm-serif-display-latin-400-normal.woff2")})}
@@ -63,10 +63,10 @@ body{margin:0}p{margin:0}
 .snip em{font-style:normal;font-weight:700;color:${C.chestnut}}
 #calm{position:absolute;inset:0}
 .ch{position:absolute;left:80px;right:80px;top:300px;font-family:'DM Serif Display';font-size:96px;line-height:1.04;color:${C.navy}}
-#rules{position:absolute;left:80px;right:80px;top:700px;display:flex;flex-direction:column;gap:36px}
-.rule{display:flex;align-items:center;gap:36px;padding:40px 44px;border-radius:14px;background:${C.paper};border:2px solid ${C.line};box-shadow:0 10px 24px rgba(27,43,75,.08);opacity:0}
-.big{font-family:'DM Serif Display';font-size:130px;line-height:1;color:${C.chestnut};min-width:170px;text-align:center}
-.rt{font-family:Poppins;font-size:40px;line-height:1.3;color:${C.navy}}
+#rules{position:absolute;left:80px;right:80px;top:820px;display:flex;flex-direction:column;gap:48px}
+.rule{display:flex;align-items:center;gap:40px;padding:64px 50px;border-radius:14px;background:${C.paper};border:2px solid ${C.line};box-shadow:0 10px 24px rgba(27,43,75,.08);opacity:0}
+.big{font-family:'DM Serif Display';font-size:170px;line-height:1;color:${C.chestnut};min-width:170px;text-align:center}
+.rt{font-family:Poppins;font-size:46px;line-height:1.3;color:${C.navy}}
 #end{position:absolute;inset:0;background:${C.cream};opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 </style></head><body><div id="f">
 <div id="calm">
@@ -82,12 +82,12 @@ body{margin:0}p{margin:0}
 ${swipeTimes.map((t, i) => `<div class="card" id="c${i}" data-at="${t}" style="z-index:${200 - i}"><p class="t">${ROLES[i % ROLES.length]}</p><div class="b"></div><div class="b s"></div><div class="b"></div><div class="stamp">APPLIED</div></div>`).join("")}
 </div></div>
 <div id="inbox"><div id="ibhead"><span>Inbox</span><span id="badge">0 new</span></div><div id="rows">
-${Array.from({ length: INBOX_ROWS }, (_, i) => `<div class="row" id="r${i}"><div class="dot"></div><div class="av"></div><div class="tx"><p class="from"><b>New application</b><span>now</span></p>
+${Array.from({ length: INBOX_ROWS }, (_, i) => `<div class="row" id="ir${i}"><div class="dot"></div><div class="av"></div><div class="tx"><p class="from"><b>New application</b><span>now</span></p>
 <p class="snip">Dear Hiring Manager, I am excited to apply for the <em>[Job Title]</em> position at <em>[Company]</em>. I am a passionate self starter</p></div></div>`).join("")}
 </div></div>
 <div id="band"><p id="counter"></p>
 <p class="hook" id="h1">Applied to 312 jobs.<br><span style="color:${C.chestnut}">Read none of them.</span></p>
-<p class="hook" id="h2" style="opacity:0">The clinic&apos;s inbox:<br><span style="color:${C.chestnut}">1 letter, 50 times.</span></p>
+<p class="hook" id="h2" style="opacity:0">The clinic&apos;s inbox:<br><span style="color:${C.chestnut}">1 letter, 200 times.</span></p>
 </div></div>
 <svg style="position:absolute;left:0;top:0;overflow:visible" width="1080" height="1920"><g id="bird">${FLY}</g></svg>
 <div id="end">
@@ -118,7 +118,7 @@ window.render = (t) => {
   el("inbox").style.opacity = span(t, 5.1, 5.4);
   const arrived = ${INBOX_ROWS} * Math.pow(span(t, 5.5, 7.8), 1.6);
   el("badge").textContent = Math.floor(arrived) + " new";
-  for (let i = 0; i < ${INBOX_ROWS}; i++) { const r = el("r" + i), pos = arrived - 1 - i;
+  for (let i = 0; i < ${INBOX_ROWS}; i++) { const r = el("ir" + i), pos = arrived - 1 - i;
     r.style.display = pos < -1 || pos > 8 ? "none" : "flex"; r.style.top = (Math.max(-1, pos) * ${ROW_H}) + "px"; r.style.opacity = clamp(pos + 1); }
   el("counter").textContent = t < 5.2 ? Math.round(312 * out(span(t, 1.0, 5.0))) + " applications sent today" : Math.floor(${INBOX_ROWS} * Math.pow(span(t, 5.5, 7.8), 1.6)) + " identical letters";
   el("h1").style.opacity = 1 - span(t, 5.0, 5.3); el("h2").style.opacity = span(t, 5.2, 5.5);
@@ -134,9 +134,9 @@ window.render = (t) => {
   // The calm: Kestrel's 2 rules.
   const show = (id, a, d = 40) => { const e = el(id); const k = out(span(t, a, a + 0.6)); e.style.opacity = k; e.style.transform = "translateY(" + d * (1 - k) + "px)"; };
   show("ch", 9.2); show("r0", 10.4); show("r1", 11.6);
-  el("calm").style.opacity = 1 - span(t, 15.0, 15.5);
-  el("end").style.opacity = span(t, 15.2, 15.7);
-  show("e1", 16.2, 30); show("e2", 16.9, 30);
+  el("calm").style.opacity = 1 - span(t, 13.4, 13.9);
+  el("end").style.opacity = span(t, 13.6, 14.1);
+  show("e1", 14.5, 30); show("e2", 15.2, 30);
 };
 </script></body></html>`;
 
@@ -148,7 +148,7 @@ await tab.goto(pathToFileURL(file).href);
 await tab.evaluate(() => document.fonts.ready);
 const frame = tab.locator("#f");
 if (process.env.STILLS) {
-  for (const t of [0.9, 2.6, 4.6, 6.6, 8.5, 12.5, 18]) {
+  for (const t of [0.9, 2.6, 4.6, 6.6, 8.5, 12.5, 17]) {
     await tab.evaluate((x) => window.render(x), t);
     await frame.screenshot({ path: join(process.env.STILLS, `auto-${String(t).replace(".", "-")}.jpg`), type: "jpeg", quality: 80 });
   }
