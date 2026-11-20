@@ -1,7 +1,7 @@
 import CountUp from "@/components/CountUp";
 import { CHECKED_ON, EYE_CARE_NUMBERS, NUMBER_SOURCES } from "@/lib/eye-care-numbers";
 
-// "Eye care in Canada, in numbers": 4 figures that count up on the home page, and a + that opens where they come from.
+// "Eye care in Canada, in numbers": 4 figures on the home page, and a + that opens where they come from.
 // It sits inside the band that holds the clinics and professionals cards, under them.
 export default function EyeCareNumbers() {
   return (
