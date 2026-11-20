@@ -27,7 +27,7 @@ Then there is how people are paid, which is where offers differ most. 9 in 10 as
 
 > 9 in 10 associates are paid a percentage of what they produce.
 
-On the hiring side, 1 in 5 owners surveyed said they are struggling to recruit an associate, and 71% of those named too few candidates in their region. The gap between regions was wide: 40% of Prairie owners reported trouble, against 11% in Ontario, although the Prairie group is small. Of the owners who did hire, 63% found someone within a year and 15% searched for more than 2 years. Owners who were struggling were asked what daily minimum they would pay: the most common answer was $601 to $750, above today's $600 median, from 22 owners.
+On the hiring side, 1 in 5 owners surveyed said they are struggling to recruit an associate, and 71% of those named too few candidates in their region. The gap between regions was wide: 40% of Prairie owners reported trouble, against 11% in Ontario, although the Prairie group is small. Of the owners who did hire, 63% found someone within a year and 15% searched for more than 2 years. Owners who were struggling were asked what daily minimum they would pay: the median answer fell in the $601 to $750 bracket, above today's $600 median, from 22 owners.
 
 > 1 in 5 owners say they are struggling to recruit an associate.
 
