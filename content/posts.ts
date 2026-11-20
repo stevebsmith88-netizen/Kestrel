@@ -19,11 +19,17 @@ The survey is the Canadian Optometry Landscape Report, written by Dr. Wynn Nguye
 
 The median take-home income for 2025, before tax, was $175,000, from the 323 optometrists who answered and had worked a full year. Owners reported $200,000 and associates $168,310. Per day worked, the medians were $996 for owners and $775 for associates. By province, Ontario came in at about $169,000, Alberta at about $163,000 and British Columbia at $180,000.
 
+> Associates reported a median of $775 for each day worked, and owners $996.
+
 A typical week was shorter than many people assume: 4 days, about 33 hours with patients, 15 patients a day (12 of them full exams) and 24 days of vacation. Associates worked 4.5 days a week to owners' 4. The report also found that a longer week did not pay more. Median income peaked at $190,000 for people working 4.5 days and slipped to $175,000 for those working 5.5 days or more, while income per day fell from about $1,000 at 3.5 days or fewer to $712 at 5.5 or more.
 
 Then there is how people are paid, which is where offers differ most. 9 in 10 associates are paid a percentage of what they produce. The median is 23%, and about 3 in 4 of those on a single percentage sit between 20% and 25%. A guaranteed minimum is less common: 32% of associates have one, usually a daily amount, with a median of $600 a day. It depends heavily on where you are. 63% of respondents in British Columbia and 62% in Alberta have a guarantee, against 21% in Ontario. It also depends on when you graduated: 39% of 2021 to 2025 graduates have one, against 17% to 21% of those who graduated before 2016. One gap is worth knowing about: the report did not ask whether a percentage covers exams only or also glasses and contact lenses, which is the first question to ask.
 
+> 9 in 10 associates are paid a percentage of what they produce.
+
 On the hiring side, 1 in 5 owners surveyed said they are struggling to recruit an associate, and 71% of those named too few candidates in their region. The gap between regions was wide: 40% of Prairie owners reported trouble, against 11% in Ontario, although the Prairie group is small. Of the owners who did hire, 63% found someone within a year and 15% searched for more than 2 years. Owners who were struggling were asked what daily minimum they would pay: the most common answer was $601 to $750, above today's $600 median, from 22 owners.
+
+> 1 in 5 owners say they are struggling to recruit an associate.
 
 Keeping people comes down to money and raises. 70% of owners with associates said they had never given a percentage raise, and 55% of associates had never asked for one. Of those who asked, 68% got one. Among the 20 associates who asked and were refused, 16 named a reason to leave. That's a small group, but it's a sharp reminder that a refused raise is often the start of a resignation.
 
@@ -31,17 +37,34 @@ Keeping people comes down to money and raises. 70% of owners with associates sai
 
 Job Bank's 2026 file replaces the one released in November 2025, and the survey years behind it moved from 2023 and 2024 to 2024 and 2025. The comparison below is between those 2 files. It is not a count of raises, and Job Bank does not publish how many people each figure is based on, so a swing in 1 province can be sampling as much as pay. You can see every role and province in our [pay table](/resources#pay) and the [2026 summary](/resources/eye-care-pay-summary).
 
+Typical (median) hourly pay for opticians and optometric assistants in the 8 provinces we cover:
+
+| Province | Optician 2025 | Optician 2026 | Assistant 2025 | Assistant 2026 |
+| --- | --- | --- | --- | --- |
+| Ontario | $24.04 | $29.00 | $22.00 | $24.00 |
+| British Columbia | $30.82 | $29.00 | $25.00 | $28.00 |
+| Alberta | $28.00 | $28.00 | $22.50 | $24.00 |
+| Saskatchewan | $30.10 | $30.00 | $22.83 | $24.00 |
+| Manitoba | $29.69 | $28.90 | $20.00 | $22.00 |
+| Nova Scotia | $28.07 | $30.00 | $24.00 | $24.50 |
+| New Brunswick | $28.50 | $27.63 | $23.00 | $24.24 |
+| Newfoundland and Labrador | $29.59 | $30.03 | $22.00 | $22.41 |
+
+> Ontario's optician median rose 21% in a year, and Job Bank doesn't say why.
+
 For opticians, the typical province barely moved: across the 8 provinces we cover, 3 medians rose, 4 fell and 1 stayed put, and the typical change was nil. The headline is Ontario, up from $24.04 an hour to $29.00, a rise of 21%, while British Columbia slipped from $30.82 to $29.00. Our [optician pay guide](/blog/optician-pay-canada) has the full table. For optometric assistants, every province rose, with a typical increase of 6%: British Columbia went from $25.00 to $28.00, Manitoba from $20.00 to $22.00 and Ontario from $22.00 to $24.00. See our [guide to optometric assistant jobs](/blog/optometric-assistant-jobs-canada) for what the work involves. Reception and patient care teams rose in 6 of 8 provinces, typically by 3%. Practice managers, using Job Bank's closest group, rose in 5 of 8 provinces, with a typical rise of 9% and Ontario up 15%, from $31.00 to $35.75.
 
-Optometrists did not change at all, because Job Bank's optometrist figures still come from the 2021 Census. They will stay that way until newer census data arrives. Job Bank shows a median of $78,000 for optometrists in Ontario, which is less than half of the survey's roughly $169,000. The 2 measure different things. Job Bank's figure covers every optometrist in the census, including part time and self employed practitioners, and the survey leans to full time, recent graduates. Our pay table still shows Job Bank's optometrist figure, labelled with its census year, but for what associates are offered today this survey is the better guide.
+Optometrists did not change at all, because Job Bank's optometrist figures still come from the 2021 Census. They will stay that way until newer census data arrives. Job Bank shows a median of $78,000 for optometrists in Ontario, which is less than half of the survey's roughly $169,000. The 2 measure different things. Job Bank's figure covers every optometrist in the census, including part time and self employed practitioners, and the survey leans to full time, recent graduates. Our pay table still shows Job Bank's optometrist figure, labelled with its census year. For what associates are offered today, though, this survey is the better guide.
 
-> Working more did not pay more.
+> Job Bank shows $78,000 for Ontario optometrists. The survey found about $169,000.
 
 ## What surprised us
 
 The Ontario optician jump is the one we keep returning to. A 21% rise in a year is large, Job Bank does not explain it, and a single new year of survey data can do that to a province. We would wait for next year's file before calling it a trend.
 
-The gap between Job Bank and the survey for optometrists was bigger than we expected, and so was the Ontario guarantee figure. Ontario is the province with the strongest rules on posting pay, yet only 21% of respondents there have a guaranteed minimum, against about 60% in the west. A floor is already more common among newer graduates, so it wouldn't be a surprise to see it spread.
+The gap between Job Bank and the survey for optometrists was bigger than we expected, and so was the Ontario guarantee figure. Ontario now has rules on posting pay, yet only 21% of respondents there have a guaranteed minimum, against about 60% in British Columbia and Alberta. A floor is already more common among newer graduates, so it wouldn't be a surprise to see it spread.
+
+> Only 21% of Ontario optometrists in the survey have a guaranteed minimum, against about 60% in the west.
 
 Working more did not pay more. And mentorship ranked last for 43% of optometrists choosing a practice, behind autonomy (39% ranked it first), income (30%) and clinic culture (23%). Newer graduates lean to income: 45% of 2021 to 2025 graduates put it first, against 19% of those who graduated before 2000. Mentorship still matters, but few people pick a clinic for it. It tends to matter once they're there.
 
@@ -53,9 +76,9 @@ Posted pay comes first. Since 1st January 2026, Ontario employers with 25 or mor
 
 The rules do not apply to an employer with fewer than 25 employees, so a small clinic is free to leave pay out. It is still good practice for attracting candidates, which is why every job on Kestrel shows pay, whatever the size of the clinic. Every ad also says whether the job is an existing vacancy and whether the clinic uses AI to screen applicants, and no ad can ask for Canadian experience, so an ad on Kestrel carries the main things the Ontario rules ask a posting to include. Kestrel is a job posting platform too, which is why every job page has a way to report a fraudulent post and the [policy on fake jobs](/fake-jobs) is public. Our guide to [Ontario job ad rules for eye care clinics](/resources/ontario-job-ads) explains what a covered ad must include.
 
-Guarantees come second. If the 39% of recent graduates with a guaranteed minimum is a sign of where offers are heading, clinics that don't post a floor will find it harder to compete. Ontario, at 21%, has the most room to move.
+Guarantees come second. If the 39% of recent graduates with a guaranteed minimum is a sign of where offers are heading, clinics that don't post a floor will find it harder to compete. Ontario, at 21%, is where a change would show most.
 
-Third are the Prairies. If owners there keep struggling to recruit, we would expect to see more daily minimums. The [Canadian Association of Optometrists](https://opto.ca/sites/default/files/2026-02/Optometry_in_Canada.2026.ENG_.pdf) tracks the workforce in its 2026 "Optometry in Canada" report.
+The Prairies come third. If owners there keep struggling to recruit, we would expect to see more daily minimums. The [Canadian Association of Optometrists](https://opto.ca/sites/default/files/2026-02/Optometry_in_Canada.2026.ENG_.pdf) tracks the workforce in its 2026 "Optometry in Canada" report.
 
 The next Job Bank file, due in November or December, will show whether Ontario's optician figure holds. Another edition of the survey next year would turn these comparisons into a real year on year series.
 
@@ -67,7 +90,7 @@ If you are looking, ask what the percentage covers, ask for the clinic's own est
 
 [See eye care jobs across Canada](/jobs)
 
-## Where these figures come from
+::: Where these figures come from
 
 - Canadian Optometry Landscape Report, 2026 Canadian New ODs Survey, Dr. Wynn Nguyen, sponsored by OSI Group (460 respondents, 2025 income)
 - [2025 New ODs Report](http://newods.ca/wp-content/uploads/2025/05/Canadian-New-ODs-FINAL-REPORT.pdf), Canadian New Optometrists
@@ -79,7 +102,9 @@ If you are looking, ask what the percentage covers, ask for the clinic's own est
 - [O. Reg. 476/24, Rules and exemptions re job postings](https://www.ontario.ca/laws/regulation/240476), Ontario
 - [Your guide to the Employment Standards Act: recent changes](https://www.ontario.ca/document/your-guide-employment-standards-act-0/recent-changes), Ontario
 - [Canadian New ODs 2025 workforce report announcement](https://www.opto.com/news/214/canadian-new-ods-launch-2025-workforce-report-backed-by-osi-group/), OSI Group
-- [Canadian Association of Optometrists, new optometrists report 2023](https://opto.ca/sites/default/files/2023-01/NEW-OD-REPORT-2023-FINAL.pdf)`,
+- [Canadian Association of Optometrists, new optometrists report 2023](https://opto.ca/sites/default/files/2023-01/NEW-OD-REPORT-2023-FINAL.pdf)
+
+:::`,
   },
   {
     slug: "clinic-to-lens-rep-supplier-role",

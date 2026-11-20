@@ -122,3 +122,18 @@ test("every post has a topic from the list, and every topic has posts", () => {
   for (const post of POSTS) assert.ok(ids.includes(post.topic), `${post.slug} has no topic, or an unknown one`);
   for (const id of ids) assert.ok(POSTS.some((p) => p.topic === id), `the topic ${id} has no posts`);
 });
+
+test("a folded section holds the blocks between its markers, and ends at the closing marker or the end of the post", () => {
+  const blocks = parseBlocks("Intro.\n\n::: Where these figures come from\n\n- [One](https://example.com)\n- Two\n\n:::\n\nAfter.");
+  assert.equal(blocks.length, 3);
+  assert.equal(blocks[0].type, "p");
+  const details = blocks[1];
+  assert.equal(details.type, "details");
+  if (details.type !== "details") return;
+  assert.equal(details.summary, "Where these figures come from");
+  assert.deepEqual(details.blocks.map((b) => b.type), ["ul"]);
+  assert.equal(blocks[2].type, "p");
+  const open = parseBlocks("Intro.\n\n::: Sources\n\n- One\n\nMore.");
+  assert.equal(open.length, 2);
+  assert.deepEqual(open[1].type === "details" ? open[1].blocks.map((b) => b.type) : [], ["ul", "p"]);
+});
