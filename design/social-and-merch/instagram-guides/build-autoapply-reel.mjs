@@ -30,8 +30,8 @@ const swipeTimes = []; for (let i = 0, t = SWIPE_START; t < SWIPE_END - 0.2; i++
 const LETTER = "Dear Hiring Manager, I am excited to apply for the [Job Title] position at [Company]. I am a passionate self starter with a proven track record of";
 
 function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
-const r = rng(23);
-const letters = Array.from({ length: 50 }, (_, i) => ({ x: -60 + r() * 700, y: 640 + r() * 1150, rot: -10 + r() * 20, at: 5.4 + i * 0.045 }));
+// The clinic's inbox: 50 rows of the same application, arriving faster than anyone could read them.
+const INBOX_ROWS = 50, ROW_H = 168;
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Auto apply</title><style>
 @font-face{font-family:'DM Serif Display';src:url(${font("dm-serif-display/files/dm-serif-display-latin-400-normal.woff2")})}
@@ -52,8 +52,15 @@ body{margin:0}p{margin:0}
 .card .t{font-weight:700;font-size:52px;line-height:1.15;color:#333}
 .card .b{height:18px;background:#D9DDE2;border-radius:9px;margin-top:26px;width:75%}.card .b.s{width:50%}
 .stamp{position:absolute;right:30px;top:40px;border:6px solid #3F9D58;color:#3F9D58;font-weight:700;font-size:40px;padding:6px 18px;border-radius:12px;transform:rotate(14deg);opacity:0}
-.letter{position:absolute;width:520px;padding:30px 34px;box-sizing:border-box;background:#fff;border:2px solid #D3D7DD;border-radius:10px;box-shadow:0 8px 22px rgba(0,0,0,.10);font-size:24px;line-height:1.45;color:#555;opacity:0}
-.letter b{color:#333}
+#inbox{position:absolute;left:50px;right:50px;top:720px;bottom:110px;border-radius:24px;background:#fff;box-shadow:0 20px 50px rgba(0,0,0,.15);overflow:hidden;opacity:0}
+#ibhead{position:relative;z-index:2;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:30px 36px;border-bottom:2px solid #E3E6EA;font-weight:700;font-size:38px;color:#333}
+#badge{font-size:26px;color:#fff;background:#C0473A;padding:8px 18px;border-radius:999px}
+#rows{position:relative}
+.row{position:absolute;left:0;right:0;height:${ROW_H}px;box-sizing:border-box;display:flex;gap:20px;align-items:center;padding:0 30px;border-bottom:2px solid #EEF0F2;background:#fff}
+.dot{width:14px;height:14px;border-radius:50%;background:#2F6FD6;flex:none}.row .av{width:64px;height:64px;border-radius:50%;background:#C9CED5;flex:none}
+.tx{flex:1;min-width:0}.from{display:flex;justify-content:space-between;font-size:28px;color:#333}.from span{font-size:22px;color:#8A9099}
+.snip{font-size:24px;line-height:1.4;color:#666;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.snip em{font-style:normal;font-weight:700;color:${C.chestnut}}
 #calm{position:absolute;inset:0}
 .ch{position:absolute;left:80px;right:80px;top:300px;font-family:'DM Serif Display';font-size:96px;line-height:1.04;color:${C.navy}}
 #rules{position:absolute;left:80px;right:80px;top:700px;display:flex;flex-direction:column;gap:36px}
@@ -74,10 +81,13 @@ body{margin:0}p{margin:0}
 <div id="toggle"><span>Auto apply</span><div id="sw"><div id="knob"></div></div></div>
 ${swipeTimes.map((t, i) => `<div class="card" id="c${i}" data-at="${t}" style="z-index:${200 - i}"><p class="t">${ROLES[i % ROLES.length]}</p><div class="b"></div><div class="b s"></div><div class="b"></div><div class="stamp">APPLIED</div></div>`).join("")}
 </div></div>
-${letters.map((l, i) => `<div class="letter" id="l${i}" data-at="${l.at}" style="left:${l.x}px;top:${l.y}px;transform:rotate(${l.rot}deg)"><b>${LETTER.slice(0, 19)}</b>${LETTER.slice(19)}</div>`).join("")}
+<div id="inbox"><div id="ibhead"><span>Inbox</span><span id="badge">0 new</span></div><div id="rows">
+${Array.from({ length: INBOX_ROWS }, (_, i) => `<div class="row" id="r${i}"><div class="dot"></div><div class="av"></div><div class="tx"><p class="from"><b>New application</b><span>now</span></p>
+<p class="snip">Dear Hiring Manager, I am excited to apply for the <em>[Job Title]</em> position at <em>[Company]</em>. I am a passionate self starter</p></div></div>`).join("")}
+</div></div>
 <div id="band"><p id="counter"></p>
 <p class="hook" id="h1">Applied to 312 jobs.<br><span style="color:${C.chestnut}">Read none of them.</span></p>
-<p class="hook" id="h2" style="opacity:0">The clinicMeanwhile, at the clinic:<br><span style="color:${C.chestnut}">the same letter, 50 times.</span>apos;s inbox:<br><span style="color:${C.chestnut}">1 letter, 50 times.</span></p>
+<p class="hook" id="h2" style="opacity:0">The clinic&apos;s inbox:<br><span style="color:${C.chestnut}">1 letter, 50 times.</span></p>
 </div></div>
 <svg style="position:absolute;left:0;top:0;overflow:visible" width="1080" height="1920"><g id="bird">${FLY}</g></svg>
 <div id="end">
@@ -104,9 +114,13 @@ window.render = (t) => {
     c.querySelector(".stamp").style.opacity = span(t, a, a + 0.06); });
   // The phone leaves and the clinic's inbox fills with the same letter.
   el("phone").style.opacity = 1 - span(t, 5.0, 5.4);
-  document.querySelectorAll(".letter").forEach((l) => { const a = +l.dataset.at, k = span(t, a, a + 0.25); l.style.opacity = k > 0 ? 1 : 0;
-    l.style.scale = 0.6 + 0.4 * back(k); });
-  el("counter").textContent = t < 5.2 ? Math.round(312 * out(span(t, 1.0, 5.0))) + " applications sent today" : Math.round(50 * span(t, 5.4, 7.7)) + " identical letters";
+  // New rows arrive at the top and push the rest down, faster and faster.
+  el("inbox").style.opacity = span(t, 5.1, 5.4);
+  const arrived = ${INBOX_ROWS} * Math.pow(span(t, 5.5, 7.8), 1.6);
+  el("badge").textContent = Math.floor(arrived) + " new";
+  for (let i = 0; i < ${INBOX_ROWS}; i++) { const r = el("r" + i), pos = arrived - 1 - i;
+    r.style.display = pos < -1 || pos > 8 ? "none" : "flex"; r.style.top = (Math.max(-1, pos) * ${ROW_H}) + "px"; r.style.opacity = clamp(pos + 1); }
+  el("counter").textContent = t < 5.2 ? Math.round(312 * out(span(t, 1.0, 5.0))) + " applications sent today" : Math.floor(${INBOX_ROWS} * Math.pow(span(t, 5.5, 7.8), 1.6)) + " identical letters";
   el("h1").style.opacity = 1 - span(t, 5.0, 5.3); el("h2").style.opacity = span(t, 5.2, 5.5);
   // The kestrel swoops across and clears it all.
   const c = span(t, CUT[0], CUT[1]), bx = -500 + 2100 * c;
