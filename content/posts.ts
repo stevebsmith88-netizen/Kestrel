@@ -15,7 +15,7 @@ Late in 2026, 2 new sets of numbers arrived. On 18th November, [Job Bank refresh
 
 ## What optometrists reported
 
-The survey is the Canadian Optometry Landscape Report, written by Dr. Wynn Nguyen for Canadian New ODs and sponsored by OSI Group. It leans recent: 57% of the 460 respondents graduated in 2013 or later, and most trained at Waterloo. So it is a detailed picture of those respondents, and not a count of every optometrist in the country. An [earlier edition](http://newods.ca/wp-content/uploads/2025/05/Canadian-New-ODs-FINAL-REPORT.pdf) ran in early 2025.
+The survey is the [Canadian Optometry Landscape Report](https://images.opto.com/opto/documents/canadian-optometry-landscape-report-part-2-income.pdf), written by Dr. Wynn Nguyen for Canadian New ODs and sponsored by OSI Group. It leans recent: 57% of the 460 respondents graduated in 2013 or later, and most trained at Waterloo. So it is a detailed picture of those respondents, and not a count of every optometrist in the country. An [earlier edition](http://newods.ca/wp-content/uploads/2025/05/Canadian-New-ODs-FINAL-REPORT.pdf) ran in early 2025.
 
 The median take-home income for 2025, before tax, was $175,000, from the 323 optometrists who answered and had worked a full year. Owners reported $200,000 and associates $168,310. Per day worked, the medians were $996 for owners and $775 for associates. By province, Ontario came in at about $169,000, Alberta at about $163,000 and British Columbia at $180,000.
 
@@ -92,7 +92,9 @@ If you are looking, ask what the percentage covers, ask for the clinic's own est
 
 ::: Where these figures come from
 
-- Canadian Optometry Landscape Report, 2026 Canadian New ODs Survey, Dr. Wynn Nguyen, sponsored by OSI Group (460 respondents, 2025 income)
+- [Canadian Optometry Landscape Report, Part 1: Demographics, chapters 1 to 3](https://images.opto.com/opto/documents/canadian-optometry-landscape-report-part-1-demographics-chapters-1-3-v16.pdf), Dr. Wynn Nguyen for Canadian New ODs, sponsored by OSI Group (460 respondents, 2025 income)
+- [Canadian Optometry Landscape Report, Part 2: Income](https://images.opto.com/opto/documents/canadian-optometry-landscape-report-part-2-income.pdf)
+- [Canadian Optometry Landscape Report, Part 3: The practice, chapters 5 to 8](https://images.opto.com/opto/documents/canadian-optometry-landscape-report-part-3-the-practice-28chapters-5-8-29.pdf)
 - [2025 New ODs Report](http://newods.ca/wp-content/uploads/2025/05/Canadian-New-ODs-FINAL-REPORT.pdf), Canadian New Optometrists
 - [Job Bank wages dataset](https://open.canada.ca/data/en/dataset/adad580f-76b0-4502-bd05-20c125de9116), Employment and Social Development Canada, file of 18th November 2026, under the Open Government Licence, Canada, adapted by Kestrel and not endorsed by the Government of Canada
 - [How Job Bank works out wages](https://www.jobbank.gc.ca/trend-analysis/search-wages/wage-methodology)
