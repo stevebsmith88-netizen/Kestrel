@@ -164,7 +164,6 @@ for (let n = 0; n < FPS * SECONDS; n++) {
 }
 ff.stdin.end();
 await done;
-await tab.evaluate(() => window.render(3.2));
-await frame.screenshot({ path: join(OUT, "autoapply-reel-cover.jpg"), type: "jpeg", quality: 92 });
+// The cover is designed separately: build-noise-covers.mjs.
 await browser.close();
 console.log(`Built ${mp4}`);

@@ -213,9 +213,7 @@ for (const [name, v] of Object.entries(VARIANTS)) {
   }
   ff.stdin.end();
   await done;
-  // The cover: the noise at its peak, with the hook, so it stops the scroll.
-  await tab.evaluate(() => window.render(4.8));
-  await frame.screenshot({ path: join(OUT, `noise-reel-${name}-cover.jpg`), type: "jpeg", quality: 92 });
+// The cover is designed separately: build-noise-covers.mjs.
   console.log(`Built ${mp4}`);
 }
 await browser.close();
