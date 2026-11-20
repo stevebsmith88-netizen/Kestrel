@@ -11,6 +11,7 @@ import { AI_SCREENING_EXPLAINER, answerLabel, employmentExplainer, EXISTING_VACA
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
+import { isRenewed, newestDate } from "@/lib/renewed";
 import { clinicHrefFor } from "@/lib/public-clinics";
 import FollowButton from "@/components/FollowButton";
 import SaveJobButton from "@/components/SaveJobButton";
@@ -106,7 +107,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
                   <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}<InfoTip label="Existing vacancy" text={EXISTING_VACANCY_EXPLAINER} /></dd></div>
                   <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}<InfoTip label="Uses AI to screen candidates" text={AI_SCREENING_EXPLAINER} /></dd></div>
-                  <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>
+                  <div><dt>{isRenewed(job) ? "First posted" : "Posted"}</dt><dd>{longDate(job.posted_at)}</dd></div>
+                  {isRenewed(job) && <div><dt>Renewed</dt><dd>{longDate(new Date(newestDate(job)).toISOString())}<InfoTip label="Renewed" text="The clinic is still hiring and extended this post. It keeps its first posting date, and moves back up the list." /></dd></div>}
                   <div><dt>Closes</dt><dd>{longDate(job.expires_at)}</dd></div>
                 </dl>
               </section>

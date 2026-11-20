@@ -32,6 +32,33 @@ export async function headlineColumnReady(): Promise<boolean> {
   return headlineIsReady;
 }
 
+// The sort date (migration 0061) is held back the same way. Until the SQL is run, Newest keeps sorting on posted_at.
+let sortIsReady = false;
+let sortCheckedAt = 0;
+
+export async function sortColumnReady(): Promise<boolean> {
+  if (sortIsReady || Date.now() - sortCheckedAt < 5 * 60 * 1000) return sortIsReady;
+  sortCheckedAt = Date.now();
+  const admin = supabaseAdmin();
+  if (!admin) return false;
+  const { error } = await admin.from("jobs").select("sort_at").limit(1);
+  sortIsReady = !error;
+  return sortIsReady;
+}
+
+// The column the Newest list is ordered by: the later of when a job went live and when it was last extended, so an extended job goes back
+// to the top (Steve, 20th November 2026). posted_at itself never moves: Google's date, the alert emails and the "first posted" date use it.
+export async function newestColumn(): Promise<"sort_at" | "posted_at"> {
+  return (await sortColumnReady()) ? "sort_at" : "posted_at";
+}
+
+// Columns for a public read of jobs: the usual ones plus the sort date once the database has it. Never used for a write, because the sort date is
+// worked out by the database and cannot be saved.
+export async function withPublic(columns: string): Promise<string> {
+  const base = await withExpected(columns);
+  return (await sortColumnReady()) ? `${base}, sort_at` : base;
+}
+
 // ", pay_expected_min, pay_expected_max, pay_expected_period" and ", headline" once the database has them, otherwise nothing.
 export async function withExpected(columns: string): Promise<string> {
   let out = columns;

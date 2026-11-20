@@ -1,6 +1,6 @@
 # Renewed jobs go back to the top, and a free second chance (decided 20th November 2026)
 
-Steve's decisions, 20th November 2026. Nothing is built yet.
+Steve's decisions, 20th November 2026. **Built the same day (migration 0061, run it on both databases).** "Unfilled" means no hire marked through Kestrel (Steve, 20th November 2026).
 
 ## 1. Every extension moves the job to the top of Newest
 
@@ -13,5 +13,4 @@ Steve's decisions, 20th November 2026. Nothing is built yet.
 
 ## 2. A free repost, once, as a second chance
 
-Steve said yes to the idea. **Open question for Steve:** what counts as unfilled, either "no hire marked through Kestrel" or "fewer than a set number of applications" (suggestion: fewer than 3 in 30 days).
-Draft rules to confirm: only after the job has been live for 3 months in total, the same role at the same clinic, once per job, free of charge and not counted against a pass, and goes through review as normal. Put it in the posting policy and terms as a promise, not a standing right, and check it with the paralegal along with the other drafts.
+Steve said yes to the idea. Draft rules to confirm: only after the job has been live for 3 months in total, the same role at the same clinic, once per job, free of charge and not counted against a pass, and goes through review as normal. Put it in the posting policy and terms as a promise, not a standing right, and check it with the paralegal along with the other drafts.

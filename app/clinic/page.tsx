@@ -19,6 +19,7 @@ import { POSTING_SOON_BODY, POSTING_SOON_HEADING } from "@/lib/posting-copy";
 import { clinicSteps } from "@/lib/checklist";
 import { RESPONSE_NOTE } from "@/lib/clinic-emails";
 import { getApplicantCounts, getMyClinics, getMyEmployer, getMyJobs } from "@/lib/clinic";
+import { loadFreeRepostEligible } from "@/lib/free-repost-data";
 import LocationPicker from "@/components/LocationPicker";
 import { switchLocation } from "@/lib/location-actions";
 import { canEdit, levelLabel, VIEW_ONLY_TEXT } from "@/lib/team";
@@ -47,6 +48,8 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
   // A clinic with no profile yet goes straight to setting it up (Steve, 13th November 2026): the dashboard has nothing to show until then.
   if (!employer) redirect("/clinic/profile");
   const jobs = employer ? await getMyJobs(employer.id) : [];
+  // Jobs that can be posted again free (the older one ran 3 months with no hire marked through Kestrel).
+  const freeAgain = employer ? await loadFreeRepostEligible(employer.id) : new Set<string>();
   const applicants = employer ? await getApplicantCounts() : {};
   const numbers = employer ? await getMyJobNumbers() : {};
   const payments = employer ? await getMyJobPayments(jobs.map((j) => j.id)) : {};
@@ -203,7 +206,7 @@ export default async function ClinicHome({ searchParams }: { searchParams: Promi
                             <QuickActionForm action={extendJobQuiet} ids={[j.id]} className={applicants[j.id] ? "btn sm ghost" : "btn sm"}>Extend 30 days</QuickActionForm>
                           )}
                           {editor && (j.status === "closed" || j.status === "expired") && (
-                            <form action={repostJob}><input type="hidden" name="id" value={j.id} /><button type="submit" className="btn sm ghost"><Icon name="refresh" />Post again</button></form>
+                            <form action={repostJob}><input type="hidden" name="id" value={j.id} />{freeAgain.has(j.id) && <input type="hidden" name="free" value="yes" />}<button type="submit" className="btn sm ghost" title={freeAgain.has(j.id) ? "This job ran 3 months with no hire marked through Kestrel, so you can post it again free, once." : undefined}><Icon name="refresh" />{freeAgain.has(j.id) ? "Post again, free" : "Post again"}</button></form>
                           )}
                           {editor && (j.status === "draft" || j.status === "rejected" || j.status === "live") && <Link href={`/clinic/jobs/${j.id}`} className="btn sm ghost"><Icon name="pencil" />Edit</Link>}
                           {j.status === "live" && <Link href={`/jobs/${j.id}`} className="btn sm ghost"><Icon name="eye" />View</Link>}

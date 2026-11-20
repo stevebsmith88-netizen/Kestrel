@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { employmentLabel, longDate, practiceLabel } from "@/lib/jobs";
 import { payChips } from "@/lib/job-pay";
+import { postedLines } from "@/lib/renewed";
 import { tagLine, tagsFromRow } from "@/lib/job-tags";
 import type { JobSummary } from "@/lib/public-jobs";
 import SaveJobButton from "@/components/SaveJobButton";
@@ -28,7 +29,11 @@ export default function JobCard({ job: j, applied = false, saved }: { job: JobSu
       </div>
       <div className="jobside">
         {applied && <span className="badge a-applied">Applied</span>}
-        <span className="meta">Posted {longDate(j.posted_at)}</span>
+        {(() => {
+          // A renewed job shows when it was renewed and keeps its first posting date (Steve, 20th November 2026).
+          const dates = postedLines(j, longDate);
+          return dates.renewed ? <><span className="meta">Renewed {dates.renewed}</span><span className="meta">First posted {dates.posted}</span></> : <span className="meta">Posted {dates.posted}</span>;
+        })()}
         <Link href={`/jobs/${j.id}`} className="btn sm" aria-label={`View job: ${j.title}`}>View job</Link>
         {saved !== undefined && !applied && <SaveJobButton jobId={j.id} initial={saved ? "saved" : "not-saved"} small />}
       </div>

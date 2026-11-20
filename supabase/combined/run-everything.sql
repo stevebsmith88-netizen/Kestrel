@@ -3412,6 +3412,27 @@ revoke all on public.saved_jobs from anon, authenticated;
 
 
 -- ======================================================================
+-- 0061_renewed_jobs_and_free_repost.sql
+
+-- 0061: renewed jobs go back to the top, and a free second chance (Steve, 20th November 2026). Safe to run twice.
+-- (0060 is kept for the Canada only province rule, planned in another chat.)
+--
+-- 1. `sort_at` is the date the Newest list sorts on: the later of when a job went live and when it was last extended, so every
+--    extension moves the job back to the top. It is worked out by the database from the 2 dates already there, so no code has to
+--    keep it in step. The Google JobPosting date and the alert emails still use `posted_at`, which never moves.
+-- 2. `free_repost_of` marks a job that is the one free second chance for an older job that ran 3 months with no hire marked through
+--    Kestrel. Only the website's server can set it (no grant to a clinic's own sign in), and a unique index means an older job can
+--    have 1 such copy, so a clinic cannot claim it twice.
+
+alter table public.jobs add column if not exists sort_at timestamptz generated always as (greatest(posted_at, last_extended_at)) stored;
+create index if not exists jobs_sort_at_idx on public.jobs (sort_at desc) where status = 'live';
+grant select (sort_at) on public.jobs to anon;
+grant select (sort_at) on public.jobs to authenticated;
+
+alter table public.jobs add column if not exists free_repost_of uuid references public.jobs (id) on delete set null;
+create unique index if not exists jobs_one_free_repost on public.jobs (free_repost_of) where free_repost_of is not null;
+revoke select (free_repost_of) on public.jobs from anon;
+
 select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
@@ -3523,6 +3544,7 @@ from (
     ('table: employer_follows (candidates following a clinic or company, for the server only, 0057)', to_regclass('public.employer_follows') is not null and not has_table_privilege('anon', 'public.employer_follows', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_follows', 'SELECT')),
     ('columns: who has been told a clinic they asked about joined, still for the server only (0058)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_interest' and column_name = 'notified_at') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT') and not has_column_privilege('authenticated', 'public.employer_interest', 'notified_at', 'SELECT')),
     ('table: saved_jobs (jobs candidates saved to apply for later, for the server only, 0059)', to_regclass('public.saved_jobs') is not null and not has_table_privilege('anon', 'public.saved_jobs', 'SELECT') and not has_table_privilege('authenticated', 'public.saved_jobs', 'SELECT')),
+    ('columns: a job''s sort date (the later of live and last extended) readable by visitors, and the free second chance marker for the server only (0061)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'sort_at') and has_column_privilege('anon', 'public.jobs', 'sort_at', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'free_repost_of') and not has_column_privilege('anon', 'public.jobs', 'free_repost_of', 'SELECT') and not has_column_privilege('authenticated', 'public.jobs', 'free_repost_of', 'INSERT') and not has_column_privilege('authenticated', 'public.jobs', 'free_repost_of', 'UPDATE')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

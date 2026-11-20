@@ -1,7 +1,7 @@
 import { clampPage, pageOrLast } from "./paging.ts";
 import "server-only";
 import { supabasePublic } from "@/lib/supabase/public";
-import { withExpected } from "@/lib/expected-columns";
+import { newestColumn, withPublic } from "@/lib/expected-columns";
 import { cleanEmploymentTypes, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
 import { cleanTagFilters, type TagFilters } from "@/lib/job-tags";
 import type { PayFields } from "@/lib/job-pay";
@@ -27,6 +27,8 @@ export type JobSummary = PayFields & {
   province: string;
   city: string;
   posted_at: string;
+  // Set once the database has migration 0061: when the job was last renewed or first posted, whichever is later.
+  sort_at?: string | null;
   is_seeded: boolean;
   work_arrangement: string;
   employers: { clinic_name: string; practice_type: string; claimed: boolean } | null;
@@ -70,7 +72,8 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.city && !place) return { jobs: [], total: 0, place: null, placeNotFound: true };
 
   const nowIso = new Date().toISOString();
-  const summaryColumns = await withExpected(SUMMARY_COLUMNS);
+  const summaryColumns = await withPublic(SUMMARY_COLUMNS);
+  const orderBy = await newestColumn();
   const build = (columns: string, head = false) => {
   let query = db.from("jobs").select(columns, { count: "exact", head }).eq("status", "live").gt("expires_at", nowIso);
   if (filters.province) query = query.eq("province", filters.province);
@@ -84,7 +87,7 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.tags?.specialties.length) query = query.overlaps("tags_specialties", filters.tags.specialties);
   // The clinic or company name is searched too (Steve, 19th November 2026), so a candidate can look up a place they would like to work.
   if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%,employers.clinic_name.ilike.%${filters.q}%`);
-  return query.order("posted_at", { ascending: false });
+  return query.order(orderBy, { ascending: false });
   };
   const query = build(summaryColumns);
 
@@ -127,7 +130,7 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
 export async function listLiveJobsForMatching(limit = 1000): Promise<JobSummary[]> {
   const db = supabasePublic();
   if (!db) return [];
-  const { data, error } = await db.from("jobs").select(await withExpected(SUMMARY_COLUMNS)).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(limit);
+  const { data, error } = await db.from("jobs").select(await withPublic(SUMMARY_COLUMNS)).eq("status", "live").gt("expires_at", new Date().toISOString()).order(await newestColumn(), { ascending: false }).limit(limit);
   if (error) {
     console.error("Listing live jobs for recommendations failed:", error.code, error.message);
     return [];
@@ -140,7 +143,7 @@ export async function listLiveJobsForEmployer(employerId: string): Promise<JobSu
   if (!UUID.test(employerId)) return [];
   const db = supabasePublic();
   if (!db) return [];
-  const { data, error } = await db.from("jobs").select(await withExpected(SUMMARY_COLUMNS)).eq("employer_id", employerId).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(50);
+  const { data, error } = await db.from("jobs").select(await withPublic(SUMMARY_COLUMNS)).eq("employer_id", employerId).eq("status", "live").gt("expires_at", new Date().toISOString()).order(await newestColumn(), { ascending: false }).limit(50);
   if (error) {
     console.error("Listing a clinic's jobs failed:", error.code, error.message);
     return [];
@@ -186,7 +189,7 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
   if (!db) return null;
   const { data, error } = await db
     .from("jobs")
-    .select(await withExpected("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)"))
+    .select(await withPublic("id, employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, territory, pay_extras, apply_method, apply_url, is_seeded, work_arrangement, posted_at, expires_at, employers(clinic_name, practice_type, claimed, website, city, province, about)"))
     .eq("id", id)
     .eq("status", "live")
     .gt("expires_at", new Date().toISOString())

@@ -22,6 +22,7 @@ import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { canExtend, extendedUntil } from "@/lib/job-ending";
+import { freeRepostOffer, isFreeSecondChance } from "@/lib/free-repost-data";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { refreshJobPages } from "@/lib/job-cache";
 import { fetchPage } from "@/lib/fetch-page";
@@ -201,6 +202,13 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       // A location with a pass: a job it covers goes straight to review with nothing to charge, and a job it cannot cover (the pass is full, or
       // the role is not included) is recorded against the card already on the pass. Either way there is no Stripe page (lib/pass-flow.ts).
       const passAdmin = supabaseAdmin();
+      // A free second chance (lib/free-repost.ts) for the same role needs no card and no pass: it goes straight to review at no charge.
+      if (passAdmin && (await isFreeSecondChance(passAdmin, savedId, row.role_category ?? null))) {
+        await logJobActivity(passAdmin, savedId, "Sent for review as a free second chance (the older job ran 3 months with no hire marked through Kestrel), nothing to charge", { actor: "clinic" });
+        await moveToReview(passAdmin, { id: savedId, title: job.title }, employer.clinic_name);
+        revalidatePath("/clinic");
+        redirect("/clinic?notice=job-submitted");
+      }
       const pass = passAdmin ? await applyPassForSubmit(passAdmin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name) : ({ kind: "none" } as const);
       if (pass.kind === "covered" && passAdmin) {
         await moveToReview(passAdmin, { id: savedId, title: job.title }, employer.clinic_name);
@@ -388,7 +396,20 @@ export async function repostJob(form: FormData) {
     .in("status", ["closed", "expired", "live"])
     .maybeSingle();
   if (!old) redirect("/clinic");
-  const { data: copy, error } = await db.from("jobs").insert({ ...(old as unknown as Record<string, unknown>), employer_id: employer.id, status: "draft" }).select("id").single();
+  // The free second chance (Steve, 20th November 2026): checked on the server, and saved with the server key, because a clinic's own sign in cannot
+  // write the marker. It is offered once per job, only when the older job ran 3 months with no hire marked through Kestrel (lib/free-repost.ts).
+  const wantsFree = String(form.get("free") ?? "") === "yes";
+  const admin = wantsFree ? supabaseAdmin() : null;
+  if (wantsFree) {
+    const offer = admin ? await freeRepostOffer(admin, id, employer.id) : { ok: false as const };
+    if (!offer.ok) redirect("/clinic?notice=job-free-repost-blocked");
+  }
+  const insertRow = { ...(old as unknown as Record<string, unknown>), employer_id: employer.id, status: "draft", ...(wantsFree ? { free_repost_of: id } : {}) };
+  const { data: copy, error } = wantsFree && admin
+    ? await admin.from("jobs").insert(insertRow).select("id").single()
+    : await db.from("jobs").insert(insertRow).select("id").single();
+  if (wantsFree && error?.code === "23505") redirect("/clinic?notice=job-free-repost-blocked");
+  if (wantsFree && admin && copy) await logJobActivity(admin, copy.id, "Started as a free second chance for an older job that ran 3 months with no hire marked through Kestrel", { actor: "clinic" });
   if (error || !copy) {
     console.error("Repost failed:", error?.code, error?.message);
     redirect(`/clinic?notice=${/10 open jobs/.test(error?.message ?? "") ? "job-limit" : "job-repost-failed"}`);

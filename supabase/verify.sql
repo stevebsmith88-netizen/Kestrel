@@ -64,6 +64,7 @@ from (
     ('function: can_edit_employer (team access, 0045)', exists (select 1 from pg_proc where proname = 'can_edit_employer')),
     ('table: support_requests (help requests and feedback, 0046)', to_regclass('public.support_requests') is not null),
     ('several locations for 1 owner (0047)', to_regclass('public.employers_owner_idx') is null and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_invites' and column_name = 'also_employer_ids')),
+    ('columns: a job''s sort date (the later of live and last extended) readable by visitors, and the free second chance marker for the server only (0061)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'sort_at') and has_column_privilege('anon', 'public.jobs', 'sort_at', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'free_repost_of') and not has_column_privilege('anon', 'public.jobs', 'free_repost_of', 'SELECT') and not has_column_privilege('authenticated', 'public.jobs', 'free_repost_of', 'INSERT') and not has_column_privilege('authenticated', 'public.jobs', 'free_repost_of', 'UPDATE')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

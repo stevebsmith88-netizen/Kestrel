@@ -474,5 +474,15 @@ select t.try('0059', 'a clinic cannot see who saved its job', 'clinic_c', 'count
 select t.try('0059', 'a visitor cannot read saved jobs', 'visitor', 'count', 'select * from public.saved_jobs', 'refused');
 select t.try('0059', 'the admin cannot read saved jobs with their own sign in either (the server does)', 'admin', 'count', 'select * from public.saved_jobs', 'refused');
 select t.try('0059', 'a saved job goes when the candidate or the job goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.saved_jobs'::regclass and contype = 'f'$$, 'c,c');
+
+-- ---------------------------------------------------------------- 0061: renewed jobs and the free second chance
+select t.try('0061', 'a visitor can read the sort date of a job', 'visitor', 'count', 'select sort_at from public.jobs', 'not refused');
+select t.try('0061', 'extending a job moves its sort date past the date it went live', 'server', 'value', $$with u as (update public.jobs set last_extended_at = now() + interval '1 day' where id = '{job_c_live}' returning sort_at, posted_at) select (sort_at > posted_at)::text from u$$, 'true');
+select t.try('0061', 'nobody can write the sort date, it is worked out by the database', 'server', 'write', $$update public.jobs set sort_at = now() where id = '{job_c_live}'$$, 'refused');
+select t.try('0061', 'a visitor cannot read which jobs are free second chances', 'visitor', 'count', 'select free_repost_of from public.jobs', 'refused');
+select t.try('0061', 'a clinic cannot mark its own job as a free second chance', 'clinic_c', 'write', $$update public.jobs set free_repost_of = '{job_c_live}' where id = '{job_c_draft}'$$, 'refused');
+select t.try('0061', 'a clinic cannot add a job already marked as a free second chance', 'clinic_c', 'write', $$insert into public.jobs (employer_id, title, free_repost_of) values ('{employer_c}', 'Optician', '{job_c_live}')$$, 'refused');
+select t.try('0061', 'the server marks a job as the free second chance for an older one', 'server', 'write', $$update public.jobs set free_repost_of = '{job_c_live}' where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0061', 'an older job can have only 1 free second chance', 'server', 'value', $$select count(*)::text from pg_indexes where schemaname = 'public' and indexname = 'jobs_one_free_repost' and indexdef like '%UNIQUE%'$$, '1');
 select t.try('0059', 'a candidate cannot read or change when she was reminded', 'ann', 'write', $$update public.saved_jobs set reminded_at = now()$$, 'refused');
 select t.try('0059', 'the server records that a candidate was reminded a saved job is closing', 'server', 'write', $$update public.saved_jobs set reminded_at = now()$$, 'not refused');

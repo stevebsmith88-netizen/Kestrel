@@ -4,7 +4,7 @@
 export const PAGE_DATES = {
   privacy: "2026-11-15",
   terms: "2026-11-13",
-  postingPolicy: "2026-11-13",
+  postingPolicy: "2026-11-20",
   fakeJobs: "2026-11-13",
   security: "2026-11-12",
   resources: "2026-11-18",

@@ -4,6 +4,7 @@
 // it can be tested on its own (lib/job-sort.test.ts).
 
 import { distanceKm, findPlace, type Place } from "./places.ts";
+import { newestDate } from "./renewed.ts";
 
 export const SORTS = ["best", "new", "near"] as const;
 export type Sort = (typeof SORTS)[number];
@@ -19,7 +20,7 @@ export function sortChoice(asked: Sort | null, opts: { forMe: boolean; hasPlace:
   return { options, sort: asked && options.includes(asked) ? asked : fallback };
 }
 
-type Orderable = { posted_at: string; city: string; province: string; work_arrangement?: string | null };
+type Orderable = { posted_at: string; sort_at?: string | null; city: string; province: string; work_arrangement?: string | null };
 
 // Kilometres from the place to the job. A field based job is not tied to one town, and an unknown town cannot be measured, so both go last.
 export function kmFrom(ref: Place, job: Orderable): number {
@@ -29,7 +30,7 @@ export function kmFrom(ref: Place, job: Orderable): number {
 }
 
 export function orderJobs<T extends Orderable>(jobs: readonly T[], sort: "new" | "near", ref: Place | null): T[] {
-  const newest = (a: T, b: T) => Date.parse(b.posted_at) - Date.parse(a.posted_at);
+  const newest = (a: T, b: T) => newestDate(b) - newestDate(a);
   const list = [...jobs];
   if (sort === "near" && ref) {
     const km = new Map(list.map((j) => [j, kmFrom(ref, j)] as const));

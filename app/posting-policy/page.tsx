@@ -17,7 +17,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/posting-policy",
 });
 
-const UPDATED = "13th November 2026";
+const UPDATED = "20th November 2026";
 const DRAFT = true;
 
 export default async function PostingPolicy() {
@@ -70,7 +70,7 @@ export default async function PostingPolicy() {
           <h2>How posts are reviewed</h2>
           <ul>
             <li>Each post is read by our team before it is published. We may send it back to you with a note on what to change.</li>
-            <li>A published post stays live for 30 days, then it expires. You can close it sooner, for example when the role is filled. In its last 7 days, or within 7 days of it ending, you can extend it for another 30 days with the same wording.</li>
+            <li>A published post stays live for 30 days, then it expires. You can close it sooner, for example when the role is filled. In its last 7 days, or within 7 days of it ending, you can extend it for another 30 days with the same wording, and it moves back to the top of the list, marked Renewed. If a post ran for 3 months and no hire was marked through Kestrel, you can post it again once, free, for the same role.</li>
             <li>A clinic can have up to 10 open jobs at a time (drafts, in review and live together). Monthly passes include up to 5 live posts.</li>
             <li>We may take down a post at any time if it breaks this policy, or after a report. We will tell you, and you can fix and resubmit it. Our <Link href="/fake-jobs">policy on fake and fraudulent jobs</Link> says how we deal with reports.</li>
           </ul>
