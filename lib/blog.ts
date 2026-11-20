@@ -7,6 +7,8 @@
 // - A table: every line starts with "|". The first row is the header, the second is the "| --- | --- |" divider.
 // - An image: a line "![Alt text](/images/blog/file.png)", optionally followed by a caption line. Only files listed in
 //   lib/blog-images.ts can be used, so every image has its size and exists in /public.
+// - A folded section (Steve, 20th November 2026, for a long list of sources): a line "::: Title" on its own starts it, and a line ":::" on its
+//   own ends it (or the end of the post does). Everything between is shown folded under the title, and can hold any of the blocks above.
 
 // The topics that group posts on the blog page (Steve, 14th November 2026: the page was getting crowded). Topics, not months, because
 // people search by subject; a post's address never changes when it is grouped.
@@ -34,18 +36,28 @@ export type Block =
   | { type: "p"; text: string }
   | { type: "quote"; text: string; source?: string }
   | { type: "table"; head: string[]; rows: string[][] }
-  | { type: "figure"; src: string; alt: string; caption?: string };
+  | { type: "figure"; src: string; alt: string; caption?: string }
+  | { type: "details"; summary: string; blocks: Block[] };
 
 const cells = (line: string) => line.replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
 const DIVIDER = /^\|(\s*:?-{3,}:?\s*\|)+$/;
 const IMAGE = /^!\[([^\]]+)\]\((\/images\/blog\/[a-z0-9-]+\.(?:png|jpg|webp))\)$/;
 
 export function parseBlocks(body: string): Block[] {
+  return parseChunks(body.trim().split(/\n\s*\n/));
+}
+
+function parseChunks(chunks: string[]): Block[] {
   const blocks: Block[] = [];
-  for (const chunk of body.trim().split(/\n\s*\n/)) {
-    const lines = chunk.split("\n").map((l) => l.trim()).filter(Boolean);
+  for (let i = 0; i < chunks.length; i++) {
+    const lines = chunks[i].split("\n").map((l) => l.trim()).filter(Boolean);
     if (!lines.length) continue;
-    if (lines.length === 1 && lines[0].startsWith("## ")) blocks.push({ type: "h2", text: lines[0].slice(3) });
+    if (lines.length === 1 && lines[0].startsWith("::: ")) {
+      let end = chunks.findIndex((c, k) => k > i && c.trim() === ":::");
+      if (end === -1) end = chunks.length;
+      blocks.push({ type: "details", summary: lines[0].slice(4).trim(), blocks: parseChunks(chunks.slice(i + 1, end)) });
+      i = end;
+    } else if (lines.length === 1 && lines[0].startsWith("## ")) blocks.push({ type: "h2", text: lines[0].slice(3) });
     else if (lines.every((l) => l.startsWith("> "))) {
       const text = lines.map((l) => l.slice(2).trim());
       const last = text[text.length - 1];

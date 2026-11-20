@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { parseBlocks, parseInline } from "@/lib/blog";
+import { parseBlocks, parseInline, type Block } from "@/lib/blog";
 import { BLOG_IMAGES } from "@/lib/blog-images";
 
 // `sameDocument` turns a link such as /help#post-a-job into a plain #post-a-job link, so a click on a page that is already open fires the browser's own hashchange.
@@ -19,10 +19,21 @@ export function Inline({ text, sameDocument = false }: { text: string; sameDocum
 // Shows a blog post's text. Everything is rendered as ordinary page text, never as raw HTML.
 // A pull quote with no source repeats a line from the post, so screen readers skip it. An image not listed in lib/blog-images.ts is left out.
 export default function BlogBody({ body }: { body: string }) {
+  return <Blocks blocks={parseBlocks(body)} />;
+}
+
+// A folded section (such as the sources at the bottom of a long post) is a plain details element, so it works without JavaScript.
+function Blocks({ blocks }: { blocks: Block[] }) {
   return (
     <>
-      {parseBlocks(body).map((b, i) =>
+      {blocks.map((b, i) =>
         b.type === "h2" ? <h2 key={i}>{b.text}</h2>
+        : b.type === "details" ? (
+          <details key={i} className="numdetails blogsources">
+            <summary><span className="plus" aria-hidden="true">+</span>{b.summary}</summary>
+            <Blocks blocks={b.blocks} />
+          </details>
+        )
         : b.type === "quote" ? (
           <figure key={i} className={b.source ? "pullquote cited" : "pullquote"} aria-hidden={b.source ? undefined : true}>
             <blockquote><p><Inline text={b.text} /></p></blockquote>
