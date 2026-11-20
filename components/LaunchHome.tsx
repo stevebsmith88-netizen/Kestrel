@@ -27,7 +27,7 @@ export default async function LaunchHome() {
         <section className="lh-hero" aria-labelledby="lh-title">
           <div className="wrap">
             <h1 id="lh-title">Find your next eye care job</h1>
-            <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and <Link href="/posting-policy">a person reads every post before it goes live</Link>.</p>
+            <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and <Link href="/posting-policy" className="quietlink">a person reads every post before it goes live</Link>.</p>
             {!postingOn() && <p className="lh-lede lh-note"><strong>{PRELAUNCH_HOME_LEAD}</strong> {PRELAUNCH_HOME_BODY}</p>}
             <form method="get" action="/jobs" className="lh-search" role="search" aria-label="Search jobs">
               <label className="sr" htmlFor="lh-q">Role, keyword or clinic name</label>
@@ -89,7 +89,7 @@ export default async function LaunchHome() {
             <div>
               <p className="kicker">For clinics</p>
               <h2 id="lh-clinics-h">Hire people who chose eye care</h2>
-              <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, <Link href="/posting-policy">a person reads it before it goes live</Link>, and agencies cannot post. Anyone can <Link href="/fake-jobs">report a fake job</Link>.</p>
+              <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, <Link href="/posting-policy" className="quietlink">a person reads it before it goes live</Link>, and agencies cannot post. Anyone can <Link href="/fake-jobs" className="quietlink">report a fake job</Link>.</p>
             </div>
             <div className="lh-offer">
               <p className="lh-offerhead">{postingOn() ? "Free to post while we launch, and first jobs stay up for 60 days" : "Posting opens at launch in early 2027, and it will be free while we launch"}</p>

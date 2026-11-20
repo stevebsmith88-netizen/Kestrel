@@ -9,6 +9,9 @@ body{margin:0;background:var(--cream);color:var(--navy);font:400 1.0625rem/1.6 v
    deliberate. Navigation links (menus, back links, the footer) and buttons switch the underline off in their own rules below. */
 a{color:var(--chestnut);text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:currentColor;text-decoration-color:color-mix(in srgb,currentColor 75%,transparent);text-underline-offset:.22em}
 a:hover{text-decoration-thickness:2px;text-decoration-color:currentColor}
+/* A link inside a sentence that looks like the sentence until you point at it (Steve, 20th November 2026). It still shows the pointer, a soft box on hover and the usual outline from the keyboard. Use only where the surrounding words make the destination obvious. */
+a.quietlink{color:inherit;text-decoration:none;border-radius:4px;padding:1px 3px;margin:0 -3px}
+a.quietlink:hover{color:inherit;background:rgba(27,43,75,.07);box-shadow:inset 0 0 0 1.5px rgba(27,43,75,.55)}
 .icon{display:inline-block;flex:none;width:18px;height:18px}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
 .pill{font-size:0.8125rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--chestnut);border:1.5px solid var(--chestnut);border-radius:999px;padding:6px 14px;white-space:nowrap}
