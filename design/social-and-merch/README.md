@@ -7,7 +7,12 @@ Live, editable canvas (private to Steve): https://claude.ai/artifact/YMXrxLJGGjS
 ## What is in this folder
 
 - `instagram/`: 8 posts, 1080 x 1350 (4:5 portrait), exported at 2x (2160 x 2700) so they stay sharp in Canva. Post them in number order.
-- `stickers/`: 4 sticker sheets (Things we say, Inspired by the kit, My superpower is, Kestrel and eyecarejobs.ca with the mug wrap idea). These are review sheets, not print files. Print files come once the first 8 to 10 are chosen.
+- `stickers/draft-2/` (20th November 2026, the current version): every sticker is built around a drawing of the real kit and carries eyecarejobs.ca, curved along the bottom edge of the circles and in a corner of the others.
+  - `sheets/`: 4 review sheets (Things we say set 1 and 2, Inspired by the kit, My superpower is).
+  - `individual/`: each of the 25 stickers on its own, transparent background, white die cut edge included, at 3x (about 300 dpi at 3 to 4 inches). These are the files to drop into Canva or send to a printer for a proof.
+- `stickers/draft-1/`: the first text only drafts, kept for comparison. The Kestrel and eyecarejobs.ca sheet (wordmark, K, seal, chart and mug wrap) lives here and now carries eyecarejobs.ca on every sticker too.
+
+Rule from Steve (20th November 2026): every sticker shows eyecarejobs.ca on its edge or in a corner, small enough not to take over and big enough to read.
 - `source/`: the design files behind the canvas (`.dc.html`). Images in them point to the canvas's copies of the brand files in `public/brand` (`kestrel-k-mark.svg`, `kestrel-k-mark-reversed.svg`, `kestrel-wordmark.svg`).
 
 ## Brand rules used
