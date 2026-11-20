@@ -817,6 +817,8 @@ main.app > .wrap > :is(.notice, .note){margin-bottom:20px}
 .lh-offerhead{font:400 1.375rem/1.2 var(--f-display),Georgia,serif;color:#fff !important;margin:0 0 8px}
 .lh-offeractions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 22px;margin:16px 0 0}
 .lh-clinics a:not(.btn){color:var(--buff)}
+.lh-clinics a.quietlink{color:inherit}
+.lh-clinics a.quietlink:hover{color:#fff;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.6)}
 .lh-pay .btn{margin:6px 8px 0 0}
 .emptylinks{list-style:none;padding:0;margin:14px 0 18px;display:flex;flex-direction:column;align-items:center;gap:8px}
 .lh-shotslede{max-width:640px;margin:0 0 22px}
