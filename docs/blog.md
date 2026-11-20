@@ -96,6 +96,8 @@ Good topics, each aimed at a real search:
 
 Rules for every post: only say what is true and current, name no real clinic without asking, include no Eye Recommend material (the one exception is post 13 above), and link to the job board or the clinic page near the end.
 
+17. **How old do I need to be to work in optics?** (idea from Steve, 20th November 2026, not started). Aimed at searches such as "how old do you have to be to work in an optical shop" and "can a 16 year old work at an optical store". **Not drafted: every point below came from search summaries on 20th November 2026, the original pages were not opened, and each must be read at its source (Ontario's minimum age for work page, the Canada Labour Code page, and each province's own page) before it goes in a post.** Notes: no single age across Canada, rules are provincial; in Ontario an employer cannot hire someone under 16 during school hours, with limited exceptions; some workplaces set higher ages; federally regulated work is 18; so a 16 year old can usually work in a retail optical, and the roles that need a licence (optician, optometrist) need the training first. Links naturally to the licensing guides (optician 8th December 2026, optometric assistant 15th December 2026). Kestrel's own minimum age for an account is 16 (privacy policy, 20th November 2026).
+
 ## Review of the 5 posts (5th November 2026): what only Steve can supply
 
 Read for generic advice, claims nobody has checked, and the style rules in CLAUDE.md. Nothing has been rewritten yet. The 2 scheduled posts (13th and 27th November) are rewritten once Steve's notes arrive. Posts already published (30th October) keep their dates. Edits to them are a separate decision.

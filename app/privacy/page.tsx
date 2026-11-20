@@ -16,7 +16,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "15th November 2026";
+const UPDATED = "20th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -120,7 +120,7 @@ export default function Privacy() {
             </li>
           </ul>
           <p>
-            We do not currently use advertising cookies or tracking tools on this site. We do count how many times each job
+            We do not currently use advertising cookies or tracking tools on this site. We do not track you across other websites, so there is nothing a Do Not Track signal would switch off. We do count how many times each job
             page is viewed and how many times Apply is pressed, so clinics can see how their posts are doing. These counts
             are kept for each job and each day, without cookies, and do not record who you are. If you join the waitlist, we also
             save how your visit began: the website that sent you, the page you landed on and any campaign tag in the link you
@@ -241,6 +241,22 @@ export default function Privacy() {
             withdraw your consent. You can download a copy of your information and delete your account yourself on the Account page, or email <a href={`mailto:${EMAIL}`}>{EMAIL}</a>. We may need to confirm who you are first. If
             you are not satisfied with our response, you can contact the{" "}
             <a href="https://www.priv.gc.ca" rel="noopener noreferrer">Office of the Privacy Commissioner of Canada</a>.
+          </p>
+
+          <h2>Links to other websites</h2>
+          <p>
+            A job may send you to the clinic&apos;s own website to apply. We do not control that website, and its privacy practices are its own.
+          </p>
+
+          <h2>Who can use Kestrel</h2>
+          <p>
+            Kestrel is for people who are at least 16. If you think someone younger has given us their details, tell us and we will delete them.
+          </p>
+
+          <h2>If Kestrel is sold</h2>
+          <p>
+            If Kestrel is sold or joins another business, your information may move to the new owner. They may use it only for the purposes in
+            this policy, and we will tell you as soon as we know.
           </p>
 
           <h2>Changes to this policy</h2>
