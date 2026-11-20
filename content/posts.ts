@@ -56,7 +56,7 @@ For opticians, the typical province barely moved: across the 8 provinces we cove
 
 Optometrists did not change at all, because Job Bank's optometrist figures still come from the 2021 Census. They will stay that way until newer census data arrives. Job Bank shows a median of $78,000 for optometrists in Ontario, which is less than half of the survey's roughly $169,000. The 2 measure different things. Job Bank's figure covers every optometrist in the census, including part time and self employed practitioners, and the survey leans to full time, recent graduates. Our pay table still shows Job Bank's optometrist figure, labelled with its census year. For what associates are offered today, though, this survey is the better guide.
 
-> Working more did not pay more.
+> Job Bank shows $78,000 for Ontario optometrists. The survey found about $169,000.
 
 ## What surprised us
 
