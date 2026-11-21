@@ -133,6 +133,23 @@ Pay shown on every job. Pre launch is open. Create your account: link in bio.
 #EyeCareJobs #Optometry #Opticians #EyeCareCanada #CanadaJobs`,
     alt: "A short animation on cream. Text reads: Find us here. Before we open. 4 tiles with line icons for LinkedIn, Facebook, Instagram and Reddit drop in and take turns: LinkedIn, our company page. Facebook, kestreleye26. Instagram, @kestreleye26. Reddit, r/EyeCareJobsCanada. Pre launch is open. Create your account: link in bio. eyecarejobs.ca.",
     notes: ["Music: light and bouncy (search playful pizzicato)."] },
+  { date: "2026-12-06", platform: "Instagram", title: "Reel: 4 ways into eye care", type: "Reel. Show in profile grid: OFF",
+    file: `${R}ways-in-reel.mp4 · cover ${R}ways-in-reel-cover.jpg (Edit cover, Add from camera roll)`, loc: "Canada",
+    caption: `Want to work in optics, but not sure where to start?
+
+Here are 4 ways in:
+Front desk and patient care. Many clinics train you on the job.
+Optometric assistant. Pre testing and helping with eye exams, often trained in the clinic.
+Optician. Fitting glasses and contact lenses, with a college programme and a licence in most provinces.
+Optical lab technician. Making the lenses, often trained in the lab.
+
+Create your Kestrel account, pick the role you're interested in and your province, and we'll email you when jobs that fit are posted. Every job shows its pay. Our guides on getting started are in the link in bio too.
+
+Pre launch is open. Create your account: link in bio.
+
+#OpticianLife #OptometricAssistant #EyeCareCareers #EyeCareJobs #CanadaJobs`,
+    alt: "A short animation on cream. Text reads: Want to work in optics? Not sure where to start? Then: 4 ways into eye care. A dotted chestnut path runs down past 4 stops, each with an icon: Front desk and patient care, many clinics train you on the job. Optometric assistant, pre testing and helping with eye exams, often trained in the clinic. Optician, fitting glasses and contact lenses, a college programme and a licence in most provinces. Optical lab technician, making the lenses, often trained in the lab. Then: Find your way in. Create your account, pick the role you're interested in and your province, and we'll email you when jobs that fit are posted. Ends with the Kestrel Eye Care Jobs logo and Pre launch is open. Create your account: link in bio.",
+    notes: ["Sunday evening suits candidates.", "Music: warm and hopeful, light acoustic or piano."] },
   { date: "2027-01-21", platform: "Instagram", title: "Find us post (extra, Cream)", type: "Feed post (single image). Fits the grid between posts 24 and 25",
     file: `${R}find-us-a-grid.jpg`, loc: "Canada",
     caption: `We're in 4 places now, so you can follow along wherever you already spend your time.
