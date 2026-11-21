@@ -1,7 +1,7 @@
-// "Pre testing, explained" Reel (Steve, 22nd November 2026): the 4 tests he chose, 1 at a time, each with a big line drawing in the
+// "Pre testing, explained" Reel (Steve, 22nd November 2026): the 5 tests he chose, 1 at a time, each with a big line drawing in the
 // website's icon style, in plain words (no jargon on screen), then "this is often the optometric assistant's job" and the logo.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-pretesting-reel.mjs
-// 1080 x 1920, 30 frames a second, 24.5 seconds, no sound. Needs ffmpeg. The cover (all 4 as a grid) is built at the end.
+// 1080 x 1920, 30 frames a second, 25.5 seconds, no sound. Needs ffmpeg. The cover (all 5 as a grid) is built at the end.
 // Kept general: "depending on the clinic" is on screen, since not every clinic runs every test or in this order.
 import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright"); // the copy already installed on the machine
@@ -16,22 +16,25 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", paper: "#FBF8F2", line: "#E3D9C8", slate: "#5A6672" };
 const FPS = 30;
-const SECONDS = 24.5;
+const SECONDS = 25.5;
 
 // Line drawings on a 24 pixel grid, round ends, drawn big.
 const ART = {
   chart: `<rect x="5" y="2.5" width="14" height="19" rx="1.5"/><path d="M10 5.5v3.5M10 5.5h3.2M10 7.25h2.6M10 9h3.2"/><path d="M8.5 12h7M9.2 14.6h5.6M9.9 16.9h4.2M10.6 19h2.8"/>`,
   machine: `<rect x="2.5" y="16" width="19" height="4.5" rx="1.2"/><path d="M9 16V8.5a1.5 1.5 0 0 1 1.5-1.5h5A1.5 1.5 0 0 1 17 8.5V16"/><path d="M9 11H5.5"/><circle cx="4.4" cy="11" r="1.2"/><path d="M12.5 4.5v2.5M11 4.5h3"/><path d="M19.5 16v-6"/>`,
   puff: `<path d="M1.5 9.5h5.5l2 1.6v1.8l-2 1.6H1.5"/><path d="M10.6 10.4q.8 1.6 0 3.2M12.6 9.4q1.3 2.6 0 5.2"/><path d="M14.8 12Q18.6 6.8 22.4 12Q18.6 17.2 14.8 12Z"/><circle cx="18.6" cy="12" r="1.5"/>`,
+  clipboard: `<rect x="5" y="4" width="14" height="17.5" rx="2"/><path d="M9 4V2.6h6V4"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4.5"/>`,
+  oct: `<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M5 10q3.5-2.2 7 0t7 0M5 13q3.5-2.2 7 0t7 0M5 16q3.5-2.2 7 0t7 0"/><path d="M12 6.5v11.5" stroke-dasharray="1.2 1.8"/>`,
   camera: `<rect x="2.5" y="7" width="19" height="12.5" rx="2"/><path d="M8.5 7l1.6-2.5h3.8L15.5 7"/><circle cx="12" cy="13.2" r="4.2"/><circle cx="12" cy="13.2" r="2"/><path d="M18.5 9.5h.1"/>`,
 };
-const STEPS = [
-  { art: "chart", t: "Reading the letters", l: "Checking how clearly you see, near and far." },
+const STEPS = [ // order and the OCT step from Steve, 22nd November 2026: the autorefractor usually comes first
   { art: "machine", t: "The machine you look into", l: "An automatic reading of how your eyes focus. A starting point for your prescription." },
+  { art: "clipboard", t: "Checking your details", l: "Your reason for the visit, your health and any medication, so the optometrist has the full picture." }, // replaced reading the letters (Steve: not usually the assistant's job)
   { art: "puff", t: "The puff of air", l: "Measuring the pressure inside your eye, part of checking for glaucoma.", aside: "Sorry about the puff." },
   { art: "camera", t: "Photos of the back of your eye", l: "So the optometrist can look at the retina and see any changes over time." },
+  { art: "oct", t: "Some clinics also offer an OCT scan", l: "A detailed scan of the layers at the back of your eye." },
 ];
-const T = { steps: 3.4, each: 3.6 };
+const T = { steps: 3.4, each: 3.2 };
 T.msg = T.steps + T.each * STEPS.length;
 T.end = T.msg + 3.6;
 
@@ -55,8 +58,8 @@ body{margin:0}p{margin:0}
 #small{left:80px;right:80px;top:1640px;font-family:Poppins;font-size:26px;color:${C.slate};opacity:0}
 #msg{left:80px;right:80px;top:600px;opacity:0}
 #end{position:absolute;inset:0;background:${C.cream};opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-#grid{position:absolute;left:80px;right:80px;top:640px;display:grid;grid-template-columns:1fr 1fr;gap:30px;opacity:0}
-.g{padding:30px;border-radius:18px;background:${C.paper};border:2px solid ${C.line};display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
+#grid{position:absolute;left:80px;right:80px;top:600px;display:grid;grid-template-columns:1fr 1fr;gap:30px;opacity:0}
+.g{padding:24px;border-radius:18px;background:${C.paper};border:2px solid ${C.line};display:flex;flex-direction:column;align-items:center;text-align:center;gap:18px}
 .g p{font-family:'DM Serif Display';font-size:40px;line-height:1.1;color:${C.navy}}
 </style></head><body><div id="f">
 <p class="abs" id="label">PRE TESTING, EXPLAINED</p>
@@ -69,7 +72,7 @@ ${STEPS.map((s, i) => `<div class="step" id="s${i}"><div class="art" id="a${i}">
 <p style="font-family:Poppins;font-size:42px;line-height:1.45;color:${C.slate};margin-top:56px">Many clinics train you on the job. Curious? Create your account and set an alert for optometric assistant jobs near you.</p>
 </div>
 <p class="abs" id="ctitle" style="left:80px;right:80px;top:320px;font-family:'DM Serif Display';font-size:100px;line-height:1.04;color:${C.navy};opacity:0">Pre testing,<br><span style="color:${C.chestnut}">explained.</span></p>
-<div id="grid">${STEPS.map((s) => `<div class="g">${svg(s.art, 220, C.navy, 1.4)}<p>${s.t}</p></div>`).join("")}</div>
+<div id="grid">${STEPS.map((s, i) => `<div class="g"${i === 4 ? ' style="grid-column:1 / span 2"' : ""}>${svg(s.art, 180, C.navy, 1.4)}<p>${s.t}</p></div>`).join("")}</div>
 <div id="end">
 <img src="${brand("kestrel-lockup-full.svg")}" alt="" style="width:860px;display:block">
 <p id="e1" style="font-family:'DM Serif Display';font-size:64px;color:${C.navy};margin-top:80px">Every job shows its pay.</p>
