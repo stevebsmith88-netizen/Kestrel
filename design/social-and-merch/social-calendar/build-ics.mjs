@@ -5,6 +5,7 @@
 // in Steve's Instagram chat of 16th to 21st November 2026 are listed below. Only posts from today onwards are included.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+import { BATCH } from "./batch-2026-11-22.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "docs/marketing/kestrel-social-calendar.ics");
@@ -179,28 +180,40 @@ Looking for your next role, or hiring for your clinic? Link in bio.
     notes: ["Launch day only. Check every claim is true today: sign up and posting are live.", "Music: Arrival of the Birds again if your account allows it (the swell at about 15 seconds, when the feather lands), or uplifting strings from Instagram's library.", "If launch moves, move this with it."] },
 ];
 events.push(...extra);
+// Added on 22nd November 2026, in the free days between the posts above. Also written on their own to a second file, so they can be
+// imported into the existing calendar without doubling anything.
+events.push(...BATCH.map((e) => ({ ...e, batch: "2026-11-22" })));
 
 // 3. Write the calendar: 7 pm Toronto, 30 minutes, with a reminder 30 minutes before.
 const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
 const fold = (line) => { const out = []; let cur = ""; for (const ch of line) { if (Buffer.byteLength(cur + ch) > 74) { out.push(cur); cur = " " + ch; } else cur += ch; } out.push(cur); return out.join("\r\n"); };
 const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
 const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kestrel Eye Care Jobs//Social calendar//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
-  "X-WR-CALNAME:Kestrel social media", "X-WR-TIMEZONE:America/Toronto",
+  "X-WR-CALNAME:Kestrel", "X-WR-TIMEZONE:America/Toronto",
   "BEGIN:VTIMEZONE", "TZID:America/Toronto",
   "BEGIN:DAYLIGHT", "TZOFFSETFROM:-0500", "TZOFFSETTO:-0400", "TZNAME:EDT", "DTSTART:19700308T020000", "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU", "END:DAYLIGHT",
   "BEGIN:STANDARD", "TZOFFSETFROM:-0400", "TZOFFSETTO:-0500", "TZNAME:EST", "DTSTART:19701101T020000", "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU", "END:STANDARD",
   "END:VTIMEZONE"];
-const kept = events.filter((e) => e.date >= TODAY).sort((a, b) => (a.date + a.platform).localeCompare(b.date + b.platform));
-for (const [i, e] of kept.entries()) {
-  const d = e.date.replace(/-/g, "");
-  const desc = [`Platform: ${e.platform}`, `Type: ${e.type}`, e.file && `File: ${e.file}`, e.loc && `Location: ${e.loc}`,
-    ...(e.notes ?? []), "", "CAPTION:", e.caption, e.alt && "", e.alt && "ALT TEXT:", e.alt].filter((x) => x !== undefined && x !== false && x !== null).join("\n");
-  lines.push("BEGIN:VEVENT", `UID:kestrel-social-${d}-${i}@eyecarejobs.ca`, `DTSTAMP:${stamp}`,
-    `DTSTART;TZID=America/Toronto:${d}T190000`, `DTEND;TZID=America/Toronto:${d}T193000`,
-    fold(`SUMMARY:${esc(`${e.platform}: ${e.title}`)}`), fold(`DESCRIPTION:${esc(desc)}`),
-    "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(`Post now: ${e.platform}, ${e.title}`)}`), "TRIGGER:-PT30M", "END:VALARM", "END:VEVENT");
+// Each event's UID comes from its date and title, so it stays the same however many posts are added around it.
+const uid = (e) => "kestrel-social-" + e.date.replace(/-/g, "") + "-" + e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) + "@eyecarejobs.ca";
+function calendar(list) {
+  const out = [...lines];
+  for (const e of list) {
+    const d = e.date.replace(/-/g, "");
+    const desc = [`Platform: ${e.platform}`, `Type: ${e.type}`, e.file && `File: ${e.file}`, e.loc && `Location: ${e.loc}`,
+      ...(e.notes ?? []), "", "CAPTION:", e.caption, e.alt && "", e.alt && "ALT TEXT:", e.alt].filter((x) => x !== undefined && x !== false && x !== null).join("\n");
+    out.push("BEGIN:VEVENT", fold(`UID:${uid(e)}`), `DTSTAMP:${stamp}`,
+      `DTSTART;TZID=America/Toronto:${d}T190000`, `DTEND;TZID=America/Toronto:${d}T193000`,
+      fold(`SUMMARY:${esc(`${e.platform}: ${e.title}`)}`), fold(`DESCRIPTION:${esc(desc)}`),
+      "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(`Post now: ${e.platform}, ${e.title}`)}`), "TRIGGER:-PT30M", "END:VALARM", "END:VEVENT");
+  }
+  out.push("END:VCALENDAR");
+  return out.join("\r\n") + "\r\n";
 }
-lines.push("END:VCALENDAR");
-writeFileSync(OUT, lines.join("\r\n") + "\r\n");
+const kept = events.filter((e) => e.date >= TODAY).sort((a, b) => (a.date + a.platform).localeCompare(b.date + b.platform));
+writeFileSync(OUT, calendar(kept));
+const NEW = OUT.replace(".ics", "-added-2026-11-22.ics");
+writeFileSync(NEW, calendar(kept.filter((e) => e.batch === "2026-11-22")));
+console.log(`Also wrote ${kept.filter((e) => e.batch).length} new posts on their own to ${NEW}`);
 console.log(`Wrote ${kept.length} posts to ${OUT}`);
 for (const e of kept) console.log(e.date, e.platform.padEnd(9), e.title, e.notes?.some((n) => n.startsWith("CHECK")) ? "  [CHECK]" : "");

@@ -1,0 +1,537 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kestrel Eye Care Jobs//Social calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Kestrel
+X-WR-TIMEZONE:America/Toronto
+BEGIN:VTIMEZONE
+TZID:America/Toronto
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:EDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:EST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:kestrel-social-20261124-story-poll-better-1-or-2@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261124T190000
+DTEND;TZID=America/Toronto:20261124T193000
+SUMMARY:Instagram: Story poll: Better 1... or 2?
+DESCRIPTION:Platform: Instagram\nType: Story with a poll sticker (add the 
+ sticker in the app\, in the empty space below the drawing)\nFile: design/
+ social-and-merch/instagram-guides/story-poll-1-better-1-or-2.png\n\nThe n
+ ext day\, share the result as a Story.\n\nCAPTION:\nPoll options: 1 / 2\n
+ \n\n
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Story poll: Better 1... or 2?
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261128-reel-3-questions-to-ask-in-an-optician-intervi
+ ew@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261128T190000
+DTEND;TZID=America/Toronto:20261128T193000
+SUMMARY:Instagram: Reel: 3 questions to ask in an optician interview
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/questions-reel.mp4 · cover 
+ design/social-and-merch/instagram-guides/questions-reel-cover.jpg (Edit c
+ over\, Add from camera roll)\nLocation: Canada\nThe guide went live on 27
+ th November\, so the link in bio points to it.\n\nCAPTION:\nGot an optici
+ an interview coming up? Ask these 3 questions.\n\n1. What does a normal w
+ eek look like\, including evenings\, Saturdays and holiday cover?\n2. If 
+ there's commission or a bonus\, how exactly is it worked out\, and what d
+ oes a typical month look like?\n3. Why is the position open? A new role\,
+  a retirement and a replacement for someone who left are very different s
+ tories.\n\nOn Kestrel Eye Care Jobs\, you won't need to ask about the pay
+  range: every job shows it. The full guide\, with more questions and what
+  to watch for\, is in the link in bio.\n\n#Opticians #InterviewTips #EyeC
+ areJobs #OpticianLife #CanadaJobs\n\nALT TEXT:\nA short animation. Text r
+ eads: Got an optician interview coming up? Ask these 3 questions. 3 navy 
+ cards flip over to show why each matters: What does a normal week look li
+ ke? Including evenings\, Saturdays and holiday cover. If there's commissi
+ on or a bonus\, how is it worked out? And what does a typical month look 
+ like? Why is the position open? A new role\, a retirement and a replaceme
+ nt for someone who left are very different stories. Then: On Kestrel\, yo
+ u won't need to ask about the pay range. Ends with the Kestrel Eye Care J
+ obs logo.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: 3 questions to ask in an optician 
+ interview
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261129-reel-guess-the-pay-optician-ontario@eyecarejob
+ s.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261129T190000
+DTEND;TZID=America/Toronto:20261129T193000
+SUMMARY:Instagram: Reel: Guess the pay\, optician\, Ontario
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/guess-the-pay-1.mp4 · cover
+  design/social-and-merch/instagram-guides/guess-the-pay-1-cover.jpg (Edit
+  cover\, Add from camera roll)\nLocation: Canada\nReply to guesses in the
+  comments.\n\nCAPTION:\nGuess the pay: optician\, Ontario.\n\nA\, B or C?
+  Comment your guess before you watch to the end.\n\nThe typical (median) 
+ pay for an optician in Ontario is $29.00 an hour\, and half earn between 
+ $23.44 and $35.43. Commission\, an eyewear allowance and benefits matter 
+ too\, so compare the whole offer.\n\nOn Kestrel Eye Care Jobs\, you'll ne
+ ver have to guess: every job shows its pay. Pre launch is open. Create yo
+ ur account: link in bio.\n\nSource: Job Bank wages\, Employment and Socia
+ l Development Canada (Labour Force Survey 2024 to 2025). Contains informa
+ tion licensed under the Open Government Licence – Canada.\n\n#Opticians
+  #OpticianPay #EyeCareJobs #OntarioJobs #PayTransparency\n\nALT TEXT:\nA 
+ short quiz animation. Text reads: Guess the pay. Optician\, Ontario. A\, 
+ $22 an hour. B\, $29 an hour. C\, $36 an hour. Comment A\, B or C. After 
+ a 5 second countdown\, B is revealed: typical (median) pay $29.00 an hour
+ . Half of opticians in Ontario earn between $23.44 and $35.43 an hour. Th
+ en: On Kestrel\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, optician\, Ontario
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261201-reel-job-ad-makeover-for-clinics@eyecarejobs.c
+ a
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261201T190000
+DTEND;TZID=America/Toronto:20261201T193000
+SUMMARY:Instagram: Reel: Job ad makeover (for clinics)
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/makeover-reel.mp4 · cover d
+ esign/social-and-merch/instagram-guides/makeover-reel-cover.jpg (Edit cov
+ er\, Add from camera roll)\nLocation: Canada\nShare to LinkedIn too: clin
+ ic owners are there.\n\nCAPTION:\n"Competitive pay. Fast paced. Must be a
+  team player." Sound familiar?\n\nHere's the same optician ad\, rewritten
+  the way candidates want to read it: the actual pay range\, the real week
+ \, who they'll work with\, and 2 straight answers. Is it an existing vaca
+ ncy? Do you use AI to screen applicants?\n\nClear ads get better applican
+ ts. On Kestrel Eye Care Jobs\, the form asks for all of this\, the pay gu
+ ide shows how your range compares with what's typical in your province\, 
+ and the ad builder drafts the listing for you.\n\nPre launch is open. Set
+  up your clinic: link in bio.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optom
+ etry #PracticeManagement\n\nALT TEXT:\nA short animation for clinics. Tex
+ t reads: Your job ad\, before and after. A plain ad says Optician wanted\
+ , Competitive pay\, Fast paced busy clinic\, Must be a team player. A che
+ stnut feather scribbles out each line and the rewrite appears: Optician\,
+  Alberta\, Full time. $27 to $33 an hour\, plus an eyewear allowance\, in
+  line with what's typical in Alberta. 4 days a week\, Tuesday to Friday\,
+  about 25 patients a day. You'll work alongside 2 opticians and an optome
+ trist. Existing vacancy: Yes. Uses AI to screen candidates: No. Then: Cle
+ ar ads get better applicants. Ends with the Kestrel Eye Care Jobs logo.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Job ad makeover (for clinics)
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261204-reel-job-ad-phrases-translated@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261204T190000
+DTEND;TZID=America/Toronto:20261204T193000
+SUMMARY:Instagram: Reel: Job ad phrases\, translated
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/phrases-reel.mp4 · cover de
+ sign/social-and-merch/instagram-guides/phrases-reel-cover.jpg (Edit cover
+ \, Add from camera roll)\nLocation: Canada\n\nCAPTION:\nJob ads have thei
+ r own language. Here's the translation.\n\n"Competitive salary": we'd rat
+ her not say yet. Ask for the pay range.\n"Fast paced environment": it's b
+ usy. Ask how many patients a day.\n"We're like a family": lovely\, but ho
+ urs matter too. Ask about evenings and Saturdays.\n"Wear many hats": you 
+ might do a bit of everything. Ask what a typical day looks like.\n"Must b
+ e flexible": the schedule may change. Ask how far ahead it's set.\n\nOn K
+ estrel Eye Care Jobs\, you won't need to ask the first one: every job sho
+ ws its pay. Which phrase have you seen most?\n\nPre launch is open. Creat
+ e your account: link in bio.\n\n#EyeCareJobs #JobSearch #Opticians #Optom
+ etricAssistant #CanadaJobs\n\nALT TEXT:\nA short animation. Text reads: J
+ ob ads have their own language. Here's the translation. 5 phrases are cir
+ cled by a chestnut feather\, each with a translation and a question to as
+ k: Competitive salary\, we'd rather not say yet. Fast paced environment\,
+  it's busy. We're like a family\, lovely but hours matter too. Wear many 
+ hats\, you might do a bit of everything. Must be flexible\, the schedule 
+ may change. Ends with: On Kestrel\, you won't need to ask the first one. 
+ Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Job ad phrases\, translated
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261205-reel-myth-or-fact-eye-care-careers-edition@eye
+ carejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261205T190000
+DTEND;TZID=America/Toronto:20261205T193000
+SUMMARY:Instagram: Reel: Myth or fact? Eye care careers edition
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/myth-fact-reel.mp4 · cover 
+ design/social-and-merch/instagram-guides/myth-fact-reel-cover.jpg (Edit c
+ over\, Add from camera roll)\nLocation: Canada\n\nCAPTION:\nMyth or fact?
+  Eye care careers edition.\n\n"You need a university degree to work in op
+ tics." Myth. Many roles train you on the job\, and opticians usually need
+  a college programme and a licence.\n"Opticians and optometrists do the s
+ ame job." Myth. Optometrists examine eyes and diagnose\; opticians fit an
+ d dispense glasses and contact lenses.\n"Eye care is just retail." Myth. 
+ It's health care.\n"You can start at the front desk and grow from there."
+  Fact. Many people do.\n"There's a new job board just for eye care in Can
+ ada." Fact. That's us: Kestrel Eye Care Jobs\, where every job shows its 
+ pay.\n\nWhich one surprised you? Pre launch is open. Create your account:
+  link in bio.\n\n#EyeCareCareers #Opticians #Optometry #OptometricAssista
+ nt #EyeCareJobs\n\nALT TEXT:\nA short quiz animation. 5 statements each g
+ et a stamp. You need a university degree to work in optics: Myth. Opticia
+ ns and optometrists do the same job: Myth. Eye care is just retail: Myth.
+  You can start at the front desk and grow from there: Fact. There's a new
+  job board just for eye care in Canada: Fact\, Kestrel Eye Care Jobs. Eve
+ ry job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Myth or fact? Eye care careers edi
+ tion
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261208-reel-your-job-ad-and-the-law-for-clinics@eyeca
+ rejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261208T190000
+DTEND;TZID=America/Toronto:20261208T193000
+SUMMARY:Instagram: Reel: Your job ad and the law (for clinics)
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/law-reel.mp4 · cover design
+ /social-and-merch/instagram-guides/law-reel-cover.jpg (Edit cover\, Add f
+ rom camera roll)\nLocation: Canada\nShare to LinkedIn too.\n\nCAPTION:\nH
+ iring in Ontario or BC? Your job ad has rules.\n\nOntario\, for employers
+  with 25 or more employees\, since 1st January 2026: show the pay range (
+ no more than $50\,000 wide)\, say whether it's an existing vacancy\, say 
+ whether you use AI to screen applicants\, and don't ask for "Canadian exp
+ erience".\n\nBritish Columbia\, all employers: show the pay range in ever
+ y public job posting.\n\nOn Kestrel Eye Care Jobs\, every post covers all
+  of this\, whatever the size of your clinic. Save this for your next hire
+ .\n\nPre launch is open. Set up your clinic: link in bio.\n\nA plain summ
+ ary\, not legal advice.\n\n#Hiring #ClinicOwner #Optometry #PayTransparen
+ cy #OntarioJobs\n\nALT TEXT:\nA short checklist animation for clinics. Te
+ xt reads: What your job ad needs. Ontario\, employers with 25 or more emp
+ loyees\, since 1st January 2026: the pay range\, no more than $50\,000 wi
+ de\; whether it's an existing vacancy\; whether AI is used to screen appl
+ icants\; no Canadian experience requirement. British Columbia\, all emplo
+ yers: the pay range in every public job posting. Then: On Kestrel\, every
+  post covers all of this\, whatever the size of your clinic. A plain summ
+ ary\, not legal advice.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Your job ad and the law (for clini
+ cs)
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261209-reel-guess-the-pay-front-desk-british-columbia
+ @eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261209T190000
+DTEND;TZID=America/Toronto:20261209T193000
+SUMMARY:Instagram: Reel: Guess the pay\, front desk\, British Columbia
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/guess-the-pay-2.mp4 · cover
+  design/social-and-merch/instagram-guides/guess-the-pay-2-cover.jpg (Edit
+  cover\, Add from camera roll)\nLocation: Canada\n\nCAPTION:\nGuess the p
+ ay: front desk and patient care\, British Columbia.\n\nA\, B or C? Commen
+ t your guess before you watch to the end.\n\nThe typical (median) pay for
+  receptionists in British Columbia\, the closest Job Bank group to front 
+ desk and patient care\, is $24.62 an hour\, and half earn between $21.00 
+ and $28.00.\n\nOn Kestrel Eye Care Jobs\, you'll never have to guess: eve
+ ry job shows its pay. Pre launch is open. Create your account: link in bi
+ o.\n\nSource: Job Bank wages\, Employment and Social Development Canada (
+ Labour Force Survey 2024 to 2025). Contains information licensed under th
+ e Open Government Licence – Canada.\n\n#EyeCareJobs #PatientCare #BCJob
+ s #PayTransparency #Optometry\n\nALT TEXT:\nA short quiz animation. Text 
+ reads: Guess the pay. Front desk and patient care\, British Columbia. A\,
+  $25 an hour. B\, $19 an hour. C\, $31 an hour. After a 5 second countdow
+ n\, A is revealed: typical (median) pay $24.62 an hour. Half of reception
+ ists in British Columbia earn between $21.00 and $28.00 an hour. Then: On
+  Kestrel\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, front desk\, Briti
+ sh Columbia
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261211-reel-pre-testing-explained@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261211T190000
+DTEND;TZID=America/Toronto:20261211T193000
+SUMMARY:Instagram: Reel: Pre testing\, explained
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/pretesting-reel.mp4 · cover
+  design/social-and-merch/instagram-guides/pretesting-reel-cover.jpg (Edit
+  cover\, Add from camera roll)\nLocation: Canada\n\nCAPTION:\nEver wonder
+ ed what happens before you see the optometrist?\n\nChecking your details:
+  your reason for the visit\, your health and any medication\, so the opto
+ metrist has the full picture.\nThe machine you look into: an autorefracto
+ r\, an automatic reading of how your eyes focus\, a starting point for yo
+ ur prescription.\nThe puff of air: non contact tonometry\, measuring the 
+ pressure inside your eye as part of checking for glaucoma. (Sorry about t
+ he puff.)\nPhotos of the back of your eye: retinal imaging\, so the optom
+ etrist can see your retina and any changes over time.\nAnd some clinics a
+ lso offer an OCT scan\, a detailed scan of the layers at the back of your
+  eye.\n\nDepending on the clinic\, the tests and their order vary. This i
+ s often the optometric assistant's job\, with many clinics training you o
+ n the job.\n\nCurious about working in eye care? Pre launch is open. Crea
+ te your account: link in bio.\n\n#OptometricAssistant #EyeExam #Optometry
+  #EyeCareCareers #EyeCareJobs\n\nALT TEXT:\nA short animation with line d
+ rawings. Text reads: Ever wondered what happens before you see the optome
+ trist? Pre testing\, explained. 1\, checking your details. 2\, the machin
+ e you look into. 3\, the puff of air\, sorry about the puff. 4\, photos o
+ f the back of your eye. 5\, some clinics also offer an OCT scan. Then: Th
+ is is often the optometric assistant's job. Many clinics train you on the
+  job.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Pre testing\, explained
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261212-story-poll-would-you-apply-if-the-pay-wasn-t-s
+ hown@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261212T190000
+DTEND;TZID=America/Toronto:20261212T193000
+SUMMARY:Instagram: Story poll: Would you apply if the pay wasn't shown?
+DESCRIPTION:Platform: Instagram\nType: Story with a poll sticker (add the 
+ sticker in the app\, in the empty space below the drawing)\nFile: design/
+ social-and-merch/instagram-guides/story-poll-4-apply-without-pay.png\n\nS
+ creenshot the result: it's a figure you can quote later.\nThe next day\, 
+ share the result as a Story.\n\nCAPTION:\nPoll options: Yes / No\n\n\n
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Story poll: Would you apply if the pay w
+ asn't shown?
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261213-reel-just-finished-optometry-school-new-ods@ey
+ ecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261213T190000
+DTEND;TZID=America/Toronto:20261213T193000
+SUMMARY:Instagram: Reel: Just finished optometry school? (new ODs)
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/new-od-reel.mp4 · cover des
+ ign/social-and-merch/instagram-guides/new-od-reel-cover.jpg (Edit cover\,
+  Add from camera roll)\nLocation: Canada\nPost again in April or May\, wh
+ en final year students are deciding.\nShare on LinkedIn and Reddit too.\n
+ \nCAPTION:\nJust finished optometry school? Here's what's next.\n\nFirst\
+ , pass your board exam and register with the college in the province you'
+ ll practise in. Then choose your path. Most new ODs consider associate wo
+ rk in an independent practice\, corporate or retail optical\, locum work\
+ , and their own practice later on.\n\nPay comes as a day rate\, a salary\
+ , or a percentage of billings. On Kestrel Eye Care Jobs\, a job paid by p
+ ercentage must also show the expected earnings in dollars\, so you can co
+ mpare offers before you apply.\n\nCreate your account\, pick Optometrist 
+ and your province\, and we'll email you when jobs that fit are posted. Pr
+ e launch is open: link in bio.\n\n#Optometry #Optometrist #NewGrad #Optom
+ etryStudent #EyeCareJobs\n\nALT TEXT:\nA short animation for new optometr
+ ists. Text reads: Just finished optometry school? Here's what's next. Fir
+ st\, get licensed: pass your board exam\, register with the college in th
+ e province you'll practise in. 4 paths most new ODs consider: associate i
+ n an independent practice\, corporate or retail optical\, locum work\, yo
+ ur own practice later. How you'll be paid: a day rate\, a salary\, or a p
+ ercentage of billings. On Kestrel\, a job paid by percentage must also sh
+ ow the expected earnings in dollars.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Just finished optometry school? (n
+ ew ODs)
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261215-reel-guess-the-pay-optician-nova-scotia@eyecar
+ ejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261215T190000
+DTEND;TZID=America/Toronto:20261215T193000
+SUMMARY:Instagram: Reel: Guess the pay\, optician\, Nova Scotia
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/guess-the-pay-3.mp4 · cover
+  design/social-and-merch/instagram-guides/guess-the-pay-3-cover.jpg (Edit
+  cover\, Add from camera roll)\nLocation: Canada\n\nCAPTION:\nGuess the p
+ ay: optician\, Nova Scotia.\n\nA\, B or C? Comment your guess before you 
+ watch to the end.\n\nThe typical (median) pay for an optician in Nova Sco
+ tia is $30.00 an hour\, and half earn between $25.00 and $40.00\, one of 
+ the widest spreads in Canada.\n\nOn Kestrel Eye Care Jobs\, you'll never 
+ have to guess: every job shows its pay. Pre launch is open. Create your a
+ ccount: link in bio.\n\nSource: Job Bank wages\, Employment and Social De
+ velopment Canada (Labour Force Survey 2024 to 2025). Contains information
+  licensed under the Open Government Licence – Canada.\n\n#Opticians #Op
+ ticianPay #EyeCareJobs #NovaScotiaJobs #PayTransparency\n\nALT TEXT:\nA s
+ hort quiz animation. Text reads: Guess the pay. Optician\, Nova Scotia. A
+ \, $22 an hour. B\, $26 an hour. C\, $30 an hour. After a 5 second countd
+ own\, C is revealed: typical (median) pay $30.00 an hour. Half of opticia
+ ns in Nova Scotia earn between $25.00 and $40.00 an hour. Then: On Kestre
+ l\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, optician\, Nova Sc
+ otia
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261216-reel-follow-the-feather@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261216T190000
+DTEND;TZID=America/Toronto:20261216T193000
+SUMMARY:Instagram: Reel: Follow the feather
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/follow-feather-reel.mp4 · c
+ over design/social-and-merch/instagram-guides/follow-feather-reel-cover.j
+ pg (Edit cover\, Add from camera roll)\nLocation: Canada\n\nCAPTION:\nFol
+ low the feather to your next job in eye care.\n\n1. Pick your role: optom
+ etrist\, optician\, optometric assistant\, front desk or practice manager
+ .\n2. Pick your province.\n3. Get an alert: we'll email you when a job th
+ at fits is posted.\n4. See the pay first: every job on Kestrel shows its 
+ pay.\n\nPre launch is open. Create your account: link in bio.\n\n#EyeCare
+ Jobs #Optometry #Opticians #OptometricAssistant #CanadaJobs\n\nALT TEXT:\
+ nA short animation on cream. A chestnut feather drifts down. Text reads: 
+ Follow the feather to your next job in eye care. The feather lands on eac
+ h step: 1\, pick your role\, Optician. 2\, pick your province\, Alberta. 
+ 3\, get an alert\, a bell rings. 4\, see the pay first\, a job card showi
+ ng $27 to $33 an hour. The feather settles into the Kestrel logo as the l
+ eg of the K. Text reads: Follow the feather. Pre launch is open.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Follow the feather
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261218-story-poll-clinic-owners-where-do-your-best-hi
+ res-come-from@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261218T190000
+DTEND;TZID=America/Toronto:20261218T193000
+SUMMARY:Instagram: Story poll: Clinic owners\, where do your best hires co
+ me from?
+DESCRIPTION:Platform: Instagram\nType: Story with a poll sticker (add the 
+ sticker in the app\, in the empty space below the drawing)\nFile: design/
+ social-and-merch/instagram-guides/story-poll-5-where-staff-come-from.png\
+ n\nScreenshot the result: it tells you how clinics really hire.\n\nCAPTIO
+ N:\nPoll options: Word of mouth / Job sites\n\n\n
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Story poll: Clinic owners\, where do you
+ r best hires come from?
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261219-reel-guess-the-pay-practice-manager-ontario@ey
+ ecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261219T190000
+DTEND;TZID=America/Toronto:20261219T193000
+SUMMARY:Instagram: Reel: Guess the pay\, practice manager\, Ontario
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/guess-the-pay-4.mp4 · cover
+  design/social-and-merch/instagram-guides/guess-the-pay-4-cover.jpg (Edit
+  cover\, Add from camera roll)\nLocation: Canada\nCHECK: this uses Job Ba
+ nk's closest group for practice managers\, still waiting for Steve's 5 mi
+ nute check on Job Bank (docs/pay-benchmark.md). If you'd rather not use i
+ t yet\, ask Claude to swap it for Optician\, British Columbia.\n\nCAPTION
+ :\nGuess the pay: practice manager\, Ontario.\n\nA\, B or C? Comment your
+  guess before you watch to the end.\n\nThe typical (median) pay for offic
+ e and administrative supervisors in Ontario\, the closest Job Bank group 
+ to a practice manager\, is $35.75 an hour\, and half earn between $29.00 
+ and $46.00.\n\nOn Kestrel Eye Care Jobs\, you'll never have to guess: eve
+ ry job shows its pay. Pre launch is open. Create your account: link in bi
+ o.\n\nSource: Job Bank wages\, Employment and Social Development Canada (
+ Labour Force Survey 2024 to 2025). Contains information licensed under th
+ e Open Government Licence – Canada.\n\n#PracticeManagement #EyeCareJobs
+  #OntarioJobs #PayTransparency #Optometry\n\nALT TEXT:\nA short quiz anim
+ ation. Text reads: Guess the pay. Practice manager\, Ontario. A\, $36 an 
+ hour. B\, $27 an hour. C\, $45 an hour. After a 5 second countdown\, A is
+  revealed: typical (median) pay $35.75 an hour. Half of office and admini
+ strative supervisors in Ontario earn between $29.00 and $46.00 an hour. T
+ hen: On Kestrel\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, practice manager\,
+  Ontario
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261220-story-poll-round-or-square@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261220T190000
+DTEND;TZID=America/Toronto:20261220T193000
+SUMMARY:Instagram: Story poll: Round or square?
+DESCRIPTION:Platform: Instagram\nType: Story with a poll sticker (add the 
+ sticker in the app\, in the empty space below the drawing)\nFile: design/
+ social-and-merch/instagram-guides/story-poll-2-round-or-square.png\n\n\nC
+ APTION:\nPoll options: Round / Square\n\n\n
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Story poll: Round or square?
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261229-story-poll-the-puff-or-the-drops@eyecarejobs.c
+ a
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20261229T190000
+DTEND;TZID=America/Toronto:20261229T193000
+SUMMARY:Instagram: Story poll: The puff or the drops?
+DESCRIPTION:Platform: Instagram\nType: Story with a poll sticker (add the 
+ sticker in the app\, in the empty space below the drawing)\nFile: design/
+ social-and-merch/instagram-guides/story-poll-3-puff-or-drops.png\n\n\nCAP
+ TION:\nPoll options: The puff / The drops\n\n\n
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Story poll: The puff or the drops?
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20270105-story-poll-glasses-or-contacts@eyecarejobs.ca
+DTSTAMP:20261121T174306Z
+DTSTART;TZID=America/Toronto:20270105T190000
+DTEND;TZID=America/Toronto:20270105T193000
+SUMMARY:Instagram: Story poll: Glasses or contacts?
+DESCRIPTION:Platform: Instagram\nType: Story with a poll sticker (add the 
+ sticker in the app\, in the empty space below the drawing)\nFile: design/
+ social-and-merch/instagram-guides/story-poll-6-glasses-or-contacts.png\n\
+ n\nCAPTION:\nPoll options: Glasses / Contacts\n\n\n
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Story poll: Glasses or contacts?
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
