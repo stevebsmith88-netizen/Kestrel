@@ -27,6 +27,12 @@ Updated with Steve's notes of 5th November 2026 (second pass).
 | 10 | **Tidy ups.** privacy@ sends and receives. The ad builder works on the demo (draft, in review, approved, live). It cannot be tested on the live site while the live site is locked down. The lawyer's name goes in `docs/breach-plan.md` when known. | Mostly done. |
 | 11 | **Market counts.** Steve keeps his own 12 week artifact. He reports week 1 after Saturday's run, with an annual estimate, then the month 1 total with an annual estimate, then the quarter total with an annual estimate. | Starts after Saturday. |
 
+### To discuss with the build chat
+
+| # | What | Status |
+| --- | --- | --- |
+| 12 | **Ontario's 45 day rule for interviewed applicants.** Since 1st January 2026, an Ontario employer (25 or more employees, as with the other job posting rules) must tell each applicant it interviewed whether a hiring decision has been made, within 45 days of the last interview. Raised on 22nd November 2026 while making the "Your job ad and the law" Reel, where it was left out because the exact details were not confirmed. To discuss in the build chat: confirm the rule and its details (who it covers, how the notice can be given, what records to keep), then whether Kestrel should help clinics meet it, for example a reminder on the applicants board when an interviewed candidate has had no update for 30 days, and an easy "let the candidate know" message. Then add it to the law Reel and the posting policy if it fits. | To discuss. |
+
 ### Priority 3: Gate A, in order (needs the lawyer)
 
 Steve confirmed on 5th November that Gate A is not passed. Steps 4, 5 and 6 (meeting held, disclosure given and acknowledged, company incorporated) are not done. An earlier mix up between 2 versions of this file made them look done. Clinic outreach and publishing found listings stay off. Free launch waits for Gate A. Steve wants to be ready for launch, so launch materials (the flyer) are prepared as drafts and kept unpublished.
