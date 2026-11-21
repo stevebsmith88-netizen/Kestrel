@@ -25,7 +25,7 @@ body{margin:0}p{margin:0}
 <p class="abs" id="role">Optician,<br><span style="color:#A4502C">Ontario</span></p>
 <svg id="ring" viewBox="0 0 170 170"><circle cx="85" cy="85" r="72" fill="none" stroke="#E3D9C8" stroke-width="12"/>
 <circle id="arc" cx="85" cy="85" r="72" fill="none" stroke="#A4502C" stroke-width="12" stroke-linecap="round" transform="rotate(-90 85 85)" stroke-dasharray="452.4" stroke-dashoffset="0"/>
-<text id="num" x="85" y="106" text-anchor="middle" font-family="DM Serif Display" font-size="64" fill="#1B2B4B">3</text></svg>
+<text id="num" x="85" y="106" text-anchor="middle" font-family="DM Serif Display" font-size="64" fill="#1B2B4B">5</text></svg>
 <div id="opts"><div class="opt" id="o0"><div class="let">A</div><p class="amt">$22<small>an hour</small></p></div><div class="opt ans" id="o1"><div class="let">B</div><p class="amt">$29<small>an hour</small></p></div><div class="opt" id="o2"><div class="let">C</div><p class="amt">$36<small>an hour</small></p></div></div>
 <p class="abs" id="ask">Comment A, B or C</p>
 <div class="abs" id="reveal">
@@ -52,8 +52,9 @@ const out = (x) => 1 - Math.pow(1 - x, 3);
 const back = (x) => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 const el = (id) => document.getElementById(id);
 const fadeIO = (id, a, b, d = 30) => (t) => { const i = out(span(t, a, a + 0.5)), o = span(t, b - 0.4, b); const e = el(id); e.style.opacity = i * (1 - o); e.style.transform = "translateY(" + d * (1 - i) + "px)"; };
-// Timings: title 0 to 1.9, question 1.9 to 6, countdown 3 to 6, reveal 6 to 10.2, promise 10.2 to 12.8, end 12.8 to 16.
-const T = { q: 1.9, cd: 3.0, rv: 6.0, pr: 10.2, end: 12.8 };
+// Timings (Steve, 21st November 2026: a 5 second countdown, and the promise held longer): title 0 to 1.9, question 1.9 to 8,
+// countdown 3 to 8, reveal 8 to 12.2, promise 12.2 to 16.2, end 16.2 to 19.5.
+const T = { q: 1.9, cd: 3.0, rv: 8.0, pr: 12.2, end: 16.2 };
 window.render = (t, cover = false) => {
   el("label").style.opacity = out(span(t, T.q, T.q + 0.4)) * (1 - span(t, T.pr - 0.3, T.pr)); // only once the big title has gone, so it never repeats it
   fadeIO("big", 0.1, T.q, 40)(t);
@@ -69,12 +70,12 @@ window.render = (t, cover = false) => {
   fadeIO("src", T.rv + 0.6, T.pr, 0)(t);
   // The countdown: 3, 2, 1, the ring emptying as it goes.
   const cd = span(t, T.cd, T.rv); el("ring").style.opacity = cover ? 1 : span(t, T.cd - 0.3, T.cd) * (1 - span(t, T.rv, T.rv + 0.3));
-  el("arc").setAttribute("stroke-dashoffset", 452.4 * (cover ? 0 : cd)); el("num").textContent = cover ? "?" : String(Math.max(1, 3 - Math.floor(cd * 3)));
+  el("arc").setAttribute("stroke-dashoffset", 452.4 * (cover ? 0 : cd)); el("num").textContent = cover ? "?" : String(Math.max(1, 5 - Math.floor(cd * 5)));
   fadeIO("promise", T.pr, T.end, 30)(t);
   el("end").style.opacity = span(t, T.end - 0.2, T.end + 0.3);
   const show = (id, a) => { const v = out(span(t, a, a + 0.6)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 24 * (1 - v) + "px)"; };
   show("e1", T.end + 0.6); show("e2", T.end + 1.2);
 };
 // The cover: the question with the 3 answers and a "?" in the ring.
-window.cover = () => window.render(5.0, true);
+window.cover = () => window.render(6.0, true);
 </script></body></html>
