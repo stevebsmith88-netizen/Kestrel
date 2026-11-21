@@ -27,9 +27,9 @@ const ART = {
   oct: `<rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="M5 10q3.5-2.2 7 0t7 0M5 13q3.5-2.2 7 0t7 0M5 16q3.5-2.2 7 0t7 0"/><path d="M12 6.5v11.5" stroke-dasharray="1.2 1.8"/>`,
   camera: `<rect x="2.5" y="7" width="19" height="12.5" rx="2"/><path d="M8.5 7l1.6-2.5h3.8L15.5 7"/><circle cx="12" cy="13.2" r="4.2"/><circle cx="12" cy="13.2" r="2"/><path d="M18.5 9.5h.1"/>`,
 };
-const STEPS = [ // order and the OCT step from Steve, 22nd November 2026: the autorefractor usually comes first
-  { art: "machine", t: "The machine you look into", l: "An automatic reading of how your eyes focus. A starting point for your prescription." },
+const STEPS = [ // order and the OCT step from Steve, 22nd November 2026: details first, then the autorefractor
   { art: "clipboard", t: "Checking your details", l: "Your reason for the visit, your health and any medication, so the optometrist has the full picture." }, // replaced reading the letters (Steve: not usually the assistant's job)
+  { art: "machine", t: "The machine you look into", l: "An automatic reading of how your eyes focus. A starting point for your prescription." },
   { art: "puff", t: "The puff of air", l: "Measuring the pressure inside your eye, part of checking for glaucoma.", aside: "Sorry about the puff." },
   { art: "camera", t: "Photos of the back of your eye", l: "So the optometrist can look at the retina and see any changes over time." },
   { art: "oct", t: "Some clinics also offer an OCT scan", l: "A detailed scan of the layers at the back of your eye." },
