@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { BATCH } from "./batch-2026-11-22.mjs";
+import { WEEKEND } from "./batch-2026-11-21-weekend.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "docs/marketing/kestrel-social-calendar.ics");
@@ -183,6 +184,7 @@ events.push(...extra);
 // Added on 22nd November 2026, in the free days between the posts above. Also written on their own to a second file, so they can be
 // imported into the existing calendar without doubling anything.
 events.push(...BATCH.map((e) => ({ ...e, batch: "2026-11-22" })));
+events.push(...WEEKEND.map((e) => ({ ...e, batch: "2026-11-21-weekend" })));
 
 // 3. Write the calendar: 7 pm Toronto, 30 minutes, with a reminder 30 minutes before.
 const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
@@ -203,7 +205,7 @@ function calendar(list) {
     const desc = [`Platform: ${e.platform}`, `Type: ${e.type}`, e.file && `File: ${e.file}`, e.loc && `Location: ${e.loc}`,
       ...(e.notes ?? []), "", "CAPTION:", e.caption, e.alt && "", e.alt && "ALT TEXT:", e.alt].filter((x) => x !== undefined && x !== false && x !== null).join("\n");
     out.push("BEGIN:VEVENT", fold(`UID:${uid(e)}`), `DTSTAMP:${stamp}`,
-      `DTSTART;TZID=America/Toronto:${d}T190000`, `DTEND;TZID=America/Toronto:${d}T193000`,
+      `DTSTART;TZID=America/Toronto:${d}T${(e.time ?? "1900")}00`, `DTEND;TZID=America/Toronto:${d}T${String(+(e.time ?? "1900") + 30).padStart(4, "0")}00`, // 7 pm unless a post says otherwise
       fold(`SUMMARY:${esc(`${e.platform}: ${e.title}`)}`), fold(`DESCRIPTION:${esc(desc)}`),
       "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(`Post now: ${e.platform}, ${e.title}`)}`), "TRIGGER:-PT30M", "END:VALARM", "END:VEVENT");
   }
@@ -214,6 +216,7 @@ const kept = events.filter((e) => e.date >= TODAY).sort((a, b) => (a.date + a.pl
 writeFileSync(OUT, calendar(kept));
 const NEW = OUT.replace(".ics", "-added-2026-11-22.ics");
 writeFileSync(NEW, calendar(kept.filter((e) => e.batch === "2026-11-22")));
+writeFileSync(OUT.replace(".ics", "-added-2026-11-21-weekend.ics"), calendar(kept.filter((e) => e.batch === "2026-11-21-weekend")));
 console.log(`Also wrote ${kept.filter((e) => e.batch).length} new posts on their own to ${NEW}`);
 console.log(`Wrote ${kept.length} posts to ${OUT}`);
 for (const e of kept) console.log(e.date, e.platform.padEnd(9), e.title, e.notes?.some((n) => n.startsWith("CHECK")) ? "  [CHECK]" : "");
