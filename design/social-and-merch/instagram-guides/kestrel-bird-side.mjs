@@ -29,3 +29,15 @@ export const FLY = `<g id="fly">
 export const flyWings = (flap) => { const k = 0.1 + 0.9 * flap;
   const wing = (dx, dy, m) => `translate(${10 + dx} ${-18 + dy}) scale(${1.5 * m} ${1.5 * k * m}) rotate(28) translate(-10 18)`;
   return { near: wing(0, 0, 1), far: wing(16, -6, 0.9) }; };
+
+// The perched kestrel from "Takes flight", feet at (0, 0), upright on a treetop.
+export const PERCH = `<g id="perch">
+  <path d="M-22 -64 L-44 34 Q-28 46 -10 40 L 8 -56 Z" fill="${C.chestnut}"/>
+  <path d="M-42 22 Q-27 32 -12 28 L-10 40 Q-28 46 -44 34 Z" fill="${C.navy}"/>
+  <ellipse cx="0" cy="-104" rx="46" ry="74" fill="${C.paper}" transform="rotate(-12 0 -104)"/>
+  ${[[8, -120], [20, -96], [2, -80], [16, -64]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="5" ry="7" fill="${C.navy}" opacity=".8"/>`).join("")}
+  <path d="M-34 -160 C -60 -110, -56 -50, -26 -4 C -10 -50, -6 -112, -14 -164 Z" fill="${C.chestnut}"/>
+  <path d="M-30 -150 C -52 -108, -48 -56, -24 -16 C -12 -56, -10 -110, -16 -152 Z" fill="${C.slateBlue}"/>
+  <path d="M-6 -36 v36 M12 -38 v38" stroke="${C.buff}" stroke-width="7" stroke-linecap="round"/>
+  ${HEAD(16, -186)}
+</g>`;
