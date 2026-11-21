@@ -30,7 +30,7 @@ const COVERS = {
     calm: `<div class="kc"><p class="kt">Licensed optician</p><p class="km">Calgary · 6 years in practice</p><span class="cap fit">Fits the role</span></div>` },
   autoapply: { who: "AUTO APPLY", head: ["312 applications.", "0 of them read."],
     noise: [letter, letter, letter, letter, letter, letter, letter],
-    calm: `<div class="kc"><p class="kt" style="font-size:96px;color:${C.chestnut};line-height:.9">30</p><p class="km" style="font-size:30px;color:${C.navy};margin-top:12px">a day, at most, and only for jobs that fit</p></div>` },
+    calm: `<div class="kc"><svg width="90" height="70" viewBox="0 0 24 24" fill="none" stroke="${C.chestnut}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><p class="km" style="font-size:32px;color:${C.navy};margin-top:8px">Only for roles that fit the candidate&apos;s profession</p></div>` },
 };
 
 const html = (c) => {

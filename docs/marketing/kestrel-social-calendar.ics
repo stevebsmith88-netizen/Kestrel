@@ -24,7 +24,7 @@ END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:kestrel-social-20261122-0@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261122T190000
 DTEND;TZID=America/Toronto:20261122T193000
 SUMMARY:Instagram: Reel: Cut the noise\, for candidates
@@ -55,7 +55,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261123-1@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261123T190000
 DTEND;TZID=America/Toronto:20261123T193000
 SUMMARY:Instagram: Post 12: Optician pay
@@ -78,7 +78,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261124-2@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
 SUMMARY:Facebook: Find us post
@@ -107,7 +107,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261124-3@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
 SUMMARY:Reddit: r/EyeCareJobsCanada: Where do you usually hear about eye c
@@ -137,33 +137,29 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261125-4@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261125T190000
 DTEND;TZID=America/Toronto:20261125T193000
 SUMMARY:Instagram: Reel: Auto apply
 DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
  le: design/social-and-merch/instagram-guides/autoapply-reel.mp4 · cover 
  design/social-and-merch/instagram-guides/autoapply-reel-cover.jpg (Edit c
- over\, Add from camera roll)\nLocation: Canada\nCHECK: decide whether to 
- show the 30 a day number (see chat of 21st November 2026). If you drop it
- \, the Reel and this caption need updating first.\nMusic: fast and mechan
- ical for the swiping\, then calm from 8 seconds.\n\nCAPTION:\nApplied to 
- 312 jobs. Read none of them.\n\nAuto apply tools fire off hundreds of app
- lications a day\, and clinics end up reading the same letter\, again and 
- again.\n\nOn Kestrel Eye Care Jobs\, each candidate can send up to 30 app
- lications a day\, and only for roles that fit their profession. Fewer\, b
- etter applications\, for jobs that fit. And every job shows its pay.\n\nP
- re launch is open. Create your account: link in bio.\n\n#EyeCareJobs #Opt
- ometry #Opticians #Hiring #JobSearch\n\nALT TEXT:\nA short animation. A p
- hone with Auto apply switched on swipes right on every job\, from opticia
- n to brain surgeon\, while a counter reaches 312 applications sent today.
-  Then a clinic's inbox fills with 200 copies of the same letter: Dear Hir
- ing Manager\, I am excited to apply for the [Job Title] position at [Comp
- any]. A kestrel swoops across and clears it. Text reads: Fewer\, better a
- pplications. For jobs that fit. 30 applications a day\, at most\, for eac
- h candidate. Only for roles that fit the candidate's profession. Ends wit
- h the Kestrel Eye Care Jobs logo and Pre launch is open. Create your acco
- unt: link in bio.
+ over\, Add from camera roll)\nLocation: Canada\nMusic: fast and mechanica
+ l for the swiping\, then calm from 8 seconds.\n\nCAPTION:\nApplied to 312
+  jobs. Read none of them.\n\nAuto apply tools fire off hundreds of applic
+ ations a day\, and clinics end up reading the same letter\, again and aga
+ in.\n\nOn Kestrel Eye Care Jobs\, candidates can only apply for roles tha
+ t fit their profession. Fewer\, better applications\, for jobs that fit. 
+ And every job shows its pay.\n\nPre launch is open. Create your account: 
+ link in bio.\n\n#EyeCareJobs #Optometry #Opticians #Hiring #JobSearch\n\n
+ ALT TEXT:\nA short animation. A phone with Auto apply switched on swipes 
+ right on every job\, from optician to brain surgeon\, while a counter rea
+ ches 312 applications sent today. Then a clinic's inbox fills with 200 co
+ pies of the same letter: Dear Hiring Manager\, I am excited to apply for 
+ the [Job Title] position at [Company]. A kestrel swoops across and clears
+  it. Text reads: Fewer\, better applications. For jobs that fit. Only for
+  roles that fit the candidate's profession. Ends with the Kestrel Eye Car
+ e Jobs logo and Pre launch is open. Create your account: link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
 DESCRIPTION:Post now: Instagram\, Reel: Auto apply
@@ -172,7 +168,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261126-5@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261126T190000
 DTEND;TZID=America/Toronto:20261126T193000
 SUMMARY:Instagram: Post 13: Things heard No. 7
@@ -192,7 +188,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261127-6@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261127T190000
 DTEND;TZID=America/Toronto:20261127T193000
 SUMMARY:Instagram: Reel: Find us
@@ -218,7 +214,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261130-7@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261130T190000
 DTEND;TZID=America/Toronto:20261130T193000
 SUMMARY:Instagram: Post 14: AI chatbots
@@ -240,8 +236,45 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261203-8@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261202-8@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
+DTSTART;TZID=America/Toronto:20261202T190000
+DTEND;TZID=America/Toronto:20261202T193000
+SUMMARY:Instagram: Reel: Eye care hiring\, rewritten
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/rules-reel.mp4 · cover desi
+ gn/social-and-merch/instagram-guides/rules-reel-cover.jpg (Edit cover\, A
+ dd from camera roll)\nLocation: Canada\nMusic: steady and confident\, bui
+ lding with each line (search inspiring or anthem).\nLater: reuse each of 
+ the 5 lines as its own single image post or Story.\n\nCAPTION:\nEye care 
+ hiring has worked the same way for years. We're changing it.\n\n"Salary: 
+ competitive" becomes the actual pay range\, on every post.\n"Is this job 
+ even real?" Every post says if it's an existing vacancy.\n"Is a bot readi
+ ng my application?" Every post says if AI screens candidates.\nNo agencie
+ s: jobs come from the clinics themselves.\nAnd a person reads every post 
+ before it goes live.\n\nSee how we compare with other places to advertise
+  eye care jobs: eyecarejobs.ca/compare\n\nPre launch is open. Create your
+  account: link in bio.\n\n#EyeCareJobs #PayTransparency #Optometry #Optic
+ ians #CanadaJobs\n\nALT TEXT:\nA short animation on cream. Text reads: Ey
+ e care hiring has worked the same way for years. We're changing it. Then 
+ 5 old phrases are struck through\, 1 at a time\, by a chestnut feather\, 
+ each with a new line beneath. Salary: competitive becomes The actual pay 
+ range\, on every post. Is this job even real? becomes Every post says if 
+ it's an existing vacancy. Is a bot reading my application? becomes Every 
+ post says if AI screens candidates. Recruiters reposting clinic jobs beco
+ mes No agencies. Jobs come from the clinics. Posts go live unchecked beco
+ mes A person reads every post first. Ends with the Kestrel Eye Care Jobs 
+ logo\, See how we compare: eyecarejobs.ca/compare\, and Pre launch is ope
+ n. Create your account: link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Eye care hiring\, rewritten
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261203-9@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261203T190000
 DTEND;TZID=America/Toronto:20261203T193000
 SUMMARY:Instagram: Post 15: Optometrist pay
@@ -262,8 +295,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261207-9@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261207-10@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261207T190000
 DTEND;TZID=America/Toronto:20261207T193000
 SUMMARY:Instagram: Post 16: Pay summary
@@ -286,8 +319,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261210-10@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261210-11@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261210T190000
 DTEND;TZID=America/Toronto:20261210T193000
 SUMMARY:Instagram: Post 17: Becoming an optician
@@ -308,8 +341,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261214-11@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261214-12@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261214T190000
 DTEND;TZID=America/Toronto:20261214T193000
 SUMMARY:Instagram: Post 18: Who does what
@@ -334,8 +367,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261217-12@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261217-13@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261217T190000
 DTEND;TZID=America/Toronto:20261217T193000
 SUMMARY:Instagram: Post 19: Assistant certification
@@ -356,31 +389,32 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261221-13@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261221-14@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261221T190000
 DTEND;TZID=America/Toronto:20261221T193000
-SUMMARY:Instagram: Post 20: Photo: Opening soon
-DESCRIPTION:Platform: Instagram\nType: Feed post (single image)\nFile: 20 
- 2026-12-21 Photo Opening soon.png (folder Kestrel-Instagram-1-to-40)\nLoc
- ation: Canada\nCHECK: this still says waitlist. Sign up is open in pre la
- unch\, so change it to "Pre launch is open. Create your account: link in 
- bio." (the image too\, if the words are on it).\n\nCAPTION:\nKestrel Eye 
- Care Jobs opens soon. Join the waitlist and be first to see eye care jobs
-  across Canada\, every one with its pay.\n\nLink in bio.\n\n#EyeCareJobs 
- #Optometry #Opticians #CanadaJobs #EyeCare\n\nALT TEXT:\nText reads: Open
- ing soon. Join the waitlist. Link in bio. Be first to see eye care jobs a
- cross Canada. eyecarejobs.ca. Photo of an optometrist fitting a trial fra
- me on a patient.
+SUMMARY:Instagram: Post 20: Photo: Opening soon\, pre launch is open
+DESCRIPTION:Platform: Instagram\nType: Feed post (single image)\nFile: Can
+ va photo post: swap in the new panel design/social-and-merch/instagram-gu
+ ides/p03-opening-soon.png over the same photo\nLocation: Canada\nThe old 
+ version of this image said Join the waitlist. Use the new panel.\n\nCAPTI
+ ON:\nKestrel Eye Care Jobs opens in early 2027\, and pre launch is open n
+ ow. Create your account\, set up your profile and job alerts\, and be fir
+ st to see eye care jobs across Canada\, every one with its pay.\n\nLink i
+ n bio.\n\n#EyeCareJobs #Optometry #Opticians #CanadaJobs #EyeCare\n\nALT 
+ TEXT:\nText reads: Opening soon. Pre launch is open. Create your account:
+  link in bio. Eye care jobs across Canada\, every one with its pay. eyeca
+ rejobs.ca. Photo of an optometrist fitting a trial frame on a patient.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 20: Photo: Opening soon
+DESCRIPTION:Post now: Instagram\, Post 20: Photo: Opening soon\, pre launc
+ h is open
 TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261228-14@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20261228-15@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20261228T190000
 DTEND;TZID=America/Toronto:20261228T193000
 SUMMARY:Instagram: Post 21: Questions to ask
@@ -401,8 +435,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270104-15@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270104-16@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270104T190000
 DTEND;TZID=America/Toronto:20270104T193000
 SUMMARY:Instagram: Post 22: Things heard: Your turn
@@ -421,8 +455,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270111-16@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270111-17@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270111T190000
 DTEND;TZID=America/Toronto:20270111T193000
 SUMMARY:Instagram: Post 23: Supplier role
@@ -442,8 +476,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270118-17@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270118-18@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270118T190000
 DTEND;TZID=America/Toronto:20270118T193000
 SUMMARY:Instagram: Post 24: Who works in eye care
@@ -463,8 +497,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270121-18@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270121-19@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270121T190000
 DTEND;TZID=America/Toronto:20270121T193000
 SUMMARY:Instagram: Find us post (extra\, Cream)
@@ -491,8 +525,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270125-19@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270125-20@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270125T190000
 DTEND;TZID=America/Toronto:20270125T193000
 SUMMARY:Instagram: Post 25: Photo: Every job shows its pay
@@ -514,8 +548,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270125-20@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270125-21@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270125T190000
 DTEND;TZID=America/Toronto:20270125T193000
 SUMMARY:Instagram: Reel: Takes flight (we're open)
@@ -548,8 +582,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270208-21@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270208-22@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270208T190000
 DTEND;TZID=America/Toronto:20270208T193000
 SUMMARY:Instagram: Post 26: Becoming an optometrist
@@ -569,8 +603,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270222-22@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270222-23@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270222T190000
 DTEND;TZID=America/Toronto:20270222T193000
 SUMMARY:Instagram: Post 27: Things heard No. 3
@@ -589,8 +623,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270308-23@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270308-24@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270308T190000
 DTEND;TZID=America/Toronto:20270308T193000
 SUMMARY:Instagram: Post 28: Empty chair
@@ -610,8 +644,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270322-24@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270322-25@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270322T190000
 DTEND;TZID=America/Toronto:20270322T193000
 SUMMARY:Instagram: Post 29: Attract the right people
@@ -633,8 +667,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270405-25@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270405-26@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270405T190000
 DTEND;TZID=America/Toronto:20270405T193000
 SUMMARY:Instagram: Post 30: Resume tips
@@ -658,8 +692,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270419-26@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270419-27@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270419T190000
 DTEND;TZID=America/Toronto:20270419T193000
 SUMMARY:Instagram: Post 31: Eye care jobs on the road
@@ -681,8 +715,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270503-27@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270503-28@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270503T190000
 DTEND;TZID=America/Toronto:20270503T193000
 SUMMARY:Instagram: Post 32: Hire for attitude
@@ -704,8 +738,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270517-28@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270517-29@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270517T190000
 DTEND;TZID=America/Toronto:20270517T193000
 SUMMARY:Instagram: Post 33: Phone screenings
@@ -726,8 +760,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270531-29@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270531-30@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270531T190000
 DTEND;TZID=America/Toronto:20270531T193000
 SUMMARY:Instagram: Post 34: Stand out in an interview
@@ -748,8 +782,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270614-30@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270614-31@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270614T190000
 DTEND;TZID=America/Toronto:20270614T193000
 SUMMARY:Instagram: Post 35: Ask for a raise
@@ -770,8 +804,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270628-31@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270628-32@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270628T190000
 DTEND;TZID=America/Toronto:20270628T193000
 SUMMARY:Instagram: Post 36: Optical lab technician
@@ -792,8 +826,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270712-32@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270712-33@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270712T190000
 DTEND;TZID=America/Toronto:20270712T193000
 SUMMARY:Instagram: Post 37: Why people leave
@@ -814,8 +848,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270726-33@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270726-34@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270726T190000
 DTEND;TZID=America/Toronto:20270726T193000
 SUMMARY:Instagram: Post 38: First 30 days
@@ -836,8 +870,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270809-34@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270809-35@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270809T190000
 DTEND;TZID=America/Toronto:20270809T193000
 SUMMARY:Instagram: Post 39: Reference checks
@@ -857,8 +891,8 @@ TRIGGER:-PT30M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270823-35@eyecarejobs.ca
-DTSTAMP:20261121T125747Z
+UID:kestrel-social-20270823-36@eyecarejobs.ca
+DTSTAMP:20261121T130745Z
 DTSTART;TZID=America/Toronto:20270823T190000
 DTEND;TZID=America/Toronto:20270823T193000
 SUMMARY:Instagram: Post 40: Seasonal staff

@@ -29,6 +29,18 @@ for (const block of md.split(/\n(?=### )/)) {
   const codes = [...block.matchAll(/```text\n([\s\S]*?)```/g)].map((m) => m[1].trim());
   const caption = codes[0] ?? "", alt = codes[1] ?? "";
   const notes = [];
+  if (+head[1] === 20) { // Updated for pre launch (Steve, 21st November 2026); the panel is rebuilt by build-photo-panels.mjs (p03).
+    events.push({ date, platform: "Instagram", title: `Post 20: Photo: Opening soon, pre launch is open`, type: "Feed post (single image)",
+      file: "Canva photo post: swap in the new panel design/social-and-merch/instagram-guides/p03-opening-soon.png over the same photo", loc,
+      caption: `Kestrel Eye Care Jobs opens in early 2027, and pre launch is open now. Create your account, set up your profile and job alerts, and be first to see eye care jobs across Canada, every one with its pay.
+
+Link in bio.
+
+#EyeCareJobs #Optometry #Opticians #CanadaJobs #EyeCare`,
+      alt: "Text reads: Opening soon. Pre launch is open. Create your account: link in bio. Eye care jobs across Canada, every one with its pay. eyecarejobs.ca. Photo of an optometrist fitting a trial frame on a patient.",
+      notes: ["The old version of this image said Join the waitlist. Use the new panel."] });
+    continue;
+  }
   if (/waitlist/i.test(caption + alt)) notes.push(WAITLIST_CHECK);
   if (/Launch day/.test(block)) notes.push("Launch day. Before posting, check every claim is true today: sign up and posting are live.");
   events.push({ date, platform: "Instagram", title: `Post ${head[1]}: ${head[2].replace(/ \(new\)$/, "")}`, type: "Feed post (single image)",
@@ -57,13 +69,30 @@ Pre launch is open. Create your account: link in bio.
 
 Auto apply tools fire off hundreds of applications a day, and clinics end up reading the same letter, again and again.
 
-On Kestrel Eye Care Jobs, each candidate can send up to 30 applications a day, and only for roles that fit their profession. Fewer, better applications, for jobs that fit. And every job shows its pay.
+On Kestrel Eye Care Jobs, candidates can only apply for roles that fit their profession. Fewer, better applications, for jobs that fit. And every job shows its pay.
 
 Pre launch is open. Create your account: link in bio.
 
 #EyeCareJobs #Optometry #Opticians #Hiring #JobSearch`,
-    alt: "A short animation. A phone with Auto apply switched on swipes right on every job, from optician to brain surgeon, while a counter reaches 312 applications sent today. Then a clinic's inbox fills with 200 copies of the same letter: Dear Hiring Manager, I am excited to apply for the [Job Title] position at [Company]. A kestrel swoops across and clears it. Text reads: Fewer, better applications. For jobs that fit. 30 applications a day, at most, for each candidate. Only for roles that fit the candidate's profession. Ends with the Kestrel Eye Care Jobs logo and Pre launch is open. Create your account: link in bio.",
-    notes: ["CHECK: decide whether to show the 30 a day number (see chat of 21st November 2026). If you drop it, the Reel and this caption need updating first.", "Music: fast and mechanical for the swiping, then calm from 8 seconds."] },
+    alt: "A short animation. A phone with Auto apply switched on swipes right on every job, from optician to brain surgeon, while a counter reaches 312 applications sent today. Then a clinic's inbox fills with 200 copies of the same letter: Dear Hiring Manager, I am excited to apply for the [Job Title] position at [Company]. A kestrel swoops across and clears it. Text reads: Fewer, better applications. For jobs that fit. Only for roles that fit the candidate's profession. Ends with the Kestrel Eye Care Jobs logo and Pre launch is open. Create your account: link in bio.",
+    notes: ["Music: fast and mechanical for the swiping, then calm from 8 seconds."] },
+  { date: "2026-12-02", platform: "Instagram", title: "Reel: Eye care hiring, rewritten", type: "Reel. Show in profile grid: OFF",
+    file: `${R}rules-reel.mp4 · cover ${R}rules-reel-cover.jpg (Edit cover, Add from camera roll)`, loc: "Canada",
+    caption: `Eye care hiring has worked the same way for years. We're changing it.
+
+"Salary: competitive" becomes the actual pay range, on every post.
+"Is this job even real?" Every post says if it's an existing vacancy.
+"Is a bot reading my application?" Every post says if AI screens candidates.
+No agencies: jobs come from the clinics themselves.
+And a person reads every post before it goes live.
+
+See how we compare with other places to advertise eye care jobs: eyecarejobs.ca/compare
+
+Pre launch is open. Create your account: link in bio.
+
+#EyeCareJobs #PayTransparency #Optometry #Opticians #CanadaJobs`,
+    alt: "A short animation on cream. Text reads: Eye care hiring has worked the same way for years. We're changing it. Then 5 old phrases are struck through, 1 at a time, by a chestnut feather, each with a new line beneath. Salary: competitive becomes The actual pay range, on every post. Is this job even real? becomes Every post says if it's an existing vacancy. Is a bot reading my application? becomes Every post says if AI screens candidates. Recruiters reposting clinic jobs becomes No agencies. Jobs come from the clinics. Posts go live unchecked becomes A person reads every post first. Ends with the Kestrel Eye Care Jobs logo, See how we compare: eyecarejobs.ca/compare, and Pre launch is open. Create your account: link in bio.",
+    notes: ["Music: steady and confident, building with each line (search inspiring or anthem).", "Later: reuse each of the 5 lines as its own single image post or Story."] },
   { date: "2026-11-24", platform: "Facebook", title: "Find us post", type: "Feed post (single image)",
     file: `${R}find-us-a-grid.jpg`, loc: "Canada",
     caption: `We're in 4 places now, so you can follow along wherever you already spend your time.

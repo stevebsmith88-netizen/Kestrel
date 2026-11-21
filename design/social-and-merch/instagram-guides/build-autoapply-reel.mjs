@@ -3,8 +3,8 @@
 // letter; the kestrel swoops across and clears it; then Kestrel's 2 real rules and the logo.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-autoapply-reel.mjs
 // 1080 x 1920, 30 frames a second, 18 seconds, no sound. Needs ffmpeg.
-// Claims are true today: at most 30 applications in 24 hours (lib/apply-limit.ts), and only for roles that fit the candidate's
-// profession (lib/role-fit.ts). The phone and cards are generic (no real app, job board or company names).
+// Claims are true today: candidates can only apply for roles that fit their profession (lib/role-fit.ts). The daily limit of 30
+// (lib/apply-limit.ts) is deliberately not advertised (Steve, 21st November 2026), so the number can change without making the Reel untrue. The phone and cards are generic (no real app, job board or company names).
 import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright"); // the copy already installed on the machine
 import { spawn } from "node:child_process";
@@ -63,7 +63,7 @@ body{margin:0}p{margin:0}
 .snip em{font-style:normal;font-weight:700;color:${C.chestnut}}
 #calm{position:absolute;inset:0}
 .ch{position:absolute;left:80px;right:80px;top:300px;font-family:'DM Serif Display';font-size:96px;line-height:1.04;color:${C.navy}}
-#rules{position:absolute;left:80px;right:80px;top:820px;display:flex;flex-direction:column;gap:48px}
+#rules{position:absolute;left:80px;right:80px;top:900px;display:flex;flex-direction:column;gap:48px}
 .rule{display:flex;align-items:center;gap:40px;padding:64px 50px;border-radius:14px;background:${C.paper};border:2px solid ${C.line};box-shadow:0 10px 24px rgba(27,43,75,.08);opacity:0}
 .big{font-family:'DM Serif Display';font-size:170px;line-height:1;color:${C.chestnut};min-width:170px;text-align:center}
 .rt{font-family:Poppins;font-size:46px;line-height:1.3;color:${C.navy}}
@@ -73,7 +73,6 @@ body{margin:0}p{margin:0}
 <p class="abs" style="left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:${C.chestnut}">EYE CARE JOBS</p>
 <p class="ch" id="ch">Fewer, better applications.<br><span style="color:${C.chestnut}">For jobs that fit.</span></p>
 <div id="rules">
-<div class="rule" id="r0"><p class="big">30</p><p class="rt">applications a day, at most, for each candidate</p></div>
 <div class="rule" id="r1"><svg width="170" height="130" viewBox="0 0 24 24" fill="none" stroke="${C.chestnut}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><p class="rt">Only for roles that fit the candidate&apos;s profession</p></div>
 </div></div>
 <div id="noise">
@@ -133,7 +132,7 @@ window.render = (t) => {
   el("bird").style.opacity = t > CUT[0] - 0.05 && t < CUT[1] ? 1 : 0;
   // The calm: Kestrel's 2 rules.
   const show = (id, a, d = 40) => { const e = el(id); const k = out(span(t, a, a + 0.6)); e.style.opacity = k; e.style.transform = "translateY(" + d * (1 - k) + "px)"; };
-  show("ch", 9.2); show("r0", 10.4); show("r1", 11.6);
+  show("ch", 9.2); show("r1", 10.4);
   el("calm").style.opacity = 1 - span(t, 13.4, 13.9);
   el("end").style.opacity = span(t, 13.6, 14.1);
   show("e1", 14.5, 30); show("e2", 15.2, 30);

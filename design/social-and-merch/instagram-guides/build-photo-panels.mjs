@@ -21,7 +21,7 @@ const PANELS = [
   { file: "p02-built-for-eye-care", bg: C.chestnut, fg: C.cream, accent: C.buff, line: C.cream, label: C.cream, k: "kestrel-k-mark-reversed.svg",
     head: "Built for eye care.", head2: "Only eye care.", sub: "Optometrists, opticians, assistants, technicians, managers and front desk teams." },
   { file: "p03-opening-soon", bg: C.cream, fg: C.navy, accent: C.chestnut, line: C.slate, label: C.chestnut, k: "kestrel-k-mark.svg",
-    head: "Opening soon.", head2: "Join the waitlist.", sub: "Link in bio. Be first to see eye care jobs across Canada." },
+    head: "Opening soon.", head2: "Pre launch is open.", sub: "Create your account: link in bio. Eye care jobs across Canada, every one with its pay." }, // was "Join the waitlist." until 21st November 2026
 ];
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&apos;").replace(/"/g, "&quot;");
