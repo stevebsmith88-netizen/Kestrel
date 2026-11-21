@@ -37,7 +37,7 @@ const featherSvg = lock.replace(/<(path|rect)\b/g, (m, tag, off) => { const i = 
 
 const rows = RULES.map(([old, tr, ask], i) => `
 <div class="r" id="row${i}">
-  <p class="old"><span class="ot" id="ot${i}">&quot;${old}&quot;</span><svg class="scrib" id="sc${i}"><path id="sp${i}" fill="none" stroke="${C.chestnut}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
+  <p class="old"><span class="ot" id="ot${i}">&quot;${old}&quot;</span><svg class="scrib" id="sc${i}"><path id="sp${i}" fill="none" stroke="${C.chestnut}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
   <div class="new" id="nw${i}"><p class="tr">${tr}</p><p class="ask">Ask: ${ask}</p></div>
 </div>`).join("");
 
@@ -96,14 +96,15 @@ window.render = (t) => {
     const s = FIRST + i * EACH;
     const r = el("row" + i); const a = out(span(t, s, s + 0.4)); r.style.opacity = a * (1 - span(t, END - 0.3, END)); r.style.transform = "translateY(" + 24 * (1 - a) + "px)";
     // The feather scribbles the old line out: a quick back and forth zigzag across it, drawn behind the feather's tip.
-    const k = span(t, s + 0.7, s + 1.6);
+    const k = io(span(t, s + 0.6, s + 1.7)); // eased in and out, like a hand
     const ot = el("ot" + i).getBoundingClientRect(), p = el("sp" + i);
     if (!p.dataset.len) { // built once, from the line's own width, with a fixed wobble so every build matches
       const W = ot.width + 28, H = ot.height + 12, sc = el("sc" + i); sc.setAttribute("width", W); sc.setAttribute("height", H);
       // A hand drawn ring round the phrase, a little more than once round with a wobble, so the phrase stays readable.
       const pts = [], cx = W / 2, cy = H / 2;
-      for (let a = 200; a <= 640; a += 6) { const r = a * Math.PI / 180, w = 1 + 0.04 * Math.sin(a / 23);
-        pts.push([cx + (W / 2 + 16) * w * Math.cos(r), cy + (H / 2 + 14) * (1 + 0.06 * Math.sin(a / 17)) * Math.sin(r)]); }
+      // A smooth oval, fine steps and no wobble, that grows very slightly as it goes so the end overlaps the start like a pen loop.
+      for (let a = 215; a <= 615; a += 1.5) { const r = a * Math.PI / 180, g = 1 + 0.05 * (a - 215) / 400;
+        pts.push([cx + (W / 2 + 18) * g * Math.cos(r), cy + (H / 2 + 14) * g * Math.sin(r)]); }
       let d = "M " + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1);
       for (let q = 1; q < pts.length; q++) d += " L " + pts[q][0].toFixed(1) + " " + pts[q][1].toFixed(1);
       p.setAttribute("d", d); p.dataset.len = p.getTotalLength(); }
@@ -111,7 +112,7 @@ window.render = (t) => {
     // The phrase stays fully readable: the translation underneath needs it.
     if (t >= s + 0.55 && t <= s + 1.85) { fOn = span(t, s + 0.55, s + 0.7) * (1 - span(t, s + 1.6, s + 1.85));
       const pt = p.getPointAtLength(L * k), sb = el("sc" + i).getBoundingClientRect();
-      fx = sb.left - fBox.left + pt.x; fy = sb.top - fBox.top + pt.y; fr = 10 * Math.sin(k * 40); }
+      fx = sb.left - fBox.left + pt.x; fy = sb.top - fBox.top + pt.y; fr = -4 + 8 * k; } // a steady, gentle turn rather than a twitch
     const nw = out(span(t, s + 1.7, s + 2.3)); el("nw" + i).style.opacity = nw; el("nw" + i).style.transform = "translateX(" + 30 * (1 - nw) + "px)";
   }
   // Place the feather so its tip (the bottom right of its box) rides the end of the scribble.
