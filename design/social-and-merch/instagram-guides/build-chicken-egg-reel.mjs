@@ -9,6 +9,7 @@ import { spawn } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { FLY } from "./kestrel-bird-side.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "design/social-and-merch/instagram-guides");
@@ -35,6 +36,14 @@ const EGG = `<defs>
   <path id="crack" d="M ${crackPts}" fill="none" stroke="${C.navy}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
 </g>`;
 
+// The twins (Steve, 21st November 2026): 2 small kestrels hatch and fly out, 1 for candidates in the usual colours and 1 for clinics in
+// inverted colours (navy body, buff wings, chestnut markings). Each copy of the bird gets its own ids so its wings can beat on their own.
+const twin = (n, inverted) => {
+  let b = FLY.replace(/id="(fly|nearwing|farwing|tail)"/g, (m, id) => `id="${id}${n}"`);
+  if (inverted) b = b.replaceAll("#A4502C", "@NAVY").replaceAll("#1B2B4B", "@CHESTNUT").replaceAll("#7F93AE", "#D8B48A").replaceAll("#6B7F9B", "#C49A6C")
+    .replaceAll("@NAVY", "#1B2B4B").replaceAll("@CHESTNUT", "#A4502C");
+  return b;
+};
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Which comes first?</title><style>
 @font-face{font-family:'DM Serif Display';src:url(${font("dm-serif-display/files/dm-serif-display-latin-400-normal.woff2")})}
 @font-face{font-family:Poppins;font-weight:400;src:url(${font("poppins/files/poppins-latin-400-normal.woff2")})}
@@ -54,7 +63,7 @@ body{margin:0}p{margin:0}
 #end{position:absolute;inset:0;background:${C.cream};opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 </style></head><body><div id="f">
 <p class="abs" id="hook">Which comes<br><span style="color:${C.chestnut}">first?</span></p>
-<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="eggAt">${EGG}</g></svg>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="eggAt">${EGG}</g><g id="tw1" opacity="0">${twin(1, false)}</g><g id="tw2" opacity="0">${twin(2, true)}</g></svg>
 <div class="abs" id="loop">
 <div class="card" style="left:50px">Clinics</div><div class="card" style="right:50px">Candidates</div>
 <svg class="abs" style="left:0;top:0" width="1080" height="520"><g id="spin" transform="translate(540 230)">
@@ -93,7 +102,22 @@ window.render = (t) => {
   const sc = 1.25 - 0.35 * out(span(t, 2.6, 3.2));
   const y = 860 - 0 * span(t, 2.6, 3.2);
   el("eggAt").setAttribute("transform", "translate(540 " + y + ") rotate(" + rock + ") scale(" + sc + ")");
-  el("eggAt").style.opacity = 1 - span(t, 9.6, 10.0);
+  // The egg stays in the middle after it hatches.
+  el("eggAt").style.opacity = 1;
+  // The twins hatch at 9.0, rise out of the egg, then swoop down to hover over their own card: candidates on the left, clinics on the right.
+  const EGGY = y, ex = 540;
+  for (const [n, side, inv] of [[1, -1, false], [2, 1, true]]) {
+    const g = el("tw" + n), up = out(span(t, 9.0, 9.6)), go = (k => k * k * (3 - 2 * k))(span(t, 9.6, 10.6));
+    const hx = ex + side * 250, hy = 1130;
+    const x = ex + side * 40 * up + (hx - ex - side * 40) * go;
+    const yy = EGGY - 60 - 260 * up + (hy - (EGGY - 60 - 260)) * go + 10 * Math.sin(t * 3 + n) * span(t, 10.6, 11.0);
+    const flap = Math.sin(t * 2 * Math.PI * (2.6 + 0.3 * n) + n), kk = 0.1 + 0.9 * flap;
+    const wing = (dx, dy, m) => "translate(" + (10 + dx) + " " + (-18 + dy) + ") scale(" + 1.5 * m + " " + 1.5 * kk * m + ") rotate(28) translate(-10 18)";
+    el("nearwing" + n).setAttribute("transform", wing(0, 0, 1)); el("farwing" + n).setAttribute("transform", wing(16, -6, 0.9));
+    const s = 0.25 + 0.65 * up;
+    g.setAttribute("transform", "translate(" + x + " " + yy + ") scale(" + (side * s) + " " + s + ") rotate(" + (-10 * (1 - go)) + ")");
+    g.setAttribute("opacity", t >= 9.0 ? Math.min(1, up * 3) * (1 - span(t, 13.6, 13.9)) : 0);
+  }
   const c = el("crack"), L = c.getTotalLength(); c.style.strokeDasharray = L; c.style.strokeDashoffset = L * (1 - crack);
   // The top of the shell lifts off and tips over; the crack line goes with it.
   el("top").setAttribute("transform", "translate(" + (40 * split) + " " + (-120 * split) + ") rotate(" + (24 * split) + ")");
