@@ -1,6 +1,7 @@
 // "New quest unlocked" Reel (Steve, 21st November 2026): plays on video game culture in general (a quest pop up, a quest log, an XP bar,
 // an achievement toast) in Kestrel's own colours and fonts. Deliberately not styled on any real game: no game names, logos, fonts or art
-// styles (Steve asked about a GTA style; that look belongs to its publisher, so this stays generic).
+// styles (Steve asked about a GTA style; that look belongs to its publisher, so this stays generic). The game is named
+// in words only, in Kestrel's fonts, at Steve's request.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-quest-reel.mjs
 // 1080 x 1920, 30 frames a second, 17 seconds, no sound. Needs ffmpeg. The cover is built at the end.
 import { createRequire } from "node:module";
@@ -51,6 +52,7 @@ body{margin:0}p{margin:0}
 #side{left:80px;right:80px;top:820px;opacity:0}
 #end{position:absolute;inset:0;background:${C.navy};opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 </style></head><body><div id="f">
+<p class="abs" id="gta" style="left:80px;right:80px;top:760px;text-align:center;font-family:'DM Serif Display';font-size:104px;line-height:1.05;color:${C.cream};opacity:0">Taking a break<br><span style='color:${C.buff}'>from GTA 6?</span></p>
 <div class="abs" id="pop"><span class="tag">NEW QUEST UNLOCKED</span><p class="qt">Find your next job<br><span style="color:${C.buff}">in eye care.</span></p></div>
 <div class="abs" id="log"><p class="lh">QUEST LOG</p>
 ${STEPS.map((s, i) => `<div class="st"><div class="bx" id="b${i}"><span class="tk" id="k${i}">${check}</span></div><div><p class="sn">${s.t}</p><p class="sd">${s.d}</p></div></div>`).join("")}
@@ -72,10 +74,12 @@ const out = (x) => 1 - Math.pow(1 - x, 3);
 const back = (x) => { const c = 1.8; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 const el = (id) => document.getElementById(id);
 window.render = (t) => {
+  // The opening line names the game in Kestrel's own words and fonts (Steve, 21st November 2026); no game artwork or logos.
+  const g = out(span(t, 0, 0.4)) * (1 - span(t, 1.5, 1.8)); el("gta").style.opacity = g; el("gta").style.transform = "scale(" + (0.94 + 0.06 * g) + ")";
   // The quest pops in with a bounce, then moves up to make room for the log.
-  const p = span(t, 0.2, 0.7); el("pop").style.opacity = (p > 0 ? 1 : 0) * (1 - span(t, 12.0, 12.3));
-  el("pop").style.transform = "scale(" + (0.6 + 0.4 * back(p)) + ") translateY(" + (-80 * out(span(t, 2.6, 3.2))) + "px)";
-  const l = out(span(t, 3.0, 3.5)); el("log").style.opacity = l * (1 - span(t, 12.0, 12.3)); el("log").style.transform = "translateY(" + 40 * (1 - l) + "px)";
+  const p = span(t, 1.8, 2.3); el("pop").style.opacity = (p > 0 ? 1 : 0) * (1 - span(t, 12.0, 12.3));
+  el("pop").style.transform = "scale(" + (0.6 + 0.4 * back(p)) + ") translateY(" + (-80 * out(span(t, 3.0, 3.5))) + "px)";
+  const l = out(span(t, 3.4, 3.9)); el("log").style.opacity = l * (1 - span(t, 12.0, 12.3)); el("log").style.transform = "translateY(" + 40 * (1 - l) + "px)";
   let xp = 0;
   for (let i = 0; i < 3; i++) { const a = 4.0 + i * 1.5, k = span(t, a, a + 0.25); el("k" + i).style.opacity = k; el("k" + i).style.display = "inline-block"; el("k" + i).style.transform = "scale(" + back(k) + ")"; el("b" + i).classList.toggle("on", k > 0.3); xp += 100 * out(span(t, a, a + 0.6)); }
   el("xpf").style.width = (xp / 3) + "%"; el("xpl").textContent = Math.round(xp) + " / 300 XP";

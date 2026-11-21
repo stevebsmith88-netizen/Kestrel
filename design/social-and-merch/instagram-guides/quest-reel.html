@@ -23,6 +23,7 @@ body{margin:0}p{margin:0}
 #side{left:80px;right:80px;top:820px;opacity:0}
 #end{position:absolute;inset:0;background:#1B2B4B;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 </style></head><body><div id="f">
+<p class="abs" id="gta" style="left:80px;right:80px;top:760px;text-align:center;font-family:'DM Serif Display';font-size:104px;line-height:1.05;color:#F7F1E6;opacity:0">Taking a break<br><span style='color:#D8B48A'>from GTA 6?</span></p>
 <div class="abs" id="pop"><span class="tag">NEW QUEST UNLOCKED</span><p class="qt">Find your next job<br><span style="color:#D8B48A">in eye care.</span></p></div>
 <div class="abs" id="log"><p class="lh">QUEST LOG</p>
 <div class="st"><div class="bx" id="b0"><span class="tk" id="k0"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#1B2B4B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><div><p class="sn">Pick your class</p><p class="sd">Optician, optometrist, assistant, front desk, manager</p></div></div><div class="st"><div class="bx" id="b1"><span class="tk" id="k1"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#1B2B4B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><div><p class="sn">Choose your map</p><p class="sd">Your province</p></div></div><div class="st"><div class="bx" id="b2"><span class="tk" id="k2"><svg viewBox="0 0 24 24" width="46" height="46" fill="none" stroke="#1B2B4B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div><div><p class="sn">Turn on alerts</p><p class="sd">We&apos;ll email you when a job that fits is posted</p></div></div>
@@ -44,10 +45,12 @@ const out = (x) => 1 - Math.pow(1 - x, 3);
 const back = (x) => { const c = 1.8; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 const el = (id) => document.getElementById(id);
 window.render = (t) => {
+  // The opening line names the game in Kestrel's own words and fonts (Steve, 21st November 2026); no game artwork or logos.
+  const g = out(span(t, 0, 0.4)) * (1 - span(t, 1.5, 1.8)); el("gta").style.opacity = g; el("gta").style.transform = "scale(" + (0.94 + 0.06 * g) + ")";
   // The quest pops in with a bounce, then moves up to make room for the log.
-  const p = span(t, 0.2, 0.7); el("pop").style.opacity = (p > 0 ? 1 : 0) * (1 - span(t, 12.0, 12.3));
-  el("pop").style.transform = "scale(" + (0.6 + 0.4 * back(p)) + ") translateY(" + (-80 * out(span(t, 2.6, 3.2))) + "px)";
-  const l = out(span(t, 3.0, 3.5)); el("log").style.opacity = l * (1 - span(t, 12.0, 12.3)); el("log").style.transform = "translateY(" + 40 * (1 - l) + "px)";
+  const p = span(t, 1.8, 2.3); el("pop").style.opacity = (p > 0 ? 1 : 0) * (1 - span(t, 12.0, 12.3));
+  el("pop").style.transform = "scale(" + (0.6 + 0.4 * back(p)) + ") translateY(" + (-80 * out(span(t, 3.0, 3.5))) + "px)";
+  const l = out(span(t, 3.4, 3.9)); el("log").style.opacity = l * (1 - span(t, 12.0, 12.3)); el("log").style.transform = "translateY(" + 40 * (1 - l) + "px)";
   let xp = 0;
   for (let i = 0; i < 3; i++) { const a = 4.0 + i * 1.5, k = span(t, a, a + 0.25); el("k" + i).style.opacity = k; el("k" + i).style.display = "inline-block"; el("k" + i).style.transform = "scale(" + back(k) + ")"; el("b" + i).classList.toggle("on", k > 0.3); xp += 100 * out(span(t, a, a + 0.6)); }
   el("xpf").style.width = (xp / 3) + "%"; el("xpl").textContent = Math.round(xp) + " / 300 XP";
