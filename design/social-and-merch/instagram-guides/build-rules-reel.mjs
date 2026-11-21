@@ -1,4 +1,4 @@
-// "Rewriting the rules" Reel (Steve, 21st November 2026): 5 old habits of eye care hiring are struck through, 1 at a time, by the
+// "Rewriting the rules" Reel (Steve, 21st November 2026): 5 old habits of eye care hiring are scribbled out, 1 at a time, by the
 // feather from the logo, and Kestrel's way is written in underneath. Ends on the logo and /compare.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-rules-reel.mjs
 // 1080 x 1920, 30 frames a second, 24 seconds, no sound. Needs ffmpeg. The cover (all 5 rewritten) is built at the end.
@@ -39,7 +39,7 @@ const featherSvg = lock.replace(/<(path|rect)\b/g, (m, tag, off) => { const i = 
 
 const rows = RULES.map(([old, now], i) => `
 <div class="r" id="row${i}">
-  <p class="old"><span class="ot" id="ot${i}">${old}</span><span class="strike" id="st${i}"></span></p>
+  <p class="old"><span class="ot" id="ot${i}">${old}</span><svg class="scrib" id="sc${i}"><path id="sp${i}" fill="none" stroke="${C.chestnut}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg></p>
   <p class="new" id="nw${i}">${now}</p>
 </div>`).join("");
 
@@ -56,7 +56,7 @@ body{margin:0}p{margin:0}
 #rows{position:absolute;left:80px;right:80px;top:560px}
 .r{height:226px;opacity:0}
 .old{position:relative;display:inline-block;font-family:Arial,Helvetica,sans-serif;font-size:44px;color:#8A9099}
-.strike{position:absolute;left:-8px;top:50%;height:8px;margin-top:-2px;border-radius:4px;background:${C.chestnut};width:0}
+.scrib{position:absolute;left:-14px;top:-6px;overflow:visible}
 .new{font-family:'DM Serif Display';font-size:58px;line-height:1.1;color:${C.navy};margin-top:16px;opacity:0}
 #feather{position:absolute;left:0;top:0;width:900px;pointer-events:none;opacity:0;transform-origin:0 0}
 #feather svg{width:100%;height:auto;display:block}
@@ -95,16 +95,26 @@ window.render = (t) => {
   for (let i = 0; i < N; i++) {
     const s = FIRST + i * EACH;
     const r = el("row" + i); const a = out(span(t, s, s + 0.4)); r.style.opacity = a * (1 - span(t, END - 0.3, END)); r.style.transform = "translateY(" + 24 * (1 - a) + "px)";
-    // The feather sweeps across the old line, drawing the strike behind it.
-    const k = io(span(t, s + 0.6, s + 1.4));
-    const ot = el("ot" + i).getBoundingClientRect(), w = ot.width + 16;
-    el("st" + i).style.width = (w * k) + "px";
-    el("ot" + i).style.opacity = 1 - 0.45 * span(t, s + 1.4, s + 1.8);
-    if (t >= s + 0.45 && t <= s + 1.75) { fOn = span(t, s + 0.45, s + 0.6) * (1 - span(t, s + 1.5, s + 1.75));
-      fx = ot.left - fBox.left - 8 + w * k; fy = ot.top - fBox.top + ot.height / 2; fr = -8 + 16 * k; }
-    const nw = out(span(t, s + 1.5, s + 2.1)); el("nw" + i).style.opacity = nw; el("nw" + i).style.transform = "translateX(" + 30 * (1 - nw) + "px)";
+    // The feather scribbles the old line out: a quick back and forth zigzag across it, drawn behind the feather's tip.
+    const k = span(t, s + 0.7, s + 1.6);
+    const ot = el("ot" + i).getBoundingClientRect(), p = el("sp" + i);
+    if (!p.dataset.len) { // built once, from the line's own width, with a fixed wobble so every build matches
+      const W = ot.width + 28, H = ot.height + 12, sc = el("sc" + i); sc.setAttribute("width", W); sc.setAttribute("height", H);
+      // 2 passes, left to right and back, of tight slanted strokes that run past the top and bottom of the letters, like a pen.
+      const pts = []; let j = 0;
+      for (let x = 2; x < W - 4; x += 9 + ((j * 7) % 6), j++) pts.push([x + (j % 2 ? -6 : 6), j % 2 ? H * (0.08 + ((j * 13) % 5) / 50) : H * (0.92 - ((j * 11) % 5) / 50)]);
+      for (let x = W - 6; x > 2; x -= 11 + ((j * 5) % 6), j++) pts.push([x + (j % 2 ? 5 : -5), j % 2 ? H * (0.18 + ((j * 7) % 5) / 40) : H * (0.8 - ((j * 3) % 5) / 40)]);
+      let d = "M " + pts[0][0] + " " + pts[0][1];
+      for (let q = 1; q < pts.length; q++) d += " L " + pts[q][0].toFixed(1) + " " + pts[q][1].toFixed(1);
+      p.setAttribute("d", d); p.dataset.len = p.getTotalLength(); }
+    const L = +p.dataset.len; p.style.strokeDasharray = L; p.style.strokeDashoffset = L * (1 - k);
+    el("ot" + i).style.opacity = 1 - 0.45 * span(t, s + 1.6, s + 2.0);
+    if (t >= s + 0.55 && t <= s + 1.85) { fOn = span(t, s + 0.55, s + 0.7) * (1 - span(t, s + 1.6, s + 1.85));
+      const pt = p.getPointAtLength(L * k), sb = el("sc" + i).getBoundingClientRect();
+      fx = sb.left - fBox.left + pt.x; fy = sb.top - fBox.top + pt.y; fr = 10 * Math.sin(k * 40); }
+    const nw = out(span(t, s + 1.7, s + 2.3)); el("nw" + i).style.opacity = nw; el("nw" + i).style.transform = "translateX(" + 30 * (1 - nw) + "px)";
   }
-  // Place the feather so its tip (the bottom right of its box) rides the end of the strike.
+  // Place the feather so its tip (the bottom right of its box) rides the end of the scribble.
   const fe = el("feather"); fe.style.opacity = fOn;
   // The origin is the tip, so the tip stays where it is placed while the feather shrinks and tilts round it.
   fe.style.transform = "translate(" + (fx - (FB.x + FB.w)) + "px," + (fy - (FB.y + FB.h)) + "px) scale(" + SCALE + ")";
