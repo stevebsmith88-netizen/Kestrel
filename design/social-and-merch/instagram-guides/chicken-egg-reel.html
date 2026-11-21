@@ -1,0 +1,82 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Which comes first?</title><style>
+@font-face{font-family:'DM Serif Display';src:url(file:///home/user/Kestrel/node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2)}
+@font-face{font-family:Poppins;font-weight:400;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2)}
+@font-face{font-family:Poppins;font-weight:600;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2)}
+body{margin:0}p{margin:0}
+#f{width:1080px;height:1920px;position:relative;overflow:hidden;background:#F7F1E6}
+.abs{position:absolute}
+#hook{left:80px;right:80px;top:330px;font-family:'DM Serif Display';font-size:130px;line-height:1;color:#1B2B4B}
+#loop{left:0;right:0;top:1180px;height:520px;opacity:0}
+.card{position:absolute;top:150px;width:370px;padding:34px 0;border-radius:18px;background:#FBF8F2;border:3px solid #E3D9C8;text-align:center;font-family:'DM Serif Display';font-size:54px;color:#1B2B4B;box-shadow:0 14px 30px rgba(27,43,75,.1)}
+.say{position:absolute;left:80px;right:80px;font-family:Poppins;font-weight:600;font-size:46px;line-height:1.35;color:#5A6672;opacity:0}
+#msg{left:80px;right:80px;top:330px;opacity:0}
+#two{left:80px;right:80px;top:1240px;display:grid;grid-template-columns:1fr 1fr;gap:30px;opacity:0}
+.half{padding:36px;border-radius:18px;background:#FBF8F2;border:3px solid #E3D9C8}
+.half b{display:block;font-family:'DM Serif Display';font-weight:400;font-size:56px;color:#A4502C;margin-bottom:12px}
+.half p{font-family:Poppins;font-size:34px;line-height:1.4;color:#1B2B4B}
+#end{position:absolute;inset:0;background:#F7F1E6;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+</style></head><body><div id="f">
+<p class="abs" id="hook">Which comes<br><span style="color:#A4502C">first?</span></p>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="eggAt"><defs>
+  <clipPath id="topClip"><path d="M -200 -300 L 200 -300 L 140 8 L 100 -12 L 72 14 L 40 -18 L 5 12 L -25 -20 L -60 15 L -90 -15 L -140 10 Z"/></clipPath>
+  <clipPath id="botClip"><path d="M -140 10 L -90 -15 L -60 15 L -25 -20 L 5 12 L 40 -18 L 72 14 L 100 -12 L 140 8 L 200 300 L -200 300 Z"/></clipPath>
+</defs>
+<g id="egg">
+  <g id="bot" clip-path="url(#botClip)"><path d="M0 -170 C -95 -170 -130 -40 -130 40 C -130 120 -70 175 0 175 C 70 175 130 120 130 40 C 130 -40 95 -170 0 -170 Z" fill="#F1E2CC"/><ellipse cx="-40" cy="-90" rx="9" ry="6.75" fill="#A4502C" opacity=".8"/><ellipse cx="25" cy="-60" rx="6" ry="4.5" fill="#A4502C" opacity=".8"/><ellipse cx="-10" cy="-20" rx="11" ry="8.25" fill="#A4502C" opacity=".8"/><ellipse cx="45" cy="5" rx="7" ry="5.25" fill="#A4502C" opacity=".8"/><ellipse cx="-55" cy="30" rx="6" ry="4.5" fill="#A4502C" opacity=".8"/><ellipse cx="15" cy="55" rx="9" ry="6.75" fill="#A4502C" opacity=".8"/><ellipse cx="-25" cy="95" rx="7" ry="5.25" fill="#A4502C" opacity=".8"/><ellipse cx="50" cy="80" rx="5" ry="3.75" fill="#A4502C" opacity=".8"/><ellipse cx="5" cy="-120" rx="5" ry="3.75" fill="#A4502C" opacity=".8"/><ellipse cx="-60" cy="-40" rx="5" ry="3.75" fill="#A4502C" opacity=".8"/><ellipse cx="35" cy="120" rx="6" ry="4.5" fill="#A4502C" opacity=".8"/><path d="M0 -170 C -95 -170 -130 -40 -130 40 C -130 120 -70 175 0 175 C 70 175 130 120 130 40 C 130 -40 95 -170 0 -170 Z" fill="none" stroke="#1B2B4B" stroke-width="6"/></g>
+  <g id="top" clip-path="url(#topClip)"><path d="M0 -170 C -95 -170 -130 -40 -130 40 C -130 120 -70 175 0 175 C 70 175 130 120 130 40 C 130 -40 95 -170 0 -170 Z" fill="#F1E2CC"/><ellipse cx="-40" cy="-90" rx="9" ry="6.75" fill="#A4502C" opacity=".8"/><ellipse cx="25" cy="-60" rx="6" ry="4.5" fill="#A4502C" opacity=".8"/><ellipse cx="-10" cy="-20" rx="11" ry="8.25" fill="#A4502C" opacity=".8"/><ellipse cx="45" cy="5" rx="7" ry="5.25" fill="#A4502C" opacity=".8"/><ellipse cx="-55" cy="30" rx="6" ry="4.5" fill="#A4502C" opacity=".8"/><ellipse cx="15" cy="55" rx="9" ry="6.75" fill="#A4502C" opacity=".8"/><ellipse cx="-25" cy="95" rx="7" ry="5.25" fill="#A4502C" opacity=".8"/><ellipse cx="50" cy="80" rx="5" ry="3.75" fill="#A4502C" opacity=".8"/><ellipse cx="5" cy="-120" rx="5" ry="3.75" fill="#A4502C" opacity=".8"/><ellipse cx="-60" cy="-40" rx="5" ry="3.75" fill="#A4502C" opacity=".8"/><ellipse cx="35" cy="120" rx="6" ry="4.5" fill="#A4502C" opacity=".8"/><path d="M0 -170 C -95 -170 -130 -40 -130 40 C -130 120 -70 175 0 175 C 70 175 130 120 130 40 C 130 -40 95 -170 0 -170 Z" fill="none" stroke="#1B2B4B" stroke-width="6"/></g>
+  <path id="crack" d="M -140 10 L -90 -15 L -60 15 L -25 -20 L 5 12 L 40 -18 L 72 14 L 100 -12 L 140 8" fill="none" stroke="#1B2B4B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+</g></g></svg>
+<div class="abs" id="loop">
+<div class="card" style="left:50px">Clinics</div><div class="card" style="right:50px">Candidates</div>
+<svg class="abs" style="left:0;top:0" width="1080" height="520"><g id="spin" transform="translate(540 230)">
+<path d="M-110 -60 A 125 125 0 0 1 110 -60" fill="none" stroke="#A4502C" stroke-width="10" stroke-linecap="round"/><path d="M110 -60 l-6 -42 M110 -60 l-40 -12" stroke="#A4502C" stroke-width="10" stroke-linecap="round"/>
+<path d="M110 60 A 125 125 0 0 1 -110 60" fill="none" stroke="#A4502C" stroke-width="10" stroke-linecap="round"/><path d="M-110 60 l6 42 M-110 60 l40 12" stroke="#A4502C" stroke-width="10" stroke-linecap="round"/>
+</g></svg>
+</div>
+<p class="abs say" id="s1" style="top:1740px">Clinics wait for candidates.</p>
+<p class="abs say" id="s2" style="top:1740px">Candidates wait for jobs.</p>
+<p class="abs" id="dm" style="left:80px;right:80px;top:1250px;text-align:center;font-family:'DM Serif Display';font-size:110px;color:#A4502C;opacity:0">Doesn&apos;t matter.</p>
+<div class="abs" id="msg">
+<p style="font-family:'DM Serif Display';font-size:110px;line-height:1.04;color:#1B2B4B">On Kestrel,<br><span style="color:#A4502C">you both start now.</span></p>
+</div>
+<div class="abs" id="two">
+<div class="half"><b>Candidates</b><p>Create your account and set your alerts.</p></div>
+<div class="half"><b>Clinics</b><p>Set up your clinic, ready to post.</p></div>
+</div>
+<p class="abs" id="after" style="left:80px;right:80px;top:1640px;font-family:Poppins;font-size:40px;line-height:1.4;color:#5A6672;opacity:0">So when the jobs arrive, the people are already here.</p>
+<div id="end">
+<img src="file:///home/user/Kestrel/public/brand/kestrel-lockup-full.svg" alt="" style="width:860px;display:block">
+<p id="e1" style="font-family:'DM Serif Display';font-size:64px;color:#1B2B4B;margin-top:80px">Every job shows its pay.</p>
+<p id="e2" style="font-family:Poppins;font-weight:600;font-size:40px;color:#A4502C;margin-top:40px">Pre launch is open: link in bio</p>
+</div>
+</div>
+<script>
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const span = (t, a, b) => clamp((t - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const el = (id) => document.getElementById(id);
+const io = (id, a, b, d = 30) => (t) => { const i = out(span(t, a, a + 0.5)), o = span(t, b - 0.35, b), e = el(id); e.style.opacity = i * (1 - o); e.style.transform = "translateY(" + d * (1 - i) + "px)"; };
+window.render = (t) => {
+  io("hook", 0.1, 8.0)(t);
+  // The egg: rocks while we wait (the loop), shrinks up out of the way, then cracks and splits.
+  const rock = Math.sin(t * 3.2) * (6 + 6 * span(t, 3, 7.5)) * (1 - span(t, 8.0, 8.3));
+  const crack = span(t, 8.2, 8.7), split = out(span(t, 8.8, 9.6));
+  const sc = 1.25 - 0.35 * out(span(t, 2.6, 3.2));
+  const y = 860 - 0 * span(t, 2.6, 3.2);
+  el("eggAt").setAttribute("transform", "translate(540 " + y + ") rotate(" + rock + ") scale(" + sc + ")");
+  el("eggAt").style.opacity = 1 - span(t, 9.6, 10.0);
+  const c = el("crack"), L = c.getTotalLength(); c.style.strokeDasharray = L; c.style.strokeDashoffset = L * (1 - crack);
+  // The top of the shell lifts off and tips over; the crack line goes with it.
+  el("top").setAttribute("transform", "translate(" + (40 * split) + " " + (-120 * split) + ") rotate(" + (24 * split) + ")");
+  c.style.opacity = crack > 0 && split < 0.05 ? 1 : 0;
+  // The loop: clinics and candidates with arrows chasing each other round, faster and faster, going nowhere.
+  const lo = out(span(t, 3.0, 3.5)) * (1 - span(t, 7.8, 8.1)); el("loop").style.opacity = lo;
+  el("spin").setAttribute("transform", "translate(540 230) rotate(" + (40 * Math.pow(Math.max(0, t - 3), 2)) + ")");
+  io("s1", 3.6, 5.7, 20)(t); io("s2", 5.7, 8.0, 20)(t);
+  io("dm", 8.1, 9.9, 20)(t); io("msg", 9.8, 14.0)(t); io("two", 10.6, 14.0)(t); io("after", 11.6, 14.0, 20)(t);
+  el("end").style.opacity = span(t, 13.9, 14.3);
+  const show = (id, a) => { const v = out(span(t, a, a + 0.5)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 20 * (1 - v) + "px)"; };
+  show("e1", 14.5); show("e2", 15.0);
+};
+window.cover = () => window.render(6.2);
+</script></body></html>
