@@ -23,9 +23,9 @@ RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-UID:kestrel-social-20261122-reel-cut-the-noise-for-candidates@eyecarejobs.
- ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261122-reel-cut-the-noise-for-candidates-v2@eyecarejo
+ bs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261122T190000
 DTEND;TZID=America/Toronto:20261122T193000
 SUMMARY:Instagram: Reel: Cut the noise\, for candidates
@@ -59,9 +59,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261122-reel-new-quest-unlocked-gta-6-weekend@eyecarej
- obs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261122-reel-new-quest-unlocked-gta-6-weekend-v2@eyeca
+ rejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261122T130000
 DTEND;TZID=America/Toronto:20261122T133000
 SUMMARY:Instagram: Reel: New quest unlocked (GTA 6 weekend)
@@ -94,8 +94,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261123-post-12-optician-pay@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261123-post-12-optician-pay-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261123T190000
 DTEND;TZID=America/Toronto:20261123T193000
 SUMMARY:Instagram: Post 12: Optician pay
@@ -119,9 +119,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261123-l2-introducing-the-page-post-once@eyecarejobs.
- ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261123-l2-introducing-the-page-post-once-v2@eyecarejo
+ bs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261123T080000
 DTEND;TZID=America/Toronto:20261123T083000
 SUMMARY:LinkedIn: L2. Introducing the page (post once)
@@ -150,9 +150,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261124-find-us-post-also-introduces-the-page@eyecarej
- obs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261124-find-us-post-also-introduces-the-page-v2@eyeca
+ rejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261124T080000
 DTEND;TZID=America/Toronto:20261124T083000
 SUMMARY:Facebook: Find us post (also introduces the Page)
@@ -184,8 +184,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261124-story-poll-better-1-or-2@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261124-story-poll-better-1-or-2-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
 SUMMARY:Instagram: Story poll: Better 1... or 2?
@@ -202,9 +202,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261124-reel-which-comes-first-twin-kestrels@eyecarejo
- bs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261124-reel-which-comes-first-twin-kestrels-v2@eyecar
+ ejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
 SUMMARY:Instagram: Reel: Which comes first? (twin kestrels)
@@ -239,9 +239,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261124-where-do-you-usually-hear-about-eye-care-jobs@
- eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261124-where-do-you-usually-hear-about-eye-care-jobs-
+ v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261124T080000
 DTEND;TZID=America/Toronto:20261124T083000
 SUMMARY:Reddit: Where do you usually hear about eye care jobs?
@@ -271,8 +271,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261125-reel-auto-apply@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261125-reel-auto-apply-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261125T190000
 DTEND;TZID=America/Toronto:20261125T193000
 SUMMARY:Instagram: Reel: Auto apply
@@ -306,8 +306,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261125-l1-optician-pay@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261125-l1-optician-pay-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261125T080000
 DTEND;TZID=America/Toronto:20261125T083000
 SUMMARY:LinkedIn: L1. Optician pay
@@ -333,8 +333,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261126-post-13-things-heard-no-7@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261126-post-13-things-heard-no-7-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261126T190000
 DTEND;TZID=America/Toronto:20261126T193000
 SUMMARY:Instagram: Post 13: Things heard No. 7
@@ -355,9 +355,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261126-reel-find-the-right-fit-trial-lens@eyecarejobs
- .ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261126-reel-find-the-right-fit-trial-lens-v2@eyecarej
+ obs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261126T130000
 DTEND;TZID=America/Toronto:20261126T133000
 SUMMARY:Instagram: Reel: Find the right fit (trial lens)
@@ -390,8 +390,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261127-reel-find-us@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261127-reel-find-us-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261127T190000
 DTEND;TZID=America/Toronto:20261127T193000
 SUMMARY:Instagram: Reel: Find us
@@ -420,8 +420,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261127-5-we-asked-chatgpt-gemini-and-copilot-where-to
- -find-eye-care@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ -find-eye-care-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261127T080000
 DTEND;TZID=America/Toronto:20261127T083000
 SUMMARY:Reddit: 5. We asked ChatGPT\, Gemini and Copilot where to find eye
@@ -460,8 +460,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261128-reel-3-questions-to-ask-in-an-optician-intervi
- ew@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ ew-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261128T190000
 DTEND;TZID=America/Toronto:20261128T193000
 SUMMARY:Instagram: Reel: 3 questions to ask in an optician interview
@@ -498,9 +498,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261129-reel-guess-the-pay-optician-ontario@eyecarejob
- s.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261129-reel-guess-the-pay-optician-ontario-v2@eyecare
+ jobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261129T190000
 DTEND;TZID=America/Toronto:20261129T193000
 SUMMARY:Instagram: Reel: Guess the pay\, optician\, Ontario
@@ -534,8 +534,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261130-post-14-ai-chatbots@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261130-post-14-ai-chatbots-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261130T190000
 DTEND;TZID=America/Toronto:20261130T193000
 SUMMARY:Instagram: Post 14: AI chatbots
@@ -559,8 +559,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261201-monthly-numbers@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261201-monthly-numbers-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261201T090000
 DTEND;TZID=America/Toronto:20261201T093000
 SUMMARY:Check: Monthly numbers
@@ -580,8 +580,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261201-optician-pay@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261201-optician-pay-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261201T080000
 DTEND;TZID=America/Toronto:20261201T083000
 SUMMARY:Facebook: Optician pay
@@ -607,9 +607,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261201-reel-job-ad-makeover-for-clinics@eyecarejobs.c
- a
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261201-reel-job-ad-makeover-for-clinics-v2@eyecarejob
+ s.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261201T190000
 DTEND;TZID=America/Toronto:20261201T193000
 SUMMARY:Instagram: Reel: Job ad makeover (for clinics)
@@ -646,8 +646,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261202-reel-eye-care-hiring-rewritten@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261202-reel-eye-care-hiring-rewritten-v2@eyecarejobs.
+ ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261202T190000
 DTEND;TZID=America/Toronto:20261202T193000
 SUMMARY:Instagram: Reel: Eye care hiring\, rewritten
@@ -687,8 +688,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261202-l6-how-optometrists-are-paid@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261202-l6-how-optometrists-are-paid-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261202T080000
 DTEND;TZID=America/Toronto:20261202T083000
 SUMMARY:LinkedIn: L6. How optometrists are paid
@@ -714,8 +715,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261203-post-15-optometrist-pay@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261203-post-15-optometrist-pay-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261203T190000
 DTEND;TZID=America/Toronto:20261203T193000
 SUMMARY:Instagram: Post 15: Optometrist pay
@@ -738,8 +739,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261204-reel-job-ad-phrases-translated@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261204-reel-job-ad-phrases-translated-v2@eyecarejobs.
+ ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261204T190000
 DTEND;TZID=America/Toronto:20261204T193000
 SUMMARY:Instagram: Reel: Job ad phrases\, translated
@@ -775,8 +777,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261204-r7-how-are-optometrists-paid-in-canada-salary-
- day-rate-or-pe@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ day-rate-or-pe-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261204T080000
 DTEND;TZID=America/Toronto:20261204T083000
 SUMMARY:Reddit: R7. How are optometrists paid in Canada? Salary\, day rate
@@ -810,9 +812,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261205-reel-myth-or-fact-eye-care-careers-edition@eye
- carejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261205-reel-myth-or-fact-eye-care-careers-edition-v2@
+ eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261205T190000
 DTEND;TZID=America/Toronto:20261205T193000
 SUMMARY:Instagram: Reel: Myth or fact? Eye care careers edition
@@ -847,8 +849,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261206-reel-4-ways-into-eye-care@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261206-reel-4-ways-into-eye-care-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261206T190000
 DTEND;TZID=America/Toronto:20261206T193000
 SUMMARY:Instagram: Reel: 4 ways into eye care
@@ -889,8 +891,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261207-post-16-pay-summary@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261207-post-16-pay-summary-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261207T190000
 DTEND;TZID=America/Toronto:20261207T193000
 SUMMARY:Instagram: Post 16: Pay summary
@@ -914,8 +916,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261208-how-optometrists-are-paid@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261208-how-optometrists-are-paid-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261208T080000
 DTEND;TZID=America/Toronto:20261208T083000
 SUMMARY:Facebook: How optometrists are paid
@@ -941,9 +943,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261208-reel-your-job-ad-and-the-law-for-clinics@eyeca
- rejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261208-reel-your-job-ad-and-the-law-for-clinics-v2@ey
+ ecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261208T190000
 DTEND;TZID=America/Toronto:20261208T193000
 SUMMARY:Instagram: Reel: Your job ad and the law (for clinics)
@@ -980,8 +982,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261209-reel-guess-the-pay-front-desk-british-columbia
- @eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ -v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261209T190000
 DTEND;TZID=America/Toronto:20261209T193000
 SUMMARY:Instagram: Reel: Guess the pay\, front desk\, British Columbia
@@ -1016,8 +1018,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261209-l8-becoming-an-optician@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261209-l8-becoming-an-optician-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261209T080000
 DTEND;TZID=America/Toronto:20261209T083000
 SUMMARY:LinkedIn: L8. Becoming an optician
@@ -1043,8 +1045,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261210-post-17-becoming-an-optician@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261210-post-17-becoming-an-optician-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261210T190000
 DTEND;TZID=America/Toronto:20261210T193000
 SUMMARY:Instagram: Post 17: Becoming an optician
@@ -1067,8 +1069,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261211-reel-pre-testing-explained@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261211-reel-pre-testing-explained-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261211T190000
 DTEND;TZID=America/Toronto:20261211T193000
 SUMMARY:Instagram: Reel: Pre testing\, explained
@@ -1107,8 +1109,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261211-r8-becoming-an-optician-in-canada-what-is-the-
- same-everywher@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ same-everywher-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261211T080000
 DTEND;TZID=America/Toronto:20261211T083000
 SUMMARY:Reddit: R8. Becoming an optician in Canada: what is the same every
@@ -1143,8 +1145,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261212-story-poll-would-you-apply-if-the-pay-wasn-t-s
- hown@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ hown-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261212T190000
 DTEND;TZID=America/Toronto:20261212T193000
 SUMMARY:Instagram: Story poll: Would you apply if the pay wasn't shown?
@@ -1163,9 +1165,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261213-reel-just-finished-optometry-school-new-ods@ey
- ecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261213-reel-just-finished-optometry-school-new-ods-v2
+ @eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261213T190000
 DTEND;TZID=America/Toronto:20261213T193000
 SUMMARY:Instagram: Reel: Just finished optometry school? (new ODs)
@@ -1204,8 +1206,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261214-post-18-who-does-what@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261214-post-18-who-does-what-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261214T190000
 DTEND;TZID=America/Toronto:20261214T193000
 SUMMARY:Instagram: Post 18: Who does what
@@ -1232,8 +1234,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261215-becoming-an-optician@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261215-becoming-an-optician-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261215T080000
 DTEND;TZID=America/Toronto:20261215T083000
 SUMMARY:Facebook: Becoming an optician
@@ -1259,9 +1261,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261215-reel-guess-the-pay-optician-nova-scotia@eyecar
- ejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261215-reel-guess-the-pay-optician-nova-scotia-v2@eye
+ carejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261215T190000
 DTEND;TZID=America/Toronto:20261215T193000
 SUMMARY:Instagram: Reel: Guess the pay\, optician\, Nova Scotia
@@ -1295,8 +1297,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261216-reel-follow-the-feather@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261216-reel-follow-the-feather-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261216T190000
 DTEND;TZID=America/Toronto:20261216T193000
 SUMMARY:Instagram: Reel: Follow the feather
@@ -1327,9 +1329,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261216-l10-assistant-courses-and-certification@eyecar
- ejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261216-l10-assistant-courses-and-certification-v2@eye
+ carejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261216T080000
 DTEND;TZID=America/Toronto:20261216T083000
 SUMMARY:LinkedIn: L10. Assistant courses and certification
@@ -1355,8 +1357,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261217-post-19-assistant-certification@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261217-post-19-assistant-certification-v2@eyecarejobs
+ .ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261217T190000
 DTEND;TZID=America/Toronto:20261217T193000
 SUMMARY:Instagram: Post 19: Assistant certification
@@ -1380,8 +1383,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261218-story-poll-clinic-owners-where-do-your-best-hi
- res-come-from@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ res-come-from-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261218T190000
 DTEND;TZID=America/Toronto:20261218T193000
 SUMMARY:Instagram: Story poll: Clinic owners\, where do your best hires co
@@ -1401,8 +1404,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261218-r9-optometric-assistants-how-did-you-learn-the
- -job@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ -job-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261218T080000
 DTEND;TZID=America/Toronto:20261218T083000
 SUMMARY:Reddit: R9. Optometric assistants: how did you learn the job?
@@ -1431,9 +1434,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261219-reel-guess-the-pay-practice-manager-ontario@ey
- ecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261219-reel-guess-the-pay-practice-manager-ontario-v2
+ @eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261219T190000
 DTEND;TZID=America/Toronto:20261219T193000
 SUMMARY:Instagram: Reel: Guess the pay\, practice manager\, Ontario
@@ -1471,8 +1474,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261220-story-poll-round-or-square@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261220-story-poll-round-or-square-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261220T190000
 DTEND;TZID=America/Toronto:20261220T193000
 SUMMARY:Instagram: Story poll: Round or square?
@@ -1488,9 +1491,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261221-post-20-photo-opening-soon-pre-launch-is-open@
- eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261221-post-20-photo-opening-soon-pre-launch-is-open-
+ v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261221T190000
 DTEND;TZID=America/Toronto:20261221T193000
 SUMMARY:Instagram: Post 20: Photo: Opening soon\, pre launch is open
@@ -1515,9 +1518,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261222-assistant-courses-and-certification@eyecarejob
- s.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261222-assistant-courses-and-certification-v2@eyecare
+ jobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261222T080000
 DTEND;TZID=America/Toronto:20261222T083000
 SUMMARY:Facebook: Assistant courses and certification
@@ -1543,8 +1546,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261223-l12-independent-or-corporate@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261223-l12-independent-or-corporate-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261223T080000
 DTEND;TZID=America/Toronto:20261223T083000
 SUMMARY:LinkedIn: L12. Independent or corporate
@@ -1570,8 +1573,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261228-post-21-questions-to-ask@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261228-post-21-questions-to-ask-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261228T190000
 DTEND;TZID=America/Toronto:20261228T193000
 SUMMARY:Instagram: Post 21: Questions to ask
@@ -1594,8 +1597,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261229-independent-or-corporate@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261229-independent-or-corporate-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261229T080000
 DTEND;TZID=America/Toronto:20261229T083000
 SUMMARY:Facebook: Independent or corporate
@@ -1621,9 +1624,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261229-story-poll-the-puff-or-the-drops@eyecarejobs.c
- a
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261229-story-poll-the-puff-or-the-drops-v2@eyecarejob
+ s.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261229T190000
 DTEND;TZID=America/Toronto:20261229T193000
 SUMMARY:Instagram: Story poll: The puff or the drops?
@@ -1639,8 +1642,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261230-l13-moving-to-canada@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20261230-l13-moving-to-canada-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20261230T080000
 DTEND;TZID=America/Toronto:20261230T083000
 SUMMARY:LinkedIn: L13. Moving to Canada
@@ -1666,8 +1669,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270104-monthly-numbers@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270104-monthly-numbers-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270104T090000
 DTEND;TZID=America/Toronto:20270104T093000
 SUMMARY:Check: Monthly numbers
@@ -1688,8 +1691,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270104-post-22-things-heard-your-turn@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270104-post-22-things-heard-your-turn-v2@eyecarejobs.
+ ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270104T190000
 DTEND;TZID=America/Toronto:20270104T193000
 SUMMARY:Instagram: Post 22: Things heard: Your turn
@@ -1710,8 +1714,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270105-moving-to-canada@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270105-moving-to-canada-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270105T080000
 DTEND;TZID=America/Toronto:20270105T083000
 SUMMARY:Facebook: Moving to Canada
@@ -1737,8 +1741,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270105-story-poll-glasses-or-contacts@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270105-story-poll-glasses-or-contacts-v2@eyecarejobs.
+ ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270105T190000
 DTEND;TZID=America/Toronto:20270105T193000
 SUMMARY:Instagram: Story poll: Glasses or contacts?
@@ -1755,8 +1760,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270106-l14-from-the-clinic-to-the-road-supplier-roles
- @eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ -v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270106T080000
 DTEND;TZID=America/Toronto:20270106T083000
 SUMMARY:LinkedIn: L14. From the clinic to the road (supplier roles)
@@ -1784,8 +1789,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270108-r10-what-would-make-2027-a-better-year-for-wor
- king-or-hiring@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ king-or-hiring-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270108T080000
 DTEND;TZID=America/Toronto:20270108T083000
 SUMMARY:Reddit: R10. What would make 2027 a better year for working or hir
@@ -1813,8 +1818,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270111-post-23-supplier-role@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270111-post-23-supplier-role-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270111T190000
 DTEND;TZID=America/Toronto:20270111T193000
 SUMMARY:Instagram: Post 23: Supplier role
@@ -1836,9 +1841,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270112-from-the-clinic-to-the-road-supplier-roles@eye
- carejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270112-from-the-clinic-to-the-road-supplier-roles-v2@
+ eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270112T080000
 DTEND;TZID=America/Toronto:20270112T083000
 SUMMARY:Facebook: From the clinic to the road (supplier roles)
@@ -1864,9 +1869,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270113-l15-who-works-in-eye-care-the-census@eyecarejo
- bs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270113-l15-who-works-in-eye-care-the-census-v2@eyecar
+ ejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270113T080000
 DTEND;TZID=America/Toronto:20270113T083000
 SUMMARY:LinkedIn: L15. Who works in eye care (the census)
@@ -1893,8 +1898,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270115-r11-most-optometrists-in-canada-under-35-are-w
- omen-and-most-@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ omen-and-most--v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270115T080000
 DTEND;TZID=America/Toronto:20270115T083000
 SUMMARY:Reddit: R11. Most optometrists in Canada under 35 are women\, and 
@@ -1927,8 +1932,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270118-post-24-who-works-in-eye-care@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270118-post-24-who-works-in-eye-care-v2@eyecarejobs.c
+ a
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270118T190000
 DTEND;TZID=America/Toronto:20270118T193000
 SUMMARY:Instagram: Post 24: Who works in eye care
@@ -1950,9 +1956,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270119-who-works-in-eye-care-the-census@eyecarejobs.c
- a
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270119-who-works-in-eye-care-the-census-v2@eyecarejob
+ s.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270119T080000
 DTEND;TZID=America/Toronto:20270119T083000
 SUMMARY:Facebook: Who works in eye care (the census)
@@ -1978,9 +1984,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270120-l16-how-to-become-an-optometrist@eyecarejobs.c
- a
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270120-l16-how-to-become-an-optometrist-v2@eyecarejob
+ s.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270120T080000
 DTEND;TZID=America/Toronto:20270120T083000
 SUMMARY:LinkedIn: L16. How to become an optometrist
@@ -2007,8 +2013,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270121-find-us-post-extra-cream@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270121-find-us-post-extra-cream-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270121T190000
 DTEND;TZID=America/Toronto:20270121T193000
 SUMMARY:Instagram: Find us post (extra\, Cream)
@@ -2038,8 +2044,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270122-r12-becoming-an-optometrist-in-canada-the-degr
- ee-the-board-e@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ ee-the-board-e-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270122T080000
 DTEND;TZID=America/Toronto:20270122T083000
 SUMMARY:Reddit: R12. Becoming an optometrist in Canada: the degree\, the b
@@ -2075,8 +2081,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270125-post-25-photo-every-job-shows-its-pay-launch-d
- ate-to-confirm@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ ate-to-confirm-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270125T190000
 DTEND;TZID=America/Toronto:20270125T193000
 SUMMARY:Instagram: Post 25: Photo: Every job shows its pay (launch date to
@@ -2103,8 +2109,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270125-reel-takes-flight-we-re-open-launch-date-to-co
- nfirm@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ nfirm-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270125T190000
 DTEND;TZID=America/Toronto:20270125T193000
 SUMMARY:Instagram: Reel: Takes flight (we're open) (launch date to confirm
@@ -2143,8 +2149,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270126-how-to-become-an-optometrist@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270126-how-to-become-an-optometrist-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270126T080000
 DTEND;TZID=America/Toronto:20270126T083000
 SUMMARY:Facebook: How to become an optometrist
@@ -2171,9 +2177,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270127-l17-what-an-empty-optician-chair-costs@eyecare
- jobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270127-l17-what-an-empty-optician-chair-costs-v2@eyec
+ arejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270127T080000
 DTEND;TZID=America/Toronto:20270127T083000
 SUMMARY:LinkedIn: L17. What an empty optician chair costs
@@ -2201,8 +2207,8 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270129-r13-clinic-owners-and-managers-what-does-a-mon
- th-without-an-@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+ th-without-an--v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270129T080000
 DTEND;TZID=America/Toronto:20270129T083000
 SUMMARY:Reddit: R13. Clinic owners and managers: what does a month without
@@ -2235,8 +2241,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270208-post-26-becoming-an-optometrist@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270208-post-26-becoming-an-optometrist-v2@eyecarejobs
+ .ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270208T190000
 DTEND;TZID=America/Toronto:20270208T193000
 SUMMARY:Instagram: Post 26: Becoming an optometrist
@@ -2258,8 +2265,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270222-post-27-things-heard-no-3@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270222-post-27-things-heard-no-3-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270222T190000
 DTEND;TZID=America/Toronto:20270222T193000
 SUMMARY:Instagram: Post 27: Things heard No. 3
@@ -2280,8 +2287,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270308-post-28-empty-chair@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270308-post-28-empty-chair-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270308T190000
 DTEND;TZID=America/Toronto:20270308T193000
 SUMMARY:Instagram: Post 28: Empty chair
@@ -2303,9 +2310,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270322-post-29-attract-the-right-people@eyecarejobs.c
- a
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270322-post-29-attract-the-right-people-v2@eyecarejob
+ s.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270322T190000
 DTEND;TZID=America/Toronto:20270322T193000
 SUMMARY:Instagram: Post 29: Attract the right people
@@ -2329,8 +2336,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270405-post-30-resume-tips@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270405-post-30-resume-tips-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270405T190000
 DTEND;TZID=America/Toronto:20270405T193000
 SUMMARY:Instagram: Post 30: Resume tips
@@ -2356,9 +2363,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270419-post-31-eye-care-jobs-on-the-road@eyecarejobs.
- ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270419-post-31-eye-care-jobs-on-the-road-v2@eyecarejo
+ bs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270419T190000
 DTEND;TZID=America/Toronto:20270419T193000
 SUMMARY:Instagram: Post 31: Eye care jobs on the road
@@ -2382,8 +2389,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270503-post-32-hire-for-attitude@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270503-post-32-hire-for-attitude-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270503T190000
 DTEND;TZID=America/Toronto:20270503T193000
 SUMMARY:Instagram: Post 32: Hire for attitude
@@ -2407,8 +2414,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270517-post-33-phone-screenings@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270517-post-33-phone-screenings-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270517T190000
 DTEND;TZID=America/Toronto:20270517T193000
 SUMMARY:Instagram: Post 33: Phone screenings
@@ -2431,9 +2438,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270531-post-34-stand-out-in-an-interview@eyecarejobs.
- ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270531-post-34-stand-out-in-an-interview-v2@eyecarejo
+ bs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270531T190000
 DTEND;TZID=America/Toronto:20270531T193000
 SUMMARY:Instagram: Post 34: Stand out in an interview
@@ -2456,8 +2463,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270614-post-35-ask-for-a-raise@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270614-post-35-ask-for-a-raise-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270614T190000
 DTEND;TZID=America/Toronto:20270614T193000
 SUMMARY:Instagram: Post 35: Ask for a raise
@@ -2480,8 +2487,9 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270628-post-36-optical-lab-technician@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270628-post-36-optical-lab-technician-v2@eyecarejobs.
+ ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270628T190000
 DTEND;TZID=America/Toronto:20270628T193000
 SUMMARY:Instagram: Post 36: Optical lab technician
@@ -2504,8 +2512,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270712-post-37-why-people-leave@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270712-post-37-why-people-leave-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270712T190000
 DTEND;TZID=America/Toronto:20270712T193000
 SUMMARY:Instagram: Post 37: Why people leave
@@ -2528,8 +2536,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270726-post-38-first-30-days@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270726-post-38-first-30-days-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270726T190000
 DTEND;TZID=America/Toronto:20270726T193000
 SUMMARY:Instagram: Post 38: First 30 days
@@ -2552,8 +2560,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270809-post-39-reference-checks@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270809-post-39-reference-checks-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270809T190000
 DTEND;TZID=America/Toronto:20270809T193000
 SUMMARY:Instagram: Post 39: Reference checks
@@ -2575,8 +2583,8 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270823-post-40-seasonal-staff@eyecarejobs.ca
-DTSTAMP:20261122T144256Z
+UID:kestrel-social-20270823-post-40-seasonal-staff-v2@eyecarejobs.ca
+DTSTAMP:20261122T145008Z
 DTSTART;TZID=America/Toronto:20270823T190000
 DTEND;TZID=America/Toronto:20270823T193000
 SUMMARY:Instagram: Post 40: Seasonal staff

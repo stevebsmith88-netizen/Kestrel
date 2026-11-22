@@ -207,7 +207,7 @@ const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kestrel Eye Care Job
   "BEGIN:STANDARD", "TZOFFSETFROM:-0400", "TZOFFSETTO:-0500", "TZNAME:EST", "DTSTART:19701101T020000", "RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU", "END:STANDARD",
   "END:VTIMEZONE"];
 // Each event's UID comes from its date and title, so it stays the same however many posts are added around it.
-const uid = (e) => "kestrel-social-" + e.date.replace(/-/g, "") + "-" + e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) + "@eyecarejobs.ca";
+const uid = (e) => "kestrel-social-" + e.date.replace(/-/g, "") + "-" + e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) + "-v2@eyecarejobs.ca"; // v2 (22nd November 2026): new IDs so a fresh import is not matched to old copies in another calendar
 const whereOf = (e) => e.where ?? (e.platform === "Instagram" ? `Instagram @kestreleye26${e.loc ? `, location tag: ${e.loc}` : ""}`
   : e.platform === "Facebook" ? "Facebook: the kestreleye26 Page (post as the Page, not your profile)"
   : e.platform === "Reddit" ? "Reddit: r/EyeCareJobsCanada (post as the Kestrel account)" : e.platform);
