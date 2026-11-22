@@ -23,105 +23,83 @@ RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
 END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
-UID:kestrel-social-20261122-reel-cut-the-noise-for-candidates-v2@eyecarejo
- bs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261122T190000
-DTEND;TZID=America/Toronto:20261122T193000
-SUMMARY:Instagram: Reel: Cut the noise\, for candidates
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/noise-reel-candidates.mp4 · cover design/social-and-merch/instagra
- m-guides/noise-reel-candidates-cover.jpg (Edit cover\, Add from camera ro
- ll)\n- Music: busy track with a drop at 5 seconds\, when the bird swoops 
- (search beat drop or transition).\n- Share to your Story with a link stic
- ker to eyecarejobs.ca/links.\n- Before sharing\, turn on Share to Faceboo
- k so it also goes to the Facebook Page (the same video\, no extra work).\
- n\nCAPTION (copy and paste):\nScrolling 4\,000 jobs to find the 1 that fi
- ts?\n\nKestrel Eye Care Jobs is built only for eye care in Canada. Choose
-  your role and province\, and see jobs for optometrists\, opticians\, ass
- istants\, technicians and practice teams. Nothing else.\n\nEvery job show
- s its pay. No "competitive salary"\, no guessing.\n\nPre launch is open. 
- Create your account: link in bio.\n\n#EyeCareJobs #Opticians #Optometry #
- OptometricAssistant #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessib
- ility):\nA short animation. Grey job ads flood the screen\, with titles l
- ike warehouse associate and rockstar wanted\, and pay lines like competit
- ive and not stated\, while a counter races to 4\,382 results. A kestrel s
- woops across and clears them. Text reads: 1 search. Only eye care. A sear
- ch for optician in Alberta shows 3 jobs\, each with its pay. Ends with th
- e Kestrel Eye Care Jobs logo\, Every job shows its pay\, and Pre launch i
- s open. Create your account: link in bio.
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Cut the noise\, for candidates
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
 UID:kestrel-social-20261122-reel-new-quest-unlocked-gta-6-weekend-v2@eyeca
  rejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261122T130000
-DTEND;TZID=America/Toronto:20261122T133000
-SUMMARY:Instagram: Reel: New quest unlocked (GTA 6 weekend)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/quest-reel.mp4 · cover design/social-and-merch/instagram-guides/qu
- est-reel-cover.jpg (Edit cover\, Add from camera roll)\n- 1 pm\, ahead of
-  the 7 pm candidate Reel the same day.\n- If Instagram offers a trending 
- sound from the game's launch\, use it.\n- Before sharing\, turn on Share 
- to Facebook so it also goes to the Facebook Page (the same video\, no ext
- ra work).\n\nCAPTION (copy and paste):\nTaking a break from GTA 6 this we
- ekend? Here's a quest worth starting.\n\nPick your class: optician\, opto
- metrist\, assistant\, front desk or manager. Choose your map. Turn on ale
- rts. Achievement unlocked: you can see the pay before you apply.\n\nPre l
- aunch is open for candidates\, clinics and suppliers. Press start: link i
- n bio.\n\n#GTA6 #EyeCareJobs #Opticians #Optometry #CanadaJobs\n\nALT TEX
- T (Advanced settings\, Accessibility):\nA short animation in navy and buf
- f\, styled like a game menu. Text reads: Taking a break from GTA 6? Then:
-  New quest unlocked. Find your next job in eye care. A quest log ticks of
- f: pick your class\, choose your map\, turn on alerts\, as an XP bar fill
- s to 300. Achievement unlocked: you can see the pay before you apply. Sid
- e quest available: pre launch is open for candidates\, clinics and suppli
- ers. Ends with the Kestrel Eye Care Jobs logo\, Press start\, Link in bio
- .
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261122T190000
+DTEND;TZID=America/Toronto:20261122T193000
+SUMMARY:Instagram + Facebook: Reel: New quest unlocked (GTA 6 weekend)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/quest-reel.mp4 · cover design/social-and-merc
+ h/instagram-guides/quest-reel-cover.jpg (Edit cover\, Add from camera rol
+ l)\n- If Instagram offers a trending sound from the game's launch\, use i
+ t.\n- Facebook: before sharing\, turn on Share to Facebook so it also goe
+ s to the kestreleye26 Page. Nothing else to post there.\n\nCAPTION (copy 
+ and paste):\nTaking a break from GTA 6 this weekend? Here's a quest worth
+  starting.\n\nPick your class: optician\, optometrist\, assistant\, front
+  desk or manager. Choose your map. Turn on alerts. Achievement unlocked: 
+ you can see the pay before you apply.\n\nPre launch is open for candidate
+ s\, clinics and suppliers. Press start: link in bio.\n\n#GTA6 #EyeCareJob
+ s #Opticians #Optometry #CanadaJobs\n\nALT TEXT (Advanced settings\, Acce
+ ssibility):\nA short animation in navy and buff\, styled like a game menu
+ . Text reads: Taking a break from GTA 6? Then: New quest unlocked. Find y
+ our next job in eye care. A quest log ticks off: pick your class\, choose
+  your map\, turn on alerts\, as an XP bar fills to 300. Achievement unloc
+ ked: you can see the pay before you apply. Side quest available: pre laun
+ ch is open for candidates\, clinics and suppliers. Ends with the Kestrel 
+ Eye Care Jobs logo\, Press start\, Link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: New quest unlocked (GTA 6 weekend)
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: New quest unlocked (GTA
+  6 weekend)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261123-post-12-optician-pay-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261123-reel-cut-the-noise-for-candidates-v2@eyecarejo
+ bs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261123T190000
 DTEND;TZID=America/Toronto:20261123T193000
-SUMMARY:Instagram: Post 12: Optician pay
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 12 2026-11-23 Optician pay.png (folder Kes
- trel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nHow much do opticia
- ns earn in Canada? It depends a lot on where you are.\n\nJob Bank's typic
- al hourly pay for opticians runs from $27.63 in New Brunswick to $30.03 i
- n Newfoundland and Labrador\, and Ontario sits at $29.00. Commission\, an
-  eyewear allowance and benefits all count too\, so compare the whole offe
- r.\n\nEvery province\, and what moves pay up or down: link in bio.\n\n#Op
- ticians #OpticianPay #EyeCareJobs #Optics #CanadaJobs\n\nALT TEXT (Advanc
- ed settings\, Accessibility):\nKestrel guide: Typical optician pay\, by p
- rovince. Highest\, Newfoundland and Labrador at $30.03 an hour. Lowest\, 
- New Brunswick at $27.63 an hour. Ontario at $29.00 an hour.
+SUMMARY:Instagram + Facebook: Reel: Cut the noise\, for candidates
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/noise-reel-candidates.mp4 · cover design/soci
+ al-and-merch/instagram-guides/noise-reel-candidates-cover.jpg (Edit cover
+ \, Add from camera roll)\n- Music: busy track with a drop at 5 seconds\, 
+ when the bird swoops (search beat drop or transition).\n- Share to your S
+ tory with a link sticker to eyecarejobs.ca/links.\n- Facebook: before sha
+ ring\, turn on Share to Facebook so it also goes to the kestreleye26 Page
+ . Nothing else to post there.\n\nCAPTION (copy and paste):\nScrolling 4\,
+ 000 jobs to find the 1 that fits?\n\nKestrel Eye Care Jobs is built only 
+ for eye care in Canada. Choose your role and province\, and see jobs for 
+ optometrists\, opticians\, assistants\, technicians and practice teams. N
+ othing else.\n\nEvery job shows its pay. No "competitive salary"\, no gue
+ ssing.\n\nPre launch is open. Create your account: link in bio.\n\n#EyeCa
+ reJobs #Opticians #Optometry #OptometricAssistant #CanadaJobs\n\nALT TEXT
+  (Advanced settings\, Accessibility):\nA short animation. Grey job ads fl
+ ood the screen\, with titles like warehouse associate and rockstar wanted
+ \, and pay lines like competitive and not stated\, while a counter races 
+ to 4\,382 results. A kestrel swoops across and clears them. Text reads: 1
+  search. Only eye care. A search for optician in Alberta shows 3 jobs\, e
+ ach with its pay. Ends with the Kestrel Eye Care Jobs logo\, Every job sh
+ ows its pay\, and Pre launch is open. Create your account: link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 12: Optician pay
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Cut the noise\, for can
+ didates
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261123-l2-introducing-the-page-post-once-v2@eyecarejo
  bs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261123T080000
 DTEND;TZID=America/Toronto:20261123T083000
 SUMMARY:LinkedIn: L2. Introducing the page (post once)
@@ -150,98 +128,37 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261124-find-us-post-also-introduces-the-page-v2@eyeca
- rejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261124T080000
-DTEND;TZID=America/Toronto:20261124T083000
-SUMMARY:Facebook: Find us post (also introduces the Page)
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Feed post (single image)\nFile: design/social-and-m
- erch/instagram-guides/find-us-a-grid.jpg\n- Skip if already posted.\n\nPO
- ST (copy and paste):\nWe're in 4 places now\, so you can follow along whe
- rever you already spend your time.\n\nLinkedIn\, for hiring news and upda
- tes for clinic owners and managers: https://www.linkedin.com/company/kest
- rel-eye-care-jobs/\nInstagram\, for guides\, pay facts and the odd thing 
- heard in clinic: https://www.instagram.com/kestreleye26/\nReddit\, a comm
- unity for people who work in eye care and the clinics that hire them: htt
- ps://www.reddit.com/r/EyeCareJobsCanada/\n\nKestrel Eye Care Jobs opens i
- n early 2027\, a Canada-wide job board for optometrists\, opticians\, ass
- istants\, technicians and practice teams\, with the pay shown on every jo
- b. Pre launch is open\, create your account here: https://eyecarejobs.ca/
- ?utm_source=facebook&utm_medium=social&utm_campaign=2026-11-find-us\n\nAL
- T TEXT (Advanced settings\, Accessibility):\nText reads: Find us here. Be
- fore we open. 4 tilted tiles with line icons for LinkedIn\, Facebook\, In
- stagram and Reddit. Below: LinkedIn\, our company page. Facebook\, kestre
- leye26. Instagram\, @kestreleye26. Reddit\, r/EyeCareJobsCanada. eyecarej
- obs.ca.
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Find us post (also introduces the Page)
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261124-story-poll-better-1-or-2-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261124-post-12-optician-pay-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
-SUMMARY:Instagram: Story poll: Better 1... or 2?
-LOCATION:Instagram @kestreleye26
-DESCRIPTION:Where: Instagram @kestreleye26\nType: Story with a poll sticke
- r (add the sticker in the app\, in the empty space below the drawing)\nFi
- le: design/social-and-merch/instagram-guides/story-poll-1-better-1-or-2.p
- ng\n- The next day\, share the result as a Story.\n\nCAPTION (copy and pa
- ste):\nPoll options: 1 / 2
+SUMMARY:Instagram + Facebook: Post 12: Optician pay
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 12 2026-11-23 Opticia
+ n pay.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing\
+ , turn on Share to Facebook so it also goes to the kestreleye26 Page. Not
+ hing else to post there.\n\nCAPTION (copy and paste):\nHow much do optici
+ ans earn in Canada? It depends a lot on where you are.\n\nJob Bank's typi
+ cal hourly pay for opticians runs from $27.63 in New Brunswick to $30.03 
+ in Newfoundland and Labrador\, and Ontario sits at $29.00. Commission\, a
+ n eyewear allowance and benefits all count too\, so compare the whole off
+ er.\n\nEvery province\, and what moves pay up or down: link in bio.\n\n#O
+ pticians #OpticianPay #EyeCareJobs #Optics #CanadaJobs\n\nALT TEXT (Advan
+ ced settings\, Accessibility):\nKestrel guide: Typical optician pay\, by 
+ province. Highest\, Newfoundland and Labrador at $30.03 an hour. Lowest\,
+  New Brunswick at $27.63 an hour. Ontario at $29.00 an hour.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Story poll: Better 1... or 2?
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261124-reel-which-comes-first-twin-kestrels-v2@eyecar
- ejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261124T190000
-DTEND;TZID=America/Toronto:20261124T193000
-SUMMARY:Instagram: Reel: Which comes first? (twin kestrels)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/chicken-egg-reel.mp4 · cover design/social-and-merch/instagram-gui
- des/chicken-egg-reel-cover.jpg (Edit cover\, Add from camera roll)\n- The
-  same evening as the Better 1 or 2 Story poll\; that one is a Story\, so 
- they don't clash.\n- Before sharing\, turn on Share to Facebook so it als
- o goes to the Facebook Page (the same video\, no extra work).\n\nCAPTION 
- (copy and paste):\nWhich came first\, the clinic or the candidate? Wrong 
- answers only.\n\nEvery new job board has the same puzzle: clinics wait fo
- r candidates\, and candidates wait for jobs. So we're not waiting. Pre la
- unch is open now for both. Twins\, if you like.\n\nCandidates: create you
- r account and set your alerts. Clinics: set up your clinic\, ready to pos
- t. So when the jobs arrive\, the people are already here.\n\nLink in bio.
- \n\n#EyeCareJobs #Optometry #Opticians #ClinicOwner #CanadaJobs\n\nALT TE
- XT (Advanced settings\, Accessibility):\nA short animation on cream. Text
-  reads: Which comes first? A speckled egg rocks. Clinics and Candidates c
- ards sit either side of arrows chasing each other round: Clinics wait for
-  candidates. Candidates wait for jobs. The egg cracks and its top tips of
- f: Doesn't matter. 2 small kestrels hatch\, 1 in the usual colours and 1 
- in inverted colours\, and hover over the 2 cards. Text reads: On Kestrel\
- , you both start now. Candidates: create your account and set your alerts
- . Clinics: set up your clinic\, ready to post. So when the jobs arrive\, 
- the people are already here.
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Which comes first? (twin kestrels)
+DESCRIPTION:Post now: Instagram + Facebook\, Post 12: Optician pay
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261124-where-do-you-usually-hear-about-eye-care-jobs-
  v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261124T080000
 DTEND;TZID=America/Toronto:20261124T083000
 SUMMARY:Reddit: Where do you usually hear about eye care jobs?
@@ -271,43 +188,65 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261125-reel-auto-apply-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261125T190000
-DTEND;TZID=America/Toronto:20261125T193000
-SUMMARY:Instagram: Reel: Auto apply
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/autoapply-reel.mp4 · cover design/social-and-merch/instagram-guide
- s/autoapply-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Music: 
- fast and mechanical for the swiping\, then calm from 8 seconds.\n- Before
-  sharing\, turn on Share to Facebook so it also goes to the Facebook Page
-  (the same video\, no extra work).\n\nCAPTION (copy and paste):\nApplied 
- to 312 jobs. Read none of them.\n\nAuto apply tools fire off hundreds of 
- applications a day\, and clinics end up reading the same letter\, again a
- nd again.\n\nOn Kestrel Eye Care Jobs\, candidates can only apply for rol
- es that fit their profession. Fewer\, better applications\, for jobs that
-  fit. And every job shows its pay.\n\nPre launch is open. Create your acc
- ount: link in bio.\n\n#EyeCareJobs #Optometry #Opticians #Hiring #JobSear
- ch\n\nALT TEXT (Advanced settings\, Accessibility):\nA short animation. A
-  phone with Auto apply switched on swipes right on every job\, from optic
- ian to brain surgeon\, while a counter reaches 312 applications sent toda
- y. Then a clinic's inbox fills with 200 copies of the same letter: Dear H
- iring Manager\, I am excited to apply for the [Job Title] position at [Co
- mpany]. A kestrel swoops across and clears it. Text reads: Fewer\, better
-  applications. For jobs that fit. Only for roles that fit the candidate's
-  profession. Ends with the Kestrel Eye Care Jobs logo and Pre launch is o
- pen. Create your account: link in bio.
+UID:kestrel-social-20261125-story-poll-better-1-or-2-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261125T120000
+DTEND;TZID=America/Toronto:20261125T123000
+SUMMARY:Instagram + Facebook: Story poll: Better 1... or 2?
+LOCATION:Instagram @kestreleye26\, shared to Facebook
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\nType: Sto
+ ry with a poll sticker (add the sticker in the app\, in the empty space b
+ elow the drawing)\nFile: design/social-and-merch/instagram-guides/story-p
+ oll-1-better-1-or-2.png\n- The next day\, share the result as a Story.\n-
+  Facebook: tap Share to Facebook story (or set it to share automatically 
+ once).\n\nCAPTION (copy and paste):\nPoll options: 1 / 2
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Auto apply
+DESCRIPTION:Post now: Instagram + Facebook\, Story poll: Better 1... or 2?
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261125-reel-which-comes-first-twin-kestrels-v2@eyecar
+ ejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261125T190000
+DTEND;TZID=America/Toronto:20261125T193000
+SUMMARY:Instagram + Facebook: Reel: Which comes first? (twin kestrels)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/chicken-egg-reel.mp4 · cover design/social-an
+ d-merch/instagram-guides/chicken-egg-reel-cover.jpg (Edit cover\, Add fro
+ m camera roll)\n- Facebook: before sharing\, turn on Share to Facebook so
+  it also goes to the kestreleye26 Page. Nothing else to post there.\n\nCA
+ PTION (copy and paste):\nWhich came first\, the clinic or the candidate? 
+ Wrong answers only.\n\nEvery new job board has the same puzzle: clinics w
+ ait for candidates\, and candidates wait for jobs. So we're not waiting. 
+ Pre launch is open now for both. Twins\, if you like.\n\nCandidates: crea
+ te your account and set your alerts. Clinics: set up your clinic\, ready 
+ to post. So when the jobs arrive\, the people are already here.\n\nLink i
+ n bio.\n\n#EyeCareJobs #Optometry #Opticians #ClinicOwner #CanadaJobs\n\n
+ ALT TEXT (Advanced settings\, Accessibility):\nA short animation on cream
+ . Text reads: Which comes first? A speckled egg rocks. Clinics and Candid
+ ates cards sit either side of arrows chasing each other round: Clinics wa
+ it for candidates. Candidates wait for jobs. The egg cracks and its top t
+ ips off: Doesn't matter. 2 small kestrels hatch\, 1 in the usual colours 
+ and 1 in inverted colours\, and hover over the 2 cards. Text reads: On Ke
+ strel\, you both start now. Candidates: create your account and set your 
+ alerts. Clinics: set up your clinic\, ready to post. So when the jobs arr
+ ive\, the people are already here.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Which comes first? (twi
+ n kestrels)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261125-l1-optician-pay-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261125T080000
 DTEND;TZID=America/Toronto:20261125T083000
 SUMMARY:LinkedIn: L1. Optician pay
@@ -333,95 +272,82 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261126-post-13-things-heard-no-7-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261126-reel-auto-apply-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261126T190000
 DTEND;TZID=America/Toronto:20261126T193000
-SUMMARY:Instagram: Post 13: Things heard No. 7
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 13 2026-11-26 Things heard No. 7.png (fold
- er Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nWe've seen la
- bs\, poodles and one very determined beagle. What's the worst chewed pair
-  you've had across the counter?\n\n#optometry #optician #optometrist #eye
- care #opticianlife #optometrylife #eyecarecanada #optometricassistant\n\n
- ALT TEXT (Advanced settings\, Accessibility):\nThings heard in clinic\, N
- o. 7: The dog ate them. Again. Underneath: Same dog. Same frames. Third p
- air. A drawing of chewed glasses.
+SUMMARY:Instagram + Facebook: Reel: Auto apply
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/autoapply-reel.mp4 · cover design/social-and-
+ merch/instagram-guides/autoapply-reel-cover.jpg (Edit cover\, Add from ca
+ mera roll)\n- Music: fast and mechanical for the swiping\, then calm from
+  8 seconds.\n- Facebook: before sharing\, turn on Share to Facebook so it
+  also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPTI
+ ON (copy and paste):\nApplied to 312 jobs. Read none of them.\n\nAuto app
+ ly tools fire off hundreds of applications a day\, and clinics end up rea
+ ding the same letter\, again and again.\n\nOn Kestrel Eye Care Jobs\, can
+ didates can only apply for roles that fit their profession. Fewer\, bette
+ r applications\, for jobs that fit. And every job shows its pay.\n\nPre l
+ aunch is open. Create your account: link in bio.\n\n#EyeCareJobs #Optomet
+ ry #Opticians #Hiring #JobSearch\n\nALT TEXT (Advanced settings\, Accessi
+ bility):\nA short animation. A phone with Auto apply switched on swipes r
+ ight on every job\, from optician to brain surgeon\, while a counter reac
+ hes 312 applications sent today. Then a clinic's inbox fills with 200 cop
+ ies of the same letter: Dear Hiring Manager\, I am excited to apply for t
+ he [Job Title] position at [Company]. A kestrel swoops across and clears 
+ it. Text reads: Fewer\, better applications. For jobs that fit. Only for 
+ roles that fit the candidate's profession. Ends with the Kestrel Eye Care
+  Jobs logo and Pre launch is open. Create your account: link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 13: Things heard No. 7
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Auto apply
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261126-reel-find-the-right-fit-trial-lens-v2@eyecarej
+UID:kestrel-social-20261127-reel-find-the-right-fit-trial-lens-v2@eyecarej
  obs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261126T130000
-DTEND;TZID=America/Toronto:20261126T133000
-SUMMARY:Instagram: Reel: Find the right fit (trial lens)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/focus-reel-messages.mp4 · cover design/social-and-merch/instagram-
- guides/focus-reel-messages-cover.jpg (Edit cover\, Add from camera roll)\
- n- 1 pm\, ahead of the 7 pm post the same day.\n- It answers Tuesday's Be
- tter 1... or 2? Story poll: reshare the Reel to your Story afterwards wit
- h a line like: You voted. Here's 3.\n- Before sharing\, turn on Share to 
- Facebook so it also goes to the Facebook Page (the same video\, no extra 
- work).\n\nCAPTION (copy and paste):\nBetter 1... or 2?\n\n"Competitive sa
- lary" is a blur. "Pay: DOE" isn't much clearer. On Kestrel\, every job sh
- ows its pay\, so you can see the fit before you apply.\n\nCandidates: cre
- ate your account and set your alerts. Clinics: set up your clinic\, ready
-  to post.\n\nPre launch is open: link in bio.\n\n#EyeCareJobs #Optometry 
- #Opticians #OptometricAssistant #CanadaJobs\n\nALT TEXT (Advanced setting
- s\, Accessibility):\nA short animation on cream\, like an eye test. Text 
- reads: Better 1... or 2? A round trial lens with a +1.00 tab sits over bl
- urred words: Competitive salary. Lens 2\, marked +0.50\, shows Pay: DOE\,
-  still blurry. Text reads: Try 3. A lens with a chestnut tab marked Kestr
- el brings the Kestrel wordmark and a pay pill\, $27 to $33 an hour\, into
-  focus. The lens lifts away. Text reads: Find the right fit. Every job sh
- ows its pay. Pre launch is open: link in bio.
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Find the right fit (trial lens)
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261127-reel-find-us-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261127T190000
 DTEND;TZID=America/Toronto:20261127T193000
-SUMMARY:Instagram: Reel: Find us
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/find-us-reel.mp4\n- Music: light and bouncy (search playful pizzica
- to).\n- Before sharing\, turn on Share to Facebook so it also goes to the
-  Facebook Page (the same video\, no extra work).\n\nCAPTION (copy and pas
- te):\n4 places to find us before the job board opens in early 2027.\n\nLi
- nkedIn: our company page\nFacebook: kestreleye26\nInstagram: right here\n
- Reddit: r/EyeCareJobsCanada\, for people who work in eye care and the cli
- nics that hire them\n\nPay shown on every job. Pre launch is open. Create
-  your account: link in bio.\n\n#EyeCareJobs #Optometry #Opticians #EyeCar
- eCanada #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA s
- hort animation on cream. Text reads: Find us here. Before we open. 4 tile
- s with line icons for LinkedIn\, Facebook\, Instagram and Reddit drop in 
- and take turns: LinkedIn\, our company page. Facebook\, kestreleye26. Ins
- tagram\, @kestreleye26. Reddit\, r/EyeCareJobsCanada. Pre launch is open.
-  Create your account: link in bio. eyecarejobs.ca.
+SUMMARY:Instagram + Facebook: Reel: Find the right fit (trial lens)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/focus-reel-messages.mp4 · cover design/social
+ -and-merch/instagram-guides/focus-reel-messages-cover.jpg (Edit cover\, A
+ dd from camera roll)\n- It answers the Better 1... or 2? Story poll from 
+ 2 days before: reshare the Reel to your Story afterwards with a line like
+ : You voted. Here's 3.\n- Facebook: before sharing\, turn on Share to Fac
+ ebook so it also goes to the kestreleye26 Page. Nothing else to post ther
+ e.\n\nCAPTION (copy and paste):\nBetter 1... or 2?\n\n"Competitive salary
+ " is a blur. "Pay: DOE" isn't much clearer. On Kestrel\, every job shows 
+ its pay\, so you can see the fit before you apply.\n\nCandidates: create 
+ your account and set your alerts. Clinics: set up your clinic\, ready to 
+ post.\n\nPre launch is open: link in bio.\n\n#EyeCareJobs #Optometry #Opt
+ icians #OptometricAssistant #CanadaJobs\n\nALT TEXT (Advanced settings\, 
+ Accessibility):\nA short animation on cream\, like an eye test. Text read
+ s: Better 1... or 2? A round trial lens with a +1.00 tab sits over blurre
+ d words: Competitive salary. Lens 2\, marked +0.50\, shows Pay: DOE\, sti
+ ll blurry. Text reads: Try 3. A lens with a chestnut tab marked Kestrel b
+ rings the Kestrel wordmark and a pay pill\, $27 to $33 an hour\, into foc
+ us. The lens lifts away. Text reads: Find the right fit. Every job shows 
+ its pay. Pre launch is open: link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Find us
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Find the right fit (tri
+ al lens)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261127-5-we-asked-chatgpt-gemini-and-copilot-where-to
  -find-eye-care-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261127T080000
 DTEND;TZID=America/Toronto:20261127T083000
 SUMMARY:Reddit: 5. We asked ChatGPT\, Gemini and Copilot where to find eye
@@ -459,108 +385,106 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261128-reel-3-questions-to-ask-in-an-optician-intervi
- ew-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261128-post-13-things-heard-no-7-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261128T190000
 DTEND;TZID=America/Toronto:20261128T193000
-SUMMARY:Instagram: Reel: 3 questions to ask in an optician interview
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/questions-reel.mp4 · cover design/social-and-merch/instagram-guide
- s/questions-reel-cover.jpg (Edit cover\, Add from camera roll)\n- The gui
- de went live on 27th November\, so the link in bio points to it.\n- Befor
- e sharing\, turn on Share to Facebook so it also goes to the Facebook Pag
- e (the same video\, no extra work).\n\nCAPTION (copy and paste):\nGot an 
- optician interview coming up? Ask these 3 questions.\n\n1. What does a no
- rmal week look like\, including evenings\, Saturdays and holiday cover?\n
- 2. If there's commission or a bonus\, how exactly is it worked out\, and 
- what does a typical month look like?\n3. Why is the position open? A new 
- role\, a retirement and a replacement for someone who left are very diffe
- rent stories.\n\nOn Kestrel Eye Care Jobs\, you won't need to ask about t
- he pay range: every job shows it. The full guide\, with more questions an
- d what to watch for\, is in the link in bio.\n\n#Opticians #InterviewTips
-  #EyeCareJobs #OpticianLife #CanadaJobs\n\nALT TEXT (Advanced settings\, 
- Accessibility):\nA short animation. Text reads: Got an optician interview
-  coming up? Ask these 3 questions. 3 navy cards flip over to show why eac
- h matters: What does a normal week look like? Including evenings\, Saturd
- ays and holiday cover. If there's commission or a bonus\, how is it worke
- d out? And what does a typical month look like? Why is the position open?
-  A new role\, a retirement and a replacement for someone who left are ver
- y different stories. Then: On Kestrel\, you won't need to ask about the p
- ay range. Ends with the Kestrel Eye Care Jobs logo.
+SUMMARY:Instagram + Facebook: Post 13: Things heard No. 7
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 13 2026-11-26 Things 
+ heard No. 7.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sh
+ aring\, turn on Share to Facebook so it also goes to the kestreleye26 Pag
+ e. Nothing else to post there.\n\nCAPTION (copy and paste):\nWe've seen l
+ abs\, poodles and one very determined beagle. What's the worst chewed pai
+ r you've had across the counter?\n\n#optometry #optician #optometrist #ey
+ ecare #opticianlife #optometrylife #eyecarecanada #optometricassistant\n\
+ nALT TEXT (Advanced settings\, Accessibility):\nThings heard in clinic\, 
+ No. 7: The dog ate them. Again. Underneath: Same dog. Same frames. Third 
+ pair. A drawing of chewed glasses.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: 3 questions to ask in an optician 
- interview
+DESCRIPTION:Post now: Instagram + Facebook\, Post 13: Things heard No. 7
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261129-reel-guess-the-pay-optician-ontario-v2@eyecare
- jobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261129-reel-find-us-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261129T190000
 DTEND;TZID=America/Toronto:20261129T193000
-SUMMARY:Instagram: Reel: Guess the pay\, optician\, Ontario
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/guess-the-pay-1.mp4 · cover design/social-and-merch/instagram-guid
- es/guess-the-pay-1-cover.jpg (Edit cover\, Add from camera roll)\n- Reply
-  to guesses in the comments.\n- Before sharing\, turn on Share to Faceboo
- k so it also goes to the Facebook Page (the same video\, no extra work).\
- n\nCAPTION (copy and paste):\nGuess the pay: optician\, Ontario.\n\nA\, B
-  or C? Comment your guess before you watch to the end.\n\nThe typical (me
- dian) pay for an optician in Ontario is $29.00 an hour\, and half earn be
- tween $23.44 and $35.43. Commission\, an eyewear allowance and benefits m
- atter too\, so compare the whole offer.\n\nOn Kestrel Eye Care Jobs\, you
- 'll never have to guess: every job shows its pay. Pre launch is open. Cre
- ate your account: link in bio.\n\nSource: Job Bank wages\, Employment and
-  Social Development Canada (Labour Force Survey 2024 to 2025). Contains i
- nformation licensed under the Open Government Licence – Canada.\n\n#Opt
- icians #OpticianPay #EyeCareJobs #OntarioJobs #PayTransparency\n\nALT TEX
- T (Advanced settings\, Accessibility):\nA short quiz animation. Text read
- s: Guess the pay. Optician\, Ontario. A\, $22 an hour. B\, $29 an hour. C
- \, $36 an hour. Comment A\, B or C. After a 5 second countdown\, B is rev
- ealed: typical (median) pay $29.00 an hour. Half of opticians in Ontario 
- earn between $23.44 and $35.43 an hour. Then: On Kestrel\, you'll never h
- ave to guess. Every job shows its pay.
+SUMMARY:Instagram + Facebook: Reel: Find us
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/find-us-reel.mp4\n- Music: light and bouncy (s
+ earch playful pizzicato).\n- Facebook: before sharing\, turn on Share to 
+ Facebook so it also goes to the kestreleye26 Page. Nothing else to post t
+ here.\n\nCAPTION (copy and paste):\n4 places to find us before the job bo
+ ard opens in early 2027.\n\nLinkedIn: our company page\nFacebook: kestrel
+ eye26\nInstagram: right here\nReddit: r/EyeCareJobsCanada\, for people wh
+ o work in eye care and the clinics that hire them\n\nPay shown on every j
+ ob. Pre launch is open. Create your account: link in bio.\n\n#EyeCareJobs
+  #Optometry #Opticians #EyeCareCanada #CanadaJobs\n\nALT TEXT (Advanced s
+ ettings\, Accessibility):\nA short animation on cream. Text reads: Find u
+ s here. Before we open. 4 tiles with line icons for LinkedIn\, Facebook\,
+  Instagram and Reddit drop in and take turns: LinkedIn\, our company page
+ . Facebook\, kestreleye26. Instagram\, @kestreleye26. Reddit\, r/EyeCareJ
+ obsCanada. Pre launch is open. Create your account: link in bio. eyecarej
+ obs.ca.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, optician\, Ontario
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Find us
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261130-post-14-ai-chatbots-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261130-reel-3-questions-to-ask-in-an-optician-intervi
+ ew-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261130T190000
 DTEND;TZID=America/Toronto:20261130T193000
-SUMMARY:Instagram: Post 14: AI chatbots
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 14 2026-11-30 AI chatbots.png (folder Kest
- rel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nWe asked ChatGPT\, G
- emini and Copilot where to find eye care jobs in Canada.\n\nKestrel was n
- amed in 0 of 21 answers. In fairness\, we had not opened yet. One chatbot
-  even used our own web address as its example of something that does not 
- exist.\n\nWhat they got right\, what they got wrong\, and how to use AI w
- ell in your own job search: link in bio.\n\nHave you asked a chatbot for 
- job advice? Tell us how it went.\n\n#EyeCareJobs #JobSearch #AI #Optometr
- y #Opticians\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel bl
- og: We asked the AI chatbots about eye care jobs. We were named in 0 of 2
- 1 answers. What they got right\, and what they got wrong.
+SUMMARY:Instagram + Facebook: Reel: 3 questions to ask in an optician inte
+ rview
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/questions-reel.mp4 · cover design/social-and-
+ merch/instagram-guides/questions-reel-cover.jpg (Edit cover\, Add from ca
+ mera roll)\n- The guide went live on 27th November\, so the link in bio p
+ oints to it.\n- Facebook: before sharing\, turn on Share to Facebook so i
+ t also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPT
+ ION (copy and paste):\nGot an optician interview coming up? Ask these 3 q
+ uestions.\n\n1. What does a normal week look like\, including evenings\, 
+ Saturdays and holiday cover?\n2. If there's commission or a bonus\, how e
+ xactly is it worked out\, and what does a typical month look like?\n3. Wh
+ y is the position open? A new role\, a retirement and a replacement for s
+ omeone who left are very different stories.\n\nOn Kestrel Eye Care Jobs\,
+  you won't need to ask about the pay range: every job shows it. The full 
+ guide\, with more questions and what to watch for\, is in the link in bio
+ .\n\n#Opticians #InterviewTips #EyeCareJobs #OpticianLife #CanadaJobs\n\n
+ ALT TEXT (Advanced settings\, Accessibility):\nA short animation. Text re
+ ads: Got an optician interview coming up? Ask these 3 questions. 3 navy c
+ ards flip over to show why each matters: What does a normal week look lik
+ e? Including evenings\, Saturdays and holiday cover. If there's commissio
+ n or a bonus\, how is it worked out? And what does a typical month look l
+ ike? Why is the position open? A new role\, a retirement and a replacemen
+ t for someone who left are very different stories. Then: On Kestrel\, you
+  won't need to ask about the pay range. Ends with the Kestrel Eye Care Jo
+ bs logo.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 14: AI chatbots
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: 3 questions to ask in a
+ n optician interview
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261201-monthly-numbers-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261201T090000
 DTEND;TZID=America/Toronto:20261201T093000
 SUMMARY:Check: Monthly numbers
@@ -580,116 +504,74 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261201-optician-pay-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261201T080000
-DTEND;TZID=America/Toronto:20261201T083000
-SUMMARY:Facebook: Optician pay
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L1\, without the hashtags.\n- Check the link opens before p
- osting. Facebook makes the link pressable\, so leave it in the text.\n\nP
- OST (copy and paste):\nWhat does an optician earn where you work?\n\nJob 
- Bank\, the Government of Canada's labour market service\, publishes typic
- al hourly pay for opticians in most provinces. Medians run from $27.63 an
-  hour in New Brunswick to $30.03 in Newfoundland and Labrador\, and Ontar
- io's is $29.00. The middle half of pay is wider than you might expect.\n\
- nWe put the table\, and what moves an offer up or down\, on the blog. Doe
- s it match what you see?\n\nhttps://eyecarejobs.ca/blog/optician-pay-cana
- da?utm_source=facebook&utm_medium=social&utm_campaign=2026-11-optician-pa
- y
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Optician pay
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261201-reel-job-ad-makeover-for-clinics-v2@eyecarejob
- s.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261201-reel-guess-the-pay-optician-ontario-v2@eyecare
+ jobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261201T190000
 DTEND;TZID=America/Toronto:20261201T193000
-SUMMARY:Instagram: Reel: Job ad makeover (for clinics)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/makeover-reel.mp4 · cover design/social-and-merch/instagram-guides
- /makeover-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Share to 
- LinkedIn too: clinic owners are there.\n- Before sharing\, turn on Share 
- to Facebook so it also goes to the Facebook Page (the same video\, no ext
- ra work).\n\nCAPTION (copy and paste):\n"Competitive pay. Fast paced. Mus
- t be a team player." Sound familiar?\n\nHere's the same optician ad\, rew
- ritten the way candidates want to read it: the actual pay range\, the rea
- l week\, who they'll work with\, and 2 straight answers. Is it an existin
- g vacancy? Do you use AI to screen applicants?\n\nClear ads get better ap
- plicants. On Kestrel Eye Care Jobs\, the form asks for all of this\, the 
- pay guide shows how your range compares with what's typical in your provi
- nce\, and the ad builder drafts the listing for you.\n\nPre launch is ope
- n. Set up your clinic: link in bio.\n\n#EyeCareJobs #Hiring #ClinicOwner 
- #Optometry #PracticeManagement\n\nALT TEXT (Advanced settings\, Accessibi
- lity):\nA short animation for clinics. Text reads: Your job ad\, before a
- nd after. A plain ad says Optician wanted\, Competitive pay\, Fast paced 
- busy clinic\, Must be a team player. A chestnut feather scribbles out eac
- h line and the rewrite appears: Optician\, Alberta\, Full time. $27 to $3
- 3 an hour\, plus an eyewear allowance\, in line with what's typical in Al
- berta. 4 days a week\, Tuesday to Friday\, about 25 patients a day. You'l
- l work alongside 2 opticians and an optometrist. Existing vacancy: Yes. U
- ses AI to screen candidates: No. Then: Clear ads get better applicants. E
- nds with the Kestrel Eye Care Jobs logo.
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, optician\, Ontario
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-1.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-1-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- Reply to guesses in the comments.\n- Facebook: before sha
+ ring\, turn on Share to Facebook so it also goes to the kestreleye26 Page
+ . Nothing else to post there.\n\nCAPTION (copy and paste):\nGuess the pay
+ : optician\, Ontario.\n\nA\, B or C? Comment your guess before you watch 
+ to the end.\n\nThe typical (median) pay for an optician in Ontario is $29
+ .00 an hour\, and half earn between $23.44 and $35.43. Commission\, an ey
+ ewear allowance and benefits matter too\, so compare the whole offer.\n\n
+ On Kestrel Eye Care Jobs\, you'll never have to guess: every job shows it
+ s pay. Pre launch is open. Create your account: link in bio.\n\nSource: J
+ ob Bank wages\, Employment and Social Development Canada (Labour Force Su
+ rvey 2024 to 2025). Contains information licensed under the Open Governme
+ nt Licence – Canada.\n\n#Opticians #OpticianPay #EyeCareJobs #OntarioJo
+ bs #PayTransparency\n\nALT TEXT (Advanced settings\, Accessibility):\nA s
+ hort quiz animation. Text reads: Guess the pay. Optician\, Ontario. A\, $
+ 22 an hour. B\, $29 an hour. C\, $36 an hour. Comment A\, B or C. After a
+  5 second countdown\, B is revealed: typical (median) pay $29.00 an hour.
+  Half of opticians in Ontario earn between $23.44 and $35.43 an hour. The
+ n: On Kestrel\, you'll never have to guess. Every job shows its pay.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Job ad makeover (for clinics)
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, opticia
+ n\, Ontario
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261202-reel-eye-care-hiring-rewritten-v2@eyecarejobs.
- ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261202-post-14-ai-chatbots-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261202T190000
 DTEND;TZID=America/Toronto:20261202T193000
-SUMMARY:Instagram: Reel: Eye care hiring\, rewritten
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/rules-reel.mp4 · cover design/social-and-merch/instagram-guides/ru
- les-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Music: steady a
- nd confident\, building with each line (search inspiring or anthem).\n- L
- ater: reuse each of the 5 lines as its own single image post or Story.\n-
-  Before sharing\, turn on Share to Facebook so it also goes to the Facebo
- ok Page (the same video\, no extra work).\n\nCAPTION (copy and paste):\nE
- ye care hiring has worked the same way for years. We're changing it.\n\n"
- Salary: competitive" becomes the actual pay range\, on every post.\n"Is t
- his job even real?" Every post says if it's an existing vacancy.\n"Is a b
- ot reading my application?" Every post says if AI screens candidates.\nNo
-  agencies: jobs come from the clinics themselves.\nAnd a person reads eve
- ry post before it goes live.\n\nSee how we compare with other places to a
- dvertise eye care jobs: eyecarejobs.ca/compare\n\nPre launch is open. Cre
- ate your account: link in bio.\n\n#EyeCareJobs #PayTransparency #Optometr
- y #Opticians #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):
- \nA short animation on cream. Text reads: Eye care hiring has worked the 
- same way for years. We're changing it. Then 5 old phrases are struck thro
- ugh\, 1 at a time\, by a chestnut feather\, each with a new line beneath.
-  Salary: competitive becomes The actual pay range\, on every post. Is thi
- s job even real? becomes Every post says if it's an existing vacancy. Is 
- a bot reading my application? becomes Every post says if AI screens candi
- dates. Recruiters reposting clinic jobs becomes No agencies. Jobs come fr
- om the clinics. Posts go live unchecked becomes A person reads every post
-  first. Ends with the Kestrel Eye Care Jobs logo\, See how we compare: ey
- ecarejobs.ca/compare\, and Pre launch is open. Create your account: link 
- in bio.
+SUMMARY:Instagram + Facebook: Post 14: AI chatbots
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 14 2026-11-30 AI chat
+ bots.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing\,
+  turn on Share to Facebook so it also goes to the kestreleye26 Page. Noth
+ ing else to post there.\n\nCAPTION (copy and paste):\nWe asked ChatGPT\, 
+ Gemini and Copilot where to find eye care jobs in Canada.\n\nKestrel was 
+ named in 0 of 21 answers. In fairness\, we had not opened yet. One chatbo
+ t even used our own web address as its example of something that does not
+  exist.\n\nWhat they got right\, what they got wrong\, and how to use AI 
+ well in your own job search: link in bio.\n\nHave you asked a chatbot for
+  job advice? Tell us how it went.\n\n#EyeCareJobs #JobSearch #AI #Optomet
+ ry #Opticians\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel b
+ log: We asked the AI chatbots about eye care jobs. We were named in 0 of 
+ 21 answers. What they got right\, and what they got wrong.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Eye care hiring\, rewritten
+DESCRIPTION:Post now: Instagram + Facebook\, Post 14: AI chatbots
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261202-l6-how-optometrists-are-paid-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261202T080000
 DTEND;TZID=America/Toronto:20261202T083000
 SUMMARY:LinkedIn: L6. How optometrists are paid
@@ -715,70 +597,94 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261203-post-15-optometrist-pay-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261203-reel-job-ad-makeover-for-clinics-v2@eyecarejob
+ s.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261203T190000
 DTEND;TZID=America/Toronto:20261203T193000
-SUMMARY:Instagram: Post 15: Optometrist pay
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 15 2026-12-03 Optometrist pay.png (folder 
- Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nSalary\, day rat
- e or a percentage of what you bill? Optometrist offers in Canada come in 
- different shapes\, which makes them hard to compare.\n\nOur new guide exp
- lains each one\, turns a percentage into dollars\, and lists the question
- s to ask before you sign.\n\nFull guide: link in bio.\n\n#Optometrist #Op
- tometry #OptometryStudent #EyeCareJobs #CanadaJobs\n\nALT TEXT (Advanced 
- settings\, Accessibility):\nKestrel guide: Salary\, day rate or a percent
- age? How optometrist pay is built\, and how to compare offers that are bu
- ilt differently.
+SUMMARY:Instagram + Facebook: Reel: Job ad makeover (for clinics)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/makeover-reel.mp4 · cover design/social-and-m
+ erch/instagram-guides/makeover-reel-cover.jpg (Edit cover\, Add from came
+ ra roll)\n- Share to LinkedIn too: clinic owners are there.\n- Facebook: 
+ before sharing\, turn on Share to Facebook so it also goes to the kestrel
+ eye26 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\n"Co
+ mpetitive pay. Fast paced. Must be a team player." Sound familiar?\n\nHer
+ e's the same optician ad\, rewritten the way candidates want to read it: 
+ the actual pay range\, the real week\, who they'll work with\, and 2 stra
+ ight answers. Is it an existing vacancy? Do you use AI to screen applican
+ ts?\n\nClear ads get better applicants. On Kestrel Eye Care Jobs\, the fo
+ rm asks for all of this\, the pay guide shows how your range compares wit
+ h what's typical in your province\, and the ad builder drafts the listing
+  for you.\n\nPre launch is open. Set up your clinic: link in bio.\n\n#Eye
+ CareJobs #Hiring #ClinicOwner #Optometry #PracticeManagement\n\nALT TEXT 
+ (Advanced settings\, Accessibility):\nA short animation for clinics. Text
+  reads: Your job ad\, before and after. A plain ad says Optician wanted\,
+  Competitive pay\, Fast paced busy clinic\, Must be a team player. A ches
+ tnut feather scribbles out each line and the rewrite appears: Optician\, 
+ Alberta\, Full time. $27 to $33 an hour\, plus an eyewear allowance\, in 
+ line with what's typical in Alberta. 4 days a week\, Tuesday to Friday\, 
+ about 25 patients a day. You'll work alongside 2 opticians and an optomet
+ rist. Existing vacancy: Yes. Uses AI to screen candidates: No. Then: Clea
+ r ads get better applicants. Ends with the Kestrel Eye Care Jobs logo.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 15: Optometrist pay
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Job ad makeover (for cl
+ inics)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261204-reel-job-ad-phrases-translated-v2@eyecarejobs.
+UID:kestrel-social-20261204-reel-eye-care-hiring-rewritten-v2@eyecarejobs.
  ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261204T190000
 DTEND;TZID=America/Toronto:20261204T193000
-SUMMARY:Instagram: Reel: Job ad phrases\, translated
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/phrases-reel.mp4 · cover design/social-and-merch/instagram-guides/
- phrases-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Before shar
- ing\, turn on Share to Facebook so it also goes to the Facebook Page (the
-  same video\, no extra work).\n\nCAPTION (copy and paste):\nJob ads have 
- their own language. Here's the translation.\n\n"Competitive salary": we'd
-  rather not say yet. Ask for the pay range.\n"Fast paced environment": it
- 's busy. Ask how many patients a day.\n"We're like a family": lovely\, bu
- t hours matter too. Ask about evenings and Saturdays.\n"Wear many hats": 
- you might do a bit of everything. Ask what a typical day looks like.\n"Mu
- st be flexible": the schedule may change. Ask how far ahead it's set.\n\n
- On Kestrel Eye Care Jobs\, you won't need to ask the first one: every job
-  shows its pay. Which phrase have you seen most?\n\nPre launch is open. C
- reate your account: link in bio.\n\n#EyeCareJobs #JobSearch #Opticians #O
- ptometricAssistant #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibi
- lity):\nA short animation. Text reads: Job ads have their own language. H
- ere's the translation. 5 phrases are circled by a chestnut feather\, each
-  with a translation and a question to ask: Competitive salary\, we'd rath
- er not say yet. Fast paced environment\, it's busy. We're like a family\,
-  lovely but hours matter too. Wear many hats\, you might do a bit of ever
- ything. Must be flexible\, the schedule may change. Ends with: On Kestrel
- \, you won't need to ask the first one. Every job shows its pay.
+SUMMARY:Instagram + Facebook: Reel: Eye care hiring\, rewritten
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/rules-reel.mp4 · cover design/social-and-merc
+ h/instagram-guides/rules-reel-cover.jpg (Edit cover\, Add from camera rol
+ l)\n- Music: steady and confident\, building with each line (search inspi
+ ring or anthem).\n- Later: reuse each of the 5 lines as its own single im
+ age post or Story.\n- Facebook: before sharing\, turn on Share to Faceboo
+ k so it also goes to the kestreleye26 Page. Nothing else to post there.\n
+ \nCAPTION (copy and paste):\nEye care hiring has worked the same way for 
+ years. We're changing it.\n\n"Salary: competitive" becomes the actual pay
+  range\, on every post.\n"Is this job even real?" Every post says if it's
+  an existing vacancy.\n"Is a bot reading my application?" Every post says
+  if AI screens candidates.\nNo agencies: jobs come from the clinics thems
+ elves.\nAnd a person reads every post before it goes live.\n\nSee how we 
+ compare with other places to advertise eye care jobs: eyecarejobs.ca/comp
+ are\n\nPre launch is open. Create your account: link in bio.\n\n#EyeCareJ
+ obs #PayTransparency #Optometry #Opticians #CanadaJobs\n\nALT TEXT (Advan
+ ced settings\, Accessibility):\nA short animation on cream. Text reads: E
+ ye care hiring has worked the same way for years. We're changing it. Then
+  5 old phrases are struck through\, 1 at a time\, by a chestnut feather\,
+  each with a new line beneath. Salary: competitive becomes The actual pay
+  range\, on every post. Is this job even real? becomes Every post says if
+  it's an existing vacancy. Is a bot reading my application? becomes Every
+  post says if AI screens candidates. Recruiters reposting clinic jobs bec
+ omes No agencies. Jobs come from the clinics. Posts go live unchecked bec
+ omes A person reads every post first. Ends with the Kestrel Eye Care Jobs
+  logo\, See how we compare: eyecarejobs.ca/compare\, and Pre launch is op
+ en. Create your account: link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Job ad phrases\, translated
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Eye care hiring\, rewri
+ tten
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261204-r7-how-are-optometrists-paid-in-canada-salary-
  day-rate-or-pe-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261204T080000
 DTEND;TZID=America/Toronto:20261204T083000
 SUMMARY:Reddit: R7. How are optometrists paid in Canada? Salary\, day rate
@@ -812,214 +718,185 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261205-reel-myth-or-fact-eye-care-careers-edition-v2@
- eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261205-post-15-optometrist-pay-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261205T190000
 DTEND;TZID=America/Toronto:20261205T193000
-SUMMARY:Instagram: Reel: Myth or fact? Eye care careers edition
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/myth-fact-reel.mp4 · cover design/social-and-merch/instagram-guide
- s/myth-fact-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Before 
- sharing\, turn on Share to Facebook so it also goes to the Facebook Page 
- (the same video\, no extra work).\n\nCAPTION (copy and paste):\nMyth or f
- act? Eye care careers edition.\n\n"You need a university degree to work i
- n optics." Myth. Many roles train you on the job\, and opticians usually 
- need a college programme and a licence.\n"Opticians and optometrists do t
- he same job." Myth. Optometrists examine eyes and diagnose\; opticians fi
- t and dispense glasses and contact lenses.\n"Eye care is just retail." My
- th. It's health care.\n"You can start at the front desk and grow from the
- re." Fact. Many people do.\n"There's a new job board just for eye care in
-  Canada." Fact. That's us: Kestrel Eye Care Jobs\, where every job shows 
- its pay.\n\nWhich one surprised you? Pre launch is open. Create your acco
- unt: link in bio.\n\n#EyeCareCareers #Opticians #Optometry #OptometricAss
- istant #EyeCareJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA s
- hort quiz animation. 5 statements each get a stamp. You need a university
-  degree to work in optics: Myth. Opticians and optometrists do the same j
- ob: Myth. Eye care is just retail: Myth. You can start at the front desk 
- and grow from there: Fact. There's a new job board just for eye care in C
- anada: Fact\, Kestrel Eye Care Jobs. Every job shows its pay.
+SUMMARY:Instagram + Facebook: Post 15: Optometrist pay
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 15 2026-12-03 Optomet
+ rist pay.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before shari
+ ng\, turn on Share to Facebook so it also goes to the kestreleye26 Page. 
+ Nothing else to post there.\n\nCAPTION (copy and paste):\nSalary\, day ra
+ te or a percentage of what you bill? Optometrist offers in Canada come in
+  different shapes\, which makes them hard to compare.\n\nOur new guide ex
+ plains each one\, turns a percentage into dollars\, and lists the questio
+ ns to ask before you sign.\n\nFull guide: link in bio.\n\n#Optometrist #O
+ ptometry #OptometryStudent #EyeCareJobs #CanadaJobs\n\nALT TEXT (Advanced
+  settings\, Accessibility):\nKestrel guide: Salary\, day rate or a percen
+ tage? How optometrist pay is built\, and how to compare offers that are b
+ uilt differently.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Myth or fact? Eye care careers edi
- tion
+DESCRIPTION:Post now: Instagram + Facebook\, Post 15: Optometrist pay
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261206-reel-4-ways-into-eye-care-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261206-reel-job-ad-phrases-translated-v2@eyecarejobs.
+ ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261206T190000
 DTEND;TZID=America/Toronto:20261206T193000
-SUMMARY:Instagram: Reel: 4 ways into eye care
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/ways-in-reel.mp4 · cover design/social-and-merch/instagram-guides/
- ways-in-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Sunday even
- ing suits candidates.\n- Music: warm and hopeful\, light acoustic or pian
- o.\n- Before sharing\, turn on Share to Facebook so it also goes to the F
- acebook Page (the same video\, no extra work).\n\nCAPTION (copy and paste
- ):\nWant to work in optics\, but not sure where to start?\n\nHere are 4 w
- ays in:\nFront desk and patient care. Many clinics train you on the job.\
- nOptometric assistant. Pre testing and helping with eye exams\, often tra
- ined in the clinic.\nOptician. Fitting glasses and contact lenses\, with 
- a college programme and a licence in most provinces.\nOptical lab technic
- ian. Making the lenses\, often trained in the lab.\n\nCreate your Kestrel
-  account\, pick the role you're interested in and your province\, and we'
- ll email you when jobs that fit are posted. Every job shows its pay. Our 
- guides on getting started are in the link in bio too.\n\nPre launch is op
- en. Create your account: link in bio.\n\n#OpticianLife #OptometricAssista
- nt #EyeCareCareers #EyeCareJobs #CanadaJobs\n\nALT TEXT (Advanced setting
- s\, Accessibility):\nA short animation on cream. Text reads: Want to work
-  in optics? Not sure where to start? Then: 4 ways into eye care. A dotted
-  chestnut path runs down past 4 stops\, each with an icon: Front desk and
-  patient care\, many clinics train you on the job. Optometric assistant\,
-  pre testing and helping with eye exams\, often trained in the clinic. Op
- tician\, fitting glasses and contact lenses\, a college programme and a l
- icence in most provinces. Optical lab technician\, making the lenses\, of
- ten trained in the lab. Then: Find your way in. Create your account\, pic
- k the role you're interested in and your province\, and we'll email you w
- hen jobs that fit are posted. Ends with the Kestrel Eye Care Jobs logo an
- d Pre launch is open. Create your account: link in bio.
+SUMMARY:Instagram + Facebook: Reel: Job ad phrases\, translated
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/phrases-reel.mp4 · cover design/social-and-me
+ rch/instagram-guides/phrases-reel-cover.jpg (Edit cover\, Add from camera
+  roll)\n- Facebook: before sharing\, turn on Share to Facebook so it also
+  goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPTION (c
+ opy and paste):\nJob ads have their own language. Here's the translation.
+ \n\n"Competitive salary": we'd rather not say yet. Ask for the pay range.
+ \n"Fast paced environment": it's busy. Ask how many patients a day.\n"We'
+ re like a family": lovely\, but hours matter too. Ask about evenings and 
+ Saturdays.\n"Wear many hats": you might do a bit of everything. Ask what 
+ a typical day looks like.\n"Must be flexible": the schedule may change. A
+ sk how far ahead it's set.\n\nOn Kestrel Eye Care Jobs\, you won't need t
+ o ask the first one: every job shows its pay. Which phrase have you seen 
+ most?\n\nPre launch is open. Create your account: link in bio.\n\n#EyeCar
+ eJobs #JobSearch #Opticians #OptometricAssistant #CanadaJobs\n\nALT TEXT 
+ (Advanced settings\, Accessibility):\nA short animation. Text reads: Job 
+ ads have their own language. Here's the translation. 5 phrases are circle
+ d by a chestnut feather\, each with a translation and a question to ask: 
+ Competitive salary\, we'd rather not say yet. Fast paced environment\, it
+ 's busy. We're like a family\, lovely but hours matter too. Wear many hat
+ s\, you might do a bit of everything. Must be flexible\, the schedule may
+  change. Ends with: On Kestrel\, you won't need to ask the first one. Eve
+ ry job shows its pay.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: 4 ways into eye care
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Job ad phrases\, transl
+ ated
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261207-post-16-pay-summary-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261207-reel-myth-or-fact-eye-care-careers-edition-v2@
+ eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261207T190000
 DTEND;TZID=America/Toronto:20261207T193000
-SUMMARY:Instagram: Post 16: Pay summary
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 16 2026-12-07 Pay summary.png (folder Kest
- rel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nWhere is eye care pa
- id most in Canada?\n\nIn Job Bank's latest figures\, British Columbia has
-  the highest typical pay for optometric assistants and patient care teams
- . For opticians and for practice and clinic managers it is Newfoundland a
- nd Labrador. The gap between the top and bottom province is 9% to 33%\, d
- epending on the role.\n\nOur 2026 eye care pay summary has every role: li
- nk in bio.\n\n#EyeCareJobs #PayTransparency #Opticians #OptometricAssista
- nt #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel 
- pay summary: 2 of 4 eye care roles pay most in British Columbia. Assistan
- ts and patient care teams. Our 2026 pay summary\, from Job Bank figures.
+SUMMARY:Instagram + Facebook: Reel: Myth or fact? Eye care careers edition
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/myth-fact-reel.mp4 · cover design/social-and-
+ merch/instagram-guides/myth-fact-reel-cover.jpg (Edit cover\, Add from ca
+ mera roll)\n- Facebook: before sharing\, turn on Share to Facebook so it 
+ also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPTIO
+ N (copy and paste):\nMyth or fact? Eye care careers edition.\n\n"You need
+  a university degree to work in optics." Myth. Many roles train you on th
+ e job\, and opticians usually need a college programme and a licence.\n"O
+ pticians and optometrists do the same job." Myth. Optometrists examine ey
+ es and diagnose\; opticians fit and dispense glasses and contact lenses.\
+ n"Eye care is just retail." Myth. It's health care.\n"You can start at th
+ e front desk and grow from there." Fact. Many people do.\n"There's a new 
+ job board just for eye care in Canada." Fact. That's us: Kestrel Eye Care
+  Jobs\, where every job shows its pay.\n\nWhich one surprised you? Pre la
+ unch is open. Create your account: link in bio.\n\n#EyeCareCareers #Optic
+ ians #Optometry #OptometricAssistant #EyeCareJobs\n\nALT TEXT (Advanced s
+ ettings\, Accessibility):\nA short quiz animation. 5 statements each get 
+ a stamp. You need a university degree to work in optics: Myth. Opticians 
+ and optometrists do the same job: Myth. Eye care is just retail: Myth. Yo
+ u can start at the front desk and grow from there: Fact. There's a new jo
+ b board just for eye care in Canada: Fact\, Kestrel Eye Care Jobs. Every 
+ job shows its pay.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 16: Pay summary
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Myth or fact? Eye care 
+ careers edition
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261208-how-optometrists-are-paid-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261208T080000
-DTEND;TZID=America/Toronto:20261208T083000
-SUMMARY:Facebook: How optometrists are paid
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L6\, without the hashtags.\n- Check the link opens before p
- osting. Facebook makes the link pressable\, so leave it in the text.\n\nP
- OST (copy and paste):\nAsk 3 associate optometrists how they are paid and
-  you may get 3 different answers: a salary\, a day rate\, or a percentage
-  of what they bring in\, sometimes with a guaranteed minimum.\n\nThe deta
- il that matters is what the percentage is a share of. A higher percentage
-  of a smaller base can pay less than a lower percentage of a larger one.\
- n\nOur guide explains each model and what to ask before you compare offer
- s. How are you paid?\n\nhttps://eyecarejobs.ca/blog/optometrist-pay-canad
- a?utm_source=facebook&utm_medium=social&utm_campaign=2026-12-optometrist-
- pay
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, How optometrists are paid
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261208-reel-your-job-ad-and-the-law-for-clinics-v2@ey
- ecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261208-reel-4-ways-into-eye-care-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261208T190000
 DTEND;TZID=America/Toronto:20261208T193000
-SUMMARY:Instagram: Reel: Your job ad and the law (for clinics)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/law-reel.mp4 · cover design/social-and-merch/instagram-guides/law-
- reel-cover.jpg (Edit cover\, Add from camera roll)\n- Share to LinkedIn t
- oo.\n- Before sharing\, turn on Share to Facebook so it also goes to the 
- Facebook Page (the same video\, no extra work).\n\nCAPTION (copy and past
- e):\nHiring in Ontario or BC? Your job ad has rules.\n\nOntario\, for emp
- loyers with 25 or more employees\, since 1st January 2026: show the pay r
- ange (no more than $50\,000 wide)\, say whether it's an existing vacancy\
- , say whether you use AI to screen applicants\, and don't ask for "Canadi
- an experience".\n\nBritish Columbia\, all employers: show the pay range i
- n every public job posting.\n\nOn Kestrel Eye Care Jobs\, every post cove
- rs all of this\, whatever the size of your clinic. Save this for your nex
- t hire.\n\nPre launch is open. Set up your clinic: link in bio.\n\nA plai
- n summary\, not legal advice.\n\n#Hiring #ClinicOwner #Optometry #PayTran
- sparency #OntarioJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA
-  short checklist animation for clinics. Text reads: What your job ad need
- s. Ontario\, employers with 25 or more employees\, since 1st January 2026
- : the pay range\, no more than $50\,000 wide\; whether it's an existing v
- acancy\; whether AI is used to screen applicants\; no Canadian experience
-  requirement. British Columbia\, all employers: the pay range in every pu
- blic job posting. Then: On Kestrel\, every post covers all of this\, what
- ever the size of your clinic. A plain summary\, not legal advice.
+SUMMARY:Instagram + Facebook: Reel: 4 ways into eye care
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/ways-in-reel.mp4 · cover design/social-and-me
+ rch/instagram-guides/ways-in-reel-cover.jpg (Edit cover\, Add from camera
+  roll)\n- Music: warm and hopeful\, light acoustic or piano.\n- Facebook:
+  before sharing\, turn on Share to Facebook so it also goes to the kestre
+ leye26 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nWa
+ nt to work in optics\, but not sure where to start?\n\nHere are 4 ways in
+ :\nFront desk and patient care. Many clinics train you on the job.\nOptom
+ etric assistant. Pre testing and helping with eye exams\, often trained i
+ n the clinic.\nOptician. Fitting glasses and contact lenses\, with a coll
+ ege programme and a licence in most provinces.\nOptical lab technician. M
+ aking the lenses\, often trained in the lab.\n\nCreate your Kestrel accou
+ nt\, pick the role you're interested in and your province\, and we'll ema
+ il you when jobs that fit are posted. Every job shows its pay. Our guides
+  on getting started are in the link in bio too.\n\nPre launch is open. Cr
+ eate your account: link in bio.\n\n#OpticianLife #OptometricAssistant #Ey
+ eCareCareers #EyeCareJobs #CanadaJobs\n\nALT TEXT (Advanced settings\, Ac
+ cessibility):\nA short animation on cream. Text reads: Want to work in op
+ tics? Not sure where to start? Then: 4 ways into eye care. A dotted chest
+ nut path runs down past 4 stops\, each with an icon: Front desk and patie
+ nt care\, many clinics train you on the job. Optometric assistant\, pre t
+ esting and helping with eye exams\, often trained in the clinic. Optician
+ \, fitting glasses and contact lenses\, a college programme and a licence
+  in most provinces. Optical lab technician\, making the lenses\, often tr
+ ained in the lab. Then: Find your way in. Create your account\, pick the 
+ role you're interested in and your province\, and we'll email you when jo
+ bs that fit are posted. Ends with the Kestrel Eye Care Jobs logo and Pre 
+ launch is open. Create your account: link in bio.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Your job ad and the law (for clini
- cs)
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: 4 ways into eye care
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261209-reel-guess-the-pay-front-desk-british-columbia
- -v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261209-post-16-pay-summary-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261209T190000
 DTEND;TZID=America/Toronto:20261209T193000
-SUMMARY:Instagram: Reel: Guess the pay\, front desk\, British Columbia
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/guess-the-pay-2.mp4 · cover design/social-and-merch/instagram-guid
- es/guess-the-pay-2-cover.jpg (Edit cover\, Add from camera roll)\n- Befor
- e sharing\, turn on Share to Facebook so it also goes to the Facebook Pag
- e (the same video\, no extra work).\n\nCAPTION (copy and paste):\nGuess t
- he pay: front desk and patient care\, British Columbia.\n\nA\, B or C? Co
- mment your guess before you watch to the end.\n\nThe typical (median) pay
-  for receptionists in British Columbia\, the closest Job Bank group to fr
- ont desk and patient care\, is $24.62 an hour\, and half earn between $21
- .00 and $28.00.\n\nOn Kestrel Eye Care Jobs\, you'll never have to guess:
-  every job shows its pay. Pre launch is open. Create your account: link i
- n bio.\n\nSource: Job Bank wages\, Employment and Social Development Cana
- da (Labour Force Survey 2024 to 2025). Contains information licensed unde
- r the Open Government Licence – Canada.\n\n#EyeCareJobs #PatientCare #B
- CJobs #PayTransparency #Optometry\n\nALT TEXT (Advanced settings\, Access
- ibility):\nA short quiz animation. Text reads: Guess the pay. Front desk 
- and patient care\, British Columbia. A\, $25 an hour. B\, $19 an hour. C\
- , $31 an hour. After a 5 second countdown\, A is revealed: typical (media
- n) pay $24.62 an hour. Half of receptionists in British Columbia earn bet
- ween $21.00 and $28.00 an hour. Then: On Kestrel\, you'll never have to g
- uess. Every job shows its pay.
+SUMMARY:Instagram + Facebook: Post 16: Pay summary
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 16 2026-12-07 Pay sum
+ mary.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing\,
+  turn on Share to Facebook so it also goes to the kestreleye26 Page. Noth
+ ing else to post there.\n\nCAPTION (copy and paste):\nWhere is eye care p
+ aid most in Canada?\n\nIn Job Bank's latest figures\, British Columbia ha
+ s the highest typical pay for optometric assistants and patient care team
+ s. For opticians and for practice and clinic managers it is Newfoundland 
+ and Labrador. The gap between the top and bottom province is 9% to 33%\, 
+ depending on the role.\n\nOur 2026 eye care pay summary has every role: l
+ ink in bio.\n\n#EyeCareJobs #PayTransparency #Opticians #OptometricAssist
+ ant #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel
+  pay summary: 2 of 4 eye care roles pay most in British Columbia. Assista
+ nts and patient care teams. Our 2026 pay summary\, from Job Bank figures.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, front desk\, Briti
- sh Columbia
+DESCRIPTION:Post now: Instagram + Facebook\, Post 16: Pay summary
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261209-l8-becoming-an-optician-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261209T080000
 DTEND;TZID=America/Toronto:20261209T083000
 SUMMARY:LinkedIn: L8. Becoming an optician
@@ -1045,72 +922,88 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261210-post-17-becoming-an-optician-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261210-reel-your-job-ad-and-the-law-for-clinics-v2@ey
+ ecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261210T190000
 DTEND;TZID=America/Toronto:20261210T193000
-SUMMARY:Instagram: Post 17: Becoming an optician
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 17 2026-12-10 Becoming an optician.png (fo
- lder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nBecoming an
-  optician in Canada? The national exams are shared across the provinces. 
- The licence is not.\n\nOur guide sets out the 2 routes in\, the national 
- exams\, and what each province adds\, from Ontario's intern class to Albe
- rta's provisional permit.\n\nFull guide: link in bio.\n\n#Opticians #Opti
- cian #OpticianStudent #EyeCareCareers #CanadaJobs\n\nALT TEXT (Advanced s
- ettings\, Accessibility):\nKestrel guide: The exam is national. The licen
- ce is provincial. How to become an optician in Canada\, province by provi
- nce.
+SUMMARY:Instagram + Facebook: Reel: Your job ad and the law (for clinics)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/law-reel.mp4 · cover design/social-and-merch/
+ instagram-guides/law-reel-cover.jpg (Edit cover\, Add from camera roll)\n
+ - Share to LinkedIn too.\n- Facebook: before sharing\, turn on Share to F
+ acebook so it also goes to the kestreleye26 Page. Nothing else to post th
+ ere.\n\nCAPTION (copy and paste):\nHiring in Ontario or BC? Your job ad h
+ as rules.\n\nOntario\, for employers with 25 or more employees\, since 1s
+ t January 2026: show the pay range (no more than $50\,000 wide)\, say whe
+ ther it's an existing vacancy\, say whether you use AI to screen applican
+ ts\, and don't ask for "Canadian experience".\n\nBritish Columbia\, all e
+ mployers: show the pay range in every public job posting.\n\nOn Kestrel E
+ ye Care Jobs\, every post covers all of this\, whatever the size of your 
+ clinic. Save this for your next hire.\n\nPre launch is open. Set up your 
+ clinic: link in bio.\n\nA plain summary\, not legal advice.\n\n#Hiring #C
+ linicOwner #Optometry #PayTransparency #OntarioJobs\n\nALT TEXT (Advanced
+  settings\, Accessibility):\nA short checklist animation for clinics. Tex
+ t reads: What your job ad needs. Ontario\, employers with 25 or more empl
+ oyees\, since 1st January 2026: the pay range\, no more than $50\,000 wid
+ e\; whether it's an existing vacancy\; whether AI is used to screen appli
+ cants\; no Canadian experience requirement. British Columbia\, all employ
+ ers: the pay range in every public job posting. Then: On Kestrel\, every 
+ post covers all of this\, whatever the size of your clinic. A plain summa
+ ry\, not legal advice.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 17: Becoming an optician
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Your job ad and the law
+  (for clinics)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261211-reel-pre-testing-explained-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261211-reel-guess-the-pay-front-desk-british-columbia
+ -v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261211T190000
 DTEND;TZID=America/Toronto:20261211T193000
-SUMMARY:Instagram: Reel: Pre testing\, explained
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/pretesting-reel.mp4 · cover design/social-and-merch/instagram-guid
- es/pretesting-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Befor
- e sharing\, turn on Share to Facebook so it also goes to the Facebook Pag
- e (the same video\, no extra work).\n\nCAPTION (copy and paste):\nEver wo
- ndered what happens before you see the optometrist?\n\nChecking your deta
- ils: your reason for the visit\, your health and any medication\, so the 
- optometrist has the full picture.\nThe machine you look into: an autorefr
- actor\, an automatic reading of how your eyes focus\, a starting point fo
- r your prescription.\nThe puff of air: non contact tonometry\, measuring 
- the pressure inside your eye as part of checking for glaucoma. (Sorry abo
- ut the puff.)\nPhotos of the back of your eye: retinal imaging\, so the o
- ptometrist can see your retina and any changes over time.\nAnd some clini
- cs also offer an OCT scan\, a detailed scan of the layers at the back of 
- your eye.\n\nDepending on the clinic\, the tests and their order vary. Th
- is is often the optometric assistant's job\, with many clinics training y
- ou on the job.\n\nCurious about working in eye care? Pre launch is open. 
- Create your account: link in bio.\n\n#OptometricAssistant #EyeExam #Optom
- etry #EyeCareCareers #EyeCareJobs\n\nALT TEXT (Advanced settings\, Access
- ibility):\nA short animation with line drawings. Text reads: Ever wondere
- d what happens before you see the optometrist? Pre testing\, explained. 1
- \, checking your details. 2\, the machine you look into. 3\, the puff of 
- air\, sorry about the puff. 4\, photos of the back of your eye. 5\, some 
- clinics also offer an OCT scan. Then: This is often the optometric assist
- ant's job. Many clinics train you on the job.
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, front desk\, British C
+ olumbia
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-2.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-2-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- Facebook: before sharing\, turn on Share to Facebook so i
+ t also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPT
+ ION (copy and paste):\nGuess the pay: front desk and patient care\, Briti
+ sh Columbia.\n\nA\, B or C? Comment your guess before you watch to the en
+ d.\n\nThe typical (median) pay for receptionists in British Columbia\, th
+ e closest Job Bank group to front desk and patient care\, is $24.62 an ho
+ ur\, and half earn between $21.00 and $28.00.\n\nOn Kestrel Eye Care Jobs
+ \, you'll never have to guess: every job shows its pay. Pre launch is ope
+ n. Create your account: link in bio.\n\nSource: Job Bank wages\, Employme
+ nt and Social Development Canada (Labour Force Survey 2024 to 2025). Cont
+ ains information licensed under the Open Government Licence – Canada.\n
+ \n#EyeCareJobs #PatientCare #BCJobs #PayTransparency #Optometry\n\nALT TE
+ XT (Advanced settings\, Accessibility):\nA short quiz animation. Text rea
+ ds: Guess the pay. Front desk and patient care\, British Columbia. A\, $2
+ 5 an hour. B\, $19 an hour. C\, $31 an hour. After a 5 second countdown\,
+  A is revealed: typical (median) pay $24.62 an hour. Half of receptionist
+ s in British Columbia earn between $21.00 and $28.00 an hour. Then: On Ke
+ strel\, you'll never have to guess. Every job shows its pay.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Pre testing\, explained
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, front d
+ esk\, British Columbia
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261211-r8-becoming-an-optician-in-canada-what-is-the-
  same-everywher-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261211T080000
 DTEND;TZID=America/Toronto:20261211T083000
 SUMMARY:Reddit: R8. Becoming an optician in Canada: what is the same every
@@ -1144,194 +1037,211 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261212-story-poll-would-you-apply-if-the-pay-wasn-t-s
- hown-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261212-post-17-becoming-an-optician-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261212T190000
 DTEND;TZID=America/Toronto:20261212T193000
-SUMMARY:Instagram: Story poll: Would you apply if the pay wasn't shown?
-LOCATION:Instagram @kestreleye26
-DESCRIPTION:Where: Instagram @kestreleye26\nType: Story with a poll sticke
- r (add the sticker in the app\, in the empty space below the drawing)\nFi
- le: design/social-and-merch/instagram-guides/story-poll-4-apply-without-p
- ay.png\n- Screenshot the result: it's a figure you can quote later.\n- Th
- e next day\, share the result as a Story.\n\nCAPTION (copy and paste):\nP
- oll options: Yes / No
+SUMMARY:Instagram + Facebook: Post 17: Becoming an optician
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 17 2026-12-10 Becomin
+ g an optician.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before 
+ sharing\, turn on Share to Facebook so it also goes to the kestreleye26 P
+ age. Nothing else to post there.\n\nCAPTION (copy and paste):\nBecoming a
+ n optician in Canada? The national exams are shared across the provinces.
+  The licence is not.\n\nOur guide sets out the 2 routes in\, the national
+  exams\, and what each province adds\, from Ontario's intern class to Alb
+ erta's provisional permit.\n\nFull guide: link in bio.\n\n#Opticians #Opt
+ ician #OpticianStudent #EyeCareCareers #CanadaJobs\n\nALT TEXT (Advanced 
+ settings\, Accessibility):\nKestrel guide: The exam is national. The lice
+ nce is provincial. How to become an optician in Canada\, province by prov
+ ince.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Story poll: Would you apply if the pay w
- asn't shown?
+DESCRIPTION:Post now: Instagram + Facebook\, Post 17: Becoming an optician
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261213-reel-just-finished-optometry-school-new-ods-v2
- @eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261213-reel-pre-testing-explained-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261213T190000
 DTEND;TZID=America/Toronto:20261213T193000
-SUMMARY:Instagram: Reel: Just finished optometry school? (new ODs)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/new-od-reel.mp4 · cover design/social-and-merch/instagram-guides/n
- ew-od-reel-cover.jpg (Edit cover\, Add from camera roll)\n- Post again in
-  April or May\, when final year students are deciding.\n- Share on Linked
- In and Reddit too.\n- Before sharing\, turn on Share to Facebook so it al
- so goes to the Facebook Page (the same video\, no extra work).\n\nCAPTION
-  (copy and paste):\nJust finished optometry school? Here's what's next.\n
- \nFirst\, pass your board exam and register with the college in the provi
- nce you'll practise in. Then choose your path. Most new ODs consider asso
- ciate work in an independent practice\, corporate or retail optical\, loc
- um work\, and their own practice later on.\n\nPay comes as a day rate\, a
-  salary\, or a percentage of billings. On Kestrel Eye Care Jobs\, a job p
- aid by percentage must also show the expected earnings in dollars\, so yo
- u can compare offers before you apply.\n\nCreate your account\, pick Opto
- metrist and your province\, and we'll email you when jobs that fit are po
- sted. Pre launch is open: link in bio.\n\n#Optometry #Optometrist #NewGra
- d #OptometryStudent #EyeCareJobs\n\nALT TEXT (Advanced settings\, Accessi
- bility):\nA short animation for new optometrists. Text reads: Just finish
- ed optometry school? Here's what's next. First\, get licensed: pass your 
- board exam\, register with the college in the province you'll practise in
- . 4 paths most new ODs consider: associate in an independent practice\, c
- orporate or retail optical\, locum work\, your own practice later. How yo
- u'll be paid: a day rate\, a salary\, or a percentage of billings. On Kes
- trel\, a job paid by percentage must also show the expected earnings in d
- ollars.
+SUMMARY:Instagram + Facebook: Reel: Pre testing\, explained
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/pretesting-reel.mp4 · cover design/social-and
+ -merch/instagram-guides/pretesting-reel-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- Facebook: before sharing\, turn on Share to Facebook so i
+ t also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPT
+ ION (copy and paste):\nEver wondered what happens before you see the opto
+ metrist?\n\nChecking your details: your reason for the visit\, your healt
+ h and any medication\, so the optometrist has the full picture.\nThe mach
+ ine you look into: an autorefractor\, an automatic reading of how your ey
+ es focus\, a starting point for your prescription.\nThe puff of air: non 
+ contact tonometry\, measuring the pressure inside your eye as part of che
+ cking for glaucoma. (Sorry about the puff.)\nPhotos of the back of your e
+ ye: retinal imaging\, so the optometrist can see your retina and any chan
+ ges over time.\nAnd some clinics also offer an OCT scan\, a detailed scan
+  of the layers at the back of your eye.\n\nDepending on the clinic\, the 
+ tests and their order vary. This is often the optometric assistant's job\
+ , with many clinics training you on the job.\n\nCurious about working in 
+ eye care? Pre launch is open. Create your account: link in bio.\n\n#Optom
+ etricAssistant #EyeExam #Optometry #EyeCareCareers #EyeCareJobs\n\nALT TE
+ XT (Advanced settings\, Accessibility):\nA short animation with line draw
+ ings. Text reads: Ever wondered what happens before you see the optometri
+ st? Pre testing\, explained. 1\, checking your details. 2\, the machine y
+ ou look into. 3\, the puff of air\, sorry about the puff. 4\, photos of t
+ he back of your eye. 5\, some clinics also offer an OCT scan. Then: This 
+ is often the optometric assistant's job. Many clinics train you on the jo
+ b.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Just finished optometry school? (n
- ew ODs)
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Pre testing\, explained
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261214-post-18-who-does-what-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261214-story-poll-would-you-apply-if-the-pay-wasn-t-s
+ hown-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261214T120000
+DTEND;TZID=America/Toronto:20261214T123000
+SUMMARY:Instagram + Facebook: Story poll: Would you apply if the pay wasn'
+ t shown?
+LOCATION:Instagram @kestreleye26\, shared to Facebook
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\nType: Sto
+ ry with a poll sticker (add the sticker in the app\, in the empty space b
+ elow the drawing)\nFile: design/social-and-merch/instagram-guides/story-p
+ oll-4-apply-without-pay.png\n- Screenshot the result: it's a figure you c
+ an quote later.\n- The next day\, share the result as a Story.\n- Faceboo
+ k: tap Share to Facebook story (or set it to share automatically once).\n
+ \nCAPTION (copy and paste):\nPoll options: Yes / No
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Story poll: Would you apply i
+ f the pay wasn't shown?
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261214-reel-just-finished-optometry-school-new-ods-v2
+ @eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261214T190000
 DTEND;TZID=America/Toronto:20261214T193000
-SUMMARY:Instagram: Post 18: Who does what
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 18 2026-12-14 Who does what.png (folder Ke
- strel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nIf you have only e
- ver been on the patient side of an eye exam\, a clinic can look like a ha
- ndful of jobs. There are more than most people expect.\n\nOptometrists ex
- amine eyes and prescribe. Opticians fit and adjust glasses and\, dependin
- g on the province\, contact lenses. Optometric assistants and technicians
-  run the first tests and keep the day moving. Reception and patient care 
- teams book\, greet and handle insurance. Practice managers look after the
-  team and the numbers. Behind them are labs\, frame companies and supplie
- rs.\n\nMany of these roles need no university degree. Full guide: link in
-  bio.\n\n#EyeCareCareers #Optometry #Opticians #OptometricAssistant #EyeC
- areJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: 
- Who does what in an eye care clinic? More roles than most people expect\,
-  and many need no university degree.
+SUMMARY:Instagram + Facebook: Reel: Just finished optometry school? (new O
+ Ds)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/new-od-reel.mp4 · cover design/social-and-mer
+ ch/instagram-guides/new-od-reel-cover.jpg (Edit cover\, Add from camera r
+ oll)\n- Post again in April or May\, when final year students are decidin
+ g.\n- Share on LinkedIn and Reddit too.\n- Facebook: before sharing\, tur
+ n on Share to Facebook so it also goes to the kestreleye26 Page. Nothing 
+ else to post there.\n\nCAPTION (copy and paste):\nJust finished optometry
+  school? Here's what's next.\n\nFirst\, pass your board exam and register
+  with the college in the province you'll practise in. Then choose your pa
+ th. Most new ODs consider associate work in an independent practice\, cor
+ porate or retail optical\, locum work\, and their own practice later on.\
+ n\nPay comes as a day rate\, a salary\, or a percentage of billings. On K
+ estrel Eye Care Jobs\, a job paid by percentage must also show the expect
+ ed earnings in dollars\, so you can compare offers before you apply.\n\nC
+ reate your account\, pick Optometrist and your province\, and we'll email
+  you when jobs that fit are posted. Pre launch is open: link in bio.\n\n#
+ Optometry #Optometrist #NewGrad #OptometryStudent #EyeCareJobs\n\nALT TEX
+ T (Advanced settings\, Accessibility):\nA short animation for new optomet
+ rists. Text reads: Just finished optometry school? Here's what's next. Fi
+ rst\, get licensed: pass your board exam\, register with the college in t
+ he province you'll practise in. 4 paths most new ODs consider: associate 
+ in an independent practice\, corporate or retail optical\, locum work\, y
+ our own practice later. How you'll be paid: a day rate\, a salary\, or a 
+ percentage of billings. On Kestrel\, a job paid by percentage must also s
+ how the expected earnings in dollars.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 18: Who does what
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Just finished optometry
+  school? (new ODs)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261215-becoming-an-optician-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261215T080000
-DTEND;TZID=America/Toronto:20261215T083000
-SUMMARY:Facebook: Becoming an optician
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L8\, without the hashtags.\n- Check the link opens before p
- osting. Facebook makes the link pressable\, so leave it in the text.\n\nP
- OST (copy and paste):\nThe exam is national\, but the licence is provinci
- al.\n\nOpticians are regulated in every province. Most people reach the s
- ame 2 national exams\, Optical Sciences 1 for eyeglasses and Optical Scie
- nces 2 for contact lenses\, through an accredited college program or a pr
- ior learning assessment. Then each province adds its own steps.\n\nOur gu
- ide covers what each regulator asks\, checked in November 2026. Confirm w
- ith your regulator before you apply.\n\nhttps://eyecarejobs.ca/blog/how-t
- o-become-an-optician-canada?utm_source=facebook&utm_medium=social&utm_cam
- paign=2026-12-become-optician
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Becoming an optician
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261215-reel-guess-the-pay-optician-nova-scotia-v2@eye
- carejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261215-post-18-who-does-what-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261215T190000
 DTEND;TZID=America/Toronto:20261215T193000
-SUMMARY:Instagram: Reel: Guess the pay\, optician\, Nova Scotia
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/guess-the-pay-3.mp4 · cover design/social-and-merch/instagram-guid
- es/guess-the-pay-3-cover.jpg (Edit cover\, Add from camera roll)\n- Befor
- e sharing\, turn on Share to Facebook so it also goes to the Facebook Pag
- e (the same video\, no extra work).\n\nCAPTION (copy and paste):\nGuess t
- he pay: optician\, Nova Scotia.\n\nA\, B or C? Comment your guess before 
- you watch to the end.\n\nThe typical (median) pay for an optician in Nova
-  Scotia is $30.00 an hour\, and half earn between $25.00 and $40.00\, one
-  of the widest spreads in Canada.\n\nOn Kestrel Eye Care Jobs\, you'll ne
- ver have to guess: every job shows its pay. Pre launch is open. Create yo
- ur account: link in bio.\n\nSource: Job Bank wages\, Employment and Socia
- l Development Canada (Labour Force Survey 2024 to 2025). Contains informa
- tion licensed under the Open Government Licence – Canada.\n\n#Opticians
-  #OpticianPay #EyeCareJobs #NovaScotiaJobs #PayTransparency\n\nALT TEXT (
- Advanced settings\, Accessibility):\nA short quiz animation. Text reads: 
- Guess the pay. Optician\, Nova Scotia. A\, $22 an hour. B\, $26 an hour. 
- C\, $30 an hour. After a 5 second countdown\, C is revealed: typical (med
- ian) pay $30.00 an hour. Half of opticians in Nova Scotia earn between $2
- 5.00 and $40.00 an hour. Then: On Kestrel\, you'll never have to guess. E
- very job shows its pay.
+SUMMARY:Instagram + Facebook: Post 18: Who does what
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 18 2026-12-14 Who doe
+ s what.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing
+ \, turn on Share to Facebook so it also goes to the kestreleye26 Page. No
+ thing else to post there.\n\nCAPTION (copy and paste):\nIf you have only 
+ ever been on the patient side of an eye exam\, a clinic can look like a h
+ andful of jobs. There are more than most people expect.\n\nOptometrists e
+ xamine eyes and prescribe. Opticians fit and adjust glasses and\, dependi
+ ng on the province\, contact lenses. Optometric assistants and technician
+ s run the first tests and keep the day moving. Reception and patient care
+  teams book\, greet and handle insurance. Practice managers look after th
+ e team and the numbers. Behind them are labs\, frame companies and suppli
+ ers.\n\nMany of these roles need no university degree. Full guide: link i
+ n bio.\n\n#EyeCareCareers #Optometry #Opticians #OptometricAssistant #Eye
+ CareJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide:
+  Who does what in an eye care clinic? More roles than most people expect\
+ , and many need no university degree.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, optician\, Nova Sc
- otia
+DESCRIPTION:Post now: Instagram + Facebook\, Post 18: Who does what
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261216-reel-follow-the-feather-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261216-reel-guess-the-pay-optician-nova-scotia-v2@eye
+ carejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261216T190000
 DTEND;TZID=America/Toronto:20261216T193000
-SUMMARY:Instagram: Reel: Follow the feather
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/follow-feather-reel.mp4 · cover design/social-and-merch/instagram-
- guides/follow-feather-reel-cover.jpg (Edit cover\, Add from camera roll)\
- n- Before sharing\, turn on Share to Facebook so it also goes to the Face
- book Page (the same video\, no extra work).\n\nCAPTION (copy and paste):\
- nFollow the feather to your next job in eye care.\n\n1. Pick your role: o
- ptometrist\, optician\, optometric assistant\, front desk or practice man
- ager.\n2. Pick your province.\n3. Get an alert: we'll email you when a jo
- b that fits is posted.\n4. See the pay first: every job on Kestrel shows 
- its pay.\n\nPre launch is open. Create your account: link in bio.\n\n#Eye
- CareJobs #Optometry #Opticians #OptometricAssistant #CanadaJobs\n\nALT TE
- XT (Advanced settings\, Accessibility):\nA short animation on cream. A ch
- estnut feather drifts down. Text reads: Follow the feather to your next j
- ob in eye care. The feather lands on each step: 1\, pick your role\, Opti
- cian. 2\, pick your province\, Alberta. 3\, get an alert\, a bell rings. 
- 4\, see the pay first\, a job card showing $27 to $33 an hour. The feathe
- r settles into the Kestrel logo as the leg of the K. Text reads: Follow t
- he feather. Pre launch is open.
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, optician\, Nova Scotia
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-3.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-3-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- Facebook: before sharing\, turn on Share to Facebook so i
+ t also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPT
+ ION (copy and paste):\nGuess the pay: optician\, Nova Scotia.\n\nA\, B or
+  C? Comment your guess before you watch to the end.\n\nThe typical (media
+ n) pay for an optician in Nova Scotia is $30.00 an hour\, and half earn b
+ etween $25.00 and $40.00\, one of the widest spreads in Canada.\n\nOn Kes
+ trel Eye Care Jobs\, you'll never have to guess: every job shows its pay.
+  Pre launch is open. Create your account: link in bio.\n\nSource: Job Ban
+ k wages\, Employment and Social Development Canada (Labour Force Survey 2
+ 024 to 2025). Contains information licensed under the Open Government Lic
+ ence – Canada.\n\n#Opticians #OpticianPay #EyeCareJobs #NovaScotiaJobs 
+ #PayTransparency\n\nALT TEXT (Advanced settings\, Accessibility):\nA shor
+ t quiz animation. Text reads: Guess the pay. Optician\, Nova Scotia. A\, 
+ $22 an hour. B\, $26 an hour. C\, $30 an hour. After a 5 second countdown
+ \, C is revealed: typical (median) pay $30.00 an hour. Half of opticians 
+ in Nova Scotia earn between $25.00 and $40.00 an hour. Then: On Kestrel\,
+  you'll never have to guess. Every job shows its pay.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Follow the feather
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, opticia
+ n\, Nova Scotia
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261216-l10-assistant-courses-and-certification-v2@eye
  carejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261216T080000
 DTEND;TZID=America/Toronto:20261216T083000
 SUMMARY:LinkedIn: L10. Assistant courses and certification
@@ -1357,55 +1267,71 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261217-post-19-assistant-certification-v2@eyecarejobs
- .ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261217-reel-follow-the-feather-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261217T190000
 DTEND;TZID=America/Toronto:20261217T193000
-SUMMARY:Instagram: Post 19: Assistant certification
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 19 2026-12-17 Assistant certification.png 
- (folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nOptometr
- ic assistants do not need a licence in any province. So what helps you ge
- t hired\, and grow once you are in?\n\nTraining on the job\, the CCOA pro
- gram from the Canadian Association of Optometrists\, or a college certifi
- cate: our guide compares the 3.\n\nFull guide: link in bio.\n\n#Optometri
- cAssistant #EyeCareJobs #Optometry #CareerChange #CanadaJobs\n\nALT TEXT 
- (Advanced settings\, Accessibility):\nKestrel guide: Optometric assistant
- s: no licence\, 3 ways in. Training on the job. The CCOA program. A colle
- ge certificate.
+SUMMARY:Instagram + Facebook: Reel: Follow the feather
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/follow-feather-reel.mp4 · cover design/social
+ -and-merch/instagram-guides/follow-feather-reel-cover.jpg (Edit cover\, A
+ dd from camera roll)\n- Facebook: before sharing\, turn on Share to Faceb
+ ook so it also goes to the kestreleye26 Page. Nothing else to post there.
+ \n\nCAPTION (copy and paste):\nFollow the feather to your next job in eye
+  care.\n\n1. Pick your role: optometrist\, optician\, optometric assistan
+ t\, front desk or practice manager.\n2. Pick your province.\n3. Get an al
+ ert: we'll email you when a job that fits is posted.\n4. See the pay firs
+ t: every job on Kestrel shows its pay.\n\nPre launch is open. Create your
+  account: link in bio.\n\n#EyeCareJobs #Optometry #Opticians #OptometricA
+ ssistant #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA 
+ short animation on cream. A chestnut feather drifts down. Text reads: Fol
+ low the feather to your next job in eye care. The feather lands on each s
+ tep: 1\, pick your role\, Optician. 2\, pick your province\, Alberta. 3\,
+  get an alert\, a bell rings. 4\, see the pay first\, a job card showing 
+ $27 to $33 an hour. The feather settles into the Kestrel logo as the leg 
+ of the K. Text reads: Follow the feather. Pre launch is open.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 19: Assistant certification
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Follow the feather
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261218-story-poll-clinic-owners-where-do-your-best-hi
- res-come-from-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261218-post-19-assistant-certification-v2@eyecarejobs
+ .ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261218T190000
 DTEND;TZID=America/Toronto:20261218T193000
-SUMMARY:Instagram: Story poll: Clinic owners\, where do your best hires co
- me from?
-LOCATION:Instagram @kestreleye26
-DESCRIPTION:Where: Instagram @kestreleye26\nType: Story with a poll sticke
- r (add the sticker in the app\, in the empty space below the drawing)\nFi
- le: design/social-and-merch/instagram-guides/story-poll-5-where-staff-com
- e-from.png\n- Screenshot the result: it tells you how clinics really hire
- .\n\nCAPTION (copy and paste):\nPoll options: Word of mouth / Job sites
+SUMMARY:Instagram + Facebook: Post 19: Assistant certification
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 19 2026-12-17 Assista
+ nt certification.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: befo
+ re sharing\, turn on Share to Facebook so it also goes to the kestreleye2
+ 6 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nOptomet
+ ric assistants do not need a licence in any province. So what helps you g
+ et hired\, and grow once you are in?\n\nTraining on the job\, the CCOA pr
+ ogram from the Canadian Association of Optometrists\, or a college certif
+ icate: our guide compares the 3.\n\nFull guide: link in bio.\n\n#Optometr
+ icAssistant #EyeCareJobs #Optometry #CareerChange #CanadaJobs\n\nALT TEXT
+  (Advanced settings\, Accessibility):\nKestrel guide: Optometric assistan
+ ts: no licence\, 3 ways in. Training on the job. The CCOA program. A coll
+ ege certificate.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Story poll: Clinic owners\, where do you
- r best hires come from?
+DESCRIPTION:Post now: Instagram + Facebook\, Post 19: Assistant certificat
+ ion
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261218-r9-optometric-assistants-how-did-you-learn-the
  -job-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261218T080000
 DTEND;TZID=America/Toronto:20261218T083000
 SUMMARY:Reddit: R9. Optometric assistants: how did you learn the job?
@@ -1434,120 +1360,150 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261219-reel-guess-the-pay-practice-manager-ontario-v2
- @eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261219T190000
-DTEND;TZID=America/Toronto:20261219T193000
-SUMMARY:Instagram: Reel: Guess the pay\, practice manager\, Ontario
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: OFF\nFile: design/social-and-merch/instagram-g
- uides/guess-the-pay-4.mp4 · cover design/social-and-merch/instagram-guid
- es/guess-the-pay-4-cover.jpg (Edit cover\, Add from camera roll)\n- CHECK
- : this uses Job Bank's closest group for practice managers\, still waitin
- g for Steve's 5 minute check on Job Bank (docs/pay-benchmark.md). If you'
- d rather not use it yet\, ask Claude to swap it for Optician\, British Co
- lumbia.\n- Before sharing\, turn on Share to Facebook so it also goes to 
- the Facebook Page (the same video\, no extra work).\n\nCAPTION (copy and 
- paste):\nGuess the pay: practice manager\, Ontario.\n\nA\, B or C? Commen
- t your guess before you watch to the end.\n\nThe typical (median) pay for
-  office and administrative supervisors in Ontario\, the closest Job Bank 
- group to a practice manager\, is $35.75 an hour\, and half earn between $
- 29.00 and $46.00.\n\nOn Kestrel Eye Care Jobs\, you'll never have to gues
- s: every job shows its pay. Pre launch is open. Create your account: link
-  in bio.\n\nSource: Job Bank wages\, Employment and Social Development Ca
- nada (Labour Force Survey 2024 to 2025). Contains information licensed un
- der the Open Government Licence – Canada.\n\n#PracticeManagement #EyeCa
- reJobs #OntarioJobs #PayTransparency #Optometry\n\nALT TEXT (Advanced set
- tings\, Accessibility):\nA short quiz animation. Text reads: Guess the pa
- y. Practice manager\, Ontario. A\, $36 an hour. B\, $27 an hour. C\, $45 
- an hour. After a 5 second countdown\, A is revealed: typical (median) pay
-  $35.75 an hour. Half of office and administrative supervisors in Ontario
-  earn between $29.00 and $46.00 an hour. Then: On Kestrel\, you'll never 
- have to guess. Every job shows its pay.
+UID:kestrel-social-20261219-story-poll-clinic-owners-where-do-your-best-hi
+ res-come-from-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261219T120000
+DTEND;TZID=America/Toronto:20261219T123000
+SUMMARY:Instagram + Facebook: Story poll: Clinic owners\, where do your be
+ st hires come from?
+LOCATION:Instagram @kestreleye26\, shared to Facebook
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\nType: Sto
+ ry with a poll sticker (add the sticker in the app\, in the empty space b
+ elow the drawing)\nFile: design/social-and-merch/instagram-guides/story-p
+ oll-5-where-staff-come-from.png\n- Screenshot the result: it tells you ho
+ w clinics really hire.\n- Facebook: tap Share to Facebook story (or set i
+ t to share automatically once).\n\nCAPTION (copy and paste):\nPoll option
+ s: Word of mouth / Job sites
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Guess the pay\, practice manager\,
-  Ontario
+DESCRIPTION:Post now: Instagram + Facebook\, Story poll: Clinic owners\, w
+ here do your best hires come from?
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261219-reel-guess-the-pay-practice-manager-ontario-v2
+ @eyecarejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261219T190000
+DTEND;TZID=America/Toronto:20261219T193000
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, practice manager\, Ont
+ ario
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-4.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-4-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- CHECK: this uses Job Bank's closest group for practice ma
+ nagers\, still waiting for Steve's 5 minute check on Job Bank (docs/pay-b
+ enchmark.md). If you'd rather not use it yet\, ask Claude to swap it for 
+ Optician\, British Columbia.\n- Facebook: before sharing\, turn on Share 
+ to Facebook so it also goes to the kestreleye26 Page. Nothing else to pos
+ t there.\n\nCAPTION (copy and paste):\nGuess the pay: practice manager\, 
+ Ontario.\n\nA\, B or C? Comment your guess before you watch to the end.\n
+ \nThe typical (median) pay for office and administrative supervisors in O
+ ntario\, the closest Job Bank group to a practice manager\, is $35.75 an 
+ hour\, and half earn between $29.00 and $46.00.\n\nOn Kestrel Eye Care Jo
+ bs\, you'll never have to guess: every job shows its pay. Pre launch is o
+ pen. Create your account: link in bio.\n\nSource: Job Bank wages\, Employ
+ ment and Social Development Canada (Labour Force Survey 2024 to 2025). Co
+ ntains information licensed under the Open Government Licence – Canada.
+ \n\n#PracticeManagement #EyeCareJobs #OntarioJobs #PayTransparency #Optom
+ etry\n\nALT TEXT (Advanced settings\, Accessibility):\nA short quiz anima
+ tion. Text reads: Guess the pay. Practice manager\, Ontario. A\, $36 an h
+ our. B\, $27 an hour. C\, $45 an hour. After a 5 second countdown\, A is 
+ revealed: typical (median) pay $35.75 an hour. Half of office and adminis
+ trative supervisors in Ontario earn between $29.00 and $46.00 an hour. Th
+ en: On Kestrel\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, practic
+ e manager\, Ontario
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261220-post-20-photo-opening-soon-pre-launch-is-open-
+ v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261220T190000
+DTEND;TZID=America/Toronto:20261220T193000
+SUMMARY:Instagram + Facebook: Post 20: Photo: Opening soon\, pre launch is
+  open
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: Canva photo post: swa
+ p in the new panel design/social-and-merch/instagram-guides/p03-opening-s
+ oon.png over the same photo\n- The old version of this image said Join th
+ e waitlist. Use the new panel.\n- Facebook: before sharing\, turn on Shar
+ e to Facebook so it also goes to the kestreleye26 Page. Nothing else to p
+ ost there.\n\nCAPTION (copy and paste):\nKestrel Eye Care Jobs opens in e
+ arly 2027\, and pre launch is open now. Create your account\, set up your
+  profile and job alerts\, and be first to see eye care jobs across Canada
+ \, every one with its pay.\n\nLink in bio.\n\n#EyeCareJobs #Optometry #Op
+ ticians #CanadaJobs #EyeCare\n\nALT TEXT (Advanced settings\, Accessibili
+ ty):\nText reads: Opening soon. Pre launch is open. Create your account: 
+ link in bio. Eye care jobs across Canada\, every one with its pay. eyecar
+ ejobs.ca. Photo of an optometrist fitting a trial frame on a patient.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Post 20: Photo: Opening soon\
+ , pre launch is open
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261220-story-poll-round-or-square-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261220T190000
-DTEND;TZID=America/Toronto:20261220T193000
-SUMMARY:Instagram: Story poll: Round or square?
-LOCATION:Instagram @kestreleye26
-DESCRIPTION:Where: Instagram @kestreleye26\nType: Story with a poll sticke
- r (add the sticker in the app\, in the empty space below the drawing)\nFi
- le: design/social-and-merch/instagram-guides/story-poll-2-round-or-square
- .png\n\nCAPTION (copy and paste):\nPoll options: Round / Square
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261220T120000
+DTEND;TZID=America/Toronto:20261220T123000
+SUMMARY:Instagram + Facebook: Story poll: Round or square?
+LOCATION:Instagram @kestreleye26\, shared to Facebook
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\nType: Sto
+ ry with a poll sticker (add the sticker in the app\, in the empty space b
+ elow the drawing)\nFile: design/social-and-merch/instagram-guides/story-p
+ oll-2-round-or-square.png\n- Facebook: tap Share to Facebook story (or se
+ t it to share automatically once).\n\nCAPTION (copy and paste):\nPoll opt
+ ions: Round / Square
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Story poll: Round or square?
+DESCRIPTION:Post now: Instagram + Facebook\, Story poll: Round or square?
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261221-post-20-photo-opening-soon-pre-launch-is-open-
- v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+UID:kestrel-social-20261221-post-21-questions-to-ask-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261221T190000
 DTEND;TZID=America/Toronto:20261221T193000
-SUMMARY:Instagram: Post 20: Photo: Opening soon\, pre launch is open
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: Canva photo post: swap in the new panel de
- sign/social-and-merch/instagram-guides/p03-opening-soon.png over the same
-  photo\n- The old version of this image said Join the waitlist. Use the n
- ew panel.\n\nCAPTION (copy and paste):\nKestrel Eye Care Jobs opens in ea
- rly 2027\, and pre launch is open now. Create your account\, set up your 
- profile and job alerts\, and be first to see eye care jobs across Canada\
- , every one with its pay.\n\nLink in bio.\n\n#EyeCareJobs #Optometry #Opt
- icians #CanadaJobs #EyeCare\n\nALT TEXT (Advanced settings\, Accessibilit
- y):\nText reads: Opening soon. Pre launch is open. Create your account: l
- ink in bio. Eye care jobs across Canada\, every one with its pay. eyecare
- jobs.ca. Photo of an optometrist fitting a trial frame on a patient.
+SUMMARY:Instagram + Facebook: Post 21: Questions to ask
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 21 2026-12-28 Questio
+ ns to ask.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before shar
+ ing\, turn on Share to Facebook so it also goes to the kestreleye26 Page.
+  Nothing else to post there.\n\nCAPTION (copy and paste):\nAn interview r
+ uns both ways.\n\nBefore you accept an optician job\, ask about the patie
+ nts you will see\, the lab (in house or sent out)\, the hours and weekend
+ s\, how pay is set\, the training\, and who you will work beside every da
+ y.\n\nThe answers tell you more about a clinic than the job title does.\n
+ \nOur full list of questions: link in bio.\n\n#Opticians #Optician #JobIn
+ terview #EyeCareJobs #Optics\n\nALT TEXT (Advanced settings\, Accessibili
+ ty):\nKestrel guide: Questions to ask before you say yes. The patients\, 
+ the lab\, the hours\, the pay\, the training and the team.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 20: Photo: Opening soon\, pre launc
- h is open
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261222-assistant-courses-and-certification-v2@eyecare
- jobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261222T080000
-DTEND;TZID=America/Toronto:20261222T083000
-SUMMARY:Facebook: Assistant courses and certification
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L10\, without the hashtags.\n- Check the link opens before 
- posting. Facebook makes the link pressable\, so leave it in the text.\n\n
- POST (copy and paste):\nOptometric assistants do not need a licence in an
- y province. So why take a course?\n\nThere are 3 routes: training on the 
- job\, the CCOA program from the Canadian Association of Optometrists\, wh
- ich is open to people employed by a member optometrist\, and a college ce
- rtificate. A certificate will not replace a good clinic\, but it tells th
- e next one you took the job seriously.\n\nThe 3 routes compared:\n\nhttps
- ://eyecarejobs.ca/blog/optometric-assistant-certification-canada?utm_sour
- ce=facebook&utm_medium=social&utm_campaign=2026-12-assistant-certificatio
- n
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Assistant courses and certification
+DESCRIPTION:Post now: Instagram + Facebook\, Post 21: Questions to ask
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261223-l12-independent-or-corporate-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261223T080000
 DTEND;TZID=America/Toronto:20261223T083000
 SUMMARY:LinkedIn: L12. Independent or corporate
@@ -1573,77 +1529,29 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20261228-post-21-questions-to-ask-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261228T190000
-DTEND;TZID=America/Toronto:20261228T193000
-SUMMARY:Instagram: Post 21: Questions to ask
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 21 2026-12-28 Questions to ask.png (folder
-  Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nAn interview ru
- ns both ways.\n\nBefore you accept an optician job\, ask about the patien
- ts you will see\, the lab (in house or sent out)\, the hours and weekends
- \, how pay is set\, the training\, and who you will work beside every day
- .\n\nThe answers tell you more about a clinic than the job title does.\n\
- nOur full list of questions: link in bio.\n\n#Opticians #Optician #JobInt
- erview #EyeCareJobs #Optics\n\nALT TEXT (Advanced settings\, Accessibilit
- y):\nKestrel guide: Questions to ask before you say yes. The patients\, t
- he lab\, the hours\, the pay\, the training and the team.
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 21: Questions to ask
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20261229-independent-or-corporate-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261229T080000
-DTEND;TZID=America/Toronto:20261229T083000
-SUMMARY:Facebook: Independent or corporate
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L12\, without the hashtags.\n- Check the link opens before 
- posting. Facebook makes the link pressable\, so leave it in the text.\n\n
- POST (copy and paste):\nIndependent practice or corporate group? Neither 
- is better\, but they feel different to work in.\n\nIndependent clinics of
- ten give more say over products and how the day runs\, with a smaller tea
- m and a wider range of tasks. Groups tend to have written systems\, defin
- ed steps to move up and more locations to move between.\n\nWhat matters i
- s which suits you. The questions worth asking are on the blog. Which have
-  you worked in?\n\nhttps://eyecarejobs.ca/blog/independent-or-corporate-e
- ye-care?utm_source=facebook&utm_medium=social&utm_campaign=2026-12-indepe
- ndent-or-corporate
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Independent or corporate
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
 UID:kestrel-social-20261229-story-poll-the-puff-or-the-drops-v2@eyecarejob
  s.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20261229T190000
-DTEND;TZID=America/Toronto:20261229T193000
-SUMMARY:Instagram: Story poll: The puff or the drops?
-LOCATION:Instagram @kestreleye26
-DESCRIPTION:Where: Instagram @kestreleye26\nType: Story with a poll sticke
- r (add the sticker in the app\, in the empty space below the drawing)\nFi
- le: design/social-and-merch/instagram-guides/story-poll-3-puff-or-drops.p
- ng\n\nCAPTION (copy and paste):\nPoll options: The puff / The drops
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20261229T120000
+DTEND;TZID=America/Toronto:20261229T123000
+SUMMARY:Instagram + Facebook: Story poll: The puff or the drops?
+LOCATION:Instagram @kestreleye26\, shared to Facebook
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\nType: Sto
+ ry with a poll sticker (add the sticker in the app\, in the empty space b
+ elow the drawing)\nFile: design/social-and-merch/instagram-guides/story-p
+ oll-3-puff-or-drops.png\n- Facebook: tap Share to Facebook story (or set 
+ it to share automatically once).\n\nCAPTION (copy and paste):\nPoll optio
+ ns: The puff / The drops
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Story poll: The puff or the drops?
+DESCRIPTION:Post now: Instagram + Facebook\, Story poll: The puff or the d
+ rops?
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261230-l13-moving-to-canada-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20261230T080000
 DTEND;TZID=America/Toronto:20261230T083000
 SUMMARY:LinkedIn: L13. Moving to Canada
@@ -1670,7 +1578,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270104-monthly-numbers-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270104T090000
 DTEND;TZID=America/Toronto:20270104T093000
 SUMMARY:Check: Monthly numbers
@@ -1693,75 +1601,55 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270104-post-22-things-heard-your-turn-v2@eyecarejobs.
  ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270104T190000
 DTEND;TZID=America/Toronto:20270104T193000
-SUMMARY:Instagram: Post 22: Things heard: Your turn
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 22 2027-01-04 Things heard Your turn.png (
- folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nYour turn
- . Answers in the comments\, and the best ones may become a future post.\n
- \n#optometry #optician #optometrist #eyecare #opticianlife #optometrylife
-  #eyecarecanada #optometricassistant\n\nALT TEXT (Advanced settings\, Acc
- essibility):\nThings heard in clinic\, your turn: Finish the sentence. Th
- e thing I say most in clinic is\, followed by a blank line. Underneath: T
- ell us in the comments.
+SUMMARY:Instagram + Facebook: Post 22: Things heard: Your turn
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 22 2027-01-04 Things 
+ heard Your turn.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: befor
+ e sharing\, turn on Share to Facebook so it also goes to the kestreleye26
+  Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nYour tur
+ n. Answers in the comments\, and the best ones may become a future post.\
+ n\n#optometry #optician #optometrist #eyecare #opticianlife #optometrylif
+ e #eyecarecanada #optometricassistant\n\nALT TEXT (Advanced settings\, Ac
+ cessibility):\nThings heard in clinic\, your turn: Finish the sentence. T
+ he thing I say most in clinic is\, followed by a blank line. Underneath: 
+ Tell us in the comments.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 22: Things heard: Your turn
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20270105-moving-to-canada-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20270105T080000
-DTEND;TZID=America/Toronto:20270105T083000
-SUMMARY:Facebook: Moving to Canada
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L13\, without the hashtags.\n- Check the link opens before 
- posting. Facebook makes the link pressable\, so leave it in the text.\n\n
- POST (copy and paste):\nIf you trained in eye care abroad\, your skills a
- re in demand here. The first step is almost always the same: ask the regu
- lator.\n\nOptometrists and opticians must be registered in the province w
- here they work\, and the process differs between provinces. Ask which doc
- uments and exams are needed\, how long it takes\, and whether you can wor
- k in a related role while it is under way.\n\nA general guide\, not legal
-  or immigration advice:\n\nhttps://eyecarejobs.ca/blog/eye-care-moving-to
- -canada?utm_source=facebook&utm_medium=social&utm_campaign=2026-12-moving
- -to-canada
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Moving to Canada
+DESCRIPTION:Post now: Instagram + Facebook\, Post 22: Things heard: Your t
+ urn
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270105-story-poll-glasses-or-contacts-v2@eyecarejobs.
  ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20270105T190000
-DTEND;TZID=America/Toronto:20270105T193000
-SUMMARY:Instagram: Story poll: Glasses or contacts?
-LOCATION:Instagram @kestreleye26
-DESCRIPTION:Where: Instagram @kestreleye26\nType: Story with a poll sticke
- r (add the sticker in the app\, in the empty space below the drawing)\nFi
- le: design/social-and-merch/instagram-guides/story-poll-6-glasses-or-cont
- acts.png\n\nCAPTION (copy and paste):\nPoll options: Glasses / Contacts
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20270105T120000
+DTEND;TZID=America/Toronto:20270105T123000
+SUMMARY:Instagram + Facebook: Story poll: Glasses or contacts?
+LOCATION:Instagram @kestreleye26\, shared to Facebook
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\nType: Sto
+ ry with a poll sticker (add the sticker in the app\, in the empty space b
+ elow the drawing)\nFile: design/social-and-merch/instagram-guides/story-p
+ oll-6-glasses-or-contacts.png\n- Facebook: tap Share to Facebook story (o
+ r set it to share automatically once).\n\nCAPTION (copy and paste):\nPoll
+  options: Glasses / Contacts
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Story poll: Glasses or contacts?
+DESCRIPTION:Post now: Instagram + Facebook\, Story poll: Glasses or contac
+ ts?
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270106-l14-from-the-clinic-to-the-road-supplier-roles
  -v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270106T080000
 DTEND;TZID=America/Toronto:20270106T083000
 SUMMARY:LinkedIn: L14. From the clinic to the road (supplier roles)
@@ -1790,7 +1678,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270108-r10-what-would-make-2027-a-better-year-for-wor
  king-or-hiring-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270108T080000
 DTEND;TZID=America/Toronto:20270108T083000
 SUMMARY:Reddit: R10. What would make 2027 a better year for working or hir
@@ -1819,59 +1707,34 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270111-post-23-supplier-role-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270111T190000
 DTEND;TZID=America/Toronto:20270111T193000
-SUMMARY:Instagram: Post 23: Supplier role
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 23 2027-01-11 Supplier role.png (folder Ke
- strel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nEvery week a rep w
- alks into the clinic with a sample case. Ever wondered whether you could 
- do the job?\n\nOur guide covers what carries over from the clinic\, what 
- changes on the road\, and how to make the move.\n\nFull guide: link in bi
- o.\n\n#EyeCareJobs #Opticians #FieldSales #OpticalIndustry #CareerChange\
- n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: From the
-  clinic to the road. What changes when you move into a lens rep\, trainer
-  or supplier role.
+SUMMARY:Instagram + Facebook: Post 23: Supplier role
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 23 2027-01-11 Supplie
+ r role.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing
+ \, turn on Share to Facebook so it also goes to the kestreleye26 Page. No
+ thing else to post there.\n\nCAPTION (copy and paste):\nEvery week a rep 
+ walks into the clinic with a sample case. Ever wondered whether you could
+  do the job?\n\nOur guide covers what carries over from the clinic\, what
+  changes on the road\, and how to make the move.\n\nFull guide: link in b
+ io.\n\n#EyeCareJobs #Opticians #FieldSales #OpticalIndustry #CareerChange
+ \n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: From th
+ e clinic to the road. What changes when you move into a lens rep\, traine
+ r or supplier role.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 23: Supplier role
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20270112-from-the-clinic-to-the-road-supplier-roles-v2@
- eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20270112T080000
-DTEND;TZID=America/Toronto:20270112T083000
-SUMMARY:Facebook: From the clinic to the road (supplier roles)
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L14\, without the hashtags.\n- Check the link opens before 
- posting. Facebook makes the link pressable\, so leave it in the text.\n\n
- POST (copy and paste):\nEvery week a rep walks into your clinic with a sa
- mple case. Many of them started exactly where you are.\n\nLens labs\, fra
- me companies and contact lens makers hire people who know clinics\, becau
- se knowing why a remake hurts at 4 on a Saturday is hard to teach. What c
- hanges is the day: a territory\, pay that is often a base plus a share of
-  sales\, and much more time on your own.\n\nOur guide to making the move 
- well:\n\nhttps://eyecarejobs.ca/blog/clinic-to-lens-rep-supplier-role?utm
- _source=facebook&utm_medium=social&utm_campaign=2027-01-supplier-role
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, From the clinic to the road (supplier rol
- es)
+DESCRIPTION:Post now: Instagram + Facebook\, Post 23: Supplier role
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270113-l15-who-works-in-eye-care-the-census-v2@eyecar
  ejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270113T080000
 DTEND;TZID=America/Toronto:20270113T083000
 SUMMARY:LinkedIn: L15. Who works in eye care (the census)
@@ -1899,7 +1762,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270115-r11-most-optometrists-in-canada-under-35-are-w
  omen-and-most--v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270115T080000
 DTEND;TZID=America/Toronto:20270115T083000
 SUMMARY:Reddit: R11. Most optometrists in Canada under 35 are women\, and 
@@ -1934,59 +1797,35 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270118-post-24-who-works-in-eye-care-v2@eyecarejobs.c
  a
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270118T190000
 DTEND;TZID=America/Toronto:20270118T193000
-SUMMARY:Instagram: Post 24: Who works in eye care
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 24 2027-01-18 Who works in eye care.png (f
- older Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\n14% to 69%
- .\n\nThat is the share of optometrists in Canada who are women\, from tho
- se aged 65 and over to those aged 25 to 34\, in the 2021 Census. Optician
- s show the same shift.\n\nWhat it means for clinics and careers: link in 
- bio.\n\n#EyeCare #Optometry #Opticians #WomenInOptometry #CanadaJobs\n\nA
- LT TEXT (Advanced settings\, Accessibility):\nKestrel: 14% to 69%. The sh
- are of optometrists who are women: 14% of those 65 and over\, 69% of thos
- e aged 25 to 34. Source: Statistics Canada\, 2021 Census.
+SUMMARY:Instagram + Facebook: Post 24: Who works in eye care
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 24 2027-01-18 Who wor
+ ks in eye care.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before
+  sharing\, turn on Share to Facebook so it also goes to the kestreleye26 
+ Page. Nothing else to post there.\n\nCAPTION (copy and paste):\n14% to 69
+ %.\n\nThat is the share of optometrists in Canada who are women\, from th
+ ose aged 65 and over to those aged 25 to 34\, in the 2021 Census. Opticia
+ ns show the same shift.\n\nWhat it means for clinics and careers: link in
+  bio.\n\n#EyeCare #Optometry #Opticians #WomenInOptometry #CanadaJobs\n\n
+ ALT TEXT (Advanced settings\, Accessibility):\nKestrel: 14% to 69%. The s
+ hare of optometrists who are women: 14% of those 65 and over\, 69% of tho
+ se aged 25 to 34. Source: Statistics Canada\, 2021 Census.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 24: Who works in eye care
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
-UID:kestrel-social-20270119-who-works-in-eye-care-the-census-v2@eyecarejob
- s.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20270119T080000
-DTEND;TZID=America/Toronto:20270119T083000
-SUMMARY:Facebook: Who works in eye care (the census)
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- The same text as 
- LinkedIn post L15\, without the hashtags.\n- Check the link opens before 
- posting. Facebook makes the link pressable\, so leave it in the text.\n\n
- POST (copy and paste):\nAmong optometrists in Canada aged 65 and over\, a
- bout 1 in 7 is a woman. Among those aged 25 to 34\, it is more than 2 in 
- 3.\n\nThe 2021 census counted 6\,765 optometrists\, 59% of them women\, a
- nd 9\,775 opticians\, 70% of them women. As the older group retires\, the
-  people running clinics will look different\, which raises practical ques
- tions about leave\, part time hours and the path to partner.\n\nThe numbe
- rs by age and province:\n\nhttps://eyecarejobs.ca/blog/who-works-in-eye-c
- are-canada?utm_source=facebook&utm_medium=social&utm_campaign=2027-01-cen
- sus
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, Who works in eye care (the census)
+DESCRIPTION:Post now: Instagram + Facebook\, Post 24: Who works in eye car
+ e
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270120-l16-how-to-become-an-optometrist-v2@eyecarejob
  s.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270120T080000
 DTEND;TZID=America/Toronto:20270120T083000
 SUMMARY:LinkedIn: L16. How to become an optometrist
@@ -2014,38 +1853,41 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270121-find-us-post-extra-cream-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270121T190000
 DTEND;TZID=America/Toronto:20270121T193000
-SUMMARY:Instagram: Find us post (extra\, Cream)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image). Fits the grid between posts 24 and 25\nFile: des
- ign/social-and-merch/instagram-guides/find-us-a-grid.jpg\n- If the launch
-  date has been set by then\, swap early 2027 for the date.\n\nCAPTION (co
- py and paste):\nWe're in 4 places now\, so you can follow along wherever 
- you already spend your time.\n\nLinkedIn: Kestrel Eye Care Jobs. Hiring n
- ews and updates for clinic owners and managers.\nFacebook: kestreleye26\n
- Instagram: right here\, @kestreleye26\nReddit: r/EyeCareJobsCanada. A com
- munity for people who work in eye care and the clinics that hire them. As
- k questions\, compare notes\, share what works.\n\nThe job board opens in
-  early 2027\, with the pay shown on every job. Pre launch is open. Create
-  your account: link in bio.\n\n#EyeCareJobs #Optometry #Opticians #EyeCar
- eCanada #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nTex
- t reads: Find us here. Before we open. 4 tilted tiles with line icons for
-  LinkedIn\, Facebook\, Instagram and Reddit. Below: LinkedIn\, our compan
- y page. Facebook\, kestreleye26. Instagram\, @kestreleye26. Reddit\, r/Ey
- eCareJobsCanada. eyecarejobs.ca.
+SUMMARY:Instagram + Facebook: Find us post (extra\, Cream)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image). Fits the grid between posts
+  24 and 25\nFile: design/social-and-merch/instagram-guides/find-us-a-grid
+ .jpg\n- If the launch date has been set by then\, swap early 2027 for the
+  date.\n- Facebook: before sharing\, turn on Share to Facebook so it also
+  goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPTION (c
+ opy and paste):\nWe're in 4 places now\, so you can follow along wherever
+  you already spend your time.\n\nLinkedIn: Kestrel Eye Care Jobs. Hiring 
+ news and updates for clinic owners and managers.\nFacebook: kestreleye26\
+ nInstagram: right here\, @kestreleye26\nReddit: r/EyeCareJobsCanada. A co
+ mmunity for people who work in eye care and the clinics that hire them. A
+ sk questions\, compare notes\, share what works.\n\nThe job board opens i
+ n early 2027\, with the pay shown on every job. Pre launch is open. Creat
+ e your account: link in bio.\n\n#EyeCareJobs #Optometry #Opticians #EyeCa
+ reCanada #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nTe
+ xt reads: Find us here. Before we open. 4 tilted tiles with line icons fo
+ r LinkedIn\, Facebook\, Instagram and Reddit. Below: LinkedIn\, our compa
+ ny page. Facebook\, kestreleye26. Instagram\, @kestreleye26. Reddit\, r/E
+ yeCareJobsCanada. eyecarejobs.ca.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Find us post (extra\, Cream)
+DESCRIPTION:Post now: Instagram + Facebook\, Find us post (extra\, Cream)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270122-r12-becoming-an-optometrist-in-canada-the-degr
  ee-the-board-e-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270122T080000
 DTEND;TZID=America/Toronto:20270122T083000
 SUMMARY:Reddit: R12. Becoming an optometrist in Canada: the degree\, the b
@@ -2080,106 +1922,83 @@ TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270125-post-25-photo-every-job-shows-its-pay-launch-d
- ate-to-confirm-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20270125T190000
-DTEND;TZID=America/Toronto:20270125T193000
-SUMMARY:Instagram: Post 25: Photo: Every job shows its pay (launch date to
-  confirm)
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 25 2027-01-25 Photo Every job shows its pa
- y.png (folder Kestrel-Instagram-1-to-40)\n- Launch day. Before posting\, 
- check every claim is true today: sign up and posting are live.\n\nCAPTION
-  (copy and paste):\nKestrel Eye Care Jobs is open.\n\nEvery job on Kestre
- l shows its pay range. No "competitive salary"\, no guessing\, no awkward
-  question at the end of the interview. Clinics can post free while we lau
- nch.\n\nSee the jobs\, or post one: link in bio.\n\n#EyeCareJobs #PayTran
- sparency #Optometry #Opticians #CanadaJobs\n\nALT TEXT (Advanced settings
- \, Accessibility):\nText reads: Every job shows its pay. No guessing and 
- no "competitive salary". The range is on every post. eyecarejobs.ca. Phot
- o of an optician fitting tortoiseshell glasses on a young woman.
-BEGIN:VALARM
-ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 25: Photo: Every job shows its pay 
- (launch date to confirm)
-TRIGGER:PT0M
-END:VALARM
-END:VEVENT
-BEGIN:VEVENT
 UID:kestrel-social-20270125-reel-takes-flight-we-re-open-launch-date-to-co
  nfirm-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270125T190000
 DTEND;TZID=America/Toronto:20270125T193000
-SUMMARY:Instagram: Reel: Takes flight (we're open) (launch date to confirm
- )
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: R
- eel. Show in profile grid: ON\, then pin it in place of the logo post\nFi
- le: design/social-and-merch/instagram-guides/takes-flight-reel.mp4 · cov
- er design/social-and-merch/instagram-guides/takes-flight-reel-cover.jpg\n
- - Launch day only. Check every claim is true today: sign up and posting a
- re live.\n- Music: Arrival of the Birds again if your account allows it (
- the swell at about 15 seconds\, when the feather lands)\, or uplifting st
- rings from Instagram's library.\n- If launch moves\, move this with it.\n
- - Before sharing\, turn on Share to Facebook so it also goes to the Faceb
- ook Page (the same video\, no extra work).\n\nCAPTION (copy and paste):\n
- We're open.\n\nKestrel Eye Care Jobs is a Canada-wide job board built onl
- y for eye care: optometrists\, opticians\, optometric assistants\, techni
- cians\, practice managers and the people at the front desk. Independent c
- linics and corporate groups post side by side.\n\nEvery job shows its pay
- . Every post is read by a person before it goes live.\n\nLooking for your
-  next role\, or hiring for your clinic? Link in bio.\n\n#EyeCareJobs #Opt
- ometry #Opticians #OptometricAssistant #CanadaJobs\n\nALT TEXT (Advanced 
- settings\, Accessibility):\nA short animation on cream. A stylized kestre
- l perches on a treetop in front of mountains and forest\, takes off and s
- woops across the screen twice. On its third pass a chestnut feather falls
-  from its tail and drifts down to the Kestrel wordmark\, where it settles
-  into place as the leg of the K. The full logo appears: Kestrel\, Eye Car
- e Jobs\, Canada-wide eye care job board. Text reads: Now open. Every job 
- shows its pay. Find your next role or post a job: link in bio. eyecarejob
- s.ca.
+SUMMARY:Instagram + Facebook: Reel: Takes flight (we're open) (launch date
+  to confirm)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: ON\, then pin it in place
+  of the logo post\nFile: design/social-and-merch/instagram-guides/takes-f
+ light-reel.mp4 · cover design/social-and-merch/instagram-guides/takes-fl
+ ight-reel-cover.jpg\n- Launch day only. Check every claim is true today: 
+ sign up and posting are live.\n- Music: Arrival of the Birds again if you
+ r account allows it (the swell at about 15 seconds\, when the feather lan
+ ds)\, or uplifting strings from Instagram's library.\n- If launch moves\,
+  move this with it.\n- Facebook: before sharing\, turn on Share to Facebo
+ ok so it also goes to the kestreleye26 Page. Nothing else to post there.\
+ n\nCAPTION (copy and paste):\nWe're open.\n\nKestrel Eye Care Jobs is a C
+ anada-wide job board built only for eye care: optometrists\, opticians\, 
+ optometric assistants\, technicians\, practice managers and the people at
+  the front desk. Independent clinics and corporate groups post side by si
+ de.\n\nEvery job shows its pay. Every post is read by a person before it 
+ goes live.\n\nLooking for your next role\, or hiring for your clinic? Lin
+ k in bio.\n\n#EyeCareJobs #Optometry #Opticians #OptometricAssistant #Can
+ adaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA short animati
+ on on cream. A stylized kestrel perches on a treetop in front of mountain
+ s and forest\, takes off and swoops across the screen twice. On its third
+  pass a chestnut feather falls from its tail and drifts down to the Kestr
+ el wordmark\, where it settles into place as the leg of the K. The full l
+ ogo appears: Kestrel\, Eye Care Jobs\, Canada-wide eye care job board. Te
+ xt reads: Now open. Every job shows its pay. Find your next role or post 
+ a job: link in bio. eyecarejobs.ca.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Reel: Takes flight (we're open) (launch 
- date to confirm)
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Takes flight (we're ope
+ n) (launch date to confirm)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
-UID:kestrel-social-20270126-how-to-become-an-optometrist-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
-DTSTART;TZID=America/Toronto:20270126T080000
-DTEND;TZID=America/Toronto:20270126T083000
-SUMMARY:Facebook: How to become an optometrist
-LOCATION:Facebook: the kestreleye26 Page (post as the Page\, not your prof
- ile)
-DESCRIPTION:Where: Facebook: the kestreleye26 Page (post as the Page\, not
-  your profile)\nType: Page post\, text with the link\n- Launch week: if t
- he launch is this week\, post the launch announcement first and move this
-  to the following week.\n- The same text as LinkedIn post L16\, without t
- he hashtags.\n- Check the link opens before posting. Facebook makes the l
- ink pressable\, so leave it in the text.\n\nPOST (copy and paste):\nBecom
- ing an optometrist in Canada takes 3 things: a Doctor of Optometry degree
- \, the national board exam and a licence from the province where you will
-  practise.\n\nThere are 2 schools\, Waterloo in English and Montréal in 
- French. If you are in your final year\, registration for the next OEBC ex
- am sitting runs from 4th January to 29th January 2027.\n\nEach step\, and
-  the routes for optometrists trained abroad:\n\nhttps://eyecarejobs.ca/bl
- og/how-to-become-an-optometrist-canada?utm_source=facebook&utm_medium=soc
- ial&utm_campaign=2027-01-become-optometrist
+UID:kestrel-social-20270126-post-25-photo-every-job-shows-its-pay-launch-d
+ ate-to-confirm-v2@eyecarejobs.ca
+DTSTAMP:20261122T151129Z
+DTSTART;TZID=America/Toronto:20270126T190000
+DTEND;TZID=America/Toronto:20270126T193000
+SUMMARY:Instagram + Facebook: Post 25: Photo: Every job shows its pay (lau
+ nch date to confirm)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 25 2027-01-25 Photo E
+ very job shows its pay.png (folder Kestrel-Instagram-1-to-40)\n- The day 
+ after launch. Before posting\, check every claim is true today: sign up a
+ nd posting are live.\n- Facebook: before sharing\, turn on Share to Faceb
+ ook so it also goes to the kestreleye26 Page. Nothing else to post there.
+ \n\nCAPTION (copy and paste):\nKestrel Eye Care Jobs is open.\n\nEvery jo
+ b on Kestrel shows its pay range. No "competitive salary"\, no guessing\,
+  no awkward question at the end of the interview. Clinics can post free w
+ hile we launch.\n\nSee the jobs\, or post one: link in bio.\n\n#EyeCareJo
+ bs #PayTransparency #Optometry #Opticians #CanadaJobs\n\nALT TEXT (Advanc
+ ed settings\, Accessibility):\nText reads: Every job shows its pay. No gu
+ essing and no "competitive salary". The range is on every post. eyecarejo
+ bs.ca. Photo of an optician fitting tortoiseshell glasses on a young woma
+ n.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Facebook\, How to become an optometrist
+DESCRIPTION:Post now: Instagram + Facebook\, Post 25: Photo: Every job sho
+ ws its pay (launch date to confirm)
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270127-l17-what-an-empty-optician-chair-costs-v2@eyec
  arejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270127T080000
 DTEND;TZID=America/Toronto:20270127T083000
 SUMMARY:LinkedIn: L17. What an empty optician chair costs
@@ -2208,7 +2027,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270129-r13-clinic-owners-and-managers-what-does-a-mon
  th-without-an--v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270129T080000
 DTEND;TZID=America/Toronto:20270129T083000
 SUMMARY:Reddit: R13. Clinic owners and managers: what does a month without
@@ -2243,366 +2062,416 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270208-post-26-becoming-an-optometrist-v2@eyecarejobs
  .ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270208T190000
 DTEND;TZID=America/Toronto:20270208T193000
-SUMMARY:Instagram: Post 26: Becoming an optometrist
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 26 2027-02-08 Becoming an optometrist.png 
- (folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\n2 school
- s\, 1 national board exam\, and a licence from your province. That is the
-  road to becoming an optometrist in Canada.\n\nOur guide walks through ea
- ch step\, the routes for optometrists trained abroad\, and where the jobs
-  are.\n\nFull guide: link in bio.\n\n#Optometry #OptometryStudent #Optome
- trist #EyeCareCareers #CanadaJobs\n\nALT TEXT (Advanced settings\, Access
- ibility):\nKestrel guide: Becoming an optometrist in Canada. 2 schools\, 
- 1 national board exam\, and a licence from your province.
+SUMMARY:Instagram + Facebook: Post 26: Becoming an optometrist
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 26 2027-02-08 Becomin
+ g an optometrist.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: befo
+ re sharing\, turn on Share to Facebook so it also goes to the kestreleye2
+ 6 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\n2 schoo
+ ls\, 1 national board exam\, and a licence from your province. That is th
+ e road to becoming an optometrist in Canada.\n\nOur guide walks through e
+ ach step\, the routes for optometrists trained abroad\, and where the job
+ s are.\n\nFull guide: link in bio.\n\n#Optometry #OptometryStudent #Optom
+ etrist #EyeCareCareers #CanadaJobs\n\nALT TEXT (Advanced settings\, Acces
+ sibility):\nKestrel guide: Becoming an optometrist in Canada. 2 schools\,
+  1 national board exam\, and a licence from your province.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 26: Becoming an optometrist
+DESCRIPTION:Post now: Instagram + Facebook\, Post 26: Becoming an optometr
+ ist
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270222-post-27-things-heard-no-3-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270222T190000
 DTEND;TZID=America/Toronto:20270222T193000
-SUMMARY:Instagram: Post 27: Things heard No. 3
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 27 2027-02-22 Things heard No. 3.png (fold
- er Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nIf you know\,
-  you know. What did your first autorefractor show you\, a house\, a ballo
- on or a barn?\n\n#optometry #optician #optometrist #eyecare #opticianlife
-  #optometrylife #eyecarecanada #optometricassistant\n\nALT TEXT (Advanced
-  settings\, Accessibility):\nThings heard in clinic\, No. 3: Just look at
-  the house. Underneath: It will go blurry. That's fine. A line drawing of
-  a road leading to a house\, on navy.
+SUMMARY:Instagram + Facebook: Post 27: Things heard No. 3
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 27 2027-02-22 Things 
+ heard No. 3.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sh
+ aring\, turn on Share to Facebook so it also goes to the kestreleye26 Pag
+ e. Nothing else to post there.\n\nCAPTION (copy and paste):\nIf you know\
+ , you know. What did your first autorefractor show you\, a house\, a ball
+ oon or a barn?\n\n#optometry #optician #optometrist #eyecare #opticianlif
+ e #optometrylife #eyecarecanada #optometricassistant\n\nALT TEXT (Advance
+ d settings\, Accessibility):\nThings heard in clinic\, No. 3: Just look a
+ t the house. Underneath: It will go blurry. That's fine. A line drawing o
+ f a road leading to a house\, on navy.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 27: Things heard No. 3
+DESCRIPTION:Post now: Instagram + Facebook\, Post 27: Things heard No. 3
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270308-post-28-empty-chair-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270308T190000
 DTEND;TZID=America/Toronto:20270308T193000
-SUMMARY:Instagram: Post 28: Empty chair
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 28 2027-03-08 Empty chair.png (folder Kest
- rel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nClinic owners: what 
- does an empty optician chair really cost?\n\nGlasses sales that walk out 
- with the prescription\, and exam time lost when your optometrist covers t
- he dispensary. Our guide shows the sums\, so you can work out yours.\n\nF
- ull guide: link in bio.\n\n#ClinicOwner #Optometry #Opticians #Hiring #Ey
- eCareJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide
-  for clinics: What does an empty optician chair cost? Glasses sales that 
- walk out\, and exam time lost. The sums\, so you can work out yours.
+SUMMARY:Instagram + Facebook: Post 28: Empty chair
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 28 2027-03-08 Empty c
+ hair.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing\,
+  turn on Share to Facebook so it also goes to the kestreleye26 Page. Noth
+ ing else to post there.\n\nCAPTION (copy and paste):\nClinic owners: what
+  does an empty optician chair really cost?\n\nGlasses sales that walk out
+  with the prescription\, and exam time lost when your optometrist covers 
+ the dispensary. Our guide shows the sums\, so you can work out yours.\n\n
+ Full guide: link in bio.\n\n#ClinicOwner #Optometry #Opticians #Hiring #E
+ yeCareJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guid
+ e for clinics: What does an empty optician chair cost? Glasses sales that
+  walk out\, and exam time lost. The sums\, so you can work out yours.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 28: Empty chair
+DESCRIPTION:Post now: Instagram + Facebook\, Post 28: Empty chair
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270322-post-29-attract-the-right-people-v2@eyecarejob
  s.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270322T190000
 DTEND;TZID=America/Toronto:20270322T193000
-SUMMARY:Instagram: Post 29: Attract the right people
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 29 2027-03-22 Attract the right people.png
-  (folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nGood ca
- ndidates choose clinics as much as clinics choose them.\n\nDescribe the r
- eal week\, not "fast paced\, friendly team". Put the pay range and the ho
- urs in the ad. Keep the application short\, and reply to everyone\, inclu
- ding the people you will not interview. A candidate who hears back in 2 d
- ays feels very different from one who hears nothing.\n\nFull guide: link 
- in bio.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optometry #PracticeManageme
- nt\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: How t
- o attract the right people to your clinic. Show the pay. Describe the rea
- l week. Reply to everyone.
+SUMMARY:Instagram + Facebook: Post 29: Attract the right people
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 29 2027-03-22 Attract
+  the right people.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: bef
+ ore sharing\, turn on Share to Facebook so it also goes to the kestreleye
+ 26 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nGood c
+ andidates choose clinics as much as clinics choose them.\n\nDescribe the 
+ real week\, not "fast paced\, friendly team". Put the pay range and the h
+ ours in the ad. Keep the application short\, and reply to everyone\, incl
+ uding the people you will not interview. A candidate who hears back in 2 
+ days feels very different from one who hears nothing.\n\nFull guide: link
+  in bio.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optometry #PracticeManagem
+ ent\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: How 
+ to attract the right people to your clinic. Show the pay. Describe the re
+ al week. Reply to everyone.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 29: Attract the right people
+DESCRIPTION:Post now: Instagram + Facebook\, Post 29: Attract the right pe
+ ople
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270405-post-30-resume-tips-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270405T190000
 DTEND;TZID=America/Toronto:20270405T193000
-SUMMARY:Instagram: Post 30: Resume tips
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 30 2027-04-05 Resume tips.png (folder Kest
- rel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nA resume for an eye 
- care job does not need to be fancy. A clean\, honest 1 or 2 pages gets re
- ad.\n\nPut your registration status near the top if the job needs it\, su
- ch as "Registered Optician\, Ontario" or "registration in progress". Add 
- 2 or 3 lines on who you are and what you offer. Be specific about the tes
- ts you have done\, the lenses you have fitted and the systems you use. Yo
- u do not need a photo\, your date of birth or your home address.\n\nFull 
- guide: link in bio.\n\n#EyeCareJobs #Resume #Opticians #OptometricAssista
- nt #JobSearch\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel g
- uide: 4 tips for an eye care resume. 1\, your registration status\, if th
- e job needs it. 2\, 2 or 3 lines on who you are. 3\, the tests\, lenses a
- nd systems you know. 4\, leave off your photo and date of birth.
+SUMMARY:Instagram + Facebook: Post 30: Resume tips
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 30 2027-04-05 Resume 
+ tips.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing\,
+  turn on Share to Facebook so it also goes to the kestreleye26 Page. Noth
+ ing else to post there.\n\nCAPTION (copy and paste):\nA resume for an eye
+  care job does not need to be fancy. A clean\, honest 1 or 2 pages gets r
+ ead.\n\nPut your registration status near the top if the job needs it\, s
+ uch as "Registered Optician\, Ontario" or "registration in progress". Add
+  2 or 3 lines on who you are and what you offer. Be specific about the te
+ sts you have done\, the lenses you have fitted and the systems you use. Y
+ ou do not need a photo\, your date of birth or your home address.\n\nFull
+  guide: link in bio.\n\n#EyeCareJobs #Resume #Opticians #OptometricAssist
+ ant #JobSearch\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel 
+ guide: 4 tips for an eye care resume. 1\, your registration status\, if t
+ he job needs it. 2\, 2 or 3 lines on who you are. 3\, the tests\, lenses 
+ and systems you know. 4\, leave off your photo and date of birth.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 30: Resume tips
+DESCRIPTION:Post now: Instagram + Facebook\, Post 30: Resume tips
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270419-post-31-eye-care-jobs-on-the-road-v2@eyecarejo
  bs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270419T190000
 DTEND;TZID=America/Toronto:20270419T193000
-SUMMARY:Instagram: Post 31: Eye care jobs on the road
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 31 2027-04-19 Eye care jobs on the road.pn
- g (folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nNot ev
- ery eye care job is in a clinic.\n\nLens and frame companies\, labs and e
- quipment makers hire sales reps\, clinical trainers\, field technicians a
- nd account managers\, and many of them started in a clinic.\n\nBefore you
-  say yes to a field role\, ask how big the territory is\, how much of the
-  pay is base\, and whether a vehicle comes with it.\n\nFull guide: link i
- n bio.\n\n#EyeCareJobs #Optometry #Opticians #FieldSales #CanadaJobs\n\nA
- LT TEXT (Advanced settings\, Accessibility):\nKestrel guide: Eye care job
- s on the road. Lens reps\, clinical trainers\, field technicians and acco
- unt managers. What they do\, and how to find the role.
+SUMMARY:Instagram + Facebook: Post 31: Eye care jobs on the road
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 31 2027-04-19 Eye car
+ e jobs on the road.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: be
+ fore sharing\, turn on Share to Facebook so it also goes to the kestreley
+ e26 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nNot e
+ very eye care job is in a clinic.\n\nLens and frame companies\, labs and 
+ equipment makers hire sales reps\, clinical trainers\, field technicians 
+ and account managers\, and many of them started in a clinic.\n\nBefore yo
+ u say yes to a field role\, ask how big the territory is\, how much of th
+ e pay is base\, and whether a vehicle comes with it.\n\nFull guide: link 
+ in bio.\n\n#EyeCareJobs #Optometry #Opticians #FieldSales #CanadaJobs\n\n
+ ALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: Eye care jo
+ bs on the road. Lens reps\, clinical trainers\, field technicians and acc
+ ount managers. What they do\, and how to find the role.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 31: Eye care jobs on the road
+DESCRIPTION:Post now: Instagram + Facebook\, Post 31: Eye care jobs on the
+  road
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270503-post-32-hire-for-attitude-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270503T190000
 DTEND;TZID=America/Toronto:20270503T193000
-SUMMARY:Instagram: Post 32: Hire for attitude
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 32 2027-05-03 Hire for attitude.png (folde
- r Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nSome of the be
- st people in eye care started somewhere else: retail\, hospitality\, a de
- ntal office\, a pharmacy counter.\n\nIf someone is warm with patients\, c
- areful with detail and keen to learn\, the technical side can be taught. 
- Our guide covers when hiring for attitude works\, when it does not\, and 
- how to train a new starter well.\n\nFull guide: link in bio.\n\n#EyeCareJ
- obs #Hiring #ClinicOwner #Optometry #Opticians\n\nALT TEXT (Advanced sett
- ings\, Accessibility):\nKestrel guide: Hire for attitude. Train for skill
- s. Many good eye care staff start out in retail\, hospitality or other he
- alth jobs.
+SUMMARY:Instagram + Facebook: Post 32: Hire for attitude
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 32 2027-05-03 Hire fo
+ r attitude.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sha
+ ring\, turn on Share to Facebook so it also goes to the kestreleye26 Page
+ . Nothing else to post there.\n\nCAPTION (copy and paste):\nSome of the b
+ est people in eye care started somewhere else: retail\, hospitality\, a d
+ ental office\, a pharmacy counter.\n\nIf someone is warm with patients\, 
+ careful with detail and keen to learn\, the technical side can be taught.
+  Our guide covers when hiring for attitude works\, when it does not\, and
+  how to train a new starter well.\n\nFull guide: link in bio.\n\n#EyeCare
+ Jobs #Hiring #ClinicOwner #Optometry #Opticians\n\nALT TEXT (Advanced set
+ tings\, Accessibility):\nKestrel guide: Hire for attitude. Train for skil
+ ls. Many good eye care staff start out in retail\, hospitality or other h
+ ealth jobs.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 32: Hire for attitude
+DESCRIPTION:Post now: Instagram + Facebook\, Post 32: Hire for attitude
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270517-post-33-phone-screenings-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270517T190000
 DTEND;TZID=America/Toronto:20270517T193000
-SUMMARY:Instagram: Post 33: Phone screenings
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 33 2027-05-17 Phone screenings.png (folder
-  Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nThe first call 
- is often short. It still decides who gets an interview.\n\nHave the job a
- d open\, a quiet spot to talk\, and 2 or 3 things you want them to know a
- bout you. Expect questions about your availability\, your pay range and w
- hy this clinic. Then send a short thank you the same day.\n\nFull guide: 
- link in bio.\n\n#EyeCareJobs #Opticians #OptometricAssistant #JobSearch #
- CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guid
- e: The first call decides a lot. How to get ready for a phone screen\, wh
- at clinics tend to ask\, and how to follow up.
+SUMMARY:Instagram + Facebook: Post 33: Phone screenings
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 33 2027-05-17 Phone s
+ creenings.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before shar
+ ing\, turn on Share to Facebook so it also goes to the kestreleye26 Page.
+  Nothing else to post there.\n\nCAPTION (copy and paste):\nThe first call
+  is often short. It still decides who gets an interview.\n\nHave the job 
+ ad open\, a quiet spot to talk\, and 2 or 3 things you want them to know 
+ about you. Expect questions about your availability\, your pay range and 
+ why this clinic. Then send a short thank you the same day.\n\nFull guide:
+  link in bio.\n\n#EyeCareJobs #Opticians #OptometricAssistant #JobSearch 
+ #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel gui
+ de: The first call decides a lot. How to get ready for a phone screen\, w
+ hat clinics tend to ask\, and how to follow up.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 33: Phone screenings
+DESCRIPTION:Post now: Instagram + Facebook\, Post 33: Phone screenings
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270531-post-34-stand-out-in-an-interview-v2@eyecarejo
  bs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270531T190000
 DTEND;TZID=America/Toronto:20270531T193000
-SUMMARY:Instagram: Post 34: Stand out in an interview
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 34 2027-05-31 Stand out in an interview.pn
- g (folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nMost c
- andidates a clinic meets are good. A few are memorable.\n\nThey have look
- ed at the clinic's website\, they ask about the patients and the team\, t
- hey talk about a time they helped someone\, and they follow up. None of i
- t is complicated\, and it shows.\n\nFull guide: link in bio.\n\n#EyeCareJ
- obs #Interview #Opticians #Optometry #CanadaJobs\n\nALT TEXT (Advanced se
- ttings\, Accessibility):\nKestrel guide: How to stand out in an interview
- . Clinics see plenty of good candidates. The small things that make one m
- emorable.
+SUMMARY:Instagram + Facebook: Post 34: Stand out in an interview
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 34 2027-05-31 Stand o
+ ut in an interview.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: be
+ fore sharing\, turn on Share to Facebook so it also goes to the kestreley
+ e26 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nMost 
+ candidates a clinic meets are good. A few are memorable.\n\nThey have loo
+ ked at the clinic's website\, they ask about the patients and the team\, 
+ they talk about a time they helped someone\, and they follow up. None of 
+ it is complicated\, and it shows.\n\nFull guide: link in bio.\n\n#EyeCare
+ Jobs #Interview #Opticians #Optometry #CanadaJobs\n\nALT TEXT (Advanced s
+ ettings\, Accessibility):\nKestrel guide: How to stand out in an intervie
+ w. Clinics see plenty of good candidates. The small things that make one 
+ memorable.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 34: Stand out in an interview
+DESCRIPTION:Post now: Instagram + Facebook\, Post 34: Stand out in an inte
+ rview
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270614-post-35-ask-for-a-raise-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270614T190000
 DTEND;TZID=America/Toronto:20270614T193000
-SUMMARY:Instagram: Post 35: Ask for a raise
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 35 2027-06-14 Ask for a raise.png (folder 
- Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nAsking for more 
- pay is easier with a plan.\n\nKnow what the role typically pays in your p
- rovince\, note what you have taken on since your last review\, and pick a
-  calm moment\, not the end of a busy Saturday. If the answer is not yet\,
-  ask what would change it\, and when you can talk again.\n\nFull guide: l
- ink in bio.\n\n#EyeCareJobs #Pay #Opticians #OptometricAssistant #CareerA
- dvice\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: Ho
- w to ask for a raise. How to prepare\, when to ask\, what to say\, and wh
- at to do if the answer is not yet.
+SUMMARY:Instagram + Facebook: Post 35: Ask for a raise
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 35 2027-06-14 Ask for
+  a raise.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before shari
+ ng\, turn on Share to Facebook so it also goes to the kestreleye26 Page. 
+ Nothing else to post there.\n\nCAPTION (copy and paste):\nAsking for more
+  pay is easier with a plan.\n\nKnow what the role typically pays in your 
+ province\, note what you have taken on since your last review\, and pick 
+ a calm moment\, not the end of a busy Saturday. If the answer is not yet\
+ , ask what would change it\, and when you can talk again.\n\nFull guide: 
+ link in bio.\n\n#EyeCareJobs #Pay #Opticians #OptometricAssistant #Career
+ Advice\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide: H
+ ow to ask for a raise. How to prepare\, when to ask\, what to say\, and w
+ hat to do if the answer is not yet.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 35: Ask for a raise
+DESCRIPTION:Post now: Instagram + Facebook\, Post 35: Ask for a raise
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270628-post-36-optical-lab-technician-v2@eyecarejobs.
  ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270628T190000
 DTEND;TZID=America/Toronto:20270628T193000
-SUMMARY:Instagram: Post 36: Optical lab technician
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 36 2027-06-28 Optical lab technician.png (
- folder Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nEvery pai
- r of glasses passes through someone's hands before it reaches the patient
- .\n\nOptical lab technicians surface\, edge and fit lenses\, in clinic la
- bs and in larger wholesale labs. It is careful\, practical work\, and man
- y people start with on the job training.\n\nFull guide: link in bio.\n\n#
- EyeCareJobs #OpticalLab #Opticians #Eyewear #CanadaJobs\n\nALT TEXT (Adva
- nced settings\, Accessibility):\nKestrel guide: Optical lab technicians. 
- Where glasses get made. What the work involves\, where it happens\, and h
- ow people get started in it.
+SUMMARY:Instagram + Facebook: Post 36: Optical lab technician
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 36 2027-06-28 Optical
+  lab technician.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: befor
+ e sharing\, turn on Share to Facebook so it also goes to the kestreleye26
+  Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nEvery pa
+ ir of glasses passes through someone's hands before it reaches the patien
+ t.\n\nOptical lab technicians surface\, edge and fit lenses\, in clinic l
+ abs and in larger wholesale labs. It is careful\, practical work\, and ma
+ ny people start with on the job training.\n\nFull guide: link in bio.\n\n
+ #EyeCareJobs #OpticalLab #Opticians #Eyewear #CanadaJobs\n\nALT TEXT (Adv
+ anced settings\, Accessibility):\nKestrel guide: Optical lab technicians.
+  Where glasses get made. What the work involves\, where it happens\, and 
+ how people get started in it.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 36: Optical lab technician
+DESCRIPTION:Post now: Instagram + Facebook\, Post 36: Optical lab technici
+ an
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270712-post-37-why-people-leave-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270712T190000
 DTEND;TZID=America/Toronto:20270712T193000
-SUMMARY:Instagram: Post 37: Why people leave
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 37 2027-07-12 Why people leave.png (folder
-  Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nWhen a good opt
- ician or assistant leaves\, the cost is more than the job ad.\n\nThe reas
- ons are often the same: pay that has not moved\, no path forward\, short 
- staffing that never ends\, or not feeling heard. Most of them can be fixe
- d before the resignation letter.\n\nFull guide for clinics: link in bio.\
- n\n#EyeCareJobs #ClinicOwner #Retention #Optometry #PracticeManagement\n\
- nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide for clinics
- : Why people leave eye care jobs. The usual reasons\, and practical ways 
- to keep good people.
+SUMMARY:Instagram + Facebook: Post 37: Why people leave
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 37 2027-07-12 Why peo
+ ple leave.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before shar
+ ing\, turn on Share to Facebook so it also goes to the kestreleye26 Page.
+  Nothing else to post there.\n\nCAPTION (copy and paste):\nWhen a good op
+ tician or assistant leaves\, the cost is more than the job ad.\n\nThe rea
+ sons are often the same: pay that has not moved\, no path forward\, short
+  staffing that never ends\, or not feeling heard. Most of them can be fix
+ ed before the resignation letter.\n\nFull guide for clinics: link in bio.
+ \n\n#EyeCareJobs #ClinicOwner #Retention #Optometry #PracticeManagement\n
+ \nALT TEXT (Advanced settings\, Accessibility):\nKestrel guide for clinic
+ s: Why people leave eye care jobs. The usual reasons\, and practical ways
+  to keep good people.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 37: Why people leave
+DESCRIPTION:Post now: Instagram + Facebook\, Post 37: Why people leave
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270726-post-38-first-30-days-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270726T190000
 DTEND;TZID=America/Toronto:20270726T193000
-SUMMARY:Instagram: Post 38: First 30 days
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 38 2027-07-26 First 30 days.png (folder Ke
- strel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nA new hire decides
-  a lot in their first month.\n\nHave their login\, schedule and uniform r
- eady before day 1. Give the first week a plan and a person to ask. At 30 
- days\, sit down for 15 minutes and ask how it is going\, then listen.\n\n
- Full guide for clinics: link in bio.\n\n#EyeCareJobs #Onboarding #ClinicO
- wner #Optometry #PracticeManagement\n\nALT TEXT (Advanced settings\, Acce
- ssibility):\nKestrel guide for clinics: A new hire's first 30 days. What 
- to have ready before day 1\, how to run the first week\, and a check in a
- t 30 days.
+SUMMARY:Instagram + Facebook: Post 38: First 30 days
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 38 2027-07-26 First 3
+ 0 days.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharing
+ \, turn on Share to Facebook so it also goes to the kestreleye26 Page. No
+ thing else to post there.\n\nCAPTION (copy and paste):\nA new hire decide
+ s a lot in their first month.\n\nHave their login\, schedule and uniform 
+ ready before day 1. Give the first week a plan and a person to ask. At 30
+  days\, sit down for 15 minutes and ask how it is going\, then listen.\n\
+ nFull guide for clinics: link in bio.\n\n#EyeCareJobs #Onboarding #Clinic
+ Owner #Optometry #PracticeManagement\n\nALT TEXT (Advanced settings\, Acc
+ essibility):\nKestrel guide for clinics: A new hire's first 30 days. What
+  to have ready before day 1\, how to run the first week\, and a check in 
+ at 30 days.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 38: First 30 days
+DESCRIPTION:Post now: Instagram + Facebook\, Post 38: First 30 days
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270809-post-39-reference-checks-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270809T190000
 DTEND;TZID=America/Toronto:20270809T193000
-SUMMARY:Instagram: Post 39: Reference checks
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 39 2027-08-09 Reference checks.png (folder
-  Kestrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nA 10 minute cal
- l can save months of trouble.\n\nCall a manager the candidate actually re
- ported to\, ask about real situations (a busy day\, an unhappy patient)\,
-  and listen for what is not said as much as what is.\n\nFull guide for cl
- inics: link in bio.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optometry #Prac
- ticeManagement\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel 
- guide for clinics: Reference checks worth making. Who to call\, what to a
- sk\, and what to do with the answers.
+SUMMARY:Instagram + Facebook: Post 39: Reference checks
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 39 2027-08-09 Referen
+ ce checks.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before shar
+ ing\, turn on Share to Facebook so it also goes to the kestreleye26 Page.
+  Nothing else to post there.\n\nCAPTION (copy and paste):\nA 10 minute ca
+ ll can save months of trouble.\n\nCall a manager the candidate actually r
+ eported to\, ask about real situations (a busy day\, an unhappy patient)\
+ , and listen for what is not said as much as what is.\n\nFull guide for c
+ linics: link in bio.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optometry #Pra
+ cticeManagement\n\nALT TEXT (Advanced settings\, Accessibility):\nKestrel
+  guide for clinics: Reference checks worth making. Who to call\, what to 
+ ask\, and what to do with the answers.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 39: Reference checks
+DESCRIPTION:Post now: Instagram + Facebook\, Post 39: Reference checks
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270823-post-40-seasonal-staff-v2@eyecarejobs.ca
-DTSTAMP:20261122T145008Z
+DTSTAMP:20261122T151129Z
 DTSTART;TZID=America/Toronto:20270823T190000
 DTEND;TZID=America/Toronto:20270823T193000
-SUMMARY:Instagram: Post 40: Seasonal staff
-LOCATION:Instagram @kestreleye26\, location tag: Canada
-DESCRIPTION:Where: Instagram @kestreleye26\, location tag: Canada\nType: F
- eed post (single image)\nFile: 40 2027-08-23 Seasonal staff.png (folder K
- estrel-Instagram-1-to-40)\n\nCAPTION (copy and paste):\nShort term help c
- an carry a clinic through the back to school rush\, holidays and leave.\n
- \nIt works best when the role is clear\, the training is short and someon
- e owns the handover. Our guide covers when it pays off\, what it costs an
- d how to make a short stay go well.\n\nFull guide for clinics: link in bi
- o.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optometry #SeasonalJobs\n\nALT T
- EXT (Advanced settings\, Accessibility):\nKestrel guide for clinics: Seas
- onal staff. Worth it? When short term help works\, what it costs\, and ho
- w to make a short stay go well.
+SUMMARY:Instagram + Facebook: Post 40: Seasonal staff
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Feed post (single image)\nFile: 40 2027-08-23 Seasona
+ l staff.png (folder Kestrel-Instagram-1-to-40)\n- Facebook: before sharin
+ g\, turn on Share to Facebook so it also goes to the kestreleye26 Page. N
+ othing else to post there.\n\nCAPTION (copy and paste):\nShort term help 
+ can carry a clinic through the back to school rush\, holidays and leave.\
+ n\nIt works best when the role is clear\, the training is short and someo
+ ne owns the handover. Our guide covers when it pays off\, what it costs a
+ nd how to make a short stay go well.\n\nFull guide for clinics: link in b
+ io.\n\n#EyeCareJobs #Hiring #ClinicOwner #Optometry #SeasonalJobs\n\nALT 
+ TEXT (Advanced settings\, Accessibility):\nKestrel guide for clinics: Sea
+ sonal staff. Worth it? When short term help works\, what it costs\, and h
+ ow to make a short stay go well.
 BEGIN:VALARM
 ACTION:DISPLAY
-DESCRIPTION:Post now: Instagram\, Post 40: Seasonal staff
+DESCRIPTION:Post now: Instagram + Facebook\, Post 40: Seasonal staff
 TRIGGER:PT0M
 END:VALARM
 END:VEVENT

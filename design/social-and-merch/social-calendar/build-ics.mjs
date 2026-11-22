@@ -196,6 +196,40 @@ events.push(...otherChannels(readDoc("docs/marketing/reddit-and-linkedin-calenda
 // The launch posts stay where they are, but are marked until Steve confirms the date.
 for (const e of events) if (e.date === "2027-01-25") e.title += " (launch date to confirm)";
 
+// 4. Spacing (Steve, 22nd November 2026). Facebook is no longer its own event: every Instagram Reel, post and Story is shared to
+// Facebook from Instagram, so they sit in 1 event. Instagram gets at most 1 Reel or post a day, in the order already agreed: 1 a day at
+// 7 pm from today until the content before the holidays runs out (about 21st December), a quiet break over Christmas and New Year, then
+// the January posts on their own dates (each guide post after its blog post). Stories go at 12 pm and can share a day with a post, and
+// LinkedIn and Reddit stay on their own 8 am rhythm.
+const START = "2026-11-22";
+const addDays = (d, n) => { const t = new Date(d + "T12:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); };
+const key = (e) => e.date + (e.time ?? "1900");
+for (let i = events.length - 1; i >= 0; i--) if (events[i].platform === "Facebook") events.splice(i, 1);
+const ig = events.filter((e) => e.platform === "Instagram" && e.date >= START).sort((a, b) => key(a).localeCompare(key(b)));
+const isStory = (e) => /^Story/.test(e.title);
+const run = ig.filter((e) => !isStory(e) && e.date < "2027-01-01");
+const oldKey = new Map(ig.map((e) => [e, key(e)]));
+run.forEach((e, i) => { e.date = addDays(START, i); e.time = "1900"; });
+// Each Story moves with the post it sat beside: it goes at 12 pm on the new date of the first post at or after its old slot.
+for (const st of ig.filter(isStory)) {
+  const next = run.find((e) => oldKey.get(e) >= oldKey.get(st).slice(0, 10));
+  if (next && oldKey.get(st) < "2027-01-01") st.date = next.date;
+  st.time = "1200";
+}
+// Launch day has the Takes flight Reel; the launch photo (post 25) moves to the next day so there is 1 post a day.
+for (const e of events) if (/^Post 25/.test(e.title)) { e.date = addDays(e.date, 1); e.notes = (e.notes ?? []).map((n) => n.replace(/^Launch day\./, "The day after launch.")); }
+// Notes and captions that named a time or day that no longer fits.
+for (const e of ig) {
+  e.notes = (e.notes ?? []).filter((n) => !/^1 pm|Sunday evening|same evening as the Better/.test(n))
+    .map((n) => n.replace("Tuesday's Better 1... or 2? Story poll", "the Better 1... or 2? Story poll from 2 days before"));
+}
+// Check the order rules still hold: a guide post never goes out before its blog post, and the poll comes before the Reel that answers it.
+const BLOG = { "Post 12": "2026-11-17", "Post 14": "2026-11-24", "Post 15": "2026-12-01", "Post 16": "2026-11-24", "Post 17": "2026-12-08", "Post 18": "2026-11-20",
+  "Post 19": "2026-12-15", "Post 21": "2026-11-27", "Post 23": "2027-01-05", "Post 24": "2027-01-12" };
+for (const e of ig) { const b = BLOG[(e.title.match(/^Post \d+/) || [])[0]]; if (b && e.date < b) throw new Error(`${e.title} would go out before its blog post (${b})`); }
+const poll = ig.find((e) => /Better 1/.test(e.title)), fit = ig.find((e) => /Find the right fit/.test(e.title));
+if (poll && fit && poll.date >= fit.date) throw new Error("The Better 1 or 2 poll must come before the Find the right fit Reel");
+
 // 3. Write the calendar: 7 pm Toronto, 30 minutes, with a reminder 30 minutes before.
 const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
 const fold = (line) => { const out = []; let cur = ""; for (const ch of line) { if (Buffer.byteLength(cur + ch) > 74) { out.push(cur); cur = " " + ch; } else cur += ch; } out.push(cur); return out.join("\r\n"); };
@@ -208,7 +242,7 @@ const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kestrel Eye Care Job
   "END:VTIMEZONE"];
 // Each event's UID comes from its date and title, so it stays the same however many posts are added around it.
 const uid = (e) => "kestrel-social-" + e.date.replace(/-/g, "") + "-" + e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) + "-v2@eyecarejobs.ca"; // v2 (22nd November 2026): new IDs so a fresh import is not matched to old copies in another calendar
-const whereOf = (e) => e.where ?? (e.platform === "Instagram" ? `Instagram @kestreleye26${e.loc ? `, location tag: ${e.loc}` : ""}`
+const whereOf = (e) => e.where ?? (e.platform === "Instagram" ? `Instagram @kestreleye26, shared to Facebook${e.loc ? `, location tag: ${e.loc}` : ""}`
   : e.platform === "Facebook" ? "Facebook: the kestreleye26 Page (post as the Page, not your profile)"
   : e.platform === "Reddit" ? "Reddit: r/EyeCareJobsCanada (post as the Kestrel account)" : e.platform);
 function calendar(list) {
@@ -218,14 +252,14 @@ function calendar(list) {
     // Steve, 22nd November 2026: the platform in the title, where to post in the location, an alert at the time, and everything to copy in the notes.
     const where = whereOf(e);
     const notes = [...(e.notes ?? [])];
-    if (e.platform === "Instagram" && /^Reel/.test(e.type)) notes.push("Before sharing, turn on Share to Facebook so it also goes to the Facebook Page (the same video, no extra work).");
+    if (e.platform === "Instagram") notes.push(/^Story/.test(e.title) ? "Facebook: tap Share to Facebook story (or set it to share automatically once)." : "Facebook: before sharing, turn on Share to Facebook so it also goes to the kestreleye26 Page. Nothing else to post there.");
     const label = e.platform === "Check" ? "CHECKLIST:" : e.platform === "Instagram" ? "CAPTION (copy and paste):" : "POST (copy and paste):";
     const desc = [`Where: ${where}`, `Type: ${e.type}`, e.file && `File: ${e.file}`, ...notes.map((n) => `- ${n}`), "", label, e.caption,
       e.alt && "", e.alt && "ALT TEXT (Advanced settings, Accessibility):", e.alt].filter((x) => x !== undefined && x !== false && x !== null && x !== "").join("\n").replace(/\n(CAPTION|POST|CHECKLIST|ALT)/g, "\n\n$1");
     out.push("BEGIN:VEVENT", fold(`UID:${uid(e)}`), `DTSTAMP:${stamp}`,
       `DTSTART;TZID=America/Toronto:${d}T${(e.time ?? "1900")}00`, `DTEND;TZID=America/Toronto:${d}T${String(+(e.time ?? "1900") + 30).padStart(4, "0")}00`, // 7 pm unless a post says otherwise
-      fold(`SUMMARY:${esc(`${e.platform}: ${e.title}`)}`), fold(`LOCATION:${esc(where)}`), fold(`DESCRIPTION:${esc(desc)}`),
-      "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(e.platform === "Check" ? `Kestrel: ${e.title}` : `Post now: ${e.platform}, ${e.title}`)}`), "TRIGGER:PT0M", "END:VALARM", "END:VEVENT");
+      fold(`SUMMARY:${esc(`${e.platform === "Instagram" ? "Instagram + Facebook" : e.platform}: ${e.title}`)}`), fold(`LOCATION:${esc(where)}`), fold(`DESCRIPTION:${esc(desc)}`),
+      "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(e.platform === "Check" ? `Kestrel: ${e.title}` : `Post now: ${e.platform === "Instagram" ? "Instagram + Facebook" : e.platform}, ${e.title}`)}`), "TRIGGER:PT0M", "END:VALARM", "END:VEVENT");
   }
   out.push("END:VCALENDAR");
   return out.join("\r\n") + "\r\n";
