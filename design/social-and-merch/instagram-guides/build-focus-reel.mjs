@@ -1,5 +1,6 @@
-// "Find the right fit" Reel (Steve, 22nd November 2026): "Better 1... or 2?" Glasses 1 and 2 swap in and the Kestrel logo behind them is
-// still blurry; "Try 3." and the logo snaps into focus, first only through the lenses (like real glasses), then everywhere. 2 versions:
+// "Find the right fit" Reel (Steve, 22nd November 2026): "Better 1... or 2?" Trial lenses 1 and 2 swap in and the Kestrel logo behind them is
+// still blurry; "Try 3." and the logo snaps into focus, first only through the lens, then everywhere. A single trial lens (round metal rim,
+// flat tab handle with the power on it) replaced the pair of glasses at Steve's request; lens 3 has a chestnut tab. 2 versions:
 // "simple" (the logo only) and "messages" (lens 1 shows "Competitive salary", lens 2 "Pay: DOE", lens 3 the logo and a pay range).
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-focus-reel.mjs   (VERSION=simple or messages, default both)
 // 1080 x 1920, 30 frames a second, 15 seconds, no sound. Needs ffmpeg. The wordmark is the real file, used as it is (only blurred), centred behind
@@ -18,13 +19,14 @@ const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", slate: "#5A6672", mist: "#DCE3E6" };
 const FPS = 30;
 const SECONDS = 15;
-const CY = 960; // the lenses' centre line
+const CY = 900; // the lens centre
+const R = 340; // the lens radius
 
 const content = (v) => v === "messages" ? `
-  <div class="msg" data-k="0"><p class="old">Competitive salary</p></div>
-  <div class="msg" data-k="1"><p class="old">Pay: DOE</p></div>
-  <div class="msg" data-k="2"><img src="${brand("kestrel-wordmark.svg")}" alt="" style="width:860px;display:block;margin:0 auto"><p class="pay">$27 to $33 an hour</p></div>`
-  : `<div class="msg" data-k="2" style="opacity:1"><img src="${brand("kestrel-wordmark.svg")}" alt="" style="width:900px;display:block;margin:0 auto"></div>`;
+  <div class="msg" data-k="0"><p class="old">Competitive<br>salary</p></div>
+  <div class="msg" data-k="1"><p class="old">Pay:<br>DOE</p></div>
+  <div class="msg" data-k="2"><img src="${brand("kestrel-wordmark.svg")}" alt="" style="width:620px;display:block;margin:0 auto"><p class="pay">$27 to $33 an hour</p></div>`
+  : `<div class="msg" data-k="2" style="opacity:1"><img src="${brand("kestrel-wordmark.svg")}" alt="" style="width:620px;display:block;margin:0 auto"></div>`;
 
 const page = (v) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Find the right fit</title><style>
 @font-face{font-family:'DM Serif Display';src:url(${font("dm-serif-display/files/dm-serif-display-latin-400-normal.woff2")})}
@@ -34,15 +36,15 @@ body{margin:0}p{margin:0}
 #f{width:1080px;height:1920px;position:relative;overflow:hidden;background:${C.cream}}
 .abs{position:absolute}
 .layer{position:absolute;inset:0}
-.scene{position:absolute;left:0;right:0;top:${CY}px;transform:translateY(-50%)}
+.scene{position:absolute;left:0;right:0;top:${CY - 60}px;transform:translateY(-50%)}
 .msg{position:absolute;left:0;right:0;top:0;transform:translateY(-50%);text-align:center;opacity:0}
-.old{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:118px;line-height:1.1;color:#5F6670;padding:0 40px}
-.pay{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;margin-top:150px;display:inline-block;padding:16px 36px;border-radius:999px;background:${C.navy};font-family:Poppins;font-weight:600;font-size:46px;color:${C.cream}}
+.old{font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:84px;line-height:1.1;color:#5F6670}
+.pay{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;margin-top:60px;display:inline-block;padding:16px 36px;border-radius:999px;background:${C.navy};font-family:Poppins;font-weight:600;font-size:46px;color:${C.cream}}
 #tint{position:absolute;inset:0;background:rgba(220,227,230,.18)}
-#top{left:80px;right:80px;top:300px;text-align:center;font-family:'DM Serif Display';font-size:120px;line-height:1.04;color:${C.navy}}
-#num{left:0;right:0;top:300px;text-align:center;font-family:'DM Serif Display';font-size:150px;line-height:1;color:${C.chestnut};opacity:0}
-#fit{left:80px;right:80px;top:1330px;text-align:center;font-family:'DM Serif Display';font-size:100px;color:${C.navy};opacity:0}
-#cta{left:80px;right:80px;top:1480px;text-align:center;opacity:0}
+#top{left:80px;right:80px;top:230px;text-align:center;font-family:'DM Serif Display';font-size:120px;line-height:1.04;color:${C.navy}}
+#num{left:0;right:0;top:320px;text-align:center;font-family:'DM Serif Display';font-size:150px;line-height:1;color:${C.chestnut};opacity:0}
+#fit{left:80px;right:80px;top:1290px;text-align:center;font-family:'DM Serif Display';font-size:100px;color:${C.navy};opacity:0}
+#cta{left:80px;right:80px;top:1450px;text-align:center;opacity:0}
 </style></head><body><div id="f">
 <div class="layer" id="outside"><div class="scene">${content(v)}</div></div>
 <div class="layer" id="inside"><div class="scene">${content(v)}</div><div id="tint"></div></div>
@@ -60,24 +62,24 @@ const span = (t, a, b) => clamp((t - a) / (b - a));
 const out = (x) => 1 - Math.pow(1 - x, 3);
 const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
 const el = (id) => document.getElementById(id);
-// 3 frames: round, rectangular, and a Kestrel frame with a chestnut brow. Each lens is centred 210 pixels either side of the middle.
-const rr = (cx, cy, w, h, r) => "M " + (cx - w / 2 + r) + " " + (cy - h / 2) + " H " + (cx + w / 2 - r) + " A " + r + " " + r + " 0 0 1 " + (cx + w / 2) + " " + (cy - h / 2 + r) +
-  " V " + (cy + h / 2 - r) + " A " + r + " " + r + " 0 0 1 " + (cx + w / 2 - r) + " " + (cy + h / 2) + " H " + (cx - w / 2 + r) + " A " + r + " " + r + " 0 0 1 " + (cx - w / 2) + " " + (cy + h / 2 - r) +
-  " V " + (cy - h / 2 + r) + " A " + r + " " + r + " 0 0 1 " + (cx - w / 2 + r) + " " + (cy - h / 2) + " Z";
-const FRAMES = [
-  { w: 340, h: 340, r: 170, stroke: "${C.navy}" },
-  { w: 380, h: 250, r: 34, stroke: "${C.navy}" },
-  { w: 390, h: 290, r: 96, stroke: "${C.navy}", brow: true },
+// A trial lens: round metal rim, a thin inner ring, a glint, and a flat tab handle angled down to the right with the power on it.
+const LENSES = [
+  { label: "+1.00", tab: "${C.slate}" },
+  { label: "+0.50", tab: "${C.slate}" },
+  { label: "Kestrel", tab: "${C.chestnut}" },
 ];
-const lensPaths = (F, dx, dy) => [rr(330 + dx, CY + dy, F.w, F.h, F.r), rr(750 + dx, CY + dy, F.w, F.h, F.r)];
-function frameSvg(F, dx, dy, op) {
-  const [a, b] = lensPaths(F, dx, dy), cy = CY + dy;
-  const bridge = "M " + (330 + dx + F.w / 2) + " " + (cy - F.h * 0.12) + " Q " + (540 + dx) + " " + (cy - F.h * 0.32) + " " + (750 + dx - F.w / 2) + " " + (cy - F.h * 0.12);
-  const temples = "M " + (330 + dx - F.w / 2) + " " + (cy - F.h * 0.3) + " l -70 -26 M " + (750 + dx + F.w / 2) + " " + (cy - F.h * 0.3) + " l 70 -26";
-  const brow = F.brow ? '<path d="M ' + (330 + dx - F.w / 2 + 30) + " " + (cy - F.h / 2 + 4) + " H " + (330 + dx + F.w / 2 - 20) + " M " + (750 + dx - F.w / 2 + 20) + " " + (cy - F.h / 2 + 4) + " H " + (750 + dx + F.w / 2 - 30) + '" stroke="${C.chestnut}" stroke-width="26" stroke-linecap="round"/>' : "";
-  return '<g opacity="' + op + '"><path d="' + a + " " + b + '" fill="none" stroke="' + F.stroke + '" stroke-width="16"/><path d="' + bridge + " " + temples + '" fill="none" stroke="' + F.stroke + '" stroke-width="16" stroke-linecap="round"/>' + brow + "</g>";
+const R = ${R};
+const circle = (cx, cy, r) => "M " + (cx - r) + " " + cy + " A " + r + " " + r + " 0 1 0 " + (cx + r) + " " + cy + " A " + r + " " + r + " 0 1 0 " + (cx - r) + " " + cy + " Z";
+const lensPath = (dx, dy) => circle(540 + dx, CY + dy, R);
+function lensSvg(L, dx, dy, op) {
+  const cx = 540 + dx, cy = CY + dy;
+  const tab = '<g transform="translate(' + cx + " " + cy + ') rotate(-45)"><rect x="-36" y="' + (R + 2) + '" width="72" height="190" rx="10" fill="' + L.tab + '"/>' +
+    '<text x="0" y="' + (R + 104) + '" transform="rotate(90 0 ' + (R + 104) + ')" text-anchor="middle" dominant-baseline="central" font-family="Poppins" font-weight="600" font-size="30" fill="${C.cream}">' + L.label + "</text></g>";
+  const glint = '<path d="M ' + (cx - R * 0.62) + " " + (cy - R * 0.42) + " A " + R * 0.75 + " " + R * 0.75 + " 0 0 1 " + (cx - R * 0.2) + " " + (cy - R * 0.72) + '" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" opacity=".55"/>';
+  return '<g opacity="' + op + '">' + tab + '<circle cx="' + cx + '" cy="' + cy + '" r="' + R + '" fill="none" stroke="${C.slate}" stroke-width="14"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (R - 5) + '" fill="none" stroke="${C.mist}" stroke-width="3"/>' +
+    '<circle cx="' + cx + '" cy="' + cy + '" r="' + (R - 26) + '" fill="none" stroke="${C.slate}" stroke-width="2" opacity=".35"/>' + glint + "</g>";
 }
-// Swaps at 5 and 8 seconds: the old frame slides out to the left as the new one slides in from the right.
+// Swaps at 5 and 8 seconds: the old lens slides out to the left as the new one slides in from the right.
 const SW = [5.0, 8.0];
 function frameState(t) {
   const list = [];
@@ -86,19 +88,19 @@ function frameState(t) {
     const k = io(span(t, inT, inT + 0.6)), o = i < 2 ? io(span(t, outT, outT + 0.5)) : 0;
     const lift = i === 2 ? io(span(t, 11.0, 11.8)) : 0;
     if (k <= 0 || o >= 1 || lift >= 1) continue;
-    list.push({ F: FRAMES[i], dx: i === 0 && t < 1 ? 0 : 1100 * (1 - k) - 1100 * o, dy: (i === 0 ? 400 * (1 - k) : 0) - 700 * lift, op: (i === 0 ? k : 1) * (1 - lift) });
+    list.push({ L: LENSES[i], dx: i === 0 && t < 1 ? 0 : 1200 * (1 - k) - 1200 * o, dy: (i === 0 ? 400 * (1 - k) : 0) - 1300 * lift, op: (i === 0 ? k : 1) });
   }
   return list;
 }
 window.render = (t) => {
   const st = frameState(t);
-  el("frames").innerHTML = st.map((s) => frameSvg(s.F, s.dx, s.dy, s.op)).join("");
-  // Through the lenses: very blurry, then less, then sharp. Around them: blurry until the glasses lift away.
+  el("frames").innerHTML = st.map((s) => lensSvg(s.L, s.dx, s.dy, s.op)).join("");
+  // Through the lens: very blurry, then less, then sharp. Around them: blurry until the lens lifts away.
   const step = t < SW[0] ? 0 : t < SW[1] ? 1 : 2;
   const inBlur = [15, 7, 0][step], outBlur = 15 * (1 - io(span(t, 11.0, 11.8)));
   el("outside").style.filter = "blur(" + outBlur + "px)";
   el("inside").style.filter = "blur(" + inBlur + "px)";
-  const paths = st.flatMap((s) => lensPaths(s.F, s.dx, s.dy)).join(" ");
+  const paths = st.map((s) => lensPath(s.dx, s.dy)).join(" ");
   el("inside").style.clipPath = paths ? "path('" + paths + "')" : "inset(100%)";
   el("tint").style.opacity = 1 - span(t, 11.0, 11.6);
   // The messages version shows something different behind each pair.
@@ -110,7 +112,7 @@ window.render = (t) => {
   const f = out(span(t, 11.8, 12.4)); el("fit").style.opacity = f; el("fit").style.transform = "translateY(" + 24 * (1 - f) + "px)";
   const c = out(span(t, 12.8, 13.4)); el("cta").style.opacity = c; el("cta").style.transform = "translateY(" + 24 * (1 - c) + "px)";
 };
-// The cover: the first glasses over a blurred logo, with "Better 1... or 2?".
+// The cover: the first trial lens over a blurred logo, with "Better 1... or 2?".
 window.cover = () => window.render(1.4);
 </script></body></html>`;
 
