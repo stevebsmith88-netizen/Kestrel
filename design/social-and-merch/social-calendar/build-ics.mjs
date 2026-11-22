@@ -3,15 +3,19 @@
 // Run from the repo root: node design/social-and-merch/social-calendar/build-ics.mjs <path to instagram-master-schedule.md>
 // The master schedule (posts 10 to 40) lives on main in docs/marketing/instagram-master-schedule.md; the Reels and cross posts made
 // in Steve's Instagram chat of 16th to 21st November 2026 are listed below. Only posts from today onwards are included.
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { execSync } from "node:child_process";
 import { join, resolve } from "node:path";
 import { BATCH } from "./batch-2026-11-22.mjs";
 import { WEEKEND } from "./batch-2026-11-21-weekend.mjs";
 import { FOCUS } from "./batch-2026-11-22-focus.mjs";
+import { otherChannels, CHECKS } from "./other-channels.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "docs/marketing/kestrel-social-calendar.ics");
-const masterPath = process.argv[2] ?? join(ROOT, "docs/marketing/instagram-master-schedule.md");
+// The plan documents live on main. Read the local copy if this branch has one, otherwise the copy on origin/main.
+const readDoc = (rel) => existsSync(join(ROOT, rel)) ? readFileSync(join(ROOT, rel), "utf8") : execSync(`git show origin/main:${rel}`, { encoding: "utf8", maxBuffer: 1 << 24 });
+const masterPath = process.argv[2];
 const TODAY = process.env.FROM ?? new Date().toISOString().slice(0, 10);
 const MONTHS = { January: 1, February: 2, March: 3, April: 4, May: 5, June: 6, July: 7, August: 8, September: 9, October: 10, November: 11, December: 12 };
 
@@ -20,7 +24,7 @@ const MONTHS = { January: 1, February: 2, March: 3, April: 4, May: 5, June: 6, J
 const WAITLIST_CHECK = "CHECK: this still says waitlist. Sign up is open in pre launch, so change it to \"Pre launch is open. Create your account: link in bio.\" (the image too, if the words are on it).";
 
 // 1. Posts 10 to 40 from the master schedule.
-const md = readFileSync(masterPath, "utf8");
+const md = masterPath ? readFileSync(masterPath, "utf8") : readDoc("docs/marketing/instagram-master-schedule.md");
 const events = [];
 for (const block of md.split(/\n(?=### )/)) {
   const head = block.match(/^### (\d+)\. (.+)/);
@@ -96,7 +100,7 @@ Pre launch is open. Create your account: link in bio.
 #EyeCareJobs #PayTransparency #Optometry #Opticians #CanadaJobs`,
     alt: "A short animation on cream. Text reads: Eye care hiring has worked the same way for years. We're changing it. Then 5 old phrases are struck through, 1 at a time, by a chestnut feather, each with a new line beneath. Salary: competitive becomes The actual pay range, on every post. Is this job even real? becomes Every post says if it's an existing vacancy. Is a bot reading my application? becomes Every post says if AI screens candidates. Recruiters reposting clinic jobs becomes No agencies. Jobs come from the clinics. Posts go live unchecked becomes A person reads every post first. Ends with the Kestrel Eye Care Jobs logo, See how we compare: eyecarejobs.ca/compare, and Pre launch is open. Create your account: link in bio.",
     notes: ["Music: steady and confident, building with each line (search inspiring or anthem).", "Later: reuse each of the 5 lines as its own single image post or Story."] },
-  { date: "2026-11-24", platform: "Facebook", title: "Find us post", type: "Feed post (single image)",
+  { date: "2026-11-24", time: "0800", platform: "Facebook", title: "Find us post (also introduces the Page)", type: "Feed post (single image)",
     file: `${R}find-us-a-grid.jpg`, loc: "Canada",
     caption: `We're in 4 places now, so you can follow along wherever you already spend your time.
 
@@ -107,7 +111,7 @@ Reddit, a community for people who work in eye care and the clinics that hire th
 Kestrel Eye Care Jobs opens in early 2027, a Canada-wide job board for optometrists, opticians, assistants, technicians and practice teams, with the pay shown on every job. Pre launch is open, create your account here: https://eyecarejobs.ca/?utm_source=facebook&utm_medium=social&utm_campaign=2026-11-find-us`,
     alt: "Text reads: Find us here. Before we open. 4 tilted tiles with line icons for LinkedIn, Facebook, Instagram and Reddit. Below: LinkedIn, our company page. Facebook, kestreleye26. Instagram, @kestreleye26. Reddit, r/EyeCareJobsCanada. eyecarejobs.ca.",
     notes: ["Skip if already posted."] },
-  { date: "2026-11-24", platform: "Reddit", title: "r/EyeCareJobsCanada: Where do you usually hear about eye care jobs?", type: "Text post, flair Discussion",
+  { date: "2026-11-24", time: "0800", platform: "Reddit", title: "Where do you usually hear about eye care jobs?", type: "Text post, flair Discussion",
     file: "", loc: "",
     caption: `Title: Where do you usually hear about eye care jobs?
 
@@ -187,6 +191,10 @@ events.push(...extra);
 events.push(...BATCH.map((e) => ({ ...e, batch: "2026-11-22" })));
 events.push(...WEEKEND.map((e) => ({ ...e, batch: "2026-11-21-weekend" })));
 events.push(...FOCUS.map((e) => ({ ...e, batch: "2026-11-22-focus" })));
+// LinkedIn, Facebook and Reddit (22nd November 2026), and the monthly numbers check.
+events.push(...otherChannels(readDoc("docs/marketing/reddit-and-linkedin-calendar.md"), readDoc("docs/marketing/reddit-seed-posts.md")), ...CHECKS);
+// The launch posts stay where they are, but are marked until Steve confirms the date.
+for (const e of events) if (e.date === "2027-01-25") e.title += " (launch date to confirm)";
 
 // 3. Write the calendar: 7 pm Toronto, 30 minutes, with a reminder 30 minutes before.
 const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
@@ -200,26 +208,29 @@ const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kestrel Eye Care Job
   "END:VTIMEZONE"];
 // Each event's UID comes from its date and title, so it stays the same however many posts are added around it.
 const uid = (e) => "kestrel-social-" + e.date.replace(/-/g, "") + "-" + e.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) + "@eyecarejobs.ca";
+const whereOf = (e) => e.where ?? (e.platform === "Instagram" ? `Instagram @kestreleye26${e.loc ? `, location tag: ${e.loc}` : ""}`
+  : e.platform === "Facebook" ? "Facebook: the kestreleye26 Page (post as the Page, not your profile)"
+  : e.platform === "Reddit" ? "Reddit: r/EyeCareJobsCanada (post as the Kestrel account)" : e.platform);
 function calendar(list) {
   const out = [...lines];
   for (const e of list) {
     const d = e.date.replace(/-/g, "");
-    const desc = [`Platform: ${e.platform}`, `Type: ${e.type}`, e.file && `File: ${e.file}`, e.loc && `Location: ${e.loc}`,
-      ...(e.notes ?? []), "", "CAPTION:", e.caption, e.alt && "", e.alt && "ALT TEXT:", e.alt].filter((x) => x !== undefined && x !== false && x !== null).join("\n");
+    // Steve, 22nd November 2026: the platform in the title, where to post in the location, an alert at the time, and everything to copy in the notes.
+    const where = whereOf(e);
+    const notes = [...(e.notes ?? [])];
+    if (e.platform === "Instagram" && /^Reel/.test(e.type)) notes.push("Before sharing, turn on Share to Facebook so it also goes to the Facebook Page (the same video, no extra work).");
+    const label = e.platform === "Check" ? "CHECKLIST:" : e.platform === "Instagram" ? "CAPTION (copy and paste):" : "POST (copy and paste):";
+    const desc = [`Where: ${where}`, `Type: ${e.type}`, e.file && `File: ${e.file}`, ...notes.map((n) => `- ${n}`), "", label, e.caption,
+      e.alt && "", e.alt && "ALT TEXT (Advanced settings, Accessibility):", e.alt].filter((x) => x !== undefined && x !== false && x !== null && x !== "").join("\n").replace(/\n(CAPTION|POST|CHECKLIST|ALT)/g, "\n\n$1");
     out.push("BEGIN:VEVENT", fold(`UID:${uid(e)}`), `DTSTAMP:${stamp}`,
       `DTSTART;TZID=America/Toronto:${d}T${(e.time ?? "1900")}00`, `DTEND;TZID=America/Toronto:${d}T${String(+(e.time ?? "1900") + 30).padStart(4, "0")}00`, // 7 pm unless a post says otherwise
-      fold(`SUMMARY:${esc(`${e.platform}: ${e.title}`)}`), fold(`DESCRIPTION:${esc(desc)}`),
-      "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(`Post now: ${e.platform}, ${e.title}`)}`), "TRIGGER:-PT30M", "END:VALARM", "END:VEVENT");
+      fold(`SUMMARY:${esc(`${e.platform}: ${e.title}`)}`), fold(`LOCATION:${esc(where)}`), fold(`DESCRIPTION:${esc(desc)}`),
+      "BEGIN:VALARM", "ACTION:DISPLAY", fold(`DESCRIPTION:${esc(e.platform === "Check" ? `Kestrel: ${e.title}` : `Post now: ${e.platform}, ${e.title}`)}`), "TRIGGER:PT0M", "END:VALARM", "END:VEVENT");
   }
   out.push("END:VCALENDAR");
   return out.join("\r\n") + "\r\n";
 }
 const kept = events.filter((e) => e.date >= TODAY).sort((a, b) => (a.date + a.platform).localeCompare(b.date + b.platform));
 writeFileSync(OUT, calendar(kept));
-const NEW = OUT.replace(".ics", "-added-2026-11-22.ics");
-writeFileSync(NEW, calendar(kept.filter((e) => e.batch === "2026-11-22")));
-writeFileSync(OUT.replace(".ics", "-added-2026-11-21-weekend.ics"), calendar(kept.filter((e) => e.batch === "2026-11-21-weekend")));
-writeFileSync(OUT.replace(".ics", "-added-find-the-right-fit.ics"), calendar(kept.filter((e) => e.batch === "2026-11-22-focus")));
-console.log(`Also wrote ${kept.filter((e) => e.batch).length} new posts on their own to ${NEW}`);
 console.log(`Wrote ${kept.length} posts to ${OUT}`);
 for (const e of kept) console.log(e.date, e.platform.padEnd(9), e.title, e.notes?.some((n) => n.startsWith("CHECK")) ? "  [CHECK]" : "");
