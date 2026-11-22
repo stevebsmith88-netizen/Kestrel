@@ -24,7 +24,7 @@ END:STANDARD
 END:VTIMEZONE
 BEGIN:VEVENT
 UID:kestrel-social-20261124-story-poll-better-1-or-2@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
 SUMMARY:Instagram: Story poll: Better 1... or 2?
@@ -42,7 +42,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261128-reel-3-questions-to-ask-in-an-optician-intervi
  ew@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261128T190000
 DTEND;TZID=America/Toronto:20261128T193000
 SUMMARY:Instagram: Reel: 3 questions to ask in an optician interview
@@ -78,7 +78,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261129-reel-guess-the-pay-optician-ontario@eyecarejob
  s.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261129T190000
 DTEND;TZID=America/Toronto:20261129T193000
 SUMMARY:Instagram: Reel: Guess the pay\, optician\, Ontario
@@ -110,7 +110,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261201-reel-job-ad-makeover-for-clinics@eyecarejobs.c
  a
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261201T190000
 DTEND;TZID=America/Toronto:20261201T193000
 SUMMARY:Instagram: Reel: Job ad makeover (for clinics)
@@ -144,7 +144,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261204-reel-job-ad-phrases-translated@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261204T190000
 DTEND;TZID=America/Toronto:20261204T193000
 SUMMARY:Instagram: Reel: Job ad phrases\, translated
@@ -178,7 +178,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261205-reel-myth-or-fact-eye-care-careers-edition@eye
  carejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261205T190000
 DTEND;TZID=America/Toronto:20261205T193000
 SUMMARY:Instagram: Reel: Myth or fact? Eye care careers edition
@@ -212,7 +212,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261208-reel-your-job-ad-and-the-law-for-clinics@eyeca
  rejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261208T190000
 DTEND;TZID=America/Toronto:20261208T193000
 SUMMARY:Instagram: Reel: Your job ad and the law (for clinics)
@@ -247,7 +247,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261209-reel-guess-the-pay-front-desk-british-columbia
  @eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261209T190000
 DTEND;TZID=America/Toronto:20261209T193000
 SUMMARY:Instagram: Reel: Guess the pay\, front desk\, British Columbia
@@ -279,7 +279,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261211-reel-pre-testing-explained@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261211T190000
 DTEND;TZID=America/Toronto:20261211T193000
 SUMMARY:Instagram: Reel: Pre testing\, explained
@@ -316,7 +316,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261212-story-poll-would-you-apply-if-the-pay-wasn-t-s
  hown@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261212T190000
 DTEND;TZID=America/Toronto:20261212T193000
 SUMMARY:Instagram: Story poll: Would you apply if the pay wasn't shown?
@@ -335,7 +335,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261213-reel-just-finished-optometry-school-new-ods@ey
  ecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261213T190000
 DTEND;TZID=America/Toronto:20261213T193000
 SUMMARY:Instagram: Reel: Just finished optometry school? (new ODs)
@@ -372,7 +372,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261215-reel-guess-the-pay-optician-nova-scotia@eyecar
  ejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261215T190000
 DTEND;TZID=America/Toronto:20261215T193000
 SUMMARY:Instagram: Reel: Guess the pay\, optician\, Nova Scotia
@@ -403,7 +403,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261216-reel-follow-the-feather@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261216T190000
 DTEND;TZID=America/Toronto:20261216T193000
 SUMMARY:Instagram: Reel: Follow the feather
@@ -432,7 +432,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261218-story-poll-clinic-owners-where-do-your-best-hi
  res-come-from@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261218T190000
 DTEND;TZID=America/Toronto:20261218T193000
 SUMMARY:Instagram: Story poll: Clinic owners\, where do your best hires co
@@ -452,7 +452,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261219-reel-guess-the-pay-practice-manager-ontario@ey
  ecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261219T190000
 DTEND;TZID=America/Toronto:20261219T193000
 SUMMARY:Instagram: Reel: Guess the pay\, practice manager\, Ontario
@@ -487,7 +487,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261220-story-poll-round-or-square@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261220T190000
 DTEND;TZID=America/Toronto:20261220T193000
 SUMMARY:Instagram: Story poll: Round or square?
@@ -504,7 +504,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261229-story-poll-the-puff-or-the-drops@eyecarejobs.c
  a
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261229T190000
 DTEND;TZID=America/Toronto:20261229T193000
 SUMMARY:Instagram: Story poll: The puff or the drops?
@@ -520,7 +520,7 @@ END:VALARM
 END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20270105-story-poll-glasses-or-contacts@eyecarejobs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20270105T190000
 DTEND;TZID=America/Toronto:20270105T193000
 SUMMARY:Instagram: Story poll: Glasses or contacts?

@@ -25,7 +25,7 @@ END:VTIMEZONE
 BEGIN:VEVENT
 UID:kestrel-social-20261122-reel-new-quest-unlocked-gta-6-weekend@eyecarej
  obs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261122T130000
 DTEND;TZID=America/Toronto:20261122T133000
 SUMMARY:Instagram: Reel: New quest unlocked (GTA 6 weekend)
@@ -56,7 +56,7 @@ END:VEVENT
 BEGIN:VEVENT
 UID:kestrel-social-20261124-reel-which-comes-first-twin-kestrels@eyecarejo
  bs.ca
-DTSTAMP:20261121T190606Z
+DTSTAMP:20261122T141242Z
 DTSTART;TZID=America/Toronto:20261124T190000
 DTEND;TZID=America/Toronto:20261124T193000
 SUMMARY:Instagram: Reel: Which comes first? (twin kestrels)

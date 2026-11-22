@@ -1,0 +1,57 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kestrel Eye Care Jobs//Social calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Kestrel
+X-WR-TIMEZONE:America/Toronto
+BEGIN:VTIMEZONE
+TZID:America/Toronto
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:EDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:EST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:kestrel-social-20261126-reel-find-the-right-fit-trial-lens@eyecarejobs
+ .ca
+DTSTAMP:20261122T141242Z
+DTSTART;TZID=America/Toronto:20261126T130000
+DTEND;TZID=America/Toronto:20261126T133000
+SUMMARY:Instagram: Reel: Find the right fit (trial lens)
+DESCRIPTION:Platform: Instagram\nType: Reel. Show in profile grid: OFF\nFi
+ le: design/social-and-merch/instagram-guides/focus-reel-messages.mp4 · c
+ over design/social-and-merch/instagram-guides/focus-reel-messages-cover.j
+ pg (Edit cover\, Add from camera roll)\nLocation: Canada\n1 pm\, ahead of
+  the 7 pm post the same day.\nIt answers Tuesday's Better 1... or 2? Stor
+ y poll: reshare the Reel to your Story afterwards with a line like: You v
+ oted. Here's 3.\n\nCAPTION:\nBetter 1... or 2?\n\n"Competitive salary" is
+  a blur. "Pay: DOE" isn't much clearer. On Kestrel\, every job shows its 
+ pay\, so you can see the fit before you apply.\n\nCandidates: create your
+  account and set your alerts. Clinics: set up your clinic\, ready to post
+ .\n\nPre launch is open: link in bio.\n\n#EyeCareJobs #Optometry #Opticia
+ ns #OptometricAssistant #CanadaJobs\n\nALT TEXT:\nA short animation on cr
+ eam\, like an eye test. Text reads: Better 1... or 2? A round trial lens 
+ with a +1.00 tab sits over blurred words: Competitive salary. Lens 2\, ma
+ rked +0.50\, shows Pay: DOE\, still blurry. Text reads: Try 3. A lens wit
+ h a chestnut tab marked Kestrel brings the Kestrel wordmark and a pay pil
+ l\, $27 to $33 an hour\, into focus. The lens lifts away. Text reads: Fin
+ d the right fit. Every job shows its pay. Pre launch is open: link in bio
+ .
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram\, Reel: Find the right fit (trial lens)
+TRIGGER:-PT30M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { BATCH } from "./batch-2026-11-22.mjs";
 import { WEEKEND } from "./batch-2026-11-21-weekend.mjs";
+import { FOCUS } from "./batch-2026-11-22-focus.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "docs/marketing/kestrel-social-calendar.ics");
@@ -185,6 +186,7 @@ events.push(...extra);
 // imported into the existing calendar without doubling anything.
 events.push(...BATCH.map((e) => ({ ...e, batch: "2026-11-22" })));
 events.push(...WEEKEND.map((e) => ({ ...e, batch: "2026-11-21-weekend" })));
+events.push(...FOCUS.map((e) => ({ ...e, batch: "2026-11-22-focus" })));
 
 // 3. Write the calendar: 7 pm Toronto, 30 minutes, with a reminder 30 minutes before.
 const esc = (s) => String(s).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
@@ -217,6 +219,7 @@ writeFileSync(OUT, calendar(kept));
 const NEW = OUT.replace(".ics", "-added-2026-11-22.ics");
 writeFileSync(NEW, calendar(kept.filter((e) => e.batch === "2026-11-22")));
 writeFileSync(OUT.replace(".ics", "-added-2026-11-21-weekend.ics"), calendar(kept.filter((e) => e.batch === "2026-11-21-weekend")));
+writeFileSync(OUT.replace(".ics", "-added-find-the-right-fit.ics"), calendar(kept.filter((e) => e.batch === "2026-11-22-focus")));
 console.log(`Also wrote ${kept.filter((e) => e.batch).length} new posts on their own to ${NEW}`);
 console.log(`Wrote ${kept.length} posts to ${OUT}`);
 for (const e of kept) console.log(e.date, e.platform.padEnd(9), e.title, e.notes?.some((n) => n.startsWith("CHECK")) ? "  [CHECK]" : "");
