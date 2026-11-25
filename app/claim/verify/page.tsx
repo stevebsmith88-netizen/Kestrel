@@ -26,7 +26,7 @@ export default async function VerifyClaim({ searchParams }: { searchParams: Prom
   if (problem || !c || !t) {
     return (
       <AuthShell title="That link didn't work">
-        <p className="auth-intro">The link may have expired, been used already, or been opened while signed in to a different account. Go back to the listing and start your claim again, or email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a> and we will help.</p>
+        <p className="auth-intro">The link may have expired, been used already, or been opened while signed in to a different account. Go back to the listing and start your claim again, or email <a href="mailto:support@eyecarejobs.ca">support@eyecarejobs.ca</a> and we will help.</p>
         <p className="alt"><Link href="/jobs" className="btn">Find jobs</Link></p>
       </AuthShell>
     );

@@ -28,7 +28,6 @@ export default async function MyApplications({ searchParams }: { searchParams: P
       <AppBar session={session} current="/candidate/applications" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">My applications</p>
           <h1>Where each application stands</h1>
           <p className="lede2">Clinics update the status as they review your application. Their private notes are never shown to you.</p>
 
@@ -57,7 +56,7 @@ export default async function MyApplications({ searchParams }: { searchParams: P
               {shown.map((a) => (
                 <article className="card jobrow" key={a.id}>
                   <div className="jobmain">
-                    <h3><Link href={`/candidate/applications/${a.id}`}>{a.job_title}</Link></h3>
+                    <h2><Link href={`/candidate/applications/${a.id}`}>{a.job_title}</Link></h2>
                     <p className="meta">{a.clinic_name} · {a.job_location}</p>
                     <p className="meta">Applied {longDate(a.created_at)} · {APP_EXPLAINERS[a.status as AppStatus]}</p>
                   </div>

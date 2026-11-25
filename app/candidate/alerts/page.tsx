@@ -6,6 +6,11 @@ import { requireRole } from "@/lib/auth";
 import { practiceLabel } from "@/lib/jobs";
 import { deleteAlert } from "@/lib/alert-actions";
 import { supabaseServer } from "@/lib/supabase/server";
+import { ALERTS_PAUSED_NOTE, alertsPaused } from "@/lib/alerts-paused";
+import Link from "next/link";
+import { listFollows } from "@/lib/follow-server";
+import { unfollow } from "@/lib/follow-actions";
+import { FOLLOW_LIMIT } from "@/lib/follows";
 
 export const metadata: Metadata = { title: "Job alerts | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -21,14 +26,23 @@ export default async function Alerts() {
   const db = await supabaseServer();
   const { data } = db ? await db.from("job_alerts").select("id, role_category, province, practice_type, frequency").order("created_at", { ascending: true }) : { data: null };
   const alerts = (data ?? []) as Alert[];
+  // Read on its own, so the page still works if it fails. Unsubscribing also stops alert emails (P1-51).
+  const { data: profile } = db ? await db.from("profiles").select("unsubscribed_at").eq("id", session.userId).maybeSingle() : { data: null };
+  const paused = alertsPaused(profile);
+  const follows = await listFollows(session.userId);
   return (
     <>
       <AppBar session={session} current="/candidate/alerts" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Job alerts</p>
           <h1>Hear about new jobs first</h1>
-          <p className="lede2">Tell us what you are looking for and we will email you when a matching job is posted. You choose how often, daily, weekly or monthly, and every email has an unsubscribe link.</p>
+          <p className="lede2">Tell us what you are looking for and we will email you when a matching job is posted. You choose how often, daily, weekly or monthly, and every email has an unsubscribe link. These are emails you set up yourself, so they do not depend on the news box you may have ticked at sign up.</p>
+          {paused && (
+            <div className="notice warn noticerow" role="status">
+              <p>{ALERTS_PAUSED_NOTE}</p>
+              <Link href="/account#ac-email-prefs" className="btn sm ghost">Go to Email choices</Link>
+            </div>
+          )}
           <div className="stackcards">
             <section className="card">
               <h2>Your alerts</h2>
@@ -46,6 +60,22 @@ export default async function Alerts() {
               )}
             </section>
             {alerts.length < 5 && <AlertForm />}
+            <section className="card" id="following">
+              <h2>Clinics and companies you follow</h2>
+              <p className="help">You are emailed when a place you follow posts a new job, in the same daily email as your alerts. They are never told who follows them. You can follow up to {FOLLOW_LIMIT}, from their page on Kestrel.</p>
+              {follows.length === 0 ? (
+                <p className="help">You are not following anyone yet. Open a clinic or company page and press Follow for new jobs. <Link href="/jobs">Find jobs</Link></p>
+              ) : (
+                <ul className="alertlist">
+                  {follows.map((f) => (
+                    <li key={f.employerId}>
+                      <span>{f.href ? <Link href={f.href}>{f.name}</Link> : f.name}{f.place ? ` · ${f.place}` : ""}</span>
+                      <form action={unfollow}><input type="hidden" name="employerId" value={f.employerId} /><button type="submit" className="linkbtn">Unfollow</button></form>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
           </div>
         </div>
       </main>

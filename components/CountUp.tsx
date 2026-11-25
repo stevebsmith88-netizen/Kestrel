@@ -1,50 +1,15 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
 import { formatCount } from "@/lib/eye-care-numbers";
 
-// A number that counts up to its real value over about 2 seconds, once it scrolls into view. The real value is what the page,
-// a search engine, a screen reader and anyone with JavaScript off or "reduce motion" switched on all see.
-export default function CountUp({ to, suffix = "", duration = 2000 }: { to: number; suffix?: string; duration?: number }) {
-  const [shown, setShown] = useState(to);
-  const ref = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
-    let frame = 0;
-    let started = false;
-    const run = () => {
-      const t0 = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - t0) / duration);
-        setShown(Math.round(to * (1 - Math.pow(1 - p, 3))));
-        if (p < 1) frame = requestAnimationFrame(tick);
-      };
-      setShown(0);
-      frame = requestAnimationFrame(tick);
-    };
-    const watcher = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started) {
-          started = true;
-          watcher.disconnect();
-          run();
-        }
-      },
-      { threshold: 0.4 },
-    );
-    watcher.observe(el);
-    return () => {
-      watcher.disconnect();
-      cancelAnimationFrame(frame);
-    };
-  }, [to, duration]);
-
+// A figure on the home page. It no longer counts up from 0 (20th November 2026): an AI assistant read the page part way
+// through the count and quoted 869 and 1,557 instead of 6,400 and 11,700. The real figure is now the only text in the page,
+// so a search engine, an assistant, a screen reader and a person all see the same number straight away.
+// The name stays so the home page does not change; the `duration` prop is kept for the same reason and does nothing.
+export default function CountUp({ to, suffix = "" }: { to: number; suffix?: string; duration?: number }) {
   return (
-    <span ref={ref}>
-      <span aria-hidden="true">{formatCount(shown)}{suffix}</span>
-      <span className="sr">{formatCount(to)}{suffix === "+" ? " or more" : ""}</span>
+    <span>
+      {formatCount(to)}
+      {suffix}
+      {suffix === "+" ? <span className="sr"> or more</span> : null}
     </span>
   );
 }

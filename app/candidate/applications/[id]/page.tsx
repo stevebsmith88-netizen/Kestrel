@@ -7,8 +7,10 @@ import { AppStatusBadge, Steps } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
 import { APP_EXPLAINERS, APP_LABELS, isClosed, type AppStatus } from "@/lib/applications";
 import { getApplication } from "@/lib/candidate";
-import { withdrawApplication } from "@/lib/candidate-actions";
+import WithdrawForm from "@/components/WithdrawForm";
 import { longDate } from "@/lib/jobs";
+import { writtenBy } from "@/lib/clinic-message";
+import { calendarLinks, detailsLines, splitInterview } from "@/lib/interview-details";
 
 export const metadata: Metadata = { title: "Your application | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -50,8 +52,34 @@ export default async function ApplicationDetail({ params, searchParams }: { para
           {a.clinic_message && (
             <section className="card">
               <h2>A message from {a.clinic_name}</h2>
-              <blockquote className="msg">{a.clinic_message}</blockquote>
-              <p className="help">Clinics choose what to tell you. Their private notes are never shown.</p>
+              {(() => {
+                const { text, interview, link } = splitInterview(a.clinic_message);
+                const calendar = interview ? calendarLinks({ id: a.id, jobTitle: a.job_title, clinicName: a.clinic_name ?? "the clinic", interview, link }) : null;
+                return (
+                  <>
+                    {text && <blockquote className="msg">{text}</blockquote>}
+                    {interview && (
+                      <ul className="interviewdetails">
+                        {detailsLines(interview, link).map((line) => <li key={line}>{line}</li>)}
+                      </ul>
+                    )}
+                    {(link || calendar) && (
+                      <p className="emptyactions">
+                        {link && <a className="btn" href={link} target="_blank" rel="noopener noreferrer">Join the meeting</a>}
+                        {calendar && a.status === "interview" && (
+                          <>
+                            {" "}
+                            <a className="btn ghost" href={`/candidate/applications/${a.id}/calendar`}>Add to my calendar</a>{" "}
+                            <a className="btn sm ghost" href={calendar.google} target="_blank" rel="noopener noreferrer">Google Calendar</a>{" "}
+                            <a className="btn sm ghost" href={calendar.outlook} target="_blank" rel="noopener noreferrer">Outlook</a>
+                          </>
+                        )}
+                      </p>
+                    )}
+                  </>
+                );
+              })()}
+              <p className="help">{writtenBy(a.clinic_name || "the clinic")} Clinics choose what to tell you. Their private notes are never shown.</p>
             </section>
           )}
 
@@ -81,10 +109,7 @@ export default async function ApplicationDetail({ params, searchParams }: { para
             <section className="card">
               <h2>Need to step back?</h2>
               <p className="help">Withdrawing tells the clinic you are no longer interested. You cannot apply to this job a second time, but you can apply to other jobs, now or later.</p>
-              <form action={withdrawApplication}>
-                <input type="hidden" name="id" value={a.id} />
-                <button type="submit" className="btn ghost">Withdraw my application</button>
-              </form>
+              <WithdrawForm id={a.id} clinicName={a.clinic_name} />
             </section>
           )}
         </div>

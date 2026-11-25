@@ -1,6 +1,7 @@
 // Compares the wording candidates were seeing with an edited version waiting in the review queue.
 const FIELDS: [string, string][] = [
   ["title", "Title"],
+  ["headline", "Headline"],
   ["role_category", "Role"],
   ["employment_type", "Type"],
   ["province", "Province"],
@@ -13,6 +14,9 @@ const FIELDS: [string, string][] = [
   ["pay_percent_min", "Percentage, lowest"],
   ["pay_percent_max", "Percentage, highest"],
   ["pay_percent_of", "Percentage is of"],
+  ["pay_expected_min", "Expected earnings, lowest"],
+  ["pay_expected_max", "Expected earnings, highest"],
+  ["pay_expected_period", "Expected earnings per"],
   ["tags_software", "Practice software"],
   ["tags_equipment", "Diagnostic equipment"],
   ["tags_specialties", "Specialties"],

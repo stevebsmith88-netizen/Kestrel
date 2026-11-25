@@ -2,6 +2,7 @@
 
 import { useServerForm } from "@/components/useServerForm";
 import { deleteCv, uploadCv } from "@/lib/candidate-actions";
+import { fileBadge } from "@/lib/file-badge";
 
 export default function CvCard({ filename, uploadedOn }: { filename: string | null; uploadedOn: string | null }) {
   const { state, pending, submit } = useServerForm(uploadCv);
@@ -10,7 +11,7 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
       <h2 id="cv-h">Your resume</h2>
       {filename ? (
         <div className="file">
-          <span className="ft" aria-hidden="true">DOC</span>
+          <span className="ft" aria-hidden="true">{fileBadge(filename)}</span>
           <div className="filemain">
             <strong>{filename}</strong>
             {uploadedOn && <div className="meta">Uploaded {uploadedOn}</div>}
@@ -25,7 +26,7 @@ export default function CvCard({ filename, uploadedOn }: { filename: string | nu
       <form onSubmit={submit} noValidate className="uploadform">
         <label className="lab" htmlFor="cv-file">{filename ? "Replace your resume" : "Upload your resume"}</label>
         <input id="cv-file" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-        <p className="help">PDF or Word, up to 3 MB.</p>
+        <p className="help">PDF or Word, up to 4 MB.</p>
         {state.error && <p className="err form-err" role="alert">{state.error}</p>}
         {state.message && <p className="ok-msg" role="status">{state.message}</p>}
         <button type="submit" className="btn sm" disabled={pending}>{pending ? "Uploading" : "Upload"}</button>

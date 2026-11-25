@@ -4,12 +4,15 @@
 
 import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLES } from "./waitlist.ts";
 import { HOURS_IN_A_YEAR, markupPayLine, parseMoney, payFlags, payRangeAllowed, payText, salaryForMarkup, validatePay, type PayFields } from "./job-pay.ts";
-import { tidyTitle } from "./job-title.ts";
+import { levelsForRole, suggestTitle, tidyTitle } from "./job-title.ts";
 import { cleanTags, EQUIPMENT_TAGS, SOFTWARE_TAGS, SPECIALTY_TAGS } from "./job-tags.ts";
 
 export { HOURS_IN_A_YEAR, parseMoney, payRangeAllowed };
 
 export { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE };
+// Whether a saved job is in Quebec, whatever the capitals or accent. The form only ever saves "Quebec", but approving and extending re-check
+// with this in case a job reached the database another way (audit P1-28). The database holds the same rule (migration 0040).
+export const isQuebecJob = (job: { province?: string | null }) => ["quebec", "qu\u00e9bec", "qc"].includes((job.province ?? "").trim().toLowerCase());
 // Roles that work from clinics. The waitlist uses this list too, so it is kept as it is.
 export const CLINIC_ROLES = ROLES;
 // Roles that usually travel to clinics, for suppliers, manufacturers and labs. To add another role, add it
@@ -33,6 +36,15 @@ export function cleanEmploymentTypes(value: string | string[] | undefined): (typ
 export function employmentLabel(type: string | null | undefined): string {
   return type === "Contract" ? "Fixed term" : type ?? "";
 }
+
+// A short explanation shown beside "Fixed term" wherever people choose it or read it, opened with a tap or by hovering (Steve, 12th November 2026).
+export const FIXED_TERM_EXPLAINER = "A job for a set period with an end date, such as maternity cover or a seasonal role. The person is an employee of the clinic for that time, not self employed.";
+export function employmentExplainer(type: string | null | undefined): string | null {
+  return type === "Contract" ? FIXED_TERM_EXPLAINER : null;
+}
+// Short notes beside the 2 quick questions on a job page, matching the help centre topics (review item D-07).
+export const EXISTING_VACANCY_EXPLAINER = "Yes means the clinic has a real opening to fill now. No means it is building a pool of candidates for the future, so this may not lead to a hire straight away.";
+export const AI_SCREENING_EXPLAINER = "Yes means the clinic uses software with artificial intelligence to sort, rank or choose among applicants. The answer is about the clinic's own tools: Kestrel does not rank applicants with AI.";
 export const PRACTICE_TYPES = [
   { value: "independent", label: "Independent" },
   { value: "corporate", label: "Corporate" },
@@ -63,6 +75,8 @@ export const STATUS_LABELS: Record<JobStatus, string> = {
 
 export type JobInput = {
   title: string;
+  titleLevel: string; // a level word added to the suggested title: Lead, Senior or Associate
+  headline: string; // an optional one line from the clinic, up to 70 characters, shown under the title
   roleCategory: string;
   employmentType: string;
   province: string;
@@ -84,6 +98,9 @@ export type JobInput = {
   payPercentMin: string;
   payPercentMax: string;
   payPercentOf: string;
+  payExpectedMin: string; // the clinic's expected earnings, with a percentage only (migration 0043)
+  payExpectedMax: string;
+  payExpectedPeriod: string; // day or year
   tagsSoftware: string[];
   tagsEquipment: string[];
   tagsSpecialties: string[];
@@ -123,17 +140,19 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clean = (v: unknown, max: number) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
 // Wording that is not allowed in a post: any requirement of Canadian experience. This covers Ontario's rules from 1st January 2026.
-// It looks for three shapes, and is a safety net, because the admin reads every post as well:
+// It looks for four shapes, and is a safety net, because the admin reads every post as well:
 //  1. a place word near "experience": "Canadian experience", "Canadian clinical experience", "Canadian-experience preferred",
 //     "Cdn experience", "North American experience", "local work history". Only job words may sit between the two,
 //     so "We are a Canadian clinic offering experience with lenses" is allowed.
 //  2. experience then "in" a place: "experience in Canada", "experience gained in Canada", "experience in a Canadian clinic".
 //  3. "worked in Canada", "practising in Canada". Not when it is about a licence ("licensed to practise in Canada").
 const PLACE = "(?:canad\\w*|cdn|north\\s+americ\\w*|local)";
-const EXPERIENCE = "(?:experienc\\w*|work\\s+history|employment\\s+history)";
+const EXPERIENCE = "(?:experienc\\w*|exp(?!\\w)\\.?|work\\s+history(?!\\w)|employment\\s+history(?!\\w))";
 const JOB_WORDS = new Set("clinical clinic optometry optometric optical optician opticians dispensing retail eye care eyecare vision work working job professional industry relevant related prior previous practice practising practicing field employment health healthcare".split(" "));
-const NEAR_PLACE = new RegExp(`\\b${PLACE}\\b((?:[\\s-]+[\\w']+){0,3}?)[\\s-]+${EXPERIENCE}\\b`, "gi");
-const EXPERIENCE_IN = new RegExp(`\\bexperienc\\w*(?:\\s+[\\w']+){0,3}?\\s+(?:in|within|across|throughout|from)\\s+(?:a\\s+|the\\s+)?(?:canad\\w*|north\\s+americ\\w*)\\b`, "i");
+const NEAR_PLACE = new RegExp(`\\b${PLACE}\\b((?:[\\s-]+[\\w']+){0,3}?)[\\s-]+${EXPERIENCE}`, "gi");
+const EXPERIENCE_IN = new RegExp(`\\bexperienc\\w*(?:\\s+[\\w']+){0,3}?\\s+(?:in|within|across|throughout|from|at)\\s+(?:a\\s+|the\\s+)?(?:canad\\w*|north\\s+americ\\w*)\\b`, "i");
+// 4. the place put after the word, in brackets: "experience (Canadian) required".
+const EXPERIENCE_THEN_PLACE = new RegExp(`\\b${EXPERIENCE}\\s*[(\\[]\\s*${PLACE}\\s*[)\\]]`, "i");
 const WORKED_IN = /\b(?:work(?:ed|ing)?|practi[sc](?:e|ed|ing)|employed)\s+(?:[\w']+\s+){0,2}?(?:in|within)\s+(?:a\s+|the\s+)?canad\w*\b/gi;
 const ABOUT_A_LICENCE = /licen[cs]|regist|eligib|entitled|authori[sz]ed|permitted/i;
 
@@ -151,14 +170,27 @@ function firstAccepted(pattern: RegExp, text: string, accept: (match: RegExpExec
 export function mentionsCanadianExperience(text: string) {
   const onlyJobWords = (m: RegExpExecArray) => m[1].split(/[\s-]+/).filter(Boolean).every((w) => JOB_WORDS.has(w.toLowerCase()));
   const notAboutALicence = (m: RegExpExecArray) => !ABOUT_A_LICENCE.test(text.slice(Math.max(0, m.index - 30), m.index));
-  return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
+  return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || EXPERIENCE_THEN_PLACE.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
 }
 
+// The headline is the clinic's own line under the title (Steve, 14th November 2026).
+export const HEADLINE_MAX = 70;
+const HEADLINE_NOT_ALLOWED = /https?:\/\/|www\.|\S+@\S+|\$\s?\d/i;
+
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {
+  const roleCategory = clean(raw.roleCategory, 80);
+  const employmentType = clean(raw.employmentType, 30);
+  const tagsSpecialties = cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS);
+  const titleLevel = levelsForRole(roleCategory).includes(clean(raw.titleLevel, 12)) ? clean(raw.titleLevel, 12) : "";
+  // Once a role is chosen the title is set from the choices (Steve, 14th November 2026), so every title for a role reads the same way and the
+  // title always matches the role and the price band. Only a draft with no role yet keeps what was typed.
+  const suggested = suggestTitle({ role: roleCategory, employmentType, specialties: tagsSpecialties, level: titleLevel });
   return {
-    title: tidyTitle(clean(raw.title, 120)),
-    roleCategory: clean(raw.roleCategory, 80),
-    employmentType: clean(raw.employmentType, 30),
+    title: levelsForRole(roleCategory).length ? suggested : tidyTitle(clean(raw.title, 120)),
+    titleLevel,
+    headline: clean(raw.headline, HEADLINE_MAX),
+    roleCategory,
+    employmentType,
     province: clean(raw.province, 40),
     city: clean(raw.city, 80),
     payPeriod: clean(raw.payPeriod, 12),
@@ -175,21 +207,26 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     payPercentMin: clean(raw.payPercentMin, 20),
     payPercentMax: clean(raw.payPercentMax, 20),
     payPercentOf: clean(raw.payPercentOf, 12),
+    payExpectedMin: clean(raw.payExpectedMin, 20),
+    payExpectedMax: clean(raw.payExpectedMax, 20),
+    payExpectedPeriod: ["day", "year"].includes(clean(raw.payExpectedPeriod, 4)) ? clean(raw.payExpectedPeriod, 4) : "",
     payIsMinimum: clean(raw.payIsMinimum, 3) === "yes" ? "yes" : "",
     payDays: clean(raw.payDays, 2),
     tagsSoftware: cleanTags(raw.tagsSoftware, SOFTWARE_TAGS),
     tagsEquipment: cleanTags(raw.tagsEquipment, EQUIPMENT_TAGS),
-    tagsSpecialties: cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS),
+    tagsSpecialties,
   };
 }
 
 // A draft only needs a title. Submitting for review needs everything.
 export function validateJob(job: JobInput, submit: boolean) {
   const errors: Record<string, string> = {};
-  if (!job.title) errors.title = "Give the job a title.";
+  if (!job.title) errors.title = "Choose a role and the job title is set for you.";
   if (job.description && mentionsCanadianExperience(`${job.title} ${job.description}`)) {
     errors.description = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   }
+  if (job.headline && mentionsCanadianExperience(job.headline)) errors.headline = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
+  else if (job.headline && HEADLINE_NOT_ALLOWED.test(job.headline)) errors.headline = "Keep the headline to words about the job and the clinic. Pay, web addresses and email addresses go in their own boxes.";
   if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.province === QUEBEC) errors.province = QUEBEC_JOB_MESSAGE; // refused for drafts too, so a Quebec job never gets as far as review
@@ -328,8 +365,9 @@ const REGION_CODES: Record<string, string> = {
   Quebec: "QC", Saskatchewan: "SK", Yukon: "YT",
 };
 
-// Locum work is temporary and usually done as a contractor, so both are given. Google accepts a list.
-const SCHEMA_EMPLOYMENT: Record<string, string | string[]> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: ["TEMPORARY", "CONTRACTOR"], Contract: "CONTRACTOR" };
+// Locum work is temporary and usually done as a contractor, so both are given. Google accepts a list. Fixed term ("Contract") is an
+// employee for a set period, so it is TEMPORARY; CONTRACTOR means self employed (audit P1-52, Steve agreed 12th November 2026).
+const SCHEMA_EMPLOYMENT: Record<string, string | string[]> = { "Full time": "FULL_TIME", "Part time": "PART_TIME", Locum: ["TEMPORARY", "CONTRACTOR"], Contract: "TEMPORARY" };
 
 type PublicJob = PayFields & {
   id: string; title: string; description: string; employment_type: string; province: string; city: string;

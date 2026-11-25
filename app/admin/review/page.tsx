@@ -1,60 +1,48 @@
+import { withExpected } from "@/lib/expected-columns";
 import type { Metadata } from "next";
+import Link from "next/link";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
-import { approveJob, rejectJob } from "@/lib/admin-actions";
+import { type AdminJob, type AdminPayment } from "@/components/admin-job-types";
+import AdminJobRow from "@/components/AdminJobRow";
+import JobActivity from "@/components/JobActivity";
+import ReviewButtons from "@/components/ReviewButtons";
+import { loadActivity } from "@/lib/job-activity";
+import { REVIEW_NOTICES, reviewMessage } from "@/lib/review-notices";
 import { changedFields } from "@/lib/job-diff";
-import { answerLabel, employeeBandLabel, employerFlags, employmentLabel, longDate, practiceLabel, reviewFlags } from "@/lib/jobs";
-import { payText, type PayFields } from "@/lib/job-pay";
+import { answerLabel, employeeBandLabel, employmentLabel, longDate, practiceLabel } from "@/lib/jobs";
+import { payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { REVIEW_COLUMNS, loadReviewQueue, queueFlagList } from "@/lib/review-queue";
+import { paymentLine } from "@/lib/checkout-mode";
 
 export const metadata: Metadata = { title: "Review queue | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
 
-const NOTICES: Record<string, string> = {
-  approved: "Approved. The job is live.",
-  rejected: "Sent back to the clinic with your note.",
-  "need-note": "Please tell the clinic what to change before sending a job back.",
-  error: "That didn't work. The job may already have been handled. Please refresh and try again.",
-};
+// How many recently handled jobs the strip shows. Everything else is on the Jobs page, which can search and page.
+const RECENT_LIMIT = 10;
 
-type QueueJob = PayFields & {
-  tags_software: string[] | null; tags_equipment: string[] | null; tags_specialties: string[] | null;
-  id: string; title: string; role_category: string; employment_type: string; province: string; city: string;
-  is_existing_vacancy: boolean | null; uses_ai_screening: boolean | null;
-  description: string; work_arrangement: string | null; territory: string | null; pay_extras: string | null; apply_method: string; apply_url: string | null; created_at: string; employer_id: string; posted_at: string | null; expires_at: string | null;
-  employers: { clinic_name: string; practice_type: string; website: string | null; city: string; province: string; direct_hire_confirmed_at: string | null } | null;
-};
-
-export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
+export default async function ReviewQueue({ searchParams }: { searchParams: Promise<{ notice?: string; why?: string }> }) {
   const session = await requireRole("admin");
-  const { notice } = await searchParams;
+  const { notice, why } = await searchParams;
   const db = supabaseAdmin();
-  const { data } = db
-    ? await db
-        .from("jobs")
-        .select("id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, created_at, employer_id, posted_at, expires_at, employers(clinic_name, practice_type, website, city, province, direct_hire_confirmed_at)")
-        .eq("status", "in_review")
-        .order("created_at", { ascending: true })
+  const { jobs, notifyEmails, bands, liveWording } = await loadReviewQueue(db, await withExpected(REVIEW_COLUMNS));
+  // Jobs handled in the last 7 days (approved and live, or sent back), so a job does not vanish the moment it is dealt with and its notes can still be read.
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: recentRows } = db
+    ? await db.from("jobs").select("id, title, status, role_category, city, province, posted_at, expires_at, updated_at, employers(clinic_name)").in("status", ["live", "rejected"]).gte("updated_at", weekAgo).order("updated_at", { ascending: false }).limit(RECENT_LIMIT)
     : { data: null };
-  const jobs = (data ?? []) as unknown as QueueJob[];
-  const notifyEmails = new Map<string, string>();
-  const bands = new Map<string, string | null>();
-  if (db && jobs.length) {
-    const { data: contacts } = await db.from("employer_contacts").select("employer_id, notify_email, employee_band").in("employer_id", [...new Set(jobs.map((j) => j.employer_id))]);
-    (contacts ?? []).forEach((c) => {
-      notifyEmails.set(c.employer_id, c.notify_email);
-      bands.set(c.employer_id, c.employee_band);
-    });
-  }
-
-  // For edited live jobs, the wording candidates were seeing (the most recent copy kept for each job).
-  const liveWording = new Map<string, Record<string, unknown>>();
-  if (db && jobs.some((j) => j.posted_at)) {
-    const { data: versions } = await db.from("job_versions").select("job_id, snapshot").in("job_id", jobs.map((j) => j.id)).order("saved_at", { ascending: false });
-    (versions ?? []).forEach((v) => !liveWording.has(v.job_id) && liveWording.set(v.job_id, v.snapshot as Record<string, unknown>));
+  const recent = (recentRows ?? []) as unknown as AdminJob[];
+  const allIds = [...jobs.map((j) => j.id), ...recent.map((j) => j.id)];
+  const activity = db ? await loadActivity(db, allIds) : new Map();
+  // The payment for each job (migration 0048). A database without it just shows no payment line.
+  const payments = new Map<string, AdminPayment>();
+  if (db && allIds.length) {
+    const { data: rows } = await db.from("job_payments").select("job_id, status, amount_cents, band, failure_message, created_at").in("job_id", allIds).order("created_at", { ascending: false });
+    (rows ?? []).forEach((r) => !payments.has(r.job_id) && payments.set(r.job_id, r));
   }
 
   return (
@@ -62,21 +50,17 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
       <AppBar session={session} current="/admin/review" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Review queue</h1>
-          <p className="lede2">Check each post before it goes live. Approving it starts its 30 days.</p>
-          {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}
+          <p className="lede2">Check each post before it goes live. Approving it puts it live and starts its run: 60 days during the free launch, 30 days after.</p>
+          {notice && REVIEW_NOTICES[notice] && <p className="notice" role="status">{reviewMessage(notice, why)}</p>}
 
+          {jobs.length > 0 && <p className="waitcount" role="status">{jobs.length} waiting for a decision</p>}
           {jobs.length === 0 ? (
             <section className="card"><p>Nothing is waiting. New posts appear here as soon as a clinic submits them.</p></section>
           ) : (
             <div className="joblist">
               {jobs.map((j) => {
-                const flags = [
-                  ...(j.posted_at ? [`Changes to a job that was already live since ${longDate(j.posted_at)}.${liveWording.has(j.id) ? " What changed is listed below." : " No copy of the earlier wording was kept for this one."}`] : []),
-                  ...reviewFlags(j),
-                  ...employerFlags({ website: j.employers?.website, notifyEmail: notifyEmails.get(j.employer_id), directHireConfirmedAt: j.employers?.direct_hire_confirmed_at }),
-                ];
+                const flags = queueFlagList(j, notifyEmails.get(j.employer_id), liveWording.has(j.id));
                 return (
                   <article className="card review" key={j.id}>
                     <div className="listhead">
@@ -111,6 +95,7 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                     )}
                     <dl className="facts">
                       <div><dt>Role</dt><dd>{j.role_category}</dd></div>
+                      {j.headline && <div><dt>Headline</dt><dd>{j.headline}</dd></div>}
                       <div><dt>Type</dt><dd>{employmentLabel(j.employment_type)}</dd></div>
                       <div><dt>Pay</dt><dd>{payText(j)}</dd></div>
                       {j.territory && <div><dt>Area covered</dt><dd>{j.territory}</dd></div>}
@@ -118,24 +103,31 @@ export default async function ReviewQueue({ searchParams }: { searchParams: Prom
                       {TAG_GROUPS.map((g) => (tagsFromRow(j)[g.key].length > 0 ? <div key={g.key}><dt>{g.label}</dt><dd>{tagsFromRow(j)[g.key].join(", ")}</dd></div> : null))}
                       <div><dt>Existing vacancy</dt><dd>{answerLabel(j.is_existing_vacancy)}</dd></div>
                       <div><dt>Uses AI to screen</dt><dd>{answerLabel(j.uses_ai_screening)}</dd></div>
+                      <div><dt>Payment</dt><dd>{paymentLine(payments.get(j.id), j.role_category)}</dd></div>
                       <div><dt>Applications</dt><dd>{j.apply_method === "external" ? `On their own page: ${j.apply_url}` : "Through Kestrel"}</dd></div>
                     </dl>
-                    <pre className="adtext">{j.description}</pre>
-                    <div className="reviewbtns">
-                      <form action={approveJob}>
-                        <input type="hidden" name="id" value={j.id} />
-                        <button type="submit" className="btn">Approve and publish</button>
-                      </form>
-                      <form action={rejectJob} className="rejectform">
-                        <input type="hidden" name="id" value={j.id} />
-                        <label className="lab" htmlFor={`note-${j.id}`}>Or send it back, and tell the clinic what to change</label>
-                        <textarea id={`note-${j.id}`} name="note" rows={3} />
-                        <button type="submit" className="btn ghost">Send back</button>
-                      </form>
-                    </div>
+                    <ReviewButtons id={j.id} />
+                    <details className="adfold">
+                      <summary>Read the ad</summary>
+                      <pre className="adtext">{j.description}</pre>
+                    </details>
+                    <JobActivity rows={activity.get(j.id) ?? []} />
                   </article>
                 );
               })}
+            </div>
+          )}
+
+          <div className="subheadrow">
+            <h2 className="subhead">Recently handled</h2>
+            <Link href="/admin/jobs" className="btn sm ghost">See all jobs</Link>
+          </div>
+          <p className="help">The latest {RECENT_LIMIT} jobs approved or sent back in the last 7 days, newest first. Press one for its payment and notes.</p>
+          {recent.length === 0 ? (
+            <section className="card"><p>Nothing handled in the last 7 days.</p></section>
+          ) : (
+            <div className="joblist">
+              {recent.map((j) => <AdminJobRow key={j.id} job={j} payment={payments.get(j.id)} activity={activity.get(j.id) ?? []} />)}
             </div>
           )}
         </div>

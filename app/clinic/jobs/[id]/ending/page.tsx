@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import FilledViaFields from "@/components/FilledViaFields";
 import { requireRole } from "@/lib/auth";
+import { getMyEditableEmployer } from "@/lib/clinic";
 import { fillRole } from "@/lib/applicant-actions";
 import { getApplicantCounts, getHireCandidates, getMyJob } from "@/lib/clinic";
 import { extendJob } from "@/lib/clinic-actions";
 import { EXTEND_GRACE_DAYS, EXTEND_WINDOW_DAYS, FILL_SOURCES, canExtend, extendedUntil } from "@/lib/job-ending";
 import { longDate } from "@/lib/jobs";
+import { IN_TALKS } from "@/lib/still-talking";
 
 export const metadata: Metadata = { title: "Filled, or still hiring? | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -19,6 +21,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const DAY = 24 * 60 * 60 * 1000;
 
 const NOTICES: Record<string, string> = {
+  "job-extend-quebec": "This job is in Quebec, and Kestrel can't post jobs in Quebec yet, so it can't be extended. Quebec is planned for a later date.",
   "job-extend-blocked": "This job can't be extended right now. A live job can be extended in its last 7 days, and an ended one within 7 days of ending.",
   "job-extend-failed": "We couldn't extend the job. Please try again, or email us and we'll do it for you.",
 };
@@ -26,6 +29,8 @@ const NOTICES: Record<string, string> = {
 // Where the closing soon email lands. The clinic answers one question: filled (and how), or still hiring.
 export default async function JobEnding({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("clinic");
+  // Changing a job is for the owner and "view and edit" team members (migration 0045).
+  if (!(await getMyEditableEmployer(session.userId))) redirect("/clinic");
   const { id } = await params;
   const { notice } = await searchParams;
   if (!UUID.test(id)) notFound();
@@ -34,6 +39,8 @@ export default async function JobEnding({ params, searchParams }: { params: Prom
   const counts = await getApplicantCounts();
   const waiting = counts[id]?.waiting ?? 0;
   const hireCandidates = await getHireCandidates(id);
+  // The people at Interview or Offer, listed with a message each (P1-13).
+  const talking = hireCandidates.filter((c) => (IN_TALKS as readonly string[]).includes(c.status));
   const now = new Date();
   const extendable = canExtend(job, now);
   const ended = job.status === "expired" || job.status === "closed";
@@ -68,12 +75,12 @@ export default async function JobEnding({ params, searchParams }: { params: Prom
               <input type="hidden" name="jobId" value={job.id} />
               <input type="hidden" name="from" value="ending" />
               <h2>Filled it?</h2>
-              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="end" />
+              <FilledViaFields sources={FILL_SOURCES} candidates={hireCandidates} idPrefix="end" talking={talking} clinicName={hireCandidates[0]?.clinicName ?? ""} />
               <p className="help">
                 {ended ? "We'll save your answer. " : "This closes the job. "}
                 {waiting > 0
-                  ? `The ${waiting} ${waiting === 1 ? "person" : "people"} still waiting will hear, kindly, that the role is filled. Candidates in an interview or with an offer are not changed.`
-                  : "Your answer helps us make Kestrel better for clinics like yours."}
+                  ? `The ${waiting} ${waiting === 1 ? "person" : "people"} still waiting will hear, kindly, that the role is filled.${talking.length > 0 ? " So will the people you are still talking to, with the messages above." : ""}`
+                  : talking.length > 0 ? "The people you are still talking to will hear, with the messages above." : "Your answer helps us make Kestrel better for clinics like yours."}
               </p>
               <div><button type="submit" className="btn">{ended ? "Save my answer" : "Yes, it's filled"}</button></div>
             </form>

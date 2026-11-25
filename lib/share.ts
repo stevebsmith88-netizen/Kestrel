@@ -14,6 +14,7 @@ export function shareMetadata({ title, description, path, type = "website", shar
     description,
     alternates: { canonical: path },
     openGraph: { title: shown, description, url: path, siteName: SITE_NAME, locale: "en_CA", type, images: [{ url: IMAGE, width: 1200, height: 630, alt: SITE_NAME }] },
-    twitter: { card: "summary", title: shown, description, images: [IMAGE] },
+    // The picture is 1200 by 630, so it is shown full width (audit P1-52).
+    twitter: { card: "summary_large_image", title: shown, description, images: [IMAGE] },
   };
 }

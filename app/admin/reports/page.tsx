@@ -7,6 +7,7 @@ import { dismissReport, takeDownReportedJob } from "@/lib/admin-actions";
 import { longDate } from "@/lib/jobs";
 import { REPORT_REASON_LABEL } from "@/lib/reports";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadReports } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Reports | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -26,21 +27,12 @@ type Report = {
 export default async function Reports({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("admin");
   const { notice } = await searchParams;
-  const db = supabaseAdmin();
-  const { data } = db
-    ? await db
-        .from("job_reports")
-        .select("id, job_id, reason, details, reporter_email, created_at, jobs(title, status, city, province, employers(clinic_name))")
-        .eq("status", "open")
-        .order("created_at", { ascending: true })
-    : { data: null };
-  const reports = (data ?? []) as unknown as Report[];
+  const reports = (await loadReports(supabaseAdmin())) as unknown as Report[];
   return (
     <>
       <AppBar session={session} current="/admin/reports" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Admin</p>
           <h1>Reported jobs</h1>
           <p className="lede2">Open reports from candidates and visitors. Taking a job down tells the clinic and closes every open report about that job.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}
@@ -56,7 +48,7 @@ export default async function Reports({ searchParams }: { searchParams: Promise<
                   </p>
                   <div className="flags"><strong>{REPORT_REASON_LABEL[r.reason] ?? r.reason}</strong></div>
                   {r.details && <pre className="adtext">{r.details}</pre>}
-                  {r.reporter_email && <p className="help">Reporter: <a href={`mailto:${r.reporter_email}`}>{r.reporter_email}</a></p>}
+                  {r.reporter_email && <p className="help">Reporter: {r.reporter_email} <a href={`mailto:${r.reporter_email}`} className="btn sm ghost">Email the reporter</a></p>}
                   <p><Link href={`/jobs/${r.job_id}`} className="btn sm ghost">Open the job</Link></p>
                   <div className="reviewbtns">
                     <form action={takeDownReportedJob}><input type="hidden" name="id" value={r.id} /><button type="submit" className="btn">Take the job down</button></form>

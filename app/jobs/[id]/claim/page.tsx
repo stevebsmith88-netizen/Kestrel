@@ -16,7 +16,7 @@ export const metadata: Metadata = { title: "Claim your listing | Kestrel Eye Car
 export const dynamic = "force-dynamic";
 
 const STEPS = [
-  ["Create your clinic account", "Choose \"I'm hiring for a clinic\" and use your work email."],
+  ["Create your clinic account", "Choose \"I'm hiring\" and use your work email."],
   ["Confirm you represent the clinic", "We send a link to an email address at your clinic's own website."],
   ["Check the details", "Fix anything we got wrong, and answer anything your careers page did not say, such as whether it is an existing vacancy."],
   ["We take a quick look", "Our team checks every claim, usually within 1 business day."],
@@ -41,7 +41,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
     open = data?.status ?? null;
   }
 
-  const removeLink = `mailto:hello@eyecarejobs.ca?subject=${encodeURIComponent("Please remove a listing")}&body=${encodeURIComponent(`Please remove this listing: https://eyecarejobs.ca/jobs/${job.id}\n\nMy name and role at the clinic:\n`)}`;
+  const removeLink = `mailto:support@eyecarejobs.ca?subject=${encodeURIComponent("Please remove a listing")}&body=${encodeURIComponent(`Please remove this listing: https://eyecarejobs.ca/jobs/${job.id}\n\nMy name and role at the clinic:\n`)}`;
 
   return (
     <>
@@ -49,7 +49,6 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
           <p className="back"><Link href={`/jobs/${job.id}`}>Back to the job</Link></p>
-          <p className="kicker">For clinics</p>
           <h1>Is this your clinic? Claim your listing</h1>
           <p className="lede2">We found this job on your own website. Claim it to take control of the listing, for free during our launch.</p>
 
@@ -85,7 +84,7 @@ export default async function ClaimListing({ params }: { params: Promise<{ id: s
 
             <aside className="stackcards" aria-label="Claim form">
               {claimed ? (
-                <div className="card"><h3>Already claimed</h3><p>This listing now belongs to a clinic account. If that is a mistake, please email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>.</p></div>
+                <div className="card"><h3>Already claimed</h3><p>This listing now belongs to a clinic account. If that is a mistake, please email <a href="mailto:support@eyecarejobs.ca">support@eyecarejobs.ca</a>.</p></div>
               ) : !session ? (
                 <div className="card">
                   <h3>Start your claim</h3>

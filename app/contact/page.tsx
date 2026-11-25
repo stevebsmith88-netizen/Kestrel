@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Contact",
@@ -13,11 +18,11 @@ export const metadata: Metadata = shareMetadata({
 export default async function Contact() {
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
       <main id="main" tabIndex={-1} className="legal">
         <div className="wrap legal-wrap">
           <h1>Contact us</h1>
-          <p>A person on the Kestrel team reads every message. We aim to reply promptly, within 1 to 3 business days.</p>
+          <p>A person on the Kestrel team reads every message. We reply within 2 business days.</p>
 
           <h2>General questions and help</h2>
           <p><a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a></p>

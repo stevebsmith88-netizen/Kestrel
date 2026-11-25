@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+  employmentExplainer,
   answerLabel,
   cleanEmploymentTypes,
   employmentLabel,
@@ -198,6 +199,19 @@ test("structured data text is made safe and carries what the page shows", () => 
     "https://eyecarejobs.ca",
   );
   assert.deepEqual(locum.employmentType, ["TEMPORARY", "CONTRACTOR"]);
+  // Fixed term ("Contract" in the database) is an employee for a set period, so Google is told TEMPORARY, not CONTRACTOR, which means
+  // self employed (audit P1-52 e, Steve agreed 12th November 2026).
+  const fixed = jobPostingJsonLd(
+    { id: "y", title: "Optician, maternity cover", description: "d", employment_type: "Contract", province: "Ontario", city: "Toronto", pay_period: "hour", pay_min: 25, pay_max: 30, apply_method: "kestrel", apply_url: null, posted_at: "2026-11-01T00:00:00Z", expires_at: "2026-12-01T00:00:00Z" },
+    { clinic_name: "C", website: null },
+    "https://eyecarejobs.ca",
+  );
+  assert.equal(fixed.employmentType, "TEMPORARY");
+});
+
+test("Fixed term has a short explanation people can open", () => {
+  assert.match(employmentExplainer("Contract") ?? "", /set period/);
+  assert.equal(employmentExplainer("Full time"), null);
 });
 
 test("employerFlags points out clinics that look unlike a direct employer", () => {
@@ -253,4 +267,38 @@ test("the 2 required answers show Not stated by the clinic when a found listing'
   assert.equal(answerLabel(true), "Yes");
   assert.equal(answerLabel(false), "No");
   assert.equal(answerLabel(null), "Not stated by the clinic");
+});
+
+// Audit P1-27: abbreviations and a few more word orders.
+test("Canadian experience is blocked when abbreviated or reordered", () => {
+  const blocked = [
+    "Canadian exp required", "Cdn exp.", "cdn exp", "Canadian exp. an asset", "previous experience at a Canadian practice",
+    "experience at a Canadian clinic", "Experience at the Canadian practice level required", "experience (Canadian) required", "Experience [Canadian] preferred",
+    "experience (Cdn) an asset", "2+ years Canadian exp.", "Must have Canadian exp",
+  ];
+  for (const text of blocked) assert.equal(mentionsCanadianExperience(text), true, text);
+});
+
+test("the new shapes do not block ordinary sentences", () => {
+  const allowed = [
+    "We are a Canadian clinic offering experience with lenses", "Must be licensed to practise in Canada", "Our exp. team is friendly and Canadian owned",
+    "Canadian owned clinic, expanding", "Experience at our clinic is a plus", "experience with Canadian brands of frames is not needed", "Expect a Canadian winter",
+    "Experience (preferably with lenses) required", "Trained at the clinic. Canadian Association of Optometrists member",
+  ];
+  for (const text of allowed) assert.equal(mentionsCanadianExperience(text), false, text);
+});
+
+import { HEADLINE_MAX } from "./jobs.ts";
+
+test("the headline is optional, one short line, and follows the same rules as the ad", () => {
+  assert.equal(HEADLINE_MAX, 70);
+  const ok = cleanJob({ title: "Optician", headline: "  Join a 4 doctor family practice with a new dispensary  " });
+  assert.equal(ok.headline, "Join a 4 doctor family practice with a new dispensary");
+  assert.equal(validateJob(ok, false).headline, undefined);
+  assert.equal(cleanJob({ headline: "x".repeat(200) }).headline.length, 70);
+  assert.equal(cleanJob({}).headline, "");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Canadian experience preferred" }), false).headline, "Canadian experience is refused");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Earn $90,000 with us" }), false).headline, "pay has its own box");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Apply at www.example.com" }), false).headline, "no web address");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Write to jobs@example.com" }), false).headline, "no email address");
 });

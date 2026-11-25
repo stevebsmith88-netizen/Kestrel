@@ -3,13 +3,18 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import {
   COMPARE_CHECKED, comparePageOn, ELUTA_SPONSORED, ELUTA_URL, INDEED, INDEED_URL, JOBS4ECPS_BASIC, JOBS4ECPS_URL, LINKEDIN_URL, OJOBS_FEATURED, OJOBS_REGULAR, OJOBS_URL, over30Days,
   ZIPRECRUITER, ZIPRECRUITER_URL,
 } from "@/lib/compare-prices";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, dollars, perDay, perPassPost, POST_DAYS, ROLE_BANDS } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "How Kestrel's prices compare",
@@ -47,7 +52,7 @@ export default async function Compare() {
   const featured5 = five(OJOBS_FEATURED);
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
       <main id="main" tabIndex={-1} className="legal resources">
         <div className="wrap legal-wrap">
           <h1>How Kestrel&apos;s prices compare</h1>

@@ -2,7 +2,7 @@ import "server-only";
 import { readyToApply } from "./profile-ready.ts";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { deliverEmail, type SendResult } from "@/lib/email";
-import { dueStep, onboardingEmail, type Facts } from "@/lib/onboarding-emails";
+import { dueStep, onboardingAddress, onboardingEmail, type Facts } from "@/lib/onboarding-emails";
 import type { makeBudget } from "@/lib/send-budget";
 import { unsubscribeIdUrl } from "@/lib/unsubscribe-link";
 
@@ -28,6 +28,8 @@ export async function runOnboarding(admin: SupabaseClient, ctx: { now: Date; bud
     .select("id, role, first_name, created_at")
     .in("role", ["candidate", "clinic"])
     .is("unsubscribed_at", null)
+    // Only people who ticked the news box at sign up, whose wording names these tips (Steve, 12th November 2026).
+    .eq("marketing_consent", true)
     .gte("created_at", new Date(ctx.now.getTime() - 12 * DAY).toISOString())
     .limit(500);
   if (error) {
@@ -81,7 +83,8 @@ export async function runOnboarding(admin: SupabaseClient, ctx: { now: Date; bud
       break;
     }
     const { data: user } = await admin.auth.admin.getUserById(p.id);
-    const email = user?.user?.email;
+    // Only an address the person has confirmed (P1-06).
+    const email = onboardingAddress(user?.user);
     if (!email) {
       ctx.budget.refund();
       continue;

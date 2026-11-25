@@ -99,6 +99,23 @@ The key is listed in `docs/security.md` with how to rotate it.
 6. Buying groups blog post: LIVE since 6th November 2026 (Steve approved). It is impartial and says nothing about your job, as you decided. Research and sources: `docs/blog-drafts/buying-groups.md`.
 7. Recommended for you (built 6th November 2026 on branch `claude/amazing-keller-c7k18u`, waiting for your preview). It needs SQL: run `supabase/combined/run-everything.sql` on **both** databases (live and demo), which adds migration 0031. (On 6th November the demo run stopped with "check constraint jobs_complete_unless_draft is violated by some row", because the demo holds 2 found listings with the 2 questions blank and the file re-applied an older, stricter rule first. Fixed the same day in migrations 0019 and the combined file, so use the updated file. Re-checked on a test database holding such listings: runs twice cleanly. If the full file ever fails, running just `supabase/migrations/0031_candidate_preferences.sql` is enough for this feature.) Then re-run `supabase/demo/seed.sql` on the demo database only, so the demo candidate has a town and preferences. Then sign in to the demo as the sample candidate, open the home page and look at "Recommended for you", press "Not interested" on one, and open the profile page to change "What you are looking for". No new setting. The rules are described in `docs/candidates-and-applications.md`.
 
+## When the audit part 1 phases are wrapped up (saved 12th November 2026, from Phase F)
+
+Steve asked to keep these for the end of the audit phases.
+
+### Check that saved job pages clear at once (Phase F, P1-10)
+
+On demo.eyecarejobs.ca (it builds from `main`): close a test job as a clinic, then open its job page in a private tab. It should already be gone. Opening it again 5 minutes later must certainly show it gone.
+
+### Set up Google Search Console
+
+1. Go to search.google.com/search-console and sign in with the Kestrel Google account (steve@eyecarejobs.ca).
+2. Choose **Add property**, then **Domain**, and type `eyecarejobs.ca`.
+3. Google shows a TXT record. In Namecheap, open **Advanced DNS** for eyecarejobs.ca, choose **Add new record**, then **TXT**, with Host `@` and the value Google gave. Save.
+4. Back in Search Console, choose **Verify**. It can take a few minutes to an hour.
+5. Open **Sitemaps**, enter `https://eyecarejobs.ca/sitemap.xml` and submit it.
+6. A week later, look at **Pages** (what Google has indexed) and **Enhancements**, where Job postings appear once jobs are live.
+
 ## Planning items (decided direction, not started)
 
 ### Sponsored posts (added 6th November 2026, design only)

@@ -2,6 +2,7 @@ import "server-only";
 import { readyToApply } from "./profile-ready.ts";
 import { countIn, gateC, hiresSummary, investorNumbers, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts, type JobRow, type Period } from "@/lib/admin-stats";
 import { EMPLOYEE_BANDS } from "@/lib/jobs";
+import { demoAccountIds, loadAccountEmails } from "@/lib/account-emails";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
 type Db = NonNullable<ReturnType<typeof supabaseAdmin>>;
@@ -39,8 +40,8 @@ export async function loadStats(period: Period) {
   if (!db) return null;
   const range = periodRange(period);
 
-  const [profiles, waitlist, employers, jobs, applications, candidateProfiles, inReview, openReports, pendingClaims, contacts] = await Promise.all([
-    fetchAll<{ role: string; created_at: string }>(db, "profiles", "role, created_at"),
+  const [allProfiles, waitlist, allEmployers, allJobs, allApplications, allCandidateProfiles, inReview, openReports, pendingClaims, allContacts, openSupport] = await Promise.all([
+    fetchAll<{ id: string; role: string; created_at: string }>(db, "profiles", "id, role, created_at"),
     fetchAll<{ created_at: string; confirmed_at: string | null; unsubscribed_at: string | null }>(db, "waitlist", "created_at, confirmed_at, unsubscribed_at"),
     fetchAll<{ id: string; claimed: boolean; owner_id: string | null; created_at: string }>(db, "employers", "id, claimed, owner_id, created_at"),
     fetchAll<JobRow & { id: string; filled_via: string | null; filled_application_id: string | null }>(db, "jobs", "id, employer_id, status, posted_at, province, created_at, filled_via, filled_application_id"),
@@ -50,8 +51,20 @@ export async function loadStats(period: Period) {
     head(db, "job_reports", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "open")),
     head(db, "listing_claims", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "pending_review")),
     fetchAll<{ employer_id: string; employee_band: string | null }>(db, "employer_contacts", "employer_id, employee_band"),
+    head(db, "support_requests", (q) => (q as { eq: (a: string, b: string) => unknown }).eq("status", "open")),
   ]);
 
+  // The demo and test accounts are left out of every candidate number (Steve, 19th November 2026).
+  const demo = demoAccountIds(await loadAccountEmails(db));
+  const profiles = allProfiles.filter((p) => !demo.has(p.id));
+  // A demo clinic, its jobs, its contacts and the applications to them are left out too.
+  const demoEmployers = new Set(allEmployers.filter((e) => e.owner_id && demo.has(e.owner_id)).map((e) => e.id));
+  const employers = allEmployers.filter((e) => !demoEmployers.has(e.id));
+  const jobs = allJobs.filter((j) => !demoEmployers.has(j.employer_id));
+  const contacts = allContacts.filter((c) => !demoEmployers.has(c.employer_id));
+  const liveJobIds = new Set(jobs.map((j) => j.id));
+  const applications = allApplications.filter((a) => !demo.has(a.candidate_id) && liveJobIds.has(a.job_id));
+  const candidateProfiles = allCandidateProfiles.filter((c) => !demo.has(c.user_id));
   const candidates = profiles.filter((p) => p.role === "candidate");
   const clinicAccounts = profiles.filter((p) => p.role === "clinic");
   const live = jobs.filter((j) => j.status === "live");
@@ -113,6 +126,7 @@ export async function loadStats(period: Period) {
     jobsInReview: inReview ?? 0,
     openReports: openReports ?? 0,
     pendingClaims: pendingClaims ?? 0,
+    openSupport: openSupport ?? 0,
     claimedShare: percent(employers.filter((e) => e.claimed).length, employers.length),
   };
 }

@@ -1,4 +1,5 @@
 // The help centre at /help: what a topic looks like, and small helpers the page and the tests share. The words live in content/help.ts.
+import { parseInline } from "./blog.ts";
 
 export type HelpLink = { label: string; href: string };
 
@@ -63,3 +64,21 @@ export function topicHaystack(topic: HelpTopic): string {
 
 // When this many topics or fewer match, the search opens them so the answer is already showing.
 export const SEARCH_OPEN_LIMIT = 5;
+
+// The FAQPage structured data for /help (audit P1-52): each topic's title as the question and its visible text as the answer, in page
+// order. Links and bold are turned into plain words, exactly as the page shows them, and the search keywords are left out.
+export function helpFaqJsonLd(sections: readonly HelpSection[]) {
+  const plain = (text: string) => parseInline(text).map((p) => p.text).join("");
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    inLanguage: "en-CA",
+    mainEntity: sections.flatMap((s) =>
+      s.topics.map((t) => ({
+        "@type": "Question",
+        name: t.title,
+        acceptedAnswer: { "@type": "Answer", text: [...t.answer.map(plain), ...(t.steps ?? []).map((step, n) => `${n + 1}. ${plain(step)}`)].join("\n") },
+      })),
+    ),
+  };
+}

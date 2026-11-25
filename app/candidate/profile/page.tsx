@@ -14,6 +14,9 @@ import { longDate } from "@/lib/jobs";
 export const metadata: Metadata = { title: "My profile and resume | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export const dynamic = "force-dynamic";
+// The longest any action on this page may run (saving the profile, uploading a resume, Read my resume). A backstop behind the resume
+// reader's own limits in lib/resume-text.ts: if something still runs away, the server stops it at 30 seconds.
+export const maxDuration = 30;
 
 export default async function CandidateProfilePage({ searchParams }: { searchParams: Promise<{ notice?: string; next?: string }> }) {
   const session = await requireRole("candidate");
@@ -26,7 +29,6 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
       <AppBar session={session} current="/candidate/profile" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">My profile</p>
           <h1>Your profile and resume</h1>
           <p className="lede2">Save your resume once, then apply to any job in a few clicks. Your profile is private. A clinic sees only what you send with an application.</p>
           {notice === "cv-deleted" && <p className="notice" role="status">Your resume is deleted.</p>}
@@ -54,7 +56,8 @@ export default async function CandidateProfilePage({ searchParams }: { searchPar
           </section>
           <div className="stackcards">
             <CvCard filename={profile?.cv_filename ?? null} uploadedOn={profile?.cv_uploaded_at ? longDate(profile.cv_uploaded_at) : null} />
-            {profile?.cv_path && <ResumeReader />}
+            {/* Keyed by the upload time, so a new resume starts the reader afresh instead of showing the old file's suggestions (D-03). */}
+            {profile?.cv_path && <ResumeReader key={`${profile.cv_path}|${profile.cv_uploaded_at ?? ""}`} />}
             <CandidateProfileForm key={JSON.stringify(profile)} initial={profile} />
           </div>
         </div>

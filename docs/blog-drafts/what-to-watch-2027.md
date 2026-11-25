@@ -1,4 +1,4 @@
-# Draft: Eye care hiring in Canada, what to watch in 2027 (blog item 21)
+# Draft: Eye care hiring in Canada, what to watch in 2027 (blog item 23)
 
 Drafted 12th November 2026 for Steve to review. Not in `content/posts.ts` yet.
 

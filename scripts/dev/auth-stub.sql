@@ -4,6 +4,8 @@ do $$ begin
   if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon nologin; end if;
   if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated nologin; end if;
   if not exists (select 1 from pg_roles where rolname = 'service_role') then create role service_role nologin bypassrls; end if;
+  -- Supabase's sign up service (GoTrue) writes new accounts into auth.users as this role.
+  if not exists (select 1 from pg_roles where rolname = 'supabase_auth_admin') then create role supabase_auth_admin nologin; end if;
 end $$;
 create schema if not exists auth;
 create table if not exists auth.users (id uuid primary key default gen_random_uuid(), email text, raw_user_meta_data jsonb default '{}', raw_app_meta_data jsonb default '{}');
@@ -15,3 +17,5 @@ create schema if not exists storage;
 create table if not exists storage.buckets (id text primary key, name text, public bool);
 create table if not exists storage.objects (id uuid default gen_random_uuid(), bucket_id text, name text, owner uuid);
 alter table storage.objects enable row level security;
+grant usage on schema auth to supabase_auth_admin;
+grant select, insert on auth.users to supabase_auth_admin;

@@ -32,7 +32,10 @@ test("only a page with live jobs is offered to Google", () => {
 });
 
 test("the description counts jobs only when there are some", () => {
-  assert.match(landingDescription("Optician jobs in Ontario", 3), /^3 live jobs: optician jobs in ontario\./);
+  // The place keeps its capital letters (audit P1-52 b): only the first word is lowercased to read on after the colon.
+  assert.match(landingDescription("Optician jobs in Ontario", 3), /^3 live jobs: optician jobs in Ontario\./);
+  assert.match(landingDescription("Eye care jobs in British Columbia", 2), /^2 live jobs: eye care jobs in British Columbia\./);
+  assert.match(landingDescription("Eye care jobs in Prince Edward Island", 4), /in Prince Edward Island\./);
   assert.match(landingDescription("Optician jobs in Ontario", 1), /^1 live job:/);
   assert.match(landingDescription("Optician jobs in Ontario", 0), /^Optician jobs in Ontario on Kestrel Eye Care Jobs\./);
 });

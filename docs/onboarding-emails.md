@@ -9,7 +9,7 @@ At most 3 emails per account, on day 1, day 3 and day 7 after the account is ope
 | Account | Day 1 | Day 3 | Day 7 |
 | --- | --- | --- | --- |
 | Clinic | No profile yet: set up the profile. Profile but no post: post your first job. Skipped if a job is already submitted | Not submitted: offer help and say we can post for them. Submitted, not live: what happens to a post. Live, no applications: 3 ways to get the first applications | Has applications: reply within 5 days. Live, none yet: 3 things to check. Nothing posted: offer to help |
-| Candidate | Profile not ready: add role and CV. Ready: jobs that fit you | Set a job alert (skipped if one exists) | Ready to apply, with the cover letter draft. All skipped once the candidate has applied |
+| Candidate | Profile not ready: add role and CV. Ready: jobs that fit you | Set a job alert (skipped if one exists) | Ready to apply, with a reminder that a cover letter can be saved and reused. All skipped once the candidate has applied |
 
 The aim behind each is the agreed definitions in `docs/definitions.md`: a clinic's first application received, a candidate's first application sent.
 
@@ -21,7 +21,7 @@ The aim behind each is the agreed definitions in `docs/definitions.md`: a clinic
 - `lib/onboarding-run.ts`: part of the daily job. It looks at accounts opened in the last 12 days, works out what each has done, and sends at most 1 email each. A step missed by up to 3 days (budget spent, job off) is still sent, then dropped.
 - Each step is claimed in the `onboarding_emails` table before sending, so a second copy of the daily job can never send it twice. If sending fails the claim is removed and it is tried again the next day.
 - Counts against the daily email budget (`DAILY_EMAIL_BUDGET`, default 50) like every other email, and shows in the daily job's summary as `onboardingSent`.
-- Every email has the unsubscribe link, the mailing address and the line "You are receiving this because you created a Kestrel Eye Care Jobs account." It never goes to anyone on the do not email list or anyone who has unsubscribed.
+- Every email has the unsubscribe link, the mailing address and the line "You are receiving this because you created a Kestrel Eye Care Jobs account." It never goes to anyone on the do not email list, anyone who has unsubscribed, or an account whose email address was never confirmed (audit P1-06).
 
 ## To check before switching on
 

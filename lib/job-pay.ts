@@ -5,6 +5,8 @@
 // A job's pay has up to two parts, and at least one must be filled in (Steve, 9th November 2026):
 //   money        a range in dollars a year, an hour or a day (optometrist roles can use a day). Optionally "a guaranteed minimum".
 //   percentage   a range of a percentage of production, collections, billings or exam fees (optometrist roles only)
+//   expected     with a percentage and no dollar range: the clinic's own estimate of what the role earns, a day or a year (Steve, 12th
+//                November 2026). Shown as the clinic's estimate, so a percentage never stands alone (migration 0043).
 // Both together read "money, plus the percentage", or, when the money is a guaranteed minimum, "the minimum, or the percentage when that
 // comes to more". "Negotiable" on its own is never accepted.
 
@@ -74,6 +76,9 @@ export type PayFields = {
   pay_percent_min?: number | string | null;
   pay_percent_max?: number | string | null;
   pay_percent_of?: string | null;
+  pay_expected_min?: number | string | null; // the clinic's estimate, with a percentage only (migration 0043)
+  pay_expected_max?: number | string | null;
+  pay_expected_period?: string | null; // day or year
 };
 
 // A usable positive number, or null (so a missing figure is never treated as 0).
@@ -98,6 +103,14 @@ function shareOf(f: PayFields): Share | null {
   return min !== null && max !== null ? { min, max, of: OF_WORDS[f.pay_percent_of ?? ""] ? (f.pay_percent_of as string) : "production" } : null;
 }
 
+type Expected = { period: "day" | "year"; min: number; max: number };
+function expectedOf(f: PayFields): Expected | null {
+  const min = num(f.pay_expected_min);
+  const max = num(f.pay_expected_max);
+  const p = f.pay_expected_period;
+  return min !== null && max !== null && (p === "day" || p === "year") ? { period: p, min, max } : null;
+}
+
 // "year", "hour" or "day" for dollars only; "minimum" for a guaranteed minimum only; "percent" for a percentage only; "both" for the two together.
 export type PayBasis = "year" | "hour" | "day" | "minimum" | "percent" | "both";
 export function payBasisOf(f: PayFields): PayBasis | null {
@@ -116,6 +129,14 @@ const UNIT: Record<string, string> = { year: "a year", hour: "an hour", day: "a 
 
 const moneyText = (m: Money) => `${range(m.min, m.max, money)} ${UNIT[m.period]}`;
 const shareText = (s: Share) => `${range(s.min, s.max, pct)} of ${OF_WORDS[s.of] ?? "production"}`;
+const expectedText = (e: Expected) => `${range(e.min, e.max, money)} ${UNIT[e.period]}`;
+
+// The clinic's estimate beside a percentage only, as the job page and the job card show it.
+export const EXPECTED_NOTE = "the clinic's estimate";
+export function expectedEarningsText(f: PayFields): string | null {
+  const e = expectedOf(f);
+  return e && shareOf(f) && !moneyOf(f) ? `Expected earnings ${expectedText(e)} (${EXPECTED_NOTE})` : null;
+}
 
 export const PAY_NOT_STATED = "Pay not stated";
 
@@ -125,7 +146,10 @@ export function payText(f: PayFields): string {
   const s = shareOf(f);
   const guaranteed = f.pay_is_minimum === true;
   if (m && s) return guaranteed ? `A guaranteed minimum of ${moneyText(m)}, or ${shareText(s)} when that comes to more` : `${moneyText(m)}, plus ${shareText(s)}`;
-  if (s) return shareText(s);
+  if (s) {
+    const e = expectedOf(f);
+    return e ? `${shareText(s)}, expected earnings ${expectedText(e)} (${EXPECTED_NOTE})` : shareText(s);
+  }
   if (m) return guaranteed ? `Guaranteed minimum ${moneyText(m)}` : moneyText(m);
   return PAY_NOT_STATED;
 }
@@ -137,6 +161,8 @@ export function payChips(f: PayFields): string[] {
   const chips: string[] = [];
   if (m) chips.push(f.pay_is_minimum === true ? `Minimum ${moneyText(m)}` : moneyText(m));
   if (s) chips.push(shareText(s));
+  const e = !m && s ? expectedOf(f) : null;
+  if (e) chips.push(`Expected ${expectedText(e)}`);
   return chips;
 }
 
@@ -169,9 +195,13 @@ export function estimateText(f: PayFields): string | null {
 // ---------------------------------------------------------------- Google's job markup
 
 // What goes in baseSalary: the dollar part, with a unit. A percentage can never go here, and neither can the yearly estimate.
+// With a percentage only, the clinic's expected earnings are given, which the page shows beside it as the clinic's estimate.
 export function salaryForMarkup(f: PayFields): { min: number; max: number; unitText: "YEAR" | "HOUR" | "DAY" } | null {
   const m = moneyOf(f);
-  if (!m) return null;
+  if (!m) {
+    const e = shareOf(f) ? expectedOf(f) : null;
+    return e ? { min: e.min, max: e.max, unitText: e.period === "day" ? "DAY" : "YEAR" } : null;
+  }
   return { min: m.min, max: m.max, unitText: m.period === "hour" ? "HOUR" : m.period === "day" ? "DAY" : "YEAR" };
 }
 
@@ -205,6 +235,9 @@ export type PayInput = {
   payPercentMin: string;
   payPercentMax: string;
   payPercentOf: string;
+  payExpectedMin?: string; // the clinic's expected earnings, needed with a percentage only
+  payExpectedMax?: string;
+  payExpectedPeriod?: string; // day or year
   roleCategory: string;
 };
 
@@ -230,6 +263,17 @@ export function payColumns(j: PayInput) {
     pay_percent_min: hasShare ? parsePercent(j.payPercentMin) : null,
     pay_percent_max: hasShare ? parsePercent(j.payPercentMax) : null,
     pay_percent_of: hasShare ? (OF_WORDS[j.payPercentOf] ? j.payPercentOf : "production") : null,
+    ...expectedColumns(j, hasMoney, hasShare),
+  };
+}
+
+// Expected earnings are kept only with a percentage and no dollar range; otherwise they are cleared.
+function expectedColumns(j: PayInput, hasMoney: boolean, hasShare: boolean) {
+  const keep = hasShare && !hasMoney && filledIn(j.payExpectedMin ?? "", j.payExpectedMax ?? "") && (j.payExpectedPeriod === "day" || j.payExpectedPeriod === "year");
+  return {
+    pay_expected_min: keep ? parseMoney(j.payExpectedMin ?? "") : null,
+    pay_expected_max: keep ? parseMoney(j.payExpectedMax ?? "") : null,
+    pay_expected_period: keep ? (j.payExpectedPeriod as "day" | "year") : null,
   };
 }
 
@@ -290,7 +334,36 @@ export function validatePay(j: PayInput): Record<string, string> {
         else if (!percentRangeAllowed(min, max)) errors.payPercentMax = "The range is too wide. Percentage ranges can be up to 10 points wide, for example 28% to 38%.";
       }
       if (j.payPercentOf && !OF_WORDS[j.payPercentOf]) errors.payPercentOf = "Say what the percentage is of.";
+      // A percentage on its own also needs the clinic's estimate in dollars (Steve, 12th November 2026).
+      if (!hasMoney) Object.assign(errors, validateExpected(j));
     }
+  }
+  return errors;
+}
+
+function validateExpected(j: PayInput): Record<string, string> {
+  const errors: Record<string, string> = {};
+  const b = j.payExpectedPeriod ?? "";
+  const minText = j.payExpectedMin ?? "";
+  const maxText = j.payExpectedMax ?? "";
+  if (!filledIn(minText, maxText)) {
+    errors.payExpectedMin = "With a percentage only, also enter what the role usually earns in dollars, for example $800 to $1,000 a day.";
+    return errors;
+  }
+  if (b !== "day" && b !== "year") {
+    errors.payExpectedPeriod = "Choose a day or a year.";
+    return errors;
+  }
+  const min = parseMoney(minText);
+  const max = parseMoney(maxText);
+  const eg = b === "day" ? { low: "800", high: "1,000" } : { low: "150,000", high: "190,000" };
+  if (min === null) errors.payExpectedMin = hasLetters(minText) ? WORDS_NOT_ACCEPTED : `Enter the lowest expected earnings, for example ${eg.low}.`;
+  else if (min > MAX_PAY[b]) errors.payExpectedMin = "That is more than Kestrel accepts. Please check for a typing slip.";
+  if (max === null) errors.payExpectedMax = hasLetters(maxText) ? WORDS_NOT_ACCEPTED : `Enter the highest expected earnings, for example ${eg.high}.`;
+  else if (max > MAX_PAY[b]) errors.payExpectedMax = "That is more than Kestrel accepts. Please check for a typing slip.";
+  if (min !== null && max !== null && !errors.payExpectedMin && !errors.payExpectedMax) {
+    if (max < min) errors.payExpectedMax = "The highest can't be lower than the lowest.";
+    else if (!payRangeAllowed(min, max, b)) errors.payExpectedMax = b === "day" ? "The range is too wide. It can be up to $200 a day wide, for example $800 to $1,000." : "The range is too wide. It can be up to $50,000 wide, unless the top is over $200,000.";
   }
   return errors;
 }
@@ -308,5 +381,6 @@ export function payFlags(f: PayFields): string[] {
   if (m && m.period === "day" && (m.min < 200 || m.max > 2_500)) flags.push("Daily pay looks unusually low or high. Check for a typing slip");
   if (s && !percentRangeAllowed(s.min, s.max)) flags.push("Percentage range is too wide");
   if (s && (s.min < 10 || s.max > 60)) flags.push("The percentage looks unusually low or high. Check for a typing slip");
+  if (s && !m && !expectedOf(f)) flags.push("A percentage with no expected earnings in dollars (posted before 13th November 2026, or the database update has not been run)");
   return flags;
 }

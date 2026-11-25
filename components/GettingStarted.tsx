@@ -8,7 +8,6 @@ export default function GettingStarted({ title, steps }: { title: string; steps:
   const doneCount = steps.filter((s) => s.done).length;
   return (
     <section className="card checklist" aria-labelledby="gs-title">
-      <p className="kicker">Getting started</p>
       <h2 id="gs-title">{title}</h2>
       <p className="help">{doneCount} of {steps.length} done</p>
       <ol>

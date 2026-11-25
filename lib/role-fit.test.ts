@@ -60,3 +60,39 @@ test("the message points to the right fix", () => {
   assert.ok(roleMismatchText("Optician", "Trainer or clinical educator").includes("Open to field and supplier roles"));
   assert.ok(roleMismatchText("Optician", "Patient care or reception").includes("Other roles you would consider"));
 });
+
+// Audit P1-55, decided by Steve on 12th November 2026: only optometrists can apply for optometrist roles.
+test("only an optometrist can apply for an optometrist job, whatever is under other roles", () => {
+  for (const profession of ["Practice or clinic manager", "Optometric assistant or technician", "Patient care or reception", "Vision therapist", "Sales or territory representative", "Optician"]) {
+    assert.equal(canApplyForRole(profession, ["Optometrist"], "Optometrist"), false, `${profession} must not be able to apply for an optometrist job`);
+    assert.ok(!otherRolesOffered(profession).includes("Optometrist"), `${profession} must not be offered Optometrist under other roles`);
+    const m = roleMismatchText(profession, "Optometrist");
+    assert.ok(m.includes("This role is for an optometrist."));
+    assert.ok(!m.includes("Other roles"), "the message must not suggest adding it under other roles");
+  }
+  assert.equal(canApplyForRole("Optometrist", [], "Optometrist"), true);
+  // An optometrist can still add and apply for other clinic roles, apart from optician.
+  assert.equal(canApplyForRole("Optometrist", ["Practice or clinic manager"], "Practice or clinic manager"), true);
+  assert.ok(otherRolesOffered("Optometrist").includes("Practice or clinic manager"));
+  // With no role chosen yet, Optometrist is not offered as an "other" role either.
+  assert.ok(!otherRolesOffered(null).includes("Optometrist"));
+});
+
+import { canAddAsOtherRole, withRoleAdded } from "./role-fit.ts";
+
+test("the one tap add role follows the profile's rules", () => {
+  assert.equal(canAddAsOtherRole("Optician", "Practice or clinic manager"), true);
+  assert.equal(canAddAsOtherRole("Optician", "Optician"), false, "your own role");
+  assert.equal(canAddAsOtherRole("Optician", "Optometrist"), false, "only an optometrist can");
+  assert.equal(canAddAsOtherRole("Optometrist", "Optician"), false, "an optometrist is not offered optician jobs");
+  assert.equal(canAddAsOtherRole("Optician", "Sales or territory representative"), true);
+  assert.equal(canAddAsOtherRole("Optometrist", "Sales or territory representative"), false, "optometrists are not offered field roles");
+  assert.equal(canAddAsOtherRole("Optician", "Not a role"), false);
+  assert.equal(canAddAsOtherRole(null, "Optician"), false);
+});
+
+test("adding a role keeps what is there, once, and a field role adds every field role", () => {
+  assert.deepEqual(withRoleAdded(["Vision therapist"], "Practice or clinic manager"), ["Vision therapist", "Practice or clinic manager"]);
+  assert.deepEqual(withRoleAdded(["Practice or clinic manager"], "Practice or clinic manager"), ["Practice or clinic manager"]);
+  assert.equal(withRoleAdded([], "Trainer or clinical educator").length, 4);
+});

@@ -2,7 +2,7 @@
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
-select thing, case when present then 'OK' when thing = 'private CV storage' then 'NOT YET (normal: it is created when the first CV is uploaded)' else 'MISSING' end as status
+select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
     ('table: waitlist', to_regclass('public.waitlist') is not null),
@@ -57,7 +57,13 @@ from (
     ('column: candidate software skills', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'software_skills')),
     ('permission: candidates can save their job preferences', has_column_privilege('authenticated', 'public.candidate_profiles', 'home_city', 'UPDATE')),
     ('column: days a week on a daily rate', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_days_per_week')),
-    ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('private resume storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('table: employer_members (clinic team, 0045)', to_regclass('public.employer_members') is not null),
+    ('table: employer_invites (team invitations, 0045)', to_regclass('public.employer_invites') is not null),
+    ('table: admin_actions (changes Kestrel made for a clinic, 0045)', to_regclass('public.admin_actions') is not null),
+    ('function: can_edit_employer (team access, 0045)', exists (select 1 from pg_proc where proname = 'can_edit_employer')),
+    ('table: support_requests (help requests and feedback, 0046)', to_regclass('public.support_requests') is not null),
+    ('several locations for 1 owner (0047)', to_regclass('public.employers_owner_idx') is null and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_invites' and column_name = 'also_employer_ids')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

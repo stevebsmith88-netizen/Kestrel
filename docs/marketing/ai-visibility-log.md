@@ -44,3 +44,37 @@ ChatGPT only: prompt 2 (Indeed, Jobs4ECPs, CAO, Job Bank, LinkedIn, Glassdoor), 
 3. **The gap is real.** Copilot itself says no comprehensive eye care board covers the whole team.
 4. **Pay:** 2 assistants quote the same Job Bank figures. Kestrel's median matches. The bottom of the range differs (see the note in `docs/pay-benchmark.md`).
 5. **Association list:** the CCOA (Canadian Certified Optometric Assistants) is a program of the Canadian Association of Optometrists, and its career centre is the CAO job board (opto.ca/job-board). They are 1 target for outreach, not 2. HealthCareCAN is a new name, for later.
+
+## 20th November 2026 run (all 6 assistants, signed in on a private account with no link to Kestrel)
+
+Raw rows are in `ai-visibility-log.csv` (96 answers: ChatGPT, Gemini, Perplexity, Copilot and Grok 16 each, Claude 16). Chat 1 is the 10 monthly questions, chat 2 is the 6 diagnostic questions (numbered 11 to 16).
+
+### Result
+
+| Assistant | Chat 1 (questions 1 to 10) | Chat 2 (questions 11 to 16) |
+| --- | --- | --- |
+| ChatGPT | 0 of 10 | 3 of 6 (11, 12, 13) |
+| Claude | 0 of 10 | 2 of 6 (11, 12) |
+| Gemini | 4 of 10 (1, 5, 7, 10) | 2 of 6 (11, 12) |
+| Perplexity | 0 of 10 | 3 of 6 (11, 12, 16) |
+| Copilot | 0 of 10 | 0 of 6 (partly on 11, domain only) |
+| Grok | 2 of 10 (5, 10) | 2 of 6 (11, 12) |
+
+Chat 1: Kestrel named in 6 of 60 answers (baseline was 0 of 21). Chat 2 (which names Kestrel, so it does not count toward the monthly score): 12 of 36. Gemini and Grok were the only assistants to name Kestrel unprompted, and Gemini always put it last in the list. Gemini's answers also quote the $59 price and early 2027 launch correctly.
+
+### What we found
+
+1. **Nothing said about Kestrel was wrong,** with 1 exception caused by the site: Gemini read the home page figures part way through the count up animation and quoted 869 optometrists and 1,557 opticians (the page says 6,400 and 11,700). Fixed on 20th November 2026: the real figure is now the only text in the page (`components/CountUp.tsx`).
+2. **Copilot cannot read the site.** It called it EyeCareJobs.ca and could not summarise it. Steve to run URL inspection in Bing Webmaster Tools and request indexing, then run chat 2 question 12 on Copilot again.
+3. **Perplexity and Claude read only the home page** and said there was no visible employer verification, posting policy or named owner. The footer links to the posting policy and the fake job report page, but the home page itself says little about how ads are checked. Built 20th November 2026: on the home page, "a person reads every post before it goes live" now links to the posting policy, and the pre launch page also says anyone can report a fake job, linked to `/fake-jobs`.
+4. **Named owner or company:** ChatGPT, Gemini, Perplexity and Claude all list it as missing. Steve's plan (20th November 2026): wait for the disclosure conversation and incorporation, then name the company, its address and business number (footer, Contact, privacy policy and an About page with 1 line on his years in eye care). Nothing built until then.
+5. **Job Bank date:** ChatGPT and Claude both reached Job Bank pages that still said 19th November 2025, and ChatGPT doubted Kestrel's 18th November 2026 date. The pay table already linked the open data file and its date. The pay summary page now links it as well.
+6. **Who the assistants trust for optician pay:** Job Bank first in all 6, then Statistics Canada, WorkBC or Alberta's ALIS. Copilot also named the OAC 2026 wage guide (survey of 785). Indeed, Glassdoor and Jooble are called cross checks only. Kestrel is named as a pay source by nobody.
+7. **Optician licensing (question 14):** every answer cites the College of Opticians of Ontario and the NACOR exams, plus Seneca, Georgian and La Cité. BC and Alberta not run. The optician guide (8th December 2026) competes with the College itself, so it should add what the College does not say.
+8. **Associations and schools (question 15):** CAO, OAC EyeList, Ontario Association of Optometrists and Ontario Opticians Association, NACOR, Canadian Ophthalmological Society, Seneca library career page (lists Job Bank, Ontario Opticians Association and Jobs4ECPs), Georgian, Waterloo, Optical Prism. Feeds `docs/marketing/backlinks-plan.md`. Outreach waits for Gate A.
+9. **Trust checklist (question 16):** all 6 give pay on every job, human review, expiring listings, verified employers, no agencies, AI disclosure, named owner and published numbers. Kestrel already follows most of these. The gaps are the named owner, published numbers once there are jobs, and French.
+10. **Eye Recommend** appears as a source in Copilot (6 answers) and Gemini (3 answers), alongside OSI Group. Logged neutrally.
+
+### Next run
+
+First Monday of December 2026 (7th). Repeat chat 1 on all 6 assistants and compare with this table. Run chat 2 question 12 on Copilot after the Bing check. Run question 14 for BC and Alberta.

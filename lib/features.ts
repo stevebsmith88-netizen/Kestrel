@@ -12,6 +12,11 @@ export const googleSignInOn = () => process.env.ENABLE_GOOGLE_SIGNIN === "yes";
 // the code in CLINIC_INVITE_CODE (see lib/invite.ts). Set CLINIC_SIGNUP to "yes" in Vercel to open it to everyone.
 export const clinicSignUpOpen = () => process.env.CLINIC_SIGNUP === "yes";
 
+// Posting jobs. Off until Steve opens it (ENABLE_POSTING=yes in Vercel, then redeploy), so people can create accounts and look around first.
+// While it is off, a clinic can set up its profile but cannot start, save or send a job, and the pages say posting opens soon. Admin tools
+// that post on a clinic's behalf are not affected. The demo site sets it to "yes".
+export const postingOn = () => process.env.ENABLE_POSTING === "yes";
+
 // Publishing found listings (jobs read from a clinic's own careers page, at /admin/found). Off until Steve confirms his
 // disclosure conversation has happened. While it is off, pages can be read and drafts saved, but nothing is published.
 // Set ENABLE_SEEDING to "yes" in Vercel to switch it on.

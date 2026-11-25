@@ -112,3 +112,23 @@ export async function applyResumeAnswers(_prev: ReaderState, form: FormData): Pr
   revalidatePath("/candidate/profile");
   return { message: "Saved. Your profile below now shows them, and you can change anything." };
 }
+
+// The 3 things a first application needs (role, town and province), read from the saved resume so the apply page can offer them
+// already filled in. Nothing is saved here: the candidate checks them and presses Save and continue (lib/apply-setup-actions.ts).
+export type ResumeBasics = { profession?: string; city?: string; province?: string };
+export async function readResumeBasics(): Promise<ResumeBasics & { error?: string }> {
+  const session = await requireRole("candidate");
+  const found = await suggestionsFor(session.userId);
+  if ("error" in found) return { error: found.error };
+  const s = found.suggestions;
+  const out: ResumeBasics = {};
+  if (s.profession && (ROLE_CATEGORIES as readonly string[]).includes(s.profession.value)) out.profession = s.profession.value;
+  if (s.home) {
+    const place = findPlace(s.home.value.city, s.home.value.province);
+    if (place) {
+      out.city = place.name;
+      out.province = place.province;
+    }
+  }
+  return out;
+}

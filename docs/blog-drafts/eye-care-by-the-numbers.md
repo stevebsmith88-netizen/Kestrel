@@ -1,4 +1,4 @@
-# Draft: Eye care in Canada by the numbers (blog item 20, post F)
+# Draft: Eye care in Canada by the numbers (blog item 22, post F)
 
 Drafted 12th November 2026 for Steve to review. Not in `content/posts.ts` yet, so it cannot go live by accident.
 

@@ -37,6 +37,24 @@ export function jobNeedsChangeEmail({ title, jobId, note }: { title: string; job
   };
 }
 
+// The card a clinic saved was refused when its job was approved. The job waits, and nothing is charged until a new card is saved.
+export function cardRefusedEmail({ title, jobId }: { title: string; jobId: string }) {
+  return {
+    subject: `We could not charge your card for ${title}`,
+    ...emailLayout({
+      heading: "We could not charge your card",
+      paragraphs: [
+        `We checked your ${title} job and it is ready to go live, but your card was refused when we tried to charge it.`,
+        "Please save a new card and we will publish the job straight away. You are not charged until then, and a card is only charged once the job is approved.",
+        "If you need a hand, reply to this email.",
+        "The Kestrel team",
+      ],
+      buttonText: "Save a new card",
+      buttonUrl: `${SITE}/clinic/jobs/${jobId}/pay`,
+    }),
+  };
+}
+
 // The line clinics see wherever they are asked to look at applicants.
 export const RESPONSE_DAYS = 5;
 export const RESPONSE_NOTE = `Candidates are waiting to hear back. A reply within ${RESPONSE_DAYS} days, even a short no, keeps good people from accepting other offers.`;
@@ -73,6 +91,19 @@ export function newApplicationEmail({ title, applicationId }: { title: string; a
   };
 }
 
+// Sent when a candidate withdraws (Steve, 13th November 2026), naming the job, not the person, like a new application email.
+export function withdrawnEmail({ title, applicationId }: { title: string; applicationId: string }) {
+  return {
+    subject: `An applicant withdrew from ${title}`,
+    ...emailLayout({
+      heading: "An application was withdrawn",
+      paragraphs: [`Someone who applied for ${title} has withdrawn their application, so they are no longer interested in this job. There is nothing you need to do.`, "The Kestrel team"],
+      buttonText: "Open the application",
+      buttonUrl: `${SITE}/clinic/applications/${applicationId}`,
+    }),
+  };
+}
+
 export function applicantDigestEmail({ jobs }: { jobs: { title: string; count: number }[] }) {
   const total = jobs.reduce((n, j) => n + j.count, 0);
   return {
@@ -92,7 +123,7 @@ export function applicantDigestEmail({ jobs }: { jobs: { title: string; count: n
   };
 }
 
-// Sent by the daily job 3 days before a job's 30 days end. It asks whether the role is filled (and how) or offers
+// Sent by the daily job 3 days before a job ends. It asks whether the role is filled (and how) or offers
 // another 30 days, both from one page. Clinics can turn reminders off in their profile.
 // The "free while we launch" line must change when paid posts start.
 export function jobEndingEmail({ title, jobId, endsLabel }: { title: string; jobId: string; endsLabel: string }) {
@@ -101,7 +132,7 @@ export function jobEndingEmail({ title, jobId, endsLabel }: { title: string; job
     ...emailLayout({
       heading: `Your ${title} job closes in 3 days`,
       paragraphs: [
-        `Your ${title} job comes down from Kestrel on ${endsLabel}, after its 30 days.`,
+        `Your ${title} job comes down from Kestrel on ${endsLabel}, when its run ends.`,
         "Have you filled it? Tell us in one click, and let us know how you found the person. It helps us make Kestrel better for clinics like yours.",
         "Still hiring? You can extend it for another 30 days without posting it again. Extending is free while we launch.",
         "Applicants you have already received stay in your dashboard either way.",

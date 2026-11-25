@@ -9,7 +9,7 @@ One page. Keep it where you can find it quickly. A plain English summary of Cana
 
 ## What counts
 
-Any time personal information we hold (names, emails, phone numbers, CVs, cover letters, who applied where) is lost, or seen, taken or shared by someone who should not have it. Examples: a stolen key, a bug that shows one clinic another clinic's applicants, an email sent to the wrong list, a lost laptop with a downloaded spreadsheet, or a service we use telling us they were breached.
+Any time personal information we hold (names, emails, phone numbers, resumes, cover letters, who applied where) is lost, or seen, taken or shared by someone who should not have it. Examples: a stolen key, a bug that shows one clinic another clinic's applicants, an email sent to the wrong list, a lost laptop with a downloaded spreadsheet, or a service we use telling us they were breached.
 
 ## What to do
 
@@ -20,7 +20,7 @@ Any time personal information we hold (names, emails, phone numbers, CVs, cover 
 **2. The same day: write it down.** Add a line to the log below. Do this even if you are not sure it matters. Do not delete anything that might show what happened (logs, emails, deployments).
 
 **3. Within a day or two: decide if it is serious.** The law asks whether there is a **real risk of significant harm** to the people involved. Think about:
-- How sensitive is it? A CV and phone number is personal. A health record or bank detail would be worse. We hold no health or payment details.
+- How sensitive is it? A resume and phone number is personal. A health record or bank detail would be worse. We hold no health or payment details.
 - How likely is it to be misused? Was it taken on purpose by a criminal, or seen briefly by one trusted person who has deleted it? Was it scrambled so it cannot be read?
 - How many people?
 If you are not sure, treat it as serious and call the lawyer.
@@ -46,7 +46,7 @@ For the first hour of step 1 above. Each one is reversible. Try the sign out and
 3. Deployments, open the latest Production deployment, the three dots, Redeploy.
 4. To switch it back on: delete the `MAINTENANCE_MODE` variable and redeploy.
 
-Every page and form shows the "back soon" page. `/api/health` and the daily job keep running. The demo site is a separate Vercel project, so do the same there if needed.
+Every page and form shows the "back soon" page. The waitlist, the daily job (so its alerts and reminder emails) and the job view counter stop too (audit P1-22). 2 things keep working on purpose: `/api/health`, so the uptime monitor can still see the site, and `/api/resend`, so a bounce or spam complaint that arrives during the outage is still recorded and that address is never emailed again. While the switch is on the daily job does not run, so after 36 hours the health check reports it as late: that is expected. Account emails sent by people pressing buttons also stop, because every page is closed. Supabase's own sign up and password emails are not covered: use switch 3 for those. The demo site is a separate Vercel project, so do the same there if needed.
 
 **2. Sign everyone out**
 1. Supabase, open the project, SQL Editor.
@@ -57,7 +57,7 @@ Every page and form shows the "back soon" page. `/api/health` and the daily job 
 1. Resend, API Keys, delete the `kestrel-website` key. Everything the website sends stops, and the site keeps working.
 2. Sign up emails go through Supabase, with a second Resend key (Supabase, Authentication, SMTP settings). Delete that key in Resend as well.
 3. Make new keys afterwards and put them in Vercel and Supabase (`docs/security.md`).
-4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders).
+4. A softer option: set `DAILY_EMAIL_BUDGET` to `0` in Vercel and redeploy. That stops only the daily job's emails (alerts and reminders). Once migration 0042 is run you will also get 1 "close to today's email limit" warning that day, because the warning is set at 80% of the budget: that is expected.
 
 **4. Go back to the last good version of the site**
 1. Vercel, open the `kestrel` project, Deployments.
@@ -70,7 +70,7 @@ Every page and form shows the "back soon" page. `/api/health` and the daily job 
 >
 > Hello [first name],
 >
-> We are writing to tell you about a security problem at Kestrel Eye Care Jobs. On [date], we found that [what happened, in plain words]. This involved your [what information, for example name, email address and CV].
+> We are writing to tell you about a security problem at Kestrel Eye Care Jobs. On [date], we found that [what happened, in plain words]. This involved your [what information, for example name, email address and resume].
 >
 > What we have done: [what you did to stop it and fix it].
 >

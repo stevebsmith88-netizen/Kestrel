@@ -23,7 +23,6 @@ export default async function Letters() {
       <AppBar session={session} current="/candidate/profile" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap narrow">
-          <p className="kicker">Your letters</p>
           <h1>My saved letters</h1>
           <p className="lede2">Keep up to 5 cover letters to start from. When you apply, pick one, then change it so it speaks to that clinic. Half finished letters are kept as drafts on each application.</p>
           <div className="stackcards">

@@ -8,13 +8,21 @@ import { findYourFitOn } from "@/lib/features";
 import { LANDING_PROVINCES, LANDING_ROLES, comboHref, landingIndexable, provinceHref } from "@/lib/landing";
 import { PAGE_DATES } from "@/lib/page-dates";
 import { getComboCounts, listLiveJobIds } from "@/lib/public-jobs";
+import { listPublicClinics } from "@/lib/public-clinics";
+import { clinicIndexable, employerHref } from "@/lib/clinic-pages";
 
 // Every public page that belongs in the sitemap, in one place.
 const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
   if (demoMode()) return [];
-  const [jobs, combos] = await Promise.all([listLiveJobIds(), getComboCounts()]);
+  const [jobs, combos, clinicIndex] = await Promise.all([listLiveJobIds(), getComboCounts(), listPublicClinics()]);
+  // Clinic pages only when Google may index them: open jobs or a real description (lib/clinic-pages.ts).
+  const liveByClinic = new Map<string, number>();
+  for (const j of jobs) if (j.employer_id) liveByClinic.set(j.employer_id, (liveByClinic.get(j.employer_id) ?? 0) + 1);
+  const clinicPages = clinicIndex.clinics
+    .filter((c) => clinicIndexable(c.about, liveByClinic.get(c.id) ?? 0))
+    .map((c) => ({ url: `${SITE}${employerHref(clinicIndex.slugs.get(c.id) as string, c.practice_type)}`, changeFrequency: "weekly" as const, priority: 0.6 }));
   // Landing pages only when they have live jobs, the same rule that lets Google index them.
   const provinceCount = (p: string) => Object.entries(combos).filter(([k]) => k.startsWith(`${p}|`)).reduce((n, [, c]) => n + c, 0);
   const landing = [
@@ -30,6 +38,7 @@ export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
     ...landing,
     { url: `${SITE}/clinics`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE}/resources/ontario-job-ads`, lastModified: PAGE_DATES.ontarioJobAds, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE}/resources/eye-care-pay-summary`, lastModified: PAGE_DATES.paySummary, changeFrequency: "yearly", priority: 0.6 },
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${SITE}/resources`, lastModified: PAGE_DATES.resources, changeFrequency: "monthly", priority: 0.6 },
     ...(comparePageOn() ? [{ url: `${SITE}/compare`, lastModified: PAGE_DATES.compare, changeFrequency: "monthly" as const, priority: 0.5 }] : []),
@@ -39,7 +48,9 @@ export async function sitemapEntries(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/security`, lastModified: PAGE_DATES.security, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE}/terms`, lastModified: PAGE_DATES.terms, changeFrequency: "yearly", priority: 0.2 },
     { url: `${SITE}/posting-policy`, lastModified: PAGE_DATES.postingPolicy, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE}/fake-jobs`, lastModified: PAGE_DATES.fakeJobs, changeFrequency: "yearly", priority: 0.3 },
     { url: `${SITE}/contact`, changeFrequency: "yearly", priority: 0.3 },
+    ...clinicPages,
     ...jobs.map((j) => ({ url: `${SITE}/jobs/${j.id}`, lastModified: j.posted_at, changeFrequency: "weekly" as const, priority: 0.8 })),
   ];
 }

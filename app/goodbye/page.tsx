@@ -3,6 +3,9 @@ import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
 
+// Built fresh for every visit, as it was before audit P1-10. Only the pages Steve listed are saved and shared; this one was not on the list.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = { title: "Account deleted | Kestrel Eye Care Jobs", robots: { index: false } };
 
 export default function Goodbye() {

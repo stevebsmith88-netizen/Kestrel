@@ -18,10 +18,22 @@ export function candidateSteps(f: { profileReady: boolean; lookingFor: boolean; 
     { label: "Add your role, town and resume", detail: "Then you can apply to any job in a few clicks.", href: "/candidate/profile", cta: "Complete my profile", done: f.profileReady },
     { label: "Say what you are looking for", detail: "Your town or provinces, and the pay you need, so the suggestions fit.", href: "/candidate/profile#looking-for", cta: "Add what I want", done: f.lookingFor },
     { label: "Set a job alert", detail: "We email you when a job matches. Daily, weekly or monthly.", href: "/candidate/alerts", cta: "Set an alert", done: f.hasAlert },
-    { label: "Send your first application", detail: "Every job shows its pay. Kestrel can draft a cover letter for you to edit.", href: "/jobs", cta: "Find jobs", done: f.applications > 0 },
+    { label: "Send your first application", detail: "Every job shows its pay, and you can save a cover letter to reuse.", href: "/jobs", cta: "Find jobs", done: f.applications > 0 },
   ];
 }
 
 // The first step still to do, so the list can point at it.
 export const nextStep = (steps: Step[]) => steps.find((s) => !s.done) ?? null;
 export const allDone = (steps: Step[]) => steps.every((s) => s.done);
+
+// "Say what you are looking for" counts as done only once a preference from that part of the profile is saved: other
+// provinces, types of work, the pay needed, a practice type or other roles. The role and town from the first step page
+// do not count, and nor does the distance, which starts at 25 km for everyone (review item D-04).
+export function lookingForSaved(p: {
+  pref_provinces?: string[] | null; pref_employment_types?: string[] | null; pref_other_roles?: string[] | null;
+  pref_min_pay?: number | string | null; pref_practice?: string | null;
+} | null): boolean {
+  if (!p) return false;
+  const any = (a?: string[] | null) => (a ?? []).length > 0;
+  return any(p.pref_provinces) || any(p.pref_employment_types) || any(p.pref_other_roles) || (p.pref_min_pay != null && String(p.pref_min_pay) !== "") || !!p.pref_practice;
+}

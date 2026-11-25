@@ -2,7 +2,7 @@
 
 A separate, fully working copy of Kestrel, with its own database and sample data, so Steve can show people around before launch. The live site (eyecarejobs.ca) is never touched.
 
-**What visitors get:** a home page, the blog, job search across 18 sample jobs in 9 provinces, job pages, sign up (instant, no email), a candidate profile and applications, a clinic dashboard with an applicants board, posting a job, the AI ad writer (if you give it a key), and an admin review queue.
+**What visitors get:** a home page, the blog, job search across 27 sample jobs in 7 provinces, job pages, sign up (instant, no email), a candidate profile and applications, a clinic dashboard with an applicants board, posting a job, the AI ad writer (if you give it a key), and an admin review queue.
 
 **What keeps it safe:**
 - It has its own Supabase database in the Canada region. No real data, and none of the live data, is in it.
@@ -21,7 +21,7 @@ A separate, fully working copy of Kestrel, with its own database and sample data
 2. **SQL Editor**, new query. Paste the whole of `supabase/combined/run-everything.sql` and run it. The check table at the end should be all OK (one "NOT YET" for the CV storage is normal).
 3. **Authentication, Sign In / Providers, Email:** turn **off** "Confirm email". This is demo only. It lets visitors sign up without an email arriving. Keep the minimum password length at 10.
 4. **Authentication, URL Configuration:** set the Site URL to `https://demo.eyecarejobs.ca`, and add `https://demo.eyecarejobs.ca/**` as a Redirect URL.
-5. **SQL Editor**, new query. Paste the whole of `supabase/demo/seed.sql` and run it. This adds 11 sample clinics and 18 jobs and opens sign up on the demo database. (The part for your 2 demo accounts is skipped for now.)
+5. **SQL Editor**, new query. Paste the whole of `supabase/demo/seed.sql` and run it. This adds 13 sample clinics (2 of them in small towns, Wingham and Drumheller) and 27 live jobs across 7 provinces, and opens sign up on the demo database. (The part for your 2 demo accounts is skipped for now.)
 
 ### B. Vercel: a second project
 
@@ -52,7 +52,7 @@ On the demo site, open `/sign-up` and create 3 accounts with a password you will
 
 | Use | Address to sign up with | Choose |
 | --- | --- | --- |
-| Clinic | `kestrel+democlinic@eyecarejobs.ca` | I'm hiring for a clinic |
+| Clinic | `kestrel+democlinic@eyecarejobs.ca` | I'm hiring |
 | Candidate | `kestrel+democandidate@eyecarejobs.ca` | I'm looking for a job |
 | Admin | `kestrel+demoadmin@eyecarejobs.ca` | I'm looking for a job, and you promote it below |
 
@@ -65,6 +65,15 @@ where id = (select id from auth.users where email = 'kestrel+demoadmin@eyecarejo
 ```
 
 You can use other addresses. If you do, change the 2 addresses at the top of Part 2 in `seed.sql`, and the list at the top of `reset.sql`.
+
+## What the sample data shows from the November 2026 builds
+
+Run `seed.sql` (Part 2 needs the demo accounts) and these are in place:
+
+- **Candidate (`democandidate`):** a registration number on the profile (Optician, Ontario, both eyeglasses and contact lenses) and a LinkedIn address; an application at the **Interview** step, with an online interview in 5 days, a Join the meeting button and add to calendar buttons; 3 followed clinics (Job alerts, Following); 4 saved jobs (Saved jobs, 1 closes in 2 days, which the daily email mentions); an inbox message that Harbourside Optical has joined, after they asked about it.
+- **Clinic (`democlinic`):** applicants with registration numbers (Registration card with the register button, and one "not registered yet"), 1 applicant invited to interview with a Zoom link, a public page with Instagram and Facebook icons, and a headline on the Optician job. The View applicants button shows on the Optician job page when signed in as this clinic.
+- **Public pages:** Harbourside Optical and Maple Grove (sample) have social icons and a Follow button; 2 jobs carry a headline.
+- **Admin (`demoadmin`):** People, Interest in clinics shows Birchwood Eye Care in Barrie with 3 people asking, never who.
 
 ## A 10 minute walkthrough
 

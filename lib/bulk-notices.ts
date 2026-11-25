@@ -27,3 +27,11 @@ export function movedText(kind: "shortlisted" | "interview", moved: number, skip
 export function declinedText(done: number): string {
   return done === 0 ? "Nobody was waiting, so no messages were sent." : `${done} ${many(done, "candidate has", "candidates have")} been told, kindly, and can see it in their account.`;
 }
+
+// Added after a bulk action when a change saved but its history line did not (audit P1-49). Empty when everything saved.
+export function historyNote(failed: number): string {
+  if (failed <= 0) return "";
+  return failed === 1
+    ? " 1 change was saved but its history line was not. We have been told and will put it right."
+    : ` ${failed} changes were saved but their history lines were not. We have been told and will put it right.`;
+}

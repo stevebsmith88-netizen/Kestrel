@@ -25,3 +25,51 @@ export function tidyTitle(title: string): string {
     return w.charAt(0).toUpperCase() + w.slice(1);
   });
 }
+
+// A job title suggested from what the clinic has already chosen (Steve, 14th November 2026; rules only, no AI). The title box fills itself in and
+// the clinic can change it. It comes from the role, so an optometrist title can never be suggested for another role. The town, pay and the
+// clinic's name stay out of the title: Google wants the job title only, and the page title and description carry the town.
+const TITLE_FOR_ROLE: Record<string, string> = {
+  "Optometrist": "Optometrist",
+  "Optician": "Optician",
+  "Optometric assistant or technician": "Optometric Assistant",
+  "Practice or clinic manager": "Practice Manager",
+  "Patient care or reception": "Patient Care Coordinator",
+  "Vision therapist": "Vision Therapist",
+  "Sales or territory representative": "Sales Representative",
+  "Trainer or clinical educator": "Clinical Educator",
+  "Field service or equipment technician": "Field Service Technician",
+  "Account or practice development manager": "Account Manager",
+};
+
+// A specialty the clinic ticks shows in an optometrist's title, only when exactly 1 of these is ticked.
+const SPECIALTY_PREFIX: Record<string, string> = {
+  "Dry eye and IPL": "Dry Eye",
+  "Myopia control and ortho-k": "Myopia Control",
+};
+
+// The level words a clinic may add (Steve, 14th November 2026). Associate is for optometrists only.
+export const TITLE_LEVELS = ["Lead", "Senior", "Associate"] as const;
+export function levelsForRole(role: string): readonly string[] {
+  if (!TITLE_FOR_ROLE[role]) return [];
+  return role === "Optometrist" ? TITLE_LEVELS : TITLE_LEVELS.filter((l) => l !== "Associate");
+}
+// The level a saved title already carries, so editing a job starts with the right choice.
+export function levelFromTitle(title: string): string {
+  const words = title.trim().replace(/^locum\s+/i, "").split(/\s+/);
+  return TITLE_LEVELS.find((l) => l.toLowerCase() === (words[0] ?? "").toLowerCase()) ?? "";
+}
+
+export function suggestTitle({ role, employmentType, specialties = [], level = "" }: { role: string; employmentType?: string; specialties?: string[]; level?: string }): string {
+  const base = TITLE_FOR_ROLE[role];
+  if (!base) return role.trim();
+  let title = base;
+  if (role === "Optometrist") {
+    const picked = specialties.filter((s) => SPECIALTY_PREFIX[s]);
+    if (picked.length === 1) title = `${SPECIALTY_PREFIX[picked[0]]} ${title}`;
+  }
+  if (levelsForRole(role).includes(level) && !(employmentType === "Locum" && level === "Associate")) title = `${level} ${title}`;
+  if (employmentType === "Locum") return `Locum ${title}`;
+  if (employmentType === "Full time" || employmentType === "Part time") return `${title}, ${employmentType}`;
+  return title;
+}

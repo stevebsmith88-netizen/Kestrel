@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import JobCard from "@/components/JobCard";
+import MobileFilters from "@/components/MobileFilters";
 import SiteHeader from "@/components/SiteHeader";
 import { getSession } from "@/lib/auth";
-import { getMyCandidateProfile } from "@/lib/candidate";
+import { getMyApplications, getMyCandidateProfile } from "@/lib/candidate";
 import { orderJobs, parseSort, sortChoice, type Sort } from "@/lib/job-sort";
 import { rankForMe } from "@/lib/recommendations";
 import { emptySearchSuggestions } from "@/lib/empty-search";
@@ -12,6 +13,10 @@ import { launchLayoutOn } from "@/lib/launch";
 import { EMPLOYMENT_TYPES, employmentLabel, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { hasTagFilters, TAG_GROUPS } from "@/lib/job-tags";
 import { RADIUS_OPTIONS, findPlace, placeLabel } from "@/lib/places";
+import { clampPage } from "@/lib/paging";
+import ClinicInterest from "@/components/ClinicInterest";
+import { savedAmong } from "@/lib/saved-server";
+import { findPublicClinics } from "@/lib/public-clinics";
 import { PAGE_SIZE, cleanFilters, getFilterCounts, searchJobs, type JobFilters } from "@/lib/public-jobs";
 import { shareMetadata } from "@/lib/share";
 
@@ -50,6 +55,24 @@ function pageHref(filters: JobFilters, page: number, extra: { view?: string; sor
   return qs ? `/jobs?${qs}` : "/jobs";
 }
 
+// The filters in use, each with a link that removes it, for the tags shown under the Filters button on a phone.
+function activeFilters(filters: JobFilters, extra: { view?: string; sort?: string }): { label: string; href: string }[] {
+  const without = (change: Partial<JobFilters>) => pageHref({ ...filters, ...change }, 1, extra);
+  const out: { label: string; href: string }[] = [];
+  if (filters.role) out.push({ label: filters.role, href: without({ role: undefined }) });
+  if (filters.province) out.push({ label: filters.province, href: without({ province: undefined }) });
+  if (filters.city) out.push({ label: `Within ${filters.radius ?? 25} km of ${filters.city}`, href: without({ city: undefined, radius: undefined }) });
+  if (filters.practice) out.push({ label: `${PRACTICE_TYPES.find((p) => p.value === filters.practice)?.label ?? filters.practice} only`, href: without({ practice: undefined }) });
+  if (filters.arrangement) out.push({ label: filters.arrangement === "field" ? "Field based only" : "On site only", href: without({ arrangement: undefined }) });
+  for (const t of filters.type ?? []) out.push({ label: employmentLabel(t), href: without({ type: (filters.type ?? []).filter((x) => x !== t) }) });
+  if (filters.tags) {
+    for (const key of ["software", "equipment", "specialties"] as const) {
+      for (const tag of filters.tags[key]) out.push({ label: tag, href: without({ tags: { ...filters.tags, [key]: filters.tags[key].filter((x) => x !== tag) } }) });
+    }
+  }
+  return out;
+}
+
 export default async function Jobs({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const raw = await searchParams;
   const one = (k: string) => {
@@ -60,7 +83,9 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const session = await getSession();
   // A signed in candidate with a role on their profile sees "For me" first: only jobs they can apply for, within the distance and other
   // choices on their profile (lib/recommend.ts). A switch shows every job. The sort drop down is in lib/job-sort.ts.
-  const profile = session?.role === "candidate" ? await getMyCandidateProfile(session.userId) : null;
+  const [profile, mine] = session?.role === "candidate" ? await Promise.all([getMyCandidateProfile(session.userId), getMyApplications()]) : [null, []];
+  // The jobs this candidate has applied to, marked "Applied" on their cards (audit P1-58).
+  const appliedTo = new Set(mine.map((a) => a.job_id).filter((id): id is string => Boolean(id)));
   const canMe = Boolean(profile?.profession);
   const view: "me" | "all" = canMe && one("view") !== "all" ? "me" : "all";
   const home = profile?.home_city && profile.home_province ? findPlace(profile.home_city, profile.home_province) : null;
@@ -68,26 +93,29 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
   const from = searched ?? home;
   const { options: sortOptions, sort } = sortChoice(parseSort(one("sort")), { forMe: view === "me", hasPlace: Boolean(from) });
   const everything = view === "me" || sort === "near";
-  const [found, counts] = await Promise.all([searchJobs(filters, { everything }), getFilterCounts()]);
+  const [found, counts, clinicMatches] = await Promise.all([searchJobs(filters, { everything }), getFilterCounts(), filters.q ? findPublicClinics(filters.q) : Promise.resolve([])]);
   const { place, placeNotFound } = found;
   let jobs = found.jobs;
   let total = found.total;
+  let shown = found.page ?? filters.page ?? 1;
   if (everything) {
     const recs = view === "me" ? await rankForMe(profile, jobs) : null;
     let ordered = recs ? recs.map((r) => r.job) : jobs;
     if (sort === "new" || sort === "near") ordered = orderJobs(ordered, sort, from);
     total = ordered.length;
-    const at = filters.page ?? 1;
-    jobs = ordered.slice((at - 1) * PAGE_SIZE, at * PAGE_SIZE);
+    shown = clampPage(filters.page ?? 1, total, PAGE_SIZE);
+    jobs = ordered.slice((shown - 1) * PAGE_SIZE, shown * PAGE_SIZE);
   }
   const keep = { view: canMe ? view : undefined, sort: sort === (view === "me" ? "best" : "new") ? undefined : sort } as { view?: string; sort?: string };
   const launched = await launchLayoutOn();
   // Alerts are for candidates. A signed out visitor is sent to create an account once sign up is open, and to the waitlist before that.
   const alertHref = session ? (session.role === "candidate" ? "/candidate/alerts" : null) : launched ? "/sign-up?next=%2Fcandidate%2Falerts" : null;
   const filtered = Boolean(filters.q || filters.city || filters.province || filters.role || filters.type?.length || filters.practice || filters.arrangement || (filters.tags && hasTagFilters(filters.tags)));
-  const page = filters.page ?? 1;
+  const page = shown;
+  const savedIds = await savedAmong(session, jobs.map((j) => j.id));
   const suggestions = filtered && jobs.length === 0 && !placeNotFound ? emptySearchSuggestions(filters) : [];
   const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const inUse = activeFilters(filters, keep);
 
   return (
     <>
@@ -99,10 +127,11 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
 
           <form method="get" action="/jobs" className="searchform" role="search" aria-label="Search jobs">
             <div className="sf-main">
-              <label className="sr" htmlFor="s-q">Role or keyword</label>
-              <input id="s-q" name="q" type="text" placeholder="Role or keyword" defaultValue={filters.q} />
+              <label className="sr" htmlFor="s-q">Role, keyword or clinic name</label>
+              <input id="s-q" name="q" type="text" placeholder="Role, keyword or clinic name" defaultValue={filters.q} />
               <button type="submit" className="btn">Search</button>
             </div>
+            <MobileFilters count={inUse.length}>
             <div className="sf-filters">
               <label className="sr" htmlFor="s-role">Role</label>
               <select id="s-role" name="role" defaultValue={filters.role}>
@@ -166,7 +195,26 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
               })}
               <p className="help">Within a group, a job matches if it has any ticked item. If you tick items in more than one group, the job must match each of those groups.</p>
             </details>
+            </MobileFilters>
           </form>
+          {clinicMatches.length > 0 && (
+            <ul className="clinicmatches" aria-label="Clinics and companies matching your search">
+              {clinicMatches.map((c) => (
+                <li key={c.href}>
+                  <Link href={c.href} className="btn sm ghost"><strong>{c.name}</strong>{c.place ? `, ${c.place}` : ""}: see their page{c.supplier ? "" : " and open jobs"}</Link>
+                </li>
+              ))}
+            </ul>
+          )}
+          {filters.q && filters.q.length >= 3 && clinicMatches.length === 0 && jobs.length === 0 && !placeNotFound && (launched || session) && (
+            <ClinicInterest name={filters.q} signedIn={session ? (session.role === "candidate" ? "candidate" : "other") : "out"} />
+          )}
+          {inUse.length > 0 && (
+            <ul className="sf-tags" aria-label="Filters in use">
+              {inUse.map((f) => <li key={f.label}><Link href={f.href} className="sf-tag" aria-label={`Remove ${f.label}`}>{f.label} <span aria-hidden="true">&times;</span></Link></li>)}
+              {inUse.length > 1 && <li><Link href={pageHref({ q: filters.q } as JobFilters, 1, keep)} className="sf-clear">Clear all</Link></li>}
+            </ul>
+          )}
 
           {canMe && (
             <div className="viewbar">
@@ -197,6 +245,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
                 <>
                   <h2>No jobs match this search yet</h2>
                   <p>That is not a dead end. Here are quick ways to look a little wider:</p>
+                  {filters.q && <p className="help">Looking for a particular clinic or company? A name only finds places with a job on Kestrel right now. If one is not here yet, it has no live job with us.</p>}
                   <ul className="emptylinks">
                     {suggestions.map((s) => <li key={s.label}><Link href={s.href} className="btn sm ghost">{s.label}</Link></li>)}
                     <li><Link href="/jobs" className="btn sm ghost">Start again with every job</Link></li>
@@ -228,7 +277,7 @@ export default async function Jobs({ searchParams }: { searchParams: Promise<Rec
             <>
               <p className="resultcount" role="status">{total} {total === 1 ? "job" : "jobs"}{view === "me" ? " for you" : ""}{place ? ` within ${filters.radius ?? 25} km of ${placeLabel(place)}, and field based jobs` : ""}</p>
               <div className="joblist">
-                {jobs.map((j) => <JobCard key={j.id} job={j} />)}
+                {jobs.map((j) => <JobCard key={j.id} job={j} applied={appliedTo.has(j.id)} saved={session?.role === "candidate" ? savedIds.has(j.id) : undefined} />)}
               </div>
               {pages > 1 && (
                 <nav className="pager" aria-label="Pages of jobs">

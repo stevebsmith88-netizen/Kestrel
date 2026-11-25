@@ -1,7 +1,9 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { excerpt, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
+import { existsSync } from "node:fs";
+import { BLOG_IMAGES } from "./blog-images.ts";
+import { BLOG_TOPICS, excerpt, firstImage, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
 import { POSTS } from "../content/posts.ts";
 
 test("text becomes headings, lists and paragraphs", () => {
@@ -57,12 +59,13 @@ test("on the live site scheduled posts are hidden, and on previews they are show
   assert.equal(visiblePosts(posts, now, true).length, 3);
 });
 
-test("the posts are spaced at least a week apart after the first 3, and none links to a post that is not out yet", () => {
+test("the posts are spaced at least 3 days apart after the first 3, and none links to a post that is not out yet", () => {
   const dates = [...new Set(POSTS.map((p) => p.date))].sort();
   for (let i = 1; i < dates.length; i++) {
     const days = (Date.parse(dates[i]) - Date.parse(dates[i - 1])) / 86_400_000;
-    // the first 3 posts were published together at the start; every later one waits at least a week for the one before
-    if (dates[i - 1] >= "2026-10-30" && POSTS.filter((p) => p.date === dates[i - 1]).length === 1) assert.ok(days >= 7, `${dates[i]} is only ${days} days after ${dates[i - 1]}`);
+    // the first 3 posts were published together at the start; every later one waits at least 3 days for the one before, so a Tuesday
+    // post can sit between the weekly Friday posts (Steve, 13th November 2026: "happy to saturate over the coming weeks")
+    if (dates[i - 1] >= "2026-10-30" && POSTS.filter((p) => p.date === dates[i - 1]).length === 1) assert.ok(days >= 3, `${dates[i]} is only ${days} days after ${dates[i - 1]}`);
   }
   for (const post of POSTS) {
     for (const match of post.body.matchAll(/\]\(\/blog\/([a-z0-9-]+)\)/g)) {
@@ -82,4 +85,55 @@ test("an excerpt is plain text, ends cleanly, and is never longer than asked", (
   }
   assert.equal(excerpt("Short **bold** and a [link](/jobs).\n\nSecond."), "Short bold and a link.");
   assert.equal(excerpt("## Only a heading"), "");
+});
+
+test("pull quotes, tables and images become their own blocks", () => {
+  const blocks = parseBlocks("> A line worth repeating.\n\n> Said by someone.\n> source: A clinic owner\n\n| Role | Pay |\n| --- | --- |\n| Optician | $30 |\n\n![A card](/images/blog/cover-letter.png)\nA caption.");
+  assert.deepEqual(blocks, [
+    { type: "quote", text: "A line worth repeating." },
+    { type: "quote", text: "Said by someone.", source: "A clinic owner" },
+    { type: "table", head: ["Role", "Pay"], rows: [["Optician", "$30"]] },
+    { type: "figure", src: "/images/blog/cover-letter.png", alt: "A card", caption: "A caption." },
+  ]);
+  // an image from anywhere else stays plain text, never an image
+  assert.equal(parseBlocks("![x](https://example.com/a.png)")[0].type, "p");
+});
+
+test("every post has a pull quote, and every image it uses is listed and exists", () => {
+  for (const post of POSTS) {
+    const blocks = parseBlocks(post.body);
+    assert.ok(blocks.some((b) => b.type === "quote"), `${post.slug} has no pull quote (Steve, 13th November 2026: every post gets at least 1)`);
+    for (const b of blocks) {
+      if (b.type === "figure") {
+        assert.ok(BLOG_IMAGES[b.src], `${post.slug} uses ${b.src}, which is not in lib/blog-images.ts`);
+        assert.ok(existsSync(`public${b.src}`), `${b.src} is missing from public`);
+        // Steve, 13th November 2026: every blog image needs alt text that says what is on it
+        assert.ok(b.alt.trim().length >= 20, `${post.slug} has an image with no useful alt text`);
+      }
+      if (b.type === "table") for (const row of b.rows) assert.equal(row.length, b.head.length, `${post.slug} has a table row with the wrong number of cells`);
+    }
+  }
+  assert.equal(firstImage("Text.\n\n![A photo of an optician](/images/blog/x.png)"), "/images/blog/x.png");
+  assert.equal(firstImage("No pictures here."), undefined);
+});
+
+test("every post has a topic from the list, and every topic has posts", () => {
+  const ids = BLOG_TOPICS.map((t) => t.id as string);
+  for (const post of POSTS) assert.ok(ids.includes(post.topic), `${post.slug} has no topic, or an unknown one`);
+  for (const id of ids) assert.ok(POSTS.some((p) => p.topic === id), `the topic ${id} has no posts`);
+});
+
+test("a folded section holds the blocks between its markers, and ends at the closing marker or the end of the post", () => {
+  const blocks = parseBlocks("Intro.\n\n::: Where these figures come from\n\n- [One](https://example.com)\n- Two\n\n:::\n\nAfter.");
+  assert.equal(blocks.length, 3);
+  assert.equal(blocks[0].type, "p");
+  const details = blocks[1];
+  assert.equal(details.type, "details");
+  if (details.type !== "details") return;
+  assert.equal(details.summary, "Where these figures come from");
+  assert.deepEqual(details.blocks.map((b) => b.type), ["ul"]);
+  assert.equal(blocks[2].type, "p");
+  const open = parseBlocks("Intro.\n\n::: Sources\n\n- One\n\nMore.");
+  assert.equal(open.length, 2);
+  assert.deepEqual(open[1].type === "details" ? open[1].blocks.map((b) => b.type) : [], ["ul", "p"]);
 });

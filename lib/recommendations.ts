@@ -1,3 +1,4 @@
+import { readMyApplications } from "@/lib/my-applications";
 import "server-only";
 import { prefsFromProfile } from "@/lib/candidate-prefs";
 import type { CandidateProfile } from "@/lib/candidate";
@@ -9,13 +10,14 @@ export type RecommendationsView = {
   recs: Recommendation<JobSummary>[];
   needsRole: boolean; // no role chosen yet, so nothing can be suggested
   needsWhere: boolean; // suggestions are showing, but with no town or provinces chosen they are wider than they could be
+  hiddenJobs: JobSummary[]; // live jobs the candidate marked "Not interested", so they can bring one back (review item X-09)
 };
 
 // The signed in candidate's "Recommended for you" list. The rules are in lib/recommend.ts (no AI). Jobs they hid, and jobs they have
 // already applied to, are left out.
 export async function getRecommendations(profile: CandidateProfile | null, appliedJobIds: readonly string[]): Promise<RecommendationsView> {
   const prefs = prefsFromProfile(profile);
-  if (!prefs.profession) return { recs: [], needsRole: true, needsWhere: false };
+  if (!prefs.profession) return { recs: [], needsRole: true, needsWhere: false, hiddenJobs: [] };
   const db = await supabaseServer();
   const [jobs, hiddenRows] = await Promise.all([
     listLiveJobsForMatching(),
@@ -23,7 +25,8 @@ export async function getRecommendations(profile: CandidateProfile | null, appli
   ]);
   const hidden = new Set((hiddenRows.data ?? []).map((r) => r.job_id));
   const recs = recommend(prefs, jobs, { hidden, applied: new Set(appliedJobIds) });
-  return { recs, needsRole: false, needsWhere: !hasWhere(prefs) && prefs.licensedProvinces.length === 0 };
+  const hiddenJobs = jobs.filter((j) => hidden.has(j.id));
+  return { recs, needsRole: false, needsWhere: !hasWhere(prefs) && prefs.licensedProvinces.length === 0, hiddenJobs };
 }
 
 // The "For me" view on Find jobs: every job in the list that fits the candidate, best first. Same rules as above, with no limit on how many.
@@ -34,7 +37,7 @@ export async function rankForMe(profile: CandidateProfile | null, jobs: readonly
   const db = await supabaseServer();
   const [hiddenRows, appliedRows] = await Promise.all([
     db ? db.from("candidate_job_hides").select("job_id") : Promise.resolve({ data: [] as { job_id: string }[] }),
-    db ? db.from("applications").select("job_id") : Promise.resolve({ data: [] as { job_id: string }[] }),
+    db ? readMyApplications<{ job_id: string }[]>(db, (source) => source.select("job_id")) : Promise.resolve({ data: [] as { job_id: string }[] }),
   ]);
   const hidden = new Set((hiddenRows.data ?? []).map((r) => r.job_id));
   const applied = new Set((appliedRows.data ?? []).map((r) => r.job_id));

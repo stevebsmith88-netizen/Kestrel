@@ -4,7 +4,9 @@
 
 export type AppStatus =
   | "applied" | "viewed" | "shortlisted" | "interview" | "offer" | "hired"
-  | "not_selected" | "role_filled" | "kept" | "no_update" | "withdrawn";
+  | "not_selected" | "role_filled" | "kept" | "no_update" | "withdrawn"
+  // Shown to the candidate only, when the clinic deleted the job or its account (migration 0044). Never stored as a status.
+  | "clinic_left";
 
 export const APP_LABELS: Record<AppStatus, string> = {
   applied: "Applied",
@@ -18,6 +20,7 @@ export const APP_LABELS: Record<AppStatus, string> = {
   kept: "Kept for future roles",
   no_update: "No update from the clinic",
   withdrawn: "Withdrawn",
+  clinic_left: "Closed: the clinic left Kestrel",
 };
 
 // What a candidate sees as the one line of explanation under a status.
@@ -33,12 +36,13 @@ export const APP_EXPLAINERS: Record<AppStatus, string> = {
   kept: "The clinic will keep your details for future openings.",
   no_update: "The job closed without a decision.",
   withdrawn: "You withdrew this application.",
+  clinic_left: "The clinic has left Kestrel and can no longer see this application. We have kept your copy here.",
 };
 
 export const STEPS = ["applied", "viewed", "shortlisted", "interview", "offer", "hired"] as const;
 // A candidate is never shown Shortlisted (see candidateStatus), so their progress bar has 5 steps. A clinic sees all 6.
 export const CANDIDATE_STEPS = STEPS.filter((s) => s !== "shortlisted");
-export const CLOSED: readonly AppStatus[] = ["not_selected", "role_filled", "kept", "no_update", "withdrawn"];
+export const CLOSED: readonly AppStatus[] = ["not_selected", "role_filled", "kept", "no_update", "withdrawn", "clinic_left"];
 export const CLINIC_MOVES: readonly AppStatus[] = ["shortlisted", "interview", "offer", "not_selected", "role_filled", "kept"];
 // Who a clinic can name as the person it hired: anyone still in the running (not closed out, not withdrawn).
 export const HIREABLE: readonly AppStatus[] = ["applied", "viewed", "shortlisted", "interview", "offer"];
@@ -89,6 +93,9 @@ export function clinicMoveError(from: string, to: string, keepDetails: boolean, 
   if (!(CLINIC_MOVES as readonly string[]).includes(to)) return "That is not a step you can choose.";
   if (from === "withdrawn") return "The candidate has withdrawn this application.";
   if (from === "hired") return "This person is marked as hired, so there is nothing more to do.";
+  // Shortlisting is a private working step. Moving someone back to it from Interview or Offer would show the candidate their status turning back
+  // into Viewed with no message (audit P1-31), so it is not allowed.
+  if (to === "shortlisted" && (from === "interview" || from === "offer")) return `This person is already at ${APP_LABELS[from]}, so they can't be moved back to Shortlisted.`;
   if (from === to) return "The application is already at that step.";
   if (to === "kept" && !keepDetails) return "This candidate did not agree to have their details kept, so you can't choose this.";
   if ((NEEDS_MESSAGE as readonly string[]).includes(to)) {
@@ -110,7 +117,7 @@ export function messageTemplate(status: string, clinic: string) {
       // Shortlisting is the clinic's own working list. The candidate is not emailed and no message goes with it.
       return "";
     case "interview":
-      return `${clinic} would like to interview you. [Add the date, time and how to join]`;
+      return `${clinic} would like to interview you for this role. The details are below, and we look forward to meeting you.`;
     case "offer":
       return `${clinic} would like to offer you this role. [Add the details, and when you need a reply by]`;
     case "hired":
@@ -143,7 +150,9 @@ export function detectCv(bytes: Uint8Array, filename: string): { ext: "pdf" | "d
   return null;
 }
 
-export const CV_MAX_BYTES = 3 * 1024 * 1024;
+// 4 MB (Steve, 13th November 2026, raised from 3 MB after a real 3.7 MB resume with a photo was turned away). Vercel refuses any
+// upload over about 4.5 MB on every plan, so this cannot go much higher while resumes go through the website.
+export const CV_MAX_BYTES = 4 * 1024 * 1024;
 
 const ascii = (bytes: Uint8Array) => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString("latin1");
 const utf16 = (text: string) => Buffer.from(text, "utf16le").toString("latin1");

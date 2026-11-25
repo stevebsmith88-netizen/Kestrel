@@ -8,11 +8,12 @@ import { AppStatusBadge } from "@/components/AppStatus";
 import GettingStarted from "@/components/GettingStarted";
 import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
-import { candidateSteps } from "@/lib/checklist";
+import { candidateSteps, lookingForSaved } from "@/lib/checklist";
 import { getMyApplications, getMyCandidateProfile, needsFirstStep, profileReady, profileStrength } from "@/lib/candidate";
 import { employmentLabel, longDate } from "@/lib/jobs";
 import { payChips } from "@/lib/job-pay";
-import { hideRecommendation } from "@/lib/recommendation-actions";
+import { withNext } from "@/lib/auth-copy";
+import { hideRecommendation, unhideRecommendation } from "@/lib/recommendation-actions";
 import { getRecommendations } from "@/lib/recommendations";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -20,16 +21,17 @@ export const metadata: Metadata = { title: "Your dashboard | Kestrel Eye Care Jo
 
 export const dynamic = "force-dynamic";
 
-export default async function CandidateHome() {
+export default async function CandidateHome({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const session = await requireRole("candidate");
+  const { next } = await searchParams;
   const [profile, applications] = await Promise.all([getMyCandidateProfile(session.userId), getMyApplications()]);
   // A brand new candidate is shown the first step page once (needsFirstStep in lib/candidate.ts).
-  if (await needsFirstStep(session.userId, profile)) redirect("/candidate/start");
+  if (await needsFirstStep(session.userId, profile)) redirect(withNext("/candidate/start", next));
   const first = session.firstName || "there";
   const strength = profileStrength(profile);
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
   const latest = applications.slice(0, 3);
-  const { recs, needsRole, needsWhere } = await getRecommendations(profile, applications.map((a) => a.job_id));
+  const { recs, needsRole, needsWhere, hiddenJobs } = await getRecommendations(profile, applications.map((a) => a.job_id).filter((id): id is string => id !== null));
   const db = await supabaseServer();
   const { count: alertCount } = db ? await db.from("job_alerts").select("id", { count: "exact", head: true }) : { count: 0 };
 
@@ -38,13 +40,12 @@ export default async function CandidateHome() {
       <AppBar session={session} current="/candidate" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <p className="kicker">Your dashboard</p>
           <h1>Welcome, {first}</h1>
           <p className="lede2">Keep your resume and details here, and apply to any job in a few clicks.</p>
 
           <GettingStarted
             title="Your first application"
-            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: !needsRole && !needsWhere, hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
+            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: lookingForSaved(profile), hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
           />
 
           <div className="tiles">
@@ -113,6 +114,22 @@ export default async function CandidateHome() {
                 </div>
               )}
               <p className="help">These come from simple rules applied to what you told us. There is no AI in them, and nothing about you is shared with clinics.</p>
+              {hiddenJobs.length > 0 && (
+                <details className="moreopts hiddenjobs">
+                  <summary>Jobs you marked not interested ({hiddenJobs.length})</summary>
+                  <ul className="hiddenlist">
+                    {hiddenJobs.map((j) => (
+                      <li key={j.id}>
+                        <span><Link href={`/jobs/${j.id}`}>{j.title}</Link> <span className="meta">{j.employers?.clinic_name} · {j.city}, {j.province}</span></span>
+                        <form action={unhideRecommendation}>
+                          <input type="hidden" name="jobId" value={j.id} />
+                          <button type="submit" className="btn sm ghost" aria-label={`Show ${j.title} in my recommendations again`}>Show it again</button>
+                        </form>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
             </>
           )}
 

@@ -1,5 +1,7 @@
 # LinkedIn posts: the first month
 
+**Update, 17th November 2026:** the dates and posts to use now are in `docs/marketing/reddit-and-linkedin-calendar.md` (LinkedIn and Reddit together, to the end of December 2026, matching the current blog schedule). The weeks below are the older drafts, and some blog dates in them have since moved.
+
 Drafts for the Kestrel Eye Care Jobs company page, written 6th November 2026. Each is ready to paste. Nothing here has been posted.
 
 **Before posting anything that promotes Kestrel:** the disclosure conversation at Eye Recommend should have happened, and the page must not invite Eye Recommend staff, clinics or contacts, or use anything from Eye Recommend. When to start is Steve's call. The weeks below are relative ("Week 1"), so they can start on any Monday. Each blog post is posted on its Friday, and the link goes in the first comment or at the end, as Steve prefers.

@@ -49,7 +49,8 @@ test("a clinic cannot make a move it should not", () => {
 test("closing and offering needs a message with no blanks left in it", () => {
   assert.ok(clinicMoveError("viewed", "not_selected", false, "   "));
   assert.equal(clinicMoveError("viewed", "not_selected", false, messageTemplate("not_selected", "Harbourside Optical")), null);
-  assert.ok(clinicMoveError("viewed", "interview", false, messageTemplate("interview", "Harbourside Optical")));
+  // The interview form carries the date, time and place in its own fields, so its ready made message needs no blanks filled in.
+  assert.ok(clinicMoveError("viewed", "offer", false, messageTemplate("offer", "Harbourside Optical")));
   assert.equal(clinicMoveError("viewed", "interview", false, "Harbourside Optical would like to meet you on Friday at 2 pm by video."), null);
 });
 
@@ -137,4 +138,17 @@ test("Hired is a final step: no more moves, it sits with the offers, and its mes
   assert.ok(!/\[[^\]]+\]/.test(messageTemplate("hired", "X")), "no square brackets to fill in");
   assert.equal(reachedStep(["applied", "viewed", "interview", "offer"], "hired"), 5);
   assert.deepEqual([...HIREABLE], ["applied", "viewed", "shortlisted", "interview", "offer"], "only someone still in the running can be named");
+});
+
+// Audit P1-31: a clinic cannot move someone back to Shortlisted from a later step, because the candidate would see Interview turn back into Viewed.
+test("a clinic cannot move an application back to Shortlisted from Interview or Offer", () => {
+  assert.ok(clinicMoveError("interview", "shortlisted", false, ""));
+  assert.ok(clinicMoveError("offer", "shortlisted", false, ""));
+  assert.match(clinicMoveError("interview", "shortlisted", false, "") ?? "", /Interview/);
+  assert.match(clinicMoveError("offer", "shortlisted", false, "") ?? "", /Offer/);
+  // the forward moves and the first shortlist still work
+  assert.equal(clinicMoveError("applied", "shortlisted", false, ""), null);
+  assert.equal(clinicMoveError("viewed", "shortlisted", false, ""), null);
+  assert.equal(clinicMoveError("shortlisted", "interview", false, "Come in on Friday at 2 pm."), null);
+  assert.equal(clinicMoveError("interview", "offer", false, "We would like to offer you the role, please reply by Friday."), null);
 });

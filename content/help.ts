@@ -12,6 +12,21 @@ export const HELP: HelpSection[] = [
     intro: "About Kestrel, the rules every job follows, and what we do with your information.",
     topics: [
       {
+        id: "help-and-feedback",
+        title: "How do I report a problem, suggest a feature or ask for help?",
+        keywords: ["bug", "broken", "not working", "error", "feature", "idea", "suggestion", "feedback", "support", "contact", "help request"],
+        answer: [
+          "Signed in, open the menu under your initials and choose **Help and feedback**. A person at Kestrel reads everything sent there, and we reply by email.",
+          "A clinic can also ask for help with its account there. The owner can tick a box to let our team see and change the clinic's account for up to 7 days, so we can fix things for you. We can then see your profile, your team, open invitations, your job posts and how many people applied, but never applicants' resumes, cover letters or your private notes. Every change we make is recorded, you are told, and you can take the access back at any time on the same page.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Help and feedback**.",
+          "To report a problem or share an idea, choose what it is under **Found a problem, or have an idea?**, write a few lines and press **Send feedback**.",
+          "Clinics: under **Ask Kestrel for help**, choose what it is about, say what is happening, tick the box if you want us to work in your account, and press **Send to Kestrel**.",
+        ],
+        links: [{ label: "Help and feedback", href: "/account/help" }],
+      },
+      {
         id: "what-is-kestrel",
         title: "What is Kestrel Eye Care Jobs?",
         keywords: ["about", "overview", "who are you", "job board", "optometry", "opticians"],
@@ -92,7 +107,7 @@ export const HELP: HelpSection[] = [
         title: "Who can see my details?",
         keywords: ["privacy", "visible", "employer sees", "profile private", "share", "cv visible", "hidden"],
         answer: [
-          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number if you added one, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
+          "**If you are looking for a job:** your profile and resume are private. A clinic sees only what you send with an application: your cover letter, your resume, and your name, email address, role, licences, experience and availability, plus your phone number, LinkedIn profile and, if you are an optometrist or optician, your registration number if you added them, as they were the day you applied. It sees nothing from applications you sent to other clinics. The part of your profile about what you are looking for, such as how far you would travel and your lowest pay, is never shown to clinics. Your resume can be opened only through a link that works for 1 minute.",
           "**If you are a clinic:** your job posts are public, but the email address that applicant alerts go to is never shown on a post, and neither is the answer about how many people work for you. Candidates apply through Kestrel, so recruiters cannot harvest your address.",
           "We do not sell personal information. Our team can see account details when it needs to run the site, and a small number of service providers handle information only to provide their service to us.",
         ],
@@ -114,15 +129,16 @@ export const HELP: HelpSection[] = [
         keywords: ["unclaimed", "listing", "claim", "not claimed", "found listing", "careers page"],
         answer: [
           "Sometimes we find a job on a clinic's own careers page and list it so candidates can see it. We write the facts in our own words, link to the clinic's own application page, and do not use the clinic's logo. The label means the clinic has not yet taken the listing over, and to apply you go to the clinic's own website.",
-          "These listings come down after 21 days. If you run the clinic, you can [claim the listing](/help#claim-a-listing), and your clinic then owns it and manages it from the dashboard. To ask us to take a listing down, write to hello@eyecarejobs.ca.",
+          "These listings come down after 21 days. If you run the clinic, you can [claim the listing](/help#claim-a-listing), and your clinic then owns it and manages it from the dashboard. To ask us to take a listing down, write to support@eyecarejobs.ca.",
         ],
       },
       {
         id: "report-a-job",
         title: "How do I report a job?",
-        keywords: ["scam", "fake", "spam", "flag", "complaint", "recruiter", "agency", "discriminatory", "wrong", "filled"],
+        keywords: ["scam", "fake", "fraud", "fraudulent", "spam", "flag", "complaint", "recruiter", "agency", "discriminatory", "wrong", "filled", "policy"],
         answer: [
-          "If a job looks like a scam, comes from a recruiter or agency, uses discriminatory wording, has pay or details that look wrong, or has already been filled, tell us. A person reads every report.",
+          "If a job looks like a scam, comes from a recruiter or agency, uses discriminatory wording, has pay or details that look wrong, or has already been filled, tell us. A person reads every report within 2 business days, and may hide the job while we check.",
+          "Our policy on fake and fraudulent jobs says what we treat as fraudulent and what we do about a report.",
         ],
         steps: [
           "Open the job.",
@@ -131,6 +147,7 @@ export const HELP: HelpSection[] = [
           "Add your email address only if you would like us to write back.",
           "Press **Send report**.",
         ],
+        links: [{ label: "Reporting fake jobs", href: "/fake-jobs" }],
       },
       {
         id: "email-choices",
@@ -141,8 +158,7 @@ export const HELP: HelpSection[] = [
           "Candidates can choose news and job alert emails, and whether to be emailed when a clinic updates an application. Clinics can choose how often to be emailed about new applicants, and whether to be reminded when an application has waited 2 weeks without being opened.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page. On a phone, open **Menu** instead.",
-          "Choose **Account settings**.",
+          "Open the menu under your initials at the top of the page and press the **gear** beside your name. On a phone, open **Menu** and choose **Account settings**.",
           "Find the **Email choices** box and tick or untick what you want.",
           "Press **Save my email choices**.",
         ],
@@ -154,12 +170,12 @@ export const HELP: HelpSection[] = [
         keywords: ["inbox", "envelope", "notifications", "messages", "updates", "unread", "bell"],
         answer: [
           "The inbox keeps the updates about your account in one place, as well as in your email. A candidate sees when a clinic moves an application to a new step, with the clinic's message if it wrote one. A clinic sees new applicants, and when we approve a job or ask for a change. A shortlist is a clinic's private working list, so it never appears in a candidate's inbox.",
-          "The inbox is for reading only. Nobody replies to anybody in it. To reach us, write to hello@eyecarejobs.ca. The envelope beside your initials shows how many messages you have not read yet.",
+          "The inbox is for reading only. Nobody replies to anybody in it. To reach us, use **Help and feedback** in the menu under your initials, or write to support@eyecarejobs.ca. Your help requests are listed under the inbox's **Help requests** tab. The envelope beside your initials shows how many messages you have not read yet.",
         ],
         steps: [
-          "Choose the envelope beside your initials at the top of the page. On a phone, open **Menu** and choose **Inbox**.",
-          "Choose **Open** on a message to go to the application or job it is about.",
-          "Choose **Mark all as read** to clear the number on the envelope.",
+          "Choose the envelope at the top of the page. On a computer it is beside your initials, and on a phone it is beside the **Menu** button. The number on it is how many messages you have not read. Tick the box beside one or more messages to mark them as read or delete them, or tick **Select all** to choose every message.",
+          "Choose **Open** on a message to go to the application or job it is about. Opening a message marks it as read. A message with no page to open has its own **Mark as read** button.",
+          "Choose **Mark all as read** to clear the number on the envelope in one go.",
         ],
         links: [{ label: "Inbox", href: "/account/inbox" }],
       },
@@ -168,11 +184,12 @@ export const HELP: HelpSection[] = [
         title: "Can I change my name?",
         keywords: ["name", "change name", "typo", "married", "legal name", "rename", "surname", "last name"],
         answer: [
-          "Yes. You can change your name on your account page. Your first change is free. After each change there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again.",
-          "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to hello@eyecarejobs.ca and we will lift the hold for you.",
+          "Yes. You can change your name on your account page. After each change, including the first, there is a 30 day wait before the next one, so a clinic does not see the same person arrive under different names. The page shows the date you can change it again. Fixing capital letters alone, for example smith to Smith, does not start the wait.",
+          "If you are a candidate with an application in progress (sent, viewed, at interview or at offer, on a job the clinic still has), your name cannot change until it closes, because the clinic needs to recognise the person it is talking to. Fixing capital letters is always fine.",
+          "An application you have already sent keeps the name you used when you sent it. If you need an earlier change, for example to fix a typo or because your name has legally changed, write to support@eyecarejobs.ca and we will help.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page and choose **Account settings**. On a phone, open **Menu** instead.",
+          "Open the menu under your initials at the top of the page and press the **gear** beside your name. On a phone, open **Menu** and choose **Account settings**.",
           "Under **Your name**, change your first or last name and press **Save my name**.",
         ],
         links: [{ label: "Account settings", href: "/account" }],
@@ -182,8 +199,8 @@ export const HELP: HelpSection[] = [
         title: "How do I contact you?",
         keywords: ["support", "help", "email", "hello", "privacy officer", "reach", "question", "feedback"],
         answer: [
-          "A person on the Kestrel team reads every message, and we aim to reply promptly, within 1 to 3 business days.",
-          "For general questions and help, write to hello@eyecarejobs.ca. To see, correct or remove your information, write to privacy@eyecarejobs.ca. To report a job, use the **Report this job** link on the job's page.",
+          "A person on the Kestrel team reads every message, and we reply within 2 business days.",
+          "For help with your account, use **Help and feedback** in the menu under your initials, or write to support@eyecarejobs.ca. For general questions, write to hello@eyecarejobs.ca. To see, correct or remove your information, write to privacy@eyecarejobs.ca. To report a job, use the **Report this job** link on the job's page.",
         ],
         links: [{ label: "Contact page", href: "/contact" }],
       },
@@ -192,18 +209,30 @@ export const HELP: HelpSection[] = [
         title: "How do I download my information or delete my account?",
         keywords: ["close account", "remove account", "erase", "export", "my data", "copy of my data", "privacy request", "cancel account"],
         answer: [
-          "You can do both yourself, any time you are signed in. The download is a file with the account details we hold about you. For a candidate it also covers your profile, job alerts, applications and saved letters, and for a clinic it covers your clinic profile, jobs and templates. Your resume file is downloaded separately, with the **Download** button on your profile page.",
-          "Deleting is permanent. It removes your profile, your resume and your applications. A clinic that already received your application may have kept its own copy of what you sent. Write to privacy@eyecarejobs.ca and we will ask that clinic to remove it. If you are a clinic, deleting your account also removes your jobs and the applications they received.",
+          "You can do both yourself, any time you are signed in. The download is a file with the account details we hold about you. For a candidate it also covers your profile, the private preferences behind Recommended for you (including the lowest pay you would accept), the jobs you marked Not interested, your job alerts, applications, inbox messages and saved letters, and for a clinic it covers your clinic profile, jobs and templates. Your resume file is downloaded separately, with the **Download** button on your profile page.",
+          "Deleting is permanent. It removes your profile, your resume and your applications. A clinic that already received your application may have kept its own copy of what you sent. Write to privacy@eyecarejobs.ca and we will ask that clinic to remove it. If you are a clinic, deleting your account also removes your jobs, and you lose access to the applications they received. Candidates keep their own copy of what they sent, marked closed.",
         ],
         steps: [
-          "Open the menu under your initials at the top of the page. On a phone, open **Menu** instead.",
-          "Choose **Account settings**.",
-          "To download, find **Download your information** and press **Download my information**.",
+          "Open the menu under your initials at the top of the page and press the **gear** beside your name. On a phone, open **Menu** and choose **Account settings**.",
+          "To download, find **Download your information**, type your password (or, if you sign in with Google, your email address) so we know it is you, and press **Download my information**.",
           "To delete, open **Delete my account** further down the page.",
           "Type your password. If you sign in with Google, type your email address instead.",
           "Type DELETE in capital letters and press **Delete my account for good**.",
         ],
         links: [{ label: "Account settings", href: "/account" }],
+      },
+      {
+        id: "is-there-an-app",
+        title: "Is there a Kestrel app?",
+        keywords: ["app", "iphone", "android", "phone", "mobile", "download", "home screen", "install", "notifications"],
+        answer: [
+          "Not at the moment. Kestrel works in your phone's browser, and its pages are made to fit a small screen, so you can look for jobs, apply, post a job and move applicants along from your phone.",
+          "Until there is an app, 2 things help most. Add Kestrel to your phone's home screen, so it opens with 1 tap like an app. And choose email alerts, so new jobs and new applicants come to you. See [job alerts](/help#job-alerts) if you are looking for a job, or [email choices](/help#email-choices) if you are a clinic.",
+        ],
+        steps: [
+          "iPhone: open Kestrel in Safari, tap the **Share** button, then choose **Add to Home Screen**.",
+          "Android: open Kestrel in Chrome, tap the menu with 3 dots, then choose **Add to Home screen** or **Install app**.",
+        ],
       },
     ],
   },
@@ -224,7 +253,7 @@ export const HELP: HelpSection[] = [
           "Choose **Create account** at the top of the page. On a phone, open **Menu** first.",
           "Under **I am**, choose **I'm looking for a job**. Or choose **Continue with Google** if you see that button.",
           "Type your first name, last name, email address and a password.",
-          "Tick the box to agree to the terms of use and the privacy policy. The second box, about launch news and job alerts, is optional.",
+          "Tick the box to agree to the terms of use and the privacy policy. The second box, about launch news and tips for getting started, is optional. Job alerts are set up separately, on the Job alerts page.",
           "Complete the security check and press **Create my account**.",
           "Open the confirmation email, follow the link, and sign in.",
         ],
@@ -235,7 +264,7 @@ export const HELP: HelpSection[] = [
         title: "How do I build my profile and add a resume?",
         keywords: ["resume", "cv", "upload", "curriculum vitae", "word", "pdf", "licence", "license", "registration", "edit profile"],
         answer: [
-          "To apply through Kestrel you need 3 things: your role, a saved resume, and your town and province. Everything else on the profile is optional, and your profile is private. A resume can be a PDF or a Word file, up to 3 MB, and it is stored privately in Canada.",
+          "To apply through Kestrel you need 3 things: your role, a saved resume, and your town and province. Everything else on the profile is optional, and your profile is private. A resume can be a PDF or a Word file, up to 4 MB, and it is stored privately in Canada.",
           "You can replace or delete your resume at any time. Replacing it does not change applications you have already sent, because a clinic keeps what you sent that day.",
         ],
         steps: [
@@ -256,7 +285,7 @@ export const HELP: HelpSection[] = [
         keywords: ["for me", "fit", "sort", "newest", "closest", "best match", "all jobs", "field", "supplier", "other roles", "recommended"],
         answer: [
           "When you are signed in and your profile has a role, **Find jobs** opens on **For me**. It shows only the jobs you can apply for, within the distance and other choices you saved under **What you are looking for**. Jobs you have already applied for, or marked **Not interested**, are left out. There is no AI in it, and nothing about you is shared with clinics.",
-          "An optician is never shown optometrist jobs, and an optometrist is never shown optician jobs. Under **Other roles you would consider** you can add roles that sit close to yours, such as assistant and reception roles. If you are not an optometrist, you can also tick **Open to field and supplier roles**, which lets sales, training, equipment service and account roles appear in your list, and lets you apply for them.",
+          "Optometrist jobs are shown only to optometrists, and only an optometrist can apply for one. An optometrist is never shown optician jobs. Optometric assistants and technicians see patient care and reception jobs without ticking anything, and the other way round. On your profile, **What else would you consider?** lets you tick other roles, such as a practice or clinic manager role. If you open a job outside your roles, the apply page offers **Yes, I would consider this role**, which adds it in 1 tap. If you are not an optometrist, you can also tick **Open to field and supplier roles**, which lets sales, training, equipment service and account roles appear in your list, and lets you apply for them. If you open a job outside your roles from **Show all jobs**, choosing **Quick Apply** takes you to a page that explains why.",
         ],
         steps: [
           "Open **Find jobs**. Choose **Show all jobs** to see every job, and **Show jobs for me** to come back.",
@@ -266,19 +295,75 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Find jobs", href: "/jobs" }, { label: "What you are looking for", href: "/candidate/profile#looking-for" }],
       },
       {
+        id: "registration-number",
+        title: "Do I have to give my registration number?",
+        keywords: ["licence", "license", "registration", "college", "number", "optician", "optometrist", "contact lens", "register", "student", "new graduate"],
+        answer: [
+          "If you are an optometrist or optician, your profile has a place for the registration number your College issued you, the province or territory, and for opticians what you are registered to do: eyeglasses, contact lenses or both. You enter it and Kestrel does not check it. A clinic sees it only with an application you send, and can check it on the College's own register.",
+          "Optometrist jobs, and optician jobs in provinces that regulate opticians, ask for it before you can apply. If you are a student, a new graduate or moving province, tick **I am not registered yet** instead, and the clinic sees that. Opticians are not regulated in Yukon, the Northwest Territories or Nunavut, so nobody is asked there. In BC, give the number issued from June 2026, because the old college numbers no longer work in the register.",
+        ],
+        steps: [
+          "Open **Profile and resume**. Under **Your role**, choose Optometrist or Optician.",
+          "Find **Your registration number** and choose the province that registered you.",
+          "Type the number as the College shows it, with any leading zero, and tick what you are registered to do. Then save.",
+        ],
+        links: [{ label: "Profile and resume", href: "/candidate/profile#registration" }],
+      },
+      {
+        id: "save-a-job",
+        title: "How do I save a job to apply for later?",
+        keywords: ["save", "saved", "bookmark", "later", "favourite", "favorite", "shortlist jobs", "keep job"],
+        answer: [
+          "Press **Save job** on a job in the search results, or on the job page. You need a candidate account. Your saved jobs are on the **Saved jobs** page, with the ones closing soonest at the top, and an **Apply** button beside each.",
+          "A job you saved can end before you apply. We mention it once, in your daily email, when it is 3 days from closing and you have not applied, and you can stop those emails with the unsubscribe link or in Email choices. After it ends it stays on your list, marked as no longer open, until you remove it. Only you can see your saved jobs, and a clinic is never told you saved its job. You can save up to 100.",
+        ],
+        steps: [
+          "Open a job and press **Save job**. If you are signed out, you are asked to sign in first.",
+          "Open **Saved jobs** from the menu under your initials.",
+          "Press **Apply** when you are ready, or **Remove** to take it off the list.",
+        ],
+        links: [{ label: "Saved jobs", href: "/candidate/saved" }, { label: "Find jobs", href: "/jobs" }],
+      },
+      {
+        id: "follow-a-clinic",
+        title: "How do I follow a clinic or company and hear about its new jobs?",
+        keywords: ["follow", "favourite", "favorite", "save clinic", "notify", "alert", "supplier", "company", "new jobs", "unfollow"],
+        answer: [
+          "Open the page of a clinic or company on Kestrel and press **Follow for new jobs**. When it posts a new job, you get it in your daily job alert email, marked \"From a place you follow\". There is never more than 1 email a day, and you only hear about jobs posted after you followed. You need a candidate account.",
+          "You can follow up to 50 places. A clinic is never told who follows it. To stop, press **Following. Unfollow** on its page, or use **Unfollow** under **Clinics and companies you follow** on the **Job alerts** page. Unsubscribing from emails in your account also stops these emails.",
+        ],
+        steps: [
+          "Find the clinic or company with the search box on **Find jobs**, or follow the link to it from any of its job pages.",
+          "Press **Follow for new jobs**. If you are signed out, you are asked to sign in first.",
+          "Manage who you follow on the **Job alerts** page.",
+        ],
+        links: [{ label: "Job alerts", href: "/candidate/alerts#following" }, { label: "Find jobs", href: "/jobs" }],
+      },
+      {
+        id: "work-for-a-clinic-not-on-kestrel",
+        title: "What if the clinic or company I want to work for is not on Kestrel?",
+        keywords: ["clinic not listed", "not on kestrel", "interested", "request a clinic", "favourite", "company", "supplier", "find a clinic"],
+        answer: [
+          "Type the name into the search box on **Find jobs**. If the clinic or company has a page on Kestrel, a link to it appears above the results, with its open jobs. A name only finds places that have a page, which needs at least 1 job approved by Kestrel.",
+          "If nothing matches and no jobs come up, open **Looking for a clinic or company that is not on Kestrel yet?** under the search box and tell us who it is. We keep a count of who people ask about, and if they join Kestrel we will let you know by a message in your inbox and an email, once. We do not share your name or details with the clinic. You can tell us about up to 20 places, and they are deleted with your account.",
+        ],
+        links: [{ label: "Find jobs", href: "/jobs" }],
+      },
+      {
         id: "search-and-filter-jobs",
         title: "How do I search and filter jobs, including by distance?",
-        keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "city"],
+        keywords: ["browse", "find jobs", "distance", "near me", "radius", "km", "location", "filter", "filters", "phone", "city"],
         answer: [
           "You do not need an account to search. Every job shows its pay, and you can narrow the list as much or as little as you like.",
           "Distance works from a town or city. Kestrel knows towns of about 1,000 people or more, so if a place is not found, check the spelling or try the nearest larger town. You can choose within 10, 25 or 50 km, and 25 km is the usual choice. Field based jobs, such as sales and service roles that travel to clinics, are always included alongside the jobs near you.",
         ],
         steps: [
           "Choose **Find jobs** in the bar at the top of the page.",
-          "Type a role or keyword, or choose a role, a province or territory, a type of employer (independent or corporate), and whether the person works on site or in the field.",
+          "Type a role or keyword. On a phone, press **Filters** to see the other choices; on a computer they are shown under the search box.",
+          "Choose a role, a province or territory, a type of employer (independent or corporate), and whether the person works on site or in the field.",
           "To search by distance, type a city or town, then choose **Within 10 km**, **Within 25 km** or **Within 50 km**.",
           "Tick the types of work you want, such as full time or part time. Open **Software, equipment and specialties** to narrow by what the job uses.",
-          "Press **Search**. The number of jobs found appears above the list.",
+          "Press **Search**, or **Show jobs** on a phone. The number of jobs found appears above the list. On a phone, each filter in use shows as a tag above the list: press it to remove that filter.",
         ],
         links: [{ label: "Find jobs", href: "/jobs" }],
       },
@@ -289,16 +374,16 @@ export const HELP: HelpSection[] = [
         answer: [
           "The **Apply** box on a job page tells you which kind it is. Some clinics take applications through Kestrel, and others send you to their own careers page.",
           "When you apply through Kestrel, the clinic sees your cover note, your resume and your details: your name, email address, phone number if you added one, role, where you are licensed, years of experience and when you are available. You can follow the application under My applications. When a clinic uses its own site, the box says **Apply on the clinic's website** and opens that site in a new tab. Kestrel cannot see what happens there, so that application does not appear in My applications.",
-          "You can apply to a job once. A cover note is optional, but we recommend one, because clinics tend to read the personal ones first.",
+          "You can apply to a job once, and you can send up to 30 applications in 24 hours. If you reach that, you can apply again the next day. A cover note is optional, but we recommend one, because clinics tend to read the personal ones first.",
         ],
         steps: [
           "Open the job. On a phone, the small **Apply** button near the top jumps down to the Apply box.",
           "Choose **Quick Apply**. If you are not signed in, sign in or create a free account first.",
-          "The first time, **Complete my profile** takes you to save your resume and choose your role. Then you come back to the job.",
-          "Check your name, email, role and resume under **Your details**.",
-          "Write a cover note, or choose one of your saved letters and press **Use it**. **Save as a draft** keeps it if you want to come back later.",
+          "The first time, the Apply page asks for your resume. Choose the file and it saves straight away. We read it on our own server and fill in your role, town and province for you to check, then press **Save and continue**.",
+          "Press **See all details** under **What the clinic receives** to check the 8 details: your name, email, phone, role, where you are registered, years of experience, when you are available and your resume. Anything you have not filled in says **Not given**. Press **Change these in my profile** to update them.",
+          "Write a cover note if you like. Under **Saved letters and drafts** you can start from one of your saved letters (**Use it**) or press **Save as a draft** to come back later.",
           "Tick the box agreeing that the clinic can see your application. The box about keeping your details for future roles is optional.",
-          "Press **Send my application**. If the note is empty, we ask once: choose **Write a short note** or **Send without a note**.",
+          "Press **Send my application**.",
         ],
         links: [{ label: "Find jobs", href: "/jobs" }, { label: "My saved letters", href: "/candidate/letters" }],
       },
@@ -308,8 +393,8 @@ export const HELP: HelpSection[] = [
         keywords: ["status", "applied", "viewed", "interview", "offer", "progress", "my applications", "rejected", "not selected", "heard back"],
         answer: [
           "Every application shows a progress bar that shows how far it has got. **Applied** means it is sent and the clinic has not opened it yet. **Viewed** means the clinic has opened it, and it stays Viewed while the clinic reads through its applicants, until the clinic invites you to interview, makes an offer or closes the application. **Interview** means the clinic would like to meet you, and **Offer** means it has made you an offer. **Hired** means the clinic has told us you are the person it hired, and we email you to say congratulations.",
-          "An application can also close. **Not selected this time** means the clinic chose other candidates. **Role filled** means the job is no longer open. **Kept for future roles** means the clinic will keep your details for future openings, if you agreed to that when you applied. **No update from the clinic** means the job closed without a decision. **Withdrawn** means you withdrew it.",
-          "A clinic can write you a message with an update, and you see it on the application. The clinic's private notes are never shown to you. We also email you when a clinic updates an application, unless you have turned those emails off. The topic [How do I change which emails I get?](/help#email-choices) says how.",
+          "An application can also close. **Not selected this time** means the clinic chose other candidates. **Role filled** means the job is no longer open. **Kept for future roles** means the clinic will keep your details for future openings, if you agreed to that when you applied. **No update from the clinic** means the job closed without a decision: we mark it a week after the job ends, or 14 days after if you were at interview or offer. **Withdrawn** means you withdrew it.",
+          "A clinic can write you a message with an update, and you see it on the application. The message is the clinic's own words, so it ends with a line saying which clinic wrote it, and any web address in it is shown as plain text, not a link. The clinic's private notes are never shown to you. We also email you when a clinic updates an application, unless you have turned those emails off. The topic [How do I change which emails I get?](/help#email-choices) says how.",
         ],
         steps: [
           "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead. Your dashboard also shows the latest few.",
@@ -323,7 +408,7 @@ export const HELP: HelpSection[] = [
         title: "How do I set up job alerts?",
         keywords: ["alert", "notifications", "email me", "subscribe", "new jobs", "daily", "weekly", "monthly"],
         answer: [
-          "A job alert emails you when a new job is posted that matches what you choose. You can have up to 5 alerts. You get one email with everything new, never one email per job, and every email has an unsubscribe link.",
+          "A job alert emails you when a new job is posted that matches what you choose. You can have up to 5 alerts. You get one email with everything new, never one email per job, and every email has an unsubscribe link. Unsubscribing stops your job alert emails as well as news, but keeps your alerts, and the Job alerts page tells you so. To get them again, tick the news and job alerts box under **Email choices** on your account page.",
           "Alerts match on role, province or territory and type of employer. They do not use distance. If you turn off news and job alert emails under Account settings, your alerts are kept but no emails are sent until you turn them back on.",
         ],
         steps: [
@@ -338,15 +423,16 @@ export const HELP: HelpSection[] = [
       {
         id: "recommended-for-you",
         title: "What are Recommended for you and Not interested?",
-        keywords: ["suggestions", "matches", "hide", "dismiss", "home page", "suggested jobs"],
+        keywords: ["suggestions", "matches", "hide", "dismiss", "home page", "suggested jobs", "undo", "hidden", "bring back"],
         answer: [
           "Your dashboard shows up to 8 jobs that fit what you told us, each with a line saying why it fits, such as the role, how far away it is, or that its pay reaches your minimum. They come from plain rules applied to your profile, with no AI, and nothing about you is shared with clinics.",
-          "**Not interested** removes a job from your list, for you only. There is no undo, and the job still appears when you search. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
+          "**Not interested** removes a job from your list, for you only. The job still appears when you search. Changed your mind? Under the list, open **Jobs you marked not interested** and press **Show it again**. To get better suggestions, fill in **What you are looking for** on your profile: your town, how far you would travel, the provinces you would work in, your lowest pay and the type of work. The list starts once you have chosen your role.",
         ],
         steps: [
           "Open your dashboard by choosing **My dashboard** in the bar at the top.",
           "Read the **Recommended for you** list and the line under each job that starts **Why this fits**.",
           "Press **Not interested** on any job you do not want to see again in the list.",
+          "To bring one back, open **Jobs you marked not interested** under the list and press **Show it again**.",
           "To change what we suggest, choose **Edit what you are looking for**, update your details on the profile page and press **Save my details**.",
         ],
         links: [{ label: "What you are looking for", href: "/candidate/profile#looking-for" }],
@@ -365,13 +451,14 @@ export const HELP: HelpSection[] = [
         title: "How do I withdraw an application?",
         keywords: ["cancel", "retract", "take back", "remove application", "undo apply", "pull out"],
         answer: [
-          "You can withdraw at any step until the application is closed, including after an interview or an offer. The clinic sees the application as **Withdrawn**. We do not ask you to confirm, so the change happens as soon as you press the button.",
+          "You can withdraw at any step until the application is closed, including after an interview or an offer. The clinic sees the application as **Withdrawn**, and we let it know in its inbox, and by email if it gets emails for each application or you were at interview or offer. We ask you to confirm first.",
           "You can apply to a job only once, so a withdrawn application cannot be sent again for the same job. You can still apply to other jobs, now or later. If you change your mind about this one, contact the clinic directly.",
         ],
         steps: [
           "Open the menu under your initials and choose **My applications**. On a phone, open **Menu** instead.",
           "Choose **View details** on the application.",
           "Scroll to **Need to step back?** and press **Withdraw my application**.",
+          "Check the message and press **Yes, withdraw it**, or **Keep my application** if you pressed it by mistake.",
         ],
         links: [{ label: "My applications", href: "/candidate/applications" }],
       },
@@ -399,32 +486,81 @@ export const HELP: HelpSection[] = [
         answer: [
           "You need a clinic account and a clinic profile before you can post. The profile is where candidates learn about you, so a few honest lines about your team help. Some details are private: the email address that applicant alerts go to is never shown on a post, and neither is how many people work for you.",
           "While clinic accounts are by invitation, the sign up form also asks for the invitation code we sent you. You can change your profile later from the menu under your initials.",
+          "Once Kestrel has approved your first job, your clinic gets its own public page listing your open jobs, with your name, town and About text. Every job page links to it. You can add your clinic's Instagram, Facebook and LinkedIn page to your profile, and they show as small icons on that page. Suppliers and manufacturers get a company page in the same way, which shows **Company email confirmed** when your account uses an email address at your company's own website.",
         ],
         steps: [
           "Choose **Create account** at the top of the page. On a phone, open **Menu** first.",
-          "Under **I am**, choose **I'm hiring for a clinic**. Type your first name, last name, work email address and a password of at least 10 characters.",
+          "Under **I am**, choose **I'm hiring**. Type your first name, last name, work email address and a password of at least 10 characters.",
           "Tick the box to agree to the terms of use and the privacy policy, complete the security check and press **Create my account**.",
-          "Open the confirmation email, follow the link, and sign in. Your dashboard asks you to set up your clinic profile.",
-          "Choose **Create my clinic profile**. Fill in your clinic or company name, the type of employer (independent, corporate, or supplier or manufacturer), your city and province or territory, and roughly how many people work for you.",
-          "Add your website and a few lines **About your clinic** if you like. They are shown on your job posts.",
-          "Type the private address that new applicant alerts should go to.",
-          "Tick the box confirming that you hire directly and are not a recruiter, staffing agency or job broker, and press **Create my clinic profile**.",
+          "Open the confirmation email, follow the link, and sign in. You go straight to setting up your clinic profile.",
+          "Under **Who are you hiring for?**, choose an independent clinic, a corporate clinic or group, or a supplier or manufacturer. The questions below change to match. Then fill in the name, and your city and province or territory. How many people work for you is optional.",
+          "To save typing, type your website and press **Fill in from my website**. Kestrel reads the name, description and address your website gives search engines, along with your Instagram, Facebook and LinkedIn pages if your website links to them, shows you what it found, and fills in only what you tick. Nothing is saved until you save the form.",
+          "Add your website and a few lines **About your clinic** (or company) if you like. They are shown on your job posts.",
+          "Check the private address that new applicant alerts go to. It starts as the email you signed up with, and you can change it.",
+          "Tick the box confirming that you hire directly and are not a recruiter, staffing agency or job broker, and press **Create my clinic profile** (or company profile). You go straight on to posting your first job.",
         ],
         links: [{ label: "Clinic profile", href: "/clinic/profile" }, { label: "Create an account", href: "/sign-up" }],
+      },
+      {
+        id: "clinic-team",
+        title: "How do I add people from my clinic?",
+        keywords: ["team", "staff", "manager", "colleague", "invite", "add user", "another login", "access", "remove", "permissions", "owner"],
+        answer: [
+          "Up to 5 people can use your clinic's account, including you. You choose what each person can do. **Can view and edit** lets them post and change jobs, read applicants and their resumes, and move applicants along. **View only, with notes** lets them read jobs and applicants and add notes. Their notes are added under yours with their name and the date, and you get a message in your inbox to decide what happens next.",
+          "Only you, as the owner, can change the clinic profile, the private alert address and the team. Open invitations count toward the 5 until they are used or cancelled. When someone leaves, remove them and their access ends straight away.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Clinic team**.",
+          "Under **Invite someone**, type their name and work email, choose what they can do, and press **Send invite**. If you have more than 1 location, tick the ones they should see. All are ticked to start with.",
+          "They get an email with a link and a code. If it does not arrive, the page shows the code once so you can pass it on yourself, or press **Send again** beside their name for a new one.",
+          "To change what someone can do, choose it beside their name and press **Save**. To take away their access, press **Remove**.",
+          "To hand the clinic to someone else, open **Hand the clinic over** beside their name. You stay on the team and can still view and edit.",
+        ],
+        links: [{ label: "Clinic team", href: "/clinic/team" }],
+      },
+      {
+        id: "clinic-locations",
+        title: "Can I run several locations from 1 account?",
+        keywords: ["locations", "branches", "second clinic", "another clinic", "group", "multiple", "switch", "chain"],
+        answer: [
+          "Yes, up to 25. Each location has its own clinic profile, public page, jobs, applicants and team. Your dashboard, jobs, applicants, team and profile all follow the location you are working in, so a job is always posted to the right one.",
+          "Team members see only the locations you choose for them. Each location can have up to 5 people, counting you.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Locations**.",
+          "Under **Add a location**, fill in the clinic's name, town and province, and anything else you would like candidates to see, then press **Add this location**. You are working in it straight away.",
+          "To switch, use the **Location** picker at the top of your dashboard, or press **Work in this location** on the Locations page. Your dashboard also has **All locations**, with the live jobs and new applicants at each.",
+        ],
+        links: [{ label: "Locations", href: "/clinic/locations" }],
+      },
+      {
+        id: "join-clinic-team",
+        title: "My clinic invited me. How do I join?",
+        keywords: ["invite code", "invitation", "join clinic", "team member", "manager", "code", "kt"],
+        answer: [
+          "Use the email address the invitation was sent to. The code works once, only with that address, for 14 days. An account set up for looking for work cannot join a clinic, so use your work email. If you are already on another clinic's team, or run your own, you keep that too and switch between them with the **Location** picker on your dashboard.",
+        ],
+        steps: [
+          "Open the invitation email and press **Join the clinic**.",
+          "New to Kestrel? Press **Create my account** and fill in the form. Your account joins the clinic as soon as it is created. You can also type the code yourself: on **Create an account**, open **I have an invite code from my clinic**.",
+          "Already have a clinic account? Press **Sign in**, then enter the code and press **Join the clinic**.",
+          "Confirm your email address if asked, then sign in. Your dashboard shows your clinic's jobs and applicants.",
+        ],
+        links: [{ label: "Join a clinic", href: "/join" }],
       },
       {
         id: "post-a-job",
         title: "How do I post a job, and what does every post need?",
         keywords: ["new job", "create job", "advertise", "hire", "ad builder", "write my ad", "job ad", "draft", "posting", "vacancy"],
         answer: [
-          "Allow about 5 minutes. A draft needs only a title, so you can save it and come back from your dashboard. To send it for review, a post needs the job title, a role, an employment type, a city and a province or territory, a pay range, the 2 quick questions about existing vacancy and AI screening, and a description of at least 50 characters. Jobs in Quebec cannot be posted yet.",
+          "Allow about 5 minutes. A draft needs only a role, so you can save it and come back from your dashboard. To send it for review, a post needs a role, an employment type, a city and a province or territory, a pay range, the 2 quick questions about existing vacancy and AI screening, and a description of at least 50 characters. Jobs in Quebec cannot be posted yet.",
           "Please keep the ad free of email addresses, phone numbers and any mention of Canadian experience, even to say it is not needed. Our post checker refuses that phrase however it is used. You can have up to 10 open jobs at a time, counting drafts, jobs in review and live jobs.",
           "Posting is free during the free launch, and you do not need a credit card.",
           "If you see a **Write my ad** box, it can turn a few lines about the job into a draft ad. The draft goes into the **Describe the job** box for you to read and change. Always check it before you send it.",
         ],
         steps: [
           "Choose **Post a job** in the bar at the top of the page.",
-          "Under **The role**, type a job title and choose a role, an employment type, whether the person works on site or in the field, a city and a province or territory. A field based job also asks for the area covered.",
+          "Under **The role**, choose a role and an employment type, and add a level such as Lead or Senior if you like. The job title is set for you from those choices and any specialty you tick, so every post reads the same way and candidates and Google find it. Add a headline if you like, one line of up to 70 characters in your own words that shows under the title. Then say whether the person works on site or in the field, a city and a province or territory. Choose **Fixed term** for a job with an end date, such as maternity cover. A field based job also asks for the area covered.",
           "Under **Pay**, fill in the pay range. The next topic explains the options.",
           "Under **Tools and specialties**, tick anything that applies. It is optional, and candidates can search by it.",
           "Under **2 quick questions**, answer **Is this an existing vacancy?** and **Do you use AI to screen or select candidates?**",
@@ -452,7 +588,7 @@ export const HELP: HelpSection[] = [
         keywords: ["review", "approval", "approved", "rejected", "sent back", "in review", "how long", "moderation", "publish"],
         answer: [
           "A person on our team reads every post before it goes live, usually within 1 business day. Your dashboard shows the job as **In review**, with the line \"With our team\".",
-          "If it is approved, it goes live for 30 days and we email you. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. Nothing can be published without that check, and you cannot publish a job yourself.",
+          "If it is approved, it goes live and we email you. A job that goes live during the free launch runs for 60 days, and after the free launch a job runs for 30 days. Your dashboard also shows a message about it for 7 days, with a **See your job** button and a **Dismiss** button. If 3 or more jobs are approved at about the same time, they share 1 message with a **Dismiss all** button. Nothing can be published without that check, and you cannot publish a job yourself.",
           "If we send it back, your dashboard shows a note headed **What to change**. Change what the note asks for and send it again. While a job is in review you can press **Take back to edit** to change it yourself first.",
         ],
         steps: [
@@ -468,7 +604,7 @@ export const HELP: HelpSection[] = [
         title: "How do I edit a live job?",
         keywords: ["change", "update", "amend", "edit job", "fix typo", "modify"],
         answer: [
-          "You can change a live job, but the change goes to our team before candidates see it. The job goes offline until we have read the changes, usually within 1 business day, and its original 30 days keep running. Applications you have already received are kept. A live job cannot be saved as a draft, only sent for review or closed.",
+          "You can change a live job, but the change goes to our team before candidates see it. The job goes offline until we have read the changes, usually within 1 business day, and its original run keeps going. Applications you have already received are kept. A live job cannot be saved as a draft, only sent for review or closed.",
           "A draft, or a job we sent back, is edited in the same way and does not go offline, because it is not live.",
         ],
         steps: [
@@ -480,19 +616,31 @@ export const HELP: HelpSection[] = [
         links: [{ label: "Your dashboard", href: "/clinic" }],
       },
       {
+        id: "check-a-registration-number",
+        title: "How do I check an optometrist or optician's registration number?",
+        keywords: ["licence", "license", "registration", "college", "verify", "check", "register", "optician", "optometrist", "number"],
+        answer: [
+          "An optometrist or optician who gives a registration number sends it with their application. You see it on the application under **Registration**, marked as entered by the candidate and not checked by Kestrel. Kestrel never looks a number up in a College register, so the check is yours to make.",
+          "Press the button beside the number to open the College's register in a new tab, and **Copy number** to paste it in. In Ontario and BC you can search the register by the number itself. In Alberta and Manitoba you search the name, then compare the number and status on the person's page. Check that the name matches (allow for a former surname), that the status says they are allowed to practise, and for an optician that the register shows contact lenses if the job needs them. The BC register shows only the last 2 digits of a number. Where we have no direct link yet, the button takes you to the College's website.",
+          "Someone who is not registered yet, such as a student or a new graduate, says so instead of giving a number. Check their status with the College before offering the role.",
+        ],
+        links: [{ label: "Your dashboard", href: "/clinic" }],
+      },
+      {
         id: "read-and-manage-applicants",
         title: "How do I read and manage applicants, one at a time?",
         keywords: ["applicants", "candidates", "resume", "cv download", "notes", "interview", "offer", "reject", "decline", "reply", "response", "shortlist"],
         answer: [
           "We email you about new applicants as often as you chose under Email choices, and the email has no personal details in it. The applicants are always on your dashboard, newest first. Opening an application marks it **Viewed**, so the candidate can see it has been read. Then you can read the cover letter and details, download the resume, and move the application along.",
-          "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. **Kept for future roles** is only offered if the candidate agreed to that when they applied.", "**Shortlisting** is your own working list. No message goes with it and the candidate is not emailed, whether you shortlist one person or tick several. A candidate is never shown that they are shortlisted: they see Viewed until you invite them to interview, make an offer or close the application. You see Shortlisted everywhere.", "We encourage clinics to reply to candidates within 5 days, even with a short no, and the applicants page reminds you how many are waiting. If an application has gone 2 weeks unopened, we send you a reminder email, which you can turn off under Email choices. If a job ends and people are still waiting a week later, we close their applications for you so they are never left hanging, and they see **No update from the clinic**.",
+          "When you move an application, the candidate is told by email, unless they turned those emails off, and they can always see the update in their account. An interview, an offer, a kind no, role filled and kept for future roles each need a message, and there is a kind one ready for you to edit. Fill in any details shown in square brackets before you send. For an interview you choose how it will happen (in person, online or by phone), and can add the date, time, address and, for online, a Zoom, Microsoft Teams, Google Meet, Webex or Whereby link. The candidate sees it clearly, gets a **Join the meeting** button, and an email with a calendar file they can add to Apple, Google or Outlook calendars in 1 tap. Create the meeting in your own account first, since Kestrel does not link to your Zoom account yet. Your message is sent with a line saying your clinic wrote it, and any web address in it arrives as plain text, not a link, so the candidate can see where it goes before typing it in. **Kept for future roles** is only offered if the candidate agreed to that when they applied.", "**Shortlisting** is your own working list. No message goes with it and the candidate is not emailed, whether you shortlist one person or tick several. A candidate is never shown that they are shortlisted: they see Viewed until you invite them to interview, make an offer or close the application. You see Shortlisted everywhere.", "We encourage clinics to reply to candidates within 5 days, even with a short no, and the applicants page reminds you how many are waiting. If an application has gone 2 weeks unopened, we send you a reminder email, which you can turn off under Email choices. If a job ends and people are still waiting a week later, we close their applications for you so they are never left hanging, and they see **No update from the clinic**.",
           "Your private notes on an application are for you. The candidate never sees them. Kestrel does not use AI to rank applicants, so the list shows everyone in the order they applied.",
+          "If a job ends and you have not given a decision, each application still open is closed as **No update from the clinic**, and the candidate is told: a week after the job ends, or 14 days after for anyone at interview or offer. To keep talking to someone after that, mark the job as filled and tick **Don't close this one yet** beside them.",
         ],
         steps: [
           "On your dashboard, press **Applicants** next to the job. It appears once someone has applied, and the number in brackets is how many have applied and how many are new.",
           "Use the tabs **All**, **In review**, **Interviews**, **Offers** and **Closed** to narrow the list.",
           "Choose **Open** on an application to read their cover letter and details. Use **Download their resume** to open the resume.",
-          "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to add them to your working list. There is no message to write, and the button then reads **Save**.",
+          "Under **Update this application**, choose a step from **Move this application to**. For a kind no, choose **Not selected this time**. For an interview, choose **Interview**. Choose **Shortlisted** to add them to your working list. There is no message to write, and the button then reads **Save**. Once someone is at Interview or Offer they cannot be moved back to Shortlisted, because the candidate would see their step go backwards.",
           "Check the message and edit it if you like. Shortlisting has no message.",
           "Press **Save and tell the candidate**, or **Save** for a shortlist.",
           "To keep a private note, write it in **Private notes** and press **Save note**.",
@@ -505,14 +653,14 @@ export const HELP: HelpSection[] = [
         keywords: ["bulk", "several", "multiple", "tick", "mass", "shortlist", "decline", "reject", "invite"],
         answer: [
           "On the applicants list, tick the boxes next to the people you want, then use the panel **With the ticked applicants**. Only applications still waiting can be ticked: Applied, Viewed and Shortlisted. You can act on up to 100 at a time.",
-          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. **Invite to interview** sends everyone you ticked the same message, by email and in their account, so write the date, time and how to join in the **Interview invitation** box first. The panel with these 3 buttons sits below the list. For different times, open each application instead. **Send a kind no** gives each person the same warm message you would send one at a time.",
+          "**Shortlist** is your own working list. No email is sent and the candidate is not shown the step. The panel with these 2 buttons sits below the list. Interviews and offers are never made in bulk, because each needs its own time, place and details, so open the application to invite someone. **Send a kind no** gives each person the same warm message you would send one at a time.",
           "Offers are never made in bulk. Open the application to make one. Applicants who are already at the interview or offer step cannot be ticked.",
         ],
         steps: [
           "Open the applicants list for the job.",
           "Tick the box next to each applicant you want to include.",
           "For an interview, write your invitation in the **Interview invitation** box first.",
-          "Press **Shortlist**, **Invite to interview** or **Send a kind no**.",
+          "Press **Shortlist** or **Send a kind no**.",
           "If nothing is ticked, or the invitation is empty or still has square brackets in it, the page tells you straight away and keeps your ticks. Otherwise it confirms how many were moved. Anyone who was already at that step, or who had withdrawn, is left as they were.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
@@ -523,7 +671,7 @@ export const HELP: HelpSection[] = [
         keywords: ["renew", "repost", "expire", "expired", "delete job", "close job", "filled", "hired", "relist", "unpublish"],
         answer: [
           "**Extend.** In the last 7 days of a live job, and for 7 days after it ends, an **Extend 30 days** button appears on your dashboard. It puts the job straight back up with the same wording and no new review. Extending is free while we launch. We also email you 3 days before a job ends, and the email links to a page where you can say it is filled or extend it.",
-          "**Mark filled.** When you have found someone, press **Filled it?** next to the job and choose how you found the person, if you like. If you choose **Kestrel Eye Care Jobs**, a second list asks **Who did you hire?** and shows everyone who applied. The person you pick is marked **Hired** and told by email and in their account, and is not sent the \"role filled\" message. That closes the job and tells everyone else still waiting, kindly, that it has been filled. People at the interview or offer step are not changed. The same questions are on the applicants page as **Role filled?**",
+          "**Mark filled.** When you have found someone, press **Filled it?** next to the job and choose how you found the person, if you like. If you choose **Kestrel Eye Care Jobs**, a second list asks **Who did you hire?** and shows everyone who applied. The person you pick is marked **Hired** and told by email and in their account, and is not sent the \"role filled\" message. That closes the job and tells everyone else still waiting, kindly, that it has been filled. Anyone at the interview or offer step is listed under **People you are still talking to**, each with a kind message you can edit, and hears first, by email and in their account. Tick **Don't close this one yet** next to anyone you want to leave open, for example if an offer might still fall through. The same questions are on the applicants page as **Role filled?**",
           "**Close.** **Close** takes a job off Kestrel without messaging anyone, and keeps the record so candidates can still see that they applied. A job that was never live and has no applicants shows **Delete** instead.",
           "**Post again.** A closed or ended job has a **Post again** button. It copies the job into a new draft, which you can change and send for review like any other. It counts towards your 10 open jobs.",
         ],
@@ -540,7 +688,7 @@ export const HELP: HelpSection[] = [
         title: "How do I claim a listing you found?",
         keywords: ["found listing", "ownership", "take over", "verify", "unclaimed"],
         answer: [
-          "If we found one of your jobs on your own careers page and listed it, you can claim it. Claiming makes your clinic the owner of the listing: applications arrive in your dashboard with the resume and cover letter, you can close the job whenever you like, and you can post new ones. It is free during the launch. It must be claimed with a clinic account, and a person who already has a clinic profile cannot take over another clinic's listing. Write to hello@eyecarejobs.ca and we will help.",
+          "If we found one of your jobs on your own careers page and listed it, you can claim it. Claiming makes your clinic the owner of the listing: applications arrive in your dashboard with the resume and cover letter, you can close the job whenever you like, and you can post new ones. It is free during the launch. It must be claimed with a clinic account, and a person who already has a clinic profile cannot take over another clinic's listing. Write to support@eyecarejobs.ca and we will help.",
           "We check every claim, usually within 1 business day, and email you when it is approved or if we cannot approve it. The link in the verification email works for 2 days, and only for the account that made the claim.",
         ],
         steps: [
@@ -573,10 +721,42 @@ export const HELP: HelpSection[] = [
         title: "What do views and apply clicks mean on my dashboard?",
         keywords: ["analytics", "statistics", "stats", "traffic", "visitors", "clicks", "numbers", "performance"],
         answer: [
-          "A **view** is counted each time a job page is opened in a browser tab. An **apply click** is counted when someone presses the Apply button on the job page. The tiles at the top of your dashboard show the last 30 days across all your jobs. Choose any tile to see the jobs behind it, and choose **Show all jobs** to go back. Each job shows its own total underneath, or \"No views yet\".",
+          "A **view** is counted each time a job page is opened in a browser tab. An **apply click** is counted when someone presses the Apply button on the job page. The tiles at the top of your dashboard show the last 30 days across all your jobs. Choose **Live**, **New applicants** or **Drafts** in the top row to see the jobs behind it, and choose **Show all jobs** to go back. The bottom row (In review, Views and Apply clicks) is there to read. Each job shows its own total underneath, or \"No views yet\".",
           "Visits from search engines and link previews are left out, and so are your own visits and our team's. Nothing about the visitor is stored. The counts are guidance, not exact numbers: someone who opens the job in several tabs or on several devices is counted more than once. An apply click is not an application, because a person may press the button and not finish. The number of applicants is the figure to trust.",
         ],
         links: [{ label: "Your dashboard", href: "/clinic" }],
+      },
+      {
+        id: "receipts-and-billing",
+        title: "Where do I find my invoices and receipts?",
+        keywords: ["receipt", "invoice", "payment", "paid", "charge", "bill", "billing", "hst", "tax", "download", "card"],
+        answer: [
+          "Under your initials, open **Plans and billing**. Under Payment history it lists every payment for the location you are working in, with the date, the job, the amount and links to download the invoice as a PDF, or to open Stripe's page for the invoice and its receipt. Amounts are before HST.",
+          "During the free launch you are not asked for a card and nothing is charged. When fees begin, you save a card when you send a job for review, and you are not charged then. The card is charged only when our team approves the job, and a job we do not approve is never charged. A job that is paid shows a **Paid** tag on your dashboard, with links to its invoice and receipt.",
+          "If your card is refused, the job on your dashboard shows **Card payment error: update card**. Press it to save a different card, and the job goes live as soon as the new card works.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Plans and billing**.",
+          "Find the payment under **Payment history**, then press **Invoice PDF** to download the invoice, or **View** to open the invoice and its receipt.",
+          "Using several locations? Switch location at the top of the page to see each one's payments.",
+        ],
+        links: [{ label: "Plans and billing", href: "/clinic/plans" }],
+      },
+      {
+        id: "passes",
+        title: "How do passes work?",
+        keywords: ["pass", "subscription", "monthly", "plan", "plans", "cancel", "renew", "unlimited", "bundle", "clinic pass"],
+        answer: [
+          "A pass covers a number of live posts for 1 location, for a monthly price. The **Clinic pass** covers assistants, technicians, reception, patient care, opticians and practice leads. **Clinic pass Plus** covers every role, optometrists included. Each covers up to 5 live posts at a time. Passes are offered once fees begin. The first 50 clinics on Kestrel are Founding clinics: while the launch offer is open, the price a Founding clinic starts a pass on is kept for 12 months, or until it cancels, and it can choose a yearly option, which is 10 months for the price of 12.",
+          "A post a pass covers goes straight to our team for review with nothing to pay, and your dashboard and the Post a job page show how many of the live posts are in use. If the pass is full, or the role is not included, nothing is sent until you choose: pay the single post price for that job, charged to the card on the pass once we approve it, or switch to Clinic pass Plus when that covers the role. A job taken back into your drafts keeps its place on the pass, and a post is freed when a job is closed or has run its 30 days.",
+          "A pass renews each month at the same price until you cancel, and the price changes only with 30 days notice. Cancel any time. You keep the pass to the end of the month you paid for, and part months are not refunded. Only the clinic owner can start or cancel a pass, and a pass belongs to 1 location.",
+        ],
+        steps: [
+          "Open the menu under your initials and choose **Plans and billing**.",
+          "Choose a pass and press **Choose**. You finish on Stripe's page, where your card is entered and the pass is charged for the first month.",
+          "To change the card, see your invoices or cancel, press **Manage billing** on the Plans page.",
+        ],
+        links: [{ label: "Plans", href: "/clinic/plans" }],
       },
     ],
   },

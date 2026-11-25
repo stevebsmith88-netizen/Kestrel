@@ -5,13 +5,19 @@ import DraftNotice from "@/components/DraftNotice";
 import SiteHeader from "@/components/SiteHeader";
 import { shareMetadata } from "@/lib/share";
 
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
+
 export const metadata: Metadata = shareMetadata({
   title: "How we protect your data",
   description: "Where Kestrel keeps your information, who can see it, and how resumes and sign in are protected.",
   path: "/security",
 });
 
-const UPDATED = "7th November 2026";
+const UPDATED = "12th November 2026";
 // Set to false once a lawyer has read the page, as on the Terms page.
 const DRAFT = true;
 const EMAIL = "privacy@eyecarejobs.ca";
@@ -53,7 +59,7 @@ export default function Security() {
             Files that contain macros, scripts or embedded files are refused when they are uploaded.
           </p>
           <p>
-            If a candidate chooses Fill in from my resume, Kestrel&apos;s own server reads the text of that one file to suggest profile answers. It uses fixed rules and no AI, the text is not saved, and it is not sent to any other service. Only PDF and Word (.docx) files are read, with limits on size, pages and time.
+            If a candidate chooses Fill in from my resume, Kestrel&apos;s own server reads the text of that one file to suggest profile answers. It uses fixed rules and no AI, the text is not saved, and it is not sent to any other service. Only PDF and Word (.docx) files are read, with a limit on size for both, and on pages and time for a PDF.
           </p>
 
           <h2>Signing in</h2>
@@ -70,7 +76,7 @@ export default function Security() {
 
           <h2>Payments and AI</h2>
           <p>
-            When payments start, card details will go to Stripe and Kestrel will not store card numbers. The ad builder sees only the job details a clinic types in, never anything about candidates.
+            When payments start, card details will go to Stripe and Kestrel will not store card numbers. The ad builder, which uses Anthropic, sees what a clinic types in, up to 8 of that clinic&apos;s earlier ads and text from the clinic&apos;s own public website. Our admin tools also send it public careers pages and web searches about clinics. It never receives anything about candidates.
             Kestrel does not use AI to rank applicants for clinics.
           </p>
 

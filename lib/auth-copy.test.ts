@@ -28,3 +28,23 @@ test("safeNext refuses anything that could leave the site", () => {
     assert.equal(safeNext(bad, "/safe"), "/safe", JSON.stringify(bad));
   }
 });
+
+// Audit P1-34: a "next" address is carried from page to page only when it is safe.
+import { withNext } from "./auth-copy.ts";
+
+test("withNext adds a safe next address and drops an unsafe or missing one", () => {
+  assert.equal(withNext("/candidate/profile", "/jobs/abc/apply"), "/candidate/profile?next=%2Fjobs%2Fabc%2Fapply");
+  assert.equal(withNext("/candidate/profile", "/jobs/abc?x=1&y=2"), "/candidate/profile?next=%2Fjobs%2Fabc%3Fx%3D1%26y%3D2");
+  for (const bad of [null, undefined, "", "https://evil.example", "//evil.example", "/\t/evil.example", "javascript:alert(1)", "/a b", "\\evil"]) {
+    assert.equal(withNext("/candidate/profile", bad), "/candidate/profile", String(bad));
+  }
+});
+
+test("the first step is wired to carry the next address through every hop", async () => {
+  const { readFileSync } = await import("node:fs");
+  const read = (f: string) => readFileSync(new URL(`../${f}`, import.meta.url), "utf8");
+  assert.match(read("app/candidate/page.tsx"), /withNext\("\/candidate\/start"/);
+  assert.match(read("app/candidate/start/page.tsx"), /name="next"|<FirstStepForm next=/);
+  assert.match(read("components/FirstStepForm.tsx"), /name="next"/);
+  assert.match(read("lib/candidate-actions.ts"), /withNext\("\/candidate\/profile", String\(form\.get\("next"\)/);
+});

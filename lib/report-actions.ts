@@ -1,5 +1,8 @@
 "use server";
 
+import { sendEmail } from "@/lib/email";
+import { reportAckEmail } from "@/lib/report-ack";
+import { notifySlack } from "@/lib/notify-slack";
 import { notifyAdmin } from "@/lib/notify-admin";
 import { REPORT_REASON_LABEL } from "@/lib/reports";
 import type { JobFormState } from "@/lib/jobs";
@@ -28,7 +31,7 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   if (!(await passesTurnstile(form.get("turnstileToken")))) return { error: TURNSTILE_MESSAGE };
 
   const db = supabaseAdmin();
-  if (!db) return { error: "Reporting isn't available right now. Please email hello@eyecarejobs.ca." };
+  if (!db) return { error: "Reporting isn't available right now. Please email support@eyecarejobs.ca." };
 
   const { data: job } = await db.from("jobs").select("id, title").eq("id", jobId).maybeSingle();
   if (!job) return { error: "We couldn't find that job." };
@@ -38,11 +41,20 @@ export async function submitReport(_prev: JobFormState, form: FormData): Promise
   const { count } = await db.from("job_reports").select("id", { count: "exact", head: true }).eq("job_id", jobId).gte("created_at", since);
   if ((count ?? 0) >= 10) return { message: THANKS };
 
+  // Anyone can type any address here, so an acknowledgement goes to an address at most once a day. It is decided before this report is saved.
+  let sendAck = false;
+  if (email) {
+    const { count: earlier } = await db.from("job_reports").select("id", { count: "exact", head: true }).eq("reporter_email", email).gte("created_at", since);
+    sendAck = (earlier ?? 0) === 0;
+  }
+
   const { error } = await db.from("job_reports").insert({ job_id: jobId, reason, details: details || null, reporter_email: email || null });
   if (error) {
     console.error("Report failed:", error.code, error.message);
-    return { error: "We couldn't send your report. Please try again, or email hello@eyecarejobs.ca." };
+    return { error: "We couldn't send your report. Please try again, or email support@eyecarejobs.ca." };
   }
   await notifyAdmin("A job has been reported", [`${job.title}`, REPORT_REASON_LABEL[reason]], "/admin/reports");
+  await notifySlack("A job was reported", [job.title, REPORT_REASON_LABEL[reason]], { path: "/admin/reports", text: "Open the reports" }, "support");
+  if (sendAck) await sendEmail({ to: email, subject: "We have your report", ...reportAckEmail(job.title) });
   return { message: THANKS };
 }

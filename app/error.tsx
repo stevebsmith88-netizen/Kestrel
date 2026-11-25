@@ -13,7 +13,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
       <div className="wrap">
         <span className="pill">Something went wrong</span>
         <h1>That didn&apos;t work</h1>
-        <p>We hit a problem on our side. Nothing you have already saved has been lost. Please try again, and if it keeps happening, email <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>.</p>
+        <p>We hit a problem on our side. Nothing you have already saved has been lost. Please try again, and if it keeps happening, email <a href="mailto:support@eyecarejobs.ca">support@eyecarejobs.ca</a>.</p>
         <button type="button" className="btn" onClick={reset}>Try again</button>
         <p className="small-note"><Link href="/" className="btn sm ghost">Go to the home page</Link></p>
         {error.digest && <p className="small-note">Reference: {error.digest}</p>}

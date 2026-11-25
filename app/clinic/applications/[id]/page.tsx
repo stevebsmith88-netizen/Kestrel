@@ -5,11 +5,16 @@ import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { AppStatusBadge, Steps } from "@/components/AppStatus";
 import NoteForm from "@/components/NoteForm";
+import RegisterCheck from "@/components/RegisterCheck";
+import { DOES, type Does } from "@/lib/licence";
 import StatusForm from "@/components/StatusForm";
 import { requireRole } from "@/lib/auth";
+import { getMyEmployer } from "@/lib/clinic";
+import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { APP_LABELS, type AppStatus } from "@/lib/applications";
-import { getApplication } from "@/lib/candidate";
+import { getApplicationForClinic } from "@/lib/candidate";
 import { longDate } from "@/lib/jobs";
+import { cleanSocialUrl } from "@/lib/social-links";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -24,7 +29,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
   const { id } = await params;
   if (!UUID.test(id)) notFound();
   // The database only returns this if the application is to one of this clinic's own jobs.
-  const found = await getApplication(id);
+  const found = await getApplicationForClinic(id);
   if (!found) notFound();
   let { application: a, history } = found;
 
@@ -40,9 +45,12 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
     }
   }
 
+  const editor = canEdit((await getMyEmployer(session.userId))?.level);
   const db = await supabaseServer();
   const { data: noteRow } = db ? await db.from("application_notes").select("note").eq("application_id", id).maybeSingle() : { data: null };
   const who = a.applicant;
+  // Re-checked on the way out, so only a real LinkedIn profile address can ever become a link a clinic clicks.
+  const linkedinUrl = cleanSocialUrl("linkedin", who.linkedin_url, "candidate").url || null;
 
   return (
     <>
@@ -70,6 +78,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
                 <dl className="facts">
                   <div><dt>Email</dt><dd><a href={`mailto:${who.email}`}>{who.email}</a></dd></div>
                   {who.phone && <div><dt>Phone</dt><dd>{who.phone}</dd></div>}
+                  {linkedinUrl && <div><dt>LinkedIn</dt><dd><a href={linkedinUrl} target="_blank" rel="noopener nofollow noreferrer">View their profile<span className="sr"> (opens in a new tab)</span></a></dd></div>}
                   <div><dt>Role</dt><dd>{who.profession ?? "Not given"}</dd></div>
                   <div><dt>Licensed in</dt><dd>{who.licensed_provinces?.length ? who.licensed_provinces.join(", ") : "Not given"}</dd></div>
                   <div><dt>Experience</dt><dd>{who.years_experience ?? "Not given"}</dd></div>
@@ -84,6 +93,8 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
                   </>
                 )}
               </section>
+
+              <RegisterCheck candidateName={who.name} profession={who.profession} licence={who.licence ? { province: who.licence.province ?? null, number: who.licence.number ?? null, does: (who.licence.does ?? []).filter((d): d is Does => (DOES as readonly string[]).includes(d)), notYet: Boolean(who.licence.notYet) } : null} />
 
               <section className="card">
                 <h2>History</h2>
@@ -102,10 +113,10 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
             <aside className="stackcards">
               <section className="card">
                 <h2>Update this application</h2>
-                <StatusForm id={a.id} current={a.status} keepDetails={a.keep_details} clinicName={a.clinic_name} />
+                {editor ? <StatusForm id={a.id} current={a.status} keepDetails={a.keep_details} clinicName={a.clinic_name} /> : <p className="help">{VIEW_ONLY_TEXT}</p>}
               </section>
               <section className="card">
-                <NoteForm id={a.id} initial={noteRow?.note ?? ""} />
+                <NoteForm id={a.id} initial={noteRow?.note ?? ""} addOnly={!editor} />
               </section>
             </aside>
           </div>

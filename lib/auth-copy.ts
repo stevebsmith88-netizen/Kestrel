@@ -4,11 +4,11 @@
 
 export const ACCOUNT_TYPES = [
   { value: "candidate", label: "I'm looking for a job" },
-  { value: "clinic", label: "I'm hiring for a clinic" },
+  { value: "clinic", label: "I'm hiring" },
 ] as const;
 
 export const MARKETING_CONSENT_TEXT =
-  "Yes, email me launch news, job alerts, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
+  "Yes, email me launch news, tips for getting started, product updates and offers from Kestrel Eye Care Jobs. I can unsubscribe at any time.";
 
 // Saved with each account as the record of which terms were agreed to. Change it when the terms change
 // in a way people need to agree to again (for example when the lawyer's version replaces the draft).
@@ -37,4 +37,11 @@ export function safeNext(value: string | null, fallback = "/dashboard") {
   } catch {
     return fallback;
   }
+}
+
+// A page address with the safe "next" address added, so someone sent through several steps (first step, profile) can still be taken back to the
+// job they came from. An unsafe or missing address is dropped (audit P1-34).
+export function withNext(path: string, next: string | null | undefined) {
+  const safe = safeNext(next ?? null, "");
+  return safe ? `${path}?next=${encodeURIComponent(safe)}` : path;
 }

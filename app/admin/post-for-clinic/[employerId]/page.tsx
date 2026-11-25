@@ -8,6 +8,7 @@ import { payAndTagValues } from "@/lib/job-form";
 import { requireRole } from "@/lib/auth";
 import { loadOwnPayStats } from "@/lib/pay-benchmark-server";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadClinicForPosting } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Post for a clinic | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -19,8 +20,7 @@ export default async function PostForOneClinic({ params }: { params: Promise<{ e
   const session = await requireRole("admin");
   const { employerId } = await params;
   if (!UUID.test(employerId)) notFound();
-  const db = supabaseAdmin();
-  const { data: employer } = db ? await db.from("employers").select("id, clinic_name, city, province").eq("id", employerId).maybeSingle() : { data: null };
+  const employer = (await loadClinicForPosting(supabaseAdmin(), employerId)) as { id: string; clinic_name: string; city: string; province: string } | null;
   if (!employer) notFound();
   const ownPay = await loadOwnPayStats();
   return (
@@ -30,7 +30,8 @@ export default async function PostForOneClinic({ params }: { params: Promise<{ e
         <div className="wrap narrow">
           <p className="kicker">Posting for {employer.clinic_name}</p>
           <h1>Post a job</h1>
-          <p className="lede2">Fill in the same form the clinic would. <Link href="/admin/post-for-clinic">Choose a different clinic</Link></p>
+          <p className="lede2">Fill in the same form the clinic would.</p>
+          <p><Link href="/admin/post-for-clinic" className="btn sm ghost">Choose a different clinic</Link></p>
           <JobForm
             employerId={employer.id}
             ownPay={ownPay}

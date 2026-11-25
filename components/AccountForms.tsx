@@ -1,5 +1,6 @@
 "use client";
 
+import { IN_PLAY_NAME_TEXT } from "@/lib/name-hold";
 import { FREQUENCIES, RESPONSE_NOTE, type Frequency } from "@/lib/clinic-emails";
 import Link from "next/link";
 import { Field } from "@/components/Field";
@@ -7,23 +8,25 @@ import { useServerForm } from "@/components/useServerForm";
 import { requestEmailChange, savePreferences, updateName } from "@/lib/account-settings-actions";
 import { MARKETING_CONSENT_TEXT } from "@/lib/auth-copy";
 
-export function NameForm({ first, last, lockedUntil = null }: { first: string; last: string; lockedUntil?: string | null }) {
+export function NameForm({ first, last, lockedUntil = null, inPlay = false }: { first: string; last: string; lockedUntil?: string | null; inPlay?: boolean }) {
   const { state, pending, submit } = useServerForm(updateName);
   const e = state.errors ?? {};
   return (
     <form onSubmit={submit} noValidate className="stackform">
       <div className="pair">
         <Field id="ac-first" label="First name" required error={e.firstName}>
-          <input id="ac-first" name="firstName" type="text" autoComplete="given-name" defaultValue={first} disabled={Boolean(lockedUntil)} />
+          <input id="ac-first" name="firstName" type="text" autoComplete="given-name" defaultValue={first} />
         </Field>
         <Field id="ac-last" label="Last name" error={e.lastName}>
-          <input id="ac-last" name="lastName" type="text" autoComplete="family-name" defaultValue={last} disabled={Boolean(lockedUntil)} />
+          <input id="ac-last" name="lastName" type="text" autoComplete="family-name" defaultValue={last} />
         </Field>
       </div>
-      {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca.</p>}
+      {inPlay && !lockedUntil && <p className="help">{IN_PLAY_NAME_TEXT}</p>}
+      {/* The boxes stay open during a hold, because fixing capital letters ("smith" to "Smith") is always allowed (review item X-11). */}
+      {lockedUntil && <p className="help">You can change your name again on {lockedUntil}. Until then you can still fix capital letters. If you need an earlier change, for example a typo or a legal name change, write to support@eyecarejobs.ca.</p>}
       {state.error && !state.errors?.firstName && <p className="err form-err" role="alert">{state.error}</p>}
       {state.message && <p className="ok-msg" role="status">{state.message}</p>}
-      {!lockedUntil && <div><button type="submit" className="btn sm" disabled={pending}>{pending ? "Saving" : "Save my name"}</button></div>}
+      <div><button type="submit" className="btn sm" disabled={pending}>{pending ? "Saving" : "Save my name"}</button></div>
     </form>
   );
 }

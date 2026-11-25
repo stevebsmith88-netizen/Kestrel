@@ -49,7 +49,7 @@ export default function HomeBelowHero() {
           <div className="wrap grid">
             <div className="intro">
               <h2>Be first through the door</h2>
-              <p>Whether you&apos;re hiring or looking, join the waitlist and we&apos;ll let you know the moment Kestrel opens.</p>
+              <p>Kestrel is built by someone with over 20 years in eye care. Whether you&apos;re hiring or looking, join the waitlist and we&apos;ll let you know the moment Kestrel opens.</p>
             </div>
             <div className="panel">
               <WaitlistForm />
@@ -62,7 +62,7 @@ export default function HomeBelowHero() {
               <h3>What happens next</h3>
               <p>We send a link to confirm your address. Press it and you are on the list.</p>
               <p>
-                When Kestrel opens, you hear from us first. Clinics post a job with its pay range, a person reads every post before it goes live, and candidates see the pay on each job.
+                When Kestrel opens, you hear from us first. Clinics post a job with its pay range, <Link href="/posting-policy" className="quietlink">a person reads every post before it goes live</Link>, and candidates see the pay on each job. Anyone can <Link href="/fake-jobs" className="quietlink">report a fake job</Link>.
               </p>
               <p>
                 While you wait, see <Link href="/resources#pay">typical pay by province</Link> or read the <Link href="/blog">blog</Link> for help with interviews, resumes and job ads.

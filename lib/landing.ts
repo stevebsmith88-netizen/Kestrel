@@ -45,5 +45,7 @@ export const provinceTitle = (province: string) => `Eye care jobs in ${province}
 
 export function landingDescription(subject: string, jobCount: number) {
   const base = "Every job shows its pay, and a person reads every post before it goes live.";
-  return jobCount > 0 ? `${jobCount} live ${jobCount === 1 ? "job" : "jobs"}: ${subject.toLowerCase()}. ${base}` : `${subject} on Kestrel Eye Care Jobs. ${base}`;
+  // Only the first letter is lowercased, so it reads on after the colon and the province keeps its capitals (audit P1-52).
+  const after = subject.charAt(0).toLowerCase() + subject.slice(1);
+  return jobCount > 0 ? `${jobCount} live ${jobCount === 1 ? "job" : "jobs"}: ${after}. ${base}` : `${subject} on Kestrel Eye Care Jobs. ${base}`;
 }

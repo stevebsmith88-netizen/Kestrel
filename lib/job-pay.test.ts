@@ -64,20 +64,44 @@ test("(a) a daily minimum range saves, shows and goes to Google as dollars a day
   assert.equal(ld(row).baseSalary?.value.unitText, "DAY");
 });
 
-test("(b) a percentage range alone saves, shows, and is not given to Google as a salary", () => {
-  const { row, errors } = jobFromForm(filled({ payMin: "", payMax: "", payPercentMin: "28%", payPercentMax: "35", payPercentOf: "production" }), true);
+test("(b) a percentage range alone needs the clinic's expected earnings, which show beside it and go to Google", () => {
+  const without = jobFromForm(filled({ payMin: "", payMax: "", payPercentMin: "28%", payPercentMax: "35", payPercentOf: "production" }), true);
+  assert.ok(without.errors.payExpectedMin, "a percentage on its own is refused without expected earnings (Steve, 12th November 2026)");
+  const { row, errors } = jobFromForm(filled({ payMin: "", payMax: "", payPercentMin: "28%", payPercentMax: "35", payPercentOf: "production", payExpectedPeriod: "day", payExpectedMin: "800", payExpectedMax: "$1,000" }), true);
   assert.deepEqual(errors, {});
-  assert.equal(row.pay_period, null, "no dollars were entered, so no unit is saved");
+  assert.equal(row.pay_period, null, "no dollar range was entered, so no unit is saved");
   assert.equal(row.pay_min, null);
   assert.equal(row.pay_percent_min, 28);
   assert.equal(row.pay_percent_max, 35);
+  assert.equal(row.pay_expected_min, 800);
+  assert.equal(row.pay_expected_max, 1000);
+  assert.equal(row.pay_expected_period, "day");
   assert.equal(payBasisOf(row), "percent");
-  assert.equal(payText(row), "28% to 35% of production");
-  assert.deepEqual(payChips(row), ["28% to 35% of production"]);
-  assert.equal(salaryForMarkup(row), null);
+  assert.equal(payText(row), "28% to 35% of production, expected earnings $800 to $1,000 a day (the clinic's estimate)");
+  assert.deepEqual(payChips(row), ["28% to 35% of production", "Expected $800 to $1,000 a day"]);
+  assert.deepEqual(salaryForMarkup(row), { min: 800, max: 1000, unitText: "DAY" });
   const data = ld(row);
-  assert.equal("baseSalary" in data, false, "a percentage can never be a salary figure");
-  assert.ok(data.description.includes(payText(row)));
+  assert.ok("baseSalary" in data, "the clinic's expected earnings are the dollar figure Google is given");
+  assert.ok(data.description.includes(payText(row)), "the markup says it is the clinic's estimate, as the page does");
+});
+
+test("expected earnings: a day or a year, the usual width rules, and only with a percentage on its own", () => {
+  const pct = { payPercentMin: "28", payPercentMax: "35", payPercentOf: "production" };
+  assert.deepEqual(validatePay(input({ ...pct, payExpectedPeriod: "year", payExpectedMin: "150000", payExpectedMax: "190000" })), {});
+  assert.ok(validatePay(input({ ...pct, payExpectedPeriod: "day", payExpectedMin: "700", payExpectedMax: "1000" })).payExpectedMax?.includes("$200 a day"));
+  assert.ok(validatePay(input({ ...pct, payExpectedPeriod: "year", payExpectedMin: "100000", payExpectedMax: "180000" })).payExpectedMax?.includes("$50,000"));
+  assert.ok(validatePay(input({ ...pct, payExpectedPeriod: "hour", payExpectedMin: "60", payExpectedMax: "70" })).payExpectedPeriod);
+  assert.ok(validatePay(input({ ...pct, payExpectedPeriod: "day", payExpectedMin: "lots", payExpectedMax: "1000" })).payExpectedMin);
+  assert.ok(validatePay(input({ ...pct, payExpectedPeriod: "day", payExpectedMin: "1000", payExpectedMax: "800" })).payExpectedMax);
+  // With a dollar range as well, expected earnings are not needed and are not kept.
+  const both = { ...pct, payPeriod: "day", payMin: "600", payMax: "800", payExpectedPeriod: "day", payExpectedMin: "900", payExpectedMax: "1000" };
+  assert.deepEqual(validatePay(input(both)), {});
+  assert.equal(payColumns(input(both)).pay_expected_min, null);
+  // Old rows with a percentage and no expected earnings still read as before, and the review flags them.
+  const old = { pay_percent_min: 28, pay_percent_max: 35, pay_percent_of: "production" };
+  assert.equal(payText(old), "28% to 35% of production");
+  assert.equal(salaryForMarkup(old), null);
+  assert.ok(payFlags(old).some((f) => /no expected earnings/.test(f)));
 });
 
 test("(c) a guaranteed daily minimum and a percentage together", () => {
@@ -161,7 +185,7 @@ test("percentage ranges: up to 10 points wide", () => {
   assert.equal(percentRangeAllowed(32.5, 42.5), true);
   assert.equal(percentRangeAllowed(30, 30), true);
   assert.ok(validatePay(input({ payPercentMin: "25", payPercentMax: "36" })).payPercentMax.includes("10 points"));
-  assert.deepEqual(validatePay(input({ payPercentMin: "25", payPercentMax: "35", payPercentOf: "billings" })), {});
+  assert.deepEqual(validatePay(input({ payPercentMin: "25", payPercentMax: "35", payPercentOf: "billings", payExpectedPeriod: "day", payExpectedMin: "800", payExpectedMax: "1000" })), {});
 });
 
 test("salary and hourly width rules are unchanged", () => {
@@ -205,7 +229,7 @@ test("a daily rate and a percentage are for optometrist roles only", () => {
   assert.ok(validatePay(input({ roleCategory: "Optician", payPeriod: "day", payMin: "900", payMax: "1000" })).payPeriod);
   assert.ok(validatePay(input({ roleCategory: "Optician", payMin: "60000", payMax: "70000", payPercentMin: "28", payPercentMax: "35" })).payPercentMin);
   assert.deepEqual(validatePay(input({ roleCategory: "Optician", payMin: "60000", payMax: "70000" })), {});
-  assert.deepEqual(validatePay(input({ roleCategory: "", payPercentMin: "28", payPercentMax: "35" })), {}, "before a role is chosen nothing is refused for the role");
+  assert.deepEqual(validatePay(input({ roleCategory: "", payPercentMin: "28", payPercentMax: "35", payExpectedPeriod: "day", payExpectedMin: "800", payExpectedMax: "1000" })), {}, "before a role is chosen nothing is refused for the role");
 });
 
 test("an unknown unit is refused", () => {
@@ -295,7 +319,7 @@ test("review flags for the new pay", () => {
   assert.deepEqual(reviewFlags({ ...base, pay_period: "day", pay_min: 900, pay_max: 1100 }), []);
   assert.ok(reviewFlags({ ...base, pay_period: "day", pay_min: 20, pay_max: 100 }).some((f) => /Daily pay looks unusually/.test(f)));
   assert.ok(reviewFlags({ ...base, pay_period: "day", pay_min: 500, pay_max: 900 }).includes("Pay range is too wide"));
-  assert.deepEqual(reviewFlags({ ...base, pay_percent_min: 28, pay_percent_max: 35, pay_percent_of: "production" }), []);
+  assert.deepEqual(reviewFlags({ ...base, pay_percent_min: 28, pay_percent_max: 35, pay_percent_of: "production", pay_expected_min: 800, pay_expected_max: 1000, pay_expected_period: "day" }), []);
   assert.ok(payFlags({ pay_percent_min: 2, pay_percent_max: 4 }).some((f) => /percentage looks unusually/.test(f)));
   assert.ok(payFlags({ pay_percent_min: 30, pay_percent_max: 80 }).includes("Percentage range is too wide"));
 });
@@ -303,7 +327,7 @@ test("review flags for the new pay", () => {
 test("a full validation of a submitted percentage job passes, and fails if the role is wrong", () => {
   const job = cleanJob({
     title: "Optometrist", roleCategory: "Optometrist", employmentType: "Full time", province: "Ontario", city: "Toronto",
-    payPercentMin: "28", payPercentMax: "35", payPercentOf: "production", existingVacancy: "yes", usesAi: "no", applyMethod: "kestrel",
+    payPercentMin: "28", payPercentMax: "35", payPercentOf: "production", payExpectedPeriod: "day", payExpectedMin: "800", payExpectedMax: "1000", existingVacancy: "yes", usesAi: "no", applyMethod: "kestrel",
     description: "Join a friendly, busy independent clinic as our associate optometrist and work closely with our team.",
   });
   assert.deepEqual(validateJob(job, true), {});
@@ -312,5 +336,5 @@ test("a full validation of a submitted percentage job passes, and fails if the r
 
 test("payColumns writes only the parts that were filled in", () => {
   const c = payColumns(input({ payPeriod: "year", payMin: "95,000", payMax: "$120000" }));
-  assert.deepEqual(c, { pay_period: "year", pay_min: 95000, pay_max: 120000, pay_is_minimum: false, pay_days_per_week: null, pay_percent_min: null, pay_percent_max: null, pay_percent_of: null });
+  assert.deepEqual(c, { pay_period: "year", pay_min: 95000, pay_max: 120000, pay_is_minimum: false, pay_days_per_week: null, pay_percent_min: null, pay_percent_max: null, pay_percent_of: null, pay_expected_min: null, pay_expected_max: null, pay_expected_period: null });
 });

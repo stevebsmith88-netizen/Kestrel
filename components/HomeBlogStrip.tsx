@@ -13,7 +13,6 @@ export default function HomeBlogStrip() {
   return (
     <section className="blogstrip" aria-labelledby="blogstrip-h">
       <div className="wrap">
-        <p className="kicker">From the blog</p>
         <h2 id="blogstrip-h">Advice for clinics and eye care professionals</h2>
         <div className="stripgrid">
           <article className="featured">

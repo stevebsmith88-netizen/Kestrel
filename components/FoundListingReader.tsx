@@ -136,7 +136,7 @@ function FoundJobForm({ index, total, readId, job, clinic, publishOn }: {
       <article className="card">
         <h3>{job.title}</h3>
         <p className="ok-msg" role="status">{state.message}</p>
-        {done.status === "live" && <p><Link href={`/jobs/${done.jobId}`}>Open the listing</Link></p>}
+        {done.status === "live" && <p><Link href={`/jobs/${done.jobId}`} className="btn sm ghost">Open the listing</Link></p>}
       </article>
     );
   }

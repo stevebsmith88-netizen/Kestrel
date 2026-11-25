@@ -3,8 +3,13 @@ import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import DraftNotice from "@/components/DraftNotice";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Posting policy",
@@ -12,13 +17,13 @@ export const metadata: Metadata = shareMetadata({
   path: "/posting-policy",
 });
 
-const UPDATED = "30th October 2026";
+const UPDATED = "13th November 2026";
 const DRAFT = true;
 
 export default async function PostingPolicy() {
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
       <main id="main" tabIndex={-1} className="legal">
         <div className="wrap legal-wrap">
           <h1>Posting policy</h1>
@@ -40,13 +45,16 @@ export default async function PostingPolicy() {
 
           <h2>What every post must include</h2>
           <ul>
-            <li><strong>A pay range</strong> for the job, as a yearly salary or an hourly rate. The range should be genuine. Unless the top of the range is over $200,000 a year, it may not be more than $50,000 wide (hourly rates are counted over a standard year of 2,080 hours).</li>
+            <li><strong>A pay range</strong> for the job, as a yearly salary or an hourly rate. The range should be genuine. Unless the top of the range is over $200,000 a year, it may not be more than $50,000 wide (hourly rates are counted over a standard year of 2,080 hours). Optometrist roles may also use a daily rate, up to $200 a day wide, or a percentage of production, collections, billings or exam fees, up to 10 points wide. A percentage given on its own needs your honest estimate of expected earnings in dollars, a day or a year, which candidates see marked as your estimate.</li>
             <li><strong>Whether this is an existing vacancy</strong>, answered honestly with yes or no. Please do not advertise a job that does not exist.</li>
             <li><strong>Whether you use artificial intelligence to screen candidates</strong>, answered honestly with yes or no.</li>
-            <li>The role, the type of work (full time, part time, locum or contract), and the city and province. For a field based role, the city the person is based in and the area they cover.</li>
+            <li>The role, the type of work (full time, part time, fixed term or locum), and the city and province. For a field based role, the city the person is based in and the area they cover.</li>
             <li>If part of the pay is commission, a car allowance or similar, say so. The pay range is still required, and it should show the base pay.</li>
             <li>A clear description of the job in your own words.</li>
           </ul>
+          <p>
+            Some of these come from provincial rules. If you hire in Ontario, <Link href="/resources/ontario-job-ads">Ontario job ad rules for eye care clinics</Link> explains who those rules cover and what a covered ad must include.
+          </p>
 
           <h2>What is not allowed</h2>
           <ul>
@@ -64,7 +72,7 @@ export default async function PostingPolicy() {
             <li>Each post is read by our team before it is published. We may send it back to you with a note on what to change.</li>
             <li>A published post stays live for 30 days, then it expires. You can close it sooner, for example when the role is filled. In its last 7 days, or within 7 days of it ending, you can extend it for another 30 days with the same wording.</li>
             <li>A clinic can have up to 10 open jobs at a time (drafts, in review and live together). Monthly passes include up to 5 live posts.</li>
-            <li>We may take down a post at any time if it breaks this policy, or after a report. We will tell you, and you can fix and resubmit it.</li>
+            <li>We may take down a post at any time if it breaks this policy, or after a report. We will tell you, and you can fix and resubmit it. Our <Link href="/fake-jobs">policy on fake and fraudulent jobs</Link> says how we deal with reports.</li>
           </ul>
 
           <h2>Looking after applicants</h2>

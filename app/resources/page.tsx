@@ -4,14 +4,19 @@ import AppFooter from "@/components/AppFooter";
 import DirectoryTable from "@/components/DirectoryTable";
 import PayGuide from "@/components/PayGuide";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { DIRECTORY, DIRECTORY_CATEGORIES, DIRECTORY_CHECKED } from "@/lib/directory-data";
 import { findYourFitOn } from "@/lib/features";
 import { JOB_BANK_SOURCE } from "@/lib/pay-benchmark-data";
 import { LICENCE_STATEMENT, LICENCE_URL, plainDate } from "@/lib/pay-benchmark";
-import { payGuide, payGuideProvinces } from "@/lib/pay-guide";
+import { payDatasetJsonLd, payGuide, payGuideProvinces } from "@/lib/pay-guide";
 import { listedGroups } from "@/lib/resources";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Eye care resources for Canada",
@@ -19,14 +24,17 @@ export const metadata: Metadata = shareMetadata({
   path: "/resources",
 });
 
-const UPDATED = "9th November 2026";
+const UPDATED = "18th November 2026";
+const SITE = process.env.NEXT_PUBLIC_SITE_URL || "https://eyecarejobs.ca";
 
 export default async function Resources() {
   const provinces = payGuideProvinces();
   const groups = listedGroups();
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
+      {/* The pay table as a data set, with its Job Bank source, licence and date (audit P1-52). */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payDatasetJsonLd(SITE)).replace(/</g, "\\u003c") }} />
       <main id="main" tabIndex={-1} className="legal resources">
         <div className="wrap legal-wrap">
           <h1>Eye care resources for Canada</h1>
@@ -37,7 +45,7 @@ export default async function Resources() {
           </p>
 
           <h2 id="pay">What eye care roles typically pay</h2>
-          <p>Choose a province to see the median and the middle half of pay for each role. The figures come from Job Bank, the Government of Canada&apos;s labour market service.</p>
+          <p>Choose a province to see the median and the middle half of pay for each role. The figures come from Job Bank, the Government of Canada&apos;s labour market service. For where each role is paid most and least, see <Link href="/resources/eye-care-pay-summary">eye care pay in Canada: the 2026 summary</Link>.</p>
           <PayGuide provinces={provinces} rows={payGuide()} initial={provinces.includes("Ontario") ? "Ontario" : provinces[0]} />
           <p className="help">
             The median is the middle figure: half of workers earn more and half earn less. The middle half of pay runs from the first quartile to the third.

@@ -1,20 +1,25 @@
 "use server";
 
+import { applicantSnapshot } from "./application-details.ts";
+import { candidateLinkedinReady, withCandidateLinkedin } from "@/lib/social-columns";
+import { licenceReady, withLicence } from "@/lib/licence-columns";
+import { LICENCE_MISSING_TEXT, cleanLicence, licenceComplete, licenceRequiredFor, licenceRole } from "@/lib/licence";
+import { cleanSocialUrl } from "@/lib/social-links";
+import { APPLY_LIMIT_TEXT, MAX_APPLICATIONS_PER_DAY, applyWindowStart, overApplyLimit } from "@/lib/apply-limit";
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { CV_MAX_BYTES, activeContent, cleanCoverLetter, detectCv, isClosed, safeFilename } from "@/lib/applications";
-import { NOT_CONNECTED } from "@/lib/auth-copy";
+import { NOT_CONNECTED, withNext } from "@/lib/auth-copy";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
-import { newApplicationEmail } from "@/lib/clinic-emails";
+import { newApplicationEmail, withdrawnEmail } from "@/lib/clinic-emails";
 import { cleanPrefs } from "@/lib/candidate-prefs";
 import { FIELD_ROLES, PROVINCES, ROLE_CATEGORIES, type JobFormState } from "@/lib/jobs";
 import { missingSentence, readyToApply } from "@/lib/profile-ready";
-import { cleanStage } from "@/lib/career-stage";
 import { notify } from "@/lib/notifications";
-import { newApplicant } from "@/lib/notify-text";
-import { canApplyForRole, canHaveFieldRoles, roleMismatchText } from "@/lib/role-fit";
+import { applicantWithdrew, newApplicant } from "@/lib/notify-text";
+import { canApplyForRole, canHaveFieldRoles, roleMismatchText, canAddAsOtherRole, withRoleAdded } from "@/lib/role-fit";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -27,7 +32,15 @@ const text = (form: FormData, key: string, max = 200) => String(form.get(key) ??
 // Resumes live in a private bucket that nobody can read directly. It is made the first time it is needed.
 async function ensureBucket(admin: NonNullable<ReturnType<typeof supabaseAdmin>>) {
   const { data } = await admin.storage.getBucket(CV_BUCKET);
-  if (data) return true;
+  if (data) {
+    // A store made when the limit was 3 MB is brought up to today's limit, so neither database needs changing by hand.
+    const limit = Number((data as { file_size_limit?: number | null }).file_size_limit ?? 0);
+    if (limit && limit < CV_MAX_BYTES) {
+      const { error } = await admin.storage.updateBucket(CV_BUCKET, { public: false, fileSizeLimit: CV_MAX_BYTES, allowedMimeTypes: data.allowed_mime_types ?? undefined });
+      if (error) console.error("Could not raise the resume store's size limit:", error.message);
+    }
+    return true;
+  }
   const { error } = await admin.storage.createBucket(CV_BUCKET, {
     public: false,
     fileSizeLimit: CV_MAX_BYTES,
@@ -70,11 +83,18 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
     profession,
   );
   Object.assign(errors, prefs.errors);
+  // An optional LinkedIn profile (Steve, 15th November 2026): the candidate's own page only, sent to a clinic with an application.
+  const linkedin = cleanSocialUrl("linkedin", text(form, "linkedin", 300), "candidate");
+  if (linkedin.error) errors.linkedin = linkedin.error;
+  // An optometrist or optician can give their registration number (Steve, 19th November 2026). Entered by them, never checked by Kestrel.
+  const licence = cleanLicence(licenceRole(profession), { province: text(form, "licenceProvince", 40), number: text(form, "licenceNumber", 40), does: form.getAll("licenceDoes").map(String), notYet: form.get("licenceNotYet") === "on" });
+  if (licence.errors) Object.assign(errors, licence.errors);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
-  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...prefs.row };
+  // Left out until the database has the column (migration 0054), so saving a profile never fails because of it.
+  const row = { profession, licensed_provinces: provinces, years_experience: years || null, available_from: available || null, phone: phone || null, ...((await candidateLinkedinReady()) ? { linkedin_url: linkedin.url || null } : {}), ...((await licenceReady()) && licence.licence ? { licence_province: licence.licence.province, licence_number: licence.licence.number, licence_does: licence.licence.does, licence_not_yet: licence.licence.notYet } : {}), ...prefs.row };
 
   const { data: existing } = await db.from("candidate_profiles").select("user_id").eq("user_id", session.userId).maybeSingle();
   const { error } = existing
@@ -89,7 +109,7 @@ export async function saveCandidateProfile(_prev: JobFormState, form: FormData):
   return { message: "Your profile is saved." };
 }
 
-// The first step page after a candidate's first sign in: an optional role, the field and supplier tick, and where they are in eye care.
+// The first step page after a candidate's first sign in: an optional role and the field and supplier tick.
 // Skip saves nothing except that the page was shown. If migration 0037 has not been run yet, the new columns are left out so the answers
 // that can be saved still are, and nobody is sent back to this page.
 export async function saveFirstStep(_prev: JobFormState, form: FormData): Promise<JobFormState> {
@@ -97,7 +117,6 @@ export async function saveFirstStep(_prev: JobFormState, form: FormData): Promis
   const skip = form.get("skip") === "1";
   const profession = skip ? "" : text(form, "profession", 80);
   if (profession && !(ROLE_CATEGORIES as readonly string[]).includes(profession)) return { errors: { profession: "Choose the role that fits you best." }, error: "Please check the highlighted answer." };
-  const stage = skip ? null : cleanStage(text(form, "careerStage", 12));
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
@@ -110,12 +129,11 @@ export async function saveFirstStep(_prev: JobFormState, form: FormData): Promis
     base.pref_other_roles = form.get("openToField") === "on" && canHaveFieldRoles(profession) ? [...kept, ...FIELD_ROLES] : kept;
   }
   const extra: Record<string, unknown> = { start_seen_at: new Date().toISOString() };
-  if (stage) extra.career_stage = stage;
 
   const write = (row: Record<string, unknown>) =>
     existing ? db.from("candidate_profiles").update(row).eq("user_id", session.userId) : db.from("candidate_profiles").insert({ ...row, user_id: session.userId });
   let { error } = await write({ ...base, ...extra });
-  if (error && /career_stage|start_seen_at/.test(error.message)) {
+  if (error && /start_seen_at/.test(error.message)) {
     // The database has not been updated yet. Save what can be saved.
     ({ error } = Object.keys(base).length ? await write(base) : { error: null });
   }
@@ -125,14 +143,15 @@ export async function saveFirstStep(_prev: JobFormState, form: FormData): Promis
   }
   revalidatePath("/candidate");
   revalidatePath("/candidate/profile");
-  redirect("/candidate/profile");
+  // Someone who came from a job goes on to the profile with the way back to that job still offered (audit P1-34).
+  redirect(withNext("/candidate/profile", String(form.get("next") ?? "")));
 }
 
 export async function uploadCv(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("candidate");
   const file = form.get("cv");
   if (!(file instanceof File) || file.size === 0) return { error: "Choose a file to upload." };
-  if (file.size > CV_MAX_BYTES) return { error: "That file is too big. Please use a file under 3 MB." };
+  if (file.size > CV_MAX_BYTES) return { error: "That file is too big. Please use a file under 4 MB, for example by saving it again without the photo." };
 
   const bytes = new Uint8Array(await file.arrayBuffer());
   const kind = detectCv(bytes, file.name);
@@ -198,11 +217,27 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
   if (!job || job.status !== "live" || new Date(job.expires_at) <= new Date() || !clinicName) return { error: "This job is no longer open for applications." };
   if (job.apply_method !== "kestrel") return { error: "This job takes applications on the clinic's own website." };
 
-  const { data: profile } = await admin.from("candidate_profiles").select("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, home_city, home_province").eq("user_id", session.userId).maybeSingle();
+  const { data: profileRow } = await admin.from("candidate_profiles").select(await withLicence(await withCandidateLinkedin("profession, pref_other_roles, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, home_city, home_province"))).eq("user_id", session.userId).maybeSingle();
+  const profile = profileRow as unknown as { profession: string | null; pref_other_roles: string[] | null; licensed_provinces: string[] | null; years_experience: string | null; available_from: string | null; phone: string | null; cv_path: string | null; cv_filename: string | null; home_city: string | null; home_province: string | null; linkedin_url?: string | null; licence_province?: string | null; licence_number?: string | null; licence_does?: string[] | null; licence_not_yet?: boolean | null } | null;
   if (!profile || !readyToApply(profile)) return { error: `Please add ${missingSentence(profile ?? null)} to your profile first.` };
   if (!profile.profession || !profile.cv_path) return { error: "Please finish your profile and save your resume first." };
   // The role on the profile has to fit the job (lib/role-fit.ts). The job page and the apply page say so first, and this stops it from the server too.
   if (!canApplyForRole(profile.profession, profile.pref_other_roles, job.role_category)) return { error: roleMismatchText(profile.profession, job.role_category) };
+  // Optometrist jobs, and optician jobs where the province regulates opticians, ask for the registration number (Steve, 19th November 2026).
+  // The number is the candidate's own answer, never checked by Kestrel. Someone not registered yet can say so instead. The apply page says
+  // this first, and this stops it from the server too. A database without migration 0056 has no number to ask for, so nobody is held up.
+  if ((await licenceReady()) && licenceRequiredFor(profile.profession, { role_category: job.role_category, province: job.province }) && !licenceComplete({ province: profile.licence_province ?? null, number: profile.licence_number ?? null, does: [], notYet: Boolean(profile.licence_not_yet) })) return { error: LICENCE_MISSING_TEXT };
+
+  // No more than 30 applications in 24 hours (lib/apply-limit.ts). If the count cannot be read, the application goes ahead.
+  const now = new Date();
+  const { data: recent, error: recentError } = await admin
+    .from("applications")
+    .select("created_at")
+    .eq("candidate_id", session.userId)
+    .gt("created_at", applyWindowStart(now).toISOString())
+    .limit(MAX_APPLICATIONS_PER_DAY + 1);
+  if (recentError) console.error("Counting recent applications failed:", recentError.code, recentError.message);
+  else if (overApplyLimit((recent ?? []).map((row) => String(row.created_at)), now)) return { error: APPLY_LIMIT_TEXT };
 
   const { data: created, error } = await admin
     .from("applications")
@@ -211,15 +246,7 @@ export async function applyToJob(_prev: JobFormState, form: FormData): Promise<J
       candidate_id: session.userId,
       cover_letter: coverLetter || null,
       keep_details: keepDetails,
-      applicant: {
-        name: session.fullName || session.email,
-        email: session.email,
-        phone: profile.phone,
-        profession: profile.profession,
-        licensed_provinces: profile.licensed_provinces,
-        years_experience: profile.years_experience,
-        available_from: profile.available_from,
-      },
+      applicant: applicantSnapshot({ name: session.fullName || session.email, email: session.email }, profile),
       job_title: job.title,
       clinic_name: clinicName,
       job_location: `${job.city}, ${job.province}`,
@@ -269,12 +296,43 @@ export async function withdrawApplication(form: FormData) {
   const id = String(form.get("id") ?? "");
   const admin = supabaseAdmin();
   if (UUID.test(id) && admin) {
-    const { data } = await admin.from("applications").select("status").eq("id", id).eq("candidate_id", session.userId).maybeSingle();
-    if (data && !isClosed(data.status)) {
+    const { data } = await admin.from("applications").select("status, job_id, job_title").eq("id", id).eq("candidate_id", session.userId).maybeSingle();
+    if (data && data.job_id && !isClosed(data.status)) {
       await admin.from("applications").update({ status: "withdrawn", status_changed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("id", id);
       await admin.from("application_events").insert({ application_id: id, status: "withdrawn" });
+      // Tell the clinic (Steve, 13th November 2026): always in its inbox; by email when it gets an email for each application, or always
+      // when the person was at interview or offer, where a clinic may be about to spend time on them.
+      const { data: job } = await admin.from("jobs").select("employer_id").eq("id", data.job_id).maybeSingle();
+      if (job?.employer_id) {
+        const { data: owner } = await admin.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
+        await notify(admin, owner?.owner_id, applicantWithdrew({ jobTitle: data.job_title, applicationId: id }));
+        const { data: contact } = await admin.from("employer_contacts").select("*").eq("employer_id", job.employer_id).maybeSingle();
+        const late = data.status === "interview" || data.status === "offer";
+        if (contact?.notify_email && contact.notify_new_applications !== false && (late || (contact.notify_frequency ?? "each") === "each")) {
+          await sendEmail({ to: contact.notify_email, ...withdrawnEmail({ title: data.job_title, applicationId: id }) });
+        }
+      }
     }
   }
   revalidatePath("/candidate/applications");
   redirect(`/candidate/applications/${id}?notice=withdrawn`);
+}
+
+// One tap from the apply page: "Add this role to my profile". The role is added to Other roles you would consider, under the same rules as the
+// profile form (lib/role-fit.ts), and the candidate goes straight back to the apply page (Steve, 19th November 2026).
+export async function addRoleToProfile(form: FormData) {
+  const session = await requireRole("candidate");
+  const jobId = String(form.get("jobId") ?? "");
+  const role = String(form.get("role") ?? "");
+  if (!UUID.test(jobId)) redirect("/jobs");
+  const db = await supabaseServer();
+  if (db) {
+    const { data } = await db.from("candidate_profiles").select("profession, pref_other_roles").eq("user_id", session.userId).maybeSingle();
+    if (data?.profession && canAddAsOtherRole(data.profession, role)) {
+      const { error } = await db.from("candidate_profiles").update({ pref_other_roles: withRoleAdded(data.pref_other_roles as string[] | null, role) }).eq("user_id", session.userId);
+      if (error) console.error("Adding a role failed:", error.code, error.message);
+    }
+  }
+  revalidatePath("/candidate/profile");
+  redirect(`/jobs/${jobId}/apply`);
 }

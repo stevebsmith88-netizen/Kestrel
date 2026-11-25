@@ -29,7 +29,10 @@ insert into public.employers (owner_id, clinic_name, practice_type, website, pro
   (null, 'Capital Optometry (sample)', 'independent', null, 'Ontario', 'Ottawa', 'An independent practice a short walk from Parliament Hill, seeing patients of all ages.', true),
   (null, 'Clearview Lens Co (sample)', 'supplier', null, 'Ontario', 'Mississauga', 'A Canadian lens manufacturer supplying independent and corporate practices from coast to coast.', true),
   (null, 'Lakeshore Optical (sample)', 'independent', null, 'Ontario', 'Hamilton', null, false),
-  (null, 'Riverbend Eye Clinic (sample)', 'independent', null, 'Saskatchewan', 'Saskatoon', null, false);
+  (null, 'Riverbend Eye Clinic (sample)', 'independent', null, 'Saskatchewan', 'Saskatoon', null, false),
+  -- 2 small town clinics, so the distance search and town list are tried outside the cities (review item D-08).
+  (null, 'Maitland Valley Eye Care (sample)', 'independent', null, 'Ontario', 'Wingham', 'A 1 optometrist clinic on the main street, seeing families from Wingham and the farms around it.', true),
+  (null, 'Badlands Optometry (sample)', 'independent', null, 'Alberta', 'Drumheller', 'An independent clinic serving Drumheller and the valley, with 2 optometrists and a small, close team.', true);
 
 -- Each row: clinic, title, role, type, pay period, min, max, existing vacancy, description, how to apply, field area, extra pay, days since posted
 with sample(clinic, title, role, etype, period, pmin, pmax, vacancy, descr, how, territory, extras, days_ago, seeded) as (values
@@ -68,7 +71,11 @@ with sample(clinic, title, role, etype, period, pmin, pmax, vacancy, descr, how,
   ('Lakeshore Optical (sample)', 'Optician', 'Optician', 'Full time', 'year', 56000, 68000, true,
    'An optician role listed from the clinic''s own careers page. Fit and dispense glasses in a friendly independent store. Apply on the clinic''s website.', 'external', null, null, 4, true),
   ('Riverbend Eye Clinic (sample)', 'Optometric assistant', 'Optometric assistant or technician', 'Part time', 'hour', 20, 24, true,
-   'A part time optometric assistant listed from the clinic''s own careers page. Pre-testing and patient support in a small clinic. Apply on the clinic''s website.', 'external', null, null, 6, true)
+   'A part time optometric assistant listed from the clinic''s own careers page. Pre-testing and patient support in a small clinic. Apply on the clinic''s website.', 'external', null, null, 6, true),
+  ('Maitland Valley Eye Care (sample)', 'Optometric assistant', 'Optometric assistant or technician', 'Full time', 'hour', 20, 24, true,
+   'Our small team needs a full time optometric assistant. You will greet patients, run pre-testing and help with frame choices. No eye care experience needed: we train you, and we close at 5 every day.', 'kestrel', null, null, 3, false),
+  ('Badlands Optometry (sample)', 'Optician', 'Optician', 'Full time', 'year', 54000, 64000, true,
+   'A full time licensed optician for a busy small town clinic. You will dispense and adjust glasses, fit contact lenses and look after our frame boards. Moving costs help is available for the right person.', 'kestrel', null, null, 8, false)
 )
 insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening,
                          description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, is_seeded, source_url, found_at, posted_at, expires_at)
@@ -130,6 +137,26 @@ select id, 'sample@example.invalid',
 from public.employers where clinic_name like '% (sample)' and claimed
 on conflict (employer_id) do update set employee_band = excluded.employee_band;
 
+-- Social links on 2 public clinic pages (migration 0054), shown as small icons and in the search engine data.
+update public.employers set
+  social_instagram = 'https://www.instagram.com/harbourside_optical_sample/',
+  social_facebook  = 'https://www.facebook.com/harboursideopticalsample',
+  social_linkedin  = 'https://www.linkedin.com/company/harbourside-optical-sample/'
+where clinic_name = 'Harbourside Optical (sample)';
+update public.employers set
+  social_instagram = 'https://www.instagram.com/maplegroveeyecare_sample/',
+  social_linkedin  = 'https://www.linkedin.com/company/maple-grove-eye-care-sample/'
+where clinic_name = 'Maple Grove Eye Care (sample)';
+
+-- One line headlines under the job title (migration 0053).
+update public.jobs set headline = 'A 4 day week, mentoring and a team that stays' where title = 'Optician' and employer_id = (select id from public.employers where clinic_name = 'Harbourside Optical (sample)');
+update public.jobs set headline = 'Training and room to grow across 14 clinics' where role_category = 'Optician' and status = 'live' and employer_id = (select id from public.employers where clinic_name = 'Maple Grove Eye Care (sample)');
+
+-- One sample job that closes in 2 days, so a saved job shows its closing reminder (the daily email mentions jobs ending within 3 days).
+update public.jobs set expires_at = now() + interval '2 days'
+where id = (select j.id from public.jobs j join public.employers e on e.id = j.employer_id
+            where e.clinic_name = 'Capital Optometry (sample)' and j.status = 'live' order by j.created_at limit 1);
+
 -- ------------------------------------------------------------------ PART 2: the 2 demo accounts (skipped if they do not exist yet)
 -- Change the 2 addresses below if you used different ones. They are the addresses you signed up with on the demo site.
 do $$
@@ -182,7 +209,7 @@ begin
         u := gen_random_uuid();
         insert into auth.users (id, instance_id, aud, role, email, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
         values (u, '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', format('sample.applicant%s@demo.invalid', i), now(),
-                '{"provider":"email","providers":["email"]}', jsonb_build_object('role', 'candidate', 'full_name', names[i]), now(), now());
+                '{"provider":"email","providers":["email"]}', jsonb_build_object('role', 'candidate', 'full_name', names[i], 'signup_ticket', public.issue_signup_ticket()), now(), now());
       end if;
       target := case jobs_for[i] when 1 then j_optician else j_assistant end;
       insert into public.applications (job_id, candidate_id, cover_letter, status, applicant, job_title, clinic_name, job_location, viewed_at)
@@ -197,6 +224,22 @@ begin
       insert into public.application_events (application_id, status) values (app, 'applied');
       if statuses[i] <> 'applied' then insert into public.application_events (application_id, status) values (app, statuses[i]); end if;
     end loop;
+
+    -- Registration numbers and LinkedIn as the candidates entered them (migrations 0054 and 0056). The clinic sees them on the application,
+    -- under Registration, with a button to the right College register. The 4th optician has not registered yet.
+    update public.applications set applicant = applicant || jsonb_build_object('licence', jsonb_build_object('province', 'Ontario', 'number', '5841', 'does', jsonb_build_array('eyeglasses', 'contact_lenses'), 'notYet', false), 'linkedin_url', 'https://www.linkedin.com/in/alex-morgan-sample/') where applicant->>'email' = 'sample.applicant1@demo.invalid';
+    update public.applications set applicant = applicant || jsonb_build_object('licence', jsonb_build_object('province', 'Ontario', 'number', '06120', 'does', jsonb_build_array('eyeglasses'), 'notYet', false)) where applicant->>'email' = 'sample.applicant2@demo.invalid';
+    update public.applications set applicant = applicant || jsonb_build_object('licence', jsonb_build_object('province', 'Alberta', 'number', '02723', 'does', jsonb_build_array('eyeglasses', 'contact_lenses'), 'notYet', false)) where applicant->>'email' = 'sample.applicant3@demo.invalid';
+    update public.applications set applicant = applicant || jsonb_build_object('licence', jsonb_build_object('province', null, 'number', null, 'does', jsonb_build_array(), 'notYet', true)) where applicant->>'email' = 'sample.applicant4@demo.invalid';
+
+    -- The 4th applicant has been invited to interview, with the details and a meeting link (the clinic's own last lines of the message).
+    update public.applications set clinic_message = 'Thanks for applying, Maya. We would like to meet you.' || E'\n\n' || 'Interview format: Online (video call)' || E'\n'
+      || 'Interview time: ' || to_char(current_date + 4, 'YYYY-MM-DD') || ' 10:30 America/Toronto 45' || E'\n' || 'Join the meeting: https://us02web.zoom.us/j/81234567890'
+      where applicant->>'email' = 'sample.applicant4@demo.invalid';
+
+    -- The demo clinic's own public page: social links and a headline.
+    update public.employers set social_instagram = 'https://www.instagram.com/riverside_family_eye_care_demo/', social_facebook = 'https://www.facebook.com/riversidefamilyeyecaredemo' where id = emp;
+    update public.jobs set headline = 'Friendly team, 4 day week, room to grow' where id = j_optician;
   end if;
 
   if cand_user is not null then
@@ -225,5 +268,50 @@ begin
     end if;
     delete from public.job_alerts where user_id = cand_user;
     insert into public.job_alerts (user_id, role_category, province, frequency) values (cand_user, 'Optician', 'Ontario', 'weekly');
+
+    -- Registration number and LinkedIn on the candidate's own profile (migrations 0054 and 0056).
+    update public.candidate_profiles set licence_province = 'Ontario', licence_number = '5841', licence_does = array['eyeglasses', 'contact_lenses'],
+      licence_not_yet = false, linkedin_url = 'https://www.linkedin.com/in/demo-candidate/' where user_id = cand_user;
+
+    -- Their application is at the interview step, with an online interview in 5 days: the application page shows a Join the meeting
+    -- button and add to calendar buttons, and the clinic's message reads warmly (the clinic is in BC, so the time is Pacific).
+    if app is not null then
+      update public.applications set status = 'interview', status_changed_at = now(),
+        clinic_message = 'Good news, we would love to meet you and talk about the role.' || E'\n\n' || 'Interview format: Online (video call)' || E'\n'
+          || 'Interview time: ' || to_char(current_date + 5, 'YYYY-MM-DD') || ' 10:00 America/Vancouver 45' || E'\n' || 'Join the meeting: https://meet.google.com/abc-defg-hij'
+        where id = app;
+      insert into public.application_events (application_id, status, note) values (app, 'interview', 'Online interview booked.');
+    end if;
+
+    -- Followed clinics (migration 0057): new jobs from them arrive in the daily email.
+    delete from public.employer_follows where user_id = cand_user;
+    insert into public.employer_follows (user_id, employer_id)
+    select cand_user, id from public.employers where clinic_name in ('Harbourside Optical (sample)', 'Maple Grove Eye Care (sample)', 'Clearview Lens Co (sample)');
+
+    -- Saved jobs (migration 0059): open jobs first, soonest to close at the top. One of them closes in 2 days (set in Part 1).
+    delete from public.saved_jobs where user_id = cand_user;
+    insert into public.saved_jobs (user_id, job_id)
+    select cand_user, j.id from public.jobs j join public.employers e on e.id = j.employer_id
+    where j.status = 'live' and (
+      (e.clinic_name = 'Capital Optometry (sample)') or
+      (e.clinic_name = 'Maple Grove Eye Care (sample)' and j.title = 'Optician') or
+      (e.clinic_name = 'Okanagan Eye Group (sample)' and j.role_category = 'Optician'))
+    on conflict do nothing;
+
+    -- "Would like to work for them" (migrations 0055 and 0058): 1 clinic that is not on Kestrel yet, asked about by 3 people, and 1 that has since joined,
+    -- which is why the candidate has an inbox message about it.
+    delete from public.employer_interest where candidate_id = cand_user or clinic_name = 'Birchwood Eye Care';
+    insert into public.employer_interest (candidate_id, clinic_name, town, province, website, name_key)
+    values (cand_user, 'Birchwood Eye Care', 'Barrie', 'Ontario', 'https://example.com/birchwood', 'birchwood eye care|barrie');
+    insert into public.employer_interest (candidate_id, clinic_name, town, province, name_key)
+    select u.id, 'Birchwood Eye Care', 'Barrie', 'Ontario', 'birchwood eye care|barrie'
+    from auth.users u where u.email in ('sample.applicant2@demo.invalid', 'sample.applicant5@demo.invalid')
+    on conflict do nothing;
+    insert into public.employer_interest (candidate_id, clinic_name, town, province, name_key, notified_at, notified_employer_id)
+    select cand_user, 'Harbourside Optical', 'Victoria', 'British Columbia', 'harbourside optical|victoria', now() - interval '1 day', id
+    from public.employers where clinic_name = 'Harbourside Optical (sample)';
+    delete from public.notifications where user_id = cand_user and kind = 'clinic_joined';
+    insert into public.notifications (user_id, kind, title, body, href)
+    values (cand_user, 'clinic_joined', 'Harbourside Optical is now on Kestrel', 'You asked us about them. Open their page to see their jobs and follow them.', '/clinics/harbourside-optical-sample-victoria');
   end if;
 end $$;

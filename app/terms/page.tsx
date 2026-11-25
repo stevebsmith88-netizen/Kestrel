@@ -3,8 +3,13 @@ import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import DraftNotice from "@/components/DraftNotice";
 import SiteHeader from "@/components/SiteHeader";
-import { getSession } from "@/lib/auth";
 import { shareMetadata } from "@/lib/share";
+
+// Saved once and shown to everyone, then built again at most every 5 minutes (audit P1-10). force-static means that even if something on
+// the page tried to read who is visiting, it would see nobody, so a saved page can never hold anything about a person. The rebuild brings
+// in scheduled blog posts on their date, and the launch switch, which the header checks every 5 minutes (lib/launch.ts).
+export const revalidate = 300;
+export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Terms of use",
@@ -12,13 +17,13 @@ export const metadata: Metadata = shareMetadata({
   path: "/terms",
 });
 
-const UPDATED = "30th October 2026";
+const UPDATED = "13th November 2026";
 const DRAFT = true;
 
 export default async function Terms() {
   return (
     <>
-      <SiteHeader session={await getSession()} />
+      <SiteHeader />
       <main id="main" tabIndex={-1} className="legal">
         <div className="wrap legal-wrap">
           <h1>Terms of use</h1>
@@ -79,7 +84,7 @@ export default async function Terms() {
           <ul>
             <li>Prices are shown in Canadian dollars before HST or other taxes. Tax is added at checkout and shown on your receipt.</li>
             <li>Payments are handled by Stripe, a payment company. We do not see or store your full card number.</li>
-            <li>A single job post lasts 30 days from the day it goes live. A monthly clinic pass renews each month until you cancel, and you can cancel at any time. Cancelling stops the next renewal, and your pass stays active until the end of the period you have paid for.</li>
+            <li>A single job post lasts 30 days from the day it goes live, or 60 days if it goes live during the free launch. A monthly clinic pass renews each month until you cancel, and you can cancel at any time. Cancelling stops the next renewal, and your pass stays active until the end of the period you have paid for.</li>
             <li>Once a post has gone live, its fee is not refundable. If we decline a post before it goes live, or a fault on our side stops it from being published, we will refund the fee or let you repost for free. If you think you were charged in error, write to us within 30 days.</li>
             <li>If we remove a post because it breaks these terms or our posting policy, we do not refund its fee.</li>
             <li>We may change our prices. A change applies to your next purchase or renewal, and we will give you notice first.</li>
@@ -95,7 +100,7 @@ export default async function Terms() {
 
           <h2>Reporting problems</h2>
           <p>
-            Anyone can report a job using the &quot;Report this job&quot; link on its page. We may take down a post while we look into a report. We may suspend or close an
+            Anyone can report a job using the &quot;Report this job&quot; link on its page. Our <Link href="/fake-jobs">policy on fake and fraudulent jobs</Link> says how we deal with reports. We may take down a post while we look into a report. We may suspend or close an
             account that breaks these terms, and we will usually tell you why.
           </p>
 
@@ -115,7 +120,9 @@ export default async function Terms() {
 
           <h2>Ending your account</h2>
           <p>
-            You can delete your account at any time from your account page. We may suspend or end access if these terms are broken, or if we must by law. Sections that
+            You can delete your account at any time from your account page. Deleting it removes your profile and the applications linked to it, as
+            our <Link href="/privacy">privacy policy</Link> explains, and a clinic&apos;s account takes its jobs with it. Candidates keep their own record of applications they sent to a clinic that leaves.
+            We may suspend or end access if these terms are broken, or if we must by law. Sections that
             by their nature should continue, such as those about payment and responsibility, continue after an account ends.
           </p>
 
@@ -127,7 +134,7 @@ export default async function Terms() {
           <h2>Law and contact</h2>
           <p>
             These terms are governed by the laws of Ontario and the federal laws of Canada that apply there. Disputes go to the courts of Ontario. Questions about these
-            terms can go to <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>. See our <Link href="/contact">contact page</Link> for our mailing address.
+            terms can go to <a href="mailto:hello@eyecarejobs.ca">hello@eyecarejobs.ca</a>. Our mailing address is in the footer of every email we send.
           </p>
         </div>
       </main>

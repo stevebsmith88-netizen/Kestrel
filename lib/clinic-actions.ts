@@ -3,19 +3,35 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { logJobActivity } from "@/lib/job-activity";
+import { notifySlack } from "@/lib/notify-slack";
+import { currentPaymentMode, recordFreeLaunchPost, startCardSetup } from "@/lib/job-payment-flow";
+import { applyPassForSubmit, moveToReview } from "@/lib/pass-flow";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
-import { getMyEmployer } from "@/lib/clinic";
+import { getMyEditableEmployer, getMyEmployer, LOCATION_COOKIE } from "@/lib/clinic";
+import { canEdit, OWNER_ONLY_TEXT, VIEW_ONLY_TEXT } from "@/lib/team";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
+import { fitExpected, withExpected } from "@/lib/expected-columns";
+import { jobSlackExtras } from "@/lib/slack-approve-buttons";
 import { notifyAdmin } from "@/lib/notify-admin";
-import { cleanClinic, validateClinic, type JobFormState } from "@/lib/jobs";
+import { cleanClinic, isQuebecJob, validateClinic, type JobFormState } from "@/lib/jobs";
 import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 import { NOT_CONNECTED } from "@/lib/auth-copy";
 import { canExtend, extendedUntil } from "@/lib/job-ending";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { refreshJobPages } from "@/lib/job-cache";
+import { fetchPage } from "@/lib/fetch-page";
+import { startAddress } from "@/lib/page-reader";
+import { siteDetails, type SiteDetails } from "@/lib/site-details";
+import { emailMatchesWebsite, hostOf } from "@/lib/claims";
+import { postingOn } from "@/lib/features";
+import { POSTING_CLOSED_TEXT } from "@/lib/posting-copy";
+import { clinicSocialReady } from "@/lib/social-columns";
+import { cleanClinicSocials, socialRow } from "@/lib/social-links";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const field = (form: FormData, key: string) => form.get(key) ?? "";
@@ -37,14 +53,22 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     directHire: form.get("directHire") === "yes",
     employeeBand: field(form, "employeeBand"),
   });
-  const existingForBand = await getMyEmployer(session.userId);
-  const errors = validateClinic(clinic, { requireBand: !existingForBand });
+  // The staff count is optional (Steve, 13th November 2026): it is for Kestrel only and changes no rule, so it should not slow a clinic down.
+  const errors = validateClinic(clinic);
+  // Optional social links (Steve, 15th November 2026): each must be a real page on its own platform, or blank.
+  const socials = cleanClinicSocials({ instagram: field(form, "socialInstagram"), facebook: field(form, "socialFacebook"), linkedin: field(form, "socialLinkedin") });
+  Object.assign(errors, socials.errors);
   if (Object.keys(errors).length) return { errors, error: "Please check the highlighted answers." };
 
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
 
-  const existing = await getMyEmployer(session.userId);
+  const current = await getMyEmployer(session.userId);
+  // A team member can see the profile but only the owner changes it (migration 0045).
+  if (current && current.level !== "owner") return { error: OWNER_ONLY_TEXT };
+  // "Add a location" (migration 0047): the owner of a location saves a new one instead of changing the one they are in.
+  const newLocation = form.get("newLocation") === "yes" && current?.level === "owner";
+  const existing = newLocation ? null : current;
   const row = {
     clinic_name: clinic.clinicName,
     practice_type: clinic.practiceType,
@@ -52,8 +76,10 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     province: clinic.province,
     city: clinic.city,
     about: clinic.about || null,
+    // Left out until the database has the columns (migration 0054), so saving a profile never fails because of them.
+    ...((await clinicSocialReady()) ? socialRow(socials.links) : {}),
     // Keep the first date they confirmed.
-    direct_hire_confirmed_at: existing?.direct_hire_confirmed_at ?? new Date().toISOString(),
+    direct_hire_confirmed_at: existing?.direct_hire_confirmed_at ?? current?.direct_hire_confirmed_at ?? new Date().toISOString(),
   };
 
   let employerId = existing?.id;
@@ -73,9 +99,12 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
     const { data, error } = await db.from("employers").insert({ ...row, owner_id: session.userId }).select("id").single();
     if (error || !data) {
       console.error("Clinic create failed:", error?.code, error?.message);
+      if (/25 locations/.test(error?.message ?? "")) return { error: "An account can hold up to 25 locations. Please email support@eyecarejobs.ca to add more." };
       return { error: "We couldn't save your clinic profile. Please try again." };
     }
     employerId = data.id;
+    // The new location becomes the one being worked in.
+    if (newLocation) (await cookies()).set(LOCATION_COOKIE, data.id, { httpOnly: true, sameSite: "lax", secure: process.env.NODE_ENV === "production", path: "/", maxAge: 365 * 86_400 });
   }
 
   const { error: contactError } = await db.from("employer_contacts").upsert({ employer_id: employerId, notify_email: clinic.notifyEmail, ...(clinic.employeeBand ? { employee_band: clinic.employeeBand } : {}) }, { onConflict: "employer_id" });
@@ -85,8 +114,16 @@ export async function saveClinic(_prev: JobFormState, form: FormData): Promise<J
   }
 
   revalidatePath("/clinic");
-  if (!existing) redirect("/clinic?notice=profile-created");
-  return { message: "Your clinic profile is saved." };
+  refreshJobPages(); // the clinic name and about text appear on its saved job pages
+  // A new clinic goes straight on to its first post (Steve, 13th November 2026), with no stop on the empty dashboard.
+  if (newLocation) redirect("/clinic?notice=location-added");
+  if (!existing) redirect(postingOn() ? "/clinic/jobs/new?notice=profile-created" : "/clinic?notice=profile-created-waiting");
+  // Suppliers show "Company email confirmed" on their public page when the account's email is at the company's own website (Steve,
+  // 14th November 2026). Say how to get it when it is missing.
+  if (clinic.practiceType === "supplier" && clinic.website && !emailMatchesWebsite(session.email, clinic.website)) {
+    return { message: `Your company profile is saved. Your public page shows "Company email confirmed" when your account uses an email address at ${hostOf(clinic.website)}. To get it, change your account's email under Account settings.` };
+  }
+  return { message: clinic.practiceType === "supplier" ? "Your company profile is saved." : "Your clinic profile is saved." };
 }
 
 // What a template keeps from a job: everything except the status and the two questions that must be answered fresh.
@@ -105,9 +142,11 @@ const templateFields = (row: {
 });
 
 export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobFormState> {
+  if (!postingOn()) return { error: POSTING_CLOSED_TEXT };
   const session = await requireRole("clinic");
   const employer = await getMyEmployer(session.userId);
   if (!employer) redirect("/clinic/profile");
+  if (!canEdit(employer.level)) return { error: VIEW_ONLY_TEXT };
 
   const submit = String(form.get("intent") ?? "") === "submit";
   const { job, row, errors } = jobFromForm(form, submit);
@@ -125,18 +164,24 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
     wasLive = current?.status === "live";
     if (wasLive && !submit) return { error: "A live job can't be saved as a draft. Send your changes for review, or close the job." };
   }
+  // After the free launch (or when checkout is being tried), a job sent for review first saves a card with Stripe, which charges nothing.
+  // So it is kept as a draft until the card is saved, and only then goes into the review queue (lib/job-payment-flow.ts).
+  const cardMode = submit && !wasLive && currentPaymentMode() === "card";
+  const saveRow = cardMode ? { ...row, status: "draft" as const } : row;
+  let savedId: string | null = id ?? null;
   if (id) {
-    const { data, error } = await db.from("jobs").update(row).eq("id", id).select("id");
+    const { data, error } = await db.from("jobs").update(await fitExpected(saveRow)).eq("id", id).select("id");
     if (error || !data?.length) {
       console.error("Job update failed:", error?.code, error?.message);
       return { error: "We couldn't save this job. It may already be in review or live." };
     }
   } else {
-    const { error } = await db.from("jobs").insert({ ...row, employer_id: employer.id });
+    const { data: created, error } = await db.from("jobs").insert(await fitExpected({ ...saveRow, employer_id: employer.id })).select("id");
     if (error) {
       console.error("Job create failed:", error.code, error.message);
       return { error: "We couldn't save this job. Please check the form and try again." };
     }
+    savedId = created?.[0]?.id ?? null;
   }
 
   // Optionally keep this post as a template for next time (the two required questions are not kept).
@@ -151,9 +196,45 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
       templateFailed = true;
     } else savedTemplate = true;
   }
+  if (submit && !wasLive && savedId) {
+    if (cardMode) {
+      // A location with a pass: a job it covers goes straight to review with nothing to charge, and a job it cannot cover (the pass is full, or
+      // the role is not included) is recorded against the card already on the pass. Either way there is no Stripe page (lib/pass-flow.ts).
+      const passAdmin = supabaseAdmin();
+      const pass = passAdmin ? await applyPassForSubmit(passAdmin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name) : ({ kind: "none" } as const);
+      if (pass.kind === "covered" && passAdmin) {
+        await moveToReview(passAdmin, { id: savedId, title: job.title }, employer.clinic_name);
+        revalidatePath("/clinic");
+        redirect("/clinic?notice=job-submitted-pass");
+      }
+      // The pass is full or does not cover this role: the clinic is asked what it wants before anything is sent or charged.
+      if (pass.kind === "choose") {
+        revalidatePath("/clinic");
+        redirect(`/clinic/jobs/${savedId}/confirm`);
+      }
+      const started = await startCardSetup(savedId);
+      if ("url" in started) {
+        revalidatePath("/clinic");
+        redirect(started.url);
+      }
+      if ("error" in started) return { error: started.error };
+      // A card is already saved for this job (it was withdrawn and is being sent again), so it goes straight to review.
+      await db.from("jobs").update({ status: "in_review" }).eq("id", savedId).eq("status", "draft");
+      const admin = supabaseAdmin();
+      if (admin) await logJobActivity(admin, savedId, "Sent for review again (the card saved earlier is still on file)", { actor: "clinic" });
+    } else {
+      const admin = supabaseAdmin();
+      if (admin) await recordFreeLaunchPost(admin, { id: savedId, title: job.title, role_category: row.role_category ?? null, employer_id: employer.id }, employer.clinic_name);
+    }
+  }
+  if (submit) {
+    const slackDb = supabaseAdmin();
+    const extra = slackDb && savedId ? await jobSlackExtras(slackDb, savedId) : { lines: [], buttons: [] };
+    await notifySlack(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [job.title, employer.clinic_name, ...extra.lines], { path: "/admin/review", text: "Open the review queue" }, "jobs", extra.buttons);
+  }
   if (submit) await notifyAdmin(wasLive ? "A live job was edited and needs review" : "A job is waiting for review", [`${job.title}`, `${employer.clinic_name}`], "/admin/review");
   revalidatePath("/clinic");
-  revalidatePath("/jobs");
+  refreshJobPages();
   redirect(`/clinic?notice=${wasLive ? "job-edited" : submit ? "job-submitted" : "job-saved"}${savedTemplate ? "&template=1" : templateFailed ? "&template=failed" : ""}`);
 }
 
@@ -199,6 +280,7 @@ async function doClose(form: FormData) {
   const db = await supabaseServer();
   if (id && db) await db.from("jobs").update({ status: "closed" }).eq("id", id).in("status", ["live", "draft", "rejected"]);
   revalidatePath("/clinic");
+  refreshJobPages();
   return "job-closed";
 }
 
@@ -217,10 +299,12 @@ export async function closeJobQuiet(_prev: QuickState, form: FormData): Promise<
 async function doExtend(form: FormData) {
   const session = await requireRole("clinic");
   const id = idFrom(form);
-  const employer = await getMyEmployer(session.userId);
+  // Changed on the server, so the database cannot check the person's level here: only the owner and "view and edit" members may.
+  const employer = await getMyEditableEmployer(session.userId);
   const admin = supabaseAdmin();
   if (!id || !employer || !admin) return "job-extend-failed";
-  const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count").eq("id", id).eq("employer_id", employer.id).maybeSingle();
+  const { data: job } = await admin.from("jobs").select("id, status, expires_at, is_seeded, extended_count, province").eq("id", id).eq("employer_id", employer.id).maybeSingle();
+  if (job && isQuebecJob(job)) return "job-extend-quebec";
   if (!job || !canExtend(job)) return "job-extend-blocked";
   const until = extendedUntil(job).toISOString();
   const { error } = await admin
@@ -231,8 +315,7 @@ async function doExtend(form: FormData) {
     .in("status", ["live", "expired"]);
   if (error) return "job-extend-failed";
   revalidatePath("/clinic");
-  revalidatePath("/jobs");
-  revalidatePath(`/jobs/${id}`);
+  refreshJobPages();
   return "job-extended";
 }
 
@@ -291,24 +374,48 @@ export async function deleteJobQuiet(_prev: QuickState, form: FormData): Promise
 // Starts a new draft from an old job (one that has closed or expired), so it can be posted again
 // without typing everything in again. The dates start fresh when it is approved.
 export async function repostJob(form: FormData) {
+  if (!postingOn()) redirect("/clinic");
   const session = await requireRole("clinic");
   const id = idFrom(form);
-  const employer = await getMyEmployer(session.userId);
+  const employer = await getMyEditableEmployer(session.userId);
   const db = await supabaseServer();
   if (!id || !db || !employer) redirect("/clinic");
   const { data: old } = await db
     .from("jobs")
-    .select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras")
+    .select(await withExpected("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras"))
     .eq("id", id)
     .eq("employer_id", employer.id)
     .in("status", ["closed", "expired", "live"])
     .maybeSingle();
   if (!old) redirect("/clinic");
-  const { data: copy, error } = await db.from("jobs").insert({ ...old, employer_id: employer.id, status: "draft" }).select("id").single();
+  const { data: copy, error } = await db.from("jobs").insert({ ...(old as unknown as Record<string, unknown>), employer_id: employer.id, status: "draft" }).select("id").single();
   if (error || !copy) {
     console.error("Repost failed:", error?.code, error?.message);
     redirect(`/clinic?notice=${/10 open jobs/.test(error?.message ?? "") ? "job-limit" : "job-repost-failed"}`);
   }
   revalidatePath("/clinic");
   redirect(`/clinic/jobs/${copy.id}`);
+}
+
+// "Fill in from my website" (Steve, 14th November 2026). Reads the home page the clinic typed, safely and politely (lib/fetch-page.ts: public
+// sites only, robots.txt obeyed), and returns the labels it carries for search engines (lib/site-details.ts). No AI, and nothing is saved:
+// the clinic chooses what to use, then saves the form as usual.
+export type WebsiteFill = { found?: SiteDetails; error?: string };
+
+export async function readMyWebsite(typed: string): Promise<WebsiteFill> {
+  await requireRole("clinic");
+  const address = startAddress(String(typed ?? "").slice(0, 300));
+  if (!address) return { error: "Type your website address first." };
+  let home: string;
+  try {
+    const url = new URL(address);
+    home = `${url.origin}/`;
+  } catch {
+    return { error: "That does not look like a web address. Try something like northgateeyecare.ca." };
+  }
+  const result = await fetchPage(home);
+  if (!result.ok) return { error: result.reason.replace("the careers page", "your website") };
+  const found = siteDetails(result.html);
+  if (!Object.keys(found).length) return { error: "Your website does not carry the labels we read (a name, description or address for search engines), so there is nothing to fill in. Type your details below instead." };
+  return { found };
 }

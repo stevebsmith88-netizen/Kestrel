@@ -23,3 +23,7 @@ export function missingSentence(p: ReadyFields | null): string {
   const list = missingToApply(p).map((l) => l.toLowerCase());
   return list.length <= 1 ? list.join("") : `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}`;
 }
+
+// The dashboard meter: how many of the 3 needs to apply are done, as a percentage. It reads 100 exactly when readyToApply is true,
+// so it can never sit beside "Finish your profile".
+export const profileStrength = (p: ReadyFields | null) => Math.round((APPLY_NEEDS.filter((n) => n.done(p)).length / APPLY_NEEDS.length) * 100);
