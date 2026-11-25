@@ -608,10 +608,10 @@ We will ask the same 10 questions again every month and keep a note of who gets 
   {
     slug: "optician-pay-canada",
     title: "Optician pay in Canada: what opticians earn in each province",
-    description: "Typical hourly pay for opticians in each province from Job Bank, what it comes to over a year, and what moves an offer up or down.",
+    description: "Typical hourly pay for opticians in each province from Job Bank, what it comes to over a year, what licensing costs, and what moves an offer up or down.",
     date: "2026-11-17",
     topic: "pay",
-    updated: "2026-11-18",
+    updated: "2026-11-25",
     body: `![An optician adjusts a pair of glasses on a smiling woman in front of a wall of frames.](/images/blog/optician-pay-canada.jpg)
 
 If you are weighing up an optician job, or deciding what to offer one, the first question is what is normal where you are. The most reliable public answer comes from Job Bank, the Government of Canada's labour market service, which publishes typical hourly pay for opticians in most provinces. The figures below are from its wage dataset revised on 18th November 2026, covering surveys from 2024 and 2025.
@@ -644,6 +644,24 @@ British Columbia needs a note of its own. Glasses there can be sold without a re
 The last column of the table works each median out at 37.5 hours a week, every week of the year. These are our own sums from the hourly figures, before tax and without benefits or bonuses, and real hours vary a great deal: many opticians work 4 longer days, or part time.
 
 > Treat the median as a starting point for a conversation, not a ceiling.
+
+## What it costs to stay licensed
+
+Pay is only half the picture. Opticians pay their provincial regulator every year to keep their licence, and the fee is very different from one province to the next. The table shows each fee next to the provincial median from the table above, worked out as the hours of work it takes to cover it.
+
+| Province | Regulator | Yearly licence fee | Hours at the median to pay it |
+| --- | --- | --- | --- |
+| Ontario | College of Opticians of Ontario | $1,237.35 for 2027 ($1,095 plus HST) | About 43 |
+| British Columbia | College of Health and Care Professionals of BC | $1,005 for a full year | About 35 |
+| Manitoba | Opticians of Manitoba | $833.77 for eyeglasses, $894.36 with contact lenses, for 2027, GST included | About 29 to 31 |
+| Alberta | College of Opticians of Alberta | $680.10 for eyeglasses, $839.85 with contact lenses, GST included | About 24 to 30 |
+| Nova Scotia | Nova Scotia College of Dispensing Opticians | $525 for a dispensing optician, $575 for a contact lens fitter | About 18 to 19 |
+
+**Ontario** has the highest fee, more than twice Nova Scotia's, while its median pay is $1 an hour lower than Nova Scotia's. Ontario's fee went up from $1,206.84 in 2026. **British Columbia** comes next, and its licence year runs from 1st April, with a lower fee for a licence that starts on or after 1st October. **Alberta** says there is no increase for 2027, and **Manitoba**'s rose from $809.49 to $833.77 for eyeglasses. **Nova Scotia** has the lowest fee of the 5, and renewals there are due by 31st March.
+
+Someone registering for the first time usually pays a one time fee on top: $150 plus HST in Ontario, $380 in British Columbia, $315 in Alberta and $200 in Manitoba, and Nova Scotia charges $200 for a newly graduated candidate. Professional liability insurance, continuing education and any association membership are extra again, and they vary too much from person to person to put in a table.
+
+We read each fee on the regulator's own website on 25th November 2026, and the table shows it as the regulator lists it. British Columbia and Nova Scotia do not say on their fee pages whether tax applies. We are checking Saskatchewan, New Brunswick, Newfoundland and Labrador and Prince Edward Island with their regulators, and will add them here. Fees change each year, so check with your regulator before you budget.
 
 ## What moves pay up or down
 

@@ -94,6 +94,22 @@ Good topics, each aimed at a real search:
     - **Care points:** neutral and factual. Keep politics and the trade dispute out of it and do not name any country or company as a target. No claim that Kestrel is "the only" anything. No Eye Recommend material.
     - **Slot and links:** a free Friday after the optometry career post, or sooner if Steve wants it out near the Canadian shopping seasons. Links back to "Independent practice or corporate group", and to `/jobs`. Also a discussion question for r/EyeCareJobsCanada.
 
+Added 12th November 2026 from the Reddit plan (`docs/marketing/reddit.md`, which has the full angle, the checks and what Steve needs to supply for each). Each one later backs a Reddit post, so none is posted on Reddit before it is live here.
+
+17. **Summer jobs in eye care for university students** (post C). Seasonal: must be live by late January 2027, so it takes a Friday slot in January and a post that is not yet out moves later. It goes out before "Hiring seasonal workers" (9th April 2027), so only the April post can link to it.
+18. **Studying optometry in the US and coming home to practise in Canada** (post A). Check every step with OEBC and at least 2 provincial colleges.
+19. **When to start looking for your first eye care job: a timeline for new graduates** (post D).
+20. **After graduation: associate, locum, residency or your own practice** (post E). Takes in item 5 above (locum work).
+21. **What eye care jobs pay in and outside the big cities** (post B), from Job Bank's regional figures. Only if those figures exist for the roles; no "rural pays more" headline unless the numbers show it.
+
+22. **Eye care in Canada by the numbers** (post F, Steve's idea, 12th November 2026), from the home page figures in `lib/eye-care-numbers.ts`. Recheck every figure against its source first (`docs/market-sizing.md` rates them low to medium confidence), and call the 2,000 roles figure an estimate every time. A good early slot, since it needs no seasonal timing.
+
+23. **Eye care hiring in Canada: what to watch in 2027** (Steve's idea, 12th November 2026). A year ahead post for late December, when people search for "2027" outlooks. Proposed slot: Friday 18th December 2026. "Thinking of starting a career in optics?" moves from that date to 16th April 2027 (no other post links to it, so the tests allow the move). Make the change when this post is written.
+    - **Angle:** what clinics and job seekers should watch, framed as things to watch, not predictions. Each point stands on a public source: Job Bank's 3 year employment outlooks for optometrists, opticians and assistants by province (check the current outlook period and ratings), pay transparency rules (Ontario since 1st January 2026, British Columbia's pay range rule, and any other province that has announced one), employers' AI disclosure in Ontario job posts, the ageing population and demand for eye exams (Statistics Canada), and any scope of practice changes a provincial government has announced for optometrists or opticians. Steve's own view closes the post, clearly marked as his opinion.
+    - **Needs from Steve:** 2 or 3 things he expects to change in clinic hiring in 2027, from 20 years in the industry, in his own words. From public knowledge and general experience only, never from anything learned through his job at Eye Recommend (no member, sales or internal information), and nothing about buying groups.
+    - **Careful with:** corporate consolidation and named companies (only what is public and dated), any figure without a source, and anything that reads like a forecast of pay. Title must carry 2027, and the post gets a short "checked on" date at the end.
+    - **Reddit:** a shortened version suits r/optometry in early January as a discussion post ("What are you expecting for hiring in 2027?"), with the disclosure line, after Gate A.
+
 Rules for every post: only say what is true and current, name no real clinic without asking, include no Eye Recommend material (the one exception is post 13 above), and link to the job board or the clinic page near the end.
 
 ## Review of the 5 posts (5th November 2026): what only Steve can supply
