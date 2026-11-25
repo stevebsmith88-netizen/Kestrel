@@ -649,17 +649,19 @@ The last column of the table works each median out at 37.5 hours a week, every w
 
 Pay is only half the picture. Opticians pay their provincial regulator every year to keep their licence, and the fee is very different from one province to the next. The table shows each fee next to the provincial median from the table above, worked out as the hours of work it takes to cover it.
 
-| Province | Regulator | Yearly fee for 2027, tax included | Hours at the median to pay it |
+| Province | Regulator | Yearly licence fee | Hours at the median to pay it |
 | --- | --- | --- | --- |
-| Ontario | College of Opticians of Ontario | $1,237.35 for a Registered Optician ($1,095 plus HST) | About 43 |
-| Manitoba | Opticians of Manitoba | $833.77 for eyeglasses, $894.36 with contact lenses | About 29 to 31 |
-| Alberta | College of Opticians of Alberta | $680.10 for eyeglasses, $839.85 with contact lenses | About 24 to 30 |
+| Ontario | College of Opticians of Ontario | $1,237.35 for 2027 ($1,095 plus HST) | About 43 |
+| British Columbia | College of Health and Care Professionals of BC | $1,005 for a full year | About 35 |
+| Manitoba | Opticians of Manitoba | $833.77 for eyeglasses, $894.36 with contact lenses, for 2027, GST included | About 29 to 31 |
+| Alberta | College of Opticians of Alberta | $680.10 for eyeglasses, $839.85 with contact lenses, GST included | About 24 to 30 |
+| Nova Scotia | Nova Scotia College of Dispensing Opticians | $525 for a dispensing optician, $575 for a contact lens fitter | About 18 to 19 |
 
-**Ontario** has the highest fee of the 3, at a little under twice Alberta's for eyeglasses, while its median pay is only $1 an hour higher. Ontario's fee went up from $1,206.84 in 2026. **Alberta** says there is no increase for 2027, and **Manitoba**'s rose from $809.49 to $833.77 for eyeglasses.
+**Ontario** has the highest fee, more than twice Nova Scotia's, while its median pay is $1 an hour lower than Nova Scotia's. Ontario's fee went up from $1,206.84 in 2026. **British Columbia** comes next, and its licence year runs from 1st April, with a lower fee for a licence that starts on or after 1st October. **Alberta** says there is no increase for 2027, and **Manitoba**'s rose from $809.49 to $833.77 for eyeglasses. **Nova Scotia** has the lowest fee of the 5, and renewals there are due by 31st March.
 
-Someone registering for the first time also pays a one time fee on top: $150 plus HST in Ontario, $315 in Alberta and $200 in Manitoba. Professional liability insurance, continuing education and any association membership are extra again, and they vary too much from person to person to put in a table.
+Someone registering for the first time usually pays a one time fee on top: $150 plus HST in Ontario, $380 in British Columbia, $315 in Alberta and $200 in Manitoba, and Nova Scotia charges $200 for a newly graduated candidate. Professional liability insurance, continuing education and any association membership are extra again, and they vary too much from person to person to put in a table.
 
-We read each fee on the regulator's own website on 25th November 2026. We are checking British Columbia, Saskatchewan, Nova Scotia, New Brunswick, Newfoundland and Labrador and Prince Edward Island with their regulators, and will add them here. Fees change each year, so check with your regulator before you budget.
+We read each fee on the regulator's own website on 25th November 2026, and the table shows it as the regulator lists it. British Columbia and Nova Scotia do not say on their fee pages whether tax applies. We are checking Saskatchewan, New Brunswick, Newfoundland and Labrador and Prince Edward Island with their regulators, and will add them here. Fees change each year, so check with your regulator before you budget.
 
 ## What moves pay up or down
 
