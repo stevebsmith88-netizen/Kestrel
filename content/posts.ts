@@ -428,6 +428,65 @@ A note on the figures: the census numbers are from Statistics Canada's 2021 Cens
   },
 
   {
+    slug: "women-in-optometry-canada-and-the-world",
+    title: "Women in optometry: how Canada compares with the world",
+    description: "Women are now most of the optometrists in many countries, but not all of them. How Canada compares with the US, England, Australia and the world.",
+    date: "2027-03-08",
+    topic: "careers",
+    body: `Optometry has changed fast. In 1968 there were 368 women among the optometrists in the United States, 2.1% of the profession. Today women are the majority in Canada and in many other countries, and the next generation looks more female again. It is not the same everywhere, though, and the way countries count makes comparing them harder than it looks. For International Women's Day, here is what the published numbers say, with every source linked so you can read them yourself.
+
+## The world view
+
+The widest look comes from the 2023 Global Survey of Optometry, published in the journal [Clinical Optometry](https://pmc.ncbi.nlm.nih.gov/articles/PMC11363951/) in 2024. The researchers, from universities in Jordan, London, Chicago and elsewhere, asked the national members of the World Council of Optometry to take part, and 39 of the 40 countries invited did. Across those countries, the average was 55% women and 45% men.
+
+The average hides a wide spread. In the 12 high income countries in the survey, the average was 63% women. In sub-Saharan Africa, where the survey covered 8 countries, women were 37% of optometrists. In the paper's table, women are about 4 in 5 of optometrists in the Philippines and Palestine, and about 1 in 4 or fewer in Bangladesh and Uganda.
+
+The paper suggests the low figures may reflect male dominated social norms in some countries, and it describes gender inequality in the eye care workforce as a significant issue globally.
+
+> In some countries, optometry is still mostly a men's profession.
+
+## Countries that count their optometrists
+
+For a few countries, a national count gives a firmer figure than a survey answer. They come from different years and different definitions, so read each on its own terms.
+
+| Place | Women among optometrists | Year and source |
+| --- | --- | --- |
+| Canada | 59% (census), 63% (association count, without British Columbia) | 2021 and 2025 |
+| United States | 48.6% | 2022, Data USA |
+| England | 54.9% (optometrists and ophthalmic medical practitioners) | 2019, NHS Digital |
+| Australia | 54.9% | 2019, National Health Workforce Dataset |
+
+The Canadian figures are from [Statistics Canada's 2021 census](https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810044901) and the Canadian Association of Optometrists' 2025 report, both in our post on [who works in eye care in Canada](/blog/who-works-in-eye-care-canada), along with the split by age and province. The United States figure is Data USA's count of practising optometrists, reported by [Eyes on Eyecare](https://glance.eyesoneyecare.com/stories/2024-10-17/future-of-optometry-is-increasingly-women-report-finds/). The England figure is from the College of Optometrists' magazine, [Acuity](https://www.college-optometrists.org/acuity/all-issues/acuity-digital/is-there-a-gender-gulf-in-optometry), quoting NHS Digital. The Australian figure is in the Department of Health's [2019 optometrist factsheet](https://hwd.health.gov.au/resources/publications/factsheet-alld-optometrists-2019.pdf).
+
+So Canada sits at the high end of the countries that count, and the United States is closest to an even split. The 2 sources for Canada differ by 4 points, which may come from the association's count leaving out British Columbia and from the 4 years between them.
+
+## A caution about the survey's country numbers
+
+The global survey's table gives a figure for each country, but they come from 1 informant per country, nominated by the national association, and are given in steps of 5%. For Canada and the United States the table says 70% women. A national count puts Canada at 59% to 63% and the United States at about 49%.
+
+That does not make the survey wrong. It was built to compare regions and rules, and on that it is clear: high income countries have a more female workforce, and parts of Africa and South Asia have a much less female one. Use it for the pattern, and use the national counts for any single country.
+
+## How it got here
+
+The United States has the longest record. According to Eyes on Eyecare, drawing on the Women in Optometry group and earlier counts, women were 19% of students entering optometry school in 1979, 54% in the 1999 to 2000 school year, and 68% in 2017 to 2018. When the class of 2028 started in the fall of 2024, 71% of the more than 2,000 first year students at 26 schools in North America, including Canada and Puerto Rico, were women. It was the fourth year in a row at 70% or higher.
+
+The practising workforce follows the students with a delay of decades. The American Optometric Association's database counted 45% women in 2017 and 49% by January 2020, as [Review of Optometry](https://www.reviewofoptometry.com/article/optometric-workforce-survey-projects-modest-growth-more-employed-ods) reported. Eyes on Eyecare puts it at 40% in 2012 and 48% in 2023. In England the change came early: in 2008, 51.2% of optometrists and ophthalmic medical practitioners were men, and by 2019 women were 54.9%, with 70% of trainees in 2018 to 2019 being women.
+
+## What the research says about the work
+
+A common worry when a profession becomes more female is whether it changes how much work gets done. The 2017 National Optometry Workforce Survey, reported in Review of Optometry, looked at this in the United States. Women worked 37.5 hours a week on average and men 38.9, a difference the researchers called not significant. Women saw 1.97 patients an hour and men saw 2. In both groups, about 3 in 4 said they would prefer the same or fewer patient care hours.
+
+The survey also found that women were more often employed than self employed, and that the men who answered tended to be older, more experienced and more likely to own a practice. That is a point about timing as much as gender: practice ownership comes late in a career, and the women's share of the older groups is still catching up.
+
+## And opticians and assistants?
+
+Almost no country publishes gender figures for opticians or optometric assistants the way it does for optometrists. In Canada, the census counts 70% of opticians as women, and the wider group of health assistants that includes optometric assistants is about 78% women, as set out in our [Canadian post](/blog/who-works-in-eye-care-canada). If you are weighing the career, our posts on [becoming an optometrist](/blog/how-to-become-an-optometrist-canada) and [whether optometry is a good career](/blog/is-optometry-a-good-career-canada) cover the routes in.
+
+A note on the figures: every number above is from the source linked beside it, read in November 2026, and each uses its own definition of who is counted. Compare each with itself and treat the table as a set of separate snapshots, not a league table. Gender in the Canadian census is reported as men and women, with the small number of non binary people included in each group to protect privacy.
+
+[See eye care jobs across Canada](/jobs)`,
+  },
+  {
     slug: "empty-optician-chair-cost",
     title: "What an empty optician chair costs a clinic",
     description: "A job ad is the cheap part of hiring. The empty chair is not. A worked example, and the sums to work it out for your own clinic.",
@@ -925,7 +984,7 @@ Short "stay conversations" help: what do you enjoy, what would you change, what 
     slug: "attract-right-candidates",
     title: "How to attract the right candidates to your clinic",
     description: "Good candidates choose clinics as much as clinics choose them. Here is what makes the right people apply, and what makes them look elsewhere.",
-    date: "2027-03-09",
+    date: "2027-03-11",
     topic: "clinics",
     body: `![A long wall display of eyeglass frames in an optical store.](/images/blog/attract-right-candidates.jpg)
 
