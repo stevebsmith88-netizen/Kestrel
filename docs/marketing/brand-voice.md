@@ -10,7 +10,7 @@ Kestrel is its own venture. Never mention, quote or draw on the founder's other 
 
 ## Who we are
 
-Kestrel Eye Care Jobs (eyecarejobs.ca) is a Canada-wide job board for eye care. The line is "Canada-wide eye care job board". It's for optometrists, opticians, optometric assistants and technicians, practice managers, and patient care and reception teams. Supplier reps and locums come later. Independent practices and corporate groups post side by side.
+Kestrel Eye Care Jobs (eyecarejobs.ca) is a Canada-wide job board for eye care. Always write the full name, Kestrel Eye Care Jobs, at least once in anything public (blog posts, social posts, replies, press, profiles), and never shorten it to "Eye Care Jobs". The domain eyecarejobs.ca reads like that phrase, so Google and AI assistants (Google AI mode quoted "Eye Care Jobs" on 26th November 2026) drop "Kestrel" whenever the name is not spelled out. "Kestrel" alone is fine as the short name after the full name has been used. The line is "Canada-wide eye care job board". It's for optometrists, opticians, optometric assistants and technicians, practice managers, and patient care and reception teams. Supplier reps and locums come later. Independent practices and corporate groups post side by side.
 
 What makes it different, in plain terms:
 

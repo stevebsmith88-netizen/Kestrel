@@ -39,20 +39,20 @@ Job Bank's 2026 file replaces the one released in November 2025, and the survey 
 
 Typical (median) hourly pay for opticians and optometric assistants in the 8 provinces we cover:
 
-| Province | Optician 2025 | Optician 2026 | Assistant 2025 | Assistant 2026 |
+| Province | Optician, 2026 file | Change on last year's file | Assistant, 2026 file | Change on last year's file |
 | --- | --- | --- | --- | --- |
-| Ontario | $24.04 | $29.00 | $22.00 | $24.00 |
-| British Columbia | $30.82 | $29.00 | $25.00 | $28.00 |
-| Alberta | $28.00 | $28.00 | $22.50 | $24.00 |
-| Saskatchewan | $30.10 | $30.00 | $22.83 | $24.00 |
-| Manitoba | $29.69 | $28.90 | $20.00 | $22.00 |
-| Nova Scotia | $28.07 | $30.00 | $24.00 | $24.50 |
-| New Brunswick | $28.50 | $27.63 | $23.00 | $24.24 |
-| Newfoundland and Labrador | $29.59 | $30.03 | $22.00 | $22.41 |
+| Ontario | $29.00 | up 21% | $24.00 | up 9% |
+| British Columbia | $29.00 | down 6% | $28.00 | up 12% |
+| Alberta | $28.00 | no change | $24.00 | up 7% |
+| Saskatchewan | $30.00 | down 0.3% | $24.00 | up 5% |
+| Manitoba | $28.90 | down 3% | $22.00 | up 10% |
+| Nova Scotia | $30.00 | up 7% | $24.50 | up 2% |
+| New Brunswick | $27.63 | down 3% | $24.24 | up 5% |
+| Newfoundland and Labrador | $30.03 | up 2% | $22.41 | up 2% |
 
 > Ontario's optician median rose 21% in a year, and Job Bank doesn't say why.
 
-For opticians, the typical province barely moved: across the 8 provinces we cover, 3 medians rose, 4 fell and 1 stayed put, and the typical change was nil. The headline is Ontario, up from $24.04 an hour to $29.00, a rise of 21%, while British Columbia slipped from $30.82 to $29.00. Our [optician pay guide](/blog/optician-pay-canada) has the full table. For optometric assistants, every province rose, with a typical increase of 6%: British Columbia went from $25.00 to $28.00, Manitoba from $20.00 to $22.00 and Ontario from $22.00 to $24.00. See our [guide to optometric assistant jobs](/blog/optometric-assistant-jobs-canada) for what the work involves. Reception and patient care teams rose in 6 of 8 provinces, typically by 3%. Practice managers, using Job Bank's closest group, rose in 5 of 8 provinces, with a typical rise of 9% and Ontario up 15%, from $31.00 to $35.75.
+For opticians, the typical province barely moved: across the 8 provinces we cover, 3 medians rose, 4 fell and 1 stayed put, and the typical change was nil. The headline is Ontario, where the 2026 median of $29.00 an hour is 21% above last year's file, while British Columbia slipped 6% to $29.00. Our [optician pay guide](/blog/optician-pay-canada) has the full table. For optometric assistants, every province rose, with a typical increase of 6%: British Columbia rose 12% to $28.00, Manitoba 10% to $22.00 and Ontario 9% to $24.00. See our [guide to optometric assistant jobs](/blog/optometric-assistant-jobs-canada) for what the work involves. Reception and patient care teams rose in 6 of 8 provinces, typically by 3%. Practice managers, using Job Bank's closest group, rose in 5 of 8 provinces, with a typical rise of 9% and Ontario up 15%, from $31.00 to $35.75.
 
 Optometrists did not change at all, because Job Bank's optometrist figures still come from the 2021 Census. They will stay that way until newer census data arrives. Job Bank shows a median of $78,000 for optometrists in Ontario, which is less than half of the survey's roughly $169,000. The 2 measure different things. Job Bank's figure covers every optometrist in the census, including part time and self employed practitioners, and the survey leans to full time, recent graduates. Our pay table still shows Job Bank's optometrist figure, labelled with its census year. For what associates are offered today, though, this survey is the better guide.
 

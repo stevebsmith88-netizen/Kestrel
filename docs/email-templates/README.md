@@ -21,7 +21,7 @@ This one is not for Supabase. It is a reply for the shared inbox (hello@eyecarej
 Gmail's vacation responder (Settings, See all settings, General, Vacation responder) takes formatted text, not raw HTML. What works:
 1. **Subject:** type "We have your message". Gmail puts your subject in front of the original one ("We have your message Re: Great website").
 2. **Message:** paste the text from `auto-reply.txt` (without its first "Subject" line). Then turn each of the 3 lines into a proper link: select the words (for example "Browse eye care jobs across Canada"), press the link button (or Ctrl or Cmd with K) and paste the address from the brackets, then delete the bracketed address. This avoids long web addresses wrapping on a phone.
-3. **Signature:** Gmail adds your default signature after the reply. Put the logo, "Eye Care Jobs", the web address and the mailing address (6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2) together in the signature, under the logo, so the reply itself stays short. In Gmail: Settings, See all settings, General, Signature.
+3. **Signature:** Gmail adds your default signature after the reply. Put the logo, "Kestrel Eye Care Jobs" (the full name, never just "Eye Care Jobs"), the web address and the mailing address (6013 Yonge Street, 3rd Floor, North York, Ontario M2M 3W2) together in the signature, under the logo, so the reply itself stays short. In Gmail: Settings, See all settings, General, Signature.
 4. Send yourself a test from another address to see the real result.
 
 If the formatting matters later, the app can send this reply itself through Resend, which would keep the full design (`auto-reply.html`). That is a small build.

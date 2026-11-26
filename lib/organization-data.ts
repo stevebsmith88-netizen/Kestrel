@@ -12,13 +12,14 @@ export function organizationData() {
         "@type": "Organization",
         "@id": `${SITE}/#organization`,
         name: "Kestrel Eye Care Jobs",
+        alternateName: "Kestrel",
         url: SITE,
         logo: `${SITE}/brand/kestrel-lockup-full.png`,
         description: "A Canada-wide job board for eye care: optometrists, opticians, assistants, clinic teams and suppliers. Every job shows its pay.",
         areaServed: { "@type": "Country", name: "Canada" },
         sameAs: socialPages().map((p) => p.url),
       },
-      { "@type": "WebSite", "@id": `${SITE}/#website`, name: "Kestrel Eye Care Jobs", url: SITE, inLanguage: "en-CA", publisher: { "@id": `${SITE}/#organization` } },
+      { "@type": "WebSite", "@id": `${SITE}/#website`, name: "Kestrel Eye Care Jobs", alternateName: "Kestrel", url: SITE, inLanguage: "en-CA", publisher: { "@id": `${SITE}/#organization` } },
     ],
   };
 }

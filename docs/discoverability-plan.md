@@ -55,3 +55,7 @@ Steve compared advice from ChatGPT, Perplexity, Copilot, Claude and Grok on how 
 - **A light hearted blog post** on asking the chatbots about eye care jobs (24th November 2026), from Steve's own visibility log.
 - **Extra diagnostic prompts** in `docs/marketing/ai-visibility-baseline.md`, and Grok and Perplexity added to the monthly check.
 - **Parked until after launch:** a public job feed, and a Claude connector (MCP) listed in Anthropic's directory. Both need real job volume to be worth it.
+
+## Brand name and old figures (26th November 2026)
+
+Google AI mode answered "what do opticians get paid in Canada" with "Eye Care Jobs" (no Kestrel) and with last year's Ontario ($24.04) and BC ($30.82) figures from the 2025 column of the "Working in eye care in 2026" table. Fixes: the table and text now show 2026 medians with percentage changes only; `alternateName: "Kestrel"` added to the Organization and WebSite data; the full name rule is in `docs/marketing/brand-voice.md`. To do by hand: after merging, request indexing of the home page and that post in Search Console, keep the LinkedIn, Facebook and Reddit profile names identical ("Kestrel Eye Care Jobs"), and re-ask the AI assistants in a few weeks (log in `docs/marketing/ai-visibility-log.csv`).
