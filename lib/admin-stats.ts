@@ -115,6 +115,15 @@ export function hiresSummary(jobs: HireJobRow[]) {
   };
 }
 
+// Quebec interest (docs/plans/quebec.md, phase 0): people who chose Quebec on the waitlist or as their home province. Counts only, shown with the
+// "fewer than 5" rule so it never points to 1 person. A small line under the gates, not a main number (Steve, 26th November 2026).
+export const QUEBEC_NAME = "Quebec";
+export function quebecInterest(waitlistProvinces: (string | null)[], homeProvinces: (string | null)[]) {
+  const waitlist = waitlistProvinces.filter((p) => p === QUEBEC_NAME).length;
+  const candidates = homeProvinces.filter((p) => p === QUEBEC_NAME).length;
+  return { waitlist, candidates, total: waitlist + candidates };
+}
+
 // Gate C (docs/audit/NEXT-STEPS-PHASES.md): 50 live roles across 5 or more provinces before the paid launch. Job pages indexed and free
 // to paid data cannot be counted here, so the page shows them as checks for Steve.
 export const GATE_C = { liveJobs: 50, provinces: 5 } as const;

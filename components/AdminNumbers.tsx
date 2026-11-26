@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PERIODS, type Period } from "@/lib/admin-stats";
 import { moneyText, type FinanceSummary } from "@/lib/admin-finance";
 import type { Stats } from "@/lib/admin-stats-data";
+import { showCount } from "@/lib/insights";
 
 const n = (value: number | null | undefined) => (value === null || value === undefined ? "Not enough yet" : value.toLocaleString("en-CA"));
 
@@ -79,6 +80,7 @@ export default function AdminNumbers({ s, period, finance, launched }: { s: NonN
               </ul>
               <p className="help"><strong>Job pages indexed:</strong> check in Google Search Console (Pages) and Bing Webmaster Tools. Not countable here.</p>
               <p className="help"><strong>Free to paid data recorded:</strong> starts when checkout is built. Until then Kestrel records who posted and when, but not what they paid.</p>
+              <p className="help"><strong>Quebec check (later):</strong> Quebec planning starts when yearly revenue is close to half the $150,000 target, about $75,000, which you check yourself. Quebec interest so far: {showCount(s.quebec.waitlist)} on the waitlist and {showCount(s.quebec.candidates)} candidate profiles with Quebec as home. Plan: docs/plans/quebec.md.</p>
             </section>
 
             <details className="card foldcard">

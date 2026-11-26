@@ -1,7 +1,7 @@
 // Run with: npm test
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { change, countIn, gateC, hiresSummary, investorNumbers, parsePeriod, percent, periodRange, ratio, repeatWithin, topCounts, weeklyCounts } from "./admin-stats.ts";
+import { change, countIn, gateC, hiresSummary, investorNumbers, parsePeriod, percent, periodRange, quebecInterest, ratio, repeatWithin, topCounts, weeklyCounts } from "./admin-stats.ts";
 
 const now = new Date("2026-10-30T12:00:00Z");
 
@@ -69,6 +69,11 @@ test("gate C needs 50 live jobs in 5 provinces", () => {
   assert.deepEqual(gateC(12, 3), { jobs: { have: 12, need: 50, met: false }, provinces: { have: 3, need: 5, met: false } });
   assert.equal(gateC(50, 5).jobs.met && gateC(50, 5).provinces.met, true);
   assert.equal(gateC(60, 4).provinces.met, false);
+});
+
+test("Quebec interest counts waitlist and candidate profiles that chose Quebec, and nothing else", () => {
+  assert.deepEqual(quebecInterest(["Quebec", "Ontario", null, "Quebec"], ["Quebec", "Alberta", null]), { waitlist: 2, candidates: 1, total: 3 });
+  assert.deepEqual(quebecInterest([], []), { waitlist: 0, candidates: 0, total: 0 });
 });
 
 test("hires: counts named hires, Kestrel without a name, and other sources, and how many clinics told us", () => {

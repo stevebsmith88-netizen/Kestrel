@@ -69,11 +69,19 @@ Kestrel has no lawyer yet, so these go to a Quebec language and privacy lawyer, 
 ## Decision trigger (proposed, Steve to confirm)
 
 Start phase 1 when all of these are true:
-- The English site has launched and has taken paid posts (a number Steve sets).
+- Yearly revenue is close to half the $150,000 target, about $75,000 (Steve, 26th November 2026). Steve checks this himself.
 - Phase 0 shows real Quebec interest.
 - A lawyer is in place for Kestrel generally.
 
 Until then, Quebec stays refused, and the 5 checks above stay as they are.
+
+## Phase 0 (built 26th November 2026, no SQL)
+
+Admin, Numbers shows a small "Quebec check" line under the Gate C card, not a main metric (Steve's choice). It counts waitlist sign ups that chose Quebec and candidate profiles with Quebec as home province, with counts under 5 shown as "fewer than 5" (`quebecInterest` in `lib/admin-stats.ts`).
+
+## Language switch and browser translation
+
+Decided 26th November 2026: do not build an English and French switch yet. A switch that changes only the menu and buttons would suggest a French site that does not exist, and Quebec's language rules are about the content (job ads, policies, emails), which a browser translation cannot cover or take responsibility for. Browser translation is a fine stopgap for a visitor reading a page, and costs nothing. Revisit at phase 2, when the French is real.
 
 ## Not decided
 
