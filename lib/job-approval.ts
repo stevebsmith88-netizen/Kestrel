@@ -65,6 +65,7 @@ export async function approveJobNow(id: string, actor: "admin" | "system", via?:
           await logJobActivity(db, id, `Asked the clinic for a new card (${charge.message})`);
         }
       }
+      if (charge.busy) return { key: "payment-busy" };
       return { key: charge.cardRefused ? "payment-failed" : "payment-error", why: charge.message.slice(0, 200) };
     }
   }

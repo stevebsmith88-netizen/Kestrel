@@ -57,6 +57,8 @@ The screens hide the buttons, so this needs a hand made request, but nothing on 
 
 ### P2-03 (Low): 2 approvals at almost the same moment could charge twice
 
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
+
 **Where:** `approveJobNow` in `lib/job-approval.ts` and `chargeForJob` in `lib/job-payment-flow.ts`, line 224.
 
 **What happens:** the card is charged before the job is marked live. Repeat charges are blocked by a Stripe idempotency key, but that key includes a 10 minute time window. Picture Approve pressed in Slack and in the review queue at the same time, or a double click, landing either side of a 10 minute mark (10:09:59 and 10:10:01). Both find the card "saved", and Stripe treats them as 2 different invoices. This is rare, but it is the kind of mistake that costs a clinic's trust.
@@ -64,6 +66,8 @@ The screens hide the buttons, so this needs a hand made request, but nothing on 
 **Fix:** claim the payment first, by moving the row from `card_saved` to a "charging" state in 1 update and going ahead only if that update changed a row. Or drop the time window from the key for the job charge. Add a test.
 
 ### P2-04 (Low): The data download misses some newer records
+
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
 
 **Where:** `buildDataExport`, `lib/data-export.ts`.
 

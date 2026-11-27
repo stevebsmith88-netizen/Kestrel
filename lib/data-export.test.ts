@@ -242,3 +242,56 @@ test("the download still works on a database that has not had the newer migratio
   assert.equal((out.account as Row).name_last_changed_at, null);
   assert.equal((out.applications as Row[]).length, 1);
 });
+
+// Audit P2-04 (27th November 2026): help requests and feedback, clinic teams, payments and passes are in the download, each only the person's own,
+// and no Stripe id ever appears.
+const withNewer = (): Record<string, Row[]> => ({
+  ...world(),
+  profiles: [...world().profiles, { id: "clinic-me", role: "clinic", full_name: "Clinic Owner" }],
+  support_requests: [
+    { user_id: ME, kind: "bug", message: "The button did nothing", status: "open", created_at: "2026-11-20" },
+    { user_id: "clinic-me", kind: "help", reason: "team", message: "Please help with my team", status: "done", created_at: "2026-11-21" },
+    { user_id: OTHER, kind: "idea", message: "OTHER PERSON FEEDBACK", status: "open", created_at: "2026-11-22" },
+  ],
+  job_payments: [
+    { employer_id: "e1", job_title: "My clinic job", band: "opticians", amount_cents: 7900, currency: "cad", status: "charged", created_at: "2026-11-10", charged_at: "2026-11-11", stripe_payment_method_id: "pm_secret", stripe_payment_intent_id: "pi_secret" },
+    { employer_id: "e2", job_title: "OTHER CLINIC PAYMENT", band: "support", amount_cents: 5900, currency: "cad", status: "charged" },
+  ],
+  location_passes: [
+    { employer_id: "e1", plan: "clinic_pass", billing_interval: "month", status: "active", created_at: "2026-11-12", stripe_subscription_id: "sub_secret" },
+    { employer_id: "e2", plan: "OTHER PASS", status: "active" },
+  ],
+  employer_members: [
+    { user_id: "clinic-me", employer_id: "e2", level: "view", created_at: "2026-11-15" },
+    { user_id: OTHER, employer_id: "e1", level: "edit", created_at: "2026-11-16" },
+  ],
+});
+
+test("a candidate's download holds their own help requests and feedback, and nobody else's", async () => {
+  const { db } = tableDb(withNewer());
+  const out = await buildDataExport(db, { userId: ME, email: "sam@example.com", role: "candidate" });
+  assert.deepEqual((out.helpRequestsAndFeedback as Row[]).map((r) => r.message), ["The button did nothing"]);
+  assert.equal(JSON.stringify(out).includes("OTHER PERSON FEEDBACK"), false);
+  assert.equal("payments" in out || "clinicTeamsIAmOn" in out, false, "a candidate has no clinic records");
+});
+
+test("a clinic's download holds its own payments, passes, teams and help requests, with no Stripe ids", async () => {
+  const { db } = tableDb(withNewer());
+  const out = await buildDataExport(db, { userId: "clinic-me", email: "hr@myclinic.ca", role: "clinic" });
+  const text = JSON.stringify(out);
+  assert.deepEqual((out.payments as Row[]).map((p) => p.amount_cents), [7900]);
+  assert.deepEqual((out.passes as Row[]).map((p) => p.plan), ["clinic_pass"]);
+  assert.deepEqual((out.clinicTeamsIAmOn as Row[]).map((t) => t.level), ["View only, with notes"]);
+  assert.deepEqual((out.helpRequestsAndFeedback as Row[]).map((r) => r.message), ["Please help with my team"]);
+  assert.equal(/pm_secret|pi_secret|sub_secret|\bstripe_/.test(text), false, "no Stripe id or Stripe column is exported");
+  assert.equal(/OTHER (CLINIC PAYMENT|PASS)|OTHER PERSON FEEDBACK/.test(text), false, "nothing of another clinic or person");
+});
+
+test("the newer parts of the download are empty, not an error, before their SQL is run", async () => {
+  const { db } = tableDb(withNewer(), ["support_requests", "job_payments", "location_passes", "employer_members"]);
+  const clinic = await buildDataExport(db, { userId: "clinic-me", email: "hr@myclinic.ca", role: "clinic" });
+  assert.deepEqual(clinic.helpRequestsAndFeedback, []);
+  assert.deepEqual(clinic.payments, []);
+  assert.deepEqual(clinic.passes, []);
+  assert.deepEqual(clinic.clinicTeamsIAmOn, []);
+});

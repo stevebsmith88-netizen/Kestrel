@@ -298,3 +298,18 @@ The old gap needed a hand made request, so it cannot be reproduced by clicking. 
 1. Clinic account A (the owner) invites account B as **View only** on its team. Account B also has its own clinic.
 2. Sign in as B and pick clinic A in the location picker. Open a job's applicants. There should be no buttons to move anyone, only the note box. A note should be added under A's note, with B's name.
 3. Sign in as A and move an applicant to Shortlisted. It should work as before.
+
+## Audit round 3, P2-03 and P2-04: no double charge, and a fuller data download (27th November 2026). On a branch, waiting for Steve's check on the preview
+
+Branch `claude/pensive-albattani-rgbrvp`. No SQL. No settings changed. Before the push: `tsc --noEmit`, `npm test` (876 tests) and `npm run build` all pass.
+
+| Finding | Status | How it was checked |
+| --- | --- | --- |
+| P2-03 2 approvals at almost the same moment could charge twice | fixed | `lib/charge-claim.ts`. Before any money moves, `chargeForJob` claims the payment in 1 update that works only while it is `card_saved` and nobody holds a fresh claim. The claim is a mark in `failure_message`, which is shown only on a refused payment, so no SQL is needed. A second approval finds the claim and stops with "Someone else is approving this job right now" (`payment-busy`, worded for the review queue and for Slack), and nothing is charged. A claim older than 5 minutes no longer counts, so a job can never be stuck if the server stops half way. After a problem on our side the claim is let go, so approving again tries again at once. The Stripe idempotency key now belongs to the claim instead of a 10 minute window, and moving a pass job to the card on the pass happens only once. `lib/charge-claim.test.ts` (6 tests) covers 2 approvals at once, a stale claim, each payment state, letting go, the key, and the order in `chargeForJob`. Not tried against Stripe's test mode from here (Steve's check below). |
+| P2-04 The data download missed some newer records | fixed | `buildDataExport` (`lib/data-export.ts`) now adds help requests and feedback (for everyone), and for a clinic person each location's payments and passes, and the clinic teams they are on, with their level. No Stripe id is exported. Each part is read on its own and is empty before its SQL is run. 3 new tests in `lib/data-export.test.ts` check that each person gets only their own, that no Stripe id or Stripe column appears, and that a database without the SQL gives empty lists. The help topic "How do I download my information or delete my account?" now lists everything the download covers (it had also fallen behind on follows, saved jobs and registration numbers). |
+
+### Steve's check on the demo
+
+1. With `FORCE_PAID_CHECKOUT=yes` on the demo, send a job for review as a clinic and save a test card.
+2. Open the review queue in 2 browser tabs and press Approve in both, a second apart. 1 tab should say the job is live, the other "Someone else is approving this job right now". In Stripe's test dashboard there should be exactly 1 invoice for the job.
+3. As any account, open Account settings, Download your information. The file should now include `helpRequestsAndFeedback` (and, for a clinic, `payments`, `passes` and `clinicTeamsIAmOn`).

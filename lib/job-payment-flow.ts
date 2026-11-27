@@ -1,3 +1,4 @@
+import { BUSY_MESSAGE, chargeStamp, claimCharge, releaseCharge } from "@/lib/charge-claim";
 import { jobSlackExtras } from "@/lib/slack-approve-buttons";
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -178,10 +179,11 @@ async function voidInvoice(key: string, invoiceId: string): Promise<void> {
 
 // cardRefused is true only when the cardholder's bank said no (or needs them to confirm). Any other failure is a problem on our side or in the
 // set up, so the clinic is not told and the saved card stays ready for another try.
-export type ChargeResult = { ok: true; charged: boolean; cents: number } | { ok: false; message: string; cardRefused: boolean };
+export type ChargeResult = { ok: true; charged: boolean; cents: number } | { ok: false; message: string; cardRefused: boolean; busy?: boolean };
 
 // Called when Kestrel approves a job. If a card is saved for it, charges the price of the role and returns ok. A job with no payment record
-// (posted before checkout existed, or during the free launch) needs no charge. Never charges twice: the idempotency key repeats the same answer.
+// (posted before checkout existed, or during the free launch) needs no charge. Never charges twice: the payment is claimed first, so only 1
+// approval at a time can charge it (lib/charge-claim.ts, audit P2-03), and the idempotency key repeats the same answer inside that attempt.
 export async function chargeForJob(jobId: string): Promise<ChargeResult> {
   const db = supabaseAdmin();
   if (!db) return { ok: true, charged: false, cents: 0 };
@@ -197,7 +199,8 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
     const { data: last } = await db.from("location_passes").select("stripe_payment_method_id").eq("employer_id", covered.employer_id).not("stripe_payment_method_id", "is", null).order("created_at", { ascending: false }).limit(1).maybeSingle();
     if (!last?.stripe_payment_method_id) return { ok: false, message: "The pass has ended and there is no card on file for this job.", cardRefused: false };
     const loaded = await loadJob(db, jobId);
-    await db.from("job_payments").update({ status: "card_saved", stripe_payment_method_id: last.stripe_payment_method_id, amount_cents: jobPriceCents(loaded?.job.role_category), updated_at: new Date().toISOString() }).eq("id", covered.id);
+    // Only while it is still covered_by_pass, so 2 approvals at once do not both move it (audit P2-03).
+    await db.from("job_payments").update({ status: "card_saved", stripe_payment_method_id: last.stripe_payment_method_id, amount_cents: jobPriceCents(loaded?.job.role_category), updated_at: new Date().toISOString() }).eq("id", covered.id).eq("status", "covered_by_pass");
     await logJobActivity(db, jobId, "The pass has ended since this job was sent, so it is charged at the single post price to the card that was on the pass");
     return chargeForJob(jobId);
   }
@@ -219,9 +222,12 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
   const band = bandForRole(job.role_category);
   // The charge is a Stripe invoice, paid at once with the saved card: it has its own number, a web page and a PDF the clinic can download
   // again, and it carries HST once Stripe Tax is on. If the card is refused the invoice is cancelled, so no unpaid invoice is left open.
+  // Claimed before any money moves. Another approval that is charging this card right now holds the claim, so this one stops.
+  const marker = await claimCharge(db, ready.id);
+  if (!marker) return { ok: false, message: BUSY_MESSAGE, cardRefused: false, busy: true };
   let invoiceId: string | null = null;
   try {
-    const stamp = `${ready.id}-${cents}-${Math.floor(Date.now() / 600_000)}`;
+    const stamp = chargeStamp(ready.id, cents, marker);
     const meta = { payment_id: ready.id, job_id: job.id, employer_id: job.employer_id, clinic: clinicName };
     const draft = await stripePost<StripeInvoice>("/invoices", key, {
       customer: billing.stripe_customer_id,
@@ -258,6 +264,8 @@ export async function chargeForJob(jobId: string): Promise<ChargeResult> {
     console.error("Charge failed:", e instanceof StripeError ? `${e.status} ${e.message}` : e);
     if (invoiceId) await voidInvoice(key, invoiceId);
     if (reason.cardRefused) await db.from("job_payments").update({ status: "failed", failure_message: reason.label, updated_at: new Date().toISOString() }).eq("id", ready.id);
+    // A problem on our side: the card stays saved and the claim is let go, so approving again tries again.
+    else await releaseCharge(db, ready.id, marker);
     await logJobActivity(db, jobId, `Charge failed: ${reason.label}`, { detail: describeFailure(e) });
     await notifySlack(reason.cardRefused ? "A card was refused" : "A payment could not be taken", [`${clinicName}: ${job.title}`, reason.label], { path: "/admin/jobs", text: "Open Admin, Jobs to see what happened" }, "jobs");
     return { ok: false, message: reason.label, cardRefused: reason.cardRefused };
