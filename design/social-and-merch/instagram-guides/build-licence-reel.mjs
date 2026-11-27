@@ -2,7 +2,7 @@
 // (content/posts.ts, optician-pay-canada, fees read on each regulator's website on 25th November 2026, hours at Job Bank's median of
 // 18th November 2026). Each square is 1 hour of work; the provinces build from the lowest fee to Ontario's, the highest.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-licence-reel.mjs
-// 1080 x 1920, 30 frames a second, 17 seconds, no sound. Needs ffmpeg. The cover is built at the end.
+// 1080 x 1920, 30 frames a second, 20 seconds, no sound (Steve adds Cornfield Chase in Instagram, starting at 0:38). Needs ffmpeg. The cover is built at the end.
 // If the blog's fee table changes, change ROWS to match it exactly.
 import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright"); // the copy already installed on the machine
@@ -17,7 +17,7 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", buff: "#D8B48A", slate: "#5A6672", line: "#E3D9C8", mist: "#DCE3E6" };
 const FPS = 30;
-const SECONDS = 17;
+const SECONDS = 20;
 
 // lo and hi are the hours in the blog's table ("About 24 to 30"); a single figure has lo === hi.
 const ROWS = [
@@ -80,11 +80,14 @@ const span = (t, a, b) => clamp((t - a) / (b - a));
 const out = (x) => 1 - Math.pow(1 - x, 3);
 const back = (x) => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 const el = (id) => document.getElementById(id);
-const START = [2.9, 4.1, 5.3, 6.5, 7.8]; // when each province starts filling
-const FILL = [0.7, 0.8, 0.8, 0.9, 1.3];  // how long its squares take
+// Timed to Cornfield Chase from 0:38 (measured from Steve's screen recording, 27th November 2026): the quiet pulse has beats at about
+// 2.9, 4.1, 5.4 and 6.8 seconds, and the full orchestra hits at 8.05. The first 4 provinces fill on those beats during the build;
+// Ontario starts on the hit and fills slowly while the music is at its fullest.
+const START = [2.9, 4.14, 5.4, 6.79, 8.05]; // when each province starts filling
+const FILL = [1.1, 1.1, 1.2, 1.15, 2.9];    // how long its squares take
 window.render = (t, cover = false) => {
   const h = out(span(t, 0, 0.5)) * (1 - span(t, 2.3, 2.7)); el("hook").style.opacity = cover ? 0 : h; el("hook").style.transform = "translateY(" + 30 * (1 - h) + "px)";
-  const stage = cover ? 1 : out(span(t, 2.6, 3.0)) * (1 - span(t, 11.6, 12.0));
+  const stage = cover ? 1 : out(span(t, 2.6, 3.0)) * (1 - span(t, 12.3, 12.64));
   el("top").style.opacity = stage; el("key").style.opacity = stage;
   ROWS.forEach((r, i) => {
     const a = cover ? -10 : START[i], row = el("r" + i);
@@ -96,12 +99,12 @@ window.render = (t, cover = false) => {
     // Ontario turns chestnut once it has filled.
     row.classList.toggle("on", i === ROWS.length - 1 && (cover || t > START[i] + FILL[i] + 0.2));
   });
-  const m = out(span(t, 12.0, 12.5)) * (1 - span(t, 14.2, 14.5)); el("mid").style.opacity = m; el("mid").style.transform = "translateY(" + 30 * (1 - m) + "px)";
-  el("end").style.opacity = span(t, 14.4, 14.8);
+  const m = out(span(t, 12.64, 13.1)) * (1 - span(t, 15.2, 15.52)); el("mid").style.opacity = m; el("mid").style.transform = "translateY(" + 30 * (1 - m) + "px)";
+  el("end").style.opacity = span(t, 15.4, 15.8);
   const show = (id, a) => { const v = out(span(t, a, a + 0.5)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 20 * (1 - v) + "px)"; };
-  show("e1", 15.0); show("e2", 15.5);
+  show("e1", 16.11); show("e2", 16.7);
 };
-window.cover = () => window.render(10.5, true);
+window.cover = () => window.render(11.5, true);
 </script></body></html>`;
 
 const file = join(OUT, "licence-reel.html");
@@ -113,7 +116,7 @@ await tab.evaluate(() => document.fonts.ready);
 await tab.waitForTimeout(300);
 const frame = tab.locator("#f");
 if (process.env.STILLS) {
-  for (const t of [1.5, 4.6, 8.4, 10.5, 13.0, 16.0]) {
+  for (const t of [1.5, 5.0, 8.3, 11.4, 13.5, 17.5]) {
     await tab.evaluate((x) => window.render(x), t);
     await frame.screenshot({ path: join(process.env.STILLS, `lic-${String(t).replace(".", "-")}.jpg`), type: "jpeg", quality: 80 });
   }
