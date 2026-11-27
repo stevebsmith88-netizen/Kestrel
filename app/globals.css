@@ -921,6 +921,7 @@ fieldset.tagrow .lab { padding: 0; }
 .viewbar p{margin:0 auto 0 0;color:var(--navy-2);font-weight:600}
 .fieldtick{margin-top:12px;align-items:flex-start}
 .applycheck{margin:0 0 20px}
+.setup+.applycheck{margin-top:20px}
 .applycheck h2{margin:0 0 8px}
 .applyneeds{list-style:none;margin:0;padding:0}
 .applyneeds li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-weight:600}
