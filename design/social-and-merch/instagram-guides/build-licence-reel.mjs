@@ -71,7 +71,7 @@ body{margin:0}p{margin:0}
 </div>
 <div id="cov">
 <p style="font-family:'DM Serif Display';font-size:330px;line-height:.9;color:${C.chestnut}">43 hours</p>
-<p style="font-family:'DM Serif Display';font-size:84px;line-height:1.08;color:${C.navy};margin-top:40px">of work, just to pay for an optician&apos;s licence in Ontario.</p>
+<p style="font-family:'DM Serif Display';font-size:84px;line-height:1.08;color:${C.navy};margin-top:40px">of work: the yearly cost of an optician&apos;s licence in Ontario.</p>
 <div class="csq">${"<span></span>".repeat(43)}</div>
 </div>
 <div id="end">
