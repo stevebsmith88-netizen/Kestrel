@@ -313,3 +313,15 @@ Branch `claude/pensive-albattani-rgbrvp`. No SQL. No settings changed. Before th
 1. With `FORCE_PAID_CHECKOUT=yes` on the demo, send a job for review as a clinic and save a test card.
 2. Open the review queue in 2 browser tabs and press Approve in both, a second apart. 1 tab should say the job is live, the other "Someone else is approving this job right now". In Stripe's test dashboard there should be exactly 1 invoice for the job.
 3. As any account, open Account settings, Download your information. The file should now include `helpRequestsAndFeedback` (and, for a clinic, `payments`, `passes` and `clinicTeamsIAmOn`).
+
+## Audit round 3, P2-05 to P2-07: small tidy ups (27th November 2026). On a branch, waiting for Steve's check on the preview
+
+Branch `claude/pensive-albattani-rgbrvp`. No SQL. No settings changed. Before the push: `tsc --noEmit`, `npm test` (880 tests) and `npm run build` all pass.
+
+| Finding | Status | How it was checked |
+| --- | --- | --- |
+| P2-05 An invitation could add someone to a location the inviter no longer owns | fixed | `stillSameOwner` (`lib/team-owner.ts`): when an invitation is accepted, its extra locations are joined only if they belong to whoever owns the invitation's own location today. A location handed to someone else in the meantime is left out (the new owner can invite again). Used in `acceptInvite`, `lib/team-server.ts`. Tested with a stand in database in `lib/team-owner.test.ts`. |
+| P2-06 The 25 location limit could be passed by a hand over | fixed | `atLocationLimit` (`lib/team-owner.ts`) is checked in `transferOwnership` before ownership moves, so both the owner's hand over and Admin, Clinics refuse with "That person already holds 25 locations on Kestrel, which is the most an account can have. Please email support@eyecarejobs.ca." No SQL: the database rule for new locations is unchanged. Tested in the same file. |
+| P2-07 The Slack button endpoint did not refuse on the demo by itself | fixed | `app/api/slack/actions/route.ts` answers 404 when `DEMO_MODE=yes`, before reading anything. A test checks it comes first. |
+
+Nothing to click for these on the demo: they cover rare cases (a location handed over while an invitation is open, an account with 25 locations, a Slack press reaching the demo), and the tests cover them.

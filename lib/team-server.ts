@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refreshJobPages } from "@/lib/job-cache";
 import { notify } from "@/lib/notifications";
 import { teamMemberJoined } from "@/lib/notify-text";
+import { atLocationLimit, LOCATION_MAX_TEXT, stillSameOwner } from "@/lib/team-owner";
 import { codeHash, inviteProblem, isMemberLevel, levelLabel, type MemberLevel } from "@/lib/team";
 
 // The server side of a clinic's team (migration 0045). Every change here is made with the server key, after the caller has checked who
@@ -35,8 +36,10 @@ export async function acceptInvite(admin: Admin, code: string, user: { id: strin
     if (error.code === "23505") return "You are already on this clinic's team.";
     return "We couldn't add you to the clinic just now. Please try again.";
   }
-  // The other locations the owner ticked. A location whose team is full is skipped; the owner can invite again there.
-  for (const other of invite.also_employer_ids ?? []) {
+  // The other locations the owner ticked. A location whose team is full is skipped; the owner can invite again there. Only locations that still
+  // belong to whoever owns the invitation's own location now are joined, so a location handed to someone else since the invitation was sent is
+  // never joined on the old owner's say so (audit P2-05).
+  for (const other of await stillSameOwner(admin, invite.employer_id, invite.also_employer_ids ?? [])) {
     const { error: more } = await admin.from("employer_members").insert({ employer_id: other, user_id: user.id, level });
     if (more) console.error("Joining another location failed:", other, more.message);
   }
@@ -87,6 +90,8 @@ export async function transferOwnership(admin: Admin, employerId: string, newOwn
   const { data: employer } = await admin.from("employers").select("owner_id").eq("id", employerId).maybeSingle();
   const { data: member } = await admin.from("employer_members").select("level").eq("employer_id", employerId).eq("user_id", newOwnerId).maybeSingle();
   if (!employer?.owner_id || !member) return "That person is not on this clinic's team.";
+  // The database's 25 location limit only sees a new location, not a hand over (audit P2-06).
+  if (await atLocationLimit(admin, newOwnerId)) return LOCATION_MAX_TEXT;
   const oldOwner = employer.owner_id as string;
   const { error: leave } = await admin.from("employer_members").delete().eq("employer_id", employerId).eq("user_id", newOwnerId);
   if (leave) return "We couldn't hand over the clinic just now. Please try again.";

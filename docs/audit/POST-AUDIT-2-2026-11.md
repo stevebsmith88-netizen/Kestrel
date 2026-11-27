@@ -84,6 +84,8 @@ The screens hide the buttons, so this needs a hand made request, but nothing on 
 
 ### P2-05 (Low): An invitation can add someone to a location the inviter no longer owns
 
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
+
 **Where:** `acceptInvite`, `lib/team-server.ts`, line 39.
 
 **What happens:** the extra locations on an invitation (`also_employer_ids`) are checked when it is sent, not when it is accepted. If the owner hands 1 of those locations to someone else in the 14 days before the invitation is accepted, the invitee still joins that location's team, at the level the old owner chose.
@@ -92,6 +94,8 @@ The screens hide the buttons, so this needs a hand made request, but nothing on 
 
 ### P2-06 (Low): The 25 location limit can be passed by a hand over
 
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
+
 **Where:** migration 0047, `limit_locations`. It runs only when a clinic is created, not when ownership moves (`transferOwnership`).
 
 **What happens:** someone who already holds 25 locations can be handed a 26th.
@@ -99,6 +103,8 @@ The screens hide the buttons, so this needs a hand made request, but nothing on 
 **Fix:** a 1 line check in `transferOwnership`, so no SQL is needed. Or make the trigger also run on `update of owner_id`, which would need SQL on both databases.
 
 ### P2-07 (Low): The Slack button endpoint does not refuse on the demo by itself
+
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
 
 **Where:** `app/api/slack/actions/route.ts`.
 
