@@ -8,6 +8,7 @@ export const REVIEW_NOTICES: Record<string, string> = {
   "need-note": "Please tell the clinic what to change before sending a job back.",
   "payment-failed": "Not published. The clinic's saved card was refused, so nothing was charged. We have asked the clinic to save a new card, and you can approve the job again once they have.",
   "payment-error": "Not published, and nothing was charged. The card could not be charged because of a problem on our side or in the Stripe set up, so the clinic has not been emailed. Fix the cause, then approve the job again.",
+  "payment-busy": "Someone else is approving this job right now, so nothing more was done and the card was not charged again. Refresh in a moment to see the result.",
   error: "That didn't work. The job may already have been handled. Please refresh and try again.",
 };
 

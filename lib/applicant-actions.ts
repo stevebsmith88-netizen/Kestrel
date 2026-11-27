@@ -21,13 +21,15 @@ import { BULK_PROBLEMS, declinedText, historyNote, movedText } from "@/lib/bulk-
 import { notifyAdmin } from "@/lib/notify-admin";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { refreshJobPages } from "@/lib/job-cache";
-import { getMyEmployer } from "@/lib/clinic";
+import { jobEmployerId, levelAt, levelForJob } from "@/lib/clinic";
 import { appendNote, canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 
 // Every change to an application is made with the server key, so the database cannot check the person's level here. Only the owner and
-// "view and edit" team members may move applicants; a "view only" member may read them and add notes (migration 0045).
-async function mayMoveApplicants(userId: string) {
-  return canEdit((await getMyEmployer(userId))?.level);
+// "view and edit" team members may move applicants; a "view only" member may read them and add notes (migration 0045). The level is the one at
+// the clinic the job belongs to, never the location the person has picked: someone can be on 2 clinics' teams at different levels, and the
+// database lets them read both clinics' applicants (audit P2-01).
+async function mayMoveOnJob(userId: string, jobId: string | null | undefined) {
+  return canEdit(await levelForJob(userId, jobId));
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -111,10 +113,10 @@ const pickedIds = (form: FormData) => form.getAll("ids").map(String).filter((x) 
 // Tick some applicants and send each a kind no, using the same wording as sending one at a time.
 export async function declineSelected(form: FormData) {
   const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) redirect("/clinic");
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
+  if (!(await mayMoveOnJob(session.userId, jobId))) redirect("/clinic");
   if (!ids.length) redirect(`/clinic/jobs/${jobId}/applicants?bulkerror=none`);
   const { moved: done } = await closeWaiting(jobId, ids, "not_selected");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
@@ -128,10 +130,10 @@ const bulkAnswer = (text: string, tone: "ok" | "warn" = "ok"): QuickState => ({ 
 
 export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
   const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
+  if (!(await mayMoveOnJob(session.userId, jobId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
   const { moved, skipped, historyFailed } = await moveWaiting(jobId, ids, "shortlisted", { message: "", tell: false });
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
@@ -140,10 +142,10 @@ export async function shortlistSelectedQuiet(_prev: QuickState, form: FormData):
 
 export async function declineSelectedQuiet(_prev: QuickState, form: FormData): Promise<QuickState> {
   const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   const jobId = String(form.get("jobId") ?? "");
   const ids = pickedIds(form);
   if (!UUID.test(jobId)) redirect("/clinic");
+  if (!(await mayMoveOnJob(session.userId, jobId))) return { notice: "view-only", text: VIEW_ONLY_TEXT, tone: "warn" };
   if (!ids.length) return bulkAnswer(BULK_PROBLEMS.none, "warn");
   const { moved: done, historyFailed } = await closeWaiting(jobId, ids, "not_selected");
   revalidatePath(`/clinic/jobs/${jobId}/applicants`);
@@ -205,10 +207,10 @@ async function closeInTalks(jobId: string, form: FormData, hiredId: string | nul
 // if they told us (from the job's ending page). An expired job is not reopened; only the answer is saved.
 export async function fillRole(form: FormData) {
   const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) redirect("/clinic");
   const jobId = String(form.get("jobId") ?? "");
   const fromEnding = String(form.get("from") ?? "") === "ending";
   if (!UUID.test(jobId)) redirect("/clinic");
+  if (!(await mayMoveOnJob(session.userId, jobId))) redirect("/clinic");
   const db = await supabaseServer();
   if (!db) redirect("/clinic");
   const { data: mine } = await db.from("jobs").select("id").eq("id", jobId).maybeSingle();
@@ -242,7 +244,6 @@ export async function fillRole(form: FormData) {
 // checked by the database itself (row level security); the change is then made on the server.
 export async function setApplicationStatus(_prev: JobFormState, form: FormData): Promise<JobFormState> {
   const session = await requireRole("clinic");
-  if (!(await mayMoveApplicants(session.userId))) return { error: VIEW_ONLY_TEXT };
   const id = String(form.get("id") ?? "");
   const to = String(form.get("status") ?? "");
   // Shortlisting is the clinic's own working list: no message goes with it and the candidate is not emailed.
@@ -256,6 +257,7 @@ export async function setApplicationStatus(_prev: JobFormState, form: FormData):
 
   const { data: app } = await db.from("applications").select("id, status, keep_details, job_title, clinic_name, applicant, candidate_id, job_id").eq("id", id).maybeSingle();
   if (!app) return { error: "We couldn't find that application." };
+  if (!(await mayMoveOnJob(session.userId, app.job_id))) return { error: VIEW_ONLY_TEXT };
 
   const problem = clinicMoveError(app.status, to, app.keep_details, message);
   if (problem) return { errors: { message: problem }, error: problem };
@@ -295,12 +297,15 @@ export async function saveApplicantNote(_prev: JobFormState, form: FormData): Pr
   if (!UUID.test(id)) return { error: "That didn't work. Please refresh and try again." };
   const db = await supabaseServer();
   if (!db) return { error: NOT_CONNECTED };
-  const employer = await getMyEmployer(session.userId);
+  // The level at the clinic this application's job belongs to, not the picked location (audit P2-01).
+  const { data: app } = await db.from("applications").select("id, job_title, job_id").eq("id", id).maybeSingle();
+  if (!app) return { error: "We couldn't find that application." };
+  const employerId = await jobEmployerId(app.job_id);
+  const level = await levelAt(session.userId, employerId);
+  if (!level) return { error: "We couldn't find that application." };
   // A "view only" member's note is added under the clinic's note with their name and the date, never replacing it, and the owner is told.
-  if (employer && !canEdit(employer.level)) {
+  if (!canEdit(level)) {
     if (!note) return { error: "Write your note first." };
-    const { data: app } = await db.from("applications").select("id, job_title").eq("id", id).maybeSingle();
-    if (!app) return { error: "We couldn't find that application." };
     const { data: existing } = await db.from("application_notes").select("note").eq("application_id", id).maybeSingle();
     const joined = appendNote(existing?.note ?? "", session.fullName || session.firstName || "A team member", note, new Date());
     const { error } = await db.from("application_notes").upsert({ application_id: id, note: joined, updated_at: new Date().toISOString() }, { onConflict: "application_id" });
@@ -310,7 +315,7 @@ export async function saveApplicantNote(_prev: JobFormState, form: FormData): Pr
     }
     const admin = supabaseAdmin();
     if (admin) {
-      const { data: owner } = await admin.from("employers").select("owner_id").eq("id", employer.id).maybeSingle();
+      const { data: owner } = await admin.from("employers").select("owner_id").eq("id", employerId).maybeSingle();
       await notify(admin, owner?.owner_id, teamNoteAdded({ author: session.firstName || "A team member", jobTitle: app.job_title, applicationId: id }));
     }
     revalidatePath(`/clinic/applications/${id}`);

@@ -32,6 +32,7 @@ export async function runSlackAction(action: SlackAction, deps: SlackDeps, now: 
       case "approved": return { ok: true, result: `Approved by ${who} from Slack at ${time}.` };
       case "payment-failed": return { ok: false, result: "The clinic's card was refused, so the job stays in the review queue and the clinic has been asked for a new card." };
       case "payment-error": return { ok: false, result: "The payment could not be taken just now, so the job stays in the review queue. Try again from the review queue." };
+      case "payment-busy": return { ok: false, result: "Someone else is approving this job right now, so nothing more was done and the card was not charged again." };
       case "quebec": return { ok: false, result: "This job is in Quebec, which Kestrel does not post yet, so it was not approved." };
       default: return { ok: false, result: "Something went wrong, and nothing was approved. Open the review queue." };
     }

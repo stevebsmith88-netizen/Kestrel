@@ -55,6 +55,7 @@ export function exportApplications(apps: readonly ApplicationRow[], events: read
 }
 
 const list = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
+type Row = Record<string, unknown>;
 
 // Everything the download holds about 1 account, looked up by that account's own id. The route checks who is asking (and the password) first.
 // A clinic's download covers its own profile and jobs, never other people's applications (audit P1-19, tested in lib/data-export.test.ts).
@@ -72,6 +73,9 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     jobAlerts: alerts.data ?? [],
     inbox: (await db.from("notifications").select("kind, title, body, href, read_at, created_at").eq("user_id", id).order("created_at", { ascending: false })).data ?? [],
   };
+  // Help requests and feedback the person sent, in their own words (migration 0046, audit P2-04). Empty before the SQL is run.
+  const support = await db.from("support_requests").select("kind, reason, message, page, status, access_until, created_at, closed_at").eq("user_id", id).order("created_at", { ascending: false });
+  data.helpRequestsAndFeedback = support.error ? [] : list<Row>(support.data);
 
   if (who.role === "candidate") {
     const [cp, apps] = await Promise.all([
@@ -116,13 +120,27 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
       const contactRow = contact.data as { notify_email?: string | null; employee_band?: string | null } | null;
       const jobs = await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
       const templates = await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.id);
-      return { clinic: { ...employer, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null }, jobs: (jobs.data ?? []) as unknown[], jobTemplates: (templates.data ?? []) as unknown[] };
+      // The location's payments and passes (migrations 0048 and 0051, audit P2-04): what was paid and when, never a Stripe id. Empty before the SQL is run.
+      const payments = await db.from("job_payments").select("job_title, band, amount_cents, currency, status, created_at, charged_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
+      const passes = await db.from("location_passes").select("plan, billing_interval, status, current_period_end, cancel_at_period_end, created_at, canceled_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
+      return {
+        clinic: { ...employer, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null },
+        jobs: (jobs.data ?? []) as unknown[],
+        jobTemplates: (templates.data ?? []) as unknown[],
+        payments: payments.error ? [] : list<Row>(payments.data),
+        passes: passes.error ? [] : list<Row>(passes.data),
+      };
     };
     const all = await Promise.all(locations.map(one));
     data.clinic = all[0]?.clinic ?? null;
     data.jobs = all[0]?.jobs ?? [];
     data.jobTemplates = all[0]?.jobTemplates ?? [];
+    data.payments = all[0]?.payments ?? [];
+    data.passes = all[0]?.passes ?? [];
     if (all.length > 1) data.otherLocations = all.slice(1);
+    // The clinic teams this person is on, and at what level (migrations 0045 and 0047, audit P2-04). Empty before the SQL is run.
+    const teams = await db.from("employer_members").select("level, created_at, employers(clinic_name, city, province)").eq("user_id", id).order("created_at");
+    data.clinicTeamsIAmOn = teams.error ? [] : list<{ level: string; created_at: string; employers: object | null }>(teams.data).map((t) => ({ level: t.level === "edit" ? "Can view and edit" : "View only, with notes", joinedOn: t.created_at, ...(t.employers ?? {}) }));
   }
   return data;
 }

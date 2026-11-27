@@ -8,7 +8,7 @@ import FilledViaFields from "@/components/FilledViaFields";
 import ToastHost from "@/components/ToastHost";
 import { AppStatusBadge } from "@/components/AppStatus";
 import { requireRole } from "@/lib/auth";
-import { getMyEmployer } from "@/lib/clinic";
+import { levelForJob } from "@/lib/clinic";
 import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { GROUP_LABELS } from "@/lib/applications";
 import { FILTERS, WAITING, loadApplicants } from "@/lib/applicant-list";
@@ -36,7 +36,7 @@ export default async function Applicants({ params, searchParams }: { params: Pro
   if (!job) notFound();
   const { rows, active, shown, count, waiting, hireCandidates, talking, clinicName, anyTick } = await loadApplicants(await supabaseServer(), id, filter);
   const sentCount = Number.parseInt(sent ?? "", 10);
-  const editor = canEdit((await getMyEmployer(session.userId))?.level);
+  const editor = canEdit(await levelForJob(session.userId, id)); // the level at this job's own clinic (audit P2-01)
 
   return (
     <>

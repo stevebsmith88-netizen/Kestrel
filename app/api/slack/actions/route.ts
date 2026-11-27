@@ -6,6 +6,7 @@ import { REVIEW_COLUMNS, loadQueueJob } from "@/lib/review-queue";
 import { parseModalSubmit, parseSlackAction, noteProblem, SEND_BACK_JOB, DECLINE_CLAIM } from "@/lib/slack-approvals";
 import { NOT_APPROVER_MESSAGE, isApprover, runSlackAction, runSlackDecision } from "@/lib/slack-actions-core";
 import { ephemeral, noteModal, resultMessage } from "@/lib/slack-blocks";
+import { demoMode } from "@/lib/demo";
 import { verifySlackSignature } from "@/lib/slack-signature";
 import { supabaseAdmin } from "@/lib/supabase-server";
 
@@ -46,6 +47,8 @@ async function openForm(triggerId: string, view: unknown): Promise<string | null
 }
 
 export async function POST(request: Request) {
+  // Approving from Slack is for the live site only. The demo never answers, whatever its settings say (audit P2-07).
+  if (demoMode()) return new Response("Not found", { status: 404 });
   const raw = await request.text();
   const valid = verifySlackSignature({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
