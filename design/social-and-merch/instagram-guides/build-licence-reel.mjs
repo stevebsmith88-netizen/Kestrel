@@ -51,6 +51,8 @@ body{margin:0}p{margin:0}
 .on .pn,.on .hr{color:${C.chestnut}}.on .s{background:${C.chestnut}}
 #key{left:80px;right:80px;top:1690px;font-family:Poppins;font-size:24px;line-height:1.45;color:${C.slate};opacity:0}
 #mid{left:80px;right:80px;top:600px;opacity:0}
+#cov{position:absolute;inset:0;background:${C.cream};display:none;flex-direction:column;justify-content:center;padding:0 90px}
+.csq{display:grid;grid-template-columns:repeat(22,28px);gap:6px;margin-top:70px}.csq span{width:28px;height:28px;border-radius:4px;background:${C.chestnut}}
 #end{position:absolute;inset:0;background:${C.cream};opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 80px}
 </style></head><body><div id="f">
 <div class="abs" id="hook">
@@ -66,6 +68,11 @@ body{margin:0}p{margin:0}
 <div class="abs" id="mid">
 <p style="font-family:'DM Serif Display';font-size:100px;line-height:1.05;color:${C.navy}">Ontario&apos;s fee is more than twice Nova Scotia&apos;s.</p>
 <p style="font-family:'DM Serif Display';font-size:100px;line-height:1.05;color:${C.chestnut};margin-top:50px">Pay is only half the picture.</p>
+</div>
+<div id="cov">
+<p style="font-family:'DM Serif Display';font-size:330px;line-height:.9;color:${C.chestnut}">43 hours</p>
+<p style="font-family:'DM Serif Display';font-size:84px;line-height:1.08;color:${C.navy};margin-top:40px">of work, just to pay for an optician&apos;s licence in Ontario.</p>
+<div class="csq">${"<span></span>".repeat(43)}</div>
 </div>
 <div id="end">
 <img src="${brand("kestrel-lockup-full.svg")}" alt="" style="width:860px;display:block">
@@ -107,7 +114,8 @@ window.render = (t, cover = false) => {
   const show = (id, a) => { const v = out(span(t, a, a + 0.5)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 20 * (1 - v) + "px)"; };
   show("e1", B(13)); show("e2", B(14));
 };
-window.cover = () => window.render(11.5, true);
+// The cover is its own simple design (Steve, 27th November 2026: the chart frame was too busy), kept inside the 4:5 grid crop.
+window.cover = () => { el("cov").style.display = "flex"; };
 </script></body></html>`;
 
 const file = join(OUT, "licence-reel.html");
