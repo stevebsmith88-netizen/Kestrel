@@ -30,6 +30,8 @@ Severity: **High** means fix before the feature is used by real clinics. **Mediu
 
 ### P2-01 (High): "View only" can be bypassed by someone on more than 1 clinic's team
 
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
+
 **Where:** `lib/applicant-actions.ts`, in `mayMoveApplicants` (line 29) and `saveApplicantNote` (line 298).
 
 **What happens:** every change to an applicant is made with the server key, so the website checks the person's level first. It asks for their level **at the location they currently have picked** (`getMyEmployer`, from the location cookie). The application itself is then read through the person's own sign in, and the database allows that for **any** location they can view (`owns_application_job` uses `can_view_employer`). The 2 checks look at different clinics.
@@ -44,6 +46,8 @@ The screens hide the buttons, so this needs a hand made request, but nothing on 
 **Fix (no SQL):** work out the level from the application's own clinic, not the picked one. Either call the database's `employer_level(<the job's employer_id>)` through the person's own sign in, or refuse unless the application's job belongs to the picked location. Use 1 helper for all 6 actions, and add tests for "owner of A, view only on B".
 
 ### P2-02 (Medium): Job actions can act on a different location from the one picked
+
+**Status: fixed 27th November 2026** (see `docs/audit/AUDIT-FIXES-LOG.md`).
 
 **Where:** `saveJob` in `lib/clinic-actions.ts`, line 140 onward.
 

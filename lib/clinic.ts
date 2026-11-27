@@ -107,6 +107,31 @@ export async function getMyEmployer(userId: string): Promise<Employer | null> {
   return { ...data, notify_email: "", employee_band: null, level: current.level } as Employer;
 }
 
+// Shown when a form is sent for a job that belongs to a different location from the one picked (audit P2-02).
+export const OTHER_LOCATION_TEXT = "This job belongs to another of your locations. Switch to that location at the top of the page, then try again.";
+
+// The signed in person's level at 1 particular clinic, whichever location they have picked: owner, edit, view, or null when they have nothing to
+// do with it. Someone can be on several clinics' teams at different levels (migration 0047), so a change to a job or an applicant must be checked
+// against the clinic that job belongs to, never the picked one (audit P2-01).
+export async function levelAt(userId: string, employerId: string | null | undefined): Promise<ClinicLevel | null> {
+  if (!employerId) return null;
+  return (await getMyClinics(userId)).find((c) => c.id === employerId)?.level ?? null;
+}
+
+// The clinic a job belongs to, read with the person's own sign in, so a job they cannot see comes back as null.
+export async function jobEmployerId(jobId: string | null | undefined): Promise<string | null> {
+  if (!jobId) return null;
+  const db = await supabaseServer();
+  if (!db) return null;
+  const { data } = await db.from("jobs").select("employer_id").eq("id", jobId).maybeSingle();
+  return (data?.employer_id as string | undefined) ?? null;
+}
+
+// The signed in person's level at the clinic that owns this job (audit P2-01). null when the job is not one of theirs.
+export async function levelForJob(userId: string, jobId: string | null | undefined): Promise<ClinicLevel | null> {
+  return levelAt(userId, await jobEmployerId(jobId));
+}
+
 // For server actions that change jobs or applicants: the signed in person's clinic, only if they may make changes.
 export async function getMyEditableEmployer(userId: string): Promise<Employer | null> {
   const employer = await getMyEmployer(userId);

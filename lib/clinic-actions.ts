@@ -10,7 +10,7 @@ import { applyPassForSubmit, moveToReview } from "@/lib/pass-flow";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
 import { addDismissed, DISMISS_COOKIE, DISMISS_DAYS } from "@/lib/notice-dismiss";
-import { getMyEditableEmployer, getMyEmployer, LOCATION_COOKIE } from "@/lib/clinic";
+import { getMyEditableEmployer, getMyEmployer, LOCATION_COOKIE, OTHER_LOCATION_TEXT } from "@/lib/clinic";
 import { canEdit, OWNER_ONLY_TEXT, VIEW_ONLY_TEXT } from "@/lib/team";
 import { clinicChangeParagraphs, clinicChanges } from "@/lib/clinic-changes";
 import { jobFromForm } from "@/lib/job-form";
@@ -160,7 +160,10 @@ export async function saveJob(_prev: JobFormState, form: FormData): Promise<JobF
   // A live job can be edited, but only by sending the changes to be read again. It is offline until they are approved.
   let wasLive = false;
   if (id) {
-    const { data: current } = await db.from("jobs").select("status").eq("id", id).maybeSingle();
+    const { data: current } = await db.from("jobs").select("status, employer_id").eq("id", id).maybeSingle();
+    // A job of another location (an older tab, after switching location) is refused, so its pass and payment are never counted against the
+    // location picked now (audit P2-02).
+    if (current && current.employer_id !== employer.id) return { error: OTHER_LOCATION_TEXT };
     wasLive = current?.status === "live";
     if (wasLive && !submit) return { error: "A live job can't be saved as a draft. Send your changes for review, or close the job." };
   }

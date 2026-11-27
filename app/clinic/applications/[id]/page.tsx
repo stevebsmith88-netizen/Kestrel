@@ -9,7 +9,7 @@ import RegisterCheck from "@/components/RegisterCheck";
 import { DOES, type Does } from "@/lib/licence";
 import StatusForm from "@/components/StatusForm";
 import { requireRole } from "@/lib/auth";
-import { getMyEmployer } from "@/lib/clinic";
+import { levelForJob } from "@/lib/clinic";
 import { canEdit, VIEW_ONLY_TEXT } from "@/lib/team";
 import { APP_LABELS, type AppStatus } from "@/lib/applications";
 import { getApplicationForClinic } from "@/lib/candidate";
@@ -45,7 +45,7 @@ export default async function ClinicApplication({ params }: { params: Promise<{ 
     }
   }
 
-  const editor = canEdit((await getMyEmployer(session.userId))?.level);
+  const editor = canEdit(await levelForJob(session.userId, a.job_id)); // the level at this job's own clinic (audit P2-01)
   const db = await supabaseServer();
   const { data: noteRow } = db ? await db.from("application_notes").select("note").eq("application_id", id).maybeSingle() : { data: null };
   const who = a.applicant;
