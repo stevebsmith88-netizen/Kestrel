@@ -83,11 +83,14 @@ const el = (id) => document.getElementById(id);
 // Timed to Cornfield Chase from 0:38 (measured from Steve's screen recording, 27th November 2026): the quiet pulse has beats at about
 // 2.9, 4.1, 5.4 and 6.8 seconds, and the full orchestra hits at 8.05. The first 4 provinces fill on those beats during the build;
 // Ontario starts on the hit and fills slowly while the music is at its fullest.
-const START = [2.9, 4.14, 5.4, 6.79, 8.05]; // when each province starts filling
-const FILL = [1.1, 1.1, 1.2, 1.15, 2.9];    // how long its squares take
+// The track is 94 beats a minute (Steve), so 1 beat is 60 / 94 seconds; every change sits on a beat counted from the hit at 8.05.
+// Each province starts 2 beats after the last, and Ontario fills over 4 beats from the hit.
+const HIT = 8.05, BEAT = 60 / 94, B = (n) => HIT + n * BEAT;
+const START = [B(-8), B(-6), B(-4), B(-2), B(0)]; // when each province starts filling
+const FILL = [1.7 * BEAT, 1.7 * BEAT, 1.7 * BEAT, 1.7 * BEAT, 4 * BEAT]; // how long its squares take
 window.render = (t, cover = false) => {
-  const h = out(span(t, 0, 0.5)) * (1 - span(t, 2.3, 2.7)); el("hook").style.opacity = cover ? 0 : h; el("hook").style.transform = "translateY(" + 30 * (1 - h) + "px)";
-  const stage = cover ? 1 : out(span(t, 2.6, 3.0)) * (1 - span(t, 12.3, 12.64));
+  const h = out(span(t, 0, 0.5)) * (1 - span(t, B(-9.5), B(-9))); el("hook").style.opacity = cover ? 0 : h; el("hook").style.transform = "translateY(" + 30 * (1 - h) + "px)";
+  const stage = cover ? 1 : out(span(t, B(-9), B(-8.4))) * (1 - span(t, B(6.5), B(7)));
   el("top").style.opacity = stage; el("key").style.opacity = stage;
   ROWS.forEach((r, i) => {
     const a = cover ? -10 : START[i], row = el("r" + i);
@@ -97,12 +100,12 @@ window.render = (t, cover = false) => {
     const n = Math.round(f * r.hi), lo = Math.min(n, r.lo);
     el("h" + i).textContent = (f >= 1 ? (r.lo === r.hi ? "About " + r.hi : "About " + r.lo + " to " + r.hi) : n) + " hours";
     // Ontario turns chestnut once it has filled.
-    row.classList.toggle("on", i === ROWS.length - 1 && (cover || t > START[i] + FILL[i] + 0.2));
+    row.classList.toggle("on", i === ROWS.length - 1 && (cover || t > B(4.5)));
   });
-  const m = out(span(t, 12.64, 13.1)) * (1 - span(t, 15.2, 15.52)); el("mid").style.opacity = m; el("mid").style.transform = "translateY(" + 30 * (1 - m) + "px)";
-  el("end").style.opacity = span(t, 15.4, 15.8);
+  const m = out(span(t, B(7), B(7.7))) * (1 - span(t, B(11.5), B(12))); el("mid").style.opacity = m; el("mid").style.transform = "translateY(" + 30 * (1 - m) + "px)";
+  el("end").style.opacity = span(t, B(11.8), B(12.4));
   const show = (id, a) => { const v = out(span(t, a, a + 0.5)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 20 * (1 - v) + "px)"; };
-  show("e1", 16.11); show("e2", 16.7);
+  show("e1", B(13)); show("e2", B(14));
 };
 window.cover = () => window.render(11.5, true);
 </script></body></html>`;
