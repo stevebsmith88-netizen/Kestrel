@@ -48,7 +48,7 @@ More than 97 percent of each branch's added lines are already in `main`, and no 
 
 ## 3. Already in main (123)
 
-Either merged through a pull request, or (the 33 old branches from 29th to 31st October and the 2 early November ones) carried in by another route, with every added line found in `main`. `feature/outreach-dry-run` had its pull request closed unmerged, but all of its lines are in `main` too.
+Either merged through a pull request, or (the 33 old branches from 29th to 31st October and the 2 early November ones) carried in by another route, with every added line found in `main`. **Correction (28th November 2026):** `feature/outreach-dry-run` is NOT in `main`. Its pull request was closed unmerged and it holds an admin tool that checks saved leads against the CASL conditions. It is kept. The earlier line by line check was unreliable for the early branches, which share no history with `main`, so it was redone by comparing each branch's file tree; see `BRANCHES-DELETED-2026-11-28.md`.
 
 | Branch | Last commit | How we know |
 | --- | --- | --- |
