@@ -29,6 +29,10 @@ const HAT = (x, y) => `<g>
   <path d="M${x - 30} ${y - 26} C ${x - 24} ${y - 60}, ${x - 34} ${y - 80}, ${x - 56} ${y - 92}" fill="none" stroke="${C.deep}" stroke-width="5" opacity=".6"/>
   <rect x="${x - 38}" y="${y - 38}" width="74" height="18" rx="9" fill="${C.cream}" transform="rotate(-6 ${x} ${y - 30})"/>
   <circle cx="${x - 74}" cy="${y - 98}" r="12" fill="${C.cream}"/></g>`;
+// The illustration's beak is navy, which vanishes against this navy sky, so here it is redrawn on top in a real kestrel's colours:
+// a blue grey hooked beak with a buff base (the cere). Same shape as HEAD() in kestrel-bird-side.mjs.
+const BEAK = (x, y) => `<path d="M${x + 30} ${y - 8} C ${x + 52} ${y - 8}, ${x + 56} ${y + 8}, ${x + 48} ${y + 18} C ${x + 44} ${y + 10}, ${x + 38} ${y + 8}, ${x + 32} ${y + 8} Z" fill="#9FB0C6" stroke="${C.cream}" stroke-width="2"/>
+  <ellipse cx="${x + 33}" cy="${y - 1}" rx="7" ry="8" fill="${C.buff}"/>`;
 const SNOW = Array.from({ length: 30 }, (_, i) => ({ x: (i * 397) % 1080, y: (i * 613) % 1920, r: 4 + (i % 4) * 2, v: 50 + (i % 5) * 20, w: (i * 1.7) % 6.28 }));
 const LINES = [{ t: "A job I actually love", a: T.you }, { t: "A team that has my back", a: 4.9 }, { t: "The pay, shown up front", a: 7.0, tick: true }];
 
@@ -52,12 +56,12 @@ body{margin:0}p{margin:0}
 <p style="font-family:'DM Serif Display';font-size:78px;color:${C.chestnut}">Dear Santa,</p>
 ${LINES.map((l, i) => `<div class="ln" id="l${i}"><span class="dot"></span><p class="lt">${l.t}</p>${l.tick ? `<svg id="tick" viewBox="0 0 24 24" width="70" height="70" fill="none" stroke="${C.chestnut}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path id="tp" d="M5 12.5l4.5 4.5L19 7.5" stroke-dasharray="24" stroke-dashoffset="24"/></svg>` : ""}</div>`).join("")}
 </div>
-<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="perchbird">${PERCH.replace('id="perch"', 'id="pb"')}${HAT(16, -186)}</g></svg>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="perchbird">${PERCH.replace('id="perch"', 'id="pb"')}${BEAK(16, -186)}${HAT(16, -186)}</g></svg>
 <div class="abs" id="head">
 <p style="font-family:'DM Serif Display';font-size:110px;line-height:1.04;color:${C.cream}">All I want for Christmas is</p>
 <p style="font-family:'DM Serif Display';font-size:110px;line-height:1.04;color:${C.buff};margin-top:10px">a job in eye care.</p>
 </div>
-<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="bird">${FLY}${HAT(96, -14)}</g></svg>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="bird">${FLY}${BEAK(96, -14)}${HAT(96, -14)}</g></svg>
 <div id="end">
 <img src="${brand("kestrel-lockup-full.svg")}" alt="" style="width:860px;display:block">
 <p id="e1" style="font-family:'DM Serif Display';font-size:72px;color:${C.navy};margin-top:80px">Happy holidays</p>
@@ -66,7 +70,7 @@ ${LINES.map((l, i) => `<div class="ln" id="l${i}"><span class="dot"></span><p cl
 </div>
 <div id="cov">
 <svg class="abs" style="left:0;top:0" width="1080" height="1920">${SNOW.map((s) => `<circle cx="${s.x}" cy="${s.y}" r="${s.r}" fill="${C.cream}" opacity=".45"/>`).join("")}</svg>
-<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g transform="translate(760 1000) scale(1.6)"><path d="M-170 6 Q-20 -8 150 14" fill="none" stroke="${C.deep}" stroke-width="14" stroke-linecap="round"/><path d="M-150 -2 Q-40 -20 60 -8 Q-40 -2 -150 -2 Z" fill="${C.cream}"/>${PERCH.replace('id="perch"', 'id="cpb"')}${HAT(16, -186)}</g></svg>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g transform="translate(760 1000) scale(1.6)"><path d="M-170 6 Q-20 -8 150 14" fill="none" stroke="${C.deep}" stroke-width="14" stroke-linecap="round"/><path d="M-150 -2 Q-40 -20 60 -8 Q-40 -2 -150 -2 Z" fill="${C.cream}"/>${PERCH.replace('id="perch"', 'id="cpb"')}${BEAK(16, -186)}${HAT(16, -186)}</g></svg>
 <div class="abs" style="left:90px;right:90px;top:1120px">
 <p style="font-family:'DM Serif Display';font-size:104px;line-height:1.04;color:${C.cream}">All I want for Christmas is</p>
 <p style="font-family:'DM Serif Display';font-size:104px;line-height:1.04;color:${C.buff};margin-top:10px">a job in eye care.</p>
