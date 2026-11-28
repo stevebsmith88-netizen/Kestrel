@@ -1,6 +1,6 @@
 # Kestrel Eye Care Jobs: project guide for Claude
 
-Read this first in every session. It holds the decisions already made, so they don't get re-litigated.
+Read this first in every session. It holds the decisions already made, so they don't get re-litigated. A start up check (`.claude/hooks/session-start.sh`, 28th November 2026) runs automatically in cloud sessions and says if the branch is behind main; if it says so, stop and tell Steve before doing anything. Chats that started before it existed use `docs/session-orientation-prompt.md`.
 
 ## What this is
 
