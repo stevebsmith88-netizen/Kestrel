@@ -14,12 +14,25 @@ Each of these has files or lines that `main` does not have. Decide per branch: b
 | `claude/epic-hypatia-d7lz76` | 2026-11-17 | Parked note on the partner posting idea (docs/plans/partner-posting-idea.md). Not in main. |
 | `claude/quirky-mccarthy-re3i9g` | 2026-11-20 | Merge of main with CLAUDE.md, AUDIT-2-PROMPT and STEVE-NEXT-STEPS edits. Probably superseded, check before deleting. |
 | `claude/intelligent-hypatia-oholog` | 2026-11-26 | Quebec interest line under Gate C in Admin numbers, plus docs/plans/quebec.md. Not in main. |
-| `claude/jolly-bell-e9fpj3` | 2026-11-20 | Privacy policy lines: age, sale of a business, linked sites, Do Not Track. Not in main. |
+| `claude/jolly-bell-e9fpj3` | 2026-11-20 | **Real unmerged code, not only privacy lines.** Renewed jobs go back to the top and a free second chance on a repost (migration 0061, `lib/free-repost.ts`, `lib/renewed.ts`), the new home page title and headline, and privacy policy lines (age, sale of a business, linked sites, Do Not Track). Its docs were rescued; the code was not. **Keep this branch.** |
 | `claude/wizardly-mayer-bed5u9` | 2026-11-25 | Blog post: women in optometry in Canada and worldwide, with its draft. Not in main. |
 | `claude/bold-keller-2p1ppb` | 2026-11-12 | Audit prompts (AUDIT-FIX-PROMPTS.md, POST-AUDIT-PROMPT.md). Not in main. |
 | `claude/gifted-davinci-b7tmxu` | 2026-11-20 | Instagram images and sticker artwork (design/social-and-merch/). Not in main. |
 | `claude/hopeful-cannon-xoy1ju` | 2026-11-15 | Instagram posts 33 to 40 and the Who should we follow? post (design/social-and-merch/instagram-guides). Not in main. |
 | `claude/laughing-fermat-6mj1bk` | 2026-11-15 | Virtual assistant plan (docs/plans/virtual-assistants.md), put on hold. Not in main. |
+
+## Rescue status (28th November 2026)
+
+**Copied into this branch (docs and design only, nothing live changed):** subscriptions tracker, partner posting idea, virtual assistant plan, Quebec plan, the 3 audit prompts, the women in optometry blog draft, the competitor SEO read, search rank baseline, renew and repost plan, privacy ideas from competitors, the Who should we follow? Instagram post, and the Instagram and sticker artwork (116 files).
+
+**Not copied, because each would change the live site or the database. Keep these branches until Steve has looked:**
+- `claude/jolly-bell-e9fpj3`: renewed jobs and free repost code, migration 0061 (0060 is reserved for Canada only places, so the number may need to change), new home page title, privacy policy lines.
+- `claude/wizardly-mayer-bed5u9`: the women in optometry blog post itself in `content/posts.ts` (it would publish).
+- `claude/intelligent-hypatia-oholog`: the Quebec interest line in Admin numbers (code and tests).
+- `claude/quirky-mccarthy-re3i9g`: only its CLAUDE.md edits (next tasks 24 to 28) were not copied; `AUDIT-2-PROMPT.md` was.
+- `claude/laughing-fermat-6mj1bk`: its CLAUDE.md note that the virtual assistant build is on hold was not copied.
+
+Pushing tags is blocked in this environment (403), so branches are the safety net. Do not delete any branch in sections 1 or 2 yet.
 
 ## 2. Probably safe, quick check first (5)
 
