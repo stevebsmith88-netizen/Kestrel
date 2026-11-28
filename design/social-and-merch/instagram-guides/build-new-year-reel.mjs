@@ -2,7 +2,7 @@
 // and the kestrel illustration (not the logo) in a party hat blowing a party blower, then "Happy new year from the Kestrel team".
 // It says "Opening early 2027" until a launch date is confirmed. Music (Auld Lang Syne or similar) is added in Instagram.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-new-year-reel.mjs
-// 1080 x 1920, 30 frames a second, 15 seconds, no sound. Needs ffmpeg. The cover is its own simple design, built at the end.
+// 1080 x 1920, 30 frames a second, 16.2 seconds, no sound. Needs ffmpeg. The cover is its own simple design, built at the end.
 import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright"); // the copy already installed on the machine
 import { spawn } from "node:child_process";
@@ -17,8 +17,11 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", deep: "#8C4024", cream: "#F7F1E6", paper: "#FBF8F2", buff: "#D8B48A", slate: "#5A6672", mist: "#DCE3E6" };
 const FPS = 30;
-const SECONDS = 15;
-const T = { n3: 0.7, n2: 1.7, n1: 2.7, blow: 3.7, line: 5.0, end: 10.0 };
+const SECONDS = 16.2;
+// Timed to "Auld Lang Syne (Whistle Snap)" by Theme Stars, as it starts in Instagram's music picker (Steve's screen recording, 28th
+// November 2026): about 104 beats a minute, a snap every 2 beats from 0.13 seconds, and a lift at about 14 seconds.
+const BEAT = 0.5754, B = (n) => 0.13 + n * BEAT, SNAP = (k) => B(2 * k);
+const T = { n3: SNAP(1), n2: SNAP(2), n1: SNAP(3), blow: SNAP(4), line: SNAP(5), blow2: SNAP(7), end: SNAP(9), e1b: B(20), lift: SNAP(12) };
 
 // The head in PERCH is centred at (16, -186). The beak is redrawn in a kestrel's colours so it shows on the navy sky.
 const HX = 16, HY = -186;
@@ -39,10 +42,10 @@ const BLOWER = `<g transform="translate(${HX + 50} ${HY + 6})">
 const BRANCH = `<path d="M-200 6 Q-20 -8 190 14" fill="none" stroke="${C.deep}" stroke-width="14" stroke-linecap="round"/><path d="M-170 -2 Q-40 -20 80 -8 Q-40 -2 -170 -2 Z" fill="${C.cream}"/>`;
 const BIRD = (id) => `<g id="${id}">${BRANCH}${PERCH.replace('id="perch"', `id="${id}p"`)}${BEAK}${PARTY_HAT}${BLOWER.replace('id="strip"', `id="${id}s"`).replace('id="coil"', `id="${id}c"`)}</g>`;
 // Fireworks: rings of short rays that burst out and fade, in chestnut, buff and cream.
-const FW = [{ x: 260, y: 560, c: C.buff, a: T.blow - 0.1 }, { x: 820, y: 470, c: C.chestnut, a: T.blow + 0.25 }, { x: 560, y: 330, c: C.cream, a: T.blow + 0.55 },
-  { x: 160, y: 930, c: C.chestnut, a: T.blow + 0.9 }, { x: 900, y: 880, c: C.buff, a: 5.3 }, { x: 380, y: 260, c: C.chestnut, a: 5.9 },
-  { x: 760, y: 1000, c: C.cream, a: 6.5 }, { x: 220, y: 1120, c: C.buff, a: 7.1 }, { x: 860, y: 300, c: C.cream, a: 7.6 },
-  { x: 520, y: 820, c: C.chestnut, a: 8.2 }, { x: 140, y: 420, c: C.cream, a: 8.8 }, { x: 940, y: 640, c: C.chestnut, a: 9.2 }];
+// Each firework bursts on a beat, from the blow onwards.
+const FW = [[260, 560, C.buff, 8], [820, 470, C.chestnut, 8.5], [560, 330, C.cream, 9], [160, 930, C.chestnut, 10], [900, 880, C.buff, 11], [380, 260, C.chestnut, 12],
+  [760, 1000, C.cream, 13], [220, 1120, C.buff, 14], [860, 300, C.cream, 14.5], [520, 820, C.chestnut, 15], [140, 420, C.cream, 16], [940, 640, C.chestnut, 17]]
+  .map(([x, y, c, n]) => ({ x, y, c, a: B(n) }));
 const STARS = Array.from({ length: 40 }, (_, i) => ({ x: (i * 397) % 1080, y: (i * 613) % 1920, r: 1.5 + (i % 3), w: (i * 1.3) % 6.28 }));
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>New year</title><style>
@@ -98,13 +101,13 @@ window.render = (t) => {
   // The bird: on its branch from the start, bobbing a little; on the count of zero it blows the party blower, twice.
   const bob = 4 * Math.sin(t * 2.4);
   el("bird").setAttribute("transform", "translate(560 " + (1480 + bob) + ") scale(1.5)");
-  const b1 = Math.sin(Math.PI * span(t, T.blow, T.blow + 0.9)), b2 = Math.sin(Math.PI * span(t, 6.2, 7.0));
+  const b1 = Math.sin(Math.PI * span(t, T.blow, T.blow + 0.9)), b2 = Math.sin(Math.PI * span(t, T.blow2, T.blow2 + 0.8));
   blow("bird", Math.max(b1, b2));
   // Fireworks.
   FW.forEach((w, i) => { const v = span(t, w.a, w.a + 1.1), g = el("fw" + i); g.setAttribute("opacity", v > 0 && v < 1 ? 1 - v * v : 0); g.setAttribute("transform", "translate(" + w.x + " " + w.y + ") scale(" + (0.5 + 2.8 * out(v)) + ")"); });
   show("head", t, T.line, 30); el("head").style.opacity = parseFloat(el("head").style.opacity) * (1 - span(t, T.end - 0.4, T.end));
   el("end").style.opacity = span(t, T.end - 0.2, T.end + 0.3);
-  show("e1", t, T.end + 0.4, 20); show("e1b", t, T.end + 0.8, 20); show("e2", t, T.end + 1.6, 16);
+  show("e1", t, T.end + 0.3, 20); show("e1b", t, T.e1b, 20); show("e2", t, T.lift, 16);
 };
 window.cover = () => { window.render(0); el("cov").style.display = "block"; blow("cb", 1); };
 </script></body></html>`;
@@ -118,7 +121,7 @@ await tab.evaluate(() => document.fonts.ready);
 await tab.waitForTimeout(300);
 const frame = tab.locator("#f");
 if (process.env.STILLS) {
-  for (const t of [1.0, 2.9, 4.1, 5.8, 7.3, 13.5]) {
+  for (const t of [1.5, 3.8, 5.0, 6.5, 8.4, 14.6]) {
     await tab.evaluate((x) => window.render(x), t);
     await frame.screenshot({ path: join(process.env.STILLS, `ny-${String(t).replace(".", "-")}.jpg`), type: "jpeg", quality: 80 });
   }
