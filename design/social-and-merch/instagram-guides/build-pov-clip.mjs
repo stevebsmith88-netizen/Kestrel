@@ -90,5 +90,16 @@ for (let i = 0; i < Math.round(FPS * SECONDS); i++) {
 }
 ff.stdin.end();
 await done;
+// The cover (Steve, 28th November 2026): the ad with the highlight drawn and the "pov" line above it, inside the 4:5 grid crop.
+await tab.evaluate(() => {
+  window.render(1.0);
+  document.getElementById("cur").style.display = "none";
+  document.getElementById("card").style.top = "820px";
+  const p = document.createElement("p");
+  p.style.cssText = "position:absolute;left:90px;right:90px;top:420px;font-family:'DM Serif Display';font-size:92px;line-height:1.06;color:#F7F1E6";
+  p.innerHTML = 'pov: posting your job ad with <span style="color:#D8B48A">&quot;salary: competitive&quot;</span>';
+  document.getElementById("f").appendChild(p);
+});
+await frame.screenshot({ path: join(OUT, "pov-clip-cover.jpg"), type: "jpeg", quality: 92 });
 await browser.close();
 console.log(`Built ${mp4}`);
