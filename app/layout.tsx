@@ -23,6 +23,8 @@ export const metadata: Metadata = {
     locale: "en_CA",
     type: "website",
   },
+  // The name under the icon when someone adds Kestrel to their iPhone home screen. The icon is app/apple-icon.png.
+  appleWebApp: { title: "Kestrel" },
   // The share picture is 1200 by 630, so links shared on X and similar sites show it full width (audit P1-52).
   twitter: { card: "summary_large_image", images: ["/brand/kestrel-share-1200x630.png"] },
 };

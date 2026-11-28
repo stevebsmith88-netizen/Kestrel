@@ -7,10 +7,14 @@ import InfoTip from "@/components/InfoTip";
 import ApplyLink from "@/components/ApplyLink";
 import JobViewBeacon from "@/components/JobViewBeacon";
 import SiteHeader from "@/components/SiteHeader";
-import { answerLabel, employmentExplainer, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
+import { AI_SCREENING_EXPLAINER, answerLabel, employmentExplainer, EXISTING_VACANCY_EXPLAINER, employmentLabel, jobPostingJsonLd, longDate, practiceLabel } from "@/lib/jobs";
 import { estimateText, payChips, payText } from "@/lib/job-pay";
 import { TAG_GROUPS, tagsFromRow } from "@/lib/job-tags";
 import { getLiveJob } from "@/lib/public-jobs";
+import { clinicHrefFor } from "@/lib/public-clinics";
+import FollowButton from "@/components/FollowButton";
+import SaveJobButton from "@/components/SaveJobButton";
+import ViewApplicantsButton from "@/components/ViewApplicantsButton";
 import { shareMetadata } from "@/lib/share";
 
 // Saved and shared for up to 5 minutes (audit P1-10), and cleared at once when the job changes (lib/job-cache.ts). force-static means the
@@ -41,6 +45,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
   const job = await getLiveJob(id);
   if (!job) notFound();
   const clinic = job.employers;
+  const clinicPage = await clinicHrefFor(job.employer_id);
   // Structured data is only added while the job is live, and it matches what is on the page. A found listing that the clinic
   // has not claimed gets none: the clinic's own page is the original, and Kestrel cannot know the moment the job is filled
   // (audit finding R19, decision (a)). It still shows on Kestrel and in Kestrel's own search.
@@ -57,7 +62,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
           <p className="back"><Link href="/jobs">Back to all jobs</Link></p>
           <header className="jobhead">
             <h1>{job.title}</h1>
-            <p className="meta">{clinic?.clinic_name} · {job.city}, {job.province}</p>
+            {job.headline && <p className="headline">{job.headline}</p>}
+            <p className="meta">{clinicPage ? <Link href={clinicPage}>{clinic?.clinic_name}</Link> : clinic?.clinic_name} · {job.city}, {job.province}</p>
             <p className="chips">
               <span className="chip">{employmentLabel(job.employment_type)}</span>
               {payChips(job).map((c) => <span className="chip paychip" key={c}>{c}</span>)}
@@ -81,6 +87,9 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                     <div className="adbody">{clinic.about}</div>
                   </>
                 )}
+                {clinicPage && (
+                  <p className="clinicbtns"><Link href={clinicPage} className="btn sm ghost">More about {clinic?.clinic_name} and all its jobs</Link> <FollowButton employerId={job.employer_id} name={clinic?.clinic_name ?? "this clinic"} /></p>
+                )}
               </section>
               <section className="card jobfacts">
                 <h2>Job facts</h2>
@@ -95,8 +104,8 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                   {job.pay_extras && <div><dt>Also part of the pay</dt><dd>{job.pay_extras}</dd></div>}
                   <div><dt>{job.work_arrangement === "field" ? "Based in" : "Location"}</dt><dd>{job.city}, {job.province}</dd></div>
                   {job.work_arrangement === "field" && job.territory && <div><dt>Area covered</dt><dd>{job.territory}</dd></div>}
-                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}</dd></div>
-                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}</dd></div>
+                  <div><dt>Existing vacancy</dt><dd>{answerLabel(job.is_existing_vacancy)}<InfoTip label="Existing vacancy" text={EXISTING_VACANCY_EXPLAINER} /></dd></div>
+                  <div><dt>Uses AI to screen candidates</dt><dd>{answerLabel(job.uses_ai_screening)}<InfoTip label="Uses AI to screen candidates" text={AI_SCREENING_EXPLAINER} /></dd></div>
                   <div><dt>Posted</dt><dd>{longDate(job.posted_at)}</dd></div>
                   <div><dt>Closes</dt><dd>{longDate(job.expires_at)}</dd></div>
                 </dl>
@@ -104,6 +113,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
             </div>
 
             <aside className="jobaside">
+              <ViewApplicantsButton jobId={job.id} />
               <section className="card applybox" id="apply">
                 <h2>Apply</h2>
                 {job.apply_method === "external" && job.apply_url ? (
@@ -118,6 +128,7 @@ export default async function JobPage({ params }: { params: Promise<{ id: string
                     <ApplyLink jobId={job.id} href={`/jobs/${job.id}/apply`}>Quick Apply</ApplyLink>
                   </>
                 )}
+                <p className="savewrap"><SaveJobButton jobId={job.id} /></p>
               </section>
               <div className="reportbox">
                 <p className="reportlink"><Link href={`/jobs/${job.id}/report`}><Icon name="warning" />Report this job</Link></p>

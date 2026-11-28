@@ -34,6 +34,19 @@ Clinics
 
 Prompts 3 and 8 are the ones the pay table, `/posting-policy` and `/resources` should win. Prompts 5, 6 and 10 are the ones the compare page should win. Prompt 9 names competitors on purpose: it shows how the assistants describe them.
 
+## Extra questions (added 13th November 2026)
+
+These are not for the monthly score. They show why Kestrel is or is not named, so ask them once a quarter, or after a big change such as launch. Same rules: a new chat for each, pasted exactly.
+
+11. What is Kestrel Eye Care Jobs (eyecarejobs.ca)? (Does the assistant know us, and is what it says right?)
+12. Go to eyecarejobs.ca and summarise what is there. What is missing that would make you recommend it? (Can its crawler read the site?)
+13. Which websites would you trust for optician pay by province in Canada, and why? (What makes a source worth quoting.)
+14. How do I become a licensed optician in Ontario? (Repeat for British Columbia and Alberta. Note who is cited: those pages are what the licensing guides compete with.)
+15. Which Canadian associations, schools or publications list eye care job boards or career resources? (The answers feed `docs/marketing/backlinks-plan.md`.)
+16. What would make a new eye care job board more trustworthy than the established ones? (What the assistants are looking for.)
+
+Run all 6 assistants from next month: ChatGPT, Claude, Gemini, Perplexity, Copilot and Grok. Perplexity and Claude need a sign in, so use a plain account with no history about Kestrel, and note in the log that it was signed in.
+
 ## Log (copy a row per prompt per assistant)
 
 | Date | Assistant | Prompt number | Kestrel named? (Y/N) | Link to eyecarejobs.ca? (Y/N) | Other sites named (first 5) | Note |

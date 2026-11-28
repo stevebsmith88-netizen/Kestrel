@@ -120,7 +120,8 @@ export function SignInForm({ notice, next, google = false, signupOpen = true }: 
   );
 }
 
-export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, invitation, next }: { defaultType?: "candidate" | "clinic"; google?: boolean; inviteOnly?: boolean; invitation?: string; next?: string }) {
+// `team` is a clinic team invitation (migration 0045): the account joins that clinic as soon as it is created.
+export function SignUpForm({ defaultType = "candidate", google = false, inviteOnly = false, invitation, next, team, postingSoon = false }: { defaultType?: "candidate" | "clinic"; postingSoon?: boolean; google?: boolean; inviteOnly?: boolean; invitation?: string; next?: string; team?: { code: string; clinicName: string; email: string } }) {
   const { state, pending, submit } = useAuthForm(signUp);
   if (state.message) {
     return (
@@ -129,19 +130,35 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
           We have sent a confirmation link to <strong>{state.email}</strong>. Open it to confirm your address, then sign in.
         </p>
         <p className="help">It can take a minute to arrive. If you don&apos;t see it, check your spam or junk folder.</p>
+        {postingSoon && <p className="help">You can look around as soon as you are signed in. Kestrel is in its pre launch phase, so clinics cannot post jobs yet. We expect to launch in early 2027 and will email you then.</p>}
       </Done>
     );
   }
   return (
     <>
+      {team ? (
+        <>
+          <h1>Join {team.clinicName}</h1>
+          <p className="auth-intro">Create your account to join your clinic&apos;s team on Kestrel. Use the email address the invitation was sent to.</p>
+        </>
+      ) : (
+      <>
       <h1>Create your account</h1>
       <p className="auth-intro">
-        Free to join. Candidates can save a resume and follow their applications, and clinics can post jobs. Tick the second box below if you would also like launch news and tips for getting started.
+        Free to join. {postingSoon ? "We are in our pre launch phase, so create an account to look around and tell us what you think. Clinics can set up a profile now, and posting opens at our launch in early 2027." : "Candidates can save a resume and follow their applications, and clinics can post jobs."} Tick the second box below if you would also like launch news and tips for getting started.
       </p>
       <p className="help">Looking for a job? Your profile and resume stay private until you apply. A clinic sees only what you send with an application.</p>
-      {google && <GoogleButton next={`/welcome?type=${defaultType}${next ? `&next=${encodeURIComponent(next)}` : ""}`} note="Next, you will choose whether you are looking for a job or hiring." />}
+      </>
+      )}
+      {google && !team && <GoogleButton next={`/welcome?type=${defaultType}${next ? `&next=${encodeURIComponent(next)}` : ""}`} note="Next, you will choose whether you are looking for a job or hiring." />}
     <form onSubmit={submit} noValidate>
       {next && <input type="hidden" name="next" value={next} />}
+      {team ? (
+        <>
+          <input type="hidden" name="accountType" value="clinic" />
+          <input type="hidden" name="team" value={team.code} />
+        </>
+      ) : (
       <div className="row">
         <p className="lab" id="su-type">I am</p>
         <div className="choices" role="radiogroup" aria-labelledby="su-type">
@@ -153,6 +170,7 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
           ))}
         </div>
       </div>
+      )}
       <div className="pair">
         <div className="row">
           <label className="lab" htmlFor="su-first">First name</label>
@@ -165,11 +183,21 @@ export function SignUpForm({ defaultType = "candidate", google = false, inviteOn
       </div>
       <div className="row">
         <label className="lab" htmlFor="su-email">Email</label>
-        <input id="su-email" name="email" type="email" autoComplete="email" required />
+        <input id="su-email" name="email" type="email" autoComplete="email" required defaultValue={team?.email} />
       </div>
+      {!team && (
+        <details className="teamcodebox">
+          <summary>I have an invite code from my clinic</summary>
+          <div className="row">
+            <label className="lab" htmlFor="su-team">Invite code</label>
+            <input id="su-team" name="team" type="text" autoComplete="off" placeholder="KT-XXXX-XXXX" maxLength={20} />
+            <p className="help">From the email your clinic sent. Your account joins their team as soon as it is created.</p>
+          </div>
+        </details>
+      )}
       {invitation && <input type="hidden" name="invite" value={invitation} />}
       {invitation && <p className="help">You have an invitation, so you can create your account now.</p>}
-      {inviteOnly && !invitation && <InviteField id="su-invite" />}
+      {inviteOnly && !invitation && !team && <InviteField id="su-invite" />}
       <PasswordField id="su-password" name="password" label="Password" autoComplete="new-password" minLength={MIN_PASSWORD} hint={`At least ${MIN_PASSWORD} characters. A few words you will remember work well.`} />
       <div className="row">
         <label className="consent">

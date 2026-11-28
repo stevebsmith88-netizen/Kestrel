@@ -29,7 +29,7 @@ export default function ReportForm({ jobId }: { jobId: string }) {
       <Field id="rp-details" label="Tell us more" hint="Optional, unless you chose Something else. Please do not include sensitive personal details.">
         <textarea id="rp-details" name="details" rows={4} maxLength={1000} />
       </Field>
-      <Field id="rp-email" label="Your email" hint="Optional. Only if you would like us to write back. We use it for nothing else.">
+      <Field id="rp-email" label="Your email" hint="Optional. If you add it, we email to confirm we have your report, and may write back. We use it for nothing else.">
         <input id="rp-email" name="email" type="email" autoComplete="email" />
       </Field>
       <Turnstile resetSignal={state} />

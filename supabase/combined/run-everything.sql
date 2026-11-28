@@ -1,4 +1,4 @@
--- KESTREL: everything the database needs, in order (migrations 0001 to 0044), plus a check at the end.
+-- KESTREL: everything the database needs, in order (migrations 0001 to 0059), plus a check at the end.
 -- Safe to run more than once. Paste ALL of it into the Supabase SQL editor and press Run.
 
 -- ======================================================================
@@ -2661,10 +2661,758 @@ drop trigger if exists jobs_keep_applications on public.jobs;
 create trigger jobs_keep_applications before delete on public.jobs for each row execute function public.keep_applications_when_job_goes();
 
 -- ======================================================================
+-- 0045_clinic_team_members.sql
+-- ======================================================================
+-- 0045: team members for a clinic, their invitations, and a record of changes Kestrel's admin makes for a clinic (Steve, 14th November
+-- 2026; design in docs/plans/locations-and-team-design.md). Safe to run twice.
+--
+-- Before: 1 sign in owned 1 clinic, and every clinic rule asked "does this person own this clinic?".
+-- From here a clinic can have up to 5 people, counting the owner. The owner invites the others at 1 of 2 levels:
+--   * edit: post and change jobs, see applicants and their resumes, and move them along;
+--   * view: read jobs and applicants, and add private notes (the website passes those notes to the owner). No changes.
+-- The owner alone changes the clinic profile, the private alert address and the team.
+-- Only the owner and the people the owner invites can see a clinic's applicants. Kestrel's admin is not given access by this.
+
+-- ---------------------------------------------------------------- the team
+create table if not exists public.employer_members (
+  employer_id uuid not null references public.employers (id) on delete cascade,
+  user_id     uuid not null references auth.users (id) on delete cascade,
+  level       text not null check (level in ('edit', 'view')),
+  added_by    uuid references auth.users (id) on delete set null,
+  created_at  timestamptz not null default now(),
+  primary key (employer_id, user_id)
+);
+-- For now a person belongs to 1 clinic (several locations come later, with migration 0046).
+create unique index if not exists employer_members_one_clinic_idx on public.employer_members (user_id);
+
+-- Invitations. The code itself is never stored, only a fingerprint of it (sha256), so reading this table does not give anyone a way in.
+-- A code works once, only for the email address it was sent to, until it runs out (14 days).
+create table if not exists public.employer_invites (
+  id           uuid primary key default gen_random_uuid(),
+  employer_id  uuid not null references public.employers (id) on delete cascade,
+  name         text not null check (char_length(name) between 1 and 120),
+  email        text not null check (char_length(email) between 3 and 254 and email = lower(email)),
+  level        text not null check (level in ('edit', 'view')),
+  code_hash    text not null unique check (char_length(code_hash) = 64),
+  invited_by   uuid references auth.users (id) on delete set null,
+  created_at   timestamptz not null default now(),
+  expires_at   timestamptz not null,
+  accepted_at  timestamptz,
+  accepted_by  uuid references auth.users (id) on delete set null,
+  cancelled_at timestamptz
+);
+create index if not exists employer_invites_employer_idx on public.employer_invites (employer_id);
+
+-- What Kestrel's admin changed for a clinic, when, and why (Admin, Clinics). Kept so a clinic can always be told what was done.
+create table if not exists public.admin_actions (
+  id          uuid primary key default gen_random_uuid(),
+  admin_id    uuid references auth.users (id) on delete set null,
+  employer_id uuid references public.employers (id) on delete set null,
+  action      text not null check (char_length(action) between 1 and 60),
+  detail      text check (detail is null or char_length(detail) <= 1000),
+  reason      text check (reason is null or char_length(reason) <= 500),
+  created_at  timestamptz not null default now()
+);
+create index if not exists admin_actions_employer_idx on public.admin_actions (employer_id, created_at desc);
+
+alter table public.employer_members enable row level security;
+alter table public.employer_invites enable row level security;
+alter table public.admin_actions enable row level security;
+
+-- Invitations and the admin record are handled only by the website's server. Nobody reads or changes them with their own sign in.
+revoke all on public.employer_invites, public.admin_actions from anon, authenticated;
+-- A clinic's people can see who is on their team. Adding and removing people is done by the website's server, after checking that the
+-- person asking is the owner.
+revoke all on public.employer_members from anon, authenticated;
+grant select on public.employer_members to authenticated;
+
+-- ---------------------------------------------------------------- who may do what
+-- 'owner', 'edit', 'view', or null when the signed in person has nothing to do with the clinic.
+create or replace function public.employer_level(emp uuid)
+returns text
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select case
+    when exists (select 1 from public.employers where id = emp and owner_id = (select auth.uid())) then 'owner'
+    else (select m.level from public.employer_members m where m.employer_id = emp and m.user_id = (select auth.uid()))
+  end;
+$$;
+
+create or replace function public.can_edit_employer(emp uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select coalesce(public.employer_level(emp) in ('owner', 'edit'), false);
+$$;
+
+create or replace function public.can_view_employer(emp uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select public.employer_level(emp) is not null;
+$$;
+
+-- These 2 decide who can read a job's applications, their history and the clinic's notes on them. They now include the whole team.
+create or replace function public.owns_job(job uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (select 1 from public.jobs j where j.id = job and public.can_view_employer(j.employer_id));
+$$;
+
+create or replace function public.owns_application_job(app uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.applications a
+    join public.jobs j on j.id = a.job_id
+    where a.id = app and public.can_view_employer(j.employer_id)
+  );
+$$;
+
+revoke execute on function public.employer_level(uuid) from public, anon;
+revoke execute on function public.can_edit_employer(uuid) from public, anon;
+revoke execute on function public.can_view_employer(uuid) from public, anon;
+grant execute on function public.employer_level(uuid) to authenticated;
+grant execute on function public.can_edit_employer(uuid) to authenticated;
+grant execute on function public.can_view_employer(uuid) to authenticated;
+
+-- At most 5 people a clinic (the owner and 4 more), and someone who owns a clinic cannot also join another one.
+create or replace function public.limit_employer_members()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if (select count(*) from public.employer_members where employer_id = new.employer_id) >= 4 then
+    raise exception 'A clinic can have up to 5 people on Kestrel, including the owner.';
+  end if;
+  if exists (select 1 from public.employers where owner_id = new.user_id) then
+    raise exception 'This person already has their own clinic on Kestrel.';
+  end if;
+  return new;
+end;
+$$;
+revoke execute on function public.limit_employer_members() from public, anon, authenticated;
+drop trigger if exists employer_members_limit on public.employer_members;
+create trigger employer_members_limit before insert on public.employer_members for each row execute function public.limit_employer_members();
+
+-- A team member cannot also own a clinic (claiming a listing or creating a profile), the other half of the rule above.
+create or replace function public.owner_not_a_member()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.owner_id is not null and exists (select 1 from public.employer_members where user_id = new.owner_id) then
+    raise exception 'This person is on another clinic''s team, so they cannot own a clinic as well.';
+  end if;
+  return new;
+end;
+$$;
+revoke execute on function public.owner_not_a_member() from public, anon, authenticated;
+drop trigger if exists employers_owner_not_a_member on public.employers;
+create trigger employers_owner_not_a_member before insert or update of owner_id on public.employers for each row execute function public.owner_not_a_member();
+
+-- ---------------------------------------------------------------- the rules, now for the team
+drop policy if exists "People can see their own clinic's team" on public.employer_members;
+create policy "People can see their own clinic's team"
+  on public.employer_members for select to authenticated
+  using (public.can_view_employer(employer_id));
+
+-- The owner's own rules on employers are unchanged (only the owner can change the profile). The team can read it.
+drop policy if exists "Team members can read their clinic" on public.employers;
+create policy "Team members can read their clinic"
+  on public.employers for select to authenticated
+  using (public.can_view_employer(id));
+
+-- employer_contacts (the private alert address) stays owner only: its rules still use owns_employer, which is unchanged.
+
+drop policy if exists "Clinics can read their own jobs" on public.jobs;
+create policy "Clinics can read their own jobs"
+  on public.jobs for select to authenticated
+  using (public.can_view_employer(employer_id));
+
+drop policy if exists "Clinics can add jobs" on public.jobs;
+create policy "Clinics can add jobs"
+  on public.jobs for insert to authenticated
+  with check (public.can_edit_employer(employer_id) and status in ('draft', 'in_review'));
+
+drop policy if exists "Clinics can edit their own jobs" on public.jobs;
+create policy "Clinics can edit their own jobs"
+  on public.jobs for update to authenticated
+  using (public.can_edit_employer(employer_id))
+  with check (public.can_edit_employer(employer_id));
+
+drop policy if exists "Clinics can delete their drafts" on public.jobs;
+create policy "Clinics can delete their drafts"
+  on public.jobs for delete to authenticated
+  using (
+    public.can_edit_employer(employer_id)
+    and status in ('draft', 'rejected')
+    and posted_at is null
+    and not public.job_has_applications(id)
+  );
+
+drop policy if exists "Clinics can read their templates" on public.job_templates;
+create policy "Clinics can read their templates" on public.job_templates for select to authenticated using (public.can_edit_employer(employer_id));
+drop policy if exists "Clinics can add templates" on public.job_templates;
+create policy "Clinics can add templates" on public.job_templates for insert to authenticated with check (public.can_edit_employer(employer_id));
+drop policy if exists "Clinics can change their templates" on public.job_templates;
+create policy "Clinics can change their templates" on public.job_templates for update to authenticated using (public.can_edit_employer(employer_id)) with check (public.can_edit_employer(employer_id));
+drop policy if exists "Clinics can delete their templates" on public.job_templates;
+create policy "Clinics can delete their templates" on public.job_templates for delete to authenticated using (public.can_edit_employer(employer_id));
+
+drop policy if exists "Clinics can read the numbers for their own jobs" on public.job_daily_stats;
+create policy "Clinics can read the numbers for their own jobs"
+  on public.job_daily_stats for select to authenticated
+  using (exists (select 1 from public.jobs j where j.id = job_id and public.can_view_employer(j.employer_id)));
+
+-- ======================================================================
+-- 0046_help_requests_and_feedback.sql
+-- ======================================================================
+-- 0046: help requests and feedback (Steve, 14th November 2026). Safe to run twice.
+--
+-- * A clinic that is stuck asks Kestrel for help from its account: it picks a reason, writes a short explanation, and ticks a box that lets
+--   Kestrel's team see and change its clinic account (profile, team, invitations, jobs and how many people applied, never resumes, cover
+--   letters or private notes) for 7 days, or until the request is closed. Admin, Clinics only works for a clinic with such a request open.
+-- * Anyone signed in can send feedback: a bug, an idea for a feature, or something else.
+-- Both are emailed to Kestrel's support address and kept here. Read and written only by the website's server.
+
+create table if not exists public.support_requests (
+  id             uuid primary key default gen_random_uuid(),
+  user_id        uuid references auth.users (id) on delete set null,
+  employer_id    uuid references public.employers (id) on delete set null,
+  kind           text not null check (kind in ('help', 'bug', 'idea', 'other')),
+  reason         text check (reason is null or char_length(reason) <= 60),
+  message        text not null check (char_length(message) between 5 and 2000),
+  page           text check (page is null or char_length(page) <= 200),
+  access_until   timestamptz, -- set only when a clinic ticked the box allowing Kestrel into its account
+  access_text    text check (access_text is null or char_length(access_text) <= 600), -- the exact words they agreed to
+  status         text not null default 'open' check (status in ('open', 'done')),
+  created_at     timestamptz not null default now(),
+  closed_at      timestamptz,
+  closed_by      uuid references auth.users (id) on delete set null,
+  constraint support_access_only_for_help check (access_until is null or (kind = 'help' and employer_id is not null and access_text is not null))
+);
+create index if not exists support_requests_open_idx on public.support_requests (status, created_at desc);
+create index if not exists support_requests_employer_idx on public.support_requests (employer_id, created_at desc);
+
+alter table public.support_requests enable row level security;
+revoke all on public.support_requests from anon, authenticated;
+
+-- ======================================================================
+-- 0047_clinic_locations.sql
+-- ======================================================================
+-- 0047: several locations under 1 owner (Steve, 14th November 2026; phase B of docs/plans/locations-and-team-design.md). Safe to run twice.
+--
+-- Each location is its own clinic row (its own name, town, public page, jobs and team), and 1 person can now own several. Team members are
+-- invited to the locations the owner ticks, and someone can be on more than 1 location's team. Nothing about access changes: every rule
+-- still asks about 1 location at a time (can_view_employer, can_edit_employer, migration 0045).
+
+-- 1 person, several locations.
+drop index if exists public.employers_owner_idx;
+create index if not exists employers_owner_lookup_idx on public.employers (owner_id);
+
+-- A person can be on several locations' teams.
+drop index if exists public.employer_members_one_clinic_idx;
+create index if not exists employer_members_user_idx on public.employer_members (user_id);
+
+-- An invitation can cover several of the owner's locations at once (the first is employer_id).
+alter table public.employer_invites add column if not exists also_employer_ids uuid[] not null default '{}';
+
+-- Up to 5 people a location, and nobody is a team member of a location they own. Owning another location, or another clinic, is fine now.
+create or replace function public.limit_employer_members()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if (select count(*) from public.employer_members where employer_id = new.employer_id) >= 4 then
+    raise exception 'A clinic can have up to 5 people on Kestrel, including the owner.';
+  end if;
+  if exists (select 1 from public.employers where id = new.employer_id and owner_id = new.user_id) then
+    raise exception 'This person already owns this clinic.';
+  end if;
+  return new;
+end;
+$$;
+
+create or replace function public.owner_not_a_member()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.owner_id is not null and exists (select 1 from public.employer_members where employer_id = new.id and user_id = new.owner_id) then
+    raise exception 'This person is on this clinic''s team, so they cannot also own it.';
+  end if;
+  return new;
+end;
+$$;
+
+-- At most 25 locations an owner (a larger group asks Kestrel).
+create or replace function public.limit_locations()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.owner_id is not null and (select count(*) from public.employers where owner_id = new.owner_id) >= 25 then
+    raise exception 'An account can hold up to 25 locations. Please email support@eyecarejobs.ca to add more.';
+  end if;
+  return new;
+end;
+$$;
+revoke execute on function public.limit_locations() from public, anon, authenticated;
+drop trigger if exists employers_limit_locations on public.employers;
+create trigger employers_limit_locations before insert on public.employers for each row execute function public.limit_locations();
+
+-- ======================================================================
+-- 0048_job_payments.sql
+-- ======================================================================
+-- 0048: job payments (Steve, 14th November 2026; step 3 of docs/plans/stripe-plan.md). Safe to run twice.
+--
+-- When a clinic sends a job for review (after the free launch) it saves a card with Stripe. Nothing is charged then. The card is charged
+-- when Kestrel approves the job, for the price of the role. 1 row here follows each job through that: awaiting_card, card_saved, charged,
+-- or failed (the card was refused at approval), cancelled (the job was not approved, so nothing was charged) or free_launch (no card).
+--
+-- Only the website's server writes to these tables. A clinic can read the status of its own payments, never the Stripe ids.
+-- Rows are kept when a job or clinic is deleted, because Kestrel must keep its sales records for tax, so the job and the clinic are
+-- linked loosely and their names are copied in.
+
+create table if not exists public.job_payments (
+  id                          uuid primary key default gen_random_uuid(),
+  job_id                      uuid references public.jobs (id) on delete set null,
+  employer_id                 uuid references public.employers (id) on delete set null,
+  job_title                   text not null,
+  clinic_name                 text not null,
+  band                        text not null check (band in ('support', 'opticians', 'optometrists')),
+  amount_cents                integer not null check (amount_cents >= 0),
+  currency                    text not null default 'cad' check (currency = 'cad'),
+  status                      text not null check (status in ('awaiting_card', 'card_saved', 'charged', 'failed', 'cancelled', 'free_launch')),
+  stripe_checkout_session_id  text unique,
+  stripe_payment_method_id    text,
+  stripe_payment_intent_id    text,
+  failure_message             text,
+  created_at                  timestamptz not null default now(),
+  updated_at                  timestamptz not null default now(),
+  charged_at                  timestamptz
+);
+
+-- A job can have only 1 payment in play at a time, so the card cannot be charged twice for the same job.
+create unique index if not exists job_payments_one_active_idx
+  on public.job_payments (job_id)
+  where status in ('awaiting_card', 'card_saved', 'charged', 'free_launch');
+create index if not exists job_payments_employer_idx on public.job_payments (employer_id, created_at desc);
+
+alter table public.job_payments enable row level security;
+drop policy if exists "Clinics can read the status of their own payments" on public.job_payments;
+create policy "Clinics can read the status of their own payments"
+  on public.job_payments for select
+  to authenticated
+  using (public.can_view_employer(employer_id));
+
+-- Everything is closed to visitors and to signed in people except reading these columns, which hold no Stripe ids.
+revoke all on public.job_payments from anon, authenticated;
+grant select (id, job_id, employer_id, job_title, clinic_name, band, amount_cents, currency, status, created_at, charged_at)
+  on public.job_payments to authenticated;
+
+-- Which Stripe customer is a clinic, so the same clinic is not made a new customer for every post. For the server only.
+create table if not exists public.employer_billing (
+  employer_id         uuid primary key references public.employers (id) on delete cascade,
+  stripe_customer_id  text not null unique,
+  created_at          timestamptz not null default now()
+);
+alter table public.employer_billing enable row level security;
+revoke all on public.employer_billing from anon, authenticated;
+
+-- ======================================================================
+-- 0049_job_activity.sql
+-- ======================================================================
+-- 0049: a notes log for each job (Steve, 14th November 2026). Safe to run twice.
+--
+-- 1 row for each thing that happens to a job: sent for review, card saved, approved, charged, card refused and why, card updated, went live,
+-- sent back. Kestrel's admin reads it in a drop down under the job. It is for the website's server only: clinics and candidates never read
+-- it with their own sign in, and nothing here holds a card number or a Stripe key. The log goes when its job is deleted.
+
+create table if not exists public.job_activity (
+  id          uuid primary key default gen_random_uuid(),
+  job_id      uuid not null references public.jobs (id) on delete cascade,
+  actor       text not null default 'system' check (actor in ('system', 'admin', 'clinic')),
+  text        text not null,
+  detail      text,
+  created_at  timestamptz not null default now()
+);
+create index if not exists job_activity_job_idx on public.job_activity (job_id, created_at);
+
+alter table public.job_activity enable row level security;
+revoke all on public.job_activity from anon, authenticated;
+
+-- ======================================================================
+-- 0050_invoice_links.sql
+-- ======================================================================
+-- 0050: invoices and receipts (Steve, 14th November 2026; item 13 of the Next tasks). Safe to run twice.
+--
+-- When a job is approved the saved card is now charged through a Stripe invoice, which has its own number, a web page and a PDF (and carries HST
+-- once Stripe Tax is on). These columns keep the invoice for each payment. A clinic can read the number and the 2 links for its own payments,
+-- so it can open or download a receipt again; the Stripe invoice id stays for the website's server only.
+
+alter table public.job_payments
+  add column if not exists stripe_invoice_id text,
+  add column if not exists invoice_number text,
+  add column if not exists invoice_url text,
+  add column if not exists invoice_pdf_url text;
+
+grant select (invoice_number, invoice_url, invoice_pdf_url) on public.job_payments to authenticated;
+
+-- ======================================================================
+-- 0051_location_passes.sql
+-- ======================================================================
+-- 0051: passes (Steve, 14th November 2026; step 4 of docs/plans/stripe-plan.md). Safe to run twice.
+--
+-- A pass belongs to 1 clinic location (migration 0047: 1 pass, 1 location). While it is active, a job for a role it covers goes straight to
+-- review with no card page, and nothing is charged for it at approval. A clinic reads the plan, status and renewal date of its own pass,
+-- never the Stripe ids. Only the website's server writes here (the Stripe webhook and the return page keep it in step with Stripe).
+
+create table if not exists public.location_passes (
+  id                          uuid primary key default gen_random_uuid(),
+  employer_id                 uuid not null references public.employers (id) on delete cascade,
+  plan                        text not null check (plan in ('clinic_pass', 'clinic_pass_plus')),
+  billing_interval            text not null default 'month' check (billing_interval in ('month', 'year')),
+  status                      text not null check (status in ('incomplete', 'active', 'past_due', 'canceled')),
+  stripe_checkout_session_id  text unique,
+  stripe_subscription_id      text unique,
+  stripe_payment_method_id    text,
+  current_period_end          timestamptz,
+  cancel_at_period_end        boolean not null default false,
+  created_at                  timestamptz not null default now(),
+  updated_at                  timestamptz not null default now(),
+  canceled_at                 timestamptz
+);
+
+-- A location has only 1 pass that is live or overdue. An abandoned checkout (incomplete) never blocks a new one.
+create unique index if not exists location_passes_one_live_idx on public.location_passes (employer_id) where status in ('active', 'past_due');
+create index if not exists location_passes_employer_idx on public.location_passes (employer_id, created_at desc);
+
+alter table public.location_passes enable row level security;
+drop policy if exists "Clinics can read their own pass" on public.location_passes;
+create policy "Clinics can read their own pass"
+  on public.location_passes for select
+  to authenticated
+  using (public.can_view_employer(employer_id));
+
+revoke all on public.location_passes from anon, authenticated;
+grant select (id, employer_id, plan, billing_interval, status, current_period_end, cancel_at_period_end, created_at, canceled_at)
+  on public.location_passes to authenticated;
+
+-- A job covered by a pass leaves a payment record too (for the sales page and the Billing page), at no charge.
+alter table public.job_payments drop constraint if exists job_payments_status_check;
+alter table public.job_payments
+  add constraint job_payments_status_check
+  check (status in ('awaiting_card', 'card_saved', 'charged', 'failed', 'cancelled', 'free_launch', 'covered_by_pass'));
+
+drop index if exists public.job_payments_one_active_idx;
+create unique index if not exists job_payments_one_active_idx
+  on public.job_payments (job_id)
+  where status in ('awaiting_card', 'card_saved', 'charged', 'free_launch', 'covered_by_pass');
+
+-- ======================================================================
+-- 0052_founding_clinics.sql
+-- ======================================================================
+-- 0052: Founding clinics (Steve, 14th November 2026; step 5 of docs/plans/stripe-plan.md). Safe to run twice.
+--
+-- The first 50 clinic locations to have a job approved during the free launch are Founding clinics, in the order of that first approved job. Each
+-- location counts once. A Founding clinic gets a mark on its public clinic page for good, and the founding price lock if it takes a pass while the
+-- launch offer is open. Only the website's server reads and writes the list: the mark on the public page is added by the server, so visitors get
+-- no access to this table.
+
+create table if not exists public.founding_clinics (
+  employer_id      uuid primary key references public.employers (id) on delete cascade,
+  founding_number  integer not null unique check (founding_number between 1 and 50),
+  claimed_at       timestamptz not null default now(),
+  welcome_sent_at  timestamptz
+);
+alter table public.founding_clinics enable row level security;
+revoke all on public.founding_clinics from anon, authenticated;
+
+-- Takes the next place for a location, or returns the one it already has, or null when all places are taken. Two clinics approved at the same moment
+-- cannot take the same number: the lock makes them queue. For the server only.
+create or replace function public.claim_founding_place(emp uuid, max_places integer default 50)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  existing integer;
+  taken integer;
+  nxt integer;
+begin
+  perform pg_advisory_xact_lock(520052);
+  select founding_number into existing from public.founding_clinics where employer_id = emp;
+  if existing is not null then
+    return existing;
+  end if;
+  select count(*) into taken from public.founding_clinics;
+  if taken >= max_places then
+    return null;
+  end if;
+  select coalesce(max(founding_number), 0) + 1 into nxt from public.founding_clinics;
+  if nxt > max_places then
+    return null;
+  end if;
+  insert into public.founding_clinics (employer_id, founding_number) values (emp, nxt);
+  return nxt;
+end;
+$$;
+revoke execute on function public.claim_founding_place(uuid, integer) from public, anon, authenticated;
+
+-- Clinics that already have an approved job take their places now, in the order of their first approved job. Suppliers and manufacturers are not clinics.
+do $$
+declare
+  r record;
+begin
+  for r in
+    select e.id
+    from public.employers e
+    join public.jobs j on j.employer_id = e.id
+    where j.posted_at is not null and e.practice_type in ('independent', 'corporate')
+    group by e.id
+    order by min(j.posted_at)
+    limit 50
+  loop
+    perform public.claim_founding_place(r.id, 50);
+  end loop;
+end $$;
+
+-- What a founding pass remembers: that it is a founding pass, until when its price is locked, the Stripe schedule that moves it to the price in force,
+-- and which of the 2 emails about it have been sent. A clinic can read whether it is founding and the lock date for its own pass.
+alter table public.location_passes
+  add column if not exists founding boolean not null default false,
+  add column if not exists price_locked_until timestamptz,
+  add column if not exists stripe_schedule_id text,
+  add column if not exists thanks_sent_at timestamptz,
+  add column if not exists reminder_sent_at timestamptz;
+grant select (founding, price_locked_until) on public.location_passes to authenticated;
+
+-- ======================================================================
+-- 0054_social_links.sql
+-- ======================================================================
+-- 0054: optional social links (Steve, 15th November 2026). Safe to run twice.
+--
+-- A clinic or company can add its Instagram, Facebook and LinkedIn page, shown as small icons on its public page. A candidate can add their
+-- LinkedIn profile, which goes to a clinic only with an application (it is saved with the application, like the phone number).
+-- The website checks every address (lib/social-links.ts: https only, on the platform's own website). The database only limits the length.
+
+alter table public.employers add column if not exists social_instagram text;
+alter table public.employers add column if not exists social_facebook text;
+alter table public.employers add column if not exists social_linkedin text;
+
+alter table public.employers drop constraint if exists employers_social_length;
+alter table public.employers add constraint employers_social_length check (
+  char_length(coalesce(social_instagram, '')) <= 200 and char_length(coalesce(social_facebook, '')) <= 200 and char_length(coalesce(social_linkedin, '')) <= 200
+);
+
+-- Public columns: visitors see the links on a clinic's page. Only the clinic's own people change them (the row rules already decide who).
+grant select (social_instagram, social_facebook, social_linkedin) on public.employers to anon;
+grant insert (social_instagram, social_facebook, social_linkedin) on public.employers to authenticated;
+grant update (social_instagram, social_facebook, social_linkedin) on public.employers to authenticated;
+
+-- A candidate's LinkedIn profile. Private: not readable by visitors, and a clinic gets it only inside an application the candidate sends.
+alter table public.candidate_profiles add column if not exists linkedin_url text;
+
+alter table public.candidate_profiles drop constraint if exists candidate_profiles_linkedin_length;
+alter table public.candidate_profiles add constraint candidate_profiles_linkedin_length check (linkedin_url is null or char_length(linkedin_url) <= 200);
+
+grant insert (linkedin_url) on public.candidate_profiles to authenticated;
+grant update (linkedin_url) on public.candidate_profiles to authenticated;
+
+-- ======================================================================
 -- CHECK: after everything above has run, this lists every part of the
 -- database Kestrel needs. Every row should say OK.
 -- ======================================================================
-select thing, case when present then 'OK' when thing = 'private CV storage' then 'NOT YET (normal: it is created when the first CV is uploaded)' else 'MISSING' end as status
+-- 0053_job_headline.sql
+-- ======================================================================
+-- 0053: an optional one line headline on a job (Steve, 14th November 2026; plan in CLAUDE.md, next tasks item 12). Safe to run twice.
+--
+-- The job title is set from the role, the type of work, a level and a specialty, so every post reads the same way. The headline is the clinic's own
+-- voice, up to 70 characters, shown under the title on the job card and page and in the review queue. It is never part of the title sent to Google.
+-- The website checks it (lib/jobs.ts: no Canadian experience, no web address, no dollar amount) and the admin review is the backstop.
+
+alter table public.jobs add column if not exists headline text;
+
+alter table public.jobs drop constraint if exists jobs_headline_length;
+alter table public.jobs add constraint jobs_headline_length check (headline is null or char_length(headline) <= 70);
+
+-- Who may read and write it (a column missing from these lists silently fails to save).
+grant select (headline) on public.jobs to anon;
+grant insert (headline) on public.jobs to authenticated;
+grant update (headline) on public.jobs to authenticated;
+
+-- The copy kept when a live job is edited includes it, so the review queue can show what changed.
+create or replace function public.keep_live_version()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if old.status = 'live' and new.status = 'in_review' then
+    insert into public.job_versions (job_id, snapshot)
+    values (old.id, jsonb_build_object(
+      'title', old.title, 'headline', old.headline, 'role_category', old.role_category, 'employment_type', old.employment_type,
+      'province', old.province, 'city', old.city, 'pay_period', old.pay_period, 'pay_min', old.pay_min, 'pay_max', old.pay_max,
+      'pay_is_minimum', old.pay_is_minimum, 'pay_days_per_week', old.pay_days_per_week,
+      'pay_percent_min', old.pay_percent_min, 'pay_percent_max', old.pay_percent_max,
+      'pay_percent_of', old.pay_percent_of,
+      'pay_expected_min', old.pay_expected_min, 'pay_expected_max', old.pay_expected_max, 'pay_expected_period', old.pay_expected_period,
+      'tags_software', old.tags_software, 'tags_equipment', old.tags_equipment,
+      'tags_specialties', old.tags_specialties,
+      'is_existing_vacancy', old.is_existing_vacancy, 'uses_ai_screening', old.uses_ai_screening, 'description', old.description,
+      'apply_method', old.apply_method, 'apply_url', old.apply_url, 'work_arrangement', old.work_arrangement,
+      'territory', old.territory, 'pay_extras', old.pay_extras, 'posted_at', old.posted_at, 'expires_at', old.expires_at));
+  end if;
+  return null;
+end;
+$$;
+
+
+-- ======================================================================
+-- 0055_employer_interest.sql
+-- ======================================================================
+-- 0055: "Tell us you would like to work for them" (Steve, 19th November 2026). Safe to run twice.
+--
+-- A candidate who looks for a clinic or company that is not on Kestrel yet can say they would like to work for it. Kestrel keeps the clinic's
+-- name, town and website (if the candidate knows it), with who asked, so Admin can see how many people are asking about each. Nothing is sent
+-- to the clinic now. When clinic outreach is switched on, a clinic that is asked about can be sent 1 short email to its published business
+-- address, with no candidate's name or details in it. Only the website's server reads and writes this table (visitors and signed in people
+-- have no access), and the candidate's own rows are in their data download and are deleted with their account.
+
+create table if not exists public.employer_interest (
+  id            uuid primary key default gen_random_uuid(),
+  created_at    timestamptz not null default now(),
+  candidate_id  uuid not null references auth.users (id) on delete cascade,
+  clinic_name   text not null check (char_length(clinic_name) between 2 and 120),
+  town          text check (town is null or char_length(town) <= 80),
+  province      text check (province is null or char_length(province) <= 40),
+  website       text check (website is null or char_length(website) <= 200),
+  name_key      text not null check (char_length(name_key) <= 220),
+  unique (candidate_id, name_key)
+);
+create index if not exists employer_interest_name_key_idx on public.employer_interest (name_key);
+alter table public.employer_interest enable row level security;
+revoke all on public.employer_interest from anon, authenticated;
+
+
+-- ======================================================================
+-- 0056_licence_numbers.sql
+-- ======================================================================
+-- 0056: registration number on a candidate's profile (Steve, 19th November 2026; plan in docs/plans/licence-numbers.md). Safe to run twice.
+--
+-- An optometrist or optician can give the number their college issued them, the province, and (opticians) whether they are registered for
+-- eyeglasses, contact lenses or both. It is entered by the candidate and is not checked by Kestrel. It is private: visitors cannot read it,
+-- and a clinic gets it only inside an application the candidate sends (it is saved with the application, like the phone number). The number
+-- is text, so a leading zero is kept. The website checks the shape (lib/licence.ts); the database limits the length.
+
+alter table public.candidate_profiles add column if not exists licence_province text;
+alter table public.candidate_profiles add column if not exists licence_number text;
+alter table public.candidate_profiles add column if not exists licence_does text[] not null default '{}';
+alter table public.candidate_profiles add column if not exists licence_not_yet boolean not null default false;
+
+alter table public.candidate_profiles drop constraint if exists candidate_profiles_licence_length;
+alter table public.candidate_profiles add constraint candidate_profiles_licence_length check (
+  char_length(coalesce(licence_province, '')) <= 40 and char_length(coalesce(licence_number, '')) <= 20
+);
+
+grant insert (licence_province, licence_number, licence_does, licence_not_yet) on public.candidate_profiles to authenticated;
+grant update (licence_province, licence_number, licence_does, licence_not_yet) on public.candidate_profiles to authenticated;
+
+
+-- ======================================================================
+-- 0057_employer_follows.sql
+-- ======================================================================
+-- 0057: follow a clinic or company (Steve, 19th November 2026). Safe to run twice.
+--
+-- A candidate can follow a clinic or supplier that has a public page on Kestrel, and gets an email when it posts a new job (in the same daily
+-- email as their job alerts, never more than 1 email a day). `last_sent_at` starts when they follow, so they hear only about jobs posted after
+-- that. Only the website's server reads and writes this table: visitors, other candidates and the clinics themselves have no access, so a
+-- clinic cannot see who follows it. Follows go when the candidate's account or the clinic is deleted, and are in the candidate's data download.
+
+create table if not exists public.employer_follows (
+  user_id      uuid not null references auth.users (id) on delete cascade,
+  employer_id  uuid not null references public.employers (id) on delete cascade,
+  created_at   timestamptz not null default now(),
+  last_sent_at timestamptz not null default now(),
+  primary key (user_id, employer_id)
+);
+create index if not exists employer_follows_employer_idx on public.employer_follows (employer_id);
+create index if not exists employer_follows_due_idx on public.employer_follows (last_sent_at);
+alter table public.employer_follows enable row level security;
+revoke all on public.employer_follows from anon, authenticated;
+
+
+-- ======================================================================
+-- 0058_interest_notified.sql
+-- ======================================================================
+-- 0058: remember who has been told that a clinic they asked about has joined (Steve, 19th November 2026). Safe to run twice.
+--
+-- The "tell us you would like to work for them" form (0055) promises "if they join Kestrel we will let you know". When a clinic or company gets a
+-- public page, the daily job finds the people who asked about it, tells them once, and records it here so nobody is told twice. Still readable
+-- and writable only by the website's server (0055 gave visitors and signed in people no access, and nothing here changes that).
+
+alter table public.employer_interest add column if not exists notified_at timestamptz;
+alter table public.employer_interest add column if not exists notified_employer_id uuid references public.employers (id) on delete set null;
+create index if not exists employer_interest_waiting_idx on public.employer_interest (created_at) where notified_at is null;
+
+
+-- ======================================================================
+-- 0059_saved_jobs.sql
+-- ======================================================================
+-- 0059: saved jobs (Steve, 19th November 2026). Safe to run twice.
+--
+-- A candidate can save a job to apply for later. Only the website's server reads and writes this table: visitors, other candidates and
+-- clinics have no access, so a clinic never sees who saved its job. A saved job goes when the candidate's account or the job is deleted, and
+-- the list is in the candidate's data download. `reminded_at` records that the candidate was reminded the job is about to close, so it is
+-- done once.
+
+create table if not exists public.saved_jobs (
+  user_id     uuid not null references auth.users (id) on delete cascade,
+  job_id      uuid not null references public.jobs (id) on delete cascade,
+  created_at  timestamptz not null default now(),
+  reminded_at timestamptz,
+  primary key (user_id, job_id)
+);
+create index if not exists saved_jobs_job_idx on public.saved_jobs (job_id);
+-- Safe to run again after an earlier version of this migration.
+alter table public.saved_jobs add column if not exists reminded_at timestamptz;
+alter table public.saved_jobs enable row level security;
+revoke all on public.saved_jobs from anon, authenticated;
+
+
+-- ======================================================================
+select thing, case when present then 'OK' when thing = 'private resume storage' then 'NOT YET (normal: it is created when the first resume is uploaded)' else 'MISSING' end as status
 from (
   values
     ('table: waitlist', to_regclass('public.waitlist') is not null),
@@ -2723,7 +3471,7 @@ from (
     ('column: candidate software skills', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'software_skills')),
     ('permission: candidates can save their job preferences', has_column_privilege('authenticated', 'public.candidate_profiles', 'home_city', 'UPDATE')),
     ('column: days a week on a daily rate', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'pay_days_per_week')),
-    ('private CV storage', exists (select 1 from storage.buckets where id = 'cvs')),
+    ('private resume storage', exists (select 1 from storage.buckets where id = 'cvs')),
     ('column: the application a clinic hired for a filled job', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'filled_application_id')),
     ('column: candidate first step seen', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'start_seen_at')),
     ('career stage answers cleared and no longer writable (0043)', not has_column_privilege('authenticated', 'public.candidate_profiles', 'career_stage', 'UPDATE') and not exists (select 1 from public.candidate_profiles where career_stage is not null)),
@@ -2753,6 +3501,28 @@ from (
     ('rule: every email sign up needs Kestrel''s ticket, even with the gate open (0041)', exists (select 1 from pg_proc where proname = 'gate_new_users' and pronamespace = 'public'::regnamespace and prosrc like '%Please sign up on the Kestrel website%') and exists (select 1 from pg_trigger where tgname = 'gate_new_users' and tgrelid = 'auth.users'::regclass and tgenabled <> 'D')),
     ('table: email_send_counts (emails sent each day, for the server only) (0042)', to_regclass('public.email_send_counts') is not null and exists (select 1 from pg_proc where proname = 'count_email_send' and pronamespace = 'public'::regnamespace) and not has_function_privilege('anon', 'public.count_email_send(integer)', 'EXECUTE') and not has_function_privilege('authenticated', 'public.count_email_send(integer)', 'EXECUTE')),
     ('rule: applications are kept when a job or clinic is deleted (0044)', exists (select 1 from pg_trigger where tgname = 'jobs_keep_applications' and tgrelid = 'public.jobs'::regclass and tgenabled <> 'D') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'applications' and column_name = 'clinic_left_at') and exists (select 1 from pg_constraint where conname = 'applications_job_id_fkey' and confdeltype = 'n')),
+    ('table: employer_members (clinic team, 0045)', to_regclass('public.employer_members') is not null),
+    ('table: employer_invites (team invitations, 0045)', to_regclass('public.employer_invites') is not null),
+    ('table: admin_actions (changes Kestrel made for a clinic, 0045)', to_regclass('public.admin_actions') is not null),
+    ('function: can_edit_employer (team access, 0045)', exists (select 1 from pg_proc where proname = 'can_edit_employer')),
+    ('table: support_requests (help requests and feedback, 0046)', to_regclass('public.support_requests') is not null),
+    ('several locations for 1 owner (0047)', to_regclass('public.employers_owner_idx') is null and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_invites' and column_name = 'also_employer_ids')),
+    ('table: job_payments (a card is saved at submission and charged at approval, 0048)', to_regclass('public.job_payments') is not null and not has_table_privilege('anon', 'public.job_payments', 'SELECT') and not has_column_privilege('authenticated', 'public.job_payments', 'stripe_payment_method_id', 'SELECT')),
+    ('table: employer_billing (which Stripe customer a clinic is, for the server only, 0048)', to_regclass('public.employer_billing') is not null and not has_table_privilege('authenticated', 'public.employer_billing', 'SELECT')),
+    ('table: job_activity (notes log for each job, for the server only, 0049)', to_regclass('public.job_activity') is not null and not has_table_privilege('authenticated', 'public.job_activity', 'SELECT') and not has_table_privilege('anon', 'public.job_activity', 'SELECT')),
+    ('columns: invoice links on job_payments, readable by the clinic, the Stripe invoice id for the server only (0050)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'job_payments' and column_name = 'invoice_pdf_url') and has_column_privilege('authenticated', 'public.job_payments', 'invoice_pdf_url', 'SELECT') and not has_column_privilege('authenticated', 'public.job_payments', 'stripe_invoice_id', 'SELECT')),
+    ('table: location_passes (a clinic pass for a location, the Stripe ids for the server only, 0051)', to_regclass('public.location_passes') is not null and has_column_privilege('authenticated', 'public.location_passes', 'status', 'SELECT') and not has_column_privilege('authenticated', 'public.location_passes', 'stripe_subscription_id', 'SELECT') and not has_table_privilege('anon', 'public.location_passes', 'SELECT')),
+    ('rule: a job covered by a pass is a payment status (0051)', exists (select 1 from pg_constraint where conname = 'job_payments_status_check' and pg_get_constraintdef(oid) like '%covered_by_pass%')),
+    ('table: founding_clinics (the first 50 clinics, for the server only, 0052)', to_regclass('public.founding_clinics') is not null and not has_table_privilege('anon', 'public.founding_clinics', 'SELECT') and not has_table_privilege('authenticated', 'public.founding_clinics', 'SELECT')),
+    ('function: claim_founding_place is for the server only (0052)', exists (select 1 from pg_proc where proname = 'claim_founding_place' and pronamespace = 'public'::regnamespace) and not has_function_privilege('anon', 'public.claim_founding_place(uuid, integer)', 'EXECUTE') and not has_function_privilege('authenticated', 'public.claim_founding_place(uuid, integer)', 'EXECUTE')),
+    ('columns: a pass remembers if it is a founding pass and its price lock (0052)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'location_passes' and column_name = 'price_locked_until') and has_column_privilege('authenticated', 'public.location_passes', 'price_locked_until', 'SELECT') and not has_column_privilege('authenticated', 'public.location_passes', 'stripe_schedule_id', 'SELECT')),
+    ('column: an optional headline on a job, readable by visitors (0053)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'jobs' and column_name = 'headline') and has_column_privilege('anon', 'public.jobs', 'headline', 'SELECT')),
+    ('columns: a clinic''s social links readable by visitors, a candidate''s LinkedIn private (0054)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employers' and column_name = 'social_linkedin') and has_column_privilege('anon', 'public.employers', 'social_linkedin', 'SELECT') and exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'linkedin_url') and not has_column_privilege('anon', 'public.candidate_profiles', 'linkedin_url', 'SELECT')),
+    ('table: employer_interest (candidates asking about clinics not on Kestrel, for the server only, 0055)', to_regclass('public.employer_interest') is not null and not has_table_privilege('anon', 'public.employer_interest', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT')),
+    ('columns: a candidate''s registration number, private to them and to a clinic through an application (0056)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'candidate_profiles' and column_name = 'licence_number') and not has_column_privilege('anon', 'public.candidate_profiles', 'licence_number', 'SELECT') and has_column_privilege('authenticated', 'public.candidate_profiles', 'licence_number', 'UPDATE')),
+    ('table: employer_follows (candidates following a clinic or company, for the server only, 0057)', to_regclass('public.employer_follows') is not null and not has_table_privilege('anon', 'public.employer_follows', 'SELECT') and not has_table_privilege('authenticated', 'public.employer_follows', 'SELECT')),
+    ('columns: who has been told a clinic they asked about joined, still for the server only (0058)', exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'employer_interest' and column_name = 'notified_at') and not has_table_privilege('authenticated', 'public.employer_interest', 'SELECT') and not has_column_privilege('authenticated', 'public.employer_interest', 'notified_at', 'SELECT')),
+    ('table: saved_jobs (jobs candidates saved to apply for later, for the server only, 0059)', to_regclass('public.saved_jobs') is not null and not has_table_privilege('anon', 'public.saved_jobs', 'SELECT') and not has_table_privilege('authenticated', 'public.saved_jobs', 'SELECT')),
     ('people without a profile (should be 0 problems)', not exists (select 1 from auth.users u where not exists (select 1 from public.profiles p where p.id = u.id)))
 ) as checks(thing, present)
 order by 2, 1;

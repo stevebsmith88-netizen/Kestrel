@@ -57,6 +57,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
             "Thanks for registering with Kestrel. If you would like a hand with your first advert, reply to this email and we will help, or post it for you.",
             "Write a few lines about the role and the ad builder gives you a draft to edit. Put the pay range in: candidates on Kestrel see the pay on every job, and a post cannot go live without it.",
             "A person reads each post before it goes live, usually within 1 business day.",
+            "While you are there, add your clinic's Instagram, Facebook or LinkedIn page and tell candidates more about your team in the About box. A complete profile helps attract more candidates.",
           ],
           buttonText: "Post a job",
           buttonPath: "/clinic/jobs/new",
@@ -67,7 +68,7 @@ function clinicEmail(day: number, f: ClinicFacts, name: string): Built {
           paragraphs: [
             hello,
             "Thanks for registering with Kestrel. Your account is ready. The next step is your clinic profile: the clinic's name, where it is and where to send applicant alerts. It takes about 2 minutes.",
-            "After that you can post your first job. Every post needs a pay range and 2 yes or no answers, and the form walks you through them.",
+            "After that you can post your first job. Every post needs a pay range and 2 yes or no answers, and the form walks you through them. A complete profile, with a few lines about your team and your clinic's social pages if you have them, helps attract more candidates.",
           ],
           buttonText: "Create my clinic profile",
           buttonPath: "/clinic/profile",
@@ -141,7 +142,7 @@ function candidateEmail(day: number, f: CandidateFacts, name: string): Built {
       ? {
           subject: "Jobs that fit you on Kestrel",
           heading: "Your profile is ready",
-          paragraphs: [hello, "Your dashboard now suggests jobs from what you told us, with the reasons shown. Every job lists its pay, so you can see what a job pays before you spend time on it."],
+          paragraphs: [hello, "Your dashboard now suggests jobs from what you told us, with the reasons shown. Every job lists its pay, so you can see what a job pays before you spend time on it.", "You can also add your LinkedIn profile under More about you. It goes to a clinic only when you apply."],
           buttonText: "See jobs for me",
           buttonPath: "/candidate",
         }

@@ -3,7 +3,7 @@
 import { Field } from "@/components/Field";
 import { useServerForm } from "@/components/useServerForm";
 import { createAlert } from "@/lib/alert-actions";
-import { ALERT_FREQUENCIES, PRACTICE_TYPES, PROVINCES, ROLE_CATEGORIES } from "@/lib/jobs";
+import { ALERT_FREQUENCIES, PRACTICE_TYPES, PROVINCES, QUEBEC, ROLE_CATEGORIES } from "@/lib/jobs";
 
 export default function AlertForm() {
   const { state, pending, submit } = useServerForm(createAlert);
@@ -21,7 +21,8 @@ export default function AlertForm() {
         <Field id="al-province" label="Province or territory">
           <select id="al-province" name="province" defaultValue="">
             <option value="">All of Canada</option>
-            {PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
+            {/* No Quebec: no jobs are posted there yet, so an alert for it would never send (review item D-05). */}
+            {PROVINCES.filter((p) => p !== QUEBEC).map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         </Field>
         <Field id="al-practice" label="Type of employer">

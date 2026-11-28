@@ -2,8 +2,10 @@ import Link from "next/link";
 import { comparePageOn } from "@/lib/compare-prices";
 import { findYourFitOn } from "@/lib/features";
 import { TAGLINE } from "@/lib/launch-rules";
-import { socialPages } from "@/lib/social";
-import Icon from "@/components/Icon";
+import { socialPages, type SocialPage } from "@/lib/social";
+import Icon, { type IconName } from "@/components/Icon";
+
+const ICON_FOR: Record<SocialPage["name"], IconName> = { LinkedIn: "linkedin", Instagram: "instagram", Facebook: "facebook", Reddit: "reddit" };
 
 // The one footer for every page. The wordmark is the existing reversed brand file. The street address is not shown here: CASL needs it
 // in emails only. Find your fit and Compare prices appear only while those pages are switched on, so a link never leads to a 404.
@@ -45,7 +47,7 @@ export default function AppFooter() {
                 {socialPages().map((p) => (
                   <li key={p.name}>
                     <a href={p.url} target="_blank" rel="noopener noreferrer" aria-label={`Kestrel Eye Care Jobs on ${p.name} (opens in a new tab)`}>
-                      <Icon name={p.name === "LinkedIn" ? "linkedin" : "instagram"} />
+                      <Icon name={ICON_FOR[p.name]} />
                     </a>
                   </li>
                 ))}

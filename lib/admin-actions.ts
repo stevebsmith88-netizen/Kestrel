@@ -5,77 +5,47 @@ import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import { SITE_URL, emailLayout, sendEmail } from "@/lib/email";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { jobLiveEmail, jobNeedsChangeEmail } from "@/lib/clinic-emails";
-import { expiryFrom, isQuebecJob, longDate } from "@/lib/jobs";
+import { approveJobNow, rejectJobNow } from "@/lib/job-approval";
+import { longDate } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
 import { normaliseAddress } from "@/lib/unsubscribe-token";
 import { supabaseAdmin } from "@/lib/supabase-server";
 import { notify } from "@/lib/notifications";
-import { jobApproved, jobNeedsChange, jobTakenDown } from "@/lib/notify-text";
+import { jobTakenDown } from "@/lib/notify-text";
 import { refreshJobPages } from "@/lib/job-cache";
+import type { JobFormState } from "@/lib/jobs";
+import { reviewMessage, reviewSucceeded } from "@/lib/review-notices";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-// Publishing and rejecting always go through the server, after checking the person is an
-// admin. No browser can publish a job by itself.
-// Tells the clinic what happened to their job. Never stops the approval if the email fails.
-async function emailClinic(db: SupabaseClient, jobId: string, kind: "live" | "needs-change", extra: { wasEdit?: boolean; note?: string } = {}) {
-  const { data: job } = await db.from("jobs").select("title, employer_id, expires_at").eq("id", jobId).maybeSingle();
-  if (!job) return;
-  const { data: owner } = await db.from("employers").select("owner_id").eq("id", job.employer_id).maybeSingle();
-  await notify(db, owner?.owner_id, kind === "live" ? jobApproved({ jobTitle: job.title, jobId, wasEdit: Boolean(extra.wasEdit) }) : jobNeedsChange({ jobTitle: job.title, jobId, note: extra.note ?? "" }));
-  const { data: contact } = await db.from("employer_contacts").select("notify_email").eq("employer_id", job.employer_id).maybeSingle();
-  if (!contact?.notify_email) return;
-  const mail =
-    kind === "live"
-      ? jobLiveEmail({ title: job.title, jobId, expiresLabel: job.expires_at ? longDate(job.expires_at) : null, wasEdit: Boolean(extra.wasEdit) })
-      : jobNeedsChangeEmail({ title: job.title, jobId, note: extra.note ?? "" });
-  await sendEmail({ to: contact.notify_email, ...mail });
-}
+// Publishing and rejecting always go through the server, after checking the person is an admin (lib/job-approval.ts holds the work).
+const cleanNote = (form: FormData) => String(form.get("note") ?? "").trim().slice(0, 1000);
+const toState = (result: { key: string; why?: string }): JobFormState => (reviewSucceeded(result.key) ? { message: reviewMessage(result.key) } : { error: reviewMessage(result.key, result.why) });
 
 export async function approveJob(form: FormData) {
   await requireRole("admin");
-  const id = String(form.get("id") ?? "");
-  const db = supabaseAdmin();
-  if (!UUID.test(id) || !db) redirect("/admin/review?notice=error");
-  const now = new Date();
-  // A job that was live before (it was edited and sent back) keeps its original 30 days. Otherwise editing
-  // would be a way to keep a job live for ever.
-  const { data: before } = await db.from("jobs").select("posted_at, expires_at, province").eq("id", id).eq("status", "in_review").maybeSingle();
-  // The form refuses Quebec, so a Quebec job here reached the queue another way. It is never made live (the database refuses it too).
-  if (before && isQuebecJob(before)) redirect("/admin/review?notice=quebec");
-  const dates = before?.posted_at && before?.expires_at ? {} : { posted_at: now.toISOString(), expires_at: expiryFrom(now).toISOString() };
-  const { data, error } = await db
-    .from("jobs")
-    .update({ status: "live", ...dates, review_note: null })
-    .eq("id", id)
-    .eq("status", "in_review")
-    .select("id");
-  if (error || !data?.length) {
-    console.error("Approve failed:", error?.code, error?.message);
-    redirect("/admin/review?notice=error");
-  }
-  await emailClinic(db, id, "live", { wasEdit: Boolean(before?.posted_at) });
+  const result = await approveJobNow(String(form.get("id") ?? ""), "admin");
   revalidatePath("/admin/review");
-  refreshJobPages();
-  redirect("/admin/review?notice=approved");
+  redirect(`/admin/review?notice=${result.key}${result.why ? `&why=${encodeURIComponent(result.why)}` : ""}`);
 }
 
 export async function rejectJob(form: FormData) {
   await requireRole("admin");
-  const id = String(form.get("id") ?? "");
-  const note = String(form.get("note") ?? "").trim().slice(0, 1000);
-  const db = supabaseAdmin();
-  if (!UUID.test(id) || !db) redirect("/admin/review?notice=error");
-  if (!note) redirect("/admin/review?notice=need-note");
-  const { data, error } = await db.from("jobs").update({ status: "rejected", review_note: note }).eq("id", id).eq("status", "in_review").select("id");
-  if (error || !data?.length) {
-    console.error("Reject failed:", error?.code, error?.message);
-    redirect("/admin/review?notice=error");
-  }
-  await emailClinic(db, id, "needs-change", { note });
+  const result = await rejectJobNow(String(form.get("id") ?? ""), cleanNote(form));
   revalidatePath("/admin/review");
-  redirect("/admin/review?notice=rejected");
+  redirect(`/admin/review?notice=${result.key}`);
+}
+
+// The buttons on the review page. They hand back the result and the page stays where it is, with the message under that job. The queue is
+// not refreshed, so the job stays on screen showing what happened; it is gone the next time the page is opened.
+export async function approveJobQuiet(_prev: JobFormState, form: FormData): Promise<JobFormState> {
+  await requireRole("admin");
+  return toState(await approveJobNow(String(form.get("id") ?? ""), "admin"));
+}
+
+export async function rejectJobQuiet(_prev: JobFormState, form: FormData): Promise<JobFormState> {
+  await requireRole("admin");
+  return toState(await rejectJobNow(String(form.get("id") ?? ""), cleanNote(form)));
 }
 
 // A report is either answered by taking the job down, or dismissed. Both are recorded.
@@ -103,7 +73,7 @@ export async function takeDownReportedJob(form: FormData) {
         heading: "We have taken down one of your jobs",
         paragraphs: [
           `After a report, we took down your post "${job.title}" while we look into it.`,
-          "If you think this was a mistake, or you would like to fix the post and put it back up, just reply to this email or write to hello@eyecarejobs.ca.",
+          "If you think this was a mistake, or you would like to fix the post and put it back up, just reply to this email or write to support@eyecarejobs.ca.",
         ],
         buttonText: "Open your dashboard",
         buttonUrl: `${SITE_URL}/clinic`,

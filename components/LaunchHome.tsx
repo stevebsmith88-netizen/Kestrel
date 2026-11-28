@@ -5,7 +5,8 @@ import EyeCareNumbers from "@/components/EyeCareNumbers";
 import HomeBlogStrip from "@/components/HomeBlogStrip";
 import JobCard from "@/components/JobCard";
 import SiteHeader from "@/components/SiteHeader";
-import { findYourFitOn, homeBlogOn } from "@/lib/features";
+import { PRELAUNCH_HOME_BODY, PRELAUNCH_HOME_LEAD } from "@/lib/posting-copy";
+import { findYourFitOn, homeBlogOn, postingOn } from "@/lib/features";
 import { LANDING_PROVINCES, LANDING_ROLES, provinceHref } from "@/lib/landing";
 import { CLINIC_PASS, ROLE_BANDS, dollars } from "@/lib/pricing";
 import { getFilterCounts, searchJobs } from "@/lib/public-jobs";
@@ -26,10 +27,11 @@ export default async function LaunchHome() {
         <section className="lh-hero" aria-labelledby="lh-title">
           <div className="wrap">
             <h1 id="lh-title">Find your next eye care job</h1>
-            <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay, and a person reads every post before it goes live.</p>
+            <p className="lh-lede">Independent and corporate practices across Canada. Every job shows its pay.</p>
+            {!postingOn() && <p className="lh-lede lh-note"><strong>{PRELAUNCH_HOME_LEAD}</strong> {PRELAUNCH_HOME_BODY}</p>}
             <form method="get" action="/jobs" className="lh-search" role="search" aria-label="Search jobs">
-              <label className="sr" htmlFor="lh-q">Role or keyword</label>
-              <input id="lh-q" name="q" type="text" placeholder="Role or keyword, for example optician" autoComplete="off" />
+              <label className="sr" htmlFor="lh-q">Role, keyword or clinic name</label>
+              <input id="lh-q" name="q" type="text" placeholder="Role, keyword or clinic name" autoComplete="off" />
               <label className="sr" htmlFor="lh-province">Province or territory</label>
               <select id="lh-province" name="province" defaultValue="">
                 <option value="">All of Canada</option>
@@ -37,7 +39,7 @@ export default async function LaunchHome() {
               </select>
               <button type="submit" className="btn">Search jobs</button>
             </form>
-            <p className="lh-sub">Hiring for your clinic? <Link href="/clinics" className="btn sm ghost">Post a job</Link></p>
+            <p className="lh-sub">Hiring for your clinic? {postingOn() ? <Link href="/clinics" className="btn sm ghost">Post a job</Link> : <><span>Posting opens at launch, early 2027.</span> <Link href="/sign-up?type=clinic" className="btn sm ghost">Create a clinic account</Link></>}</p>
           </div>
           <div className="lh-skyline" aria-hidden="true">
             <Image src="/skyline.png" alt="Illustration of Canadian mountains, forest and a city skyline" width={2000} height={462} priority sizes="100vw" />
@@ -50,9 +52,9 @@ export default async function LaunchHome() {
             {latest.length > 0 ? (
               <div className="joblist">{latest.map((j) => <JobCard key={j.id} job={j} />)}</div>
             ) : (
-              <div className="card emptystate">
-                <h3>The first jobs are on their way</h3>
-                <p>New jobs appear here as clinics post them. Create an account and set a job alert, and we will email you when one fits your role and province.</p>
+              <div className="card emptystate compact">
+                <h3>The first jobs arrive at launch</h3>
+                <p>New jobs will appear here as clinics post them. Create an account and set a job alert, and we will email you when one fits your role and province.</p>
                 <p className="emptyactions"><Link href="/sign-up" className="btn">Create an account</Link></p>
               </div>
             )}
@@ -87,13 +89,13 @@ export default async function LaunchHome() {
             <div>
               <p className="kicker">For clinics</p>
               <h2 id="lh-clinics-h">Hire people who chose eye care</h2>
-              <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, a person reads it before it goes live, and agencies cannot post.</p>
+              <p>Candidates pick a role, a province and the kind of practice before they see your post, so the people who apply have picked you for a reason. Every post shows its pay range, <Link href="/posting-policy" className="quietlink">a person reads it before it goes live</Link>, and agencies cannot post. Anyone can <Link href="/fake-jobs" className="quietlink">report a fake job</Link>.</p>
             </div>
             <div className="lh-offer">
-              <p className="lh-offerhead">Free to post while we launch</p>
+              <p className="lh-offerhead">{postingOn() ? "Free to post while we launch, and first jobs stay up for 60 days" : "Posting opens at launch in early 2027, and it will be free while we launch"}</p>
               <p>After that, a 30 day post starts at {dollars(ROLE_BANDS[0].price)}, or the Clinic pass is {dollars(CLINIC_PASS.monthly)} a month for up to {CLINIC_PASS.livePosts} live posts. No charge by the click.</p>
               <p className="lh-offeractions">
-                <Link href="/clinics" className="btn">Post a job</Link>
+                <Link href={postingOn() ? "/clinics" : "/sign-up?type=clinic"} className="btn">{postingOn() ? "Post a job" : "Create a clinic account"}</Link>
                 <Link href="/compare" className="btn ghost">Compare prices</Link>
               </p>
             </div>

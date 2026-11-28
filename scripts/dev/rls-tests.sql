@@ -14,7 +14,10 @@ update public.signup_gate set open = true;
 delete from auth.users where email like '%@rls.test';
 
 insert into t.people values
-  ('ann', gen_random_uuid()), ('bo', gen_random_uuid()), ('clinic_c', gen_random_uuid()), ('clinic_d', gen_random_uuid()), ('admin', gen_random_uuid());
+  ('ann', gen_random_uuid()), ('bo', gen_random_uuid()), ('clinic_c', gen_random_uuid()), ('clinic_d', gen_random_uuid()), ('admin', gen_random_uuid()),
+  -- 0045: clinic C's team. Edith can view and edit, Vic can view only, Nell has a clinic account but no clinic, m3 to m5 fill the team up.
+  ('clinic_edith', gen_random_uuid()), ('clinic_vic', gen_random_uuid()), ('clinic_nell', gen_random_uuid()),
+  ('clinic_m3', gen_random_uuid()), ('clinic_m4', gen_random_uuid()), ('clinic_m5', gen_random_uuid());
 
 insert into auth.users (id, email, raw_user_meta_data)
 select id, name || '@rls.test',
@@ -44,6 +47,10 @@ insert into public.jobs (id, employer_id, title, status)
 values ((select id from t.things where name = 'job_c_draft'), (select id from t.things where name = 'employer_c'), 'Draft job', 'draft');
 
 insert into public.candidate_profiles (user_id, profession) select id, 'Optician' from t.people where name in ('ann', 'bo');
+
+insert into public.employer_members (employer_id, user_id, level)
+values ((select id from t.things where name = 'employer_c'), (select id from t.people where name = 'clinic_edith'), 'edit'),
+       ((select id from t.things where name = 'employer_c'), (select id from t.people where name = 'clinic_vic'), 'view');
 
 insert into public.applications (id, job_id, candidate_id, status, applicant, job_title, clinic_name, job_location, viewed_at)
 values ((select id from t.things where name = 'app_ann_c'), (select id from t.things where name = 'job_c_live'), (select id from t.people where name = 'ann'),
@@ -95,6 +102,17 @@ end;
 $$;
 
 -- ---------------------------------------------------------------- what already held in the audit (kept so it stays that way)
+
+-- Payments (0048): clinic C has 2, clinic D has 1.
+insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status, stripe_payment_method_id, stripe_payment_intent_id)
+values
+  ((select id from t.things where name = 'job_c_draft'), (select id from t.things where name = 'employer_c'), 'Optician', 'Clinic C', 'opticians', 7900, 'card_saved', 'pm_test_c', null),
+  ((select id from t.things where name = 'job_c_live'), (select id from t.things where name = 'employer_c'), 'Optician', 'Clinic C', 'opticians', 7900, 'charged', 'pm_test_c', 'pi_test_c'),
+  ((select id from t.things where name = 'job_d_live'), (select id from t.things where name = 'employer_d'), 'Optician', 'Clinic D', 'opticians', 7900, 'card_saved', 'pm_test_d', null);
+
+-- A pass (0051): clinic C has an active Clinic pass.
+insert into public.location_passes (employer_id, plan, status, stripe_subscription_id, stripe_payment_method_id, current_period_end)
+values ((select id from t.things where name = 'employer_c'), 'clinic_pass', 'active', 'sub_test_c', 'pm_pass_c', now() + interval '20 days');
 
 select t.try('held', 'visitor cannot read profiles', 'visitor', 'count', 'select id from public.profiles', 'blocked');
 select t.try('held', 'visitor cannot read candidate profiles', 'visitor', 'count', 'select user_id from public.candidate_profiles', 'blocked');
@@ -256,3 +274,205 @@ select t.try('P1-24', 'a visitor cannot read the count', 'visitor', 'count', 'se
 select t.try('P1-24', 'a signed in person cannot read the count', 'bo', 'count', 'select * from public.email_send_counts', 'refused');
 select t.try('P1-24', 'a signed in person cannot add to the count', 'bo', 'value', $$select public.count_email_send(50)::text$$, 'refused');
 select t.try('P1-24', 'a visitor cannot add to the count', 'visitor', 'value', $$select public.count_email_send(50)::text$$, 'refused');
+
+-- ---------------------------------------------------------------- 0045: a clinic's team (owner, can view and edit, view only)
+select t.try('0045', 'Edith (view and edit) sees Ann''s application to clinic C', 'clinic_edith', 'count', 'select id from public.applications', '1 rows');
+select t.try('0045', 'Vic (view only) sees Ann''s application to clinic C', 'clinic_vic', 'count', 'select id from public.applications', '1 rows');
+select t.try('0045', 'Vic sees its history', 'clinic_vic', 'count', 'select id from public.application_events', '3 rows');
+select t.try('0045', 'Nell (a clinic account with no clinic) sees no applications', 'clinic_nell', 'count', 'select id from public.applications', 'blocked');
+select t.try('0045', 'Nell sees no jobs through her own sign in', 'clinic_nell', 'count', 'select id from public.jobs', 'blocked');
+select t.try('0045', 'Edith reads clinic C''s 2 jobs', 'clinic_edith', 'count', 'select * from public.jobs', '2 rows');
+select t.try('0045', 'Vic reads clinic C''s 2 jobs', 'clinic_vic', 'count', 'select * from public.jobs', '2 rows');
+select t.try('0045', 'Edith reads her clinic', 'clinic_edith', 'count', 'select id from public.employers', '1 rows');
+select t.try('0045', 'Edith can send a job for review', 'clinic_edith', 'write', $$insert into public.jobs (employer_id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, is_existing_vacancy, uses_ai_screening, description, status) values ('{employer_c}', 'Optician', 'Optician', 'Full time', 'Ontario', 'Guelph', 'year', 50000, 60000, true, false, 'A made up job used only by the access tests in scripts/dev.', 'in_review')$$, '1 rows');
+select t.try('0045', 'Vic cannot send a job for review', 'clinic_vic', 'write', $$insert into public.jobs (employer_id, title, status) values ('{employer_c}', 'Draft', 'draft')$$, 'refused');
+select t.try('0045', 'Edith can change a draft', 'clinic_edith', 'write', $$update public.jobs set title = 'Changed' where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0045', 'Vic cannot change a draft', 'clinic_vic', 'write', $$update public.jobs set title = 'Changed' where id = '{job_c_draft}'$$, 'blocked');
+select t.try('0045', 'Edith can delete a draft', 'clinic_edith', 'write', $$delete from public.jobs where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0045', 'Vic cannot delete a draft', 'clinic_vic', 'write', $$delete from public.jobs where id = '{job_c_draft}'$$, 'blocked');
+select t.try('0045', 'Edith cannot touch clinic D''s job', 'clinic_edith', 'write', $$update public.jobs set status = 'closed' where id = '{job_d_live}'$$, 'blocked');
+select t.try('0045', 'Edith cannot change the clinic profile (owner only)', 'clinic_edith', 'write', $$update public.employers set clinic_name = 'Mine' where id = '{employer_c}'$$, 'blocked');
+select t.try('0045', 'Vic cannot change the clinic profile', 'clinic_vic', 'write', $$update public.employers set clinic_name = 'Mine' where id = '{employer_c}'$$, 'blocked');
+select t.try('0045', 'Edith cannot read the private alert address (owner only)', 'clinic_edith', 'count', 'select notify_email from public.employer_contacts', 'blocked');
+select t.try('0045', 'Vic can add a private note', 'clinic_vic', 'write', $$insert into public.application_notes (application_id, note) values ('{app_ann_c}', 'Looks good')$$, '1 rows');
+select t.try('0045', 'Nell cannot add a note', 'clinic_nell', 'write', $$insert into public.application_notes (application_id, note) values ('{app_ann_c}', 'x')$$, 'refused');
+select t.try('0045', 'Vic still cannot change an application directly', 'clinic_vic', 'write', $$update public.applications set status = 'offer' where id = '{app_ann_c}'$$, 'refused');
+select t.try('0045', 'Vic reads the numbers for clinic C''s jobs', 'clinic_vic', 'count', 'select * from public.job_daily_stats', '0 rows');
+select t.try('0045', 'Vic cannot read templates (they are for posting)', 'clinic_vic', 'count', 'select * from public.job_templates', 'blocked');
+select t.try('0045', 'the owner sees the 2 team members', 'clinic_c', 'count', 'select * from public.employer_members', '2 rows');
+select t.try('0045', 'Vic sees the team too', 'clinic_vic', 'count', 'select * from public.employer_members', '2 rows');
+select t.try('0045', 'clinic D sees nothing of clinic C''s team', 'clinic_d', 'count', 'select * from public.employer_members', 'blocked');
+select t.try('0045', 'nobody adds a member with their own sign in, not even the owner', 'clinic_c', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_nell}', 'edit')$$, 'refused');
+select t.try('0045', 'Vic cannot raise herself to view and edit', 'clinic_vic', 'write', $$update public.employer_members set level = 'edit' where user_id = '{clinic_vic}'$$, 'refused');
+select t.try('0045', 'Edith cannot remove someone', 'clinic_edith', 'write', $$delete from public.employer_members where user_id = '{clinic_vic}'$$, 'refused');
+select t.try('0045', 'nobody reads invitations with their own sign in', 'clinic_c', 'count', 'select * from public.employer_invites', 'refused');
+select t.try('0045', 'the admin record is for the server only', 'admin', 'count', 'select * from public.admin_actions', 'refused');
+select t.try('0045', 'the server can add 2 more (5 people with the owner)', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_m3}', 'view'), ('{employer_c}', '{clinic_m4}', 'view')$$, '2 rows');
+select t.try('0045', 'a 6th person is refused', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_m3}', 'view'), ('{employer_c}', '{clinic_m4}', 'view'), ('{employer_c}', '{clinic_m5}', 'view')$$, 'refused');
+select t.try('0047', 'the owner of a clinic cannot be on its own team', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_c}', 'view')$$, 'refused');
+select t.try('0047', 'the owner of another clinic can join clinic C', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_c}', '{clinic_d}', 'view')$$, '1 rows');
+select t.try('0047', 'a person can be on 2 locations'' teams', 'server', 'write', $$insert into public.employer_members (employer_id, user_id, level) values ('{employer_d}', '{clinic_vic}', 'view')$$, '1 rows');
+select t.try('0047', 'a team member cannot be made the owner of the location they are on', 'server', 'write', $$update public.employers set owner_id = '{clinic_vic}' where id = '{employer_c}'$$, 'refused');
+select t.try('0047', 'but may own a clinic of their own', 'clinic_vic', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) values ('{clinic_vic}', 'Vic Eye Care', 'independent', 'Ontario', 'Guelph')$$, '1 rows');
+select t.try('0045', 'the database knows Vic as view only', 'clinic_vic', 'value', $$select public.employer_level('{employer_c}')$$, 'view');
+select t.try('0045', 'and Edith as view and edit', 'clinic_edith', 'value', $$select public.employer_level('{employer_c}')$$, 'edit');
+select t.try('0045', 'and the owner as owner', 'clinic_c', 'value', $$select public.employer_level('{employer_c}')$$, 'owner');
+select t.try('0045', 'and Nell as nothing', 'clinic_nell', 'value', $$select public.employer_level('{employer_c}')$$, '(nothing)');
+select t.try('0045', 'a visitor cannot ask', 'visitor', 'value', $$select public.employer_level('{employer_c}')$$, 'refused');
+
+-- ---------------------------------------------------------------- 0046: help requests and feedback are for the website's server only
+select t.try('0046', 'a visitor cannot read help requests', 'visitor', 'count', 'select * from public.support_requests', 'refused');
+select t.try('0046', 'a clinic cannot read help requests with its own sign in', 'clinic_c', 'count', 'select * from public.support_requests', 'refused');
+select t.try('0046', 'a clinic cannot give Kestrel access by writing a request itself', 'clinic_c', 'write', $$insert into public.support_requests (user_id, employer_id, kind, message, access_until, access_text) values ('{clinic_c}', '{employer_c}', 'help', 'Please help me', now() + interval '7 days', 'x')$$, 'refused');
+select t.try('0046', 'the admin cannot read them with their own sign in either', 'admin', 'count', 'select * from public.support_requests', 'refused');
+select t.try('0046', 'the server records a help request with access', 'server', 'write', $$insert into public.support_requests (user_id, employer_id, kind, reason, message, access_until, access_text) values ('{clinic_c}', '{employer_c}', 'help', 'team', 'Cannot invite my manager', now() + interval '7 days', 'I allow Kestrel')$$, '1 rows');
+select t.try('0046', 'access can only come with a help request from a clinic', 'server', 'write', $$insert into public.support_requests (user_id, kind, message, access_until, access_text) values ('{ann}', 'bug', 'The page is slow', now() + interval '7 days', 'x')$$, 'refused');
+select t.try('0046', 'the server records feedback from a candidate', 'server', 'write', $$insert into public.support_requests (user_id, kind, message) values ('{ann}', 'idea', 'Let me save searches')$$, '1 rows');
+
+-- ---------------------------------------------------------------- 0047: several locations under 1 owner
+select t.try('0047', 'an owner can add a second location', 'clinic_c', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) values ('{clinic_c}', 'Clinic C West', 'independent', 'Ontario', 'Kitchener')$$, '1 rows');
+select t.try('0047', 'nobody adds a location for someone else', 'clinic_c', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) values ('{clinic_d}', 'Not mine', 'independent', 'Ontario', 'Guelph')$$, 'refused');
+select t.try('0047', 'a candidate still cannot create a clinic', 'ann', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) values ('{ann}', 'Fake', 'independent', 'Ontario', 'Guelph')$$, 'refused');
+select t.try('0047', 'the 26th location is refused', 'server', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) select '{clinic_d}', 'Location ' || n, 'corporate', 'Alberta', 'Red Deer' from generate_series(1, 25) n$$, 'refused');
+select t.try('0047', '25 locations are fine', 'server', 'write', $$insert into public.employers (owner_id, clinic_name, practice_type, province, city) select '{clinic_d}', 'Location ' || n, 'corporate', 'Alberta', 'Red Deer' from generate_series(1, 24) n$$, '24 rows');
+select t.try('0047', 'an invitation can cover more locations', 'server', 'value', $$select coalesce(array_length(also_employer_ids, 1), 0)::text from public.employer_invites limit 1$$, '(nothing)');
+
+-- ---------------------------------------------------------------- 0048: job payments (a card saved at submission, charged at approval)
+select t.try('0048', 'the server records a saved card for a job', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status, stripe_payment_method_id) values (null, '{employer_c}', 'Optician', 'Clinic C', 'opticians', 7900, 'card_saved', 'pm_test')$$, '1 rows');
+select t.try('0048', 'the same job cannot have 2 payments in play (no double charge)', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_c_live}', '{employer_c}', 'Optician', 'Clinic C', 'opticians', 7900, 'awaiting_card')$$, 'refused');
+select t.try('0048', 'a failed payment does not block a new card for the same job', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_d_live}', '{employer_d}', 'Optician', 'Clinic D', 'opticians', 7900, 'failed')$$, '1 rows');
+select t.try('0048', 'a price below zero is refused', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_c}', 'Optician', 'Clinic C', 'opticians', -1, 'failed')$$, 'refused');
+select t.try('0048', 'the owner reads the status of their own 2 payments', 'clinic_c', 'count', 'select id, status, amount_cents from public.job_payments', '2 rows');
+select t.try('0048', 'a team member with view and edit reads them too', 'clinic_edith', 'count', 'select id, status from public.job_payments', '2 rows');
+select t.try('0048', 'another clinic reads only its own', 'clinic_d', 'count', 'select id from public.job_payments', '1 rows');
+select t.try('0048', 'the Stripe card is never readable by a clinic', 'clinic_c', 'count', 'select stripe_payment_method_id from public.job_payments', 'refused');
+select t.try('0048', 'the Stripe payment id is never readable by a clinic', 'clinic_c', 'count', 'select stripe_payment_intent_id from public.job_payments', 'refused');
+select t.try('0048', 'a clinic cannot add a payment of its own', 'clinic_c', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_c}', 'Optician', 'Clinic C', 'opticians', 0, 'free_launch')$$, 'refused');
+select t.try('0048', 'a clinic cannot change what it was charged', 'clinic_c', 'write', $$update public.job_payments set amount_cents = 0$$, 'refused');
+select t.try('0048', 'a clinic cannot delete a payment record', 'clinic_c', 'write', $$delete from public.job_payments$$, 'refused');
+select t.try('0048', 'a candidate reads none of them', 'ann', 'count', 'select id from public.job_payments', '0 rows');
+select t.try('0048', 'a visitor cannot read them', 'visitor', 'count', 'select id from public.job_payments', 'refused');
+select t.try('0048', 'which Stripe customer a clinic is stays on the server', 'clinic_c', 'count', 'select * from public.employer_billing', 'refused');
+select t.try('0048', 'a visitor cannot read the billing table', 'visitor', 'count', 'select * from public.employer_billing', 'refused');
+select t.try('0048', 'the server links a clinic to a Stripe customer', 'server', 'write', $$insert into public.employer_billing (employer_id, stripe_customer_id) values ('{employer_c}', 'cus_test')$$, '1 rows');
+select t.try('0048', 'a clinic is 1 Stripe customer only', 'server', 'write', $$insert into public.employer_billing (employer_id, stripe_customer_id) values ('{employer_c}', 'cus_a'), ('{employer_c}', 'cus_b')$$, 'refused');
+select t.try('0048', 'the payment record outlives the job (the link is cleared when a job is deleted)', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.job_payments'::regclass and confrelid = 'public.jobs'::regclass$$, 'n');
+
+-- ---------------------------------------------------------------- 0049: the notes log for each job is for the website's server only
+select t.try('0049', 'the server adds a note to a job', 'server', 'write', $$insert into public.job_activity (job_id, actor, text, detail) values ('{job_c_live}', 'admin', 'Approved', 'x')$$, '1 rows');
+select t.try('0049', 'a note must say who made it (system, admin or clinic)', 'server', 'write', $$insert into public.job_activity (job_id, actor, text) values ('{job_c_live}', 'stranger', 'x')$$, 'refused');
+select t.try('0049', 'a note belongs to a real job', 'server', 'write', $$insert into public.job_activity (job_id, actor, text) values ('00000000-0000-0000-0000-000000000000', 'system', 'x')$$, 'refused');
+select t.try('0049', 'a clinic cannot read the notes log with its own sign in', 'clinic_c', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'a candidate cannot read it', 'ann', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'a visitor cannot read it', 'visitor', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'the admin cannot read it with their own sign in either (the server does)', 'admin', 'count', 'select * from public.job_activity', 'refused');
+select t.try('0049', 'a clinic cannot write a note', 'clinic_c', 'write', $$insert into public.job_activity (job_id, actor, text) values ('{job_c_live}', 'clinic', 'x')$$, 'refused');
+select t.try('0049', 'the notes go when their job is deleted', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.job_activity'::regclass and confrelid = 'public.jobs'::regclass$$, 'c');
+
+-- ---------------------------------------------------------------- 0050: invoice links on payments
+select t.try('0050', 'the server saves the invoice for a payment', 'server', 'write', $$update public.job_payments set stripe_invoice_id = 'in_test', invoice_number = 'KEST-0001', invoice_url = 'https://invoice.example/x', invoice_pdf_url = 'https://invoice.example/x.pdf' where status = 'charged'$$, '1 rows');
+select t.try('0050', 'a clinic reads the number and links for its own payments', 'clinic_c', 'count', 'select invoice_number, invoice_url, invoice_pdf_url from public.job_payments', '2 rows');
+select t.try('0050', 'a clinic never reads the Stripe invoice id', 'clinic_c', 'count', 'select stripe_invoice_id from public.job_payments', 'refused');
+select t.try('0050', 'another clinic reads only its own invoice links', 'clinic_d', 'count', 'select invoice_url from public.job_payments', '1 rows');
+select t.try('0050', 'a clinic cannot change an invoice link', 'clinic_c', 'write', $$update public.job_payments set invoice_url = 'https://evil.example'$$, 'refused');
+select t.try('0050', 'a visitor cannot read invoice links', 'visitor', 'count', 'select invoice_url from public.job_payments', 'refused');
+
+-- ---------------------------------------------------------------- 0051: passes
+select t.try('0051', 'the owner reads the plan and status of its own pass', 'clinic_c', 'count', 'select plan, status, current_period_end, cancel_at_period_end from public.location_passes', '1 rows');
+select t.try('0051', 'a team member with view and edit reads it too', 'clinic_edith', 'count', 'select plan, status from public.location_passes', '1 rows');
+select t.try('0051', 'another clinic reads no pass of this one', 'clinic_d', 'count', 'select plan from public.location_passes', '0 rows');
+select t.try('0051', 'a clinic never reads the Stripe subscription', 'clinic_c', 'count', 'select stripe_subscription_id from public.location_passes', 'refused');
+select t.try('0051', 'a clinic never reads the saved card reference on a pass', 'clinic_c', 'count', 'select stripe_payment_method_id from public.location_passes', 'refused');
+select t.try('0051', 'a clinic cannot give itself a pass', 'clinic_d', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_d}', 'clinic_pass_plus', 'active')$$, 'refused');
+select t.try('0051', 'a clinic cannot change the status of its pass', 'clinic_c', 'write', $$update public.location_passes set status = 'active', plan = 'clinic_pass_plus'$$, 'refused');
+select t.try('0051', 'a candidate reads no pass', 'ann', 'count', 'select plan from public.location_passes', '0 rows');
+select t.try('0051', 'a visitor cannot read passes', 'visitor', 'count', 'select plan from public.location_passes', 'refused');
+select t.try('0051', 'a location cannot have 2 active passes', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_c}', 'clinic_pass_plus', 'active')$$, 'refused');
+select t.try('0051', 'an unfinished checkout does not block a pass', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_c}', 'clinic_pass_plus', 'incomplete')$$, '1 rows');
+select t.try('0051', 'a pass must be 1 of the 2 plans', 'server', 'write', $$insert into public.location_passes (employer_id, plan, status) values ('{employer_d}', 'free_forever', 'active')$$, 'refused');
+select t.try('0051', 'a job covered by a pass is a payment status', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values (null, '{employer_d}', 'Optician', 'Clinic D', 'opticians', 0, 'covered_by_pass')$$, '1 rows');
+select t.try('0051', 'a covered job still cannot have 2 payments in play', 'server', 'write', $$insert into public.job_payments (job_id, employer_id, job_title, clinic_name, band, amount_cents, status) values ('{job_c_live}', '{employer_c}', 'Optician', 'Clinic C', 'opticians', 0, 'covered_by_pass')$$, 'refused');
+
+-- ---------------------------------------------------------------- 0052: Founding clinics
+select t.try('0052', 'the first clinic takes place 1', 'server', 'value', $$select public.claim_founding_place('{employer_c}')::text$$, '1');
+select t.try('0052', 'a clinic that already has a place gets the same one back', 'server', 'value', $$select (public.claim_founding_place('{employer_c}') + public.claim_founding_place('{employer_c}'))::text$$, '2');
+select t.try('0052', 'places are given in order and each clinic counts once', 'server', 'value', $$select (public.claim_founding_place('{employer_c}')::text || ',' || public.claim_founding_place('{employer_d}')::text)$$, '1,2');
+select t.try('0052', 'when all the places are taken the next clinic gets none', 'server', 'value', $$select coalesce(public.claim_founding_place('{employer_d}', 0)::text, 'none')$$, 'none');
+select t.try('0052', 'a clinic cannot take a founding place itself', 'clinic_d', 'value', $$select public.claim_founding_place('{employer_d}')::text$$, 'refused');
+select t.try('0052', 'a visitor cannot take a founding place', 'visitor', 'value', $$select public.claim_founding_place('{employer_d}')::text$$, 'refused');
+select t.try('0052', 'a clinic cannot read the founding list with its own sign in', 'clinic_c', 'count', 'select * from public.founding_clinics', 'refused');
+select t.try('0052', 'a visitor cannot read the founding list', 'visitor', 'count', 'select * from public.founding_clinics', 'refused');
+select t.try('0052', 'a clinic cannot add itself to the list', 'clinic_d', 'write', $$insert into public.founding_clinics (employer_id, founding_number) values ('{employer_d}', 7)$$, 'refused');
+select t.try('0052', 'a number outside 1 to 50 is refused', 'server', 'write', $$insert into public.founding_clinics (employer_id, founding_number) values ('{employer_d}', 51)$$, 'refused');
+select t.try('0052', 'a clinic reads whether its pass is a founding pass and its lock date', 'clinic_c', 'count', 'select founding, price_locked_until from public.location_passes', '1 rows');
+select t.try('0052', 'a clinic never reads the Stripe schedule on its pass', 'clinic_c', 'count', 'select stripe_schedule_id from public.location_passes', 'refused');
+select t.try('0052', 'a clinic cannot lock its own price', 'clinic_c', 'write', $$update public.location_passes set founding = true, price_locked_until = now() + interval '5 years'$$, 'refused');
+
+-- ---------------------------------------------------------------- 0053: job headline (public, like the title)
+select t.try('0053', 'a visitor reads the headline column on a live job', 'visitor', 'count', 'select headline from public.jobs', 'not refused');
+select t.try('0053', 'a clinic can set a headline on its own draft job', 'clinic_c', 'write', $$update public.jobs set headline = 'A friendly team' where id = '{job_c_draft}'$$, '1 rows');
+select t.try('0053', 'a clinic cannot set a headline on another clinic''s job', 'clinic_d', 'write', $$update public.jobs set headline = 'Not mine' where id = '{job_c_draft}'$$, 'blocked');
+
+-- ---------------------------------------------------------------- 0054: social links (clinic links public, a candidate's LinkedIn private)
+select t.try('0054', 'a visitor reads a clinic''s social links', 'visitor', 'count', 'select social_linkedin from public.employers', 'not refused');
+select t.try('0054', 'a clinic can add its own social link', 'clinic_c', 'write', $$update public.employers set social_instagram = 'https://www.instagram.com/clinicc' where id = '{employer_c}'$$, '1 rows');
+select t.try('0054', 'a clinic cannot change another clinic''s social link', 'clinic_d', 'write', $$update public.employers set social_instagram = 'https://www.instagram.com/stolen' where id = '{employer_c}'$$, 'blocked');
+select t.try('0054', 'a visitor cannot read a candidate''s LinkedIn', 'visitor', 'count', 'select linkedin_url from public.candidate_profiles', 'blocked');
+select t.try('0054', 'a clinic cannot read a candidate''s LinkedIn with its own sign in', 'clinic_c', 'count', 'select linkedin_url from public.candidate_profiles', 'blocked');
+select t.try('0054', 'Bo cannot read Ann''s LinkedIn', 'bo', 'count', $$select linkedin_url from public.candidate_profiles where user_id = '{ann}'$$, 'blocked');
+select t.try('0054', 'Ann can save her own LinkedIn', 'ann', 'write', $$update public.candidate_profiles set linkedin_url = 'https://www.linkedin.com/in/ann' where user_id = '{ann}'$$, '1 rows');
+select t.try('0054', 'Bo cannot change Ann''s LinkedIn', 'bo', 'write', $$update public.candidate_profiles set linkedin_url = 'https://www.linkedin.com/in/stolen' where user_id = '{ann}'$$, 'blocked');
+
+-- ---------------------------------------------------------------- 0055: interest in clinics not on Kestrel (server only)
+select t.try('0055', 'the server saves that a candidate is interested', 'server', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, town, name_key) values ('{ann}', 'Brightview Optical', 'Guelph', 'brightview optical|guelph')$$, '1 rows');
+select t.try('0055', 'the same candidate cannot ask about the same clinic twice', 'server', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, name_key) values ('{ann}', 'A', 'dup|'), ('{ann}', 'B', 'dup|')$$, 'refused');
+select t.try('0055', 'a clinic name must be 2 to 120 characters', 'server', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, name_key) values ('{ann}', 'X', 'x|')$$, 'refused');
+select t.try('0055', 'a candidate cannot read the list with her own sign in', 'ann', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'a candidate cannot write to the list herself', 'ann', 'write', $$insert into public.employer_interest (candidate_id, clinic_name, name_key) values ('{ann}', 'Mine', 'mine|')$$, 'refused');
+select t.try('0055', 'a clinic cannot read the list', 'clinic_c', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'a visitor cannot read the list', 'visitor', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'the admin cannot read it with their own sign in either (the server does)', 'admin', 'count', 'select * from public.employer_interest', 'refused');
+select t.try('0055', 'a candidate''s interest goes with her account', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.employer_interest'::regclass and contype = 'f'$$, 'c');
+
+-- ---------------------------------------------------------------- 0056: a candidate's registration number (private)
+select t.try('0056', 'Ann can save her own registration number', 'ann', 'write', $$update public.candidate_profiles set licence_province = 'Alberta', licence_number = '02723', licence_does = array['eyeglasses'], licence_not_yet = false where user_id = '{ann}'$$, '1 rows');
+select t.try('0056', 'Ann reads her own registration number', 'ann', 'count', 'select licence_number from public.candidate_profiles', '1 rows');
+select t.try('0056', 'Bo cannot read Ann''s registration number', 'bo', 'count', $$select licence_number from public.candidate_profiles where user_id = '{ann}'$$, 'blocked');
+select t.try('0056', 'Bo cannot change Ann''s registration number', 'bo', 'write', $$update public.candidate_profiles set licence_number = '99999' where user_id = '{ann}'$$, 'blocked');
+select t.try('0056', 'a clinic cannot read any registration number with its own sign in', 'clinic_c', 'count', 'select licence_number from public.candidate_profiles', 'blocked');
+select t.try('0056', 'a visitor cannot read a registration number', 'visitor', 'count', 'select licence_number from public.candidate_profiles', 'blocked');
+select t.try('0056', 'a visitor cannot write a registration number', 'visitor', 'write', $$update public.candidate_profiles set licence_number = '1' where user_id = '{ann}'$$, 'refused');
+select t.try('0056', 'a registration number over 20 characters is refused', 'ann', 'write', $$update public.candidate_profiles set licence_number = repeat('1', 21) where user_id = '{ann}'$$, 'refused');
+select t.try('0056', 'a clinic reaches a number only through an application the candidate sent (it is in the application, not the profile)', 'clinic_c', 'count', 'select applicant from public.applications', '1 rows');
+
+-- ---------------------------------------------------------------- 0057: following a clinic or company (server only)
+select t.try('0057', 'the server saves that a candidate follows a clinic', 'server', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '{employer_c}')$$, '1 rows');
+select t.try('0057', 'a candidate cannot follow the same clinic twice', 'server', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '{employer_c}'), ('{ann}', '{employer_c}')$$, 'refused');
+select t.try('0057', 'a follow must be a real clinic', 'server', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '00000000-0000-0000-0000-000000000000')$$, 'refused');
+select t.try('0057', 'a candidate cannot read follows with her own sign in', 'ann', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'a candidate cannot follow a clinic herself', 'ann', 'write', $$insert into public.employer_follows (user_id, employer_id) values ('{ann}', '{employer_c}')$$, 'refused');
+select t.try('0057', 'a clinic cannot see who follows it', 'clinic_c', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'a visitor cannot read follows', 'visitor', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'the admin cannot read follows with their own sign in either (the server does)', 'admin', 'count', 'select * from public.employer_follows', 'refused');
+select t.try('0057', 'a follow goes when the candidate or the clinic goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.employer_follows'::regclass and contype = 'f'$$, 'c,c');
+
+-- ---------------------------------------------------------------- 0058: told when a clinic they asked about joins (server only)
+select t.try('0058', 'the server records that a candidate was told a clinic joined', 'server', 'write', $$update public.employer_interest set notified_at = now(), notified_employer_id = '{employer_c}'$$, 'not refused');
+select t.try('0058', 'a candidate cannot read who was told', 'ann', 'count', 'select notified_at from public.employer_interest', 'refused');
+select t.try('0058', 'a candidate cannot mark herself as told', 'ann', 'write', $$update public.employer_interest set notified_at = now()$$, 'refused');
+select t.try('0058', 'a clinic cannot read who was told', 'clinic_c', 'count', 'select notified_employer_id from public.employer_interest', 'refused');
+select t.try('0058', 'a visitor cannot read who was told', 'visitor', 'count', 'select notified_at from public.employer_interest', 'refused');
+select t.try('0058', 'a deleted clinic does not delete the candidate''s request', 'server', 'value', $$select confdeltype::text from pg_constraint where conrelid = 'public.employer_interest'::regclass and confrelid = 'public.employers'::regclass$$, 'n');
+
+-- ---------------------------------------------------------------- 0059: saved jobs (server only)
+select t.try('0059', 'the server saves a job for a candidate', 'server', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '{job_c_live}')$$, '1 rows');
+select t.try('0059', 'a candidate cannot save the same job twice', 'server', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '{job_c_live}'), ('{ann}', '{job_c_live}')$$, 'refused');
+select t.try('0059', 'a saved job must be a real job', 'server', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '00000000-0000-0000-0000-000000000000')$$, 'refused');
+select t.try('0059', 'a candidate cannot read saved jobs with her own sign in', 'ann', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'a candidate cannot save a job herself', 'ann', 'write', $$insert into public.saved_jobs (user_id, job_id) values ('{ann}', '{job_c_live}')$$, 'refused');
+select t.try('0059', 'a clinic cannot see who saved its job', 'clinic_c', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'a visitor cannot read saved jobs', 'visitor', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'the admin cannot read saved jobs with their own sign in either (the server does)', 'admin', 'count', 'select * from public.saved_jobs', 'refused');
+select t.try('0059', 'a saved job goes when the candidate or the job goes', 'server', 'value', $$select string_agg(confdeltype::text, ',' order by confdeltype::text) from pg_constraint where conrelid = 'public.saved_jobs'::regclass and contype = 'f'$$, 'c,c');
+select t.try('0059', 'a candidate cannot read or change when she was reminded', 'ann', 'write', $$update public.saved_jobs set reminded_at = now()$$, 'refused');
+select t.try('0059', 'the server records that a candidate was reminded a saved job is closing', 'server', 'write', $$update public.saved_jobs set reminded_at = now()$$, 'not refused');

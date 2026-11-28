@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRole } from "@/lib/auth";
 import type { QuickState } from "@/lib/dashboard-notices";
-import { getMyEmployer } from "@/lib/clinic";
+import { getMyEditableEmployer } from "@/lib/clinic";
 import { updateThenInsert } from "@/lib/save-helpers";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -18,7 +18,7 @@ const idFrom = (form: FormData) => {
 async function doSaveTemplate(form: FormData) {
   const session = await requireRole("clinic");
   const id = idFrom(form);
-  const employer = await getMyEmployer(session.userId);
+  const employer = await getMyEditableEmployer(session.userId);
   const db = await supabaseServer();
   if (!id || !db || !employer) return "template-failed";
   const { data: job } = await db

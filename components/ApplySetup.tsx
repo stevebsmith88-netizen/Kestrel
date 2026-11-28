@@ -49,7 +49,7 @@ export default function ApplySetup({ needsResume, needsRole, needsTown, current 
 
       {needsResume && (
         <form ref={fileForm} onSubmit={upload.submit} noValidate className="stackform">
-          <Field id="as-file" label="Your resume" hint="PDF or Word, up to 3 MB. It uploads as soon as you choose it." error={upload.state.error}>
+          <Field id="as-file" label="Your resume" hint="PDF or Word, up to 4 MB. It uploads as soon as you choose it." error={upload.state.error}>
             <input id="as-file" name="cv" type="file" accept={ACCEPT} disabled={upload.pending || resumeDone} onChange={(e) => { if (e.currentTarget.files?.length) fileForm.current?.requestSubmit(); }} />
           </Field>
           <p className="help" aria-live="polite">{upload.pending ? "Saving and reading your resume" : resumeDone ? "Your resume is saved." : ""}</p>

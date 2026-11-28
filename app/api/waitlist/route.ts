@@ -1,3 +1,4 @@
+import { notifySlack } from "@/lib/notify-slack";
 import { NextResponse } from "next/server";
 import { cleanAttribution } from "@/lib/attribution";
 import { emailLayout, sendEmail } from "@/lib/email";
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
 
   // A new address, or one not yet confirmed, is sent a link to confirm it. Nobody gets more than 1 an hour, so a
   // stranger cannot use this form to fill someone's inbox.
+  if (id && action === "add") await notifySlack("New waitlist sign up", [], { path: "/admin/waitlist", text: "Open the waitlist" }, "signups");
   if (id && (action === "add" || action === "send-confirmation")) {
     const unsubscribeUrl = unsubscribeIdUrl(id);
     const mail = emailLayout({

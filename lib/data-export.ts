@@ -55,6 +55,7 @@ export function exportApplications(apps: readonly ApplicationRow[], events: read
 }
 
 const list = <T,>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : []);
+type Row = Record<string, unknown>;
 
 // Everything the download holds about 1 account, looked up by that account's own id. The route checks who is asking (and the password) first.
 // A clinic's download covers its own profile and jobs, never other people's applications (audit P1-19, tested in lib/data-export.test.ts).
@@ -72,6 +73,9 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     jobAlerts: alerts.data ?? [],
     inbox: (await db.from("notifications").select("kind, title, body, href, read_at, created_at").eq("user_id", id).order("created_at", { ascending: false })).data ?? [],
   };
+  // Help requests and feedback the person sent, in their own words (migration 0046, audit P2-04). Empty before the SQL is run.
+  const support = await db.from("support_requests").select("kind, reason, message, page, status, access_until, created_at, closed_at").eq("user_id", id).order("created_at", { ascending: false });
+  data.helpRequestsAndFeedback = support.error ? [] : list<Row>(support.data);
 
   if (who.role === "candidate") {
     const [cp, apps] = await Promise.all([
@@ -87,7 +91,10 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     const appRows = list<ApplicationRow>(apps.data);
     const appIds = appRows.map((a) => a.id);
     const events = appIds.length ? await db.from("application_events").select("application_id, status, note, created_at").in("application_id", appIds).order("created_at") : { data: [] };
-    data.candidateProfile = cp.data ?? null;
+    const li = await db.from("candidate_profiles").select("linkedin_url").eq("user_id", id).maybeSingle();
+    // The registration number (migration 0056) is read apart too, so the download works before the SQL is run.
+    const lic = await db.from("candidate_profiles").select("licence_province, licence_number, licence_does, licence_not_yet").eq("user_id", id).maybeSingle();
+    data.candidateProfile = cp.data ? { ...cp.data, ...(li.error ? {} : { linkedin_url: (li.data as { linkedin_url?: string | null } | null)?.linkedin_url ?? null }), ...(lic.error ? {} : (lic.data ?? {})) } : null;
     // What the candidate chose for "Recommended for you", the career stage answer, hidden jobs and the name change date. All private to them.
     const extras = await candidateExtras(db, id);
     data.preferences = extras.preferences;
@@ -95,18 +102,45 @@ export async function buildDataExport(db: ExportDb, who: { userId: string; email
     data.jobsMarkedNotInterested = extras.jobsMarkedNotInterested;
     (data.account as Record<string, unknown>).name_last_changed_at = extras.nameLastChangedAt;
     data.applications = exportApplications(appRows, list<EventRow>(events.data));
+    // Clinics and companies not on Kestrel that the candidate said they would like to work for (migration 0055). Empty before the SQL is run.
+    const interest = await db.from("employer_interest").select("clinic_name, town, province, website, created_at").eq("candidate_id", id).order("created_at", { ascending: false });
+    data.placesIWouldLikeToWorkAt = interest.error ? [] : interest.data ?? [];
+    // Clinics and companies the candidate follows (migration 0057), by name. Empty before the SQL is run.
+    const follows = await db.from("employer_follows").select("created_at, employers(clinic_name, city, province)").eq("user_id", id).order("created_at", { ascending: false });
+    // Jobs the candidate saved to apply for later (migration 0059). Empty before the SQL is run.
+    const saved = await db.from("saved_jobs").select("created_at, jobs(title, city, province)").eq("user_id", id).order("created_at", { ascending: false });
+    data.savedJobs = saved.error ? [] : list<{ created_at: string; jobs: object | null }>(saved.data).map((s) => ({ savedOn: s.created_at, ...(s.jobs ?? {}) }));
+    data.clinicsAndCompaniesIFollow = follows.error ? [] : list<{ created_at: string; employers: object | null }>(follows.data).map((f) => ({ followedOn: f.created_at, ...(f.employers ?? {}) }));
   } else {
-    const employerResult = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).maybeSingle();
-    const employer = { data: (employerResult.data ?? null) as ({ id: string } & Record<string, unknown>) | null };
-    const contact = employer.data ? await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.data.id).maybeSingle() : { data: null };
-    const contactRow = contact.data as { notify_email?: string | null; employee_band?: string | null } | null;
-    const jobs = employer.data
-      ? await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.data.id).order("created_at", { ascending: false })
-      : { data: [] };
-    const templates = employer.data ? await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.data.id) : { data: [] };
-    data.jobTemplates = templates.data ?? [];
-    data.clinic = employer.data ? { ...employer.data, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null } : null;
-    data.jobs = jobs.data ?? [];
+    // Every location this account owns (migration 0047). The first is "clinic", as before; any others are under "otherLocations".
+    const owned = await db.from("employers").select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at, created_at").eq("owner_id", id).order("created_at");
+    const locations = (Array.isArray(owned.data) ? owned.data : owned.data ? [owned.data] : []) as ({ id: string } & Record<string, unknown>)[];
+    const one = async (employer: { id: string } & Record<string, unknown>) => {
+      const contact = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", employer.id).maybeSingle();
+      const contactRow = contact.data as { notify_email?: string | null; employee_band?: string | null } | null;
+      const jobs = await db.from("jobs").select("title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, pay_extras, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, status, posted_at, expires_at, created_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
+      const templates = await db.from("job_templates").select("name, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, description, apply_method, apply_url, work_arrangement, territory, pay_extras, updated_at").eq("employer_id", employer.id);
+      // The location's payments and passes (migrations 0048 and 0051, audit P2-04): what was paid and when, never a Stripe id. Empty before the SQL is run.
+      const payments = await db.from("job_payments").select("job_title, band, amount_cents, currency, status, created_at, charged_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
+      const passes = await db.from("location_passes").select("plan, billing_interval, status, current_period_end, cancel_at_period_end, created_at, canceled_at").eq("employer_id", employer.id).order("created_at", { ascending: false });
+      return {
+        clinic: { ...employer, id: undefined, alertEmail: contactRow?.notify_email ?? null, employeeCount: contactRow?.employee_band ?? null },
+        jobs: (jobs.data ?? []) as unknown[],
+        jobTemplates: (templates.data ?? []) as unknown[],
+        payments: payments.error ? [] : list<Row>(payments.data),
+        passes: passes.error ? [] : list<Row>(passes.data),
+      };
+    };
+    const all = await Promise.all(locations.map(one));
+    data.clinic = all[0]?.clinic ?? null;
+    data.jobs = all[0]?.jobs ?? [];
+    data.jobTemplates = all[0]?.jobTemplates ?? [];
+    data.payments = all[0]?.payments ?? [];
+    data.passes = all[0]?.passes ?? [];
+    if (all.length > 1) data.otherLocations = all.slice(1);
+    // The clinic teams this person is on, and at what level (migrations 0045 and 0047, audit P2-04). Empty before the SQL is run.
+    const teams = await db.from("employer_members").select("level, created_at, employers(clinic_name, city, province)").eq("user_id", id).order("created_at");
+    data.clinicTeamsIAmOn = teams.error ? [] : list<{ level: string; created_at: string; employers: object | null }>(teams.data).map((t) => ({ level: t.level === "edit" ? "Can view and edit" : "View only, with notes", joinedOn: t.created_at, ...(t.employers ?? {}) }));
   }
   return data;
 }

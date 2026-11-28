@@ -2,13 +2,14 @@
 // field to decide when to look at a page again, so it must be true: change the date here when the page's own "Last updated" line changes.
 // lib/page-dates.test.ts checks that they agree.
 export const PAGE_DATES = {
-  privacy: "2026-11-13",
+  privacy: "2026-11-15",
   terms: "2026-11-13",
   postingPolicy: "2026-11-13",
   fakeJobs: "2026-11-13",
   security: "2026-11-12",
-  resources: "2026-11-09",
+  resources: "2026-11-18",
   ontarioJobAds: "2026-11-08",
+  paySummary: "2026-11-18",
   compare: "2026-11-06",
   help: "2026-11-13",
 } as const;
@@ -22,6 +23,7 @@ const PAGE_PATHS: Record<keyof typeof PAGE_DATES, string> = {
   security: "/security",
   resources: "/resources",
   ontarioJobAds: "/resources/ontario-job-ads",
+  paySummary: "/resources/eye-care-pay-summary",
   compare: "/compare",
   help: "/help",
 };

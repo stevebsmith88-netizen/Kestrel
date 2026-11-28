@@ -8,6 +8,7 @@ import { longDate } from "@/lib/jobs";
 import { addToOutreach, stopOutreach } from "@/lib/outreach-actions";
 import { LAST_STEP } from "@/lib/outreach-sequence";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadOutreach } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Outreach | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -28,15 +29,10 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
   const session = await requireRole("admin");
   const { notice, count } = await searchParams;
   const db = supabaseAdmin();
-  const [{ data: leadRows, error: leadError }, { data: contactRows, error: contactError }] = db
-    ? await Promise.all([
-        db.from("clinic_leads").select("id, clinic_name, city, province, contact_email, email_source_url").not("contact_email", "is", null).neq("status", "skipped").order("found_at", { ascending: false }).limit(300),
-        db.from("outreach_contacts").select("id, email, clinic_name, steps_sent, status, stop_reason, next_due_at, last_sent_at").order("approved_at", { ascending: false }).limit(500),
-      ])
-    : [{ data: null, error: null }, { data: null, error: null }];
-  const contacts = (contactRows ?? []) as Contact[];
-  const inSequence = new Set(contacts.map((c) => c.email.toLowerCase()));
-  const ready = (leadRows ?? []).filter((l) => !inSequence.has(String(l.contact_email).toLowerCase()));
+  const loaded = await loadOutreach(db);
+  const { leadError, contactError } = loaded;
+  const contacts = loaded.contacts as unknown as Contact[];
+  const ready = loaded.ready as unknown as { id: string; clinic_name: string; city: string | null; province: string; contact_email: string; email_source_url: string | null }[];
   const active = contacts.filter((c) => c.status === "active");
   const done = contacts.filter((c) => c.status !== "active");
   const on = outreachOn();
@@ -66,7 +62,8 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
 
           <section className="card">
             <h2>Ready to add ({ready.length})</h2>
-            <p className="help">Clinics from <Link href="/admin/found">the province search</Link> with a published address and the page it came from. Ticking them and starting is your approval of this batch.</p>
+            <p className="help">Clinics from the province search with a published address and the page it came from. Ticking them and starting is your approval of this batch.</p>
+            <p><Link href="/admin/found" className="btn sm ghost">Go to found listings</Link></p>
             {ready.length === 0 ? (
               <p className="help">No one is waiting. Save clinics with a contact email in the province search first.</p>
             ) : (
@@ -76,7 +73,7 @@ export default async function Outreach({ searchParams }: { searchParams: Promise
                     <li key={l.id}>
                       <label className="consent">
                         <input type="checkbox" name="leadIds" value={l.id} />
-                        <span><strong>{l.clinic_name}</strong>{l.city ? `, ${l.city}` : ""} {l.province}<br /><span className="help">{l.contact_email}, found on <a href={l.email_source_url ?? "#"} rel="noopener noreferrer" target="_blank">their page</a></span></span>
+                        <span><strong>{l.clinic_name}</strong>{l.city ? `, ${l.city}` : ""} {l.province}<br /><span className="help">{l.contact_email}, found on their page <a href={l.email_source_url ?? "#"} rel="noopener noreferrer" target="_blank" className="btn sm ghost">Open the page<span className="sr"> (opens in a new tab)</span></a></span></span>
                       </label>
                     </li>
                   ))}

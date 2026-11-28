@@ -4,7 +4,7 @@
 
 export const ACCOUNT_TYPES = [
   { value: "candidate", label: "I'm looking for a job" },
-  { value: "clinic", label: "I'm hiring for a clinic" },
+  { value: "clinic", label: "I'm hiring" },
 ] as const;
 
 export const MARKETING_CONSENT_TEXT =

@@ -10,7 +10,7 @@ Steve owns every decision and approves anything that goes live or costs money. C
 | --- | --- | --- | --- | --- |
 | Website and home page copy | Steve | Claude | Review after each preview | None |
 | Blog and resources | Steve | Claude (drafts from public sources) | 1 post a week, scheduled to April 2027 | None |
-| Search (Search Console, Bing Webmaster, sitemap) | Steve | Claude for fixes | Check indexed pages and queries on the 1st of the month | None |
+| Search (Search Console, Bing Webmaster, sitemap) | Steve | Claude for fixes | Weekly 10 minute check (`weekly-search-check.md`), AI assistants on the first Friday of the month | None |
 | Waitlist email (confirmation, launch news) | Steve | Claude | Before each send | Launch news waits for launch |
 | Social pages (LinkedIn, Facebook) | Steve | Claude drafts a queue | Approve a batch weekly, once there is a queue | Pages first, posting later |
 | Outbound to clinics (CASL sequence) | Steve | Claude | Batches of 20, reviewed before each | Gate A and lawyer wording check |

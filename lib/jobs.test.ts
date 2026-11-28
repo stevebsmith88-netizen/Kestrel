@@ -287,3 +287,18 @@ test("the new shapes do not block ordinary sentences", () => {
   ];
   for (const text of allowed) assert.equal(mentionsCanadianExperience(text), false, text);
 });
+
+import { HEADLINE_MAX } from "./jobs.ts";
+
+test("the headline is optional, one short line, and follows the same rules as the ad", () => {
+  assert.equal(HEADLINE_MAX, 70);
+  const ok = cleanJob({ title: "Optician", headline: "  Join a 4 doctor family practice with a new dispensary  " });
+  assert.equal(ok.headline, "Join a 4 doctor family practice with a new dispensary");
+  assert.equal(validateJob(ok, false).headline, undefined);
+  assert.equal(cleanJob({ headline: "x".repeat(200) }).headline.length, 70);
+  assert.equal(cleanJob({}).headline, "");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Canadian experience preferred" }), false).headline, "Canadian experience is refused");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Earn $90,000 with us" }), false).headline, "pay has its own box");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Apply at www.example.com" }), false).headline, "no web address");
+  assert.ok(validateJob(cleanJob({ title: "Optician", headline: "Write to jobs@example.com" }), false).headline, "no email address");
+});

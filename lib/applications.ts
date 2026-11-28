@@ -117,7 +117,7 @@ export function messageTemplate(status: string, clinic: string) {
       // Shortlisting is the clinic's own working list. The candidate is not emailed and no message goes with it.
       return "";
     case "interview":
-      return `${clinic} would like to interview you. [Add the date, time and how to join]`;
+      return `${clinic} would like to interview you for this role. The details are below, and we look forward to meeting you.`;
     case "offer":
       return `${clinic} would like to offer you this role. [Add the details, and when you need a reply by]`;
     case "hired":
@@ -150,7 +150,9 @@ export function detectCv(bytes: Uint8Array, filename: string): { ext: "pdf" | "d
   return null;
 }
 
-export const CV_MAX_BYTES = 3 * 1024 * 1024;
+// 4 MB (Steve, 13th November 2026, raised from 3 MB after a real 3.7 MB resume with a photo was turned away). Vercel refuses any
+// upload over about 4.5 MB on every plan, so this cannot go much higher while resumes go through the website.
+export const CV_MAX_BYTES = 4 * 1024 * 1024;
 
 const ascii = (bytes: Uint8Array) => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString("latin1");
 const utf16 = (text: string) => Buffer.from(text, "utf16le").toString("latin1");

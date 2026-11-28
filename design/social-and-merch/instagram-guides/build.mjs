@@ -25,7 +25,16 @@ const ICON = {
   door: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M30 42 V4 H60 V42" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M30 4 L48 8 V42 L30 42" fill="${a}" fill-opacity=".35" stroke="${a}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="44" cy="25" r="1.8" fill="${c}"/><path d="M20 42 H70" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
   path: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M4 40 C24 40 18 22 40 22 S56 4 80 4" fill="none" stroke="${c}" stroke-width="2.5" stroke-dasharray="5 5" stroke-linecap="round"/><circle cx="82" cy="4" r="3.5" fill="${a}"/><circle cx="4" cy="40" r="3.5" fill="${c}"/></svg>`,
   pin: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M2 40 H88" stroke="${c}" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6 6"/><path d="M45 34 C35 22 33 18 33 13 a12 12 0 0 1 24 0 C57 18 55 22 45 34 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="45" cy="13" r="4" fill="${a}"/></svg>`,
+  road: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M2 30 H88" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M40 30 L26 44 M50 30 L64 44" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M45 34 V36 M45 39 V42" stroke="${a}" stroke-width="2" stroke-linecap="round"/><path d="M38 28 V18 L45 11 L52 18 V28" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 19 L45 9 L54 19" fill="none" stroke="${a}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><rect x="43" y="21" width="4" height="7" fill="${a}"/></svg>`,
   pen: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M8 38 C20 30 26 40 36 32 S52 30 58 34" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/><path d="M60 30 L82 8 L86 12 L64 34 L58 36 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/></svg>`,
+  phone: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M30 6 C26 6 24 9 25 13 C29 27 39 37 53 41 C57 42 60 40 60 36 L60 31 L50 28 L46 32 C40 29 35 24 32 18 L36 14 L33 6 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M66 10 C72 14 74 20 72 26 M70 4 C80 10 82 22 78 30" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  spark: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M45 4 L49 18 L63 22 L49 26 L45 40 L41 26 L27 22 L41 18 Z" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><circle cx="72" cy="10" r="3.5" fill="${a}"/><circle cx="18" cy="34" r="3" fill="${a}"/></svg>`,
+  rise: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M4 40 H86" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M10 34 L32 24 L48 30 L78 8" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M68 8 H78 V18" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  lens: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><ellipse cx="32" cy="22" rx="18" ry="15" fill="none" stroke="${c}" stroke-width="2.5"/><ellipse cx="32" cy="22" rx="10" ry="8" fill="${a}" fill-opacity=".35"/><path d="M56 34 L68 22 L76 30 L64 42" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M70 18 L80 8" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  exit: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><path d="M44 4 H20 V40 H44" fill="none" stroke="${c}" stroke-width="2.5" stroke-linejoin="round"/><path d="M36 22 H80" stroke="${a}" stroke-width="2.5" stroke-linecap="round"/><path d="M70 12 L80 22 L70 32" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  calendar: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><rect x="24" y="6" width="42" height="36" rx="4" fill="none" stroke="${c}" stroke-width="2.5"/><path d="M24 16 H66 M34 2 V10 M56 2 V10" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/><path d="M34 29 L41 35 L56 22" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  check: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><rect x="28" y="4" width="34" height="38" rx="3" fill="none" stroke="${c}" stroke-width="2.5"/><rect x="38" y="1" width="14" height="7" rx="2" fill="${a}"/><path d="M35 20 L39 24 L46 16 M35 32 L39 36 L46 28" fill="none" stroke="${a}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M50 21 H56 M50 33 H56" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+  sun: (c, a) => `<svg viewBox="0 0 90 44" width="270" height="132" aria-hidden="true"><circle cx="45" cy="22" r="9" fill="${a}" fill-opacity=".45" stroke="${c}" stroke-width="2.5"/><path d="M45 3 V8 M45 36 V41 M26 22 H31 M59 22 H64 M32 9 L35 12 M55 32 L58 35 M58 9 L55 12 M32 35 L35 32" stroke="${c}" stroke-width="2.5" stroke-linecap="round"/></svg>`,
 };
 
 // Each post: background, colours, icon, headline (with an optional second headline line in the accent colour), and a line under it.
@@ -37,7 +46,8 @@ const POSTS = [
   { file: "g01-how-people-fall-into-optics", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", icon: "path", size: 120,
     head: "How most people", head2: "fall into optics.", sub: "Few people plan a career in eye care. Most find it by chance, and many stay for good.",
     alt: "Kestrel guide: How most people fall into optics. Few people plan a career in eye care. Most find it by chance, and many stay for good." },
-  { file: "g02-job-ad-checklist", bg: C.buff, fg: C.navy, label: C.navy, accent: C.chestnutD, line: C.navy, k: "kestrel-k-mark.svg", tr: "Checklist",
+  // Pale blue since 13th November 2026 (was buff), to match the other light posts.
+  { file: "g02-job-ad-checklist", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "Checklist",
     head: "4 things every job ad in Canada should include.", size: 96, list: ["The pay range", "Is it an existing vacancy?", "Do you use AI to screen applicants?", "No \"Canadian experience\" requirement"],
     alt: "Kestrel guide: 4 things every job ad in Canada should include. 1, the pay range. 2, is it an existing vacancy? 3, do you use AI to screen applicants? 4, no \"Canadian experience\" requirement." },
   { file: "g03-cover-letter", bg: C.paper, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", icon: "pen", size: 120,
@@ -64,6 +74,68 @@ const POSTS = [
   { file: "g09-attract-the-right-people", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", icon: "door",
     head: "How to attract the right people", head2: "to your clinic.", sub: "Show the pay. Describe the real week. Reply to everyone.",
     alt: "Kestrel guide: How to attract the right people to your clinic. Show the pay. Describe the real week. Reply to everyone." },
+  // Added 13th November 2026 for the new blog posts and the pay summary page (docs/marketing/instagram-master-schedule.md, Thursday posts).
+  { file: "g11-optician-pay", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay guide",
+    head: "Typical optician pay, by province.", size: 96, marks: true,
+    list: ["Highest: Newfoundland and Labrador, $30.03 an hour", "Ontario: $29.00 an hour", "Lowest: New Brunswick, $27.63 an hour"],
+    alt: "Kestrel guide: Typical optician pay, by province. Highest, Newfoundland and Labrador at $30.03 an hour. Lowest, New Brunswick at $27.63 an hour. Ontario at $29.00 an hour." },
+  { file: "g12-ai-chatbots", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "On the blog", icon: "question", size: 100,
+    head: "We asked the AI chatbots", head2: "about eye care jobs.", sub: "We were named in 0 of 21 answers. What they got right, and what they got wrong.",
+    alt: "Kestrel blog: We asked the AI chatbots about eye care jobs. We were named in 0 of 21 answers. What they got right, and what they got wrong." },
+  { file: "g13-pay-summary", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "Pay summary", icon: "pin", size: 92,
+    head: "2 of 4 eye care roles", head2: "pay most in British Columbia.", sub: "Assistants and patient care teams. Our 2026 pay summary, from Job Bank figures.",
+    alt: "Kestrel pay summary: 2 of 4 eye care roles pay most in British Columbia. Assistants and patient care teams. Our 2026 pay summary, from Job Bank figures." },
+  // Things heard No. 3 redrawn as a flat navy card (Steve, 13th November 2026: the landscape picture stood out from the grid).
+  { file: "t03-just-look-at-the-house", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.buff, k: "kestrel-k-mark-reversed.svg", tl: "THINGS HEARD IN CLINIC", tr: "No. 3", icon: "road", size: 120,
+    head: "Just look at", head2: "the house.", sub: "It will go blurry. That's fine.",
+    alt: "Things heard in clinic, No. 3: Just look at the house. Underneath: It will go blurry. That's fine. A line drawing of a road leading to a house, on navy." },
+  // 7 cards for the blog posts written 14th November 2026, colours re-chosen by the grid check for the January launch (docs/marketing/instagram-master-schedule.md).
+  { file: "g14-optometrist-pay", bg: C.cream, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", tr: "Pay guide", icon: "question", size: 104,
+    head: "Salary, day rate", head2: "or a percentage?", sub: "How optometrist pay is built, and how to compare offers that are built differently.",
+    alt: "Kestrel guide: Salary, day rate or a percentage? How optometrist pay is built, and how to compare offers that are built differently." },
+  { file: "g15-become-optician", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", icon: "pin", size: 100,
+    head: "The exam is national.", head2: "The licence is provincial.", sub: "How to become an optician in Canada, province by province.",
+    alt: "Kestrel guide: The exam is national. The licence is provincial. How to become an optician in Canada, province by province." },
+  { file: "g16-assistant-certification", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", tr: "New guide", size: 100, marks: true,
+    head: "Optometric assistants: no licence, 3 ways in.", list: ["Training on the job", "The CCOA program", "A college certificate"],
+    alt: "Kestrel guide: Optometric assistants: no licence, 3 ways in. Training on the job. The CCOA program. A college certificate." },
+  { file: "g17-supplier-role", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", icon: "path", size: 112,
+    head: "From the clinic", head2: "to the road.", sub: "What changes when you move into a lens rep, trainer or supplier role.",
+    alt: "Kestrel guide: From the clinic to the road. What changes when you move into a lens rep, trainer or supplier role." },
+  { file: "g18-become-optometrist", bg: C.paper, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", icon: "eye", size: 104,
+    head: "Becoming an optometrist", head2: "in Canada.", sub: "2 schools, 1 national board exam, and a licence from your province.",
+    alt: "Kestrel guide: Becoming an optometrist in Canada. 2 schools, 1 national board exam, and a licence from your province." },
+  { file: "g19-empty-chair", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "For clinics", icon: "door", size: 100,
+    head: "What does an empty", head2: "optician chair cost?", sub: "Glasses sales that walk out, and exam time lost. The sums, so you can work out yours.",
+    alt: "Kestrel guide for clinics: What does an empty optician chair cost? Glasses sales that walk out, and exam time lost. The sums, so you can work out yours." },
+  { file: "g20-who-works", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", tr: "The census", size: 150,
+    head: "14% to 69%.", sub: "The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census.",
+    alt: "Kestrel: 14% to 69%. The share of optometrists who are women: 14% of those 65 and over, 69% of those aged 25 to 34. Source: Statistics Canada, 2021 Census." },
+  // Posts 33 to 40 (Steve, 15th November 2026): the blog posts from March to June 2027, every 2 weeks after post 32.
+  { file: "g21-phone-screening", bg: C.mist, fg: C.navy, label: C.navy, accent: C.chestnut, line: C.navy, k: "kestrel-k-mark.svg", icon: "phone", size: 112,
+    head: "The first call", head2: "decides a lot.", sub: "How to get ready for a phone screen, what clinics tend to ask, and how to follow up.",
+    alt: "Kestrel guide: The first call decides a lot. How to get ready for a phone screen, what clinics tend to ask, and how to follow up." },
+  { file: "g22-stand-out-interview", bg: C.chestnut, fg: C.cream, label: C.cream, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", icon: "spark", size: 112,
+    head: "How to stand out", head2: "in an interview.", sub: "Clinics see plenty of good candidates. The small things that make one memorable.",
+    alt: "Kestrel guide: How to stand out in an interview. Clinics see plenty of good candidates. The small things that make one memorable." },
+  { file: "g23-ask-for-a-raise", bg: C.navy, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", icon: "rise", size: 120,
+    head: "How to ask", head2: "for a raise.", sub: "How to prepare, when to ask, what to say, and what to do if the answer is not yet.",
+    alt: "Kestrel guide: How to ask for a raise. How to prepare, when to ask, what to say, and what to do if the answer is not yet." },
+  { file: "g24-optical-lab-technician", bg: C.cream, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", icon: "lens",
+    head: "Optical lab technicians.", head2: "Where glasses get made.", size: 96, sub: "What the work involves, where it happens, and how people get started in it.",
+    alt: "Kestrel guide: Optical lab technicians. Where glasses get made. What the work involves, where it happens, and how people get started in it." },
+  { file: "g25-why-people-leave", bg: C.buff, fg: C.navy, label: C.navy, accent: C.chestnutD, line: C.navy, k: "kestrel-k-mark.svg", tr: "For clinics", icon: "exit", size: 112,
+    head: "Why people leave", head2: "eye care jobs.", sub: "The usual reasons, and practical ways to keep good people.",
+    alt: "Kestrel guide for clinics: Why people leave eye care jobs. The usual reasons, and practical ways to keep good people." },
+  { file: "g26-first-30-days", bg: C.chestnutD, fg: C.cream, label: C.buff, accent: C.buff, line: C.cream, k: "kestrel-k-mark-reversed.svg", tr: "For clinics", icon: "calendar", size: 112,
+    head: "A new hire's", head2: "first 30 days.", sub: "What to have ready before day 1, how to run the first week, and a check in at 30 days.",
+    alt: "Kestrel guide for clinics: A new hire's first 30 days. What to have ready before day 1, how to run the first week, and a check in at 30 days." },
+  { file: "g27-reference-checks", bg: C.soft, fg: C.cream, label: C.buff, accent: C.buff, line: C.mist, k: "kestrel-k-mark-reversed.svg", tr: "For clinics", icon: "check", size: 112,
+    head: "Reference checks", head2: "worth making.", sub: "Who to call, what to ask, and what to do with the answers.",
+    alt: "Kestrel guide for clinics: Reference checks worth making. Who to call, what to ask, and what to do with the answers." },
+  { file: "g28-seasonal-staff", bg: C.paper, fg: C.navy, label: C.chestnut, accent: C.chestnut, line: C.chestnutD, k: "kestrel-k-mark.svg", tr: "For clinics", icon: "sun", size: 112,
+    head: "Seasonal staff.", head2: "Worth it?", sub: "When short term help works, what it costs, and how to make a short stay go well.",
+    alt: "Kestrel guide for clinics: Seasonal staff. Worth it? When short term help works, what it costs, and how to make a short stay go well." },
 ];
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, "&apos;").replace(/"/g, "&quot;");
@@ -71,7 +143,7 @@ const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/'/g, 
 function html(p) {
   const size = p.size ?? (p.list ? 120 : 104);
   const middle = p.list
-    ? `<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px">${p.list.map((t, i) => `<li style="display:flex;gap:28px;align-items:baseline;font-family:Poppins;font-size:38px;line-height:1.3;color:${p.fg}"><span style="font-family:'DM Serif Display';font-size:48px;color:${p.accent};min-width:36px">${i + 1}</span>${esc(t)}</li>`).join("")}</ol>`
+    ? `<ol style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:22px">${p.list.map((t, i) => `<li style="display:flex;gap:28px;align-items:baseline;font-family:Poppins;font-size:38px;line-height:1.3;color:${p.fg}"><span style="font-family:'DM Serif Display';font-size:48px;color:${p.accent};min-width:36px">${p.marks ? "&#9679;" : i + 1}</span>${esc(t)}</li>`).join("")}</ol>`
     : `<p style="margin:0;font-family:Poppins;font-size:36px;line-height:1.35;color:${p.line}">${esc(p.sub)}</p>`;
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${esc(p.head)}</title><style>
 @font-face{font-family:'DM Serif Display';src:url(${font("dm-serif-display/files/dm-serif-display-latin-400-normal.woff2")})}

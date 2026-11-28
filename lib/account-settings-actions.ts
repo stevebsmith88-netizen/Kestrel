@@ -8,6 +8,7 @@ import { changeName, type NameDb } from "@/lib/name-change";
 import { IN_PLAY_NAME_TEXT } from "@/lib/name-hold";
 import { hasApplicationInPlay } from "@/lib/live-applications";
 import { requireRole } from "@/lib/auth";
+import { getMyEmployer } from "@/lib/clinic";
 import { MARKETING_CONSENT_TEXT, NOT_CONNECTED } from "@/lib/auth-copy";
 import type { JobFormState } from "@/lib/jobs";
 import { suppress } from "@/lib/suppression";
@@ -30,9 +31,9 @@ export async function updateName(_prev: JobFormState, form: FormData): Promise<J
   const admin = supabaseAdmin();
   const inPlay = session.role === "candidate" ? await hasApplicationInPlay(admin as unknown as Parameters<typeof hasApplicationInPlay>[0], session.userId) : false;
   const result = await changeName(admin as unknown as NameDb | null, session.userId, { first, last }, session.firstName ?? "", new Date(), { inPlay });
-  if (result.outcome === "no-server") return { error: "We can't change names just now. Please try again shortly, or write to hello@eyecarejobs.ca." };
+  if (result.outcome === "no-server") return { error: "We can't change names just now. Please try again shortly, or write to support@eyecarejobs.ca." };
   if (result.outcome === "unchanged") return { message: "Your name is saved." };
-  if (result.outcome === "locked") return { error: `You changed your name recently. You can change it again on ${longDate(result.until)}. If you need an earlier change, for example a typo or a legal name change, write to hello@eyecarejobs.ca and we will lift the hold.` };
+  if (result.outcome === "locked") return { error: `You changed your name recently. You can change it again on ${longDate(result.until)}. If you need an earlier change, for example a typo or a legal name change, write to support@eyecarejobs.ca and we will lift the hold.` };
   if (result.outcome === "in-play") return { error: IN_PLAY_NAME_TEXT };
   if (result.outcome === "failed") {
     console.error("Name change failed:", result.reason);
@@ -93,7 +94,9 @@ export async function savePreferences(_prev: JobFormState, form: FormData): Prom
   if (session.role === "candidate") {
     await admin.from("profiles").update({ notify_application_updates: form.get("applicationUpdates") === "yes" }).eq("id", session.userId);
   } else {
-    const { data: employer } = await admin.from("employers").select("id").eq("owner_id", session.userId).maybeSingle();
+    // The email choices belong to the location being worked in (migration 0047), and only its owner sets them.
+    const current = await getMyEmployer(session.userId);
+    const employer = current?.level === "owner" ? current : null;
     if (employer) {
       const frequency = cleanFrequency(form.get("applicantEmails"));
       await admin.from("employer_contacts").update({ notify_frequency: frequency, notify_new_applications: frequency !== "off", notify_reminders: form.get("reminders") === "yes" }).eq("employer_id", employer.id);

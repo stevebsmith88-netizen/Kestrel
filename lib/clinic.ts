@@ -1,8 +1,12 @@
 import { withExpected } from "@/lib/expected-columns";
+import { withClinicSocial } from "@/lib/social-columns";
+import type { SocialColumns } from "@/lib/social-links";
 import "server-only";
+import { cookies } from "next/headers";
 import { HIREABLE } from "@/lib/applications";
 import { supabaseServer } from "@/lib/supabase/server";
 import type { JobStatus } from "@/lib/jobs";
+import { canEdit, type ClinicLevel } from "@/lib/team";
 
 export type Employer = {
   id: string;
@@ -15,7 +19,9 @@ export type Employer = {
   notify_email: string;
   employee_band: string | null; // from the private contact table, never shown publicly
   direct_hire_confirmed_at: string | null;
-};
+  // Who the signed in person is to this clinic: its owner, or a team member who can view and edit, or view only (migration 0045).
+  level: ClinicLevel;
+} & SocialColumns; // the optional social links (migration 0054), present once the database has them
 
 export type MyJob = {
   id: string;
@@ -35,6 +41,7 @@ export type MyJob = {
   pay_expected_min?: number | null; // migration 0043
   pay_expected_max?: number | null;
   pay_expected_period?: string | null;
+  headline?: string | null;
   tags_software: string[] | null;
   tags_equipment: string[] | null;
   tags_specialties: string[] | null;
@@ -56,18 +63,79 @@ export type MyJob = {
 const JOB_COLUMNS =
   "id, title, role_category, employment_type, province, city, pay_period, pay_min, pay_max, pay_is_minimum, pay_days_per_week, pay_percent_min, pay_percent_max, pay_percent_of, tags_software, tags_equipment, tags_specialties, is_existing_vacancy, uses_ai_screening, description, apply_method, apply_url, work_arrangement, territory, pay_extras, status, review_note, posted_at, expires_at, created_at";
 
-// The signed in clinic's own profile (row level security means it can only be their own).
+// The signed in person's clinics: the locations they own, then the ones whose team they are on (migrations 0045 and 0047). Row level
+// security means only their own. On a database without the team tables, only owned locations, as before.
+const EMPLOYER_COLUMNS = "id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at";
+export const LOCATION_COOKIE = "kestrel_location";
+
+export type MyClinic = { id: string; clinic_name: string; city: string; province: string; level: ClinicLevel };
+
+export async function getMyClinics(userId: string): Promise<MyClinic[]> {
+  const db = await supabaseServer();
+  if (!db) return [];
+  const { data: owned } = await db.from("employers").select("id, clinic_name, city, province").eq("owner_id", userId).order("created_at");
+  const { data: memberships, error } = await db.from("employer_members").select("employer_id, level").eq("user_id", userId);
+  const ownedRows = (owned ?? []).map((e) => ({ ...(e as Omit<MyClinic, "level">), level: "owner" as const }));
+  const memberIds = error ? [] : (memberships ?? []).map((m) => m.employer_id as string).filter((id) => !ownedRows.some((o) => o.id === id));
+  const { data: teams } = memberIds.length ? await db.from("employers").select("id, clinic_name, city, province").in("id", memberIds) : { data: [] };
+  const levelOf = new Map((memberships ?? []).map((m) => [m.employer_id as string, m.level === "edit" ? ("edit" as const) : ("view" as const)]));
+  return [...ownedRows, ...((teams ?? []) as Omit<MyClinic, "level">[]).map((t) => ({ ...t, level: levelOf.get(t.id) ?? ("view" as const) }))];
+}
+
+// The location the person is working in now: the one they picked (a cookie, lib/location-actions.ts), or their first. Every clinic page
+// and action works on this 1 location, so nothing can reach another location by mistake.
 export async function getMyEmployer(userId: string): Promise<Employer | null> {
   const db = await supabaseServer();
   if (!db) return null;
-  const { data } = await db
-    .from("employers")
-    .select("id, clinic_name, practice_type, website, province, city, about, direct_hire_confirmed_at")
-    .eq("owner_id", userId)
-    .maybeSingle();
+  const clinics = await getMyClinics(userId);
+  if (!clinics.length) return null;
+  let picked: string | undefined;
+  try {
+    picked = (await cookies()).get(LOCATION_COOKIE)?.value;
+  } catch {
+    picked = undefined; // outside a request
+  }
+  const current = clinics.find((c) => c.id === picked) ?? clinics[0];
+  const { data: row } = await db.from("employers").select(await withClinicSocial(EMPLOYER_COLUMNS)).eq("id", current.id).maybeSingle();
+  const data = row as unknown as (Record<string, unknown> & { id: string }) | null;
   if (!data) return null;
-  const { data: contact } = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", data.id).maybeSingle();
-  return { ...data, notify_email: contact?.notify_email ?? "", employee_band: contact?.employee_band ?? null } as Employer;
+  if (current.level === "owner") {
+    const { data: contact } = await db.from("employer_contacts").select("notify_email, employee_band").eq("employer_id", data.id).maybeSingle();
+    return { ...data, notify_email: contact?.notify_email ?? "", employee_band: contact?.employee_band ?? null, level: "owner" } as Employer;
+  }
+  // The private alert address and the staff count are the owner's; a team member never sees them.
+  return { ...data, notify_email: "", employee_band: null, level: current.level } as Employer;
+}
+
+// Shown when a form is sent for a job that belongs to a different location from the one picked (audit P2-02).
+export const OTHER_LOCATION_TEXT = "This job belongs to another of your locations. Switch to that location at the top of the page, then try again.";
+
+// The signed in person's level at 1 particular clinic, whichever location they have picked: owner, edit, view, or null when they have nothing to
+// do with it. Someone can be on several clinics' teams at different levels (migration 0047), so a change to a job or an applicant must be checked
+// against the clinic that job belongs to, never the picked one (audit P2-01).
+export async function levelAt(userId: string, employerId: string | null | undefined): Promise<ClinicLevel | null> {
+  if (!employerId) return null;
+  return (await getMyClinics(userId)).find((c) => c.id === employerId)?.level ?? null;
+}
+
+// The clinic a job belongs to, read with the person's own sign in, so a job they cannot see comes back as null.
+export async function jobEmployerId(jobId: string | null | undefined): Promise<string | null> {
+  if (!jobId) return null;
+  const db = await supabaseServer();
+  if (!db) return null;
+  const { data } = await db.from("jobs").select("employer_id").eq("id", jobId).maybeSingle();
+  return (data?.employer_id as string | undefined) ?? null;
+}
+
+// The signed in person's level at the clinic that owns this job (audit P2-01). null when the job is not one of theirs.
+export async function levelForJob(userId: string, jobId: string | null | undefined): Promise<ClinicLevel | null> {
+  return levelAt(userId, await jobEmployerId(jobId));
+}
+
+// For server actions that change jobs or applicants: the signed in person's clinic, only if they may make changes.
+export async function getMyEditableEmployer(userId: string): Promise<Employer | null> {
+  const employer = await getMyEmployer(userId);
+  return employer && canEdit(employer.level) ? employer : null;
 }
 
 export async function getMyJobs(employerId: string): Promise<MyJob[]> {

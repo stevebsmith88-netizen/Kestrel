@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import FilledViaFields from "@/components/FilledViaFields";
 import { requireRole } from "@/lib/auth";
+import { getMyEditableEmployer } from "@/lib/clinic";
 import { fillRole } from "@/lib/applicant-actions";
 import { getApplicantCounts, getHireCandidates, getMyJob } from "@/lib/clinic";
 import { extendJob } from "@/lib/clinic-actions";
@@ -28,6 +29,8 @@ const NOTICES: Record<string, string> = {
 // Where the closing soon email lands. The clinic answers one question: filled (and how), or still hiring.
 export default async function JobEnding({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ notice?: string }> }) {
   const session = await requireRole("clinic");
+  // Changing a job is for the owner and "view and edit" team members (migration 0045).
+  if (!(await getMyEditableEmployer(session.userId))) redirect("/clinic");
   const { id } = await params;
   const { notice } = await searchParams;
   if (!UUID.test(id)) notFound();

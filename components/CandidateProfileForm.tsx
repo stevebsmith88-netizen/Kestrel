@@ -7,6 +7,7 @@ import { saveCandidateProfile } from "@/lib/candidate-actions";
 import { SOFTWARE_TAGS } from "@/lib/job-tags";
 import { EMPLOYMENT_TYPES, PAY_PERIODS, PROVINCES, ROLE_CATEGORIES, employmentLabel } from "@/lib/jobs";
 import { canHaveFieldRoles, openToField, otherRolesOffered } from "@/lib/role-fit";
+import { BC_NOTE, DOES, DOES_LABELS, licenceProvinces, licenceRole, registerFor } from "@/lib/licence";
 
 type Initial = {
   profession: string | null;
@@ -14,6 +15,11 @@ type Initial = {
   years_experience: string | null;
   available_from: string | null;
   phone: string | null;
+  linkedin_url?: string | null;
+  licence_province?: string | null;
+  licence_number?: string | null;
+  licence_does?: string[] | null;
+  licence_not_yet?: boolean | null;
   home_city: string | null;
   home_province: string | null;
   pref_radius_km: number;
@@ -39,13 +45,17 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
   const licensed = initial?.licensed_provinces ?? [];
   // The other roles offered depend on the role chosen above, so keep it in step as it changes.
   const [profession, setProfession] = useState(initial?.profession ?? "");
+  const [licProvince, setLicProvince] = useState(initial?.licence_province ?? "");
+  const [licNotYet, setLicNotYet] = useState(Boolean(initial?.licence_not_yet));
+  const licRole = licenceRole(profession);
+  const licRegister = registerFor(licRole, licProvince);
   // The two "more" sections start closed. They open when the page is reached from "Edit what you are looking for", or when a box inside has a problem.
   const [aboutOpen, setAboutOpen] = useState(false);
   const [lookingOpen, setLookingOpen] = useState(false);
   useEffect(() => {
     if (window.location.hash === "#looking-for") setLookingOpen(true);
   }, []);
-  const aboutError = Boolean(e.yearsExperience || e.availableFrom || e.phone);
+  const aboutError = Boolean(e.yearsExperience || e.availableFrom || e.phone || e.linkedin);
   const lookingError = Boolean(e.minPay || e.payPeriod);
   return (
     <form onSubmit={submit} noValidate className="panel formpanel">
@@ -75,6 +85,27 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
         </Field>
       </div>
 
+      {profession && (
+        <fieldset className="row provinces otherroles" id="other-roles">
+          <legend className="lab">What else would you consider?</legend>
+          <p className="help">Tick any other roles you would be happy to apply for, such as a practice or clinic manager role, or a step into a field or supplier role. A job only lets you apply when its role is yours or is ticked here. Optional.</p>
+          <div className="checkgrid">
+            {otherRolesOffered(profession).map((r) => (
+              <label className="consent" key={r}>
+                <input type="checkbox" name="otherRoles" value={r} defaultChecked={(initial?.pref_other_roles ?? []).includes(r)} />
+                <span>{r}</span>
+              </label>
+            ))}
+          </div>
+          {canHaveFieldRoles(profession) && (
+            <label className="consent fieldtick">
+              <input type="checkbox" name="openToField" defaultChecked={openToField(initial?.pref_other_roles)} />
+              <span><strong>Open to field and supplier roles.</strong> Sales, training, equipment service and account roles that travel to clinics. Jobs for these roles can then appear in your list, and you can apply for them.</span>
+            </label>
+          )}
+        </fieldset>
+      )}
+
       {REGISTERED_ROLES.includes(profession) && (
         <fieldset className="row provinces">
           <legend className="lab">Registered in (optional)</legend>
@@ -90,9 +121,45 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
         </fieldset>
       )}
 
+      {licRole && (
+        <fieldset className="row licencefields" id="registration">
+          <legend className="lab">Your registration number{licRole === "Optician" ? " and what you are registered for" : ""}</legend>
+          <p className="help">Some jobs ask for it, and clinics see it only when you apply. You enter it and Kestrel does not check it. The clinic can check it on the College&apos;s register.</p>
+          <div className="pair">
+            <Field id="cpf-lic-province" label="Registered by" error={e.licenceProvince} hint={licRegister ? licRegister.college : undefined}>
+              <select id="cpf-lic-province" name="licenceProvince" value={licProvince} onChange={(ev) => setLicProvince(ev.target.value)} disabled={licNotYet}>
+                <option value="">Choose a province or territory</option>
+                {licenceProvinces(licRole).map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </Field>
+            <Field id="cpf-lic-number" label="Registration number" error={e.licenceNumber} hint={licProvince === "British Columbia" ? BC_NOTE : "Type it as the College shows it, with any leading zero."}>
+              <input id="cpf-lic-number" name="licenceNumber" type="text" autoComplete="off" maxLength={15} defaultValue={initial?.licence_number ?? ""} disabled={licNotYet} />
+            </Field>
+          </div>
+          {licRole === "Optician" && (
+            <div className="row">
+              <p className="lab">What you are registered to do</p>
+              <div className="checkgrid">
+                {DOES.map((d) => (
+                  <label className="consent" key={d}>
+                    <input type="checkbox" name="licenceDoes" value={d} defaultChecked={(initial?.licence_does ?? []).includes(d)} />
+                    <span>{DOES_LABELS[d]}</span>
+                  </label>
+                ))}
+              </div>
+              <p className="help">Contact lens work is its own registration or advanced practice in several provinces.</p>
+            </div>
+          )}
+          <label className="consent">
+            <input type="checkbox" name="licenceNotYet" checked={licNotYet} onChange={(ev) => setLicNotYet(ev.target.checked)} />
+            <span>I am not registered yet (a student, a new graduate, or moving to a new province)</span>
+          </label>
+        </fieldset>
+      )}
+
       <details className="moreopts" id="about-you" open={aboutOpen || aboutError} onToggle={(ev) => setAboutOpen(ev.currentTarget.open)}>
         <summary>More about you</summary>
-        <p className="help">Optional. Your years of experience, when you can start and your phone number are sent to a clinic only when you apply to it.</p>
+        <p className="help">Optional. Your years of experience, when you can start and your phone number and your LinkedIn profile are sent to a clinic only when you apply to it.</p>
         <div className="pair">
           <Field id="cpf-years" label="Years of experience" error={e.yearsExperience}>
             <select id="cpf-years" name="yearsExperience" defaultValue={initial?.years_experience ?? ""}>
@@ -108,6 +175,9 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
         </div>
         <Field id="cpf-phone" label="Phone" error={e.phone} hint="Only shared with a clinic when you apply to it.">
           <input id="cpf-phone" name="phone" type="tel" autoComplete="tel" defaultValue={initial?.phone ?? ""} />
+        </Field>
+        <Field id="cpf-linkedin" label="LinkedIn profile" error={e.linkedin} hint="Only shared with a clinic when you apply to it. Your own profile, like https://www.linkedin.com/in/yourname.">
+          <input id="cpf-linkedin" name="linkedin" type="url" inputMode="url" autoComplete="url" placeholder="https://" defaultValue={initial?.linkedin_url ?? ""} />
         </Field>
       </details>
 
@@ -180,24 +250,6 @@ export default function CandidateProfileForm({ initial }: { initial: Initial | n
               </label>
             ))}
           </div>
-        </fieldset>
-
-        <fieldset className="row provinces">
-          <legend className="lab">Other roles you would consider</legend>
-          <div className="checkgrid">
-            {otherRolesOffered(profession).map((r) => (
-              <label className="consent" key={r}>
-                <input type="checkbox" name="otherRoles" value={r} defaultChecked={(initial?.pref_other_roles ?? []).includes(r)} />
-                <span>{r}</span>
-              </label>
-            ))}
-          </div>
-          {canHaveFieldRoles(profession) && (
-            <label className="consent fieldtick">
-              <input type="checkbox" name="openToField" defaultChecked={openToField(initial?.pref_other_roles)} />
-              <span><strong>Open to field and supplier roles.</strong> Sales, training, equipment service and account roles that travel to clinics. Jobs for these roles can then appear in your list, and you can apply for them.</span>
-            </label>
-          )}
         </fieldset>
       </details>
 

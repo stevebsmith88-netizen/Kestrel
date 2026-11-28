@@ -239,4 +239,89 @@ Branch `claude/kestrel-audit-fixes-phase-g-h67oku` (the session was set up on th
 - **A shortlist made straight from the applicants list, before the application is ever opened, shows the candidate "Viewed" at the time of the shortlist** (history and the masked copy). The candidate is told it has been viewed, which is true (the clinic did act on it), so this was left alone, but it does give a time that matches the shortlist. Only matters if Steve wants to hide even that.
 - **The applicants list (`app/clinic/jobs/[id]/applicants/page.tsx`) and the admin pages still read the database inside the page code** and have no tests. The loaders for the single application page and the candidate's list are covered; those pages are the next place to extract and test if more is wanted.
 - **`npm run test:db` needs Linux with Postgres 16 and the `postgres` user**, like the older scratch scripts. It cannot run on Steve's own computer, only in the cloud session.
-- **From Phase F, still open:** the posting policy still lists the types as "full time, part time, locum or contract", and `lib/onboarding-emails.test.ts` fails when `NEXT_PUBLIC_SITE_URL` is set to another address.
+- **From Phase F, still open:** the posting policy still lists the types as "full time, part time, locum or contract", and `lib/onboarding-emails.test.ts` fails when `NEXT_PUBLIC_SITE_URL` is set to another address. (Both closed by 13th November 2026: see the last section.)
+
+## Small fixes from the post audit review (13th November 2026). On a branch, waiting for Steve's check on the preview
+
+Branch `claude/loving-faraday-3j5smt`. No SQL. No settings changed. Steve asked for all of these on 13th November 2026. Before the push: `npm run typecheck` (0 errors), `npm test` (618 tests, all passing) and `npm run build` (clean).
+
+| Item | Status | What changed |
+| --- | --- | --- |
+| D-03 Old resume suggestions stay after a new upload | fixed | "Fill in from my resume" starts afresh whenever a new resume is saved (keyed by the upload time), so no suggestions from the old file and the button is back |
+| D-04 Checklist ticks "Say what you are looking for" too early | fixed | Done only once a preference from that part of the profile is saved: other provinces, types of work, pay needed, practice type or other roles (`lookingForSaved` in `lib/checklist.ts`, tested). The role and town from the first step page and the 25 km default no longer count |
+| D-05 Quebec offered as a job alert province | fixed | Taken off the alert form, and the server refuses it with the usual Quebec wording |
+| D-07 "Existing vacancy" not explained on the job page | fixed | A small "i" note beside it, and beside "Uses AI to screen candidates", in the help centre's words |
+| D-09 PDF resumes show a DOC badge | fixed | PDF for a PDF, DOC for a Word file (`lib/file-badge.ts`, tested) |
+| X-04 Interview and Offer left open for ever when a job runs out | fixed | The daily job now also closes Interview and Offer, 14 days after the job ended (7 for the others), as "No update from the clinic", with kinder words that suggest contacting the clinic directly. A job the clinic marked as filled is left alone, so "Don't close this one yet" still holds. Tested |
+| X-06 The October phased plan read as all open | fixed | `NEXT-STEPS-PHASES.md` has a status table per phase at the top |
+| X-07 Posting policy says "contract" | already fixed | The page already says "fixed term" |
+| X-10 No "written by the clinic" line on the candidate's application page | fixed | The page now says "This message was written by [clinic]", as the email and inbox do |
+| X-11 Name boxes greyed out during a name hold | fixed | The boxes and Save button stay usable, with "Until then you can still fix capital letters". The server already allowed it and still refuses anything more |
+| X-13 Onboarding email test fails with another site address | fixed | The test expects whichever address is set. Passes with none and with the demo address |
+| X-14 Old docs point to an old SQL file | fixed | `docs/launch-checklist.md` and `docs/google-signin.md` point to the current combined file |
+| X-20 Help page layout shift on a phone | fixed | The search box's space is held before the script runs. Layout shift measured at 0 on a phone and a desktop (was 0.079) |
+| P1-58 No "Applied" mark on job cards | fixed | A signed in candidate sees an "Applied" badge on Find jobs cards for jobs they have applied to |
+
+### Second batch, the same day (Steve: "do the other stuff")
+
+No SQL. No settings. `npm test` 626 tests, all passing; typecheck and build clean.
+
+| Item | Status | What changed |
+| --- | --- | --- |
+| X-05 Home page built for every visitor | fixed | Saved and shared like the content pages (`force-static`, rebuilt at most every 5 minutes). A job change clears it at once (`refreshJobPages` now clears `/` too). The launch switch and scheduled posts show within 5 minutes. `lib/page-cache.test.ts` now checks it |
+| X-09 No way to bring back a job marked Not interested | fixed | "Jobs you marked not interested" under Recommended for you on the candidate home, with Show it again. The database already allowed it (migration 0031). Help topic updated |
+| X-16 Applicants list and admin pages untested | fixed | The applicants list (`lib/applicant-list.ts`) and the review queue (`lib/review-queue.ts`) first, then the other 7 admin pages later the same day (`lib/admin-loaders.ts`: outreach, waitlist, post for a clinic x2, claims, reports, found listings, suppressions). 17 tests with stand in databases, including the waitlist and page reads fallbacks for a database without the newer SQL |
+| X-17 "private CV storage" in the SQL check | fixed | Now "private resume storage" in `supabase/verify.sql`, the combined file and the scratch scripts. The label only, so nothing needs running again |
+| D-08 No small town jobs on the demo | fixed | 2 sample clinics in Wingham, Ontario and Drumheller, Alberta, with a job each. Seed tested twice on a scratch database: 13 sample clinics, 27 live jobs in 7 provinces. `docs/demo-site.md` updated. Steve runs `reset.sql` then `seed.sql` on the demo |
+| Home page wording (Steve) | done | Shorter line under the headline, "Be the first to know when jobs go live." under the buttons, and the 20 years line moved to the waitlist section |
+
+### Third batch, the same day
+
+| Item | Status | What changed |
+| --- | --- | --- |
+| P1-59 Resume reader samples | first batch done | Steve's 5 sample templates (13th November 2026) are tests, with names and contact details changed. They showed 3 gaps, now fixed in `lib/resume-reader.ts`: numbered headings ("① PROFILE", "4. Experience"), a side column "Skills" heading read out in the middle of the job history (it no longer cuts off the jobs after it), and a date split over 2 lines when 2 jobs sit side by side. All 5 give the right phone number, the right years, no invented role or town, and never use a date of birth. More samples welcome, especially eye care resumes and Canadian addresses |
+| Weekly search check | done | `docs/marketing/weekly-search-check.md`: Search Console and Bing each week, ChatGPT, Gemini and Copilot once a month (the ones that need no sign in), what good looks like, and a log |
+| P1-59 Resume reader, second batch | done | 5 real optician resumes from Steve (4 PDF, 1 Word), run in the session only and not kept in the repository. 4 read well at once (Optician and the phone number on all). Fixed from them, each with a test that copies the layout with made up details: a heading joining 2 sections ("Education AND ACCOMPLISHMENT:") was not seen, so school years counted as work (23 years became 18); an address written province first ("unit 1210, Ontario. Toronto") gave no town; a month touching its year ("May2026") was missed; "about 10 years" beside the "5 to 9 years" band; and a university's name on the next bullet ("University of British Columbia") was read as the province of registration. The 5th file is 3.7 MB, over the 3 MB upload limit; it reads correctly given the room (Steve to decide on the limit) |
+
+## Audit round 3, P2-01 and P2-02: level checked at the job's own clinic (27th November 2026). On a branch, waiting for Steve's check on the preview
+
+Findings are in `docs/audit/POST-AUDIT-2-2026-11.md`. Branch `claude/pensive-albattani-rgbrvp`. No SQL. No settings changed. Before the push: `tsc --noEmit`, `npm test` (867 tests) and `npm run build` all pass.
+
+| Finding | Status | How it was checked |
+| --- | --- | --- |
+| P2-01 "View only" could be bypassed by someone on more than 1 clinic's team | fixed | New helpers in `lib/clinic.ts`: `levelAt` (the person's level at 1 named clinic, from their own list) and `levelForJob` (the level at the clinic that owns a job, read with their own sign in). Every action that moves applicants (`setApplicationStatus`, `declineSelected`, `declineSelectedQuiet`, `shortlistSelectedQuiet`, `fillRole`) now asks for the level at the job's own clinic, after the job or application is known, instead of the picked location. `saveApplicantNote` does the same, so a view only member always adds under the note instead of replacing it, and the owner told is the owner of that clinic. The applicants list and application page show the buttons by the same rule. `lib/team-level.test.ts` (4 tests) reads the code and fails if any of these goes back to the picked location; it fails on the code before this fix. Not tried in a browser, because that needs 2 clinics with a shared team member on the demo (Steve's check below). |
+| P2-02 Saving a job could act on a different location from the one picked | fixed | `saveJob` reads the job's clinic with its status and refuses a job of another location with "This job belongs to another of your locations. Switch to that location at the top of the page, then try again." (`OTHER_LOCATION_TEXT`), so a pass or payment is never counted against the wrong location. Covered by the same test file. `doExtend`, `repostJob` and the pass actions already did this. Closing, withdrawing and deleting a job go through the person's own sign in, so the database already checks the level at the job's own clinic. |
+
+### Steve's check on the demo
+
+The old gap needed a hand made request, so it cannot be reproduced by clicking. This check makes sure nothing ordinary broke:
+1. Clinic account A (the owner) invites account B as **View only** on its team. Account B also has its own clinic.
+2. Sign in as B and pick clinic A in the location picker. Open a job's applicants. There should be no buttons to move anyone, only the note box. A note should be added under A's note, with B's name.
+3. Sign in as A and move an applicant to Shortlisted. It should work as before.
+
+## Audit round 3, P2-03 and P2-04: no double charge, and a fuller data download (27th November 2026). On a branch, waiting for Steve's check on the preview
+
+Branch `claude/pensive-albattani-rgbrvp`. No SQL. No settings changed. Before the push: `tsc --noEmit`, `npm test` (876 tests) and `npm run build` all pass.
+
+| Finding | Status | How it was checked |
+| --- | --- | --- |
+| P2-03 2 approvals at almost the same moment could charge twice | fixed | `lib/charge-claim.ts`. Before any money moves, `chargeForJob` claims the payment in 1 update that works only while it is `card_saved` and nobody holds a fresh claim. The claim is a mark in `failure_message`, which is shown only on a refused payment, so no SQL is needed. A second approval finds the claim and stops with "Someone else is approving this job right now" (`payment-busy`, worded for the review queue and for Slack), and nothing is charged. A claim older than 5 minutes no longer counts, so a job can never be stuck if the server stops half way. After a problem on our side the claim is let go, so approving again tries again at once. The Stripe idempotency key now belongs to the claim instead of a 10 minute window, and moving a pass job to the card on the pass happens only once. `lib/charge-claim.test.ts` (6 tests) covers 2 approvals at once, a stale claim, each payment state, letting go, the key, and the order in `chargeForJob`. Not tried against Stripe's test mode from here (Steve's check below). |
+| P2-04 The data download missed some newer records | fixed | `buildDataExport` (`lib/data-export.ts`) now adds help requests and feedback (for everyone), and for a clinic person each location's payments and passes, and the clinic teams they are on, with their level. No Stripe id is exported. Each part is read on its own and is empty before its SQL is run. 3 new tests in `lib/data-export.test.ts` check that each person gets only their own, that no Stripe id or Stripe column appears, and that a database without the SQL gives empty lists. The help topic "How do I download my information or delete my account?" now lists everything the download covers (it had also fallen behind on follows, saved jobs and registration numbers). |
+
+### Steve's check on the demo
+
+1. With `FORCE_PAID_CHECKOUT=yes` on the demo, send a job for review as a clinic and save a test card.
+2. Open the review queue in 2 browser tabs and press Approve in both, a second apart. 1 tab should say the job is live, the other "Someone else is approving this job right now". In Stripe's test dashboard there should be exactly 1 invoice for the job.
+3. As any account, open Account settings, Download your information. The file should now include `helpRequestsAndFeedback` (and, for a clinic, `payments`, `passes` and `clinicTeamsIAmOn`).
+
+## Audit round 3, P2-05 to P2-07: small tidy ups (27th November 2026). On a branch, waiting for Steve's check on the preview
+
+Branch `claude/pensive-albattani-rgbrvp`. No SQL. No settings changed. Before the push: `tsc --noEmit`, `npm test` (880 tests) and `npm run build` all pass.
+
+| Finding | Status | How it was checked |
+| --- | --- | --- |
+| P2-05 An invitation could add someone to a location the inviter no longer owns | fixed | `stillSameOwner` (`lib/team-owner.ts`): when an invitation is accepted, its extra locations are joined only if they belong to whoever owns the invitation's own location today. A location handed to someone else in the meantime is left out (the new owner can invite again). Used in `acceptInvite`, `lib/team-server.ts`. Tested with a stand in database in `lib/team-owner.test.ts`. |
+| P2-06 The 25 location limit could be passed by a hand over | fixed | `atLocationLimit` (`lib/team-owner.ts`) is checked in `transferOwnership` before ownership moves, so both the owner's hand over and Admin, Clinics refuse with "That person already holds 25 locations on Kestrel, which is the most an account can have. Please email support@eyecarejobs.ca." No SQL: the database rule for new locations is unchanged. Tested in the same file. |
+| P2-07 The Slack button endpoint did not refuse on the demo by itself | fixed | `app/api/slack/actions/route.ts` answers 404 when `DEMO_MODE=yes`, before reading anything. A test checks it comes first. |
+
+Nothing to click for these on the demo: they cover rare cases (a location handed over while an invitation is open, an account with 25 locations, a Slack press reaching the demo), and the tests cover them.

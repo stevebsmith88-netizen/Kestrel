@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Builds lib/pay-benchmark-data.ts from the Government of Canada Job Bank wages file (open.canada.ca, "Wages" dataset).
 
-Run once a year, when Job Bank publishes a new file (the 2025 file was revised on 19th November 2025):
+Run once a year, when Job Bank publishes a new file (the 2026 file was revised on 18th November 2026):
   1. Download the newest "Wages" CSV from https://open.canada.ca/data/en/dataset/adad580f-76b0-4502-bd05-20c125de9116
      (the file is served from opencanada.blob.core.windows.net) into an empty folder.
-  2. python3 scripts/build-pay-benchmark.py path/to/wages.csv --file-name "2a71-das-wage2025opendata-esdc-all-19nov2025-vf.csv"
+  2. python3 scripts/build-pay-benchmark.py path/to/wages.csv --file-name "2a71-das-wage2026opendata-esdc-all-18nov2026-vf.csv"
   3. npm test, then read the diff before committing. docs/pay-benchmark.md explains the choices.
 
 Only the rows listed in MAPPING are kept. To add a province or a role, add it below, run the script, and read the figures.
@@ -46,12 +46,14 @@ def main():
     args = ap.parse_args()
 
     rows = list(csv.DictReader(open(args.csv_path, encoding="utf-8-sig")))
+    # The column holding the survey source is named for the file's year (Source2025_NHQ, Source2026_NHQ), so find it.
+    source_col = next(c for c in rows[0] if c.startswith("Source") and c.endswith("_NHQ"))
     noc_to_role = {noc: role for role, (noc, _) in MAPPING.items()}
     entries, revision = [], set()
     for r in rows:
         if r["NOC_CNP"] not in noc_to_role or r["prov"] not in PROVINCES:
             continue
-        if r["Median_Wage_Salaire_Median"].strip() == "" or r["Source2025_NHQ"].strip() in ("", "N/A"):
+        if r["Median_Wage_Salaire_Median"].strip() == "" or r[source_col].strip() in ("", "N/A"):
             continue
         # The province wide row has a 4 character region code such as ER35. Economic regions inside a province have longer codes.
         if len(r["ER_Code_Code_RE"]) != 4:
@@ -65,7 +67,7 @@ def main():
             "match": dict(MAPPING.values())[r["NOC_CNP"]],
             "basis": "year" if r["Annual_Wage_Flag_Salaire_annuel"].strip() == "1" else "hour",
             **{k: number(r[c]) for k, c in COLUMNS.items()},
-            "survey": r["Data_Source_E"].strip() or r["Source2025_NHQ"].strip(),
+            "survey": r["Data_Source_E"].strip() or r[source_col].strip(),
             "period": r["Reference_Period"].strip(),
         })
     if len(revision) != 1:

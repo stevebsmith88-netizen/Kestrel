@@ -4,6 +4,9 @@
 
 export const POST_DAYS = 30;
 
+// Jobs that go live during the free launch run for 60 days instead of 30 (Steve, 14th November 2026). Extending is still 30 days.
+export const LAUNCH_POST_DAYS = 60;
+
 export const ROLE_BANDS = [
   { key: "support", label: "Support and patient care", covers: "Optometric assistants, technicians, reception and patient care", price: 59 },
   { key: "opticians", label: "Opticians and practice leads", covers: "Opticians, contact lens fitters and practice managers", price: 79 },
@@ -15,6 +18,15 @@ export const ROLE_BANDS = [
 // The yearly option (10 months for the price of 12) is a founding offer on both passes.
 export const CLINIC_PASS = { monthly: 199, livePosts: 5, yearly: 1990, lockMonths: 12 } as const;
 export const CLINIC_PASS_PLUS = { monthly: 349, livePosts: 5, yearly: 3490, lockMonths: 12 } as const;
+
+// Founding clinics (Steve, 14th November 2026; the full rule is in docs/pass-procedures.md). The first 50 clinic locations to post during the
+// free launch are Founding clinics. A founding clinic that takes a pass during the founding period keeps that pass price for 12 months, or
+// until it cancels, whichever comes first. Then the price in force at that time applies, after 30 days notice. Stripe checkout must follow this.
+export const FOUNDING_CLINICS = { places: 50, lockMonths: 12, noticeDays: 30 } as const;
+
+// The free launch coupon (Steve, 14th November 2026: "July 2027, I think"). Stripe cannot change a coupon's end date once it exists, so the
+// end date lives here and checkout only applies the coupon on or before it. Change the date here, nothing in Stripe needs remaking.
+export const FREE_LAUNCH_ENDS = "2027-07-31";
 
 const money = (n: number, places = 0) => "$" + n.toLocaleString("en-CA", { minimumFractionDigits: places, maximumFractionDigits: places });
 

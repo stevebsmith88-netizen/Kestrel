@@ -10,7 +10,7 @@ import { countSend } from "@/lib/email-count";
 export { SITE_URL, emailLayout } from "./email-layout.ts";
 const FROM = process.env.EMAIL_FROM || "Kestrel Eye Care Jobs <hello@mail.eyecarejobs.ca>";
 // Replies go to a mailbox someone reads. The sending address cannot receive mail.
-const REPLY_TO = () => process.env.EMAIL_REPLY_TO || "hello@eyecarejobs.ca";
+const REPLY_TO = () => process.env.EMAIL_REPLY_TO || "support@eyecarejobs.ca";
 
 export type SendResult = "sent" | "skipped" | "failed";
 
@@ -20,10 +20,10 @@ export async function sendEmail(message: EmailMessage) {
   return (await deliverEmail(message)) === "sent";
 }
 
-type EmailMessage = { to: string; subject: string; html: string; text: string; unsubscribeUrl?: string; replyTo?: string };
+type EmailMessage = { to: string; subject: string; html: string; text: string; unsubscribeUrl?: string; replyTo?: string; attachments?: { filename: string; content: string; contentType: string }[] };
 
 // The same, but says whether the email was sent, deliberately skipped (do not email list, no key) or failed.
-export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, replyTo }: EmailMessage): Promise<SendResult> {
+export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, replyTo, attachments }: EmailMessage): Promise<SendResult> {
   // The demo site never sends email to anyone, whatever keys are set.
   if (demoMode()) {
     console.log("Email skipped, this is the demo site:", subject);
@@ -45,7 +45,7 @@ export async function deliverEmail({ to, subject, html, text, unsubscribeUrl, re
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, reply_to: replyTo ?? REPLY_TO(), ...(unsubscribeUrl ? { headers: unsubscribeHeaders(unsubscribeUrl, SITE_URL) } : {}) }),
+      body: JSON.stringify({ from: FROM, to: [to], subject, html, text, reply_to: replyTo ?? REPLY_TO(), ...(attachments?.length ? { attachments: attachments.map((a) => ({ filename: a.filename, content: a.content, content_type: a.contentType })) } : {}), ...(unsubscribeUrl ? { headers: unsubscribeHeaders(unsubscribeUrl, SITE_URL) } : {}) }),
     });
     if (!res.ok) {
       console.error("Email failed:", res.status, (await res.text()).slice(0, 200));

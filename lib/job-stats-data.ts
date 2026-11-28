@@ -1,6 +1,6 @@
 import "server-only";
 import { getSession } from "@/lib/auth";
-import { getMyEmployer } from "@/lib/clinic";
+import { getMyClinics } from "@/lib/clinic";
 import { summariseStats, type EventKind, type JobNumbers, type StatRow } from "@/lib/job-stats";
 import { supabaseServer } from "@/lib/supabase/server";
 import { supabaseAdmin } from "@/lib/supabase-server";
@@ -19,10 +19,11 @@ export async function isOwnerOrAdmin(jobId: string) {
   if (!session) return false;
   if (session.role === "admin") return true;
   if (session.role !== "clinic") return false;
-  const [employer, db] = [await getMyEmployer(session.userId), supabaseAdmin()];
-  if (!employer || !db) return false;
+  // Any of the person's locations, not only the one open now (migration 0047).
+  const [clinics, db] = [await getMyClinics(session.userId), supabaseAdmin()];
+  if (!clinics.length || !db) return false;
   const { data } = await db.from("jobs").select("employer_id").eq("id", jobId).maybeSingle();
-  return data?.employer_id === employer.id;
+  return clinics.some((c) => c.id === data?.employer_id);
 }
 
 // The signed in clinic's own numbers (row level security means only their own jobs come back).

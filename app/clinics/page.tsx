@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AppFooter from "@/components/AppFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { postingOn } from "@/lib/features";
 import { launchLayoutOn } from "@/lib/launch";
 import { CLINIC_PASS, CLINIC_PASS_PLUS, ROLE_BANDS, dollars, passBreakEven, perDay, perPassPost } from "@/lib/pricing";
 import { shareMetadata } from "@/lib/share";
@@ -14,7 +15,7 @@ export const dynamic = "force-static";
 
 export const metadata: Metadata = shareMetadata({
   title: "Post eye care jobs in Canada",
-  description: "Post jobs and reach eye care professionals across Canada. Join the waitlist to be first invited to post.",
+  description: "Post jobs and reach eye care professionals across Canada. Create an account to look around now. We expect to launch in early 2027, when posting opens.",
   path: "/clinics",
 });
 
@@ -51,7 +52,7 @@ export default async function Clinics() {
           </p>
           <section className="pricing" aria-labelledby="pricing-h">
             <h2 id="pricing-h">One price. 30 days.</h2>
-            <p className="pricing-free">Free to post while we launch, for the opening 30 to 60 days.</p>
+            <p className="pricing-free">Free to post while we launch, for the opening 30 to 60 days, and those first jobs stay up for 60 days.</p>
             <p>After launch, a 30 day post costs around the price of a coffee a day. No charge by the click.</p>
             <table className="ladder">
               <caption>Per 30 day post, before HST</caption>
@@ -81,7 +82,10 @@ export default async function Clinics() {
             <p className="small-note">Prices in Canadian dollars, before HST. Near the end of its 30 days, any post can be extended for another 30.</p>
           </section>
           {launched ? (
-            <Link href="/sign-up?type=clinic" className="btn">Create your clinic account</Link>
+            <>
+              {!postingOn() && <p>We are in our pre launch phase, and posting opens at our launch in early 2027. Create your clinic account now to set up your profile, look around and send us feedback, and we will email you when you can post.</p>}
+              <Link href="/sign-up?type=clinic" className="btn">Create your clinic account</Link>
+            </>
           ) : (
             <>
               <p>Waitlist clinics will be the first invited to post.</p>

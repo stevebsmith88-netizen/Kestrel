@@ -1,6 +1,7 @@
 // Compares the wording candidates were seeing with an edited version waiting in the review queue.
 const FIELDS: [string, string][] = [
   ["title", "Title"],
+  ["headline", "Headline"],
   ["role_category", "Role"],
   ["employment_type", "Type"],
   ["province", "Province"],

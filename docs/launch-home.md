@@ -1,6 +1,6 @@
 # The launch home page
 
-Built 7th November 2026 (marketing audit and Steve's request). Before launch the site shows the coming soon page. The moment sign up opens, the home page and header change to the launch layout by themselves.
+Built 7th November 2026 (marketing audit and Steve's request). Before launch the site shows the coming soon page. When sign up opens, the home page and header change to the launch layout by themselves, within 5 minutes: since 13th November 2026 the home page is saved and shared like the content pages (review item X-05), and rebuilt at most every 5 minutes.
 
 ## Three looks
 
@@ -27,6 +27,12 @@ The wordmark is the existing file, unchanged. The tagline is text in Poppins, as
 The pre launch home shows 2 screens of the product under the hero, "What the board will look like": the job search and a job page. They are screenshots of the demo site (sample clinics and jobs, with the demo banner and header cropped out), kept in `public/home/`, and the block says plainly that they are samples. There is no link to the demo site, by Steve's decision. The block lives in `components/PreLaunchHome.tsx` only, so it disappears by itself when the launch layout takes over, and the launch home shows real jobs instead. After launch the 2 image files can be deleted. If the job page or search page changes a lot before launch, retake the screens from the demo site. The job page sample was redone on 10th November 2026, after the Job facts box moved under the description: it was rendered from the real stylesheet and page structure (Playwright, 1080 pixels wide at 2x), not captured from the demo site. The search sample is still the original capture.
 
 Idea for later (Steve, 8th November 2026, not built): a sponsored area on the home page listing either brand advertisements or chosen jobs. It must be labelled "Sponsored", must never look like an ordinary job, and waits for the disclosure conversation, like the sponsored listings in `docs/marketing/directory-plan.md`.
+
+## Open for sign up, not yet for posting (Steve, 15th November 2026)
+
+Sign up can open before clinics can post. Run `update public.signup_gate set open = true;` (the launch layout and Create account take over), set `CLINIC_SIGNUP` to `yes` so clinics can create accounts without a code, and leave `ENABLE_POSTING` unset. People can then create accounts, set up profiles and look around. A clinic sees "Posting opens soon" instead of the post form, the dashboard hides Post a job, the server refuses new jobs and pass purchases, and the For clinics page and home page say posting opens soon. When you are ready, set `ENABLE_POSTING` to `yes` in Vercel and redeploy. The demo site sets `ENABLE_POSTING` to `yes` so it still shows the whole flow.
+
+Wording while posting is closed (15th November 2026): the pre launch message (look around, send feedback, official launch in early 2027, an email when posting opens) lives in `lib/posting-copy.ts` and is used on the home page, Post a job, the clinic dashboard, the For clinics page and the sign up pages. When posting opens, set `ENABLE_POSTING` to `yes` and these messages go away by themselves. The Confirm sign up email in Supabase carries the same paragraph, to be taken out by hand (`docs/email-templates/README.md`).
 
 ## What flips it
 

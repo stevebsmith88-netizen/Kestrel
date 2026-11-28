@@ -28,14 +28,14 @@ test("every Job Bank row is sensible: known role and province, median present, q
     if (w.basis === "hour") assert.ok(w.median > 10 && w.median < 150, `${w.role} ${w.province} hourly`);
     else assert.ok(w.median > 20000 && w.median < 400000, `${w.role} ${w.province} yearly`);
   }
-  assert.equal(JOB_BANK_SOURCE.revised, "2025-11-19");
+  assert.equal(JOB_BANK_SOURCE.revised, "2026-11-18");
 });
 
 test("hourly and yearly pay are put on one basis before they are compared", () => {
   const b = findBenchmark("Optician", "Ontario");
   assert.equal(b?.kind, "job_bank");
   if (b?.kind !== "job_bank") return;
-  assert.ok(Math.abs(b.bands.median - 24.04 * 2080) < 1);
+  assert.ok(Math.abs(b.bands.median - 29 * 2080) < 1);
   // The same pay typed hourly or yearly gives the same answer.
   assert.equal(compareRange(24, 28, "hour", b.bands), compareRange(24 * 2080, 28 * 2080, "year", b.bands));
   assert.equal(compareRange(40, 45, "hour", b.bands), compareRange(40 * 2080, 45 * 2080, "year", b.bands));
@@ -65,12 +65,12 @@ test("the wording says typical and median, shows the source and date, and never 
   const m = describeBenchmark(entry("Optician", "Ontario", "hour", 20, 22), b);
   assert.equal(m.verdict, "below");
   assert.match(m.lead, /^Your range is below what is typical for opticians in Ontario\.$/);
-  assert.match(m.detail, /median is about \$24\.04 an hour/);
-  assert.match(m.detail, /\$23\.00 an hour to \$33\.65 an hour/);
+  assert.match(m.detail, /median is about \$29\.00 an hour/);
+  assert.match(m.detail, /\$23\.44 an hour to \$35\.43 an hour/);
   assert.equal(m.short, "Source: Job Bank, Government of Canada. Guidance only.");
   assert.match(m.source, /Job Bank wages, Government of Canada/);
-  assert.match(m.source, /Labour Force Survey 2023 to 2024\. Job Bank file of 19th November 2025/);
-  assert.match(m.caution, /cover 2023 to 2024/);
+  assert.match(m.source, /Labour Force Survey 2024 to 2025\. Job Bank file of 18th November 2026/);
+  assert.match(m.caution, /cover 2024 to 2025/);
   assert.match(m.caution, /Guidance only\. It does not stop you posting/);
   assert.equal(m.licence, true);
   assert.doesNotMatch(JSON.stringify(m), /national average|average pay/i);
@@ -86,7 +86,7 @@ test("before a range is typed the guide shows the typical pay only, in the basis
   assert.equal(m.verdict, null);
   assert.equal(m.lead, "Typical pay for optometrists in Alberta.");
   assert.match(m.detail, /median is about \$84,000 a year/);
-  assert.match(m.source, /2021 Census\. Job Bank file of 19th November 2025/);
+  assert.match(m.source, /2021 Census\. Job Bank file of 18th November 2026/);
   assert.match(m.caution, /cover 2021/);
   assert.equal(showMoney(24.04 * 2080, "year"), "$50,000 a year");
 });

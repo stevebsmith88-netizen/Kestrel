@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { jobFromForm } from "./job-form.ts";
 
-const migrations = ["0005_clinics_and_jobs", "0013_field_roles", "0034_pay_basis_tags_headcount", "0035_pay_both_parts", "0043_expected_earnings_no_career_stage"].map((n) => readFileSync(new URL(`../supabase/migrations/${n}.sql`, import.meta.url), "utf8")).join("\n");
+const migrations = ["0005_clinics_and_jobs", "0013_field_roles", "0034_pay_basis_tags_headcount", "0035_pay_both_parts", "0043_expected_earnings_no_career_stage", "0053_job_headline"].map((n) => readFileSync(new URL(`../supabase/migrations/${n}.sql`, import.meta.url), "utf8")).join("\n");
 
 // The column names listed in every `grant <verb> (a, b, c) on public.jobs to <role>` statement.
 function granted(verb: string, role: string, table = "jobs") {

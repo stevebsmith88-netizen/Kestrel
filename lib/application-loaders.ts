@@ -20,7 +20,7 @@ export type Application = {
   viewed_at: string | null;
   status_changed_at: string;
   created_at: string;
-  applicant: { name?: string; email?: string; phone?: string | null; profession?: string | null; licensed_provinces?: string[]; years_experience?: string | null; available_from?: string | null };
+  applicant: { name?: string; email?: string; phone?: string | null; profession?: string | null; licensed_provinces?: string[]; years_experience?: string | null; available_from?: string | null; linkedin_url?: string | null; licence?: { province: string | null; number: string | null; does: string[]; notYet: boolean } | null };
 };
 
 export const APPLICATION_COLUMNS =

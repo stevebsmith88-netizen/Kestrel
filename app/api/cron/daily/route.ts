@@ -5,12 +5,20 @@ import { DIGEST_GAP_HOURS, applicantDigestEmail, digestDue, jobEndingEmail } fro
 import { SITE_URL, deliverEmail, emailLayout, type SendResult } from "@/lib/email";
 import { longDate } from "@/lib/jobs";
 import { ALERT_PAY_COLUMNS, alertLine, type AlertJob } from "@/lib/job-alert-text";
+import { CLOSING_SOON_DAYS, alertHeading, alertSubject, closingLine, followedLine } from "@/lib/follows";
+import { INTEREST_JOINED_BODY, INTEREST_JOINED_TITLE, matchPublicClinic } from "@/lib/clinic-interest";
+import { employerHref } from "@/lib/clinic-pages";
+import { listPublicClinics } from "@/lib/public-clinics";
 import { withExpected } from "@/lib/expected-columns";
 import { retentionCutoffs } from "@/lib/retention";
 import type { PayFields } from "@/lib/job-pay";
 import { notifyAdmin } from "@/lib/notify-admin";
+import { sendDailyDigest, sendWaitingReminder } from "@/lib/slack-digest";
+import { sendMilestones } from "@/lib/slack-milestones";
+import { notifySlack } from "@/lib/notify-slack";
+import { sendFoundingReminders } from "@/lib/founding-flow";
 import { notify } from "@/lib/notifications";
-import { applicationNoUpdate } from "@/lib/notify-text";
+import { applicationNoUpdate, closedAfterTalksText } from "@/lib/notify-text";
 import { submitToIndexNow } from "@/lib/indexnow";
 import { recentlyChangedPages } from "@/lib/page-dates";
 import { runOnboarding } from "@/lib/onboarding-run";
@@ -35,8 +43,8 @@ const chunks = <T,>(list: T[], size = 100) => Array.from({ length: Math.ceil(lis
 // Runs once a day (see vercel.json). It:
 //  1. marks live jobs that have passed their 30 days as expired,
 //  2. tells clinics when a job closes in 3 days, asking whether it is filled (and how) or offering 30 more days,
-//  3. closes out applications still waiting on a job that ended a week ago, so candidates
-//     are never left waiting,
+//  3. closes out applications still waiting on a job that ended a week ago, and those at Interview or Offer on a job that
+//     ran out 14 days ago without being marked filled, so candidates are never left waiting,
 //  4. reminds clinics about applications they have not opened for 14 days,
 //     and sends the summary email to clinics who chose one every 2 to 3 days or weekly,
 //  5. emails candidates one digest of new jobs that match their job alerts,
@@ -55,6 +63,8 @@ export async function GET(request: Request) {
     const message = error instanceof Error ? error.message : String(error);
     console.error("Daily job crashed:", message);
     await notifyAdmin("The daily housekeeping job failed", ["It stopped with this error:", message.slice(0, 300)]);
+    // Slack too, so a failed day is seen on the phone. Best effort.
+    await notifySlack("The daily housekeeping job failed", ["It stopped with this error:", message.slice(0, 300)], { path: "/admin", text: "Open the admin dashboard" }, "daily").catch(() => undefined);
     return new Response("Failed", { status: 500 });
   }
 }
@@ -71,7 +81,7 @@ async function runDaily(request: Request) {
   const started = Date.now();
   const outOfTime = () => Date.now() - started > TIME_LIMIT;
   const now = new Date();
-  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, onboardingSent: 0, indexNowSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
+  const summary = { expiredJobs: 0, closingSoonEmails: 0, closedOutApplications: 0, reminders: 0, applicantSummaries: 0, alertsSent: 0, interestTold: 0, onboardingSent: 0, indexNowSent: 0, outreachSent: 0, outreachStopped: 0, emailsFailed: 0, emailsHeldBack: 0 };
   const problems: string[] = [];
 
   // Only one run at a time. If two copies started together, every email would go twice.
@@ -139,10 +149,19 @@ async function runDaily(request: Request) {
     }
   }
 
-  // 3. Applications still waiting on a job that ended a week or more ago.
-  const { data: ended } = await admin.from("jobs").select("id").in("status", ["expired", "closed"]).lt("updated_at", new Date(now.getTime() - 7 * DAY).toISOString());
+  // 3. Applications still waiting on a job that ended a week or more ago. Then (review item X-04) people at Interview or Offer on a job
+  // that ended 14 days or more ago, so nobody is left at Interview for ever. Those get kinder words. A job the clinic marked as filled is
+  // left out of the second group: the clinic chose then who to close, and "Don't close this one yet" is its call to keep.
+  const closeOutGroups = [
+    { statuses: ["applied", "viewed", "shortlisted"], days: 7, afterTalks: false, onlyUnfilled: false },
+    { statuses: ["interview", "offer"], days: 14, afterTalks: true, onlyUnfilled: true },
+  ] as const;
+  for (const group of closeOutGroups) {
+  let endedQuery = admin.from("jobs").select("id").in("status", ["expired", "closed"]).lt("updated_at", new Date(now.getTime() - group.days * DAY).toISOString());
+  if (group.onlyUnfilled) endedQuery = endedQuery.is("filled_at", null);
+  const { data: ended } = await endedQuery;
   for (const ids of chunks((ended ?? []).map((j) => j.id))) {
-    const { data: waiting } = await admin.from("applications").select("id, applicant, job_title, clinic_name, candidate_id").in("job_id", ids).in("status", ["applied", "viewed", "shortlisted"]);
+    const { data: waiting } = await admin.from("applications").select("id, applicant, job_title, clinic_name, candidate_id").in("job_id", ids).in("status", [...group.statuses]);
     for (const app of waiting ?? []) {
       if (outOfTime()) break;
       const { email, wants } = await candidateRecipient(admin, app.candidate_id, (app.applicant as { email?: string } | null)?.email);
@@ -157,17 +176,20 @@ async function runDaily(request: Request) {
       await admin.from("application_events").insert({ application_id: app.id, status: "no_update" });
       summary.closedOutApplications += 1;
       // The inbox message goes whether or not the email does, as it does when a clinic moves an application (lib/applicant-actions.ts).
-      await notify(admin, app.candidate_id, applicationNoUpdate({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS.no_update, applicationId: app.id }));
+      await notify(admin, app.candidate_id, applicationNoUpdate({ jobTitle: app.job_title, clinicName: app.clinic_name, label: APP_LABELS.no_update, applicationId: app.id, afterTalks: group.afterTalks }));
       if (sendIt && email) {
         const mail = emailLayout({
           heading: "An update on your application",
-          paragraphs: [`The job you applied for, ${app.job_title} at ${app.clinic_name}, has closed, and the clinic did not send a decision. Your application is now marked: ${APP_LABELS.no_update}.`, "Thank you for applying. We would love to help you find the next one."],
+          paragraphs: group.afterTalks
+            ? [`Your application for ${app.job_title} is now marked: ${APP_LABELS.no_update}.`, closedAfterTalksText(app.clinic_name), "We would love to help you find the next one."]
+            : [`The job you applied for, ${app.job_title} at ${app.clinic_name}, has closed, and the clinic did not send a decision. Your application is now marked: ${APP_LABELS.no_update}.`, "Thank you for applying. We would love to help you find the next one."],
           buttonText: "Find more jobs",
           buttonUrl: `${SITE_URL}/jobs`,
         });
         note(await deliverEmail({ to: email, subject: `Update on your application: ${app.job_title}`, ...mail }));
       }
     }
+  }
   }
 
   // 4. Reminders for applications unopened for 14 days, one email per clinic.
@@ -261,8 +283,44 @@ async function runDaily(request: Request) {
   const due = alerts.filter((a) => now.getTime() - new Date(a.last_sent_at).getTime() >= (GAP_HOURS[a.frequency] ?? GAP_HOURS.weekly) * 60 * 60 * 1000);
   const byUser = new Map<string, AlertRow[]>();
   due.forEach((a) => byUser.set(a.user_id, [...(byUser.get(a.user_id) ?? []), a]));
+  // Clinics and companies a candidate follows (migration 0057) are folded into the same daily email, so nobody gets more than 1 a day.
+  // `last_sent_at` starts the moment they follow, so they hear only about jobs posted after that. Before the SQL is run this just finds nothing.
+  type FollowRow = { user_id: string; employer_id: string; last_sent_at: string };
+  const followRows: FollowRow[] = [];
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await admin.from("employer_follows").select("user_id, employer_id, last_sent_at").order("last_sent_at", { ascending: true }).order("user_id", { ascending: true }).order("employer_id", { ascending: true }).range(from, from + 999);
+    if (error) {
+      problems.push(`Reading follows (has migration 0057 been run?): ${error.message}`);
+      break;
+    }
+    followRows.push(...((data ?? []) as FollowRow[]));
+    if ((data?.length ?? 0) < 1000) break;
+  }
+  const followsByUser = new Map<string, FollowRow[]>();
+  followRows
+    .filter((f) => now.getTime() - new Date(f.last_sent_at).getTime() >= GAP_HOURS.daily * 60 * 60 * 1000)
+    .forEach((f) => followsByUser.set(f.user_id, [...(followsByUser.get(f.user_id) ?? []), f]));
+  // Saved jobs that end within 3 days, for candidates who have not applied (migration 0059). Each is mentioned once, in the same daily email.
+  type ClosingRow = { user_id: string; job_id: string; jobs: (PayFields & { id: string; title: string; province: string; city: string; employers: { clinic_name: string } | null }) | null };
+  const closingByUser = new Map<string, ClosingRow[]>();
+  {
+    const soon = new Date(now.getTime() + CLOSING_SOON_DAYS * DAY).toISOString();
+    const { data: closingRows, error: closingError } = await admin
+      .from("saved_jobs")
+      .select(`user_id, job_id, jobs!inner(id, title, province, city, status, expires_at, ${ALERT_PAY_COLUMNS}, employers(clinic_name))`)
+      .is("reminded_at", null)
+      .eq("jobs.status", "live")
+      .gt("jobs.expires_at", now.toISOString())
+      .lte("jobs.expires_at", soon)
+      .limit(2000);
+    if (closingError) problems.push(`Reading saved jobs that are closing (has migration 0059 been run?): ${closingError.message}`);
+    ((closingRows ?? []) as unknown as ClosingRow[]).forEach((c) => closingByUser.set(c.user_id, [...(closingByUser.get(c.user_id) ?? []), c]));
+  }
+  const alertUsers = new Set([...byUser.keys(), ...followsByUser.keys(), ...closingByUser.keys()]);
   let leftForTomorrow = 0;
-  for (const [userId, mine] of byUser) {
+  for (const userId of alertUsers) {
+    const mine = byUser.get(userId) ?? [];
+    const myFollows = followsByUser.get(userId) ?? [];
     if (outOfTime()) {
       leftForTomorrow += 1;
       continue;
@@ -287,7 +345,40 @@ async function runDaily(request: Request) {
         found.set(job.id, { ...job, title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
       }
     }
-    if (found.size === 0) continue;
+    // Jobs from places this person follows, posted since they followed (or since they were last emailed).
+    const followedFound = new Set<string>();
+    if (myFollows.length) {
+      const oldest = myFollows.reduce((min, f) => (f.last_sent_at < min ? f.last_sent_at : min), myFollows[0].last_sent_at);
+      const { data: followedJobs } = await admin
+        .from("jobs")
+        .select(await withExpected(`id, title, province, city, employer_id, posted_at, ${ALERT_PAY_COLUMNS}, employers!inner(clinic_name, practice_type)`))
+        .eq("status", "live")
+        .gt("expires_at", now.toISOString())
+        .gt("posted_at", oldest)
+        .in("employer_id", myFollows.map((f) => f.employer_id))
+        .order("posted_at", { ascending: false })
+        .limit(40);
+      for (const job of (followedJobs ?? []) as unknown as (PayFields & { id: string; title: string; province: string; city: string; employer_id: string; posted_at: string; employers: { clinic_name: string } | null })[]) {
+        const since = myFollows.find((f) => f.employer_id === job.employer_id)?.last_sent_at;
+        if (!since || job.posted_at <= since) continue;
+        if (!found.has(job.id)) {
+          found.set(job.id, { ...job, title: job.title, clinic: job.employers?.clinic_name ?? "", place: `${job.city}, ${job.province}` });
+          followedFound.add(job.id);
+        }
+      }
+    }
+    // Saved jobs about to close, unless the person has already applied to them (or they are in the list above anyway).
+    const closingFound = new Map<string, AlertJob>();
+    const myClosing = closingByUser.get(userId) ?? [];
+    if (myClosing.length) {
+      const { data: appliedRows } = await admin.from("applications").select("job_id").eq("candidate_id", userId).in("job_id", myClosing.map((c) => c.job_id));
+      const appliedIds = new Set((appliedRows ?? []).map((a) => a.job_id as string));
+      for (const c of myClosing) {
+        if (!c.jobs || appliedIds.has(c.job_id) || found.has(c.job_id)) continue;
+        closingFound.set(c.job_id, { ...c.jobs, title: c.jobs.title, clinic: c.jobs.employers?.clinic_name ?? "", place: `${c.jobs.city}, ${c.jobs.province}` });
+      }
+    }
+    if (found.size === 0 && closingFound.size === 0) continue;
     const { data: user } = await admin.auth.admin.getUserById(userId);
     const email = user?.user?.email;
     if (!email) continue;
@@ -297,8 +388,16 @@ async function runDaily(request: Request) {
     }
     // Claim these alerts before emailing, so a second copy of this job could never send the same email. Put them back if it fails.
     const stamp = now.toISOString();
-    const claims = await Promise.all(mine.map((a) => admin.from("job_alerts").update({ last_sent_at: stamp }).eq("id", a.id).eq("last_sent_at", a.last_sent_at).select("id")));
-    const putBack = () => Promise.all(mine.map((a) => admin.from("job_alerts").update({ last_sent_at: a.last_sent_at }).eq("id", a.id).eq("last_sent_at", stamp)));
+    const claims = await Promise.all([
+      ...mine.map((a) => admin.from("job_alerts").update({ last_sent_at: stamp }).eq("id", a.id).eq("last_sent_at", a.last_sent_at).select("id")),
+      ...myFollows.map((f) => admin.from("employer_follows").update({ last_sent_at: stamp }).eq("user_id", f.user_id).eq("employer_id", f.employer_id).eq("last_sent_at", f.last_sent_at).select("user_id")),
+      ...[...closingFound.keys()].map((jobId) => admin.from("saved_jobs").update({ reminded_at: stamp }).eq("user_id", userId).eq("job_id", jobId).is("reminded_at", null).select("job_id")),
+    ]);
+    const putBack = () => Promise.all([
+      ...mine.map((a) => admin.from("job_alerts").update({ last_sent_at: a.last_sent_at }).eq("id", a.id).eq("last_sent_at", stamp)),
+      ...myFollows.map((f) => admin.from("employer_follows").update({ last_sent_at: f.last_sent_at }).eq("user_id", f.user_id).eq("employer_id", f.employer_id).eq("last_sent_at", stamp)),
+      ...[...closingFound.keys()].map((jobId) => admin.from("saved_jobs").update({ reminded_at: null }).eq("user_id", userId).eq("job_id", jobId).eq("reminded_at", stamp)),
+    ]);
     if (claims.some((c) => c.error || !c.data?.length)) {
       await putBack();
       budget.refund();
@@ -306,17 +405,52 @@ async function runDaily(request: Request) {
     }
     const unsubscribeUrl = unsubscribeIdUrl(userId);
     const mail = emailLayout({
-      heading: found.size === 1 ? "A new job matches your alert" : `${found.size} new jobs match your alerts`,
-      paragraphs: ["Here is what has been posted since we last emailed you."],
-      items: [...found].slice(0, 15).map(([id, j]) => ({ text: alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
+      heading: alertHeading(found.size + closingFound.size, followedFound.size, closingFound.size),
+      paragraphs: [
+        found.size ? "Here is what has been posted since we last emailed you." : "A job you saved is about to end.",
+        ...(followedFound.size ? ["Jobs marked \"From a place you follow\" come from clinics and companies you follow. You can change who you follow under Job alerts in your account."] : []),
+        ...(closingFound.size ? [`Jobs marked "Closing soon" are ones you saved that end within ${CLOSING_SOON_DAYS} days. You can apply from Saved jobs in your account.`] : []),
+      ],
+      items: [
+        ...[...closingFound].map(([id, j]) => ({ text: closingLine(alertLine(j)), url: `${SITE_URL}/jobs/${id}` })),
+        ...[...found].map(([id, j]) => ({ text: followedFound.has(id) ? followedLine(alertLine(j)) : alertLine(j), url: `${SITE_URL}/jobs/${id}` })),
+      ].slice(0, 15),
       buttonText: "See all jobs",
       buttonUrl: `${SITE_URL}/jobs`,
       unsubscribeUrl,
     });
-    if (note(await deliverEmail({ to: email, subject: found.size === 1 ? "New job alert: 1 new job" : `New job alert: ${found.size} new jobs`, unsubscribeUrl, ...mail }))) {
+    if (note(await deliverEmail({ to: email, subject: alertSubject(found.size + closingFound.size, followedFound.size, closingFound.size), unsubscribeUrl, ...mail }))) {
       summary.alertsSent += 1;
     } else {
       await putBack();
+    }
+  }
+
+  // 5d. Tell candidates when a clinic or company they asked about has joined (migration 0058). The "tell us you would like to work for them"
+  // form promises it. Each request is claimed before anything is sent, so nobody is told twice, and the clinic is never told who asked.
+  if (!outOfTime()) {
+    const { data: waiting, error: waitingError } = await admin.from("employer_interest").select("id, candidate_id, name_key, province").is("notified_at", null).order("created_at", { ascending: true }).limit(500);
+    if (waitingError) problems.push(`Reading clinic requests (has migration 0058 been run?): ${waitingError.message}`);
+    else if (waiting?.length) {
+      const { clinics, slugs } = await listPublicClinics();
+      for (const row of waiting) {
+        if (outOfTime()) break;
+        const match = matchPublicClinic(row as { name_key: string; province: string | null }, clinics);
+        const slug = match ? slugs.get(match.id) : null;
+        if (!match || !slug) continue;
+        const { data: claimed } = await admin.from("employer_interest").update({ notified_at: now.toISOString(), notified_employer_id: match.id }).eq("id", row.id).is("notified_at", null).select("id");
+        if (!claimed?.length) continue;
+        const href = employerHref(slug, match.practice_type);
+        await notify(admin, row.candidate_id, { kind: "clinic_joined", title: INTEREST_JOINED_TITLE(match.clinic_name), body: INTEREST_JOINED_BODY, href });
+        const [{ email, wants }, { data: asker }] = await Promise.all([candidateRecipient(admin, row.candidate_id), admin.from("profiles").select("unsubscribed_at").eq("id", row.candidate_id).maybeSingle()]);
+        if (!email || !wants || asker?.unsubscribed_at) continue;
+        if (!budget.take()) {
+          summary.emailsHeldBack += 1;
+          continue;
+        }
+        const mail = emailLayout({ heading: INTEREST_JOINED_TITLE(match.clinic_name), paragraphs: [INTEREST_JOINED_BODY], buttonText: "See their page", buttonUrl: `${SITE_URL}${href}` });
+        if (note(await deliverEmail({ to: email, subject: INTEREST_JOINED_TITLE(match.clinic_name), ...mail }))) summary.interestTold += 1;
+      }
     }
   }
 
@@ -417,6 +551,12 @@ async function runDaily(request: Request) {
     admin.from("listing_claims").delete().neq("status", "pending_review").lt("created_at", cut.reportsAndClaims),
   ]);
   for (const r of retention) if (r.error) console.error("Retention clean up:", r.error.code, r.error.message);
+  // Help requests and feedback once done (0046), and the record of changes Kestrel made for a clinic (0045), after 2 years. On a database
+  // without those tables this is only logged.
+  for (const r of await Promise.all([
+    admin.from("support_requests").delete().eq("status", "done").lt("created_at", cut.supportAndAdminRecords),
+    admin.from("admin_actions").delete().lt("created_at", cut.supportAndAdminRecords),
+  ])) if (r.error) console.error("Retention clean up (help and admin records):", r.error.code, r.error.message);
   // Applications kept for the candidate after the clinic left (migration 0044), 2 years on, with the copy of the resume sent with each.
   // On a database without 0044 the column is missing, and this is only logged.
   const { data: oldKept, error: keptError } = await admin.from("applications").select("id, cv_path").is("job_id", null).lt("clinic_left_at", cut.applicationsAfterClinicLeft).limit(500);
@@ -437,6 +577,33 @@ async function runDaily(request: Request) {
   );
   if (recordError) problems.push(`Recording the run: ${recordError.message}`);
 
-  if (problems.length) await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+  if (problems.length) {
+    await notifyAdmin("The daily housekeeping job had problems", problems.map((p) => p.slice(0, 300)));
+    await notifySlack("The daily housekeeping job had problems", problems.slice(0, 5).map((p) => p.slice(0, 300)), { path: "/admin", text: "Open the admin dashboard" }, "daily").catch(() => undefined);
+  }
+  // The 30 days notice to Founding clinics whose price lock is about to end. Best effort, and each pass is told once.
+  try {
+    await sendFoundingReminders(admin);
+  } catch (e) {
+    console.error("Founding reminders failed:", e instanceof Error ? e.message : e);
+  }
+  // The morning summary for Slack. Best effort: it never changes the result of the run.
+  try {
+    await sendDailyDigest(admin);
+  } catch (e) {
+    console.error("Slack summary not sent:", e instanceof Error ? e.message : e);
+  }
+  // A reminder when a support request or a reported job has waited more than 1 business day.
+  try {
+    await sendWaitingReminder(admin);
+  } catch (e) {
+    console.error("Slack reminder not sent:", e instanceof Error ? e.message : e);
+  }
+  // A cheer when a round number is passed (10th clinic, 100th waitlist sign up). Best effort.
+  try {
+    await sendMilestones(admin);
+  } catch (e) {
+    console.error("Slack milestones not sent:", e instanceof Error ? e.message : e);
+  }
   return Response.json({ ok: problems.length === 0, ...summary });
 }

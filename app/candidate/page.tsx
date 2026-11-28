@@ -8,12 +8,12 @@ import { AppStatusBadge } from "@/components/AppStatus";
 import GettingStarted from "@/components/GettingStarted";
 import { requireRole } from "@/lib/auth";
 import { groupOf } from "@/lib/applications";
-import { candidateSteps } from "@/lib/checklist";
+import { candidateSteps, lookingForSaved } from "@/lib/checklist";
 import { getMyApplications, getMyCandidateProfile, needsFirstStep, profileReady, profileStrength } from "@/lib/candidate";
 import { employmentLabel, longDate } from "@/lib/jobs";
 import { payChips } from "@/lib/job-pay";
 import { withNext } from "@/lib/auth-copy";
-import { hideRecommendation } from "@/lib/recommendation-actions";
+import { hideRecommendation, unhideRecommendation } from "@/lib/recommendation-actions";
 import { getRecommendations } from "@/lib/recommendations";
 import { supabaseServer } from "@/lib/supabase/server";
 
@@ -31,7 +31,7 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
   const strength = profileStrength(profile);
   const active = applications.filter((a) => groupOf(a.status) !== "closed").length;
   const latest = applications.slice(0, 3);
-  const { recs, needsRole, needsWhere } = await getRecommendations(profile, applications.map((a) => a.job_id).filter((id): id is string => id !== null));
+  const { recs, needsRole, needsWhere, hiddenJobs } = await getRecommendations(profile, applications.map((a) => a.job_id).filter((id): id is string => id !== null));
   const db = await supabaseServer();
   const { count: alertCount } = db ? await db.from("job_alerts").select("id", { count: "exact", head: true }) : { count: 0 };
 
@@ -45,7 +45,7 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
 
           <GettingStarted
             title="Your first application"
-            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: !needsRole && !needsWhere, hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
+            steps={candidateSteps({ profileReady: profileReady(profile), lookingFor: lookingForSaved(profile), hasAlert: (alertCount ?? 0) > 0, applications: applications.length })}
           />
 
           <div className="tiles">
@@ -54,8 +54,10 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
               <h2>{profileReady(profile) ? "Ready to apply" : "Finish your profile"}</h2>
               <div className="meter" role="img" aria-label={`Profile ${strength} percent complete`}><i style={{ width: `${strength}%` }} /></div>
               <p>{profileReady(profile) ? "Your resume and details are saved." : "Add your role, town and resume, and you can apply to any job in a few clicks."}</p>
-              <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
-              <p className="help"><Link href="/candidate/letters" className="btn sm ghost">My saved cover letters</Link></p>
+              <div className="tilebtns">
+                <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
+                <Link href="/candidate/letters" className="btn sm ghost">My saved cover letters</Link>
+              </div>
             </section>
             <section className="card">
               <p className="kicker">Applications</p>
@@ -114,6 +116,22 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
                 </div>
               )}
               <p className="help">These come from simple rules applied to what you told us. There is no AI in them, and nothing about you is shared with clinics.</p>
+              {hiddenJobs.length > 0 && (
+                <details className="moreopts hiddenjobs">
+                  <summary>Jobs you marked not interested ({hiddenJobs.length})</summary>
+                  <ul className="hiddenlist">
+                    {hiddenJobs.map((j) => (
+                      <li key={j.id}>
+                        <span><Link href={`/jobs/${j.id}`}>{j.title}</Link> <span className="meta">{j.employers?.clinic_name} · {j.city}, {j.province}</span></span>
+                        <form action={unhideRecommendation}>
+                          <input type="hidden" name="jobId" value={j.id} />
+                          <button type="submit" className="btn sm ghost" aria-label={`Show ${j.title} in my recommendations again`}>Show it again</button>
+                        </form>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              )}
             </>
           )}
 

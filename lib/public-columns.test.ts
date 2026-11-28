@@ -23,7 +23,7 @@ function publicJobSelects(source: string): string[][] {
   for (const m of source.matchAll(/const\s+([A-Z_]+)\s*=\s*"([^"]*)"/g)) constants.set(m[1], m[2]);
   const out: string[][] = [];
   // A read wrapped in withExpected (lib/expected-columns.ts) also asks for the 3 expected earnings columns once the database has them.
-  const EXPECTED = ["pay_expected_min", "pay_expected_max", "pay_expected_period"];
+  const EXPECTED = ["pay_expected_min", "pay_expected_max", "pay_expected_period", "headline"];
   for (const m of source.matchAll(/from\("jobs"\)\s*\.select\(\s*(await\s+withExpected\(\s*)?(?:"([^"]*)"|([A-Z_]+)|([a-z][A-Za-z]*))/g)) {
     const text = m[2] ?? constants.get(m[3] ?? "") ?? "";
     out.push([...text.replace(/[a-z_!]+\([^)]*\)/g, "").split(",").map((c) => c.trim()).filter(Boolean), ...(m[1] ? EXPECTED : [])]);
@@ -99,7 +99,7 @@ test("the 'anyone can read' rules for live jobs and their clinics are for visito
 test("only the clinic's own pages read jobs or clinics with a person's own sign in", () => {
   // These read the signed in clinic's own records, which the owner rules still allow in full. Any other page must use supabasePublic() for
   // live jobs (public columns) or the server key after its own check. Add a file here only for reads of the reader's own jobs or clinic.
-  const OWN_RECORDS = new Set(["lib/clinic.ts", "lib/clinic-actions.ts", "lib/applicant-actions.ts", "lib/template-actions.ts"]);
+  const OWN_RECORDS = new Set(["lib/clinic.ts", "lib/clinic-actions.ts", "lib/applicant-actions.ts", "lib/template-actions.ts", "app/clinic/jobs/paid/page.tsx", "app/clinic/jobs/[id]/pay/route.ts", "app/api/job-applicants/route.ts"]);
   const found = new Set<string>();
   for (const file of [...sourceFiles("lib"), ...sourceFiles("app"), ...sourceFiles("components")]) {
     const source = readFileSync(file, "utf8");

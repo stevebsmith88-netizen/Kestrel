@@ -4,7 +4,7 @@
 
 import { PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, ROLES } from "./waitlist.ts";
 import { HOURS_IN_A_YEAR, markupPayLine, parseMoney, payFlags, payRangeAllowed, payText, salaryForMarkup, validatePay, type PayFields } from "./job-pay.ts";
-import { tidyTitle } from "./job-title.ts";
+import { levelsForRole, suggestTitle, tidyTitle } from "./job-title.ts";
 import { cleanTags, EQUIPMENT_TAGS, SOFTWARE_TAGS, SPECIALTY_TAGS } from "./job-tags.ts";
 
 export { HOURS_IN_A_YEAR, parseMoney, payRangeAllowed };
@@ -42,6 +42,9 @@ export const FIXED_TERM_EXPLAINER = "A job for a set period with an end date, su
 export function employmentExplainer(type: string | null | undefined): string | null {
   return type === "Contract" ? FIXED_TERM_EXPLAINER : null;
 }
+// Short notes beside the 2 quick questions on a job page, matching the help centre topics (review item D-07).
+export const EXISTING_VACANCY_EXPLAINER = "Yes means the clinic has a real opening to fill now. No means it is building a pool of candidates for the future, so this may not lead to a hire straight away.";
+export const AI_SCREENING_EXPLAINER = "Yes means the clinic uses software with artificial intelligence to sort, rank or choose among applicants. The answer is about the clinic's own tools: Kestrel does not rank applicants with AI.";
 export const PRACTICE_TYPES = [
   { value: "independent", label: "Independent" },
   { value: "corporate", label: "Corporate" },
@@ -72,6 +75,8 @@ export const STATUS_LABELS: Record<JobStatus, string> = {
 
 export type JobInput = {
   title: string;
+  titleLevel: string; // a level word added to the suggested title: Lead, Senior or Associate
+  headline: string; // an optional one line from the clinic, up to 70 characters, shown under the title
   roleCategory: string;
   employmentType: string;
   province: string;
@@ -168,11 +173,24 @@ export function mentionsCanadianExperience(text: string) {
   return firstAccepted(NEAR_PLACE, text, onlyJobWords) || EXPERIENCE_IN.test(text) || EXPERIENCE_THEN_PLACE.test(text) || firstAccepted(WORKED_IN, text, notAboutALicence);
 }
 
+// The headline is the clinic's own line under the title (Steve, 14th November 2026).
+export const HEADLINE_MAX = 70;
+const HEADLINE_NOT_ALLOWED = /https?:\/\/|www\.|\S+@\S+|\$\s?\d/i;
+
 export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInput {
+  const roleCategory = clean(raw.roleCategory, 80);
+  const employmentType = clean(raw.employmentType, 30);
+  const tagsSpecialties = cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS);
+  const titleLevel = levelsForRole(roleCategory).includes(clean(raw.titleLevel, 12)) ? clean(raw.titleLevel, 12) : "";
+  // Once a role is chosen the title is set from the choices (Steve, 14th November 2026), so every title for a role reads the same way and the
+  // title always matches the role and the price band. Only a draft with no role yet keeps what was typed.
+  const suggested = suggestTitle({ role: roleCategory, employmentType, specialties: tagsSpecialties, level: titleLevel });
   return {
-    title: tidyTitle(clean(raw.title, 120)),
-    roleCategory: clean(raw.roleCategory, 80),
-    employmentType: clean(raw.employmentType, 30),
+    title: levelsForRole(roleCategory).length ? suggested : tidyTitle(clean(raw.title, 120)),
+    titleLevel,
+    headline: clean(raw.headline, HEADLINE_MAX),
+    roleCategory,
+    employmentType,
     province: clean(raw.province, 40),
     city: clean(raw.city, 80),
     payPeriod: clean(raw.payPeriod, 12),
@@ -196,17 +214,19 @@ export function cleanJob(raw: Partial<Record<keyof JobInput, unknown>>): JobInpu
     payDays: clean(raw.payDays, 2),
     tagsSoftware: cleanTags(raw.tagsSoftware, SOFTWARE_TAGS),
     tagsEquipment: cleanTags(raw.tagsEquipment, EQUIPMENT_TAGS),
-    tagsSpecialties: cleanTags(raw.tagsSpecialties, SPECIALTY_TAGS),
+    tagsSpecialties,
   };
 }
 
 // A draft only needs a title. Submitting for review needs everything.
 export function validateJob(job: JobInput, submit: boolean) {
   const errors: Record<string, string> = {};
-  if (!job.title) errors.title = "Give the job a title.";
+  if (!job.title) errors.title = "Choose a role and the job title is set for you.";
   if (job.description && mentionsCanadianExperience(`${job.title} ${job.description}`)) {
     errors.description = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   }
+  if (job.headline && mentionsCanadianExperience(job.headline)) errors.headline = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
+  else if (job.headline && HEADLINE_NOT_ALLOWED.test(job.headline)) errors.headline = "Keep the headline to words about the job and the clinic. Pay, web addresses and email addresses go in their own boxes.";
   if (job.territory && mentionsCanadianExperience(job.territory)) errors.territory = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.payExtras && mentionsCanadianExperience(job.payExtras)) errors.payExtras = "Please take out any mention of Canadian experience, even to say you do not ask for it. We do not allow the phrase in job posts.";
   if (job.province === QUEBEC) errors.province = QUEBEC_JOB_MESSAGE; // refused for drafts too, so a Quebec job never gets as far as review

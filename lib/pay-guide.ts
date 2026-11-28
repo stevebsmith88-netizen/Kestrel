@@ -76,13 +76,16 @@ export function payDatasetJsonLd(site: string) {
     variableMeasured: ["Median pay", "First quartile of pay", "Third quartile of pay"],
     spatialCoverage: provinces.map((name) => ({ "@type": "Place", name })),
     creator: { "@type": "Organization", name: "Kestrel Eye Care Jobs", url: site },
+    license: LICENCE_URL,
     creditText: `Source: ${JOB_BANK_SOURCE.name}, file of ${fileDate}. ${LICENCE_STATEMENT}`,
     isBasedOn: {
       "@type": "Dataset",
       name: JOB_BANK_SOURCE.name,
+      description: `The wage figures Job Bank publishes for occupations across Canada, by province, from the file of ${fileDate}. Kestrel Eye Care Jobs uses the figures for eye care roles in its pay table.`,
       url: JOB_BANK_SOURCE.dataset,
       dateModified: JOB_BANK_SOURCE.revised,
       license: LICENCE_URL,
+      creator: { "@type": "Organization", name: "Employment and Social Development Canada" },
       publisher: { "@type": "Organization", name: "Employment and Social Development Canada" },
     },
   };

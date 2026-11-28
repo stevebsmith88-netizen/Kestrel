@@ -16,12 +16,14 @@ export default function PreLaunchHome() {
             <span className="pill">Waitlist now open</span>
             <h1 id="pl-title">Eye care jobs across Canada, opening soon</h1>
             <p className="lh-lede">
-              A job board for eye care in Canada, built by someone with over 20 years in the industry. Optometrists, opticians, assistants, clinic teams and suppliers, in one place. Every job shows its pay, and a person reads every post before it goes live.
+              Optometrists, opticians, assistants and clinic teams, in one place. Every job shows its pay.
             </p>
             <p className="lh-ctas">
               <a className="btn" href="#join">Join the waitlist</a>
               <Link href="/clinics" className="btn ghost">Hiring? See how it works</Link>
             </p>
+            {/* A reason to join today, read in the first few seconds (Steve, 13th November 2026). */}
+            <p className="lh-ctanote">Be the first to know when jobs go live.</p>
           </div>
           <div className="lh-skyline" aria-hidden="true">
             <Image src="/skyline.png" alt="Illustration of Canadian mountains, forest and a city skyline" width={2000} height={462} priority sizes="100vw" />

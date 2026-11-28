@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { PERIODS, change, type Period } from "@/lib/admin-stats";
+import { PERIODS, type Period } from "@/lib/admin-stats";
+import { moneyText, type FinanceSummary } from "@/lib/admin-finance";
 import type { Stats } from "@/lib/admin-stats-data";
 
 const n = (value: number | null | undefined) => (value === null || value === undefined ? "Not enough yet" : value.toLocaleString("en-CA"));
@@ -20,14 +21,18 @@ function Bars({ rows, label }: { rows: { label: string; count: number }[]; label
   );
 }
 
-// The numbers on the admin overview page.
-export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; period: Period }) {
+// The numbers on the admin Dashboard.
+export default function AdminNumbers({ s, period, finance, launched }: { s: NonNullable<Stats>; period: Period; finance: FinanceSummary | null; launched: boolean }) {
   const label = PERIODS.find((p) => p.value === period)?.label.toLowerCase() ?? "";
   return (
     <>
-            {s.jobsInReview > 0 && <p className="notice" role="status">{s.jobsInReview} {s.jobsInReview === 1 ? "job is" : "jobs are"} waiting for your review. <Link href="/admin/review">Open the review queue</Link></p>}
-            {s.pendingClaims > 0 && <p className="notice" role="status">{s.pendingClaims} {s.pendingClaims === 1 ? "clinic is" : "clinics are"} waiting to claim a listing. <Link href="/admin/claims">Open the claims</Link></p>}
-            {s.openReports > 0 && <p className="notice" role="status">{s.openReports} {s.openReports === 1 ? "job has" : "jobs have"} been reported. <Link href="/admin/reports">Open the reports</Link></p>}
+            <h2 className="subhead">Needs you</h2>
+            <div className="tiles quad">
+              <Link href="/admin/review" prefetch className="card tile tilelink"><p className="kicker">Review queue</p><p className="num">{s.jobsInReview}</p><p>{s.jobsInReview === 0 ? "All clear" : "Jobs waiting"}</p></Link>
+              <Link href="/admin/requests" prefetch className="card tile tilelink"><p className="kicker">Support</p><p className="num">{s.openSupport}</p><p>{s.openSupport === 0 ? "All clear" : "Open requests"}</p></Link>
+              <Link href="/admin/claims" prefetch className="card tile tilelink"><p className="kicker">Claims</p><p className="num">{s.pendingClaims}</p><p>{s.pendingClaims === 0 ? "All clear" : "Waiting"}</p></Link>
+              <Link href="/admin/reports" prefetch className="card tile tilelink"><p className="kicker">Reported jobs</p><p className="num">{s.openReports}</p><p>{s.openReports === 0 ? "All clear" : "Open reports"}</p></Link>
+            </div>
 
             <div className="periodbar">
               <nav aria-label="Period">
@@ -39,13 +44,25 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
             </div>
 
             <div className="tiles stats">
-              <section className="card tile"><p className="kicker">Live jobs</p><p className="num">{n(s.liveJobs)}</p><p>{s.publishedNow} published in the {label}. {change(s.publishedNow, s.publishedBefore)}</p></section>
-              <section className="card tile"><p className="kicker">Clinics and suppliers</p><p className="num">{n(s.employers)}</p><p>{s.claimedEmployers} claimed, {s.foundEmployers} found online</p><p>By number of people (as the clinic says): {s.clinicSizes.map((b) => `${b.label}: ${b.count}`).join(", ")}</p></section>
-              <section className="card tile"><p className="kicker">Candidate accounts</p><p className="num">{n(s.candidateAccounts)}</p><p>{s.candidatesNow} joined in the {label}. {change(s.candidatesNow, s.candidatesBefore)}</p></section>
-              <section className="card tile"><p className="kicker">Applications</p><p className="num">{n(s.applicationsNow)}</p><p>In the {label}. {s.applicationsPerJob === null ? "No jobs published yet" : `${s.applicationsPerJob} per published job overall`}. {change(s.applicationsNow, s.applicationsBefore)}</p></section>
-              <section className="card tile"><p className="kicker">Waitlist</p><p className="num">{n(s.waitlistConfirmed)}</p><p>Confirmed, of {s.waitlistTotal} who joined. {s.waitlistNow} joined in the {label}. <Link href="/admin/waitlist">See the list</Link></p></section>
-              <section className="card tile"><p className="kicker">Revenue</p><p className="num">Not on yet</p><p>Appears here when payments are switched on.</p></section>
+              <Link href="/admin/jobs?status=live" prefetch className="card tile tilelink"><p className="kicker">Live jobs</p><p className="num">{n(s.liveJobs)}</p><p>{s.publishedNow} new in the {label}</p></Link>
+              <Link href="/admin/clinics" prefetch className="card tile tilelink"><p className="kicker">Clinics and suppliers</p><p className="num">{n(s.employers)}</p><p>{s.claimedEmployers} claimed</p></Link>
+              <Link href="/admin/candidates" prefetch className="card tile tilelink"><p className="kicker">Candidates</p><p className="num">{n(s.candidateAccounts)}</p><p>{s.candidatesNow} new in the {label}</p></Link>
+              <div className="card tile"><p className="kicker">Applications</p><p className="num">{n(s.applicationsNow)}</p><p>In the {label}</p></div>
+              {!launched && <Link href="/admin/waitlist" prefetch className="card tile tilelink"><p className="kicker">Waitlist</p><p className="num">{n(s.waitlistConfirmed)}</p><p>{s.waitlistNow} new in the {label}</p></Link>}
+              <Link href="/admin/payments" prefetch className="card tile tilelink">
+                <p className="kicker">Finance</p>
+                <p className="num">{finance?.any ? moneyText(finance.chargedCents) : "Not on yet"}</p>
+                <p>{finance?.any ? `${finance.chargedCount} paid ${finance.chargedCount === 1 ? "post" : "posts"}, before HST` : "Payments and Stripe"}</p>
+              </Link>
             </div>
+
+            {finance && (finance.any || finance.waitingToCharge > 0 || finance.refused > 0) && (
+              <div className="tiles stats">
+                <div className="card tile mini"><p className="kicker">Waiting to charge</p><p className="num">{finance.waitingToCharge}</p><p>Card saved</p></div>
+                <div className="card tile mini"><p className="kicker">Refused cards</p><p className="num">{finance.refused}</p><p>To fix</p></div>
+                <div className="card tile mini"><p className="kicker">Free or pass</p><p className="num">{finance.freeOrPass}</p><p>In the {label}</p></div>
+              </div>
+            )}
 
             <section className="card" aria-labelledby="gatec">
               <h2 id="gatec">Gate C: ready for the paid launch?</h2>
@@ -64,6 +81,8 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
               <p className="help"><strong>Free to paid data recorded:</strong> starts when checkout is built. Until then Kestrel records who posted and when, but not what they paid.</p>
             </section>
 
+            <details className="card foldcard">
+              <summary><h2>Charts and funnels</h2></summary>
             <div className="twocol">
               <section className="card">
                 <h2>Jobs published each week</h2>
@@ -87,8 +106,10 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
               </section>
             </div>
 
-            <section className="card" aria-labelledby="hires">
-              <h2 id="hires">Hires and where clinics fill roles</h2>
+            </details>
+
+            <details className="card foldcard" id="hires">
+              <summary><h2>Hires and where clinics fill roles</h2></summary>
               <p className="help">What clinics tell us when they mark a job as filled. It is self reported, so treat it as a floor: a clinic that never answers is not counted.</p>
               <dl className="facts">
                 <div><dt>Hired through Kestrel (the clinic named the person)</dt><dd>{n(s.hires.hiredThroughKestrel)}</dd></div>
@@ -97,10 +118,10 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
                 <div><dt>Clinics that told us, of jobs that have ended</dt><dd>{s.hires.answerRate === null ? "No ended jobs yet" : `${s.hires.answerRate}% (${s.hires.answered} of ${s.hires.ended})`}</dd></div>
               </dl>
               {s.hires.filledElsewhere > 0 && <Bars rows={s.hires.elsewhere} label="Where clinics found the person, other than Kestrel" />}
-            </section>
+            </details>
 
-            <section className="card">
-              <h2>Investor snapshot</h2>
+            <details className="card foldcard">
+              <summary><h2>Investor snapshot</h2></summary>
               <p className="help">The numbers an investor will ask about first. Revenue figures start when payments are switched on.</p>
               <dl className="facts">
                 <div><dt>Monthly recurring revenue</dt><dd>Not on yet</dd></div>
@@ -112,7 +133,7 @@ export default function AdminNumbers({ s, period }: { s: NonNullable<Stats>; per
                 <div><dt>Clinics that post again within 60 days</dt><dd>{s.repeat60.percent === null ? "Not enough yet" : `${s.repeat60.percent}% (${s.repeat60.repeat} of ${s.repeat60.clinicsWithPosts})`}</dd></div>
               </dl>
               <a href={`/admin/numbers.csv?period=${period}&kind=investor`} className="btn sm ghost">Download investor summary</a>
-            </section>
+            </details>
     </>
   );
 }

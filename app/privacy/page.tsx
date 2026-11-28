@@ -16,7 +16,7 @@ export const metadata: Metadata = shareMetadata({
   path: "/privacy",
 });
 
-const UPDATED = "13th November 2026";
+const UPDATED = "15th November 2026";
 const EMAIL = "privacy@eyecarejobs.ca";
 
 export default function Privacy() {
@@ -53,14 +53,41 @@ export default function Privacy() {
               <strong>If you create an account:</strong> your name, your email address and whether you are a candidate or a clinic.
             </li>
             <li>
+              <strong>If you tell us you would like to work for a clinic or company that is not on Kestrel:</strong> the name you
+              type, and the town, province and website if you add them, kept with your account. We use it to see how many people are asking
+              about each clinic. We do not share your name or details with the clinic. If we contact a clinic, we say only that a candidate
+              has asked about it.
+            </li>
+            <li>
+              <strong>If you save a job:</strong> which jobs you saved, so you can find them again under Saved jobs. A clinic is never told
+              who saved its job, and we show it no list. You can remove a saved job at any time.
+            </li>
+            <li>
+              <strong>If you follow a clinic or company:</strong> which clinics and companies you follow, kept with your account. We use it
+              to email you when they post a new job, in the same daily email as your job alerts. A clinic is never told who follows it, and
+              we show it no list of followers. You can unfollow at any time under Job alerts.
+            </li>
+            <li>
               <strong>If you sign in with Google:</strong> Google tells us your name and email address. We never see your Google password.
             </li>
             <li>
               <strong>If you are a candidate:</strong> the details you add to your profile (your role, where you are licensed,
-              your experience, when you are available, and a phone number if you choose to give one), the resume you upload, and the
+              your experience, when you are available, a phone number and a LinkedIn profile address if you choose to give them), the resume you upload, and the
               cover letters and applications you send. If you choose <strong>Fill in from my resume</strong>, our own server reads
               the text of your resume once to suggest answers for your profile. It does this with fixed rules, not AI, it does not
               keep the text, and it does not send it to any other service. Nothing from it is saved unless you tick it and save.
+            </li>
+            <li>
+              <strong>Optional links to your pages online:</strong> a clinic or company can add its Instagram, Facebook and LinkedIn page to
+              its profile, and these show as small icons on its public page. A candidate can add their own LinkedIn profile, which a clinic
+              sees only with an application the candidate sends to it, as it was the day they applied.
+            </li>
+            <li>
+              <strong>If you are an optometrist or optician and give your registration number:</strong> the number your College issued you,
+              the province or territory, and for opticians what you are registered to do (eyeglasses, contact lenses or both). You enter it
+              and Kestrel does not check it, and does not look it up in any College register. A clinic sees it only with an application you
+              send to it, as it was the day you applied, and can check it on the College&apos;s own register. Some jobs ask for it before you
+              can apply, and you can say instead that you are not registered yet.
             </li>
             <li>
               <strong>Also for candidates, private to you:</strong> your home town and province, how far you would travel, the provinces and
@@ -146,10 +173,18 @@ export default function Privacy() {
           <p>
             <strong>Clinics.</strong> When you apply to a job, the clinic that posted it can see your application: your cover letter,
             your resume and the details you chose to give, as they were when you applied. It cannot see your profile otherwise, and
-            clinics never see applications that were sent to other clinics.
+            clinics never see applications that were sent to other clinics. &quot;The clinic&quot; means its owner and up to 4 people the owner
+            has invited to its team on Kestrel; the owner chooses who, and can remove them at any time.
           </p>
           <p>
             <strong>Candidates.</strong> Clinic email addresses are never shown on job posts. Candidates apply to a clinic through Kestrel.
+          </p>
+          <p>
+            <strong>Kestrel&apos;s team, when a clinic asks for help.</strong> A clinic&apos;s owner can ask us for help from their account and, if they choose, let our
+            team see and change the clinic&apos;s account for up to 7 days, or until the request is closed. During that time we can see the clinic&apos;s
+            profile, its team&apos;s names, email addresses and access, open invitations, its job posts and how many people applied to each. We cannot see
+            applicants&apos; resumes, cover letters or the clinic&apos;s private notes. Every change we make is recorded, and the owner is told. The owner can
+            end our access at any time.
           </p>
           <p>We may also disclose information when the law requires it.</p>
 
@@ -176,6 +211,10 @@ export default function Privacy() {
             <li><strong>&quot;Keep my details for future roles&quot;:</strong> if you tick this when you apply, the clinic may keep your application to consider you for later roles for 12 months. You can ask the clinic, or us, to remove it at any time.</li>
             <li><strong>Job posts as published:</strong> kept for 3 years after they close.</li>
             <li><strong>Reports about a job, and claims of a listing:</strong> deleted after 2 years.</li>
+            <li><strong>Jobs you saved:</strong> kept while your account is open, and deleted with it. A saved job also goes when the clinic deletes the job.</li>
+            <li><strong>Clinics and companies you follow:</strong> kept while your account is open, and deleted with it.</li>
+            <li><strong>Clinics you told us you would like to work for:</strong> kept while your account is open, and deleted with it.</li>
+            <li><strong>Help requests and feedback you send us, and the record of changes we made to a clinic&apos;s account at its request:</strong> deleted after 2 years.</li>
           </ul>
           <p>
             If you delete your account, we delete your profile, your resume and your applications, apart from a minimal record that we received

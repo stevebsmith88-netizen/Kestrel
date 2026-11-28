@@ -16,6 +16,7 @@ export type JobFilters = { q?: string; city?: string; radius?: number; province?
 const RADIUS_SEARCH_LIMIT = 1000;
 
 export type JobSummary = PayFields & {
+  headline?: string | null;
   tags_software?: string[] | null;
   tags_equipment?: string[] | null;
   tags_specialties?: string[] | null;
@@ -81,7 +82,8 @@ export async function searchJobs(filters: JobFilters, opts: { everything?: boole
   if (filters.tags?.software.length) query = query.overlaps("tags_software", filters.tags.software);
   if (filters.tags?.equipment.length) query = query.overlaps("tags_equipment", filters.tags.equipment);
   if (filters.tags?.specialties.length) query = query.overlaps("tags_specialties", filters.tags.specialties);
-  if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%`);
+  // The clinic or company name is searched too (Steve, 19th November 2026), so a candidate can look up a place they would like to work.
+  if (filters.q) query = query.or(`title.ilike.%${filters.q}%,description.ilike.%${filters.q}%,city.ilike.%${filters.q}%,employers.clinic_name.ilike.%${filters.q}%`);
   return query.order("posted_at", { ascending: false });
   };
   const query = build(summaryColumns);
@@ -128,6 +130,19 @@ export async function listLiveJobsForMatching(limit = 1000): Promise<JobSummary[
   const { data, error } = await db.from("jobs").select(await withExpected(SUMMARY_COLUMNS)).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(limit);
   if (error) {
     console.error("Listing live jobs for recommendations failed:", error.code, error.message);
+    return [];
+  }
+  return (data ?? []) as unknown as JobSummary[];
+}
+
+// One clinic's live jobs, newest first, for its public clinic page (lib/public-clinics.ts).
+export async function listLiveJobsForEmployer(employerId: string): Promise<JobSummary[]> {
+  if (!UUID.test(employerId)) return [];
+  const db = supabasePublic();
+  if (!db) return [];
+  const { data, error } = await db.from("jobs").select(await withExpected(SUMMARY_COLUMNS)).eq("employer_id", employerId).eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(50);
+  if (error) {
+    console.error("Listing a clinic's jobs failed:", error.code, error.message);
     return [];
   }
   return (data ?? []) as unknown as JobSummary[];
@@ -184,10 +199,10 @@ export async function getLiveJob(id: string): Promise<LiveJob | null> {
 // publishing one with no jobs in it. With no database set up at all (a local build) it is an empty list.
 // The public (anonymous) database role can read only certain columns of jobs (migrations 0005 and 0013), and updated_at is not one of them,
 // so the sitemap dates a job by when it went live. lib/public-columns.test.ts checks every public read against those grants.
-export async function listLiveJobIds(): Promise<{ id: string; posted_at: string }[]> {
+export async function listLiveJobIds(): Promise<{ id: string; posted_at: string; employer_id: string }[]> {
   const db = supabasePublic();
   if (!db) return [];
-  const { data, error } = await db.from("jobs").select("id, posted_at").eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(1000);
+  const { data, error } = await db.from("jobs").select("id, posted_at, employer_id").eq("status", "live").gt("expires_at", new Date().toISOString()).order("posted_at", { ascending: false }).limit(1000);
   if (error) {
     // While the site is being built, a failed read must not stop the deployment. After that, throwing keeps the last good copy.
     if (process.env.NEXT_PHASE === "phase-production-build") {

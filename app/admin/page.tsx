@@ -6,6 +6,10 @@ import { requireRole } from "@/lib/auth";
 import AdminNumbers from "@/components/AdminNumbers";
 import { parsePeriod } from "@/lib/admin-stats";
 import { loadStats } from "@/lib/admin-stats-data";
+import { periodRange } from "@/lib/admin-stats";
+import { summariseFinance, type PaymentRow } from "@/lib/admin-finance";
+import { launchLayoutOn } from "@/lib/launch";
+import { supabaseAdmin } from "@/lib/supabase-server";
 
 export const metadata: Metadata = { title: "Admin | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -15,15 +19,28 @@ export default async function AdminHome({ searchParams }: { searchParams: Promis
   const session = await requireRole("admin");
   const period = parsePeriod((await searchParams).period);
   const s = await loadStats(period);
+  const launched = await launchLayoutOn();
+  // The finance tiles. A database without the payments table just shows "Not on yet".
+  const db = supabaseAdmin();
+  let finance = null as ReturnType<typeof summariseFinance> | null;
+  if (db) {
+    try {
+      const { data } = await db.from("job_payments").select("status, amount_cents, created_at").limit(5000);
+      const range = periodRange(period);
+      finance = summariseFinance((data ?? []) as PaymentRow[], range.start, range.end);
+    } catch {
+      finance = null;
+    }
+  }
   return (
     <>
       <AppBar session={session} current="/admin" />
       <main id="main" tabIndex={-1} className="app">
         <div className="wrap">
-          <h1>Overview</h1>
-          <p className="lede2">How Kestrel is doing. Only your account can open this page.</p>
-          <p className="help">More tools: <Link href="/admin/found">Found listings</Link>, for jobs from a clinic&apos;s own careers page, and <Link href="/admin/post-for-clinic">Post for a clinic</Link>, for when a clinic is having trouble with the form, and <Link href="/admin/outreach">Outreach</Link>, for the clinic email sequence.</p>
-          {s ? <AdminNumbers s={s} period={period} /> : <section className="card"><p>The numbers are not available because the database is not connected.</p></section>}
+          <h1>Dashboard</h1>
+          <p className="lede2">What needs you, and how Kestrel is doing.</p>
+          <p><Link className="btn sm ghost" href="/admin/insights">Insights for blog posts</Link></p>
+          {s ? <AdminNumbers s={s} period={period} finance={finance} launched={launched} /> : <section className="card"><p>The numbers are not available because the database is not connected.</p></section>}
         </div>
       </main>
       <AppFooter />

@@ -37,9 +37,9 @@ test("Ontario shows the optician hourly with a yearly equivalent", () => {
   assert.equal(ontario[0].role, "Optician");
   const optician = ontario.find((r) => r.role === "Optician");
   assert.ok(optician);
-  assert.equal(optician.median, "$24.04 an hour");
-  assert.equal(optician.middleHalf, "$23.00 to $33.65 an hour");
-  assert.equal(optician.yearly, "About $50,000 a year");
+  assert.equal(optician.median, "$29.00 an hour");
+  assert.equal(optician.middleHalf, "$23.44 to $35.43 an hour");
+  assert.equal(optician.yearly, "About $60,300 a year");
 });
 
 test("a role without a published quartile says so, and a closest match is flagged", () => {

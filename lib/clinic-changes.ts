@@ -9,6 +9,9 @@ const FIELDS: [string, string][] = [
   ["province", "Province"],
   ["city", "City"],
   ["about", "About"],
+  ["social_instagram", "Instagram"],
+  ["social_facebook", "Facebook"],
+  ["social_linkedin", "LinkedIn"],
 ];
 
 const clean = (value: unknown) => (value === null || value === undefined ? "" : String(value).trim());

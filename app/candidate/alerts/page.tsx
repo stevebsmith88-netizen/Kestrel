@@ -8,6 +8,9 @@ import { deleteAlert } from "@/lib/alert-actions";
 import { supabaseServer } from "@/lib/supabase/server";
 import { ALERTS_PAUSED_NOTE, alertsPaused } from "@/lib/alerts-paused";
 import Link from "next/link";
+import { listFollows } from "@/lib/follow-server";
+import { unfollow } from "@/lib/follow-actions";
+import { FOLLOW_LIMIT } from "@/lib/follows";
 
 export const metadata: Metadata = { title: "Job alerts | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -26,6 +29,7 @@ export default async function Alerts() {
   // Read on its own, so the page still works if it fails. Unsubscribing also stops alert emails (P1-51).
   const { data: profile } = db ? await db.from("profiles").select("unsubscribed_at").eq("id", session.userId).maybeSingle() : { data: null };
   const paused = alertsPaused(profile);
+  const follows = await listFollows(session.userId);
   return (
     <>
       <AppBar session={session} current="/candidate/alerts" />
@@ -56,6 +60,22 @@ export default async function Alerts() {
               )}
             </section>
             {alerts.length < 5 && <AlertForm />}
+            <section className="card" id="following">
+              <h2>Clinics and companies you follow</h2>
+              <p className="help">You are emailed when a place you follow posts a new job, in the same daily email as your alerts. They are never told who follows them. You can follow up to {FOLLOW_LIMIT}, from their page on Kestrel.</p>
+              {follows.length === 0 ? (
+                <p className="help">You are not following anyone yet. Open a clinic or company page and press Follow for new jobs. <Link href="/jobs">Find jobs</Link></p>
+              ) : (
+                <ul className="alertlist">
+                  {follows.map((f) => (
+                    <li key={f.employerId}>
+                      <span>{f.href ? <Link href={f.href}>{f.name}</Link> : f.name}{f.place ? ` · ${f.place}` : ""}</span>
+                      <form action={unfollow}><input type="hidden" name="employerId" value={f.employerId} /><button type="submit" className="linkbtn">Unfollow</button></form>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
           </div>
         </div>
       </main>

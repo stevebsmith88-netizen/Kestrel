@@ -112,7 +112,8 @@ export default function HelpControls() {
     if (!open && window.location.hash) window.history.replaceState(null, "", window.location.pathname + window.location.search);
   };
 
-  if (!ready) return null;
+  // Until the script runs, hold the space the search box and buttons will take, so the topics do not jump down on a phone (review item X-20).
+  if (!ready) return <div className="help-reserve" aria-hidden="true" />;
   return (
     <>
       <div className="help-search">

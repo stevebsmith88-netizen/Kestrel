@@ -11,6 +11,7 @@ import type { OwnPayStat } from "@/lib/pay-benchmark";
 import { CLINIC_ROLES, EMPLOYMENT_TYPES, employmentLabel, FIXED_TERM_EXPLAINER, FIELD_ROLES, PROVINCES, QUEBEC, QUEBEC_JOB_MESSAGE, WORK_ARRANGEMENTS } from "@/lib/jobs";
 import { MONEY_PERIODS, OPTOMETRIST_ONLY_PERIODS, OPTOMETRIST_ROLE, PERCENT_OF, WORKING_WEEKS } from "@/lib/job-pay";
 import { TAG_GROUPS } from "@/lib/job-tags";
+import { levelFromTitle, levelsForRole, suggestTitle } from "@/lib/job-title";
 
 export type JobFormValues = {
   id?: string;
@@ -41,6 +42,7 @@ export type JobFormValues = {
   tags_software: string[];
   tags_equipment: string[];
   tags_specialties: string[];
+  headline?: string;
 };
 
 // What the dollar boxes show as examples for each unit.
@@ -57,17 +59,22 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const ad = useServerForm(buildAd);
   const form = useRef<HTMLFormElement>(null);
   const [description, setDescription] = useState(initial.description);
-  // The job title starts as the role the clinic picks (Steve, 13th November 2026), unless a title has been typed. It stays editable.
+  // The job title is set from the clinic's choices (Steve, 14th November 2026): the role, the type of work, a level word and a ticked specialty
+  // (lib/job-title.ts). The box only shows it, and the server sets the same title when the job is saved, so every title for a role reads the same
+  // way and always matches the role and its price band.
   const titleRef = useRef<HTMLInputElement>(null);
-  const autoTitle = useRef("");
-  const pickRole = (next: string) => {
-    setRole(next);
+  const [level, setLevel] = useState(levelFromTitle(initial.title));
+  const refreshTitle = () => {
+    const f = form.current;
     const el = titleRef.current;
-    if (el && (!el.value.trim() || el.value === autoTitle.current)) {
-      el.value = next;
-      autoTitle.current = next;
-    }
+    if (!f || !el) return;
+    const data = new FormData(f);
+    const next = suggestTitle({ role: String(data.get("roleCategory") ?? ""), employmentType: String(data.get("employmentType") ?? ""), specialties: data.getAll("tagsSpecialties").map(String), level: String(data.get("titleLevel") ?? "") });
+    if (next) el.value = next;
   };
+  // A job saved earlier shows the title it will have when saved again.
+  useEffect(() => refreshTitle(), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const pickRole = (next: string) => setRole(next);
   // When the ad builder returns a draft, it goes into the ad box for the clinic to edit.
   useEffect(() => {
     if (ad.state.ad) setDescription(ad.state.ad);
@@ -84,13 +91,13 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const [payDays, setPayDays] = useState(initial.pay_days);
   const [pctMin, setPctMin] = useState(initial.pay_percent_min);
   const [pctMax, setPctMax] = useState(initial.pay_percent_max);
-  // A daily rate and a percentage are for optometrist roles. Until a role is chosen, everything is offered.
-  const roleChosen = role !== "";
+  // A daily rate, the days a week, a guaranteed minimum and a percentage are for optometrist roles only (Steve, 14th November 2026).
+  // Until a role is chosen they stay hidden, so no other role ever sees those questions.
   const isOptometrist = role === OPTOMETRIST_ROLE;
-  const periods = !roleChosen || isOptometrist ? MONEY_PERIODS : MONEY_PERIODS.filter((p) => !OPTOMETRIST_ONLY_PERIODS.includes(p.value));
+  const periods = isOptometrist ? MONEY_PERIODS : MONEY_PERIODS.filter((p) => !OPTOMETRIST_ONLY_PERIODS.includes(p.value));
   const period = periods.some((p) => p.value === payPeriod) ? payPeriod : "year";
   const example = EXAMPLES[period];
-  const showPercent = !roleChosen || isOptometrist;
+  const showPercent = isOptometrist;
   const hasMoney = payMin.trim() !== "" || payMax.trim() !== "";
   const hasPercent = pctMin.trim() !== "" || pctMax.trim() !== "";
   // The typical pay line compares salary, hourly and a daily rate with the days a week given. Anything with a percentage is left alone.
@@ -99,15 +106,12 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
   const toYear = (v: string) => (period === "day" ? String(Math.round(Number(v.replace(/[$,\s]/g, "")) * daysNumber * WORKING_WEEKS)) : v);
   const e = state.errors ?? {};
   return (
-    <form ref={form} onSubmit={submit} noValidate className="panel formpanel">
+    <form ref={form} onSubmit={submit} onChange={(ev) => { const changed: EventTarget = ev.target; if (changed !== titleRef.current) refreshTitle(); }} noValidate className="panel formpanel">
       <RequiredNote />
       {initial.id && <input type="hidden" name="id" value={initial.id} />}
       {employerId && <input type="hidden" name="employerId" value={employerId} />}
 
       <h2 className="formh">The role</h2>
-      <Field id="jf-title" label="Job title" required error={e.title}>
-        <input ref={titleRef} id="jf-title" name="title" type="text" defaultValue={initial.title} placeholder="For example: Optician, full time" />
-      </Field>
       <div className="pair">
         <Field id="jf-role" label="Role" required error={e.roleCategory}>
           <select id="jf-role" name="roleCategory" value={role} onChange={(ev) => pickRole(ev.target.value)}>
@@ -129,6 +133,20 @@ export default function JobForm({ initial, adBuilder = false, live = false, empl
           </select>
         </Field>
       </div>
+      <div className="pair">
+        <Field id="jf-level" label="Level (optional)" hint={levelsForRole(role).length ? "Adds a word to the title, for example Lead Optician." : "Choose a role first."}>
+          <select id="jf-level" name="titleLevel" value={levelsForRole(role).includes(level) ? level : ""} onChange={(ev) => setLevel(ev.target.value)} disabled={levelsForRole(role).length === 0}>
+            <option value="">None</option>
+            {levelsForRole(role).map((l) => <option key={l} value={l}>{l}</option>)}
+          </select>
+        </Field>
+        <Field id="jf-title" label="Job title" required error={e.title} hint="Set from your choices, so every post reads the same and candidates and Google find it.">
+          <input ref={titleRef} id="jf-title" name="title" type="text" readOnly defaultValue={initial.title} placeholder="Choose a role" />
+        </Field>
+      </div>
+      <Field id="jf-headline" label="Headline (optional)" error={e.headline} hint="One line in your own words, shown under the title. Up to 70 characters, for example: Join a 4 doctor family practice with a new dispensary.">
+        <input id="jf-headline" name="headline" type="text" maxLength={70} defaultValue={initial.headline ?? ""} />
+      </Field>
       <Choices
         name="workArrangement"
         label="Where does the person work?"

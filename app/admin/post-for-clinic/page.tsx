@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdminSearch from "@/components/AdminSearch";
 import AppBar from "@/components/AppBar";
 import AppFooter from "@/components/AppFooter";
 import { requireRole } from "@/lib/auth";
 import { supabaseAdmin } from "@/lib/supabase-server";
+import { loadClinicsForPosting } from "@/lib/admin-loaders";
 
 export const metadata: Metadata = { title: "Post for a clinic | Kestrel Eye Care Jobs", robots: { index: false } };
 
@@ -20,13 +22,8 @@ export default async function PostForClinic({ searchParams }: { searchParams: Pr
   const session = await requireRole("admin");
   const { q = "", notice } = await searchParams;
   const search = q.trim().slice(0, 80);
-  const db = supabaseAdmin();
-  // Only clinics that have an account (an owner) can have a job posted for them.
-  const pattern = search ? `%${search.replace(/[%,()]/g, " ")}%` : "%";
-  const { data } = db
-    ? await db.from("employers").select("id, clinic_name, city, province, claimed").not("owner_id", "is", null).ilike("clinic_name", pattern).order("clinic_name").limit(50)
-    : { data: null };
-  const clinics = (data ?? []) as Clinic[];
+  // Only clinics that have an account (an owner) can have a job posted for them (lib/admin-loaders.ts).
+  const clinics = (await loadClinicsForPosting(supabaseAdmin(), q)) as unknown as Clinic[];
   return (
     <>
       <AppBar session={session} current="/admin/post-for-clinic" />
@@ -35,11 +32,7 @@ export default async function PostForClinic({ searchParams }: { searchParams: Pr
           <h1>Post a job for a clinic</h1>
           <p className="lede2">For when a clinic is having trouble with the form. The job belongs to the clinic, follows the same rules as any post, and goes to the review queue for you to approve. This is separate from Found listings.</p>
           {notice && NOTICES[notice] && <p className="notice" role="status">{NOTICES[notice]}</p>}
-          <form method="get" className="panel">
-            <label className="lab" htmlFor="pc-q">Find a clinic by name</label>
-            <input id="pc-q" name="q" type="search" defaultValue={search} />
-            <button type="submit" className="btn sm">Search</button>
-          </form>
+          <AdminSearch id="pc-q" label="Find a clinic by name" defaultValue={search} clearHref="/admin/post-for-clinic" />
           {clinics.length === 0 ? (
             <p className="help">No clinics found. A clinic needs an account and a clinic profile first.</p>
           ) : (

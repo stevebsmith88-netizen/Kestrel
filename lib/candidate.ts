@@ -4,6 +4,8 @@ export { profileStrength } from "./profile-ready.ts";
 import { loadApplicationWith, loadMyApplications, type Application } from "./application-loaders.ts";
 import type { PrefsRow } from "@/lib/candidate-prefs";
 import { supabaseServer } from "@/lib/supabase/server";
+import { withCandidateLinkedin } from "@/lib/social-columns";
+import { withLicence } from "@/lib/licence-columns";
 
 export type CandidateProfile = PrefsRow & {
   profession: string | null;
@@ -14,6 +16,11 @@ export type CandidateProfile = PrefsRow & {
   cv_path: string | null;
   cv_filename: string | null;
   cv_uploaded_at: string | null;
+  linkedin_url?: string | null; // optional (migration 0054), present once the database has it
+  licence_province?: string | null; // optional (migration 0056), present once the database has it
+  licence_number?: string | null;
+  licence_does?: string[] | null;
+  licence_not_yet?: boolean | null;
 };
 
 export { APPLICATION_COLUMNS, type Application } from "./application-loaders.ts";
@@ -24,7 +31,7 @@ export async function getMyCandidateProfile(userId: string): Promise<CandidatePr
   if (!db) return null;
   const { data } = await db
     .from("candidate_profiles")
-    .select("profession, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, cv_uploaded_at, home_city, home_province, pref_radius_km, pref_provinces, pref_employment_types, pref_other_roles, pref_min_pay, pref_pay_period, pref_practice, software_skills")
+    .select(await withLicence(await withCandidateLinkedin("profession, licensed_provinces, years_experience, available_from, phone, cv_path, cv_filename, cv_uploaded_at, home_city, home_province, pref_radius_km, pref_provinces, pref_employment_types, pref_other_roles, pref_min_pay, pref_pay_period, pref_practice, software_skills")))
     .eq("user_id", userId)
     .maybeSingle();
   return (data as CandidateProfile | null) ?? null;
