@@ -1137,3 +1137,4 @@ input[readonly]{background:var(--paper);color:var(--navy-2)}
 /* Job page spacing: a clear gap between the buttons that stack in the About card and the Apply card. */
 .clinicbtns{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0 0}
 .applybox p.savewrap{margin:16px 0 0}
+.tilebtns{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:16px 0 0}

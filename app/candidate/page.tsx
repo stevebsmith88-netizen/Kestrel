@@ -54,8 +54,10 @@ export default async function CandidateHome({ searchParams }: { searchParams: Pr
               <h2>{profileReady(profile) ? "Ready to apply" : "Finish your profile"}</h2>
               <div className="meter" role="img" aria-label={`Profile ${strength} percent complete`}><i style={{ width: `${strength}%` }} /></div>
               <p>{profileReady(profile) ? "Your resume and details are saved." : "Add your role, town and resume, and you can apply to any job in a few clicks."}</p>
-              <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
-              <p className="help"><Link href="/candidate/letters" className="btn sm ghost">My saved cover letters</Link></p>
+              <div className="tilebtns">
+                <Link href="/candidate/profile" className="btn sm ghost">{profileReady(profile) ? "Edit my profile" : "Complete my profile"}</Link>
+                <Link href="/candidate/letters" className="btn sm ghost">My saved cover letters</Link>
+              </div>
             </section>
             <section className="card">
               <p className="kicker">Applications</p>

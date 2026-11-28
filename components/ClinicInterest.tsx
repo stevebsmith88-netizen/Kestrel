@@ -14,7 +14,10 @@ export default function ClinicInterest({ name, signedIn }: { name: string; signe
     <details className="clinicinterest">
       <summary>Looking for a clinic or company that is not on Kestrel yet?</summary>
       {signedIn === "out" ? (
-        <p>Create a free candidate account, then tell us where you would like to work. If they join Kestrel we will let you know. <Link href="/sign-up?next=%2Fjobs" className="btn sm">Create an account</Link> <Link href="/sign-in" className="btn sm ghost">Sign in</Link></p>
+        <>
+        <p>Create a free candidate account, then tell us where you would like to work. If they join Kestrel we will let you know.</p>
+        <div className="tilebtns"><Link href="/sign-up?next=%2Fjobs" className="btn sm">Create an account</Link><Link href="/sign-in" className="btn sm ghost">Sign in</Link></div>
+        </>
       ) : signedIn === "other" ? (
         <p>Candidates can tell us where they would like to work. Sign in with a candidate account to do that.</p>
       ) : state.message ? (
