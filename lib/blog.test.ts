@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { existsSync } from "node:fs";
 import { BLOG_IMAGES } from "./blog-images.ts";
-import { BLOG_TOPICS, excerpt, firstImage, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
+import { BLOG_TOPICS, excerpt, firstImage, hoursRange, isPublished, parseBlocks, parseInline, readingMinutes, safeHref, todayInToronto, visiblePosts } from "./blog.ts";
 import { POSTS } from "../content/posts.ts";
 
 test("text becomes headings, lists and paragraphs", () => {
@@ -136,4 +136,15 @@ test("a folded section holds the blocks between its markers, and ends at the clo
   const open = parseBlocks("Intro.\n\n::: Sources\n\n- One\n\nMore.");
   assert.equal(open.length, 2);
   assert.deepEqual(open[1].type === "details" ? open[1].blocks.map((b) => b.type) : [], ["ul", "p"]);
+});
+
+test("a table marked [squares] becomes a squares chart, and its hours are read as a range", () => {
+  const [b] = parseBlocks("[squares]\n| Province | Fee | Hours |\n| --- | --- | --- |\n| Ontario | $1,237.35 | About 43 |\n| Alberta | $680.10 to $839.85 | About 24 to 30 |");
+  assert.equal(b.type, "squares");
+  if (b.type !== "squares") return;
+  assert.deepEqual(b.head, ["Province", "Fee", "Hours"]);
+  assert.equal(b.rows.length, 2);
+  assert.deepEqual(hoursRange(b.rows[0][2]), { lo: 43, hi: 43 });
+  assert.deepEqual(hoursRange(b.rows[1][2]), { lo: 24, hi: 30 });
+  assert.equal(hoursRange("Not published"), null);
 });
