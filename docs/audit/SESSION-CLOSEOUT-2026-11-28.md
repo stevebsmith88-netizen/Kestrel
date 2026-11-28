@@ -15,5 +15,5 @@ Status key: Done (in the repo), Needs Steve (a decision or approval), Check (sta
 | Quebec launch feasibility | Needs Steve | Quebec plan rescued; the Admin numbers code stays on claude/intelligent-hypatia-oholog until previewed. |
 | Gender divide in optics blog | Needs Steve | Blog draft rescued; the post itself stays on claude/wizardly-mayer-bed5u9 until Steve approves publishing. |
 | Weekly next steps and feature feedback | Done | Missing "Who should we follow?" post rescued. |
-| Signup without job posting | Check | Marked review ready, no summary. |
+| Signup without job posting | Done, 1 decision for Steve | Branch fully merged. Reddit Pro keyword list and monthly routine saved to docs/marketing/reddit-pro-trends.md. Steve to say yes or no to rewording the never any scraper line in CLAUDE.md. |
 | Renewed jobs and free repost (jolly-bell-e9fpj3) | Needs Steve | Docs rescued; code and migration 0061 to be brought up to date as their own pull request. |
