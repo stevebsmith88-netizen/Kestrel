@@ -232,3 +232,14 @@ On accuracy: these counts are a cross check on the top down estimate in `docs/ma
 ### What Claude does next (when you say so)
 
 Phase 2 and 3 in `NEXT-STEPS-PHASES.md`, one item at a time, only on the items you choose. The likely order, because it unlocks the gates: retention and download completeness (after the lawyer), accessibility pass, the review queue measurement (job views and apply clicks), then the "read this page" step that serves the ad builder and the seeding tool. Holding back until Gate A is closer: publishing found listings, Stripe, and anything that contacts clinics. Ideas such as ad style templates are on the list for after launch.
+
+### Check the Supabase "Max rows" setting (20th November 2026, 10 minutes, both projects)
+
+Why: Supabase stops any single request at a set number of rows (often 1,000), whatever the code asks for. The page list in `lib/public-clinics.ts` reads up to 5,000 clinics and 20,000 jobs, so if Max rows is lower, clinics could quietly lose their public page once Kestrel grows. The code fix is item 24 in CLAUDE.md; this step tells us how much room there is today.
+
+1. Sign in at supabase.com and open the **live** project (the Canadian one for eyecarejobs.ca).
+2. In the left menu choose **Project Settings** (the gear), then **Data API** (older screens call it **API**). Scroll to **Max rows**. Write the number down. The menu names move around, so if you cannot find it, search the settings page for "Max rows".
+3. Open **SQL Editor** and run: `select (select count(*) from employers) as clinics, (select count(*) from jobs) as jobs, (select count(*) from applications) as applications;` Write down the 3 numbers.
+4. Repeat steps 1 to 3 on the **demo** project.
+5. Send Claude the 2 Max rows numbers and the counts. As a stopgap, raising Max rows to 10,000 is safe and costs nothing, and the code fix removes the need for it.
+6. Repeat the counts every month until launch, and once a month after it. Warning signs: jobs or clinics over half of Max rows, or the number of clinic pages on the site no longer matching the number of clinics with a job.
