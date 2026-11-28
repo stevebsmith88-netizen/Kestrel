@@ -36,6 +36,7 @@ export type Block =
   | { type: "p"; text: string }
   | { type: "quote"; text: string; source?: string }
   | { type: "table"; head: string[]; rows: string[][] }
+  | { type: "squares"; head: string[]; rows: string[][] }
   | { type: "figure"; src: string; alt: string; caption?: string }
   | { type: "details"; summary: string; blocks: Block[] };
 
@@ -63,6 +64,10 @@ function parseChunks(chunks: string[]): Block[] {
       const last = text[text.length - 1];
       const source = last.startsWith("source: ") ? last.slice(8).trim() : undefined;
       blocks.push({ type: "quote", text: (source ? text.slice(0, -1) : text).join(" "), ...(source ? { source } : {}) });
+    } else if (lines[0] === "[squares]" && lines.length >= 4 && lines.slice(1).every((l) => l.startsWith("|")) && DIVIDER.test(lines[2].replace(/\s/g, ""))) {
+      // A table drawn as 1 square for each hour (Steve, 28th November 2026, from the licence fee Reel). Its last column holds the hours,
+      // such as "About 43" or "About 24 to 30". It is still a table underneath, so the figures stay readable text.
+      blocks.push({ type: "squares", head: cells(lines[1]), rows: lines.slice(3).map(cells) });
     } else if (lines.length >= 3 && lines.every((l) => l.startsWith("|")) && DIVIDER.test(lines[1].replace(/\s/g, ""))) {
       blocks.push({ type: "table", head: cells(lines[0]), rows: lines.slice(2).map(cells) });
     } else if (IMAGE.test(lines[0]) && lines.length <= 2) {
@@ -73,6 +78,13 @@ function parseChunks(chunks: string[]): Block[] {
     else blocks.push({ type: "p", text: lines.join(" ") });
   }
   return blocks;
+}
+
+// The hours in a squares chart's cell: "About 43" is 43 to 43, "About 24 to 30" is 24 to 30. Null when there is no number.
+export function hoursRange(cell: string): { lo: number; hi: number } | null {
+  const n = cell.match(/\d+/g)?.map(Number);
+  if (!n || !n.length) return null;
+  return { lo: Math.min(...n), hi: Math.max(...n) };
 }
 
 // The first image in a post, for the search engine data. Undefined when the post has none.

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { parseBlocks, parseInline, type Block } from "@/lib/blog";
+import { hoursRange, parseBlocks, parseInline, type Block } from "@/lib/blog";
 import { BLOG_IMAGES } from "@/lib/blog-images";
 
 // `sameDocument` turns a link such as /help#post-a-job into a plain #post-a-job link, so a click on a page that is already open fires the browser's own hashchange.
@@ -48,6 +48,7 @@ function Blocks({ blocks }: { blocks: Block[] }) {
             </table>
           </div>
         )
+        : b.type === "squares" ? <Squares key={i} head={b.head} rows={b.rows} />
         : b.type === "figure" ? (BLOG_IMAGES[b.src] ? (
           <figure key={i} className={BLOG_IMAGES[b.src].width / BLOG_IMAGES[b.src].height >= 1.3 ? "blogfig wide" : "blogfig"}>
             <Image src={b.src} alt={b.alt} width={BLOG_IMAGES[b.src].width} height={BLOG_IMAGES[b.src].height} sizes={BLOG_IMAGES[b.src].width / BLOG_IMAGES[b.src].height >= 1.3 ? "(max-width: 800px) 100vw, 760px" : "(max-width: 720px) 80vw, 300px"} priority={i === 0} />
@@ -58,5 +59,34 @@ function Blocks({ blocks }: { blocks: Block[] }) {
         : <p key={i}><Inline text={b.text} /></p>,
       )}
     </>
+  );
+}
+
+// A table drawn as 1 square for each hour, the longest row in chestnut. The squares are decoration; the hours, fees and names stay as
+// table text, so screen readers, search engines and AI assistants read the same figures. Outlined squares are the gap between a lower
+// and a higher figure, such as a fee with and without contact lenses.
+function Squares({ head, rows }: { head: string[]; rows: string[][] }) {
+  const last = head.length - 1;
+  const ranges = rows.map((r) => hoursRange(r[last]));
+  const most = Math.max(...ranges.map((h) => h?.hi ?? 0));
+  return (
+    <div className="blogsquares">
+      <table>
+        <thead className="vh"><tr>{head.map((h, j) => <th key={j} scope="col">{h}</th>)}</tr></thead>
+        <tbody>
+          {rows.map((row, r) => {
+            const h = ranges[r];
+            return (
+              <tr key={r} className={h && h.hi === most ? "most" : undefined}>
+                <th scope="row"><Inline text={row[0]} /></th>
+                <td className="sqhours"><Inline text={row[last]} />{/hour/i.test(row[last]) ? "" : " hours"}</td>
+                <td className="sqgrid" aria-hidden="true">{h && Array.from({ length: h.hi }, (_, k) => <span key={k} className={k >= h.lo ? "out" : undefined} />)}</td>
+                {row.slice(1, last).reverse().map((c, j) => <td key={j} className={j === 0 ? "sqfee" : "sqmeta"}><Inline text={c} /></td>)}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }

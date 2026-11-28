@@ -1,0 +1,72 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>3 questions</title><style>
+@font-face{font-family:'DM Serif Display';src:url(file:///home/user/Kestrel/node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2)}
+@font-face{font-family:Poppins;font-weight:400;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2)}
+@font-face{font-family:Poppins;font-weight:600;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2)}
+body{margin:0}p{margin:0}
+#f{width:1080px;height:1920px;position:relative;overflow:hidden;background:#F7F1E6}
+.abs{position:absolute}
+#label{left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:#A4502C;opacity:0}
+#count{right:80px;top:268px;font-family:'DM Serif Display';font-size:38px;color:#A4502C;opacity:0}
+#hook{left:80px;right:80px;top:660px;font-family:'DM Serif Display';font-size:100px;line-height:1.04;color:#1B2B4B}
+#title{left:80px;right:80px;top:330px;font-family:'DM Serif Display';font-size:72px;line-height:1.06;color:#1B2B4B;opacity:0}
+.flip{position:absolute;left:90px;right:90px;top:640px;height:820px;perspective:2600px;opacity:0}
+.face{position:absolute;inset:0;border-radius:26px;display:flex;flex-direction:column;justify-content:center;padding:70px;box-sizing:border-box;backface-visibility:hidden}
+.front{background:#1B2B4B;box-shadow:0 24px 50px rgba(27,43,75,.25)}
+.back{background:#FBF8F2;border:3px solid #E3D9C8;box-shadow:0 24px 50px rgba(27,43,75,.12)}
+.num{font-family:'DM Serif Display';font-size:120px;line-height:1;color:#D8B48A}
+.q{font-family:'DM Serif Display';font-size:84px;line-height:1.08;color:#F7F1E6;margin-top:30px}
+.bq{font-family:'DM Serif Display';font-size:52px;line-height:1.12;color:#1B2B4B}
+.w{font-family:Poppins;font-size:44px;line-height:1.45;color:#5A6672;margin-top:40px}
+.why{font-family:Poppins;font-weight:600;font-size:28px;letter-spacing:0.2em;color:#A4502C;margin-bottom:26px}
+#msg{left:80px;right:80px;top:640px;opacity:0}
+#end{position:absolute;inset:0;background:#F7F1E6;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+</style></head><body><div id="f">
+<p class="abs" id="label">INTERVIEW TIPS</p>
+<p class="abs" id="count"></p>
+<p class="abs" id="hook">Got an optician interview coming up?<br><span style="color:#A4502C">Ask these 3 questions.</span></p>
+<p class="abs" id="title">3 questions to ask in<br><span style="color:#A4502C">an optician interview.</span></p>
+<div class="flip" id="c0"><div class="face front" id="fr0"><p class="num">1</p><p class="q">What does a normal week look like?</p></div>
+<div class="face back" id="bk0"><p class="why">WHY ASK</p><p class="bq">What does a normal week look like?</p><p class="w">Including evenings, Saturdays and holiday cover. Better to know now than in week 2.</p></div></div><div class="flip" id="c1"><div class="face front" id="fr1"><p class="num">2</p><p class="q">If there&apos;s commission or a bonus, how is it worked out?</p></div>
+<div class="face back" id="bk1"><p class="why">WHY ASK</p><p class="bq">If there&apos;s commission or a bonus, how is it worked out?</p><p class="w">And what does a typical month look like? The detail matters more than the headline.</p></div></div><div class="flip" id="c2"><div class="face front" id="fr2"><p class="num">3</p><p class="q">Why is the position open?</p></div>
+<div class="face back" id="bk2"><p class="why">WHY ASK</p><p class="bq">Why is the position open?</p><p class="w">A new role, a retirement and a replacement for someone who left are very different stories.</p></div></div>
+<div class="abs" id="msg">
+<p style="font-family:'DM Serif Display';font-size:96px;line-height:1.06;color:#1B2B4B">On Kestrel, you won&apos;t need to ask<br><span style="color:#A4502C">about the pay range.</span></p>
+<p style="font-family:Poppins;font-size:44px;line-height:1.45;color:#5A6672;margin-top:50px">Every job shows it. More questions to ask, and what to watch for: the full guide is in the link in bio.</p>
+</div>
+<div id="end">
+<img src="file:///home/user/Kestrel/public/brand/kestrel-lockup-full.svg" alt="" style="width:860px;display:block">
+<p id="e1" style="font-family:'DM Serif Display';font-size:64px;color:#1B2B4B;margin-top:80px">Every job shows its pay.</p>
+<p id="e2" style="font-family:Poppins;font-weight:600;font-size:40px;line-height:1.45;color:#A4502C;margin-top:44px">Pre launch is open.<br>Create your account: link in bio</p>
+</div>
+</div>
+<script>
+const T = {"first":2.8,"each":4.4,"msg":16,"end":19.4}, N = 3;
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const span = (t, a, b) => clamp((t - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const io = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const el = (id) => document.getElementById(id);
+window.render = (t, cover = false) => {
+  const h = out(span(t, 0.2, 0.9)); el("hook").style.opacity = h * (1 - span(t, T.first - 0.5, T.first - 0.1)); el("hook").style.transform = "translateY(" + 30 * (1 - h) + "px)";
+  const on = span(t, T.first - 0.2, T.first + 0.3) * (1 - span(t, T.msg - 0.3, T.msg));
+  el("label").style.opacity = on; el("count").style.opacity = cover ? 0 : on; el("title").style.opacity = on;
+  let cur = 0;
+  for (let i = 0; i < N; i++) {
+    const a = T.first + i * T.each, b = a + T.each, c = el("c" + i);
+    const k = out(span(t, a, a + 0.5)), o = span(t, b - 0.4, b);
+    c.style.opacity = k * (1 - o); c.style.transform = "translateX(" + (100 * (1 - k) - 100 * o) + "px)";
+    if (t >= a) cur = i;
+    // The flip: the card turns over after a beat, front face away, back face to us.
+    const f = io(span(t, a + 1.8, a + 2.5)) * 180;
+    el("fr" + i).style.transform = "rotateY(" + f + "deg)";
+    el("bk" + i).style.transform = "rotateY(" + (f - 180) + "deg)";
+  }
+  el("count").textContent = (cur + 1) + " of " + N;
+  const m = out(span(t, T.msg, T.msg + 0.6)); el("msg").style.opacity = m * (1 - span(t, T.end - 0.4, T.end)); el("msg").style.transform = "translateY(" + 30 * (1 - m) + "px)";
+  el("end").style.opacity = span(t, T.end - 0.3, T.end + 0.2);
+  const show = (id, a) => { const v = out(span(t, a, a + 0.6)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 24 * (1 - v) + "px)"; };
+  show("e1", T.end + 0.6); show("e2", T.end + 1.2);
+};
+// The cover: the title over the first question, not yet turned.
+window.cover = () => window.render(T.first + 1.0, true);
+</script></body></html>

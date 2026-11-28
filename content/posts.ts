@@ -647,8 +647,9 @@ The last column of the table works each median out at 37.5 hours a week, every w
 
 ## What it costs to stay licensed
 
-Pay is only half the picture. Opticians pay their provincial regulator every year to keep their licence, and the fee is very different from one province to the next. The table shows each fee next to the provincial median from the table above, worked out as the hours of work it takes to cover it.
+Pay is only half the picture. Opticians pay their provincial regulator every year to keep their licence, and the fee is very different from one province to the next. The chart shows each fee next to the provincial median from the table above, worked out as the hours of work it takes to cover it. Each square is 1 hour, and the outlined squares are the higher fee where a province charges more for contact lenses.
 
+[squares]
 | Province | Regulator | Yearly licence fee | Hours at the median to pay it |
 | --- | --- | --- | --- |
 | Ontario | College of Opticians of Ontario | $1,237.35 for 2027 ($1,095 plus HST) | About 43 |

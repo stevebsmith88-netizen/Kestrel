@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Myth or fact?</title><style>
+@font-face{font-family:'DM Serif Display';src:url(file:///home/user/Kestrel/node_modules/@fontsource/dm-serif-display/files/dm-serif-display-latin-400-normal.woff2)}
+@font-face{font-family:Poppins;font-weight:400;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-400-normal.woff2)}
+@font-face{font-family:Poppins;font-weight:600;src:url(file:///home/user/Kestrel/node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2)}
+body{margin:0}p{margin:0}
+#f{width:1080px;height:1920px;position:relative;overflow:hidden;background:#F7F1E6}
+.abs{position:absolute}
+#label{left:80px;top:276px;font-family:Poppins;font-weight:600;font-size:26px;letter-spacing:0.24em;color:#A4502C;opacity:0}
+#count{right:80px;top:268px;font-family:'DM Serif Display';font-size:38px;color:#A4502C;opacity:0}
+#hook{left:80px;right:80px;top:700px;font-family:'DM Serif Display';font-size:150px;line-height:1;color:#1B2B4B}
+.card{position:absolute;left:70px;right:70px;top:520px;opacity:0}
+.box{position:relative;padding:70px 60px 90px;border-radius:22px;background:#FBF8F2;border:3px solid #E3D9C8;box-shadow:0 18px 40px rgba(27,43,75,.10)}
+.st{font-family:'DM Serif Display';font-size:84px;line-height:1.08;color:#1B2B4B}
+.ask{font-family:Poppins;font-weight:600;font-size:38px;color:#A4502C;margin-top:40px}
+.stamp{position:absolute;right:40px;bottom:-60px;padding:14px 40px;border-radius:14px;border:8px solid;font-family:Poppins;font-weight:600;font-size:76px;letter-spacing:0.08em;background:#F7F1E6;opacity:0}
+.stamp.m{color:#A4502C;border-color:#A4502C}.stamp.f{color:#1B2B4B;border-color:#1B2B4B}
+.ex{font-family:Poppins;font-size:44px;line-height:1.45;color:#5A6672;margin-top:110px;opacity:0}
+.ex.k{font-family:'DM Serif Display';font-size:64px;line-height:1.15;color:#1B2B4B}
+#end{position:absolute;inset:0;background:#F7F1E6;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+</style></head><body><div id="f">
+<p class="abs" id="label">MYTH OR FACT?</p>
+<p class="abs" id="count"></p>
+<p class="abs" id="hook">Myth<br><span style="color:#A4502C">or fact?</span></p>
+<div class="card" id="c0"><div class="box"><p class="st">&quot;You need a university degree to work in optics.&quot;</p><p class="ask" id="q0">Myth or fact?</p>
+<span class="stamp m" id="st0">MYTH</span></div><p class="ex" id="ex0">Many roles train you on the job. Opticians usually need a college programme and a licence.</p></div><div class="card" id="c1"><div class="box"><p class="st">&quot;Opticians and optometrists do the same job.&quot;</p><p class="ask" id="q1">Myth or fact?</p>
+<span class="stamp m" id="st1">MYTH</span></div><p class="ex" id="ex1">Optometrists examine eyes and diagnose. Opticians fit and dispense glasses and contact lenses.</p></div><div class="card" id="c2"><div class="box"><p class="st">&quot;Eye care is just retail.&quot;</p><p class="ask" id="q2">Myth or fact?</p>
+<span class="stamp m" id="st2">MYTH</span></div><p class="ex" id="ex2">It&apos;s health care: patient care, eye tests, and lenses made to a prescription.</p></div><div class="card" id="c3"><div class="box"><p class="st">&quot;You can start at the front desk and grow from there.&quot;</p><p class="ask" id="q3">Myth or fact?</p>
+<span class="stamp f" id="st3">FACT</span></div><p class="ex" id="ex3">Many people do, into assistant, optician or practice manager roles.</p></div><div class="card" id="c4"><div class="box"><p class="st">&quot;There&apos;s a new job board just for eye care in Canada.&quot;</p><p class="ask" id="q4">Myth or fact?</p>
+<span class="stamp f" id="st4">FACT</span></div><p class="ex k" id="ex4">Kestrel Eye Care Jobs. Every job shows its pay.</p></div>
+<div id="end">
+<img src="file:///home/user/Kestrel/public/brand/kestrel-lockup-full.svg" alt="" style="width:860px;display:block">
+<p id="e1" style="font-family:'DM Serif Display';font-size:64px;color:#1B2B4B;margin-top:80px">Every job shows its pay.</p>
+<p id="e2" style="font-family:Poppins;font-weight:600;font-size:40px;line-height:1.45;color:#A4502C;margin-top:44px">Pre launch is open.<br>Create your account: link in bio</p>
+</div>
+</div>
+<script>
+const T = {"first":2.8,"each":3.6,"end":20.8}, N = 5;
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const span = (t, a, b) => clamp((t - a) / (b - a));
+const out = (x) => 1 - Math.pow(1 - x, 3);
+const el = (id) => document.getElementById(id);
+window.render = (t, cover = false) => {
+  const h = out(span(t, 0.2, 0.8)); el("hook").style.opacity = h * (1 - span(t, T.first - 0.5, T.first - 0.1)); el("hook").style.transform = "scale(" + (0.9 + 0.1 * h) + ")";
+  const on = span(t, T.first - 0.2, T.first + 0.3) * (1 - span(t, T.end - 0.3, T.end));
+  el("label").style.opacity = on; el("count").style.opacity = cover ? 0 : on;
+  let cur = 0;
+  for (let i = 0; i < N; i++) {
+    const a = T.first + i * T.each, b = a + T.each, c = el("c" + i);
+    const k = out(span(t, a, a + 0.45)), o = span(t, b - 0.35, b);
+    c.style.opacity = k * (1 - o); c.style.transform = "translateY(" + (40 * (1 - k) - 40 * o) + "px)";
+    if (t >= a) cur = i;
+    // A beat to guess, then the stamp thuds down: big and tilted, landing at its size with a small bounce.
+    const s = span(t, a + 1.5, a + 1.75), st = el("st" + i);
+    st.style.opacity = s > 0 ? 1 : 0;
+    st.style.transform = "rotate(" + (i % 2 ? 8 : -8) + "deg) scale(" + (s < 1 ? 2.4 - 1.4 * s : 1 + 0.06 * Math.sin(span(t, a + 1.75, a + 2.05) * Math.PI)) + ")";
+    el("q" + i).style.opacity = 1 - span(t, a + 1.45, a + 1.6);
+    const e = out(span(t, a + 1.95, a + 2.4)); el("ex" + i).style.opacity = e; el("ex" + i).style.transform = "translateY(" + 24 * (1 - e) + "px)";
+  }
+  el("count").textContent = (cur + 1) + " of " + N;
+  el("end").style.opacity = span(t, T.end - 0.2, T.end + 0.3);
+  const show = (id, a) => { const v = out(span(t, a, a + 0.6)); el(id).style.opacity = v; el(id).style.transform = "translateY(" + 24 * (1 - v) + "px)"; };
+  show("e1", T.end + 0.6); show("e2", T.end + 1.2);
+};
+// The cover: the first statement, still waiting for its answer.
+window.cover = () => window.render(T.first + 1.0, true);
+</script></body></html>
