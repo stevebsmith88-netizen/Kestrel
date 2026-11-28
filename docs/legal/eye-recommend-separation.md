@@ -23,6 +23,15 @@ Checked 28th November 2026 by searching every tracked file and the full Git hist
 - That the devices, browsers, email and accounts used for Kestrel are separate from his Eye Recommend ones (CLAUDE.md says Steve handles this).
 - That no idea, price or plan in Kestrel was taken from his Eye Recommend work.
 
+## Steve's confirmations (28th November 2026)
+
+Given in a chat with Claude, recorded as Steve stated them:
+
+- The supplier document behind the directory is public information, not from Eye Recommend.
+- Steve has actively made sure not to use anything from Eye Recommend.
+
+The other points above (nothing from Eye Recommend ever pasted into a chat, devices and accounts kept separate, no idea or price taken from his work there) were not itemised in that reply, so they stay listed as Steve's to confirm in his own words.
+
 ## How Claude answers if asked
 
 Claude answers factually from this file: nothing in the repository came from Eye Recommend, the 2 public mentions are the agreed ones, and what happened outside the repository is for Steve to say. Claude does not guess or overstate.

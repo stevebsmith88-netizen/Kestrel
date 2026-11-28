@@ -18,7 +18,7 @@ Status key: Done (in the repo), Needs Steve (a decision or approval), Check (sta
 | Signup without job posting | Done, 1 decision for Steve | Branch fully merged. Reddit Pro keyword list and monthly routine saved to docs/marketing/reddit-pro-trends.md. The never any scraper line in CLAUDE.md reworded (Steve said yes, 28th November). |
 | Renewed jobs and free repost (jolly-bell-e9fpj3) | Needs Steve | Docs rescued; code and migration 0061 to be brought up to date as their own pull request. |
 | Supplier Instagram accounts | Done | The list is generated from lib/directory-data.ts, already in the repo. No Instagram accounts are in that data; looking them up is optional. |
-| Instagram to Facebook cross posting | Chat only | A one off prompt for a find us post (4 icons and 3 captions), used on 15th and 16th November. Nothing to save unless Steve wants it as a template. |
+| Instagram to Facebook cross posting | Done | A one off prompt for a find us post (4 icons and 3 captions), used on 15th and 16th November. Saved as a template for future cross posting in docs/marketing/cross-posting-prompt-template.md. |
 | Instagram content grid setup | Done | Merged in pull request 272. |
 | Instagram boosted ads | Needs Steve | Test results come from Admin filtered on utm_source=instagram; send them to a chat to record in docs/marketing. |
-| Eye Recommend separation | Done | docs/legal/eye-recommend-separation.md written from a full search of the files and Git history. |
+| Eye Recommend separation | Done | docs/legal/eye-recommend-separation.md written from a full search of the files and Git history, with Steve's confirmations that the supplier document is public information and that he has actively avoided using anything from Eye Recommend. |
