@@ -1,0 +1,450 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kestrel Eye Care Jobs//Social calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Kestrel
+X-WR-TIMEZONE:America/Toronto
+BEGIN:VTIMEZONE
+TZID:America/Toronto
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:EDT
+DTSTART:19700308T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:EST
+DTSTART:19701101T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:kestrel-social-20261130-story-maple-monday-2-stories-v2@eyecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261130T120000
+DTEND;TZID=America/Toronto:20261130T123000
+SUMMARY:Instagram + Facebook: Story: Maple Monday (2 Stories)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: 2 Stories\nFile: design/social-and-merch/instagram-gu
+ ides/story-maple-1-made-for-canada.png and design/social-and-merch/instag
+ ram-guides/story-maple-2-poll.png\n- Stories can share a day with the 7 p
+ m Reel.\n- Facebook: tap Share to Facebook story (or set it to share auto
+ matically once).\n\nCAPTION (copy and paste):\nStory 1: add #MapleMonday 
+ #ShopCanadian and a link sticker to eyecarejobs.ca.\nStory 2: add a poll 
+ sticker: "Yes" / "Trying to".
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Story: Maple Monday (2 Storie
+ s)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261211-reel-the-12-days-of-christmas-10-reasons-v2@ey
+ ecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261211T190000
+DTEND;TZID=America/Toronto:20261211T193000
+SUMMARY:Instagram + Facebook: Reel: The 12 days of Christmas (10 reasons)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/12-days-reel.mp4 · cover design/social-and-me
+ rch/instagram-guides/12-days-reel-cover.jpg (Edit cover\, Add from camera
+  roll)\n- Music: add The Twelve Days of Christmas (feat. The Puppini Sist
+ ers\; Bing Crosby\, The Andrews Sisters) in Instagram and keep the start 
+ where Instagram puts it (the countdown from ten). The Reel is timed to it
+ \; play it through once before sharing.\n- Facebook: before sharing\, tur
+ n on Share to Facebook so it also goes to the kestreleye26 Page. Nothing 
+ else to post there.\n\nCAPTION (copy and paste):\nOn the 12th day of Chri
+ stmas… well\, here are 10 reasons to sign up to Kestrel.\n\nJobs only i
+ n eye care. Every job says if it's an existing vacancy and if AI screens 
+ candidates. No "Canadian experience" requirements. Clinic profiles to loo
+ k around. Every job shows its pay. You apply for the roles that fit you\,
+  get alerts for jobs that fit\, and track every application in 1 place.\n
+ \nAnd a job board made for eye care in Canada. Pre launch is open: link i
+ n bio.\n\n#12DaysOfChristmas #EyeCareJobs #Optometry #Opticians #CanadaJo
+ bs\n\nALT TEXT (Advanced settings\, Accessibility):\nA short animation on
+  a snowy navy night. A stylized kestrel in a holiday hat sits on top of a
+  Christmas tree like the star. Numbers count down from 10 to 1\, each wit
+ h a reason to join Kestrel\, as ornaments are added: baubles\, a gift\, a
+  pair of glasses\, a trial lens\, gold rings\, an ophthalmoscope\, a cont
+ act lens case and an eye chart tag. At 5\, in gold: Every job shows its p
+ ay. At 1: and a job board made for eye care in Canada\, as the kestrel fl
+ ies off the tree. Ends with the Kestrel Eye Care Jobs logo\, Pre launch i
+ s open for candidates\, clinics and suppliers\, and Link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: The 12 days of Christma
+ s (10 reasons)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261216-reel-it-s-the-most-wonderful-time-sign-up-v2@e
+ yecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261216T190000
+DTEND;TZID=America/Toronto:20261216T193000
+SUMMARY:Instagram + Facebook: Reel: It's the most wonderful time (sign up)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/wonderful-reel.mp4 · cover design/social-and-
+ merch/instagram-guides/wonderful-reel-cover.jpg (Edit cover\, Add from ca
+ mera roll)\n- Music: add It's the Most Wonderful Time of the Year (Andy W
+ illiams) in Instagram and keep the start where Instagram puts it. The Ree
+ l is timed to it\; play it through once before sharing.\n- Facebook: befo
+ re sharing\, turn on Share to Facebook so it also goes to the kestreleye2
+ 6 Page. Nothing else to post there.\n\nCAPTION (copy and paste):\nIt's th
+ e most wonderful time of the year… to sign up to Kestrel.\n\nCandidates
+ : set your role and province\, and get alerts for jobs that fit\, every o
+ ne with its pay.\nClinics: set up your clinic profile\, ready to post\, f
+ ree during the launch.\n\nPre launch is open for candidates\, clinics and
+  suppliers: link in bio.\n\n#MostWonderfulTime #EyeCareJobs #Optometry #O
+ pticians #ClinicOwner\n\nALT TEXT (Advanced settings\, Accessibility):\nA
+  short animation on a snowy navy night. A stylized kestrel in a holiday h
+ at sits on top of a Christmas tree like the star. Text reads: It's the mo
+ st wonderful time of the year… to sign up to Kestrel. A Candidates card
+  lists: Set your role and province\, Job alerts for jobs that fit\, Every
+  job shows its pay. A Clinics card lists: Set up your clinic profile\, Po
+ st with the pay up front\, Free to post during the launch. The kestrel ta
+ kes off: Pre launch is open for candidates\, clinics and suppliers. Ends 
+ with the Kestrel Eye Care Jobs logo\, Happy holidays from the Kestrel tea
+ m\, and Link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: It's the most wonderful
+  time (sign up)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261219-reel-last-christmas-for-candidates-v2@eyecarej
+ obs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261219T190000
+DTEND;TZID=America/Toronto:20261219T193000
+SUMMARY:Instagram + Facebook: Reel: Last Christmas (for candidates)
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/last-christmas-reel.mp4 · cover design/social
+ -and-merch/instagram-guides/last-christmas-reel-cover.jpg (Edit cover\, A
+ dd from camera roll)\n- Music: add Last Christmas in Instagram and use th
+ e same start point as your screen recording (the text 'Last Christmas' sh
+ ould appear as he sings it). The Reel is timed to it\; play it through on
+ ce before sharing.\n- Facebook: before sharing\, turn on Share to Faceboo
+ k so it also goes to the kestreleye26 Page. Nothing else to post there.\n
+ \nCAPTION (copy and paste):\nLast Christmas\, I sent off my resume. The v
+ ery next day: no reply. (And no idea what it paid.)\n\nThis year\, every 
+ job on Kestrel shows its pay\, you only apply for roles that fit you\, an
+ d you can track every application in 1 place.\n\nCandidates: pre launch i
+ s open. Create your account: link in bio.\n\n#LastChristmas #EyeCareJobs 
+ #Opticians #Optometry #JobSearch\n\nALT TEXT (Advanced settings\, Accessi
+ bility):\nA short animation on a snowy navy night. A stylized kestrel in 
+ a holiday hat sits on a branch. Text reads: Candidates\, this one's for y
+ ou. Last Christmas\, I sent off my resume\, as a resume card is marked Se
+ nt. But the very next day: no reply\, over an inbox showing 0 new message
+ s\, 1 day later\, 1 week later. And no idea what it paid\, either. This y
+ ear\, to save me from tears: the kestrel takes off. Every job shows its p
+ ay. Apply for the roles that fit you. Track every application in 1 place.
+  Ends with: I'll give it to someone special\, the Kestrel Eye Care Jobs l
+ ogo\, Pre launch is open\, and Create your account: link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Last Christmas (for can
+ didates)
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261222-reel-your-job-our-job-v2@eyecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261222T190000
+DTEND;TZID=America/Toronto:20261222T193000
+SUMMARY:Instagram + Facebook: Reel: Your job / Our job
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/your-job-reel.mp4 · cover design/social-and-m
+ erch/instagram-guides/your-job-reel-cover.jpg (Edit cover\, Add from came
+ ra roll)\n- Music: warm and uplifting (search heartfelt or uplifting pian
+ o)\, about 104 BPM\; a swell about 9 seconds in\, when the Our job card r
+ ises.\n- Facebook: before sharing\, turn on Share to Facebook so it also 
+ goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPTION (co
+ py and paste):\nYour job: fitting a child's first glasses. Catching glauc
+ oma before anyone notices a thing. Spotting signs of diabetes in the back
+  of an eye. Running the tests\, calming the nerves\, and helping someone 
+ read the menu again.\n\nAn eye exam is so much more than a glasses check\
+ , and it takes a whole team to make it happen.\n\nOur job: finding you th
+ e clinic where you can do that\, with the pay shown up front.\n\nPre laun
+ ch is open: link in bio.\n\n#EyeCare #Optometry #Opticians #OptometricAss
+ istant #EyeCareJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA s
+ hort animation on cream. Text reads: Your job: and 6 lines appear in turn
+ \, each with a small icon: Fitting a child's first pair of glasses. Catch
+ ing glaucoma before the patient notices anything. Spotting signs of diabe
+ tes in the back of an eye. Running the tests that start every exam. Putti
+ ng a nervous first time patient at ease. Helping someone read the menu ag
+ ain. A chestnut card rises: Our job: Finding you the clinic where you can
+  do that. With the pay shown up front. Ends with the Kestrel Eye Care Job
+ s logo\, Pre launch is open\, and Link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Your job / Our job
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261223-reel-all-i-want-for-christmas-is-a-job-in-eye-
+ care-v2@eyecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261223T190000
+DTEND;TZID=America/Toronto:20261223T193000
+SUMMARY:Instagram + Facebook: Reel: All I want for Christmas is a job in e
+ ye care
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/christmas-reel.mp4 · cover design/social-and-
+ merch/instagram-guides/christmas-reel-cover.jpg (Edit cover\, Add from ca
+ mera roll)\n- Music: add All I Want for Christmas Is You in Instagram and
+  set the start at about 0:38\, where she begins 'All I want for Christmas
+  is…' (the bird takes off as the bells come in). The Reel is timed to i
+ t\; play it through once before sharing.\n- Facebook: before sharing\, tu
+ rn on Share to Facebook so it also goes to the kestreleye26 Page. Nothing
+  else to post there.\n\nCAPTION (copy and paste):\nDear Santa\, all I wan
+ t for Christmas is a job in eye care. With the pay shown up front\, pleas
+ e.\n\nWhat's on your wish list this year? Tell us below.\n\nHappy holiday
+ s from the Kestrel team. Pre launch is open for candidates\, clinics and 
+ suppliers: link in bio.\n\n#HappyHolidays #EyeCareJobs #Optometry #Optici
+ ans #CanadaJobs\n\nALT TEXT (Advanced settings\, Accessibility):\nA short
+  animation on navy with falling snow. A stylized kestrel in a chestnut an
+ d cream holiday hat perches on a wish list that reads: Dear Santa\, A job
+  I actually love\, A team that has my back\, The pay\, shown up front\, w
+ ith a tick beside the last one. The kestrel takes off and swoops across a
+ s text reads: All I want for Christmas is a job in eye care. Ends with th
+ e Kestrel Eye Care Jobs logo\, Happy holidays from the Kestrel team\, and
+  Pre launch is open: link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: All I want for Christma
+ s is a job in eye care
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261228-reel-licence-fees-hours-of-work-by-province-v2
+ @eyecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261228T190000
+DTEND;TZID=America/Toronto:20261228T193000
+SUMMARY:Instagram + Facebook: Reel: Licence fees: hours of work\, by provi
+ nce
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/licence-reel.mp4 · cover design/social-and-me
+ rch/instagram-guides/licence-reel-cover.jpg (Edit cover\, Add from camera
+  roll)\n- Music: add Cornfield Chase (Hans Zimmer) in Instagram and drag 
+ the start to 0:38 (Ontario starts filling as the orchestra swells). The R
+ eel is timed to it\; play it through once before sharing.\n- Check the fe
+ es in the optician pay guide are still current before posting.\n- If Onta
+ rio opticians push back in the comments\, thank them and point to the gui
+ de\; don't take sides on the fee.\n- Facebook: before sharing\, turn on S
+ hare to Facebook so it also goes to the kestreleye26 Page. Nothing else t
+ o post there.\n\nCAPTION (copy and paste):\nHow many hours does an optici
+ an work just to pay for their licence?\n\nUsing each province's typical o
+ ptician pay\, the yearly licence fee works out to about 18 to 19 hours of
+  work in Nova Scotia\, and about 43 hours in Ontario\, where the fee is $
+ 1\,237.35 for 2027. That's more than twice Nova Scotia's fee\, for $1 an 
+ hour less in typical pay.\n\nLicence fees fund the regulator's work prote
+ cting patients. This is about seeing the full picture when you compare pa
+ y between provinces.\n\nPay is only half the picture. Every province's pa
+ y and licence fee is in our optician pay guide: link in bio.\n\nFees from
+  each regulator's website\, November 2026. 5 provinces checked so far\, m
+ ore coming.\n\n#Opticians #OpticianLife #EyeCareJobs #Ontario #CanadaJobs
+ \n\nALT TEXT (Advanced settings\, Accessibility):\nA short animation on c
+ ream. Text reads: How many hours does an optician work just to pay for th
+ eir licence? Rows of small squares fill in\, 1 square for each hour of wo
+ rk at the province's typical optician pay: Nova Scotia about 18 to 19 hou
+ rs\, Alberta about 24 to 30\, Manitoba about 29 to 31\, British Columbia 
+ about 35\, and Ontario about 43\, shown in chestnut. Text reads: Ontario'
+ s fee is more than twice Nova Scotia's. Pay is only half the picture. End
+ s with the Kestrel Eye Care Jobs logo and Link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Licence fees: hours of 
+ work\, by province
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20261231-reel-new-year-new-job-in-eye-care-v2@eyecarejo
+ bs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20261231T140000
+DTEND;TZID=America/Toronto:20261231T143000
+SUMMARY:Instagram + Facebook: Reel: New year\, new job in eye care
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/new-year-reel.mp4 · cover design/social-and-m
+ erch/instagram-guides/new-year-reel-cover.jpg (Edit cover\, Add from came
+ ra roll)\n- Music: add Auld Lang Syne (Whistle Snap) by Theme Stars in In
+ stagram and keep the start where Instagram puts it ('3' lands on the firs
+ t snap). The Reel is timed to it\; play it through once before sharing.\n
+ - If the launch date is confirmed by then\, change 'early 2027' in the ca
+ ption to the date.\n- Facebook: before sharing\, turn on Share to Faceboo
+ k so it also goes to the kestreleye26 Page. Nothing else to post there.\n
+ \nCAPTION (copy and paste):\n3\, 2\, 1… happy new year from the Kestrel
+  team.\n\nNew year\, new job in eye care? Kestrel opens in early 2027\, a
+  Canada-wide job board for optometrists\, opticians\, assistants\, techni
+ cians and practice teams\, with the pay shown on every job.\n\nPre launch
+  is open for candidates\, clinics and suppliers: link in bio.\n\n#HappyNe
+ wYear #NewYearNewJob #EyeCareJobs #Optometry #Opticians\n\nALT TEXT (Adva
+ nced settings\, Accessibility):\nA short animation on a starry night sky.
+  A countdown reads 3\, 2\, 1. A stylized kestrel in a striped party hat s
+ its on a snowy branch and blows a party blower as fireworks burst in ches
+ tnut\, buff and cream. Text reads: New year\, new job in eye care. Ends w
+ ith the Kestrel Eye Care Jobs logo\, Happy new year from the Kestrel team
+ \, Opening early 2027\, and Pre launch is open: link in bio.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: New year\, new job in e
+ ye care
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20270109-reel-guess-the-pay-front-desk-british-columbia
+ -v2@eyecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20270109T190000
+DTEND;TZID=America/Toronto:20270109T193000
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, front desk\, British C
+ olumbia
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-2.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-2-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- Facebook: before sharing\, turn on Share to Facebook so i
+ t also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPT
+ ION (copy and paste):\nGuess the pay: front desk and patient care\, Briti
+ sh Columbia.\n\nA\, B or C? Comment your guess before you watch to the en
+ d.\n\nThe typical (median) pay for receptionists in British Columbia\, th
+ e closest Job Bank group to front desk and patient care\, is $24.62 an ho
+ ur\, and half earn between $21.00 and $28.00.\n\nOn Kestrel Eye Care Jobs
+ \, you'll never have to guess: every job shows its pay. Pre launch is ope
+ n. Create your account: link in bio.\n\nSource: Job Bank wages\, Employme
+ nt and Social Development Canada (Labour Force Survey 2024 to 2025). Cont
+ ains information licensed under the Open Government Licence – Canada.\n
+ \n#EyeCareJobs #PatientCare #BCJobs #PayTransparency #Optometry\n\nALT TE
+ XT (Advanced settings\, Accessibility):\nA short quiz animation. Text rea
+ ds: Guess the pay. Front desk and patient care\, British Columbia. A\, $2
+ 5 an hour. B\, $19 an hour. C\, $31 an hour. After a 5 second countdown\,
+  A is revealed: typical (median) pay $24.62 an hour. Half of receptionist
+ s in British Columbia earn between $21.00 and $28.00 an hour. Then: On Ke
+ strel\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, front d
+ esk\, British Columbia
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20270114-reel-guess-the-pay-optician-nova-scotia-v2@eye
+ carejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20270114T190000
+DTEND;TZID=America/Toronto:20270114T193000
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, optician\, Nova Scotia
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-3.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-3-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- Facebook: before sharing\, turn on Share to Facebook so i
+ t also goes to the kestreleye26 Page. Nothing else to post there.\n\nCAPT
+ ION (copy and paste):\nGuess the pay: optician\, Nova Scotia.\n\nA\, B or
+  C? Comment your guess before you watch to the end.\n\nThe typical (media
+ n) pay for an optician in Nova Scotia is $30.00 an hour\, and half earn b
+ etween $25.00 and $40.00\, one of the widest spreads in Canada.\n\nOn Kes
+ trel Eye Care Jobs\, you'll never have to guess: every job shows its pay.
+  Pre launch is open. Create your account: link in bio.\n\nSource: Job Ban
+ k wages\, Employment and Social Development Canada (Labour Force Survey 2
+ 024 to 2025). Contains information licensed under the Open Government Lic
+ ence – Canada.\n\n#Opticians #OpticianPay #EyeCareJobs #NovaScotiaJobs 
+ #PayTransparency\n\nALT TEXT (Advanced settings\, Accessibility):\nA shor
+ t quiz animation. Text reads: Guess the pay. Optician\, Nova Scotia. A\, 
+ $22 an hour. B\, $26 an hour. C\, $30 an hour. After a 5 second countdown
+ \, C is revealed: typical (median) pay $30.00 an hour. Half of opticians 
+ in Nova Scotia earn between $25.00 and $40.00 an hour. Then: On Kestrel\,
+  you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, opticia
+ n\, Nova Scotia
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:kestrel-social-20270116-reel-guess-the-pay-practice-manager-ontario-v2
+ @eyecarejobs.ca
+DTSTAMP:20261128T153910Z
+DTSTART;TZID=America/Toronto:20270116T190000
+DTEND;TZID=America/Toronto:20270116T193000
+SUMMARY:Instagram + Facebook: Reel: Guess the pay\, practice manager\, Ont
+ ario
+LOCATION:Instagram @kestreleye26\, shared to Facebook\, location tag: Cana
+ da
+DESCRIPTION:Where: Instagram @kestreleye26\, shared to Facebook\, location
+  tag: Canada\nType: Reel. Show in profile grid: OFF\nFile: design/social-
+ and-merch/instagram-guides/guess-the-pay-4.mp4 · cover design/social-and
+ -merch/instagram-guides/guess-the-pay-4-cover.jpg (Edit cover\, Add from 
+ camera roll)\n- CHECK: this uses Job Bank's closest group for practice ma
+ nagers\, still waiting for Steve's 5 minute check on Job Bank (docs/pay-b
+ enchmark.md). If you'd rather not use it yet\, ask Claude to swap it for 
+ Optician\, British Columbia.\n- Facebook: before sharing\, turn on Share 
+ to Facebook so it also goes to the kestreleye26 Page. Nothing else to pos
+ t there.\n\nCAPTION (copy and paste):\nGuess the pay: practice manager\, 
+ Ontario.\n\nA\, B or C? Comment your guess before you watch to the end.\n
+ \nThe typical (median) pay for office and administrative supervisors in O
+ ntario\, the closest Job Bank group to a practice manager\, is $35.75 an 
+ hour\, and half earn between $29.00 and $46.00.\n\nOn Kestrel Eye Care Jo
+ bs\, you'll never have to guess: every job shows its pay. Pre launch is o
+ pen. Create your account: link in bio.\n\nSource: Job Bank wages\, Employ
+ ment and Social Development Canada (Labour Force Survey 2024 to 2025). Co
+ ntains information licensed under the Open Government Licence – Canada.
+ \n\n#PracticeManagement #EyeCareJobs #OntarioJobs #PayTransparency #Optom
+ etry\n\nALT TEXT (Advanced settings\, Accessibility):\nA short quiz anima
+ tion. Text reads: Guess the pay. Practice manager\, Ontario. A\, $36 an h
+ our. B\, $27 an hour. C\, $45 an hour. After a 5 second countdown\, A is 
+ revealed: typical (median) pay $35.75 an hour. Half of office and adminis
+ trative supervisors in Ontario earn between $29.00 and $46.00 an hour. Th
+ en: On Kestrel\, you'll never have to guess. Every job shows its pay.
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Post now: Instagram + Facebook\, Reel: Guess the pay\, practic
+ e manager\, Ontario
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR
