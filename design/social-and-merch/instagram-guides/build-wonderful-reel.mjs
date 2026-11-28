@@ -13,7 +13,7 @@ import { writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { FLY, PERCH } from "./kestrel-bird-side.mjs";
-import { HAT, BEAK, BRANCH } from "./kestrel-christmas.mjs";
+import { HAT, BEAK, TREE } from "./kestrel-christmas.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "design/social-and-merch/instagram-guides");
@@ -37,19 +37,19 @@ body{margin:0}p{margin:0}
 #f{width:1080px;height:1920px;position:relative;overflow:hidden;background:${C.navy}}
 .abs{position:absolute}
 .big{font-family:'DM Serif Display';font-size:96px;line-height:1.05}
-.card{position:absolute;left:80px;width:740px;border-radius:22px;background:${C.paper};border:3px solid ${C.line};padding:36px 40px 30px;box-sizing:border-box;opacity:0}
+.card{position:absolute;left:80px;width:720px;border-radius:22px;background:${C.paper};border:3px solid ${C.line};padding:34px 34px 28px;box-sizing:border-box;opacity:0}
 .lab{font-family:Poppins;font-weight:600;font-size:28px;letter-spacing:.22em;color:${C.chestnut}}
-.it{display:flex;align-items:center;gap:18px;margin-top:20px;font-family:'DM Serif Display';font-size:44px;line-height:1.15;color:${C.navy};opacity:0}
+.it{display:flex;align-items:center;gap:16px;margin-top:18px;font-family:'DM Serif Display';font-size:41px;line-height:1.15;color:${C.navy};opacity:0}
 #end{position:absolute;inset:0;background:${C.cream};opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 80px}
 #cov{position:absolute;inset:0;background:${C.navy};display:none}
 </style></head><body><div id="f">
 <svg class="abs" style="left:0;top:0" width="1080" height="1920">${SNOW.map((s, i) => `<circle id="sn${i}" r="${s.r}" fill="${C.cream}" opacity=".5"/>`).join("")}</svg>
-<div class="abs" id="h1" style="left:80px;right:80px;top:300px;opacity:0"><p class="big" style="color:${C.cream}">It&apos;s the most wonderful time of the year&hellip;</p>
-<p class="big" id="h1b" style="color:${C.buff};margin-top:20px;opacity:0">to sign up to Kestrel.</p></div>
+<div class="abs" id="h1" style="left:80px;right:80px;top:300px;opacity:0"><p class="big" style="color:${C.cream};font-size:88px">It&apos;s the most wonderful time of the year&hellip;</p>
+<p class="big" id="h1b" style="color:${C.buff};margin-top:16px;opacity:0;font-size:88px">to sign up to Kestrel.</p></div>
 ${CARDS.map((c) => `<div class="card" id="${c.id}" style="top:${c.top}px"><p class="lab">${c.label}</p>${c.items.map((t, i) => `<div class="it" id="${c.id}${i}"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="${C.chestnut}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>${t}</div>`).join("")}</div>`).join("")}
-<div class="abs" id="h2" style="left:80px;right:80px;top:640px;opacity:0"><p class="big" style="color:${C.cream}">Pre launch is open</p>
+<div class="abs" id="h2" style="left:80px;right:80px;top:440px;opacity:0"><p class="big" style="color:${C.cream}">Pre launch is open</p>
 <p class="big" style="color:${C.buff};margin-top:10px">for candidates, clinics and suppliers.</p></div>
-<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="perch">${BRANCH}${PERCH.replace('id="perch"', 'id="pb"')}${BEAK(16, -186)}${HAT(16, -186)}</g></svg>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="hero">${TREE}<g id="perch">${PERCH.replace('id="perch"', 'id="pb"')}${BEAK(16, -186)}${HAT(16, -186)}</g></g></svg>
 <svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g id="bird">${FLY}${BEAK(96, -14)}${HAT(96, -14)}</g></svg>
 <div id="end">
 <img src="${brand("kestrel-lockup-full.svg")}" alt="" style="width:860px;display:block">
@@ -59,9 +59,9 @@ ${CARDS.map((c) => `<div class="card" id="${c.id}" style="top:${c.top}px"><p cla
 </div>
 <div id="cov">
 <svg class="abs" style="left:0;top:0" width="1080" height="1920">${SNOW.map((s) => `<circle cx="${s.x}" cy="${s.y}" r="${s.r}" fill="${C.cream}" opacity=".45"/>`).join("")}</svg>
-<div class="abs" style="left:90px;right:90px;top:430px"><p class="big" style="color:${C.cream}">It&apos;s the most wonderful time of the year&hellip;</p>
-<p class="big" style="color:${C.buff};margin-top:20px">to sign up to Kestrel.</p></div>
-<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g transform="translate(780 1580) scale(1.4)">${BRANCH}${PERCH.replace('id="perch"', 'id="cpb"')}${BEAK(16, -186)}${HAT(16, -186)}</g></svg>
+<div class="abs" style="left:90px;right:90px;top:300px"><p class="big" style="color:${C.cream};font-size:88px">It&apos;s the most wonderful time of the year&hellip;</p>
+<p class="big" style="color:${C.buff};margin-top:16px;font-size:88px">to sign up to Kestrel.</p></div>
+<svg class="abs" style="left:0;top:0;overflow:visible" width="1080" height="1920"><g transform="translate(540 1000) scale(0.85)">${TREE}${PERCH.replace('id="perch"', 'id="cpb"')}${BEAK(16, -186)}${HAT(16, -186)}</g></svg>
 </div>
 </div>
 <script>
@@ -84,14 +84,17 @@ window.render = (t) => {
     e.style.opacity = clamp(v * 2) * (1 - span(t, BR(15.5), BR(16))); e.style.transform = "scale(" + (0.85 + 0.15 * back(v)) + ")";
     c.items.forEach((_, i) => { const a = BR(c.at) + 0.35 + i * (BAR * 2 / 3), w = out(span(t, a, a + 0.3)), it = el(c.id + i); it.style.opacity = w; it.style.transform = "translateX(" + -20 * (1 - w) + "px)"; });
   });
-  // The bird sways in time on its branch (once a bar), and takes off on the second "most wonderful time".
+  // The hero: the tree, centre stage, with the bird on top like the star. As the cards arrive it moves down into the corner.
+  const mv = io(span(t, BR(7.5), BR(8.3)));
+  const hx = 540 + (940 - 540) * mv, hy = 1000 + (1250 - 1000) * mv, hs = 0.85 + (0.55 - 0.85) * mv;
+  el("hero").setAttribute("transform", "translate(" + hx + " " + hy + ") scale(" + hs + ")");
   const sway = 4 * Math.sin((t - 1.0) * 2 * Math.PI / BAR);
-  el("perch").setAttribute("transform", "translate(950 1660) scale(1.15) rotate(" + sway + " 0 -100)");
+  el("perch").setAttribute("transform", "rotate(" + sway + " 0 -100)");
   el("perch").style.opacity = t < BR(16) ? 1 : 0;
   const s = span(t, BR(16), BR(16) + 1.8), flap = Math.sin(t * 2 * Math.PI * 3), kk = 0.1 + 0.9 * flap;
   const wing = (dx, dy, m) => "translate(" + (10 + dx) + " " + (-18 + dy) + ") scale(" + 1.5 * m + " " + 1.5 * kk * m + ") rotate(28) translate(-10 18)";
   el("nearwing").setAttribute("transform", wing(0, 0, 1)); el("farwing").setAttribute("transform", wing(16, -6, 0.9));
-  el("bird").setAttribute("transform", "translate(" + (950 - 1350 * io(s)) + " " + (1480 - 300 * Math.sin(Math.PI * 0.5 * Math.min(1, s * 1.3)) + 60 * s) + ") scale(-1.3 1.3) rotate(" + (-14 + 10 * s) + ")");
+  el("bird").setAttribute("transform", "translate(" + (940 - 1350 * io(s)) + " " + (1150 - 120 * Math.sin(Math.PI * 0.5 * Math.min(1, s * 1.3)) + 40 * s) + ") scale(-1.3 1.3) rotate(" + (-14 + 10 * s) + ")");
   el("bird").style.opacity = t >= BR(16) && s < 1 ? 1 : 0;
   const h2 = out(span(t, BR(16) + 0.4, BR(16) + 0.9)) * (1 - span(t, BR(19.5), BR(20))); el("h2").style.opacity = h2; el("h2").style.transform = "translateY(" + 26 * (1 - h2) + "px)";
   el("end").style.opacity = span(t, BR(20), BR(20) + 0.4);
