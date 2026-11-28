@@ -10,6 +10,7 @@ import { BATCH } from "./batch-2026-11-22.mjs";
 import { WEEKEND } from "./batch-2026-11-21-weekend.mjs";
 import { FOCUS } from "./batch-2026-11-22-focus.mjs";
 import { otherChannels, CHECKS } from "./other-channels.mjs";
+import { DRY, MOVES } from "./batch-2026-11-28.mjs";
 
 const ROOT = resolve(".");
 const OUT = join(ROOT, "docs/marketing/kestrel-social-calendar.ics");
@@ -192,6 +193,7 @@ events.push(...BATCH.map((e) => ({ ...e, batch: "2026-11-22" })));
 events.push(...WEEKEND.map((e) => ({ ...e, batch: "2026-11-21-weekend" })));
 events.push(...FOCUS.map((e) => ({ ...e, batch: "2026-11-22-focus" })));
 // LinkedIn, Facebook and Reddit (22nd November 2026), and the monthly numbers check.
+events.push(...DRY);
 events.push(...otherChannels(readDoc("docs/marketing/reddit-and-linkedin-calendar.md"), readDoc("docs/marketing/reddit-seed-posts.md")), ...CHECKS);
 // The launch posts stay where they are, but are marked until Steve confirms the date.
 for (const e of events) if (e.date === "2027-01-25") e.title += " (launch date to confirm)";
@@ -207,7 +209,7 @@ const key = (e) => e.date + (e.time ?? "1900");
 for (let i = events.length - 1; i >= 0; i--) if (events[i].platform === "Facebook") events.splice(i, 1);
 const ig = events.filter((e) => e.platform === "Instagram" && e.date >= START).sort((a, b) => key(a).localeCompare(key(b)));
 const isStory = (e) => /^Story/.test(e.title);
-const run = ig.filter((e) => !isStory(e) && e.date < "2027-01-01");
+const run = ig.filter((e) => !isStory(e) && !e.fixed && e.date < "2027-01-01");
 const oldKey = new Map(ig.map((e) => [e, key(e)]));
 run.forEach((e, i) => { e.date = addDays(START, i); e.time = "1900"; });
 // Each Story moves with the post it sat beside: it goes at 12 pm on the new date of the first post at or after its old slot.
@@ -216,8 +218,12 @@ for (const st of ig.filter(isStory)) {
   if (next && oldKey.get(st) < "2027-01-01") st.date = next.date;
   st.time = "1200";
 }
+// Moves Steve asked for after the spacing (28th November 2026), then a check that no day has 2 Reels or posts.
+for (const e of ig) for (const [t, d] of Object.entries(MOVES)) if (e.title.startsWith(t)) e.date = d;
 // Launch day has the Takes flight Reel; the launch photo (post 25) moves to the next day so there is 1 post a day.
 for (const e of events) if (/^Post 25/.test(e.title)) { e.date = addDays(e.date, 1); e.notes = (e.notes ?? []).map((n) => n.replace(/^Launch day\./, "The day after launch.")); }
+const perDay = {};
+for (const e of ig.filter((x) => !isStory(x))) { if (perDay[e.date]) throw new Error(`2 Instagram posts on ${e.date}: ${perDay[e.date]} and ${e.title}`); perDay[e.date] = e.title; }
 // Notes and captions that named a time or day that no longer fits.
 for (const e of ig) {
   e.notes = (e.notes ?? []).filter((n) => !/^1 pm|Sunday evening|same evening as the Better/.test(n))
