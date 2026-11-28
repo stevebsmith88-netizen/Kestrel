@@ -2,7 +2,7 @@
 // drawn eye that blinks and sheds 1 tear, snow drifting, then the twist: watery eyes can be a sign of dry eye. Light and funny, with no
 // medical advice beyond "book in with your optometrist" and no products or brands.
 // Run from the repo root: node design/social-and-merch/instagram-guides/build-dry-eye-reel.mjs
-// 1080 x 1920, 30 frames a second, 13 seconds, no sound. Needs ffmpeg. The cover is built at the end.
+// 1080 x 1920, 30 frames a second, 16.5 seconds, no sound. Needs ffmpeg. The cover is built at the end.
 import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright"); // the copy already installed on the machine
 import { spawn } from "node:child_process";
@@ -16,7 +16,7 @@ const font = (f) => pathToFileURL(join(ROOT, "node_modules/@fontsource", f)).hre
 const brand = (f) => pathToFileURL(join(ROOT, "public/brand", f)).href;
 const C = { navy: "#1B2B4B", chestnut: "#A4502C", cream: "#F7F1E6", buff: "#D8B48A", slate: "#5A6672", mist: "#DCE3E6" };
 const FPS = 30;
-const SECONDS = 13;
+const SECONDS = 16.5;
 const SNOW = Array.from({ length: 26 }, (_, i) => ({ x: (i * 397) % 1080, y: (i * 613) % 1920, r: 4 + (i % 4) * 2, v: 60 + (i % 5) * 22, w: (i * 1.7) % 6.28 }));
 
 const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Not crying</title><style>
@@ -36,7 +36,7 @@ body{margin:0}p{margin:0}
 <svg class="abs" style="left:90px;top:400px;overflow:visible" width="420" height="280" viewBox="0 0 300 200">
 <g id="eye" style="transform-origin:150px 100px"><path d="M10 100 Q150 -20 290 100 Q150 220 10 100 Z" fill="none" stroke="${C.buff}" stroke-width="12" stroke-linejoin="round"/>
 <circle cx="150" cy="100" r="44" fill="none" stroke="${C.buff}" stroke-width="12"/><circle cx="150" cy="100" r="14" fill="${C.buff}"/></g>
-<path id="tear" d="M0 -26 C 10 -8 18 4 18 14 A 18 18 0 0 1 -18 14 C -18 4 -10 -8 0 -26 Z" fill="${C.mist}" opacity="0"/>
+${[0, 1, 2].map((i) => `<path id="tear${i}" d="M0 -26 C 10 -8 18 4 18 14 A 18 18 0 0 1 -18 14 C -18 4 -10 -8 0 -26 Z" fill="${C.mist}" opacity="0"/>`).join("")}
 </svg>
 <div class="abs" style="left:90px;right:90px;top:800px">
 <p id="q1" style="font-family:'DM Serif Display';font-size:124px;line-height:1.02;color:${C.cream};opacity:0">&quot;I&apos;m not crying.</p>
@@ -71,18 +71,21 @@ window.render = (t, cover = false) => {
   SNOW.forEach((s, i) => { const y = (s.y + s.v * t) % 1960 - 20; const c = el("sn" + i); c.setAttribute("cx", s.x + 18 * Math.sin(t * 0.8 + s.w)); c.setAttribute("cy", y); });
   // The eye blinks twice, quickly, the way a dry eye does.
   const blink = (a) => { const b = span(t, a, a + 0.22); return 1 - 0.9 * Math.sin(Math.PI * b); };
-  el("eye").style.transform = "scaleY(" + (cover ? 1 : Math.min(blink(1.3), blink(4.7))) + ")";
-  // 1 tear forms at the outer corner and rolls down.
-  const tf = span(t, 1.8, 2.3), tr = io(span(t, 2.3, 3.6));
-  el("tear").setAttribute("opacity", cover ? 0.95 : 0.95 * out(tf) * (1 - span(t, 3.4, 3.7)));
-  el("tear").setAttribute("transform", "translate(" + (282 + 6 * tr) + " " + (cover ? 150 : 118 + 120 * tr) + ") scale(" + (0.4 + 0.6 * out(tf)) + ")");
+  el("eye").style.transform = "scaleY(" + (cover ? 1 : Math.min(blink(1.3), blink(4.7), blink(6.9))) + ")";
+  // 3 tears form at the outer corner, 1 after another, and roll down (Steve: a couple of tear drops, and hold each part longer).
+  [1.8, 3.9, 5.9].forEach((a, i) => {
+    const tf = span(t, a, a + 0.5), tr = io(span(t, a + 0.5, a + 1.9)), e = el("tear" + i);
+    const show = cover ? (i === 0 ? 0.95 : 0) : 0.95 * out(tf) * (1 - span(t, a + 1.7, a + 2.0));
+    e.setAttribute("opacity", show);
+    e.setAttribute("transform", "translate(" + (282 - 8 * i + 6 * tr) + " " + (cover ? 150 : 118 + 120 * tr) + ") scale(" + (0.4 + 0.6 * out(tf)) * (1 - 0.12 * i) + ")");
+  });
   show("q1", t, 0.5); show("q2", t, 2.4); show("q3", t, 3.9, 16);
   if (cover) { ["q1", "q2", "q3"].forEach((id) => { el(id).style.opacity = 1; el(id).style.transform = "none"; }); }
   // The cream card slides up for the twist.
-  const c = cover ? 0 : io(span(t, 5.6, 6.2)); el("c2").style.transform = "translateY(" + 100 * (1 - c) + "%)";
-  show("p1", t, 6.3); show("p2", t, 6.8); show("p3", t, 8.1, 16);
-  el("end").style.opacity = cover ? 0 : span(t, 10.4, 10.8);
-  show("e1", t, 11.0, 20); show("e2", t, 11.5, 20);
+  const c = cover ? 0 : io(span(t, 8.0, 8.6)); el("c2").style.transform = "translateY(" + 100 * (1 - c) + "%)";
+  show("p1", t, 8.7); show("p2", t, 9.2); show("p3", t, 10.6, 16);
+  el("end").style.opacity = cover ? 0 : span(t, 13.9, 14.3);
+  show("e1", t, 14.5, 20); show("e2", t, 15.0, 20);
 };
 window.cover = () => window.render(4.4, true);
 </script></body></html>`;
@@ -96,7 +99,7 @@ await tab.evaluate(() => document.fonts.ready);
 await tab.waitForTimeout(300);
 const frame = tab.locator("#f");
 if (process.env.STILLS) {
-  for (const t of [1.4, 3.0, 4.5, 5.9, 9.0, 12.2]) {
+  for (const t of [2.6, 4.7, 6.7, 8.3, 12.0, 15.8]) {
     await tab.evaluate((x) => window.render(x), t);
     await frame.screenshot({ path: join(process.env.STILLS, `dry-${String(t).replace(".", "-")}.jpg`), type: "jpeg", quality: 80 });
   }
